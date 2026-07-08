@@ -62,7 +62,8 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
 - [x] Fasa 1 — Asas Projek, Config & Model Data (25 migrasi, 19 model, 11 enum, 3 seeder, MigrationSmokeTest 6✓)
 - [x] Fasa 2 — Tenancy 2 Panel, Auth magic link, Pendaftaran, Penomboran, 9 Policies (suite 40✓)
 - [x] Fasa 3 — Registri: RecordResource/RegistryFileResource/ClassificationNodeResource + Peti Masuk wizard + dedup (suite 53✓)
-- [ ] Fasa 4 — Minit, Notifikasi, Webhook WA, Ingest E-mel
+- [x] Fasa 4 — Minit, Notifikasi §14, Webhook WA §11.1, Ingest E-mel §11.3 (suite 73✓)
+      NOTA: Minit "tab" §9.C.5 diganti filter kategori (Filament 4 getTabs+tenant bermasalah — fungsi sama).
 - [ ] Fasa 5 — Kuota & Storan, OCR, Carian
 - [ ] Fasa 6 — Kelulusan, QR & Versi, Bil
 - [ ] Fasa 7 — Enjin Retensi & Eksport ZIP

@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // §11.2 — laravel-notification-channels/telegram.
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
+
 ];

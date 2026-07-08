@@ -30,6 +30,15 @@ return [
         'timeout' => 8,                                   // saat (§11.1)
     ],
 
+    // Ingest e-mel pengimbas (§11.3).
+    'imap_enabled' => filter_var(env('IMAP_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
+
+    // Telegram (§11.2).
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
+    ],
+
     // SLA minit — hari lalai ikut keutamaan (§9.C.5, Aliran E).
     'sla' => [
         'biasa' => 7,

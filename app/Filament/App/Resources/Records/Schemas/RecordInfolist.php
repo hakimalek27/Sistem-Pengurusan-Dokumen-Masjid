@@ -3,6 +3,7 @@
 namespace App\Filament\App\Resources\Records\Schemas;
 
 use Filament\Infolists\Components\KeyValueEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -47,7 +48,16 @@ class RecordInfolist
                             ]),
                         Tab::make('Minit')
                             ->schema([
-                                TextEntry::make('_minit')->hiddenLabel()->state('Modul minit — Fasa 4.'),
+                                RepeatableEntry::make('minits')
+                                    ->hiddenLabel()
+                                    ->schema([
+                                        TextEntry::make('fromUser.name')->label('Daripada'),
+                                        TextEntry::make('priority')->label('Keutamaan')->badge(),
+                                        TextEntry::make('due_at')->label('Tarikh Akhir')->date('d/m/Y')->placeholder('—'),
+                                        TextEntry::make('status')->label('Status')->badge(),
+                                        TextEntry::make('body')->label('Catatan')->columnSpanFull(),
+                                    ])
+                                    ->columns(4),
                             ]),
                         Tab::make('Kelulusan')
                             ->schema([
