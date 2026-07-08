@@ -6,6 +6,7 @@ use App\Enums\OcrStatus;
 use App\Enums\RecordStatus;
 use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
+use App\Jobs\ProcessOcrJob;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RegistryFile;
@@ -53,7 +54,7 @@ class InboxIngestService
             return null; // e-mel/webhook: skip senyap (log duplikat oleh pemanggil)
         }
 
-        return DB::transaction(function () use ($mosque, $contents, $filename, $mime, $creator, $source, $sourceMeta, $sha256) {
+        $record = DB::transaction(function () use ($mosque, $contents, $filename, $mime, $creator, $source, $sourceMeta, $sha256) {
             $record = Record::query()->create([
                 'mosque_id' => $mosque->id,
                 'record_type' => $this->guessType($source, $filename),
@@ -77,6 +78,11 @@ class InboxIngestService
 
             return $record;
         });
+
+        // §12 — Hantar OCR ke queue 'ocr' (no-op jika tooling tiada; imej Docker sahaja).
+        ProcessOcrJob::dispatch($record->id)->onQueue('ocr');
+
+        return $record;
     }
 
     /** Penanda duplikat untuk paparan Peti Masuk (§9.C.3). */

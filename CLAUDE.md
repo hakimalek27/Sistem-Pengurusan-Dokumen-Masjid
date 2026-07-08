@@ -64,7 +64,8 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
 - [x] Fasa 3 — Registri: RecordResource/RegistryFileResource/ClassificationNodeResource + Peti Masuk wizard + dedup (suite 53✓)
 - [x] Fasa 4 — Minit, Notifikasi §14, Webhook WA §11.1, Ingest E-mel §11.3 (suite 73✓)
       NOTA: Minit "tab" §9.C.5 diganti filter kategori (Filament 4 getTabs+tenant bermasalah — fungsi sama).
-- [ ] Fasa 5 — Kuota & Storan, OCR, Carian
+- [x] Fasa 5 — QuotaService §5.14 + ProcessOcrJob §12 + SearchService §13 + Carian (suite 85✓,1 skip OCR)
+      NOTA: OCR sebenar di-skip lokal (tesseract/ocrmypdf hanya dlm imej Docker); carian ujian guna Scout collection.
 - [ ] Fasa 6 — Kelulusan, QR & Versi, Bil
 - [ ] Fasa 7 — Enjin Retensi & Eksport ZIP
 - [ ] Fasa 8 — Panel Superadmin, Pelupusan Manual, Laporan, Ops

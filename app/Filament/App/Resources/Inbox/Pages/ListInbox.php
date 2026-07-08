@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources\Inbox\Pages;
 use App\Enums\SourceChannel;
 use App\Filament\App\Resources\Inbox\InboxResource;
 use App\Services\InboxIngestService;
+use App\Services\QuotaService;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
@@ -40,6 +41,18 @@ class ListInbox extends ListRecords
                 ])
                 ->action(function (array $data) {
                     $mosque = Filament::getTenant();
+
+                    // §5.14 pintu 1 — sekat muat naik jika kuota penuh (baca kekal OK).
+                    if (app(QuotaService::class)->isFull($mosque)) {
+                        Notification::make()
+                            ->title('Kuota storan penuh')
+                            ->body('Muat naik disekat. Sila Tambah Storan di halaman Penggunaan & Storan.')
+                            ->danger()
+                            ->send();
+
+                        return;
+                    }
+
                     $service = app(InboxIngestService::class);
                     $count = 0;
 

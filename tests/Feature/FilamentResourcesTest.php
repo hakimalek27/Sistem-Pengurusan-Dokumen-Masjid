@@ -40,6 +40,10 @@ it('view rekod sulit render + tulis log akses sulit (§15.4)', function () {
     expect(SensitiveAccessLog::query()->where('record_id', $rec->id)->where('action', 'view')->exists())->toBeTrue();
 });
 
+it('halaman Carian render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/carian')->assertOk();
+});
+
 it('halaman Minit Saya render', function () {
     $this->actingAs($this->admin)->get('/app/mam/minit-saya')->assertOk();
 });

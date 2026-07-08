@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Mosque;
 use App\Models\Record;
+use App\Services\QuotaService;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -16,6 +17,12 @@ class MediaObserver
     public function created(Media $media): void
     {
         $this->adjust($media, +1);
+
+        // §5.14 — semak ambang 80/90/100% selepas kaunter dikemas kini.
+        $model = $media->model;
+        if ($model instanceof Record && $model->mosque) {
+            app(QuotaService::class)->checkThresholds($model->mosque);
+        }
     }
 
     public function deleted(Media $media): void
