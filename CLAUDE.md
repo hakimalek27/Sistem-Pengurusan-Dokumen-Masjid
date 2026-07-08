@@ -70,5 +70,7 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
       Nota: UI superadmin Pesanan Storan (Tandakan Dibayar) → Fasa 8 (logik markPaid sedia & diuji).
 - [x] Fasa 7 — RetentionEngine §16.3 + DisposalService (snapshot/sijil) + notices/execute + Eksport ZIP §16.4
       (suite 106✓; RetentionEngineTest 7 = positif + 5 negatif + gantung + kitaran; invarian t30+t7 dibuktikan)
-- [ ] Fasa 8 — Panel Superadmin, Pelupusan Manual, Laporan, Ops
+- [x] Fasa 8 — Panel Superadmin (Masjid/Pesanan/Pengguna/Tetapan), MembershipService §6.4, Pelupusan manual,
+      Ahli/Tetapan Masjid/Profil, Ops (scheduler 9 tugasan, make-superadmin, prune-logs, backup, README) (suite 124✓)
+      Nota: Laporan §9.C.9 + widget dashboard §9.C.2 = versi asas (dashboard Filament lalai).
 - [ ] Fasa 9 — Verifikasi Penuh & Kesediaan Live

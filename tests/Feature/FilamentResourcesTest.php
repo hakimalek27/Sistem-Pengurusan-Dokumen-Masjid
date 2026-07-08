@@ -56,6 +56,26 @@ it('halaman Peraturan Retensi render', function () {
     $this->actingAs($this->admin)->get('/app/mam/retensi-peraturan')->assertOk();
 });
 
+it('halaman Ahli & Peranan render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/ahli-peranan')->assertOk();
+});
+
+it('halaman Tetapan Masjid render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/tetapan-masjid')->assertOk();
+});
+
+it('halaman Pelupusan Manual render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/pelupusan')->assertOk();
+});
+
+it('halaman Profil render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/profil')->assertOk();
+});
+
+it('halaman Log Akses Sulit render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/sensitive-access-logs')->assertOk();
+});
+
 it('halaman Penggunaan & Storan render', function () {
     $this->actingAs($this->admin)->get('/app/mam/penggunaan')->assertOk();
 });

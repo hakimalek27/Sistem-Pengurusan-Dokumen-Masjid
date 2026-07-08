@@ -1,59 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Diwan — Sistem Pengurusan Dokumen Masjid (SPDM)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Platform SaaS **multi-tenant** untuk pengurusan dokumen masjid: registri digital, klasifikasi
+fail, carian kandungan (OCR), minit & routing, e-Kelulusan, kuota storan, dan enjin retensi
+arkib automatik. Setiap masjid = satu *tenant* (Filament tenancy); satu panel superadmin.
 
-## About Laravel
+Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfasa:
+**`CLAUDE-CODE-PROMPTS.md`**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Timbunan Teknologi
+- **Laravel 12** + **Filament 4** (dua panel: `/admin` superadmin, `/app/{slug}` tenant masjid)
+- **PostgreSQL 16** · **Redis 7** · **Meilisearch v1** · **Tencent COS** (S3) · **Horizon**
+- OCR: **tesseract 5 + ocrmypdf** (dalam imej Docker) · PDF: **dompdf** · QR: **simple-qrcode**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Persekitaran Pembangunan (mesin ini)
+Dev/ujian pada mesin ini menggunakan **SQLite** + PHP 8.4 tempatan (tanpa Docker). Ujian penuh
+berjalan **tanpa** perkhidmatan luaran (`Storage::fake`, `WHATSAPP_DRIVER=log`,
+`MAIL_MAILER=log`, `IMAP_ENABLED=false`, Scout `collection`). OCR sebenar hanya berjalan dalam
+imej Docker (tesseract/ocrmypdf) — OcrPipelineTest melangkau bahagian itu di luar Docker.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+php composer.phar install
+php artisan key:generate
+php artisan migrate:fresh --seed     # data demo (mam/man) dalam local/testing
+php artisan test                     # suite Pest
+```
 
-## Learning Laravel
+## Naik Produksi (Docker — Tencent Lighthouse)
+Prasyarat ✋ (§21): DNS + Caddy + swap; COS 2 bucket + CAM; Gmail App Password; BotFather;
+gateway `wassap.wehdah.my`; rclone crypt; harga & bank di Tetapan Platform; semakan Terma/DPA.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+git clone <repo> /opt/diwan && cd /opt/diwan
+cp .env.example .env    # isi APP_KEY, DB, COS, MEILI, WA, IMAP, TELEGRAM
+docker compose up -d --build
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan diwan:sync-meili
+docker compose exec app php artisan diwan:make-superadmin admin@wehdah.my --password=…
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Scheduler: servis `scheduler` menjalankan `schedule:work` (8 tugasan operasi + pangkas log
+  bulanan — lihat `routes/console.php`).
+- Worker: servis `worker` menjalankan `php artisan horizon` (queue: default, ocr[maxProcesses 1],
+  exports).
+- Sandaran 3 lapis (§4.6): COS versioning + `spatie/laravel-backup` (02:30 → `cos_backup`) +
+  rclone crypt mingguan (cron host).
 
-## Laravel Sponsors
+## Arahan Diwan
+| Command | Fungsi |
+|---|---|
+| `diwan:make-superadmin {email}` | Cipta/naik taraf superadmin |
+| `diwan:sync-meili` | Segerak tetapan indeks Meilisearch |
+| `diwan:simulate-whatsapp {session} {phone} {path}` | Uji webhook WhatsApp masuk |
+| `diwan:fetch-mail` | Tarik e-mel pengimbas (IMAP) |
+| `diwan:run-retention-notices` / `diwan:run-retention-execute` | Enjin retensi (§16) |
+| `diwan:reconcile-storage` · `diwan:expire-addons` · `diwan:ping-gateway` · `diwan:send-minit-reminders` · `diwan:prune-logs` | Tugasan operasi |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Tindakan Manusia Sebelum Live (§21)
+Lihat `DIWAN-SPEC.md §21` — DNS/COS/Gmail/BotFather/gateway/rclone/harga/Terma; luluskan MAM
+sebagai tenant pertama; buang data demo sebelum produksi.

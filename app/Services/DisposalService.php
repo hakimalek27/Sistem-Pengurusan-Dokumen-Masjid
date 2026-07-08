@@ -43,6 +43,48 @@ class DisposalService
         return $this->executeBatch($mosque, $records, 'auto', null);
     }
 
+    /** §10.G — Sedia batch manual (kerani/admin): draf menunggu kelulusan. */
+    public function prepareManual(Mosque $mosque, array $recordIds, User $creator): DisposalBatch
+    {
+        $batch = DisposalBatch::query()->create([
+            'mosque_id' => $mosque->id,
+            'kind' => 'manual',
+            'created_by' => $creator->id,
+            'status' => 'menunggu_kelulusan',
+        ]);
+
+        // Simpan rujukan rekod dalam item (snapshot penuh diambil semasa laksana).
+        foreach (Record::query()->withoutGlobalScope('mosque')->where('mosque_id', $mosque->id)->whereIn('id', $recordIds)->get() as $record) {
+            DisposalItem::query()->create([
+                'batch_id' => $batch->id,
+                'record_id' => $record->id,
+                'metadata_snapshot' => ['pending' => true, 'record_id' => $record->id],
+            ]);
+        }
+
+        return $batch;
+    }
+
+    /** §10.G — Kelulusan batch manual (pengerusi). */
+    public function approveManual(DisposalBatch $batch, User $approver): void
+    {
+        $batch->update(['status' => 'lulus', 'approved_by' => $approver->id]);
+    }
+
+    /** §10.G — Laksana batch manual yang diluluskan (admin_masjid). */
+    public function executeManual(DisposalBatch $batch, User $executor): DisposalBatch
+    {
+        $records = Record::query()->withoutGlobalScope('mosque')
+            ->whereIn('id', $batch->items()->pluck('record_id'))
+            ->where('status', 'difailkan')
+            ->get();
+
+        // Buang item pending; executeBatch akan cipta snapshot penuh.
+        $batch->items()->delete();
+
+        return $this->executeBatch($batch->mosque, $records, 'manual', $executor, $batch);
+    }
+
     /** Laksanakan pelupusan sekumpulan rekod → snapshot → padam blob → batu nisan → sijil. */
     public function executeBatch(Mosque $mosque, Collection $records, string $kind, ?User $executor, ?DisposalBatch $existing = null): DisposalBatch
     {
