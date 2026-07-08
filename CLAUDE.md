@@ -66,7 +66,8 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
       NOTA: Minit "tab" §9.C.5 diganti filter kategori (Filament 4 getTabs+tenant bermasalah — fungsi sama).
 - [x] Fasa 5 — QuotaService §5.14 + ProcessOcrJob §12 + SearchService §13 + Carian (suite 85✓,1 skip OCR)
       NOTA: OCR sebenar di-skip lokal (tesseract/ocrmypdf hanya dlm imej Docker); carian ujian guna Scout collection.
-- [ ] Fasa 6 — Kelulusan, QR & Versi, Bil
+- [x] Fasa 6 — Kelulusan §9.C.7, Ganti Versi/QR §9.C.4/6, BillingService §10.J, Penggunaan & Storan (suite 96✓)
+      Nota: UI superadmin Pesanan Storan (Tandakan Dibayar) → Fasa 8 (logik markPaid sedia & diuji).
 - [ ] Fasa 7 — Enjin Retensi & Eksport ZIP
 - [ ] Fasa 8 — Panel Superadmin, Pelupusan Manual, Laporan, Ops
 - [ ] Fasa 9 — Verifikasi Penuh & Kesediaan Live

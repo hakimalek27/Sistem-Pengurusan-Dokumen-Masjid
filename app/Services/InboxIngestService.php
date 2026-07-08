@@ -143,6 +143,38 @@ class InboxIngestService
         });
     }
 
+    /** §9.C.4 / §10.D — Ganti Versi: rekod baharu, lama status=diganti, pautan dua hala. */
+    public function supersede(Record $old, string $contents, string $filename, string $mime, ?User $user = null): Record
+    {
+        return DB::transaction(function () use ($old, $contents, $filename, $mime, $user) {
+            $sha256 = hash('sha256', $contents);
+
+            $new = $old->replicate(['ulid', 'superseded_by_record_id', 'created_at', 'updated_at']);
+            $new->status = RecordStatus::Difailkan;
+            $new->sha256 = $sha256;
+            $new->created_by = $user?->id;
+            $new->filed_by = $user?->id;
+            $new->filed_at = now();
+            $new->save(); // ulid dijana automatik
+
+            $safeName = Str::slug(pathinfo($filename, PATHINFO_FILENAME)).'.'.pathinfo($filename, PATHINFO_EXTENSION);
+            $new->addMediaFromString($contents)
+                ->usingFileName($safeName)
+                ->withCustomProperties(['sha256' => $sha256, 'mime' => $mime])
+                ->toMediaCollection('original');
+
+            $old->update([
+                'status' => RecordStatus::Diganti,
+                'superseded_by_record_id' => $new->id,
+            ]);
+
+            $new->searchable();
+            $old->searchable();
+
+            return $new;
+        });
+    }
+
     protected function guessType(SourceChannel $source, string $filename): string
     {
         return match ($source) {

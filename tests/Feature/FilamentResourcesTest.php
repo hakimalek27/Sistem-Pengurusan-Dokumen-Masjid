@@ -44,6 +44,14 @@ it('halaman Carian render', function () {
     $this->actingAs($this->admin)->get('/app/mam/carian')->assertOk();
 });
 
+it('halaman Kelulusan render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/kelulusan')->assertOk();
+});
+
+it('halaman Penggunaan & Storan render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/penggunaan')->assertOk();
+});
+
 it('halaman Minit Saya render', function () {
     $this->actingAs($this->admin)->get('/app/mam/minit-saya')->assertOk();
 });

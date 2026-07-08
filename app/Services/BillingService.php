@@ -1,0 +1,161 @@
+<?php
+
+namespace App\Services;
+
+use App\Enums\OrderStatus;
+use App\Models\Mosque;
+use App\Models\PlatformSetting;
+use App\Models\StorageAddon;
+use App\Models\StorageOrder;
+use App\Models\User;
+use App\Notifications\AddonExpiringNotification;
+use App\Notifications\NewStorageOrderNotification;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
+
+/**
+ * §10.J / §5.13 — Bil & storan (aliran invois-manual MVP).
+ */
+class BillingService
+{
+    public function blockGb(): int
+    {
+        return (int) (PlatformSetting::get('pricing', ['block_gb' => 10])['block_gb'] ?? 10);
+    }
+
+    public function pricePerGbYearRm(): float
+    {
+        return (float) (PlatformSetting::get('pricing', ['per_gb_year_rm' => null])['per_gb_year_rm'] ?? 0);
+    }
+
+    /** Invois bersiri platform-global INV-{YYYY}-{0001}. */
+    public function nextInvoiceNo(): string
+    {
+        $year = now()->format('Y');
+        $seq = StorageOrder::query()->withoutGlobalScope('mosque')
+            ->where('invoice_no', 'like', "INV-{$year}-%")->count() + 1;
+
+        return sprintf('INV-%s-%04d', $year, $seq);
+    }
+
+    /** §9.C.10 / Aliran J — Jana pesanan storan + invois PDF; status menunggu bayaran. */
+    public function createOrder(Mosque $mosque, ?User $user, int $blocks, int $periodMonths = 12): StorageOrder
+    {
+        $gb = $blocks * $this->blockGb();
+        $unitCents = (int) round($this->pricePerGbYearRm() * 100);
+        $amountCents = $gb * $unitCents;
+
+        $order = StorageOrder::query()->create([
+            'mosque_id' => $mosque->id,
+            'ordered_by' => $user?->id,
+            'gb' => $gb,
+            'unit_price_cents' => $unitCents,
+            'amount_cents' => $amountCents,
+            'period_months' => $periodMonths,
+            'status' => OrderStatus::MenungguBayaran,
+            'invoice_no' => $this->nextInvoiceNo(),
+        ]);
+
+        $order->update(['invoice_path' => $this->generateInvoicePdf($order)]);
+
+        Notification::send(
+            User::query()->where('is_superadmin', true)->where('is_active', true)->get(),
+            new NewStorageOrderNotification($order),
+        );
+
+        return $order;
+    }
+
+    public function generateInvoicePdf(StorageOrder $order): string
+    {
+        $order->loadMissing('mosque');
+        $bank = PlatformSetting::get('bank_details', []);
+        $amount = number_format($order->amount_cents / 100, 2);
+
+        $html = '<html><body style="font-family:sans-serif;">'
+            .'<h2>INVOIS — Diwan (Wehdah Solution)</h2>'
+            ."<p><strong>No. Invois:</strong> {$order->invoice_no}<br>"
+            .'<strong>Tarikh:</strong> '.now()->format('d/m/Y').'</p>'
+            ."<p><strong>Kepada:</strong> {$order->mosque->name} ({$order->mosque->code})</p>"
+            .'<table border="1" cellpadding="6" cellspacing="0" width="100%">'
+            .'<tr><th align="left">Perkara</th><th align="right">Jumlah</th></tr>'
+            ."<tr><td>Storan tambahan {$order->gb} GB ({$order->period_months} bulan)</td><td align=\"right\">RM {$amount}</td></tr>"
+            ."<tr><td align=\"right\"><strong>Jumlah</strong></td><td align=\"right\"><strong>RM {$amount}</strong></td></tr>"
+            .'</table>'
+            .'<h4>Arahan Bayaran</h4>'
+            .'<p>Bank: '.($bank['bank'] ?? '✋ (belum ditetapkan)').'<br>'
+            .'Nama Akaun: '.($bank['account_name'] ?? '—').'<br>'
+            .'No. Akaun: '.($bank['account_no'] ?? '—').'</p>'
+            ."<p>Sila nyatakan rujukan {$order->invoice_no} semasa pembayaran.</p>"
+            .'</body></html>';
+
+        $path = "platform/invoices/{$order->invoice_no}.pdf";
+        Storage::disk(config('diwan.storage_disk'))->put($path, Pdf::loadHTML($html)->output());
+
+        return $path;
+    }
+
+    /** §10.K — Tandakan dibayar → add-on aktif (kata laluan disahkan di UI). */
+    public function markPaid(StorageOrder $order, ?User $confirmer): StorageAddon
+    {
+        $order->update(['status' => OrderStatus::Dibayar, 'paid_at' => now(), 'confirmed_by' => $confirmer?->id]);
+
+        $addon = StorageAddon::query()->create([
+            'mosque_id' => $order->mosque_id,
+            'storage_order_id' => $order->id,
+            'gb' => $order->gb,
+            'starts_at' => now(),
+            'expires_at' => $order->period_months > 0 ? now()->addMonths($order->period_months) : null,
+            'status' => 'aktif',
+        ]);
+
+        activity()->performedOn($order)->causedBy($confirmer)
+            ->withProperties(['ip' => request()->ip()])->log('tandakan_dibayar');
+
+        return $addon;
+    }
+
+    /** §5.14 / Aliran J — Notis T-30/T-7, luput add-on → kira semula kuota. */
+    public function processExpiringAddons(): array
+    {
+        $expired = 0;
+        $notified = 0;
+
+        StorageAddon::query()->withoutGlobalScope('mosque')
+            ->where('status', 'aktif')->whereNotNull('expires_at')
+            ->cursor()
+            ->each(function (StorageAddon $addon) use (&$expired, &$notified) {
+                if ($addon->expires_at->isPast()) {
+                    $addon->update(['status' => 'luput']);
+                    $expired++;
+                    $this->notifyAddon($addon, 'luput');
+
+                    return;
+                }
+
+                foreach ([30, 7] as $days) {
+                    if ($addon->expires_at->isSameDay(now()->addDays($days)->startOfDay())) {
+                        $this->notifyAddon($addon, $days);
+                        $notified++;
+                    }
+                }
+            });
+
+        return ['expired' => $expired, 'notified' => $notified];
+    }
+
+    protected function notifyAddon(StorageAddon $addon, int|string $when): void
+    {
+        $mosque = $addon->mosque;
+        if (! $mosque) {
+            return;
+        }
+
+        $recipients = $mosque->users()->get()->filter(fn (User $u) => $u->canIn($mosque, 'usage.view') || $u->canIn($mosque, 'storage.order'));
+
+        if ($recipients->isNotEmpty()) {
+            Notification::send($recipients, new AddonExpiringNotification($mosque, $addon->gb, $when, optional($addon->expires_at)->format('d/m/Y') ?? '—'));
+        }
+    }
+}
