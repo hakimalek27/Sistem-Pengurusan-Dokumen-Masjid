@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+// §5.4 login_tokens (magic link — simpan hash SHA-256 sahaja)
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('login_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->string('email')->index();
+            $table->char('token', 64); // hash SHA-256 token mentah
+            $table->timestamp('expires_at');
+            $table->timestamp('used_at')->nullable();
+            $table->string('ip', 45)->nullable();
+            $table->timestamp('created_at')->nullable(); // tiada updated_at
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('login_tokens');
+    }
+};

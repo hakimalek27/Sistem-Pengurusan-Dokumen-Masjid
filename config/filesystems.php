@@ -60,6 +60,31 @@ return [
             'report' => false,
         ],
 
+        // §4.2 — Tencent COS (utama, ap-singapore). Private + signed URL sahaja.
+        'cos' => [
+            'driver' => 's3',
+            'key' => env('COS_SECRET_ID'),
+            'secret' => env('COS_SECRET_KEY'),
+            'region' => env('COS_REGION', 'ap-singapore'),
+            'bucket' => env('COS_BUCKET'),
+            'endpoint' => env('COS_ENDPOINT'),
+            'use_path_style_endpoint' => false,
+            'throw' => true,
+            'visibility' => 'private',
+        ],
+
+        // §4.2 — Tencent COS (sandaran, ap-jakarta).
+        'cos_backup' => [
+            'driver' => 's3',
+            'key' => env('COS_SECRET_ID'),
+            'secret' => env('COS_SECRET_KEY'),
+            'region' => env('COS_BACKUP_REGION', 'ap-jakarta'),
+            'bucket' => env('COS_BACKUP_BUCKET'),
+            'endpoint' => env('COS_BACKUP_ENDPOINT'),
+            'use_path_style_endpoint' => false,
+            'throw' => true,
+        ],
+
     ],
 
     /*

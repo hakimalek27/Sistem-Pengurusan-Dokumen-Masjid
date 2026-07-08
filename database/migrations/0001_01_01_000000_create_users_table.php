@@ -11,12 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // users — GLOBAL (tiada mosque_id) §5.3
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();          // magic link = laluan utama; kata laluan = fallback
+            $table->boolean('is_superadmin')->default(false); // Gate::before lulus semua + akses semua tenant (§6.0)
+            $table->string('phone_wa', 20)->nullable()->unique(); // E.164 tanpa '+' (padanan webhook global)
+            $table->string('telegram_chat_id')->nullable();
+            $table->string('jawatan')->nullable();
+            $table->boolean('notify_whatsapp')->default(true);
+            $table->boolean('notify_telegram')->default(false);
+            $table->boolean('notify_email')->default(true);
+            $table->boolean('is_active')->default(true);      // nyahaktif ≠ padam; TIADA butang padam
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
