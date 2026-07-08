@@ -35,6 +35,8 @@ function makeMosque(string $code, string $slug, MosqueStatus $status = MosqueSta
         'status' => $status,
         'wa_session_id' => $slug,
         'storage_quota_bytes' => 20 * (1024 ** 3),
+        'storage_used_bytes' => 0,
+        'auto_disposal_enabled' => true,
         'settings' => ['wa_intake_enabled' => true, 'wa_intake_keyword' => 'spdm'],
     ]);
 }

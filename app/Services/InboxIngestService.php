@@ -115,6 +115,9 @@ class InboxIngestService
             ]));
             $record->save();
 
+            // §16.3 — kira tarikh cukup tempoh apabila difailkan.
+            app(RetentionEngine::class)->refreshForRecord($record);
+
             $record->searchable();
 
             return $record;

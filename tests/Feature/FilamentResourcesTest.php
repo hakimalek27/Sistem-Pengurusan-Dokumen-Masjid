@@ -48,6 +48,14 @@ it('halaman Kelulusan render', function () {
     $this->actingAs($this->admin)->get('/app/mam/kelulusan')->assertOk();
 });
 
+it('halaman Retensi & Pegangan render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/retensi')->assertOk();
+});
+
+it('halaman Peraturan Retensi render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/retensi-peraturan')->assertOk();
+});
+
 it('halaman Penggunaan & Storan render', function () {
     $this->actingAs($this->admin)->get('/app/mam/penggunaan')->assertOk();
 });

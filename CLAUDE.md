@@ -68,6 +68,7 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
       NOTA: OCR sebenar di-skip lokal (tesseract/ocrmypdf hanya dlm imej Docker); carian ujian guna Scout collection.
 - [x] Fasa 6 — Kelulusan §9.C.7, Ganti Versi/QR §9.C.4/6, BillingService §10.J, Penggunaan & Storan (suite 96✓)
       Nota: UI superadmin Pesanan Storan (Tandakan Dibayar) → Fasa 8 (logik markPaid sedia & diuji).
-- [ ] Fasa 7 — Enjin Retensi & Eksport ZIP
+- [x] Fasa 7 — RetentionEngine §16.3 + DisposalService (snapshot/sijil) + notices/execute + Eksport ZIP §16.4
+      (suite 106✓; RetentionEngineTest 7 = positif + 5 negatif + gantung + kitaran; invarian t30+t7 dibuktikan)
 - [ ] Fasa 8 — Panel Superadmin, Pelupusan Manual, Laporan, Ops
 - [ ] Fasa 9 — Verifikasi Penuh & Kesediaan Live
