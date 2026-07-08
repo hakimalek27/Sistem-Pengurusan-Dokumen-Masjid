@@ -73,4 +73,5 @@ Mesin dev = **Windows 11, tiada Docker, tiada Redis**. Justifikasi & pemetaan:
 - [x] Fasa 8 — Panel Superadmin (Masjid/Pesanan/Pengguna/Tetapan), MembershipService §6.4, Pelupusan manual,
       Ahli/Tetapan Masjid/Profil, Ops (scheduler 9 tugasan, make-superadmin, prune-logs, backup, README) (suite 124✓)
       Nota: Laporan §9.C.9 + widget dashboard §9.C.2 = versi asas (dashboard Filament lalai).
-- [ ] Fasa 9 — Verifikasi Penuh & Kesediaan Live
+- [x] Fasa 9 — Verifikasi: migrate:fresh --seed bersih + 128 passed/1 skip + diwan:smoke 9/9 +
+      LAPORAN-KESEDIAAN.md (41 item §18 dipetakan). Kod SEDIA — go-live menunggu §21 + staging.
