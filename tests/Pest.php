@@ -1,33 +1,20 @@
 <?php
 
+use App\Enums\MosqueStatus;
+use App\Enums\OcrStatus;
+use App\Enums\RecordStatus;
+use App\Enums\SourceChannel;
+use App\Models\ClassificationNode;
+use App\Models\Mosque;
+use App\Models\Record;
+use App\Models\RegistryFile;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-
-/*
-|--------------------------------------------------------------------------
-| Test Case
-|--------------------------------------------------------------------------
-|
-| The closure you provide to your test functions is always bound to a specific PHPUnit test
-| case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
-| need to change it using the "pest()" function to bind a different classes or traits.
-|
-*/
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
-
-/*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
-*/
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
@@ -35,16 +22,80 @@ expect()->extend('toBeOne', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Functions
+| Pembantu Kilang (Test Factory Helpers) — dikongsi semua ujian
 |--------------------------------------------------------------------------
-|
-| While Pest is very powerful out-of-the-box, you may have some testing code specific to your
-| project that you don't want to repeat in every file. Here you can also expose helpers as
-| global functions to help you to reduce the number of lines of code in your test files.
-|
 */
 
-function something()
+function makeMosque(string $code, string $slug, MosqueStatus $status = MosqueStatus::Aktif): Mosque
 {
-    // ..
+    return Mosque::query()->create([
+        'name' => "Masjid {$code}",
+        'slug' => $slug,
+        'code' => $code,
+        'status' => $status,
+        'wa_session_id' => $slug,
+        'storage_quota_bytes' => 20 * (1024 ** 3),
+        'settings' => ['wa_intake_enabled' => true, 'wa_intake_keyword' => 'spdm'],
+    ]);
+}
+
+function makeNode(Mosque $mosque, string $code, string $sensitivity = 'dalaman', string $level = 'aktiviti'): ClassificationNode
+{
+    return ClassificationNode::query()->create([
+        'mosque_id' => $mosque->id,
+        'level' => $level,
+        'code' => $code,
+        'title' => "Nod {$code}",
+        'default_sensitivity' => $sensitivity,
+        'is_active' => true,
+    ]);
+}
+
+function makeMember(Mosque $mosque, string $role, ?string $email = null, array $attrs = []): User
+{
+    $user = User::query()->create(array_merge([
+        'name' => ucwords(str_replace('_', ' ', $role)),
+        'email' => $email ?? $role.'-'.$mosque->slug.'-'.uniqid().'@ujian.test',
+        'is_active' => true,
+    ], $attrs));
+
+    $mosque->users()->attach($user->id, ['role' => $role, 'joined_at' => now()]);
+
+    return $user;
+}
+
+function makeFile(Mosque $mosque, ClassificationNode $node, string $sensitivity = 'dalaman'): RegistryFile
+{
+    $txn = ((int) RegistryFile::query()->withoutGlobalScope('mosque')
+        ->where('mosque_id', $mosque->id)
+        ->where('classification_node_id', $node->id)
+        ->max('transaction_no')) + 1;
+
+    return RegistryFile::query()->create([
+        'mosque_id' => $mosque->id,
+        'classification_node_id' => $node->id,
+        'transaction_no' => $txn,
+        'volume' => 1,
+        'file_no' => "{$mosque->code}.{$node->code}/{$txn}",
+        'title' => "Fail {$node->code}",
+        'sensitivity' => $sensitivity,
+        'status' => 'terbuka',
+        'enclosure_count' => 0,
+        'opened_at' => now(),
+    ]);
+}
+
+function makeRecord(Mosque $mosque, ?RegistryFile $file, string $sensitivity = 'dalaman', string $type = 'surat_menyurat', array $attrs = []): Record
+{
+    return Record::query()->create(array_merge([
+        'mosque_id' => $mosque->id,
+        'registry_file_id' => $file?->id,
+        'record_type' => $type,
+        'title' => 'Rekod ujian',
+        'record_date' => now(),
+        'sensitivity' => $sensitivity,
+        'status' => $file ? RecordStatus::Difailkan : RecordStatus::PetiMasuk,
+        'ocr_status' => OcrStatus::Belum,
+        'source_channel' => SourceChannel::MuatNaik,
+    ], $attrs));
 }

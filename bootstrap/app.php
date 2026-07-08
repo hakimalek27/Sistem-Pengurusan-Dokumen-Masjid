@@ -11,7 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Guest pada laluan bukan-panel (cth /r/{ulid}) → halaman log masuk magic link.
+        $middleware->redirectGuestsTo(fn () => route('log-masuk'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
