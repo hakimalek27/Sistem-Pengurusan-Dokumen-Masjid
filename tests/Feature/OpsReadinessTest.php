@@ -11,6 +11,14 @@ it('failure probe job gagal dengan id yang boleh dijejak', function () {
         ->toThrow(RuntimeException::class, 'DIWAN_FAILURE_PROBE:probe-123');
 });
 
+it('failure drill queue mempunyai mod pengesahan failed jobs', function () {
+    $command = file_get_contents(app_path('Console/Commands/FailureDrill.php'));
+
+    expect($command)->toContain('{--verify')
+        ->and($command)->toContain("DB::table('failed_jobs')")
+        ->and($command)->toContain('tidak muncul dalam failed_jobs');
+});
+
 it('Horizon mengasingkan queue umum OCR dan eksport', function () {
     expect(config('horizon.defaults.general.queue'))->toBe(['default'])
         ->and(config('horizon.defaults.ocr.queue'))->toBe(['ocr'])
@@ -26,6 +34,7 @@ it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', f
     expect($dockerfile)->toContain('npm ci --no-audit --no-fund')
         ->and($dockerfile)->toContain('composer install')
         ->and($dockerfile)->toContain('--no-dev')
+        ->and($dockerfile)->toContain('mbstring dom simplexml xmlreader opcache')
         ->and($dockerfile)->toContain('USER www-data')
         ->and($dockerfile)->toContain('HEALTHCHECK')
         ->and($compose)->not->toContain('./:/var/www/html')
@@ -49,4 +58,24 @@ it('menyediakan staging smoke failure injection dan restore drill sebenar', func
         ->and($restore)->toContain('pg_restore')
         ->and($restore)->toContain('count(*) FROM records')
         ->and($restore)->toContain('LULUS restore drill');
+});
+
+it('menyediakan CI integration Docker dan deploy staging berrollback', function () {
+    $ci = file_get_contents(base_path('.github/workflows/ci.yml'));
+    $deployWorkflow = file_get_contents(base_path('.github/workflows/deploy-staging.yml'));
+    $deployScript = file_get_contents(base_path('scripts/deploy-staging.sh'));
+
+    expect($ci)->toContain('postgres:16-alpine')
+        ->and($ci)->toContain('redis:7-alpine')
+        ->and($ci)->toContain('getmeili/meilisearch:v1.12')
+        ->and($ci)->toContain('php artisan diwan:staging-check')
+        ->and($ci)->toContain('docker/build-push-action@v6')
+        ->and($ci)->toContain('Run built image smoke')
+        ->and($ci)->toContain('PHP runtime extensions OK')
+        ->and($ci)->toContain('nginx "$IMAGE" -t')
+        ->and($deployWorkflow)->toContain('environment: staging')
+        ->and($deployWorkflow)->toContain('STAGING_KNOWN_HOSTS')
+        ->and($deployScript)->toContain('trap rollback ERR')
+        ->and($deployScript)->toContain('failure-drill queue --verify')
+        ->and($deployScript)->toContain('restore-drill.sh');
 });

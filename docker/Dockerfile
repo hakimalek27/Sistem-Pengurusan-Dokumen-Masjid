@@ -24,6 +24,7 @@ FROM php:8.3-fpm-bookworm AS app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libexif-dev \
+    libxml2-dev libonig-dev \
     tesseract-ocr tesseract-ocr-msa ghostscript qpdf unpaper pngquant \
     python3 python3-pip python3-venv postgresql-client curl \
  && python3 -m venv /opt/ocr \
@@ -31,7 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && ln -s /opt/ocr/bin/ocrmypdf /usr/local/bin/ocrmypdf \
  && ln -s /opt/ocr/bin/img2pdf /usr/local/bin/img2pdf \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install -j"$(nproc)" pdo_pgsql pgsql intl zip gd bcmath pcntl exif \
+ && docker-php-ext-install -j"$(nproc)" pdo_pgsql pgsql intl zip gd bcmath pcntl exif mbstring dom simplexml xmlreader opcache \
  && pecl install redis \
  && docker-php-ext-enable redis \
  && apt-get clean \

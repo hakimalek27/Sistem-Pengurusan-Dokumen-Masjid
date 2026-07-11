@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\FailureProbeJob;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -11,7 +12,11 @@ use Throwable;
 
 class FailureDrill extends Command
 {
-    protected $signature = 'diwan:failure-drill {target : cos|queue|smtp} {--confirm-production}';
+    protected $signature = 'diwan:failure-drill
+        {target : cos|queue|smtp}
+        {--verify : Tunggu dan sahkan probe queue masuk failed_jobs}
+        {--timeout=45 : Tempoh maksimum pengesahan queue dalam saat}
+        {--confirm-production}';
 
     protected $description = 'Suntik kegagalan terkawal untuk membuktikan pengesanan COS, queue atau SMTP';
 
@@ -41,9 +46,30 @@ class FailureDrill extends Command
 
         $id = (string) Str::uuid();
         FailureProbeJob::dispatch($id)->onQueue('default');
-        $this->warn("Probe {$id} dihantar. Sahkan ia muncul dalam Horizon/failed_jobs dan alert operasi diterima.");
+        $this->warn("Probe {$id} dihantar ke Horizon.");
 
-        return self::SUCCESS;
+        if (! $this->option('verify')) {
+            $this->warn('Sahkan ia muncul dalam Horizon/failed_jobs dan alert operasi diterima.');
+
+            return self::SUCCESS;
+        }
+
+        $timeout = max(1, min(60, (int) $this->option('timeout')));
+        $deadline = microtime(true) + $timeout;
+
+        do {
+            if (DB::table('failed_jobs')->where('payload', 'like', "%{$id}%")->exists()) {
+                $this->info("LULUS: probe queue {$id} dikesan dalam failed_jobs.");
+
+                return self::SUCCESS;
+            }
+
+            usleep(500_000);
+        } while (microtime(true) < $deadline);
+
+        $this->error("GAGAL: probe queue {$id} tidak muncul dalam failed_jobs selepas {$timeout} saat.");
+
+        return self::FAILURE;
     }
 
     protected function cosProbe(): int

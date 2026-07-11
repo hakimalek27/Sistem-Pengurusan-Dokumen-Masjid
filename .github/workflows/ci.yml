@@ -1,0 +1,208 @@
+name: CI and release image
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration:
+    name: PostgreSQL, Redis, Meili, OCR and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: diwan_test
+          POSTGRES_USER: diwan
+          POSTGRES_PASSWORD: diwan-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U diwan -d diwan_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      meilisearch:
+        image: getmeili/meilisearch:v1.12
+        env:
+          MEILI_MASTER_KEY: ci-master-key-1234567890
+          MEILI_NO_ANALYTICS: "true"
+        ports:
+          - 7700:7700
+    env:
+      APP_ENV: testing
+      APP_DEBUG: "false"
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      APP_URL: http://127.0.0.1:8080
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: diwan_test
+      DB_USERNAME: diwan
+      DB_PASSWORD: diwan-ci-only
+      CACHE_STORE: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: 127.0.0.1
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      MAIL_MAILER: array
+      SCOUT_DRIVER: collection
+      MEILISEARCH_HOST: http://127.0.0.1:7700
+      MEILISEARCH_KEY: ci-master-key-1234567890
+      DIWAN_STORAGE_DISK: local
+      BACKUP_DISK: local
+      IMAP_ENABLED: "false"
+      WHATSAPP_DRIVER: log
+      LOG_CHANNEL: stderr
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, intl, pdo_pgsql, redis, pcntl, posix, zip, gd, exif
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Install OCR tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-msa ocrmypdf img2pdf ghostscript qpdf unpaper pngquant
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci --no-audit --no-fund
+
+      - name: Validate, audit and format
+        run: |
+          composer validate --strict
+          composer audit --no-dev
+          vendor/bin/pint --test
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Migrate PostgreSQL and run full suite
+        run: |
+          php artisan config:clear
+          php artisan migrate --force --no-interaction
+          php artisan test
+
+      - name: Runtime compatibility smoke
+        env:
+          QUEUE_CONNECTION: redis
+          SCOUT_DRIVER: meilisearch
+        run: |
+          php artisan horizon > storage/logs/horizon-ci.log 2>&1 &
+          horizon_pid=$!
+          trap 'php artisan horizon:terminate || true; wait "$horizon_pid" || true' EXIT
+          for attempt in {1..20}; do
+            php artisan horizon:status && break
+            sleep 1
+          done
+          php artisan horizon:status
+          php artisan diwan:health
+          php artisan diwan:staging-check --mail-to=ci@example.test --skip-imap
+
+      - name: Upload diagnostic logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-diagnostic-logs
+          path: storage/logs/*.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+  docker:
+    name: Docker ${{ matrix.target }} image
+    needs: integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [app, web]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build immutable image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          target: ${{ matrix.target }}
+          load: true
+          push: false
+          tags: |
+            ghcr.io/hakimalek27/sistem-pengurusan-dokumen-masjid/diwan-${{ matrix.target }}:${{ github.sha }}
+            ghcr.io/hakimalek27/sistem-pengurusan-dokumen-masjid/diwan-${{ matrix.target }}:main
+          cache-from: type=gha,scope=${{ matrix.target }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+
+      - name: Run built image smoke
+        env:
+          IMAGE: ghcr.io/hakimalek27/sistem-pengurusan-dokumen-masjid/diwan-${{ matrix.target }}:${{ github.sha }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          if [ "$TARGET" = "app" ]; then
+            docker run --rm --entrypoint php "$IMAGE" -r '
+              $required = ["pdo_pgsql", "redis", "intl", "zip", "gd", "bcmath", "pcntl", "posix", "exif", "mbstring", "dom", "simplexml", "xmlreader", "Zend OPcache"];
+              $missing = array_values(array_filter($required, fn ($extension) => ! extension_loaded($extension)));
+              if ($missing !== []) { fwrite(STDERR, "Missing extensions: ".implode(", ", $missing).PHP_EOL); exit(1); }
+              echo "PHP runtime extensions OK".PHP_EOL;
+            '
+          else
+            docker run --rm --entrypoint nginx "$IMAGE" -t
+          fi
+
+      - name: Publish verified image
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          IMAGE_ROOT: ghcr.io/hakimalek27/sistem-pengurusan-dokumen-masjid/diwan-${{ matrix.target }}
+        run: |
+          docker push "$IMAGE_ROOT:${{ github.sha }}"
+          docker push "$IMAGE_ROOT:main"

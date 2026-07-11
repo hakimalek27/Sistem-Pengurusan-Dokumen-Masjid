@@ -1,0 +1,69 @@
+name: Deploy staging and run live gates
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit, tag or branch to deploy
+        required: true
+        default: main
+      confirmation:
+        description: Type DEPLOY STAGING
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: inputs.confirmation == 'DEPLOY STAGING'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Validate required staging secrets
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          STAGING_KNOWN_HOSTS: ${{ secrets.STAGING_KNOWN_HOSTS }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+          STAGING_BACKUP_ZIP: ${{ secrets.STAGING_BACKUP_ZIP }}
+          STAGING_CHECK_EMAIL: ${{ secrets.STAGING_CHECK_EMAIL }}
+          STAGING_APP_URL: ${{ secrets.STAGING_APP_URL }}
+        run: |
+          for name in STAGING_HOST STAGING_USER STAGING_SSH_KEY STAGING_KNOWN_HOSTS STAGING_PATH STAGING_BACKUP_ZIP STAGING_CHECK_EMAIL STAGING_APP_URL; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::$name belum dikonfigurasi pada GitHub environment staging."
+              exit 1
+            fi
+          done
+
+      - name: Configure verified SSH connection
+        env:
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          STAGING_KNOWN_HOSTS: ${{ secrets.STAGING_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$STAGING_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$STAGING_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy, smoke, failure drills and restore drill
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+          STAGING_PORT: ${{ secrets.STAGING_PORT || '22' }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+          STAGING_BACKUP_ZIP: ${{ secrets.STAGING_BACKUP_ZIP }}
+          STAGING_CHECK_EMAIL: ${{ secrets.STAGING_CHECK_EMAIL }}
+          STAGING_APP_URL: ${{ secrets.STAGING_APP_URL }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p "$STAGING_PORT" "$STAGING_USER@$STAGING_HOST" \
+            "bash -s -- '$GITHUB_SHA' '$STAGING_PATH' '$STAGING_BACKUP_ZIP' '$STAGING_CHECK_EMAIL' '$STAGING_APP_URL'" \
+            < scripts/deploy-staging.sh

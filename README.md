@@ -49,7 +49,7 @@ STAGING_CHECK_EMAIL=ops@example.com APP_URL=https://staging.example.com ./script
 ### Gate staging dan failure drill
 
 `diwan:staging-check` menguji PostgreSQL, Redis, Horizon, COS baca/tulis/padam, OCR, Meilisearch,
-SMTP sebenar, socket IMAP dan gateway. Ia gagal jika `--mail-to` tidak diberi supaya SMTP tidak
+SMTP sebenar, autentikasi IMAP serta bacaan folder dan gateway. Ia gagal jika `--mail-to` tidak diberi supaya SMTP tidak
 boleh ditanda lulus berdasarkan konfigurasi sahaja.
 
 ```bash
@@ -74,6 +74,18 @@ teras dan merekod kiraan masjid/rekod/pengguna tanpa menyentuh DB staging.
 
 Bukti bertarikh ditulis ke `storage/logs/restore-drill-*.log`. Gate live memerlukan satu log
 `LULUS restore drill` daripada backup sebenar yang terkini.
+
+### CI dan deploy staging terkawal
+
+GitHub Actions menjalankan suite penuh pada PostgreSQL 16 + Redis 7 + Meilisearch, OCR sebenar,
+Horizon, build aset serta build/publish imej Docker `app` dan `web`. Workflow deploy staging ialah
+manual, menggunakan environment `staging`, SSH host-key verification dan rollback automatik jika
+smoke, failure injection atau restore drill gagal.
+
+Rahsia wajib pada GitHub environment `staging`: `STAGING_HOST`, `STAGING_USER`,
+`STAGING_SSH_KEY`, `STAGING_KNOWN_HOSTS`, `STAGING_PATH`, `STAGING_BACKUP_ZIP`,
+`STAGING_CHECK_EMAIL`, `STAGING_APP_URL`; `STAGING_PORT` pilihan (lalai `22`). Lindungi environment
+ini dengan required reviewer sebelum menjalankan workflow **Deploy staging and run live gates**.
 
 ## Arahan Diwan
 | Command | Fungsi |
