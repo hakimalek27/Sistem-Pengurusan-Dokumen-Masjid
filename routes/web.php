@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\MagicLoginController;
 use App\Http\Controllers\RecordDeepLinkController;
+use App\Http\Controllers\SecureArtifactController;
+use App\Http\Controllers\SecureFileController;
 use App\Livewire\RegisterMosque;
 use App\Livewire\RequestMagicLink;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +28,10 @@ Route::get('/masuk/{token}', MagicLoginController::class)
 Route::get('/r/{ulid}', RecordDeepLinkController::class)
     ->middleware('auth')
     ->name('record.deeplink');
+
+Route::middleware(['auth', 'signed'])->group(function () {
+    Route::get('/secure-file/{media}', SecureFileController::class)->name('secure-file.show');
+    Route::get('/secure-artifact/invoice/{order}', [SecureArtifactController::class, 'invoice'])->name('secure-artifact.invoice');
+    Route::get('/secure-artifact/certificate/{batch}', [SecureArtifactController::class, 'certificate'])->name('secure-artifact.certificate');
+    Route::get('/secure-artifact/export/{export}', [SecureArtifactController::class, 'export'])->name('secure-artifact.export');
+});

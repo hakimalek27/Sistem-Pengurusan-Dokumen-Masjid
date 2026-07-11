@@ -4,6 +4,7 @@ namespace App\Filament\App\Pages;
 
 use App\Jobs\BuildExportZipJob;
 use App\Models\Record;
+use App\Models\StoredExport;
 use App\Services\RetentionEngine;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -102,6 +103,12 @@ class RetensiPegangan extends Page
             'autoDisposal' => (bool) $mosque->auto_disposal_enabled,
             'canHold' => Auth::user()->canIn($mosque, 'retention.hold'),
             'records' => $this->expiringRecords(365),
+            'exports' => StoredExport::query()
+                ->where('mosque_id', $mosque->id)
+                ->where('requested_by', Auth::id())
+                ->where('expires_at', '>', now())
+                ->latest()
+                ->get(),
         ];
     }
 }

@@ -39,4 +39,23 @@
             </table>
         @endif
     </x-filament::section>
+
+    <x-filament::section>
+        <x-slot name="heading">Eksport Sedia Dimuat Turun</x-slot>
+        @if ($exports->isEmpty())
+            <p class="text-gray-500">Belum ada eksport aktif.</p>
+        @else
+            <div class="space-y-2">
+                @foreach ($exports as $export)
+                    <div class="flex items-center justify-between rounded-lg border border-gray-200 p-3 dark:border-white/10">
+                        <div>
+                            <div class="font-medium">{{ $export->label }}</div>
+                            <div class="text-xs text-gray-500">Luput {{ $export->expires_at->format('d/m/Y H:i') }}</div>
+                        </div>
+                        <a class="text-primary-600 underline" href="{{ app(\App\Services\SecureDownloadUrl::class)->export($export) }}">Muat Turun ZIP</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </x-filament::section>
 </x-filament-panels::page>

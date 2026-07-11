@@ -3,7 +3,9 @@
 namespace App\Notifications;
 
 use App\Models\Mosque;
+use App\Models\StoredExport;
 use App\Notifications\Concerns\RoutesDiwanChannels;
+use App\Services\SecureDownloadUrl;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -13,12 +15,11 @@ class ExportReadyNotification extends Notification
 {
     use RoutesDiwanChannels;
 
-    public function __construct(public Mosque $mosque, public string $path) {}
+    public function __construct(public Mosque $mosque, public StoredExport $export) {}
 
     protected function link(): string
     {
-        // Pautan perlu log masuk (luput 14 hari — lifecycle bucket §4.2).
-        return rtrim((string) config('app.url'), '/').'/app/'.$this->mosque->slug.'/retensi';
+        return app(SecureDownloadUrl::class)->export($this->export);
     }
 
     public function waMessage(): string

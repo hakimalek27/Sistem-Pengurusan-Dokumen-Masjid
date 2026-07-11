@@ -33,7 +33,7 @@ it('deep-link /r/{ulid}: ahli MAM tidak boleh akses rekod MAN → 404', function
     $mamUser = makeMember($this->mam, 'kerani');
 
     $this->actingAs($mamUser)->get('/r/'.$this->recMan->ulid)->assertNotFound();
-    $this->actingAs($mamUser)->get('/r/'.$this->recMam->ulid)->assertRedirect('/app/mam');
+    $this->actingAs($mamUser)->get('/r/'.$this->recMam->ulid)->assertRedirect('/app/mam/records/'.$this->recMam->id);
 });
 
 it('bukan ahli mana-mana masjid → 404 pada deep-link', function () {
@@ -62,5 +62,5 @@ it('superadmin boleh akses mana-mana tenant', function () {
     expect($super->canAccessTenant($this->mam))->toBeTrue()
         ->and($super->canAccessTenant($this->man))->toBeTrue();
 
-    $this->actingAs($super)->get('/r/'.$this->recMan->ulid)->assertRedirect('/app/man');
+    $this->actingAs($super)->get('/r/'.$this->recMan->ulid)->assertRedirect('/app/man/records/'.$this->recMan->id);
 });

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Mosque;
 use App\Models\Record;
+use App\Models\StoredExport;
 use App\Models\User;
 use App\Notifications\ExportReadyNotification;
 use App\Services\ExportService;
@@ -37,8 +38,16 @@ class BuildExportZipJob implements ShouldQueue
 
         $path = $export->build($mosque, $records, $this->label);
 
+        $storedExport = StoredExport::query()->create([
+            'mosque_id' => $mosque->id,
+            'requested_by' => $this->userId,
+            'label' => $this->label,
+            'path' => $path,
+            'expires_at' => now()->addDays(14),
+        ]);
+
         if ($user = User::query()->find($this->userId)) {
-            Notification::send([$user], new ExportReadyNotification($mosque, $path));
+            Notification::send([$user], new ExportReadyNotification($mosque, $storedExport));
         }
     }
 }

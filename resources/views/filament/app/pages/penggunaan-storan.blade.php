@@ -45,7 +45,7 @@
         @else
             <table class="w-full text-sm">
                 <thead><tr class="text-left text-gray-500">
-                    <th class="py-1">No. Invois</th><th>Saiz</th><th>Jumlah (RM)</th><th>Status</th>
+                    <th class="py-1">No. Invois</th><th>Saiz</th><th>Jumlah (RM)</th><th>Status</th><th></th>
                 </tr></thead>
                 <tbody>
                     @foreach ($orders as $o)
@@ -54,6 +54,11 @@
                             <td>{{ $o->gb }} GB</td>
                             <td>{{ number_format($o->amount_cents / 100, 2) }}</td>
                             <td>{{ $o->status->getLabel() }}</td>
+                            <td class="text-right">
+                                @if ($o->invoice_path)
+                                    <a class="text-primary-600 underline" href="{{ app(\App\Services\SecureDownloadUrl::class)->invoice($o) }}">Muat Turun Invois</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

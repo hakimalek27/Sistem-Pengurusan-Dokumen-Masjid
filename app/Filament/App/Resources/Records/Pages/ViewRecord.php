@@ -2,17 +2,15 @@
 
 namespace App\Filament\App\Resources\Records\Pages;
 
-use App\Concerns\ChecksSensitivity;
 use App\Enums\MinitPriority;
-use App\Enums\Sensitivity;
 use App\Filament\App\Resources\Records\RecordResource;
 use App\Models\RegistryFile;
-use App\Models\SensitiveAccessLog;
 use App\Models\User;
 use App\Services\ApprovalService;
 use App\Services\InboxIngestService;
 use App\Services\MinitService;
 use App\Services\QrLabelService;
+use App\Services\SensitiveAccessLogger;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -24,8 +22,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ViewRecord extends BaseViewRecord
 {
-    use ChecksSensitivity;
-
     protected static string $resource = RecordResource::class;
 
     public function mount(int|string $record): void
@@ -34,18 +30,7 @@ class ViewRecord extends BaseViewRecord
 
         $rec = $this->getRecord();
 
-        // §15.4 — Log akses rekod sulit pada MOUNT.
-        if ($this->effectiveSensitivity($rec) === Sensitivity::Sulit) {
-            SensitiveAccessLog::query()->create([
-                'mosque_id' => $rec->mosque_id,
-                'is_superadmin' => (bool) Auth::user()?->is_superadmin,
-                'user_id' => Auth::id(),
-                'record_id' => $rec->id,
-                'action' => 'view',
-                'ip' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-            ]);
-        }
+        app(SensitiveAccessLogger::class)->log($rec, Auth::user(), 'view', request());
     }
 
     protected function getHeaderActions(): array

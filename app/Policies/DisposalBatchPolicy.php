@@ -45,4 +45,13 @@ class DisposalBatchPolicy
     {
         return $user->canIn($batch->mosque, 'disposal.execute');
     }
+
+    public function downloadCertificate(User $user, DisposalBatch $batch): bool
+    {
+        return $user->is_superadmin
+            || $user->canIn($batch->mosque, 'disposal.prepare')
+            || $user->canIn($batch->mosque, 'disposal.approve')
+            || $user->canIn($batch->mosque, 'disposal.execute')
+            || $user->canIn($batch->mosque, 'audit.view');
+    }
 }

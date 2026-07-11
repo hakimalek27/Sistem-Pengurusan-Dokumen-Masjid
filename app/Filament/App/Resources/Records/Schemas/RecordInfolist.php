@@ -2,12 +2,15 @@
 
 namespace App\Filament\App\Resources\Records\Schemas;
 
+use App\Models\Record;
+use App\Services\SecureDownloadUrl;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 
 class RecordInfolist
 {
@@ -44,7 +47,9 @@ class RecordInfolist
                         Tab::make('Lampiran & Versi')
                             ->schema([
                                 TextEntry::make('_lampiran')->hiddenLabel()
-                                    ->state('Pratonton & muat turun fail — Fasa 5 (signed URL / SecureFileController).'),
+                                    ->state(fn (Record $record) => self::mediaLinks($record))
+                                    ->html()
+                                    ->columnSpanFull(),
                             ]),
                         Tab::make('Minit')
                             ->schema([
@@ -65,5 +70,35 @@ class RecordInfolist
                             ]),
                     ]),
             ]);
+    }
+
+    protected static function mediaLinks(Record $record): HtmlString
+    {
+        $url = app(SecureDownloadUrl::class);
+        $html = '<div class="space-y-3">';
+        $count = 0;
+
+        foreach (['original' => 'Fail Asal', 'derived' => 'PDF Boleh Cari', 'attachments' => 'Lampiran'] as $collection => $label) {
+            foreach ($record->getMedia($collection) as $media) {
+                $count++;
+                $previewable = $media->mime_type === 'application/pdf' || str_starts_with((string) $media->mime_type, 'image/');
+                $html .= '<div class="rounded-lg border border-gray-200 p-3 dark:border-white/10">'
+                    .'<div class="font-medium">'.e($label.': '.$media->file_name).'</div>'
+                    .'<div class="mt-2 flex gap-3 text-sm">';
+
+                if ($previewable) {
+                    $html .= '<a class="text-primary-600 underline" target="_blank" rel="noopener" href="'.e($url->media($media, 'inline')).'">Pratonton</a>';
+                }
+
+                $html .= '<a class="text-primary-600 underline" href="'.e($url->media($media, 'attachment')).'">Muat Turun</a>'
+                    .'</div></div>';
+            }
+        }
+
+        if ($count === 0) {
+            $html .= '<p class="text-gray-500">Tiada fail tersedia.</p>';
+        }
+
+        return new HtmlString($html.'</div>');
     }
 }

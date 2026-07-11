@@ -36,4 +36,16 @@ class StorageOrderPolicy
     {
         return $user->is_superadmin;
     }
+
+    public function download(User $user, StorageOrder $order): bool
+    {
+        if ($user->is_superadmin) {
+            return true;
+        }
+
+        return $user->isMemberOf($order->mosque)
+            && ($order->ordered_by === $user->id
+                || $user->canIn($order->mosque, 'usage.view')
+                || $user->canIn($order->mosque, 'storage.order'));
+    }
 }

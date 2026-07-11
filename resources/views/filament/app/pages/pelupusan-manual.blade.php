@@ -34,7 +34,7 @@
                                         wire:confirm="Laksana pelupusan? Blob dipadam kekal.">Laksana</x-filament::button>
                                 @endif
                                 @if ($b->certificate_path)
-                                    <span class="text-xs text-emerald-600">Sijil ✓</span>
+                                    <a class="text-xs text-primary-600 underline" href="{{ app(\App\Services\SecureDownloadUrl::class)->certificate($b) }}">Muat Turun Sijil</a>
                                 @endif
                             </td>
                         </tr>

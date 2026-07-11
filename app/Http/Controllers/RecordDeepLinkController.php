@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filament\App\Resources\Records\RecordResource;
 use App\Models\Record;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,12 +22,11 @@ class RecordDeepLinkController extends Controller
         $user = Auth::user();
         $mosque = $record->mosque;
 
-        // Bukan ahli tenant rekod (dan bukan superadmin) → 404 (jangan dedah kewujudan).
-        if (! $user->is_superadmin && ! $user->isMemberOf($mosque)) {
+        // Policy merangkumi keahlian + sensitiviti; gagal → 404 (jangan dedah kewujudan).
+        if (! $user->can('view', $record)) {
             abort(404);
         }
 
-        // Fasa 3 akan hala ke halaman ViewRecord; buat masa ini ke panel masjid.
-        return redirect('/app/'.$mosque->slug);
+        return redirect(RecordResource::getUrl('view', ['record' => $record], panel: 'app', tenant: $mosque));
     }
 }
