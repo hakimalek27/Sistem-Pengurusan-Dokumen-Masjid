@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\BelongsToMosque;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use LogicException;
 
 // §5.16 sensitive_access_logs (+mosque_id, +is_superadmin) — created_at sahaja
 class SensitiveAccessLog extends Model
@@ -23,6 +24,12 @@ class SensitiveAccessLog extends Model
             'is_superadmin' => 'boolean',
             'created_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(fn () => throw new LogicException('Log akses sulit tidak boleh diubah.'));
+        static::deleting(fn () => throw new LogicException('Log akses sulit tidak boleh dipadam.'));
     }
 
     public function user(): BelongsTo

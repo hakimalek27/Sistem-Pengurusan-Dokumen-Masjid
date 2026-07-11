@@ -2,9 +2,6 @@
 
 namespace App\Filament\App\Resources\SensitiveAccessLogs\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -16,32 +13,32 @@ class SensitiveAccessLogsTable
         return $table
             ->columns([
                 TextColumn::make('mosque.name')
+                    ->label('Masjid')
                     ->searchable(),
                 IconColumn::make('is_superadmin')
+                    ->label('Superadmin')
                     ->boolean(),
                 TextColumn::make('user.name')
+                    ->label('Pengguna')
                     ->searchable(),
                 TextColumn::make('record.title')
+                    ->label('Rekod')
                     ->searchable(),
                 TextColumn::make('action')
+                    ->label('Tindakan')
                     ->searchable(),
                 TextColumn::make('ip')
+                    ->label('Alamat IP')
                     ->searchable(),
                 TextColumn::make('created_at')
+                    ->label('Masa')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
-            ->recordActions([
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([])
+            ->toolbarActions([]);
     }
 }

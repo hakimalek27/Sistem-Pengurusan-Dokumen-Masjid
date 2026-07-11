@@ -37,7 +37,19 @@ class MinitPolicy
 
     public function respond(User $user, Minit $minit): bool
     {
-        return $user->canIn($minit->mosque, 'minit.respond');
+        return $user->canIn($minit->mosque, 'minit.respond')
+            && $minit->recipients()->where('user_id', $user->id)->where('jenis', 'tindakan')->exists();
+    }
+
+    public function complete(User $user, Minit $minit): bool
+    {
+        return $this->respond($user, $minit)
+            && $minit->recipients()->where('user_id', $user->id)->where('status', '!=', 'selesai')->exists();
+    }
+
+    public function reply(User $user, Minit $minit): bool
+    {
+        return $this->respond($user, $minit);
     }
 
     public function update(User $user, Minit $minit): bool

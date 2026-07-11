@@ -80,7 +80,7 @@ class InboxIngestService
         });
 
         // §12 — Hantar OCR ke queue 'ocr' (no-op jika tooling tiada; imej Docker sahaja).
-        ProcessOcrJob::dispatch($record->id)->onQueue('ocr');
+        ProcessOcrJob::dispatch($record->id, $mosque->id)->onQueue('ocr');
 
         return $record;
     }

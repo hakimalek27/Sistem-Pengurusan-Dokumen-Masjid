@@ -7,10 +7,12 @@ use App\Filament\App\Resources\Inbox\Pages\ListInbox;
 use App\Filament\App\Resources\Inbox\Tables\InboxTable;
 use App\Models\Record;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class InboxResource extends Resource
@@ -34,6 +36,13 @@ class InboxResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('status', RecordStatus::PetiMasuk->value);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $mosque = Filament::getTenant();
+
+        return $mosque && (Auth::user()?->canIn($mosque, 'inbox.view') ?? false);
     }
 
     public static function getNavigationBadge(): ?string

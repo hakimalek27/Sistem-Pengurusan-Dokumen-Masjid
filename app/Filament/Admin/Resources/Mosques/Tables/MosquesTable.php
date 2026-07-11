@@ -38,6 +38,7 @@ class MosquesTable
 
                 Action::make('lulus')
                     ->label('Lulus')->color('success')->icon('heroicon-o-check')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => $record->status === MosqueStatus::Menunggu)
                     ->requiresConfirmation()
                     ->action(function ($record) {
@@ -47,6 +48,7 @@ class MosquesTable
 
                 Action::make('tolak')
                     ->label('Tolak')->color('danger')->icon('heroicon-o-x-mark')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => $record->status === MosqueStatus::Menunggu)
                     ->schema([Textarea::make('reason')->label('Sebab')->required()])
                     ->action(function ($record, array $data) {
@@ -58,6 +60,7 @@ class MosquesTable
                     ->label(fn ($record) => $record->status === MosqueStatus::Digantung ? 'Aktifkan' : 'Gantung')
                     ->color(fn ($record) => $record->status === MosqueStatus::Digantung ? 'success' : 'warning')
                     ->icon('heroicon-o-pause')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => in_array($record->status, [MosqueStatus::Aktif, MosqueStatus::Digantung], true))
                     ->requiresConfirmation()
                     ->action(function ($record) {
@@ -68,6 +71,7 @@ class MosquesTable
 
                 Action::make('ubahKuota')
                     ->label('Ubah Kuota')->icon('heroicon-o-circle-stack')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->schema([
                         TextInput::make('gb')->label('Kuota Asas (GB)')->numeric()->required()
                             ->default(fn ($record) => (int) round($record->storage_quota_bytes / (1024 ** 3))),
@@ -82,6 +86,7 @@ class MosquesTable
 
                 Action::make('masukPanel')
                     ->label('Masuk Panel Masjid')->icon('heroicon-o-arrow-top-right-on-square')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->url(fn ($record) => url('/app/'.$record->slug))
                     ->openUrlInNewTab(),
             ]);

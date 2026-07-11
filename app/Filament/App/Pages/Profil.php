@@ -31,6 +31,7 @@ class Profil extends Page
             Action::make('notifikasi')
                 ->label('Tetapan Notifikasi')
                 ->icon('heroicon-o-bell')
+                ->authorize(fn () => Auth::check())
                 ->fillForm(fn () => Auth::user()->only(['notify_email', 'notify_whatsapp', 'notify_telegram']))
                 ->schema([
                     Toggle::make('notify_email')->label('E-mel'),
@@ -45,6 +46,7 @@ class Profil extends Page
             Action::make('ujian')
                 ->label('Hantar Notifikasi Ujian')
                 ->icon('heroicon-o-paper-airplane')
+                ->authorize(fn () => Auth::check())
                 ->action(function () {
                     Auth::user()->notify(new TestNotification);
                     Notification::make()->title('Notifikasi ujian dihantar ke saluran aktif.')->success()->send();

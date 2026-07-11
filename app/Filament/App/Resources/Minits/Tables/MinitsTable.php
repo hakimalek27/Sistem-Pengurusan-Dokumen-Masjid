@@ -58,6 +58,7 @@ class MinitsTable
                     ->label('Tanda Selesai')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
+                    ->authorize('complete')
                     ->visible(fn ($record) => $record->recipients()
                         ->where('user_id', Auth::id())->where('jenis', 'tindakan')->where('status', '!=', 'selesai')->exists())
                     ->requiresConfirmation()
@@ -68,6 +69,7 @@ class MinitsTable
                 Action::make('balas')
                     ->label('Balas & Edarkan')
                     ->icon('heroicon-o-arrow-uturn-left')
+                    ->authorize('reply')
                     ->visible(fn ($record) => $record->recipients()
                         ->where('user_id', Auth::id())->where('jenis', 'tindakan')->exists())
                     ->schema([

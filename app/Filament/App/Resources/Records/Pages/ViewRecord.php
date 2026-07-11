@@ -56,6 +56,7 @@ class ViewRecord extends BaseViewRecord
             Action::make('edarkanMinit')
                 ->label('Edarkan Minit')
                 ->icon('heroicon-o-paper-airplane')
+                ->authorize('routeMinit')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'minit.create'))
                 ->schema([
                     Select::make('action')->label('Penerima Tindakan')->multiple()->options(fn () => $this->memberOptions())->required(),
@@ -71,6 +72,7 @@ class ViewRecord extends BaseViewRecord
             Action::make('mohonKelulusan')
                 ->label('Mohon Kelulusan')
                 ->icon('heroicon-o-check-badge')
+                ->authorize('requestApproval')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'approvals.request'))
                 ->schema([
                     Select::make('approver_id')->label('Kepada')->options(fn () => $this->approverOptions())->required(),
@@ -84,6 +86,7 @@ class ViewRecord extends BaseViewRecord
             Action::make('gantiVersi')
                 ->label('Ganti Versi')
                 ->icon('heroicon-o-arrow-path')
+                ->authorize('supersede')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.supersede'))
                 ->schema([
                     FileUpload::make('file')->label('Versi Baharu')->disk('local')->directory('ver-tmp')->required(),
@@ -100,6 +103,7 @@ class ViewRecord extends BaseViewRecord
             Action::make('pindahFail')
                 ->label('Pindah Fail')
                 ->icon('heroicon-o-folder-arrow-down')
+                ->authorize('move')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.move') && $this->getRecord()->registry_file_id)
                 ->schema([
                     Select::make('registry_file_id')->label('Fail Baharu')
@@ -116,6 +120,7 @@ class ViewRecord extends BaseViewRecord
             Action::make('janaQr')
                 ->label('Jana Kod QR')
                 ->icon('heroicon-o-qr-code')
+                ->authorize('generateQr')
                 ->action(function () {
                     $pdf = app(QrLabelService::class)->recordPdf($this->getRecord());
 

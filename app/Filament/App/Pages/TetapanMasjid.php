@@ -44,6 +44,7 @@ class TetapanMasjid extends Page
             Action::make('edit')
                 ->label('Edit Tetapan')
                 ->icon('heroicon-o-pencil')
+                ->authorize(fn () => Auth::user()?->canIn($mosque, 'mosque.settings') ?? false)
                 ->fillForm(fn () => [
                     'phone' => $mosque->phone,
                     'dpr_name' => $mosque->settings['data_protection_rep']['name'] ?? null,

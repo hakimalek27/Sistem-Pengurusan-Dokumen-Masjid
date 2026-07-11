@@ -78,6 +78,7 @@ class PelupusanManual extends Page
             Action::make('sediaBatch')
                 ->label('Sedia Senarai Semakan')
                 ->icon('heroicon-o-clipboard-document-check')
+                ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'disposal.prepare') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'disposal.prepare'))
                 ->requiresConfirmation()
                 ->modalDescription('AMARAN: Selepas kelulusan & pelupusan, rekod dipadam kekal dan tidak boleh dikembalikan; metadata kekal. Pastikan sandaran luar telah dibuat.')

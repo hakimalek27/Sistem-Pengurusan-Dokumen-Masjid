@@ -45,6 +45,7 @@ class PenggunaanStoran extends Page
             Action::make('tambahStoran')
                 ->label('Tambah Storan')
                 ->icon('heroicon-o-plus')
+                ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'storage.order') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'storage.order'))
                 ->schema([
                     TextInput::make('blocks')

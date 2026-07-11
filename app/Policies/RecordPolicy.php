@@ -63,6 +63,12 @@ class RecordPolicy
         return $user->canIn($record->mosque, 'inbox.classify');
     }
 
+    public function classify(User $user, Record $record): bool
+    {
+        return $record->status->value === 'peti_masuk'
+            && $user->canIn($record->mosque, 'inbox.classify');
+    }
+
     public function move(User $user, Record $record): bool
     {
         return $user->canIn($record->mosque, 'records.move');
@@ -81,5 +87,20 @@ class RecordPolicy
     public function legalHold(User $user, Record $record): bool
     {
         return $user->canIn($record->mosque, 'retention.hold');
+    }
+
+    public function routeMinit(User $user, Record $record): bool
+    {
+        return $this->view($user, $record) && $user->canIn($record->mosque, 'minit.create');
+    }
+
+    public function requestApproval(User $user, Record $record): bool
+    {
+        return $this->view($user, $record) && $user->canIn($record->mosque, 'approvals.request');
+    }
+
+    public function generateQr(User $user, Record $record): bool
+    {
+        return $this->view($user, $record);
     }
 }

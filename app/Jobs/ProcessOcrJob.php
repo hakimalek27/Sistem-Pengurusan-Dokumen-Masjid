@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
 /**
- * §12 — Pipeline OCR (queue ocr, maxProcesses 1). Membawa record_id (mosque diperoleh dari
- * rekod, BUKAN konteks global). Fail asal TIDAK diubah — derived ke prefix tenant.
+ * §12 — Pipeline OCR (queue ocr, maxProcesses 1). Payload membawa record_id + mosque_id;
+ * queue tidak bergantung pada konteks tenant global. Fail asal TIDAK diubah.
  */
 class ProcessOcrJob implements ShouldQueue
 {
@@ -25,7 +25,7 @@ class ProcessOcrJob implements ShouldQueue
 
     public int $tries = 2;
 
-    public function __construct(public int $recordId) {}
+    public function __construct(public int $recordId, public int $mosqueId) {}
 
     public function backoff(): array
     {
@@ -34,7 +34,9 @@ class ProcessOcrJob implements ShouldQueue
 
     public function handle(): void
     {
-        $record = Record::query()->withoutGlobalScope('mosque')->find($this->recordId);
+        $record = Record::query()->withoutGlobalScope('mosque')
+            ->where('mosque_id', $this->mosqueId)
+            ->find($this->recordId);
         if (! $record) {
             return;
         }

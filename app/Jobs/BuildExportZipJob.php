@@ -31,6 +31,7 @@ class BuildExportZipJob implements ShouldQueue
         }
 
         $records = Record::query()->withoutGlobalScope('mosque')
+            ->where('mosque_id', $mosque->id)
             ->whereIn('id', $this->recordIds)
             ->get();
 

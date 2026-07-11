@@ -70,6 +70,7 @@ class AhliPeranan extends Page
             Action::make('jemput')
                 ->label('Jemput Ahli')
                 ->icon('heroicon-o-user-plus')
+                ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'users.manage') ?? false)
                 ->schema([
                     TextInput::make('email')->label('E-mel')->email()->required(),
                     TextInput::make('name')->label('Nama')->required(),

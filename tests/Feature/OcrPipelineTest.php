@@ -46,7 +46,7 @@ it('OCR imej BM sebenar mengekstrak teks (§18.7 — perlu ocrmypdf/tesseract)',
     $record = $this->ingest->ingest($this->mam, file_get_contents($tmp), 'surat.jpg', 'image/jpeg', null, SourceChannel::WhatsApp);
     @unlink($tmp);
 
-    ProcessOcrJob::dispatchSync($record->id);
+    ProcessOcrJob::dispatchSync($record->id, $record->mosque_id);
 
     $fresh = $record->fresh();
     expect($fresh->ocr_status)->toBe(OcrStatus::Siap)

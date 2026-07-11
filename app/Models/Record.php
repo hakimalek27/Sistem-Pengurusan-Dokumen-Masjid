@@ -8,6 +8,7 @@ use App\Enums\RecordDirection;
 use App\Enums\RecordStatus;
 use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -101,6 +102,46 @@ class Record extends Model implements HasMedia
     public function shouldBeSearchable(): bool
     {
         return in_array($this->status, [RecordStatus::Difailkan, RecordStatus::Diganti], true);
+    }
+
+    /**
+     * Senarai rekod yang benar-benar boleh dilihat pengguna dalam satu tenant.
+     * Policy kekal gate per-rekod; scope ini mencegah metadata sulit bocor di senarai.
+     */
+    public function scopeVisibleTo(Builder $query, User $user, Mosque $mosque): Builder
+    {
+        $query->where($query->qualifyColumn('mosque_id'), $mosque->id);
+
+        if ($user->is_superadmin) {
+            return $query;
+        }
+
+        $role = $user->roleIn($mosque);
+
+        if ($role === null || ! $user->canIn($mosque, 'records.view')) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        if (in_array($role, ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'], true)) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $allowed) use ($role, $user): void {
+            $allowed->where(function (Builder $notSensitive): void {
+                $notSensitive
+                    ->where('sensitivity', '!=', Sensitivity::Sulit->value)
+                    ->whereDoesntHave('registryFile', fn (Builder $file) => $file->where('sensitivity', Sensitivity::Sulit->value));
+            });
+
+            if ($role === 'bendahari') {
+                $allowed->orWhereHas('registryFile.classificationNode', fn (Builder $node) => $node
+                    ->where(function (Builder $prefix): void {
+                        $prefix->where('code', 'like', '200%')->orWhere('code', 'like', '300%');
+                    }));
+            }
+
+            $allowed->orWhereHas('registryFile.accessGrants', fn (Builder $grant) => $grant->where('user_id', $user->id));
+        });
     }
 
     // ---- Relationships ----

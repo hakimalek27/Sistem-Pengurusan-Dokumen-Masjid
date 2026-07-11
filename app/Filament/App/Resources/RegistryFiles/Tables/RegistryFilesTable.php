@@ -31,6 +31,7 @@ class RegistryFilesTable
                     ->label('Buka Jld. Baharu')
                     ->icon('heroicon-o-plus-circle')
                     ->color('warning')
+                    ->authorize('openNextVolume')
                     ->visible(fn ($record) => $record->status === 'terbuka'
                         && $record->enclosure_count >= config('diwan.enclosure_volume_limit', 100))
                     ->requiresConfirmation()
@@ -40,6 +41,7 @@ class RegistryFilesTable
                     ->label('Tutup Fail')
                     ->icon('heroicon-o-lock-closed')
                     ->color('danger')
+                    ->authorize('close')
                     ->visible(fn ($record) => $record->status === 'terbuka')
                     ->schema([
                         Textarea::make('reason')->label('Sebab Tutup')->required(),

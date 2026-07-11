@@ -11,6 +11,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class TetapanPlatform extends Page
@@ -31,6 +32,7 @@ class TetapanPlatform extends Page
             Action::make('edit')
                 ->label('Edit Tetapan')
                 ->icon('heroicon-o-pencil')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                 ->fillForm(fn () => [
                     'per_gb_year_rm' => PlatformSetting::get('pricing', [])['per_gb_year_rm'] ?? null,
                     'block_gb' => PlatformSetting::get('pricing', [])['block_gb'] ?? 10,
@@ -62,6 +64,7 @@ class TetapanPlatform extends Page
             Action::make('ujiGateway')
                 ->label('Uji Gateway WA')
                 ->icon('heroicon-o-signal')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                 ->action(function () {
                     $ok = app(WhatsAppGateway::class)->ping();
                     Notification::make()->title('Gateway: '.($ok ? 'OK' : 'GAGAL'))->status($ok ? 'success' : 'danger')->send();
@@ -70,6 +73,7 @@ class TetapanPlatform extends Page
             Action::make('ujiCos')
                 ->label('Uji COS')
                 ->icon('heroicon-o-cloud')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                 ->action(function () {
                     try {
                         $disk = Storage::disk(config('diwan.storage_disk'));

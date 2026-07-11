@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Diwan · Pentadbir Platform')
             ->login()
+            ->strictAuthorization()
             ->colors([
                 'primary' => Color::Emerald,
             ])

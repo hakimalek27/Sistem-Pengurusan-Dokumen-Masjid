@@ -62,6 +62,7 @@ class RetensiPegangan extends Page
             Action::make('eksportAkanLuput')
                 ->label('Eksport ZIP (Akan Luput ≤90 hari)')
                 ->icon('heroicon-o-arrow-down-tray')
+                ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'export.create') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'export.create'))
                 ->requiresConfirmation()
                 ->action(function () {

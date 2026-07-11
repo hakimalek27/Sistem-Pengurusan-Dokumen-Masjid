@@ -31,6 +31,7 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->brandName('Diwan')
             ->login()
+            ->strictAuthorization()
             ->tenant(Mosque::class, slugAttribute: 'slug')
             ->colors([
                 'primary' => Color::Emerald,

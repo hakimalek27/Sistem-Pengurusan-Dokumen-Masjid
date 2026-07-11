@@ -45,6 +45,12 @@ class RegistryFilePolicy
         return $user->canIn($file->mosque, 'files.close');
     }
 
+    public function openNextVolume(User $user, RegistryFile $file): bool
+    {
+        return $user->canIn($file->mosque, 'files.open')
+            && $user->canIn($file->mosque, 'files.close');
+    }
+
     public function grantAccess(User $user, RegistryFile $file): bool
     {
         return $user->canIn($file->mosque, 'files.grant_access');

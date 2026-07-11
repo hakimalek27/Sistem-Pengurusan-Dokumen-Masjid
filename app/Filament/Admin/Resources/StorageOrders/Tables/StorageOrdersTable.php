@@ -34,6 +34,7 @@ class StorageOrdersTable
             ->recordActions([
                 Action::make('tandakanDibayar')
                     ->label('Tandakan Dibayar')->color('success')->icon('heroicon-o-banknotes')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => $record->status === OrderStatus::MenungguBayaran)
                     ->schema([TextInput::make('password')->label('Sahkan Kata Laluan')->password()->required()])
                     ->action(function ($record, array $data) {
@@ -49,6 +50,7 @@ class StorageOrdersTable
 
                 Action::make('batal')
                     ->label('Batal')->color('gray')->icon('heroicon-o-x-mark')
+                    ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => $record->status === OrderStatus::MenungguBayaran)
                     ->requiresConfirmation()
                     ->action(fn ($record) => $record->update(['status' => OrderStatus::Dibatalkan])),

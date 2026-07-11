@@ -37,7 +37,8 @@ class ApprovalPolicy
 
     public function decide(User $user, Approval $approval): bool
     {
-        return $user->canIn($approval->mosque, 'approvals.decide');
+        return $approval->approver_id === $user->id
+            && $user->canIn($approval->mosque, 'approvals.decide');
     }
 
     public function update(User $user, Approval $approval): bool

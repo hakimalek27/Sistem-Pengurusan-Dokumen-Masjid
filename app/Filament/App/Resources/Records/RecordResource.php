@@ -9,11 +9,13 @@ use App\Filament\App\Resources\Records\Schemas\RecordInfolist;
 use App\Filament\App\Resources\Records\Tables\RecordsTable;
 use App\Models\Record;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class RecordResource extends Resource
@@ -45,7 +47,13 @@ class RecordResource extends Resource
     /** Senarai Rekod tidak termasuk item Peti Masuk (belum difailkan). */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('status', '!=', RecordStatus::PetiMasuk->value);
+        $query = parent::getEloquentQuery()->where('status', '!=', RecordStatus::PetiMasuk->value);
+        $mosque = Filament::getTenant();
+        $user = Auth::user();
+
+        return ($mosque && $user)
+            ? $query->visibleTo($user, $mosque)
+            : $query->whereRaw('1 = 0');
     }
 
     public static function getPages(): array

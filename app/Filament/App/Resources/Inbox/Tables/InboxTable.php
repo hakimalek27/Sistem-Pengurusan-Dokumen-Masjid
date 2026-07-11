@@ -61,6 +61,7 @@ class InboxTable
             ->label('Klasifikasikan')
             ->icon('heroicon-o-tag')
             ->color('primary')
+            ->authorize('classify')
             ->modalWidth('2xl')
             ->fillForm(fn ($record) => [
                 'record_type' => $record->record_type,
@@ -152,6 +153,7 @@ class InboxTable
             ->label('Padam (Spam)')
             ->icon('heroicon-o-trash')
             ->color('danger')
+            ->authorize('delete')
             ->schema([
                 Textarea::make('reason')->label('Sebab (spam / tidak berkaitan)')->required(),
             ])

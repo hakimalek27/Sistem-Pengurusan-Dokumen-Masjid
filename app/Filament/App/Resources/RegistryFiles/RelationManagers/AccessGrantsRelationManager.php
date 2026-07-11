@@ -42,6 +42,7 @@ class AccessGrantsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Beri Akses')
+                    ->authorize('create')
                     ->mutateDataUsing(function (array $data) {
                         $data['granted_by'] = Auth::id();
 
@@ -49,7 +50,7 @@ class AccessGrantsRelationManager extends RelationManager
                     }),
             ])
             ->recordActions([
-                DeleteAction::make()->label('Tarik Balik'),
+                DeleteAction::make()->label('Tarik Balik')->authorize('delete'),
             ]);
     }
 }

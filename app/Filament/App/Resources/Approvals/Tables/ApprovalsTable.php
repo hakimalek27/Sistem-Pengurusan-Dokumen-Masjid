@@ -39,6 +39,7 @@ class ApprovalsTable
             ->label($label)
             ->color($color)
             ->icon($decision === ApprovalStatus::Lulus ? 'heroicon-o-check' : 'heroicon-o-x-mark')
+            ->authorize('decide')
             ->visible(fn ($record) => $record->status === ApprovalStatus::Menunggu && $record->approver_id === Auth::id())
             ->schema([
                 TextInput::make('password')->label('Sahkan Kata Laluan')->password()->required(),
