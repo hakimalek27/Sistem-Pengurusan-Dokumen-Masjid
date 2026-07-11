@@ -19,14 +19,23 @@ class RunRetentionExecute extends Command
     public function handle(DisposalService $disposal): int
     {
         $totalRecords = 0;
+        $failedMosques = 0;
 
         // Masjid digantung DIJEDA; hanya masjid aktif + auto_disposal_enabled.
         Mosque::query()
             ->where('status', 'aktif')
             ->where('auto_disposal_enabled', true)
             ->cursor()
-            ->each(function (Mosque $mosque) use ($disposal, &$totalRecords) {
-                $batch = $disposal->executeAuto($mosque);
+            ->each(function (Mosque $mosque) use ($disposal, &$totalRecords, &$failedMosques) {
+                try {
+                    $batch = $disposal->executeAuto($mosque);
+                } catch (\Throwable $e) {
+                    $failedMosques++;
+                    report($e);
+                    $this->error("Pelupusan {$mosque->code} gagal; snapshot disimpan dan akan dicuba semula.");
+
+                    return;
+                }
 
                 if ($batch) {
                     $count = $batch->items()->count();
@@ -36,6 +45,10 @@ class RunRetentionExecute extends Command
             });
 
         $this->info("{$totalRecords} rekod dilupuskan automatik.");
+
+        if ($failedMosques > 0) {
+            $this->warn("{$failedMosques} masjid gagal dan dijadualkan untuk retry.");
+        }
 
         return self::SUCCESS;
     }

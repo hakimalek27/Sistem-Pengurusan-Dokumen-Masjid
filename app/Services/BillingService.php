@@ -11,8 +11,12 @@ use App\Models\User;
 use App\Notifications\AddonExpiringNotification;
 use App\Notifications\NewStorageOrderNotification;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 /**
  * §10.J / §5.13 — Bil & storan (aliran invois-manual MVP).
@@ -33,31 +37,73 @@ class BillingService
     public function nextInvoiceNo(): string
     {
         $year = now()->format('Y');
-        $seq = StorageOrder::query()->withoutGlobalScope('mosque')
-            ->where('invoice_no', 'like', "INV-{$year}-%")->count() + 1;
+        $key = 'invoice_sequence_'.$year;
+        $lastInvoice = StorageOrder::query()->withoutGlobalScope('mosque')
+            ->where('invoice_no', 'like', "INV-{$year}-%")
+            ->orderByDesc('invoice_no')
+            ->value('invoice_no');
+        $existingSequence = $lastInvoice ? (int) substr($lastInvoice, -4) : 0;
+        PlatformSetting::query()->firstOrCreate(['key' => $key], ['value' => ['seq' => $existingSequence]]);
+        $counter = PlatformSetting::query()->where('key', $key)->lockForUpdate()->firstOrFail();
+        $seq = ((int) ($counter->value['seq'] ?? 0)) + 1;
+        $counter->update(['value' => ['seq' => $seq]]);
 
         return sprintf('INV-%s-%04d', $year, $seq);
     }
 
     /** §9.C.10 / Aliran J — Jana pesanan storan + invois PDF; status menunggu bayaran. */
-    public function createOrder(Mosque $mosque, ?User $user, int $blocks, int $periodMonths = 12): StorageOrder
+    public function createOrder(Mosque $mosque, ?User $user, int $blocks, int $periodMonths = 12, ?string $idempotencyKey = null): StorageOrder
     {
+        if (! $user || ! $user->canIn($mosque, 'storage.order')) {
+            throw new AuthorizationException('Tiada kebenaran membuat pesanan storan.');
+        }
+
+        if ($blocks < 1 || $periodMonths < 0) {
+            throw ValidationException::withMessages(['blocks' => 'Blok mesti sekurang-kurangnya satu dan tempoh tidak boleh negatif.']);
+        }
+
+        if ($idempotencyKey) {
+            $existing = StorageOrder::query()->withoutGlobalScope('mosque')->where('idempotency_key', $idempotencyKey)->first();
+            if ($existing) {
+                if ($existing->mosque_id !== $mosque->id || $existing->ordered_by !== $user->id) {
+                    throw new AuthorizationException('Kunci idempotensi tidak sepadan.');
+                }
+
+                return $existing;
+            }
+        }
+
         $gb = $blocks * $this->blockGb();
         $unitCents = (int) round($this->pricePerGbYearRm() * 100);
         $amountCents = $gb * $unitCents;
+        $invoicePath = null;
 
-        $order = StorageOrder::query()->create([
-            'mosque_id' => $mosque->id,
-            'ordered_by' => $user?->id,
-            'gb' => $gb,
-            'unit_price_cents' => $unitCents,
-            'amount_cents' => $amountCents,
-            'period_months' => $periodMonths,
-            'status' => OrderStatus::MenungguBayaran,
-            'invoice_no' => $this->nextInvoiceNo(),
-        ]);
+        try {
+            $order = DB::transaction(function () use ($mosque, $user, $gb, $unitCents, $amountCents, $periodMonths, $idempotencyKey, &$invoicePath) {
+                $order = StorageOrder::query()->create([
+                    'mosque_id' => $mosque->id,
+                    'ordered_by' => $user->id,
+                    'gb' => $gb,
+                    'unit_price_cents' => $unitCents,
+                    'amount_cents' => $amountCents,
+                    'period_months' => $periodMonths,
+                    'status' => OrderStatus::MenungguBayaran,
+                    'invoice_no' => $this->nextInvoiceNo(),
+                    'idempotency_key' => $idempotencyKey,
+                ]);
 
-        $order->update(['invoice_path' => $this->generateInvoicePdf($order)]);
+                $invoicePath = $this->generateInvoicePdf($order);
+                $order->update(['invoice_path' => $invoicePath]);
+
+                return $order;
+            });
+        } catch (Throwable $e) {
+            if ($invoicePath) {
+                Storage::disk(config('diwan.storage_disk'))->delete($invoicePath);
+            }
+
+            throw $e;
+        }
 
         Notification::send(
             User::query()->where('is_superadmin', true)->where('is_active', true)->get(),
@@ -99,16 +145,36 @@ class BillingService
     /** §10.K — Tandakan dibayar → add-on aktif (kata laluan disahkan di UI). */
     public function markPaid(StorageOrder $order, ?User $confirmer): StorageAddon
     {
-        $order->update(['status' => OrderStatus::Dibayar, 'paid_at' => now(), 'confirmed_by' => $confirmer?->id]);
+        if (! $confirmer?->is_superadmin) {
+            throw new AuthorizationException('Hanya superadmin boleh mengesahkan bayaran.');
+        }
 
-        $addon = StorageAddon::query()->create([
-            'mosque_id' => $order->mosque_id,
-            'storage_order_id' => $order->id,
-            'gb' => $order->gb,
-            'starts_at' => now(),
-            'expires_at' => $order->period_months > 0 ? now()->addMonths($order->period_months) : null,
-            'status' => 'aktif',
-        ]);
+        $addon = DB::transaction(function () use ($order, $confirmer) {
+            $locked = StorageOrder::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($order->id);
+
+            if ($locked->status === OrderStatus::Dibayar) {
+                return StorageAddon::query()->withoutGlobalScope('mosque')->where('storage_order_id', $locked->id)->firstOrFail();
+            }
+
+            if ($locked->status !== OrderStatus::MenungguBayaran) {
+                throw ValidationException::withMessages(['order' => 'Hanya pesanan menunggu bayaran boleh disahkan.']);
+            }
+
+            $addon = StorageAddon::query()->withoutGlobalScope('mosque')->firstOrCreate(
+                ['storage_order_id' => $locked->id],
+                [
+                    'mosque_id' => $locked->mosque_id,
+                    'gb' => $locked->gb,
+                    'starts_at' => now(),
+                    'expires_at' => $locked->period_months > 0 ? now()->addMonths($locked->period_months) : null,
+                    'status' => 'aktif',
+                ],
+            );
+
+            $locked->update(['status' => OrderStatus::Dibayar, 'paid_at' => now(), 'confirmed_by' => $confirmer->id]);
+
+            return $addon;
+        });
 
         activity()->performedOn($order)->causedBy($confirmer)
             ->withProperties(['ip' => request()->ip()])->log('tandakan_dibayar');

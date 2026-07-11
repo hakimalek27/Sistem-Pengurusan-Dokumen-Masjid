@@ -29,9 +29,12 @@
                                 @if ($b->status === 'menunggu_kelulusan' && $canApprove)
                                     <x-filament::button size="xs" color="success" wire:click="approve({{ $b->id }})">Lulus</x-filament::button>
                                 @endif
-                                @if ($b->status === 'lulus' && $canExecute)
+                                @if (in_array($b->status, ['lulus', 'gagal', 'memproses']) && $canExecute)
                                     <x-filament::button size="xs" color="danger" wire:click="execute({{ $b->id }})"
-                                        wire:confirm="Laksana pelupusan? Blob dipadam kekal.">Laksana</x-filament::button>
+                                        wire:confirm="Laksana pelupusan? Blob dipadam kekal.">{{ $b->status === 'lulus' ? 'Laksana' : 'Cuba Semula' }}</x-filament::button>
+                                @endif
+                                @if ($b->status === 'gagal')
+                                    <span class="text-xs text-red-600" title="{{ $b->failure_reason }}">Gagal — snapshot selamat</span>
                                 @endif
                                 @if ($b->certificate_path)
                                     <a class="text-xs text-primary-600 underline" href="{{ app(\App\Services\SecureDownloadUrl::class)->certificate($b) }}">Muat Turun Sijil</a>

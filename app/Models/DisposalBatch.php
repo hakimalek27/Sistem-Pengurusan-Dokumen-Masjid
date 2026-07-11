@@ -14,13 +14,15 @@ class DisposalBatch extends Model
     use BelongsToMosque, HasFactory;
 
     protected $fillable = [
-        'mosque_id', 'kind', 'created_by', 'approved_by', 'status', 'executed_at', 'certificate_path',
+        'mosque_id', 'kind', 'created_by', 'approved_by', 'status', 'execution_started_at',
+        'executed_at', 'certificate_path', 'failure_reason',
     ];
 
     protected function casts(): array
     {
         return [
             'executed_at' => 'datetime',
+            'execution_started_at' => 'datetime',
         ];
     }
 

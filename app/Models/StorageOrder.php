@@ -16,7 +16,7 @@ class StorageOrder extends Model
 
     protected $fillable = [
         'mosque_id', 'ordered_by', 'gb', 'unit_price_cents', 'amount_cents', 'period_months',
-        'status', 'invoice_no', 'invoice_path', 'paid_at', 'confirmed_by',
+        'status', 'invoice_no', 'idempotency_key', 'invoice_path', 'paid_at', 'confirmed_by',
     ];
 
     protected function casts(): array

@@ -9,9 +9,11 @@ use App\Models\MinitRecipient;
 use App\Models\Record;
 use App\Models\User;
 use App\Notifications\MinitRoutedNotification;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 /**
  * §9.C.5 — Minit / routing + SLA. Dilindungi MinitTest.
@@ -21,6 +23,32 @@ class MinitService
     /** Cipta minit + recipients + notifikasi (§14 MinitRouted). */
     public function create(Record $record, User $from, array $actionUserIds, array $ccUserIds, string $body, MinitPriority $priority, ?Minit $parent = null): Minit
     {
+        if (! $from->is_active || ! $from->can('routeMinit', $record) || ! $from->can('view', $record)) {
+            throw new AuthorizationException('Tiada kebenaran mengedarkan minit bagi rekod ini.');
+        }
+
+        if ($parent && ($parent->mosque_id !== $record->mosque_id || $parent->record_id !== $record->id)) {
+            throw ValidationException::withMessages(['parent' => 'Bebenang minit tidak sepadan dengan rekod atau tenant.']);
+        }
+
+        $actionUserIds = collect($actionUserIds)->map(fn ($id) => (int) $id)->unique()->values()->all();
+        $ccUserIds = collect($ccUserIds)->map(fn ($id) => (int) $id)->unique()->diff($actionUserIds)->values()->all();
+        $recipientIds = collect($actionUserIds)->merge($ccUserIds)->unique()->values();
+
+        if (empty($actionUserIds) || trim($body) === '') {
+            throw ValidationException::withMessages(['recipients' => 'Sekurang-kurangnya seorang penerima tindakan dan catatan diperlukan.']);
+        }
+
+        $recipients = $record->mosque->users()
+            ->where('users.is_active', true)
+            ->whereIn('users.id', $recipientIds)
+            ->get();
+
+        if ($recipients->count() !== $recipientIds->count()
+            || $recipients->contains(fn (User $user) => ! $user->can('view', $record))) {
+            throw ValidationException::withMessages(['recipients' => 'Semua penerima mesti ahli aktif tenant dan dibenarkan melihat rekod.']);
+        }
+
         return DB::transaction(function () use ($record, $from, $actionUserIds, $ccUserIds, $body, $priority, $parent) {
             $minit = Minit::query()->create([
                 'mosque_id' => $record->mosque_id,
@@ -56,6 +84,10 @@ class MinitService
     /** Tanda Selesai oleh penerima tindakan; semua selesai → minit selesai + notifikasi pengirim. */
     public function markDone(Minit $minit, User $user): void
     {
+        if (! $user->can('complete', $minit)) {
+            throw new AuthorizationException('Pengguna bukan penerima tindakan minit ini.');
+        }
+
         DB::transaction(function () use ($minit, $user) {
             $minit->recipients()
                 ->where('user_id', $user->id)
@@ -79,6 +111,11 @@ class MinitService
     /** Tandakan minit dibaca oleh penerima. */
     public function markRead(Minit $minit, User $user): void
     {
+        if (! $user->isMemberOf($minit->mosque)
+            || ! $minit->recipients()->where('user_id', $user->id)->exists()) {
+            throw new AuthorizationException('Pengguna bukan penerima minit ini.');
+        }
+
         $minit->recipients()
             ->where('user_id', $user->id)
             ->where('status', 'belum')

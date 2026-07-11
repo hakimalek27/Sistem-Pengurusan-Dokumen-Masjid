@@ -67,9 +67,19 @@ class PelupusanManual extends Page
 
             return;
         }
-        $batch = DisposalBatch::query()->where('mosque_id', $mosque->id)->where('status', 'lulus')->findOrFail($batchId);
-        app(DisposalService::class)->executeManual($batch, Auth::user());
-        Notification::make()->title('Pelupusan dilaksanakan — sijil dijana.')->success()->send();
+        $batch = DisposalBatch::query()->where('mosque_id', $mosque->id)->whereIn('status', ['lulus', 'gagal', 'memproses'])->findOrFail($batchId);
+
+        try {
+            app(DisposalService::class)->executeManual($batch, Auth::user());
+            Notification::make()->title('Pelupusan dilaksanakan — sijil dijana.')->success()->send();
+        } catch (\Throwable $e) {
+            report($e);
+            Notification::make()
+                ->title('Pelupusan belum selesai')
+                ->body('Snapshot kekal selamat. Baiki sambungan storan dan tekan Cuba Semula.')
+                ->danger()
+                ->send();
+        }
     }
 
     protected function getHeaderActions(): array

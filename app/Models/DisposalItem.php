@@ -11,12 +11,13 @@ class DisposalItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['batch_id', 'record_id', 'metadata_snapshot'];
+    protected $fillable = ['batch_id', 'record_id', 'metadata_snapshot', 'state', 'error', 'finalized_at'];
 
     protected function casts(): array
     {
         return [
             'metadata_snapshot' => 'array',
+            'finalized_at' => 'datetime',
         ];
     }
 

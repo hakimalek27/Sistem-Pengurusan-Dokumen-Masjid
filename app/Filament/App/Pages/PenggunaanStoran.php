@@ -9,11 +9,13 @@ use App\Services\QuotaService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use UnitEnum;
 
 class PenggunaanStoran extends Page
@@ -48,12 +50,18 @@ class PenggunaanStoran extends Page
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'storage.order') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'storage.order'))
                 ->schema([
+                    Hidden::make('idempotency_key')->default(fn () => (string) Str::uuid()),
                     TextInput::make('blocks')
                         ->label('Bilangan Blok ('.app(BillingService::class)->blockGb().' GB setiap satu)')
                         ->numeric()->minValue(1)->default(1)->required(),
                 ])
                 ->action(function (array $data) {
-                    $order = app(BillingService::class)->createOrder(Filament::getTenant(), Auth::user(), (int) $data['blocks']);
+                    $order = app(BillingService::class)->createOrder(
+                        Filament::getTenant(),
+                        Auth::user(),
+                        (int) $data['blocks'],
+                        idempotencyKey: $data['idempotency_key'],
+                    );
                     Notification::make()
                         ->title('Pesanan dijana: '.$order->invoice_no)
                         ->body('Invois PDF disediakan. Status: menunggu pengesahan bayaran.')

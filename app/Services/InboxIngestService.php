@@ -11,8 +11,10 @@ use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 /**
  * §9.C.3 / §10 / §11 — Kemasukan dokumen ke Peti Masuk + klasifikasi.
@@ -48,6 +50,26 @@ class InboxIngestService
         array $sourceMeta = [],
         bool $skipIfDuplicate = false,
     ): ?Record {
+        if ($creator && ! $creator->isMemberOf($mosque)) {
+            throw new AuthorizationException('Pengguna bukan ahli tenant dokumen.');
+        }
+
+        $allowedMimes = [
+            'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        ];
+
+        if (! in_array($mime, $allowedMimes, true)
+            || strlen($contents) > ((int) config('diwan.max_upload_mb', 25) * 1024 * 1024)) {
+            throw ValidationException::withMessages(['file' => 'Jenis atau saiz dokumen tidak dibenarkan.']);
+        }
+
+        if (app(QuotaService::class)->isFull($mosque)) {
+            throw ValidationException::withMessages(['file' => 'Kuota storan masjid penuh.']);
+        }
+
         $sha256 = hash('sha256', $contents);
 
         if ($skipIfDuplicate && $this->hasDuplicate($mosque, $sha256)) {
@@ -96,8 +118,23 @@ class InboxIngestService
      * §9.C.3 langkah 3 — Failkan rekod ke dalam fail registri.
      * Peruntuk enclosure_no, status difailkan, waris sensitiviti max(pilihan, fail), filed_by/at.
      */
-    public function fileRecord(Record $record, RegistryFile $file, array $attributes = [], ?User $filer = null, ?Sensitivity $chosen = null): Record
+    public function fileRecord(Record $record, RegistryFile $file, array $attributes, User $filer, ?Sensitivity $chosen = null): Record
     {
+        if ($record->mosque_id !== $file->mosque_id
+            || $record->status !== RecordStatus::PetiMasuk
+            || $file->status !== 'terbuka') {
+            throw ValidationException::withMessages(['record' => 'Rekod dan fail mesti dalam tenant sama, item Peti Masuk dan fail masih terbuka.']);
+        }
+
+        if (! $filer->can('classify', $record)) {
+            throw new AuthorizationException('Tiada kebenaran mengklasifikasikan rekod ini.');
+        }
+
+        $attributes = collect($attributes)->only([
+            'record_type', 'title', 'our_ref', 'their_ref', 'record_date', 'received_date',
+            'direction', 'sender_name', 'sender_org', 'recipient_name', 'metadata',
+        ])->all();
+
         return DB::transaction(function () use ($record, $file, $attributes, $filer, $chosen) {
             $enclosureNo = $this->numbering->allocateEnclosureNo($file);
 
@@ -110,7 +147,7 @@ class InboxIngestService
                 'enclosure_no' => $enclosureNo,
                 'sensitivity' => $effective,
                 'status' => RecordStatus::Difailkan,
-                'filed_by' => $filer?->id,
+                'filed_by' => $filer->id,
                 'filed_at' => now(),
             ]));
             $record->save();
@@ -125,8 +162,16 @@ class InboxIngestService
     }
 
     /** §10.C — Pindah rekod ke fail lain (kerani/admin; sebab wajib). */
-    public function moveToFile(Record $record, RegistryFile $target, string $reason, ?User $mover = null): Record
+    public function moveToFile(Record $record, RegistryFile $target, string $reason, User $mover): Record
     {
+        if ($record->mosque_id !== $target->mosque_id || $target->status !== 'terbuka' || trim($reason) === '') {
+            throw ValidationException::withMessages(['record' => 'Fail sasaran mesti terbuka dalam tenant sama dan sebab wajib diisi.']);
+        }
+
+        if (! $mover->can('move', $record) || ! $mover->can('view', $record)) {
+            throw new AuthorizationException('Tiada kebenaran memindahkan rekod ini.');
+        }
+
         return DB::transaction(function () use ($record, $target, $reason, $mover) {
             $enclosureNo = $this->numbering->allocateEnclosureNo($target);
 
@@ -147,16 +192,24 @@ class InboxIngestService
     }
 
     /** §9.C.4 / §10.D — Ganti Versi: rekod baharu, lama status=diganti, pautan dua hala. */
-    public function supersede(Record $old, string $contents, string $filename, string $mime, ?User $user = null): Record
+    public function supersede(Record $old, string $contents, string $filename, string $mime, User $user): Record
     {
+        if (! $user->can('supersede', $old) || ! $user->can('view', $old)) {
+            throw new AuthorizationException('Tiada kebenaran mengganti versi rekod ini.');
+        }
+
+        if (! in_array($old->status, [RecordStatus::Difailkan, RecordStatus::Diganti], true)) {
+            throw ValidationException::withMessages(['record' => 'Hanya rekod yang telah difailkan boleh diganti versi.']);
+        }
+
         return DB::transaction(function () use ($old, $contents, $filename, $mime, $user) {
             $sha256 = hash('sha256', $contents);
 
             $new = $old->replicate(['ulid', 'superseded_by_record_id', 'created_at', 'updated_at']);
             $new->status = RecordStatus::Difailkan;
             $new->sha256 = $sha256;
-            $new->created_by = $user?->id;
-            $new->filed_by = $user?->id;
+            $new->created_by = $user->id;
+            $new->filed_by = $user->id;
             $new->filed_at = now();
             $new->save(); // ulid dijana automatik
 

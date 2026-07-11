@@ -42,6 +42,6 @@ class ClassificationNodePolicy
 
     public function delete(User $user, ClassificationNode $node): bool
     {
-        return $user->canIn($node->mosque, 'classification.manage');
+        return false;
     }
 }

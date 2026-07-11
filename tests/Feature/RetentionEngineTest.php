@@ -19,7 +19,7 @@ function mkFiled(int $backYears = 8, bool $notices = true, string $type = 'surat
     $engine = app(RetentionEngine::class);
 
     $record = $ingest->ingest(test()->mam, 'dok-'.uniqid(), 'd.pdf', 'application/pdf', null, SourceChannel::MuatNaik);
-    $record = $ingest->fileRecord($record, test()->file, ['record_type' => $type]);
+    $record = $ingest->fileRecord($record, test()->file, ['record_type' => $type], test()->kerani);
     $record->update(['record_date' => now()->subYears($backYears)]);
     $engine->refreshForRecord($record->fresh());
 

@@ -3,7 +3,6 @@
 namespace App\Filament\App\Resources\ClassificationNodes\Pages;
 
 use App\Filament\App\Resources\ClassificationNodes\ClassificationNodeResource;
-use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditClassificationNode extends EditRecord
@@ -12,8 +11,6 @@ class EditClassificationNode extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            DeleteAction::make(),
-        ];
+        return [];
     }
 }

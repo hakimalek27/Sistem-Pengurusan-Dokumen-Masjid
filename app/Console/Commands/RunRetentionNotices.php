@@ -23,6 +23,9 @@ class RunRetentionNotices extends Command
         $today = now()->startOfDay();
         $sent = 0;
 
+        // Wajib segarkan sebelum memilih calon supaya perubahan tarikh/peraturan tidak tertinggal.
+        Mosque::query()->cursor()->each(fn (Mosque $mosque) => $engine->refreshForMosque($mosque));
+
         Record::query()->withoutGlobalScope('mosque')
             ->whereIn('status', ['difailkan', 'diganti'])
             ->whereNotNull('retention_due_at')

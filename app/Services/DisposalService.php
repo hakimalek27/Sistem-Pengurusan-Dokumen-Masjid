@@ -9,20 +9,42 @@ use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 /**
  * §16 / Aliran G & L — Pelupusan (manual & automatik). Metadata snapshot KEKAL selamanya.
  */
 class DisposalService
 {
-    public function __construct(protected RetentionEngine $engine) {}
+    public function __construct(
+        protected RetentionEngine $engine,
+        protected DisposalBlobService $blobs,
+    ) {}
 
     /** §16.3 / Aliran L — Pelupusan AUTOMATIK untuk masjid (hanya rekod layak §16.3). */
     public function executeAuto(Mosque $mosque): ?DisposalBatch
     {
+        $recoverable = DisposalBatch::query()->withoutGlobalScope('mosque')
+            ->where('mosque_id', $mosque->id)
+            ->where('kind', 'auto')
+            ->whereIn('status', ['memproses', 'gagal'])
+            ->latest('id')
+            ->first();
+
+        if ($recoverable) {
+            $records = Record::query()->withoutGlobalScope('mosque')
+                ->where('mosque_id', $mosque->id)
+                ->whereIn('id', $recoverable->items()->pluck('record_id'))
+                ->get();
+
+            return $this->executeBatch($mosque, $records, 'auto', null, $recoverable);
+        }
+
         $records = new Collection;
 
         Record::query()->withoutGlobalScope('mosque')
@@ -46,41 +68,85 @@ class DisposalService
     /** §10.G — Sedia batch manual (kerani/admin): draf menunggu kelulusan. */
     public function prepareManual(Mosque $mosque, array $recordIds, User $creator): DisposalBatch
     {
-        $batch = DisposalBatch::query()->create([
-            'mosque_id' => $mosque->id,
-            'kind' => 'manual',
-            'created_by' => $creator->id,
-            'status' => 'menunggu_kelulusan',
-        ]);
-
-        // Simpan rujukan rekod dalam item (snapshot penuh diambil semasa laksana).
-        foreach (Record::query()->withoutGlobalScope('mosque')->where('mosque_id', $mosque->id)->whereIn('id', $recordIds)->get() as $record) {
-            DisposalItem::query()->create([
-                'batch_id' => $batch->id,
-                'record_id' => $record->id,
-                'metadata_snapshot' => ['pending' => true, 'record_id' => $record->id],
-            ]);
+        if (! $creator->canIn($mosque, 'disposal.prepare')) {
+            throw new AuthorizationException('Tiada kebenaran menyediakan pelupusan.');
         }
 
-        return $batch;
+        $ids = collect($recordIds)->map(fn ($id) => (int) $id)->unique()->values();
+        $records = Record::query()->withoutGlobalScope('mosque')
+            ->where('mosque_id', $mosque->id)
+            ->whereIn('id', $ids)
+            ->where('status', 'difailkan')
+            ->where('legal_hold', false)
+            ->get();
+
+        if ($ids->isEmpty() || $records->count() !== $ids->count()) {
+            throw ValidationException::withMessages(['records' => 'Senarai mengandungi rekod tidak sah, tenant lain, berpegangan atau bukan berstatus difailkan.']);
+        }
+
+        foreach ($records as $record) {
+            if (! $creator->can('view', $record)) {
+                throw new AuthorizationException('Rekod pelupusan mengandungi dokumen yang tidak boleh dilihat.');
+            }
+        }
+
+        return DB::transaction(function () use ($mosque, $creator, $records) {
+            $batch = DisposalBatch::query()->create([
+                'mosque_id' => $mosque->id,
+                'kind' => 'manual',
+                'created_by' => $creator->id,
+                'status' => 'menunggu_kelulusan',
+            ]);
+
+            foreach ($records as $record) {
+                DisposalItem::query()->create([
+                    'batch_id' => $batch->id,
+                    'record_id' => $record->id,
+                    'metadata_snapshot' => $this->snapshot($record),
+                    'state' => 'snapshotted',
+                ]);
+            }
+
+            return $batch;
+        });
     }
 
     /** §10.G — Kelulusan batch manual (pengerusi). */
     public function approveManual(DisposalBatch $batch, User $approver): void
     {
-        $batch->update(['status' => 'lulus', 'approved_by' => $approver->id]);
+        DB::transaction(function () use ($batch, $approver): void {
+            $locked = DisposalBatch::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($batch->id);
+
+            if (! $approver->canIn($locked->mosque, 'disposal.approve')) {
+                throw new AuthorizationException('Tiada kebenaran meluluskan pelupusan.');
+            }
+
+            if ($locked->status !== 'menunggu_kelulusan' || $locked->created_by === $approver->id) {
+                throw ValidationException::withMessages(['batch' => 'Batch tidak boleh diluluskan atau pemohon tidak boleh meluluskan batch sendiri.']);
+            }
+
+            $locked->update(['status' => 'lulus', 'approved_by' => $approver->id]);
+        });
     }
 
     /** §10.G — Laksana batch manual yang diluluskan (admin_masjid). */
     public function executeManual(DisposalBatch $batch, User $executor): DisposalBatch
     {
-        $records = Record::query()->withoutGlobalScope('mosque')
-            ->whereIn('id', $batch->items()->pluck('record_id'))
-            ->where('status', 'difailkan')
-            ->get();
+        $batch = DisposalBatch::query()->withoutGlobalScope('mosque')->findOrFail($batch->id);
 
-        // Buang item pending; executeBatch akan cipta snapshot penuh.
-        $batch->items()->delete();
+        if (! $executor->canIn($batch->mosque, 'disposal.execute')) {
+            throw new AuthorizationException('Tiada kebenaran melaksanakan pelupusan.');
+        }
+
+        if (! in_array($batch->status, ['lulus', 'memproses', 'gagal'], true)) {
+            throw ValidationException::withMessages(['batch' => 'Batch belum diluluskan atau telah selesai.']);
+        }
+
+        $records = Record::query()->withoutGlobalScope('mosque')
+            ->where('mosque_id', $batch->mosque_id)
+            ->whereIn('id', $batch->items()->pluck('record_id'))
+            ->whereIn('status', ['difailkan', 'dilupus'])
+            ->get();
 
         return $this->executeBatch($batch->mosque, $records, 'manual', $executor, $batch);
     }
@@ -88,40 +154,88 @@ class DisposalService
     /** Laksanakan pelupusan sekumpulan rekod → snapshot → padam blob → batu nisan → sijil. */
     public function executeBatch(Mosque $mosque, Collection $records, string $kind, ?User $executor, ?DisposalBatch $existing = null): DisposalBatch
     {
-        return DB::transaction(function () use ($mosque, $records, $kind, $executor, $existing) {
-            $batch = $existing ?? DisposalBatch::query()->create([
-                'mosque_id' => $mosque->id,
-                'kind' => $kind,
-                'created_by' => $executor?->id,
+        $batch = DB::transaction(function () use ($mosque, $records, $kind, $executor, $existing) {
+            $batch = $existing
+                ? DisposalBatch::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($existing->id)
+                : DisposalBatch::query()->create([
+                    'mosque_id' => $mosque->id,
+                    'kind' => $kind,
+                    'created_by' => $executor?->id,
+                ]);
+
+            if ($batch->mosque_id !== $mosque->id || $batch->kind !== $kind) {
+                throw ValidationException::withMessages(['batch' => 'Batch tidak sepadan dengan tenant atau jenis pelupusan.']);
+            }
+
+            if ($batch->status === 'selesai') {
+                return $batch;
+            }
+
+            $batch->update([
+                'status' => 'memproses',
+                'execution_started_at' => $batch->execution_started_at ?? now(),
+                'failure_reason' => null,
             ]);
 
             foreach ($records as $record) {
-                // 1) Snapshot PENUH sebelum apa-apa dipadam (§5.12).
-                DisposalItem::query()->create([
-                    'batch_id' => $batch->id,
-                    'record_id' => $record->id,
-                    'metadata_snapshot' => $this->snapshot($record),
-                ]);
+                if ($record->mosque_id !== $mosque->id) {
+                    throw ValidationException::withMessages(['records' => 'Rekod tenant lain dikesan dalam batch pelupusan.']);
+                }
 
-                // 2) Padam SEMUA blob (semua koleksi).
-                $record->clearMediaCollection('original');
-                $record->clearMediaCollection('derived');
-                $record->clearMediaCollection('attachments');
+                $item = DisposalItem::query()->firstOrCreate(
+                    ['batch_id' => $batch->id, 'record_id' => $record->id],
+                    ['metadata_snapshot' => $this->snapshot($record), 'state' => 'snapshotted', 'error' => null],
+                );
 
-                // 3) Batu nisan: metadata kekal, status dilupus, ocr_text NULL.
-                $record->update(['status' => RecordStatus::Dilupus, 'ocr_text' => null]);
+                if ($item->state === 'pending') {
+                    $item->update(['metadata_snapshot' => $this->snapshot($record), 'state' => 'snapshotted', 'error' => null]);
+                }
+            }
+
+            return $batch;
+        });
+
+        if ($batch->status === 'selesai') {
+            return $batch;
+        }
+
+        try {
+            foreach ($batch->items()->orderBy('id')->get() as $item) {
+                if ($item->state === 'finalized') {
+                    continue;
+                }
+
+                $record = Record::query()->withoutGlobalScope('mosque')
+                    ->where('mosque_id', $mosque->id)
+                    ->findOrFail($item->record_id);
+
+                $this->blobs->deleteRecordMedia($record);
+                $item->update(['state' => 'blobs_deleted', 'error' => null]);
+
+                DB::transaction(function () use ($record, $item): void {
+                    $locked = Record::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($record->id);
+                    $locked->update(['status' => RecordStatus::Dilupus, 'ocr_text' => null]);
+                    $item->update(['state' => 'finalized', 'finalized_at' => now(), 'error' => null]);
+                });
+
                 $record->unsearchable();
             }
 
+            $certificatePath = $this->certificate($batch->fresh(), $kind);
             $batch->update([
                 'status' => 'selesai',
                 'executed_at' => now(),
                 'approved_by' => $batch->approved_by ?? $executor?->id,
-                'certificate_path' => $this->certificate($batch, $kind),
+                'certificate_path' => $certificatePath,
+                'failure_reason' => null,
             ]);
 
-            return $batch;
-        });
+            return $batch->fresh();
+        } catch (Throwable $e) {
+            $batch->update(['status' => 'gagal', 'failure_reason' => mb_substr($e->getMessage(), 0, 4000)]);
+
+            throw $e;
+        }
     }
 
     protected function snapshot(Record $record): array

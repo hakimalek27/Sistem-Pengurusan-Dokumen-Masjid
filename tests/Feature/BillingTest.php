@@ -2,6 +2,7 @@
 
 use App\Enums\OrderStatus;
 use App\Models\PlatformSetting;
+use App\Models\User;
 use App\Notifications\AddonExpiringNotification;
 use App\Services\BillingService;
 use Illuminate\Support\Facades\Notification;
@@ -14,6 +15,9 @@ beforeEach(function () {
     $this->billing = app(BillingService::class);
     $this->mam = makeMosque('MAM', 'mam');
     $this->bendahari = makeMember($this->mam, 'bendahari', 'b@mam.test');
+    $this->superadmin = User::query()->create([
+        'name' => 'Superadmin', 'email' => 'super@ujian.test', 'is_superadmin' => true, 'is_active' => true,
+    ]);
 });
 
 it('cipta pesanan → invois bersiri INV-YYYY-0001/0002 + PDF + menunggu bayaran', function () {
@@ -33,7 +37,7 @@ it('tandakan dibayar → addon aktif + kuota efektif naik serta-merta (§18.32)'
     $this->mam->update(['storage_quota_bytes' => 10 * (1024 ** 3)]);
     $order = $this->billing->createOrder($this->mam, $this->bendahari, 1); // 10GB
 
-    $addon = $this->billing->markPaid($order, $this->bendahari);
+    $addon = $this->billing->markPaid($order, $this->superadmin);
 
     expect($order->fresh()->status)->toBe(OrderStatus::Dibayar)
         ->and($addon->status)->toBe('aktif')
@@ -43,7 +47,7 @@ it('tandakan dibayar → addon aktif + kuota efektif naik serta-merta (§18.32)'
 it('luput addon → status luput + kuota turun semula (§18.33)', function () {
     $this->mam->update(['storage_quota_bytes' => 10 * (1024 ** 3)]);
     $order = $this->billing->createOrder($this->mam, $this->bendahari, 1);
-    $addon = $this->billing->markPaid($order, $this->bendahari);
+    $addon = $this->billing->markPaid($order, $this->superadmin);
 
     $addon->update(['expires_at' => now()->subDay()]);
     $this->billing->processExpiringAddons();
@@ -54,7 +58,7 @@ it('luput addon → status luput + kuota turun semula (§18.33)', function () {
 
 it('notis T-30 dihantar untuk addon yang akan luput', function () {
     $order = $this->billing->createOrder($this->mam, $this->bendahari, 1);
-    $addon = $this->billing->markPaid($order, $this->bendahari);
+    $addon = $this->billing->markPaid($order, $this->superadmin);
     $addon->update(['expires_at' => now()->addDays(30)->startOfDay()]);
 
     $this->billing->processExpiringAddons();

@@ -11,6 +11,7 @@ beforeEach(function () {
     $this->export = app(ExportService::class);
     $this->ingest = app(InboxIngestService::class);
     $this->mam = makeMosque('MAM', 'mam');
+    $this->kerani = makeMember($this->mam, 'kerani');
     $this->file = makeFile($this->mam, makeNode($this->mam, '100-4', 'dalaman'), 'dalaman');
 });
 
@@ -18,10 +19,14 @@ it('bina Eksport ZIP mengandungi metadata.csv, senarai.pdf & media (§18.35)', f
     $r1 = $this->ingest->fileRecord(
         $this->ingest->ingest($this->mam, 'dokumen-satu', 'surat1.pdf', 'application/pdf', null, SourceChannel::MuatNaik),
         $this->file,
+        [],
+        $this->kerani,
     );
     $r2 = $this->ingest->fileRecord(
         $this->ingest->ingest($this->mam, 'dokumen-dua', 'surat2.pdf', 'application/pdf', null, SourceChannel::MuatNaik),
         $this->file,
+        [],
+        $this->kerani,
     );
 
     $path = $this->export->build($this->mam, Record::query()->whereIn('id', [$r1->id, $r2->id])->get(), 'ujian');
