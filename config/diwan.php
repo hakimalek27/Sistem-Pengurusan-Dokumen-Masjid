@@ -32,6 +32,15 @@ return [
 
     // Ingest e-mel pengimbas (§11.3).
     'imap_enabled' => filter_var(env('IMAP_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
+    'imap' => [
+        'host' => env('IMAP_HOST'),
+        'port' => (int) env('IMAP_PORT', 993),
+    ],
+
+    'meilisearch' => [
+        'host' => env('MEILISEARCH_HOST'),
+        'key' => env('MEILISEARCH_KEY'),
+    ],
 
     // Telegram (§11.2).
     'telegram' => [

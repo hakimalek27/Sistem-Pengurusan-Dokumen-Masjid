@@ -36,6 +36,7 @@ docker compose up -d --build
 docker compose exec app php artisan migrate --force
 docker compose exec app php artisan diwan:sync-meili
 docker compose exec app php artisan diwan:make-superadmin admin@wehdah.my --password=…
+STAGING_CHECK_EMAIL=ops@example.com APP_URL=https://staging.example.com ./scripts/staging-smoke.sh
 ```
 
 - Scheduler: servis `scheduler` menjalankan `schedule:work` (8 tugasan operasi + pangkas log
@@ -45,11 +46,42 @@ docker compose exec app php artisan diwan:make-superadmin admin@wehdah.my --pass
 - Sandaran 3 lapis (§4.6): COS versioning + `spatie/laravel-backup` (02:30 → `cos_backup`) +
   rclone crypt mingguan (cron host).
 
+### Gate staging dan failure drill
+
+`diwan:staging-check` menguji PostgreSQL, Redis, Horizon, COS baca/tulis/padam, OCR, Meilisearch,
+SMTP sebenar, socket IMAP dan gateway. Ia gagal jika `--mail-to` tidak diberi supaya SMTP tidak
+boleh ditanda lulus berdasarkan konfigurasi sahaja.
+
+```bash
+docker compose exec app php artisan diwan:staging-check --mail-to=ops@example.com
+docker compose exec app php artisan diwan:failure-drill queue --confirm-production
+docker compose exec app php artisan diwan:failure-drill cos --confirm-production
+docker compose exec app php artisan diwan:failure-drill smtp --confirm-production
+```
+
+Jalankan drill di staging. Probe queue mesti muncul pada Horizon/`failed_jobs`; probe COS dan SMTP
+mesti dikesan sebagai kegagalan terkawal. Jangan padam bukti log/alert.
+
+### Latihan pemulihan sandaran
+
+`backup:run` sahaja bukan bukti boleh pulih. Salin satu ZIP sandaran sebenar ke host staging dan
+jalankan skrip berikut. Ia memulihkan dump ke container PostgreSQL 16 terpencil, mengesahkan jadual
+teras dan merekod kiraan masjid/rekod/pengguna tanpa menyentuh DB staging.
+
+```bash
+./scripts/restore-drill.sh /secure/path/backup-diwan.zip
+```
+
+Bukti bertarikh ditulis ke `storage/logs/restore-drill-*.log`. Gate live memerlukan satu log
+`LULUS restore drill` daripada backup sebenar yang terkini.
+
 ## Arahan Diwan
 | Command | Fungsi |
 |---|---|
 | `diwan:make-superadmin {email}` | Cipta/naik taraf superadmin |
 | `diwan:sync-meili` | Segerak tetapan indeks Meilisearch |
+| `diwan:health` / `diwan:staging-check` | Health container dan gate dependency staging |
+| `diwan:failure-drill {cos\|queue\|smtp}` | Failure injection terkawal di staging |
 | `diwan:simulate-whatsapp {session} {phone} {path}` | Uji webhook WhatsApp masuk |
 | `diwan:fetch-mail` | Tarik e-mel pengimbas (IMAP) |
 | `diwan:run-retention-notices` / `diwan:run-retention-execute` | Enjin retensi (§16) |

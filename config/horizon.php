@@ -1,0 +1,81 @@
+<?php
+
+use Illuminate\Support\Str;
+
+return [
+    'name' => env('HORIZON_NAME', 'diwan'),
+    'domain' => env('HORIZON_DOMAIN'),
+    'path' => env('HORIZON_PATH', 'horizon'),
+    'use' => 'default',
+    'prefix' => env('HORIZON_PREFIX', Str::slug(env('APP_NAME', 'diwan'), '_').'_horizon:'),
+    'middleware' => ['web'],
+    'waits' => [
+        'redis:default' => 60,
+        'redis:ocr' => 300,
+        'redis:exports' => 300,
+    ],
+    'trim' => [
+        'recent' => 60,
+        'pending' => 60,
+        'completed' => 60,
+        'recent_failed' => 10080,
+        'failed' => 10080,
+        'monitored' => 10080,
+    ],
+    'silenced' => [],
+    'silenced_tags' => [],
+    'metrics' => ['trim_snapshots' => ['job' => 24, 'queue' => 24]],
+    'fast_termination' => true,
+    'memory_limit' => 128,
+    'defaults' => [
+        'general' => [
+            'connection' => 'redis',
+            'queue' => ['default'],
+            'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
+            'maxProcesses' => 3,
+            'maxTime' => 0,
+            'maxJobs' => 500,
+            'memory' => 192,
+            'tries' => 3,
+            'timeout' => 120,
+            'nice' => 0,
+        ],
+        'ocr' => [
+            'connection' => 'redis',
+            'queue' => ['ocr'],
+            'balance' => 'simple',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 25,
+            'memory' => 768,
+            'tries' => 2,
+            'timeout' => 330,
+            'nice' => 5,
+        ],
+        'exports' => [
+            'connection' => 'redis',
+            'queue' => ['exports'],
+            'balance' => 'simple',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 25,
+            'memory' => 512,
+            'tries' => 2,
+            'timeout' => 1900,
+            'nice' => 5,
+        ],
+    ],
+    'environments' => [
+        'production' => [
+            'general' => ['maxProcesses' => (int) env('HORIZON_GENERAL_PROCESSES', 3)],
+            'ocr' => ['maxProcesses' => 1],
+            'exports' => ['maxProcesses' => 1],
+        ],
+        'local' => [
+            'general' => ['maxProcesses' => 2],
+            'ocr' => ['maxProcesses' => 1],
+            'exports' => ['maxProcesses' => 1],
+        ],
+    ],
+];
