@@ -20,7 +20,7 @@ RUN composer install \
     --ignore-platform-req=ext-pcntl \
     --ignore-platform-req=ext-posix
 
-FROM php:8.3-fpm-bookworm AS app
+FROM php:8.4-fpm-bookworm AS app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libexif-dev \

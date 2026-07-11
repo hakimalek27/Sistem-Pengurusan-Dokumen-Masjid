@@ -8,7 +8,7 @@ Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfas
 **`CLAUDE-CODE-PROMPTS.md`**.
 
 ## Timbunan Teknologi
-- **Laravel 12** + **Filament 4** (dua panel: `/admin` superadmin, `/app/{slug}` tenant masjid)
+- **PHP 8.4** · **Laravel 12** + **Filament 4** (dua panel: `/admin` superadmin, `/app/{slug}` tenant masjid)
 - **PostgreSQL 16** · **Redis 7** · **Meilisearch v1** · **Tencent COS** (S3) · **Horizon**
 - OCR: **tesseract 5 + ocrmypdf** (dalam imej Docker) · PDF: **dompdf** · QR: **simple-qrcode**
 
