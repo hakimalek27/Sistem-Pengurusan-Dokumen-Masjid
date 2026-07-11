@@ -11,6 +11,28 @@
     </x-filament::section>
 
     <x-filament::section>
+        <x-slot name="heading">Jadual Retensi Efektif</x-slot>
+        <p class="mb-3 text-sm text-gray-500">Keputusan sebenar selepas resolusi override masjid, jenis rekod dan prefix klasifikasi.</p>
+        @if ($effectiveRetention->isEmpty())
+            <p class="text-gray-500">Tiada rekod dalam skop 12 bulan.</p>
+        @else
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-gray-500"><th>Rujukan</th><th>Tajuk</th><th>Sumber</th><th>Tempoh</th><th>Tindakan</th><th>Cukup Tempoh</th></tr></thead>
+                    <tbody>
+                        @foreach ($effectiveRetention as $row)
+                            <tr class="border-t border-gray-100 dark:border-white/10">
+                                <td class="py-2">{{ $row['reference'] }}</td><td>{{ $row['title'] }}</td><td>{{ $row['source'] }}</td>
+                                <td>{{ $row['years'] === 'Kekal' ? 'Kekal' : $row['years'].' tahun' }}</td><td>{{ $row['action'] }}</td><td>{{ $row['due'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </x-filament::section>
+
+    <x-filament::section>
         <x-slot name="heading">Akan Cukup Tempoh (≤ 12 bulan)</x-slot>
         @if ($records->isEmpty())
             <p class="text-gray-500">Tiada rekod menghampiri tempoh retensi.</p>

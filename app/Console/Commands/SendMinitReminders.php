@@ -30,10 +30,13 @@ class SendMinitReminders extends Command
             $recipients = $minit->recipients()
                 ->where('jenis', 'tindakan')
                 ->where('status', '!=', 'selesai')
+                ->whereHas('user', fn ($query) => $query
+                    ->where('is_active', true)
+                    ->whereHas('mosques', fn ($mosques) => $mosques->where('mosques.id', $minit->mosque_id)))
                 ->with('user')
                 ->get()
                 ->pluck('user')
-                ->filter();
+                ->filter(fn ($user) => $user?->can('view', $minit->record) ?? false);
 
             if ($recipients->isEmpty()) {
                 continue;

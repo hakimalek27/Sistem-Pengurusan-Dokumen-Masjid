@@ -57,16 +57,48 @@ class RecordInfolist
                                     ->hiddenLabel()
                                     ->schema([
                                         TextEntry::make('fromUser.name')->label('Daripada'),
+                                        TextEntry::make('parent_id')->label('Bebenang')
+                                            ->formatStateUsing(fn ($state) => $state ? 'Balasan kepada minit #'.$state : 'Minit asal'),
                                         TextEntry::make('priority')->label('Keutamaan')->badge(),
                                         TextEntry::make('due_at')->label('Tarikh Akhir')->date('d/m/Y')->placeholder('—'),
                                         TextEntry::make('status')->label('Status')->badge(),
+                                        TextEntry::make('created_at')->label('Dihantar')->dateTime('d/m/Y H:i'),
+                                        TextEntry::make('recipients_list')->label('Penerima')
+                                            ->state(fn ($record) => $record->recipients()->with('user')->get()
+                                                ->map(fn ($recipient) => ($recipient->jenis === 'tindakan' ? 'Tindakan: ' : 's.k.: ').$recipient->user?->name)
+                                                ->filter()->join(', '))
+                                            ->columnSpanFull(),
                                         TextEntry::make('body')->label('Catatan')->columnSpanFull(),
                                     ])
-                                    ->columns(4),
+                                    ->columns(3),
                             ]),
                         Tab::make('Kelulusan')
                             ->schema([
-                                TextEntry::make('_kelulusan')->hiddenLabel()->state('Modul kelulusan — Fasa 6.'),
+                                RepeatableEntry::make('approvals')
+                                    ->hiddenLabel()
+                                    ->schema([
+                                        TextEntry::make('requestedBy.name')->label('Pemohon'),
+                                        TextEntry::make('approver.name')->label('Pelulus'),
+                                        TextEntry::make('status')->label('Status')->badge(),
+                                        TextEntry::make('created_at')->label('Dimohon')->dateTime('d/m/Y H:i'),
+                                        TextEntry::make('decided_at')->label('Diputuskan')->dateTime('d/m/Y H:i')->placeholder('—'),
+                                        TextEntry::make('decision_ip')->label('IP Keputusan')->placeholder('—'),
+                                        TextEntry::make('request_note')->label('Nota Permohonan')->placeholder('—')->columnSpanFull(),
+                                        TextEntry::make('decision_note')->label('Nota Keputusan')->placeholder('—')->columnSpanFull(),
+                                    ])
+                                    ->columns(3),
+                            ]),
+                        Tab::make('Audit')
+                            ->schema([
+                                RepeatableEntry::make('activities')
+                                    ->hiddenLabel()
+                                    ->schema([
+                                        TextEntry::make('description')->label('Tindakan'),
+                                        TextEntry::make('causer.name')->label('Oleh')->placeholder('Sistem'),
+                                        TextEntry::make('created_at')->label('Masa')->dateTime('d/m/Y H:i:s'),
+                                        KeyValueEntry::make('properties')->label('Butiran')->columnSpanFull(),
+                                    ])
+                                    ->columns(3),
                             ]),
                     ]),
             ]);

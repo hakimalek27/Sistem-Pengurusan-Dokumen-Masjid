@@ -5,7 +5,9 @@ namespace App\Filament\App\Resources\Approvals;
 use App\Filament\App\Resources\Approvals\Pages\ListApprovals;
 use App\Filament\App\Resources\Approvals\Tables\ApprovalsTable;
 use App\Models\Approval;
+use App\Models\Record;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -34,12 +36,15 @@ class ApprovalResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         // Kelulusan yang ditujukan kepada saya (§9.C.7).
-        return parent::getEloquentQuery()->where('approver_id', Auth::id());
+        $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
+
+        return parent::getEloquentQuery()->where('approver_id', Auth::id())->whereIn('record_id', $recordIds);
     }
 
     public static function getNavigationBadge(): ?string
     {
-        $count = Approval::query()->where('approver_id', Auth::id())->where('status', 'menunggu')->count();
+        $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
+        $count = Approval::query()->whereIn('record_id', $recordIds)->where('approver_id', Auth::id())->where('status', 'menunggu')->count();
 
         return $count > 0 ? (string) $count : null;
     }

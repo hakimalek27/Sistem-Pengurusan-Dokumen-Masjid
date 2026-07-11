@@ -66,3 +66,15 @@ it('minit due esok → peringatan biasa', function () {
 
     Notification::assertSentTo($this->pengerusi, MinitReminderNotification::class, fn ($n) => $n->late === false);
 });
+
+it('tidak menghantar peringatan kepada pengguna tidak aktif atau bukan lagi ahli', function () {
+    $minit = $this->svc->create($this->record, $this->from, [$this->pengerusi->id, $this->nazir->id], [], 'X', MinitPriority::Biasa);
+    $minit->update(['due_at' => now()->subDay()->toDateString()]);
+    $this->pengerusi->update(['is_active' => false]);
+    $this->mam->users()->detach($this->nazir->id);
+
+    Notification::fake();
+    $this->artisan('diwan:send-minit-reminders')->assertSuccessful();
+
+    Notification::assertNothingSent();
+});

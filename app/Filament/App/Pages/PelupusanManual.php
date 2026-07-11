@@ -8,6 +8,7 @@ use App\Services\DisposalService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -42,6 +43,7 @@ class PelupusanManual extends Page
     protected function candidates()
     {
         return Record::query()->where('mosque_id', Filament::getTenant()->id)
+            ->visibleTo(Auth::user(), Filament::getTenant())
             ->where('status', 'difailkan')
             ->whereNotNull('retention_due_at')
             ->whereDate('retention_due_at', '<=', now())
@@ -92,13 +94,18 @@ class PelupusanManual extends Page
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'disposal.prepare'))
                 ->requiresConfirmation()
                 ->modalDescription('AMARAN: Selepas kelulusan & pelupusan, rekod dipadam kekal dan tidak boleh dikembalikan; metadata kekal. Pastikan sandaran luar telah dibuat.')
-                ->action(function () {
-                    $ids = $this->candidates()->pluck('id')->all();
-                    if (empty($ids)) {
-                        Notification::make()->title('Tiada rekod calon pelupusan.')->warning()->send();
-
-                        return;
-                    }
+                ->schema([
+                    CheckboxList::make('record_ids')
+                        ->label('Pilih Rekod Satu per Satu')
+                        ->options(fn () => $this->candidates()->mapWithKeys(fn ($record) => [
+                            $record->id => ($record->registryFile?->file_no ?? '—').'('.$record->enclosure_no.') — '.$record->title,
+                        ]))
+                        ->searchable()
+                        ->bulkToggleable()
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $ids = array_map('intval', $data['record_ids']);
                     app(DisposalService::class)->prepareManual(Filament::getTenant(), $ids, Auth::user());
                     Notification::make()->title(count($ids).' rekod dimasukkan ke batch (menunggu kelulusan).')->success()->send();
                 }),

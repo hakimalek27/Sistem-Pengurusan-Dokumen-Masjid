@@ -98,11 +98,25 @@ class RetensiPegangan extends Page
     protected function getViewData(): array
     {
         $mosque = Filament::getTenant();
+        $records = $this->expiringRecords(365);
+        $engine = app(RetentionEngine::class);
 
         return [
             'autoDisposal' => (bool) $mosque->auto_disposal_enabled,
             'canHold' => Auth::user()->canIn($mosque, 'retention.hold'),
-            'records' => $this->expiringRecords(365),
+            'records' => $records,
+            'effectiveRetention' => $records->map(function (Record $record) use ($engine) {
+                $rule = $engine->effectiveRule($record);
+
+                return [
+                    'reference' => ($record->registryFile?->file_no ?? '—').'('.$record->enclosure_no.')',
+                    'title' => $record->title,
+                    'source' => $rule?->mosque_id ? 'Override Masjid' : 'Lalai Platform',
+                    'years' => $rule?->retain_years ?? 'Kekal',
+                    'action' => $rule?->action?->getLabel() ?? 'Kekal',
+                    'due' => $record->retention_due_at?->format('d/m/Y') ?? '—',
+                ];
+            }),
             'exports' => StoredExport::query()
                 ->where('mosque_id', $mosque->id)
                 ->where('requested_by', Auth::id())

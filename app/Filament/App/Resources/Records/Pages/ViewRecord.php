@@ -116,15 +116,20 @@ class ViewRecord extends BaseViewRecord
 
     protected function memberOptions(): array
     {
-        return $this->getRecord()->mosque->users()->pluck('name', 'users.id')->toArray();
+        $record = $this->getRecord();
+
+        return $record->mosque->users()->where('users.is_active', true)->get()
+            ->filter(fn (User $user) => $user->can('view', $record))
+            ->pluck('name', 'id')
+            ->toArray();
     }
 
     protected function approverOptions(): array
     {
         $mosque = $this->getRecord()->mosque;
 
-        return $mosque->users()->get()
-            ->filter(fn (User $u) => $u->canIn($mosque, 'approvals.decide'))
+        return $mosque->users()->where('users.is_active', true)->get()
+            ->filter(fn (User $u) => $u->canIn($mosque, 'approvals.decide') && $u->can('view', $this->getRecord()))
             ->pluck('name', 'id')
             ->toArray();
     }

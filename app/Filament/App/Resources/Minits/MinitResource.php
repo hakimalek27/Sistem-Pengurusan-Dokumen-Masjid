@@ -6,7 +6,9 @@ use App\Filament\App\Resources\Minits\Pages\ListMinits;
 use App\Filament\App\Resources\Minits\Tables\MinitsTable;
 use App\Models\Minit;
 use App\Models\MinitRecipient;
+use App\Models\Record;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -36,15 +38,18 @@ class MinitResource extends Resource
     {
         $uid = Auth::id();
         $ids = MinitRecipient::query()->where('user_id', $uid)->pluck('minit_id')->all();
+        $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
 
-        return parent::getEloquentQuery()->where(function (Builder $q) use ($uid, $ids) {
+        return parent::getEloquentQuery()->whereIn('record_id', $recordIds)->where(function (Builder $q) use ($uid, $ids) {
             $q->where('from_user_id', $uid)->orWhereIn('id', $ids);
         });
     }
 
     public static function getNavigationBadge(): ?string
     {
+        $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
         $count = Minit::query()
+            ->whereIn('record_id', $recordIds)
             ->where('status', 'terbuka')
             ->whereIn('id', fn ($sub) => $sub->select('minit_id')->from('minit_recipients')
                 ->where('user_id', Auth::id())->where('jenis', 'tindakan')->where('status', '!=', 'selesai'))
