@@ -40,18 +40,21 @@ class SmokeE2E extends Command
 
     public function handle(): int
     {
+        $this->pass = 0;
+        $this->fail = 0;
         config()->set('scout.driver', 'collection');
         $slug = $this->option('slug');
+        $smokeCode = strtoupper(substr(hash('sha256', $slug), 0, 8));
 
         // 1. Daftar masjid (menunggu).
         $mosque = Mosque::query()->updateOrCreate(['slug' => $slug], [
-            'name' => 'Masjid Smoke E2E', 'code' => strtoupper(substr($slug, 0, 4)),
+            'name' => 'Masjid Smoke E2E', 'code' => $smokeCode,
             'status' => MosqueStatus::Menunggu, 'storage_quota_bytes' => 20 * (1024 ** 3),
             'auto_disposal_enabled' => true, 'wa_session_id' => $slug,
             'settings' => ['wa_intake_enabled' => true, 'wa_intake_keyword' => 'spdm'],
         ]);
         $admin = User::query()->updateOrCreate(['email' => "admin-{$slug}@smoke.test"],
-            ['name' => 'Admin Smoke', 'is_active' => true, 'password' => Hash::make('password'), 'phone_wa' => '60100000777']);
+            ['name' => 'Admin Smoke', 'is_active' => true, 'password' => Hash::make('password')]);
         $mosque->users()->syncWithoutDetaching([$admin->id => ['role' => 'admin_masjid', 'joined_at' => now()]]);
         $this->check('Daftar masjid (menunggu)', $mosque->status === MosqueStatus::Menunggu);
 
@@ -61,7 +64,7 @@ class SmokeE2E extends Command
         $this->check('Lulus + KF disalin (40 nod)', $mosque->status === MosqueStatus::Aktif && $mosque->classificationNodes()->count() === 40);
 
         // 3. Jemput ahli.
-        $kerani = app(MembershipService::class)->invite($mosque, "kerani-{$slug}@smoke.test", 'Kerani', 'kerani', '60100000778');
+        $kerani = app(MembershipService::class)->invite($mosque, "kerani-{$slug}@smoke.test", 'Kerani', 'kerani');
         $pengerusi = app(MembershipService::class)->invite($mosque, "pengerusi-{$slug}@smoke.test", 'Pengerusi', 'pengerusi');
         $this->check('Jemput ahli (kerani + pengerusi)', $kerani->roleIn($mosque) === 'kerani' && $pengerusi->roleIn($mosque) === 'pengerusi');
 
