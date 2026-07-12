@@ -41,11 +41,18 @@ class RecordNumberingService
         }
 
         return DB::transaction(function () use ($mosque, $node, $title, $userId) {
+            // Kunci satu baris nod supaya pembukaan fail bagi nod sama disiri pada
+            // PostgreSQL. Aggregate MAX() sendiri tidak boleh menggunakan FOR UPDATE.
+            $lockedNode = ClassificationNode::query()
+                ->withoutGlobalScope('mosque')
+                ->whereKey($node->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
             $txn = ((int) RegistryFile::query()
                 ->withoutGlobalScope('mosque')
                 ->where('mosque_id', $mosque->id)
                 ->where('classification_node_id', $node->id)
-                ->lockForUpdate()
                 ->max('transaction_no')) + 1;
 
             return RegistryFile::query()->create([
@@ -55,7 +62,7 @@ class RecordNumberingService
                 'volume' => 1,
                 'file_no' => $this->formatFileNo($mosque->code, $node->code, $txn, 1),
                 'title' => $title,
-                'sensitivity' => $node->default_sensitivity,
+                'sensitivity' => $lockedNode->default_sensitivity,
                 'status' => 'terbuka',
                 'enclosure_count' => 0,
                 'opened_at' => now(),
@@ -67,32 +74,38 @@ class RecordNumberingService
     /** Buka jilid baharu (Aliran F) — fail lama ditutup, jilid+1 dengan transaksi sama. */
     public function openNextVolume(RegistryFile $file, ?int $userId = null): RegistryFile
     {
-        if (! $file->isOpen()) {
-            throw ValidationException::withMessages(['file' => 'Hanya fail terbuka boleh dibuka jilid baharu.']);
-        }
-
         if ($userId && ! User::query()->findOrFail($userId)->canIn($file->mosque, 'files.open')) {
             throw new AuthorizationException('Tiada kebenaran membuka jilid baharu.');
         }
 
         return DB::transaction(function () use ($file, $userId) {
-            $file->loadMissing(['classificationNode', 'mosque']);
-            $newVolume = $file->volume + 1;
+            $locked = RegistryFile::query()
+                ->withoutGlobalScope('mosque')
+                ->whereKey($file->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
-            $file->update([
+            if (! $locked->isOpen()) {
+                throw ValidationException::withMessages(['file' => 'Hanya fail terbuka boleh dibuka jilid baharu.']);
+            }
+
+            $locked->loadMissing(['classificationNode', 'mosque']);
+            $newVolume = $locked->volume + 1;
+
+            $locked->update([
                 'status' => 'tutup',
                 'closed_at' => now(),
                 'closed_reason' => 'Jilid penuh',
             ]);
 
             return RegistryFile::query()->create([
-                'mosque_id' => $file->mosque_id,
-                'classification_node_id' => $file->classification_node_id,
-                'transaction_no' => $file->transaction_no,
+                'mosque_id' => $locked->mosque_id,
+                'classification_node_id' => $locked->classification_node_id,
+                'transaction_no' => $locked->transaction_no,
                 'volume' => $newVolume,
-                'file_no' => $this->formatFileNo($file->mosque->code, $file->classificationNode->code, $file->transaction_no, $newVolume),
-                'title' => $file->title,
-                'sensitivity' => $file->sensitivity,
+                'file_no' => $this->formatFileNo($locked->mosque->code, $locked->classificationNode->code, $locked->transaction_no, $newVolume),
+                'title' => $locked->title,
+                'sensitivity' => $locked->sensitivity,
                 'status' => 'terbuka',
                 'enclosure_count' => 0,
                 'opened_at' => now(),
@@ -104,16 +117,16 @@ class RecordNumberingService
     /** Peruntuk enclosure_no berikutnya (§5.15) dengan lockForUpdate baris fail. */
     public function allocateEnclosureNo(RegistryFile $file): int
     {
-        if (! $file->isOpen()) {
-            throw ValidationException::withMessages(['file' => 'Fail telah ditutup dan tidak menerima kandungan baharu.']);
-        }
-
         return DB::transaction(function () use ($file) {
             $locked = RegistryFile::query()
                 ->withoutGlobalScope('mosque')
                 ->whereKey($file->id)
                 ->lockForUpdate()
-                ->first();
+                ->firstOrFail();
+
+            if (! $locked->isOpen()) {
+                throw ValidationException::withMessages(['file' => 'Fail telah ditutup dan tidak menerima kandungan baharu.']);
+            }
 
             $next = (int) $locked->enclosure_count + 1;
             $locked->update(['enclosure_count' => $next]);

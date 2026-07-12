@@ -44,7 +44,7 @@ class SmokeE2E extends Command
         $this->fail = 0;
         config()->set('scout.driver', 'collection');
         $slug = $this->option('slug');
-        $smokeCode = strtoupper(substr(hash('sha256', $slug), 0, 8));
+        $smokeCode = strtoupper(substr(hash('sha256', $slug), 0, 6));
 
         // 1. Daftar masjid (menunggu).
         $mosque = Mosque::query()->updateOrCreate(['slug' => $slug], [
