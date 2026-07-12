@@ -36,7 +36,9 @@ class WhatsAppWebhookController extends Controller
 
         // (2) Idempotensi 24 jam.
         if ($messageId) {
-            $key = 'wa_msg:'.$messageId;
+            // Message ID perlu berskop sesi; dua tenant tidak boleh saling
+            // menyekat ingest jika penyedia mengitar/mengulang ID yang sama.
+            $key = 'wa_msg:'.hash('sha256', (string) $session).':'.$messageId;
             if (Cache::has($key)) {
                 return response()->json([]);
             }

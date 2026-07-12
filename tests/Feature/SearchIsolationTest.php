@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Services\SearchService;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,4 +48,16 @@ it('allowedSensitivities mengecualikan sulit untuk peranan bukan istimewa', func
 
     expect($this->svc->allowedSensitivities($ajk, $this->mam))->toBe(['umum', 'dalaman'])
         ->and($this->svc->allowedSensitivities($kerani, $this->mam))->toContain('sulit');
+});
+
+it('carian fail-closed untuk pengguna yang bukan ahli tenant', function () {
+    $outsider = User::query()->create([
+        'name' => 'Orang Luar',
+        'email' => 'search-outsider@ujian.test',
+        'is_active' => true,
+    ]);
+
+    $results = app(SearchService::class)->for($outsider, $this->mam, 'rekod');
+
+    expect($results)->toBeEmpty();
 });

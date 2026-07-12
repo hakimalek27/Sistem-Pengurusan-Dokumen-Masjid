@@ -18,6 +18,12 @@ class SearchService
 
     public function for(User $user, Mosque $tenant, string $query, array $filters = []): Collection
     {
+        // Fail-closed: service boleh dipanggil di luar halaman Filament pada masa depan.
+        // Jangan bergantung pada UI untuk membuktikan keahlian tenant.
+        if (! $user->isMemberOf($tenant)) {
+            return collect();
+        }
+
         $allowed = $this->allowedSensitivities($user, $tenant);
 
         $search = Record::search($query)

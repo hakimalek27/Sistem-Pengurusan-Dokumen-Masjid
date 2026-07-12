@@ -91,6 +91,16 @@ it('message_id ulang → idempotensi, tiada rekod pendua', function () {
     expect(Record::query()->where('mosque_id', $this->mam->id)->count())->toBe(1);
 });
 
+it('message_id sama pada dua sesi tenant tidak saling menyekat', function () {
+    makeMember($this->man, 'kerani', 'k@man.test', ['phone_wa' => '60110000002']);
+
+    postWebhook(waPayload(['message_id' => 'SAMA-RENTAS', 'session' => 'mam', 'from' => '60110000001']))->assertOk();
+    postWebhook(waPayload(['message_id' => 'SAMA-RENTAS', 'session' => 'man', 'from' => '60110000002']))->assertOk();
+
+    expect(Record::query()->where('mosque_id', $this->mam->id)->count())->toBe(1)
+        ->and(Record::query()->where('mosque_id', $this->man->id)->count())->toBe(1);
+});
+
 it('kuota penuh → balasan tolak, tiada rekod', function () {
     $this->mam->update(['storage_used_bytes' => $this->mam->effectiveQuotaBytes()]);
 
