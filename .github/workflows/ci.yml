@@ -196,7 +196,7 @@ jobs:
               echo "PHP runtime extensions OK".PHP_EOL;
             '
           else
-            docker run --rm --entrypoint nginx "$IMAGE" -t
+            docker run --rm --add-host app:127.0.0.1 --entrypoint nginx "$IMAGE" -t
           fi
 
       - name: Publish verified image

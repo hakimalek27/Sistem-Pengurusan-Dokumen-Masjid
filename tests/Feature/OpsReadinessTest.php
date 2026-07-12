@@ -76,7 +76,7 @@ it('menyediakan CI integration Docker dan deploy staging berrollback', function 
         ->and($ci)->toContain('docker/build-push-action@v6')
         ->and($ci)->toContain('Run built image smoke')
         ->and($ci)->toContain('PHP runtime extensions OK')
-        ->and($ci)->toContain('nginx "$IMAGE" -t')
+        ->and($ci)->toContain('--add-host app:127.0.0.1 --entrypoint nginx "$IMAGE" -t')
         ->and($deployWorkflow)->toContain('environment: staging')
         ->and($deployWorkflow)->toContain('STAGING_KNOWN_HOSTS')
         ->and($deployScript)->toContain('trap rollback ERR')
