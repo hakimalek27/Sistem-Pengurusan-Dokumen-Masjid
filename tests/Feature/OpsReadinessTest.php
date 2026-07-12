@@ -32,7 +32,7 @@ it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', f
     $compose = file_get_contents(base_path('docker-compose.yml'));
 
     expect($dockerfile)->toContain('npm ci --no-audit --no-fund')
-        ->and($dockerfile)->toContain('FROM php:8.4-fpm-bookworm AS app')
+        ->and($dockerfile)->toContain('FROM php:8.4-fpm-bookworm AS runtime')
         ->and($dockerfile)->toContain('composer install')
         ->and($dockerfile)->toContain('--no-dev')
         ->and($dockerfile)->toContain('FROM runtime AS vendor')
