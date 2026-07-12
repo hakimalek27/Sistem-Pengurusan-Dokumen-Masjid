@@ -6,21 +6,7 @@ COPY resources ./resources
 COPY vite.config.js ./
 RUN npm run build
 
-FROM composer:2 AS vendor
-WORKDIR /build
-COPY . .
-RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --no-interaction \
-    --no-progress \
-    --optimize-autoloader \
-    --classmap-authoritative \
-    --ignore-platform-req=ext-pcntl \
-    --ignore-platform-req=ext-posix
-
-FROM php:8.4-fpm-bookworm AS app
+FROM php:8.4-fpm-bookworm AS runtime
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libexif-dev \
@@ -38,6 +24,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+FROM runtime AS vendor
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+WORKDIR /build
+COPY . .
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --no-interaction \
+    --no-progress \
+    --optimize-autoloader \
+    --classmap-authoritative
+
+FROM runtime AS app
 WORKDIR /var/www/html
 COPY --chown=www-data:www-data . .
 COPY --from=vendor --chown=www-data:www-data /build/vendor ./vendor
