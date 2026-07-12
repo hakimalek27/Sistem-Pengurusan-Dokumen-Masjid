@@ -63,6 +63,18 @@ class ProcessOcrJob implements ShouldQueue
             return;
         }
 
+        // Retry job mesti idempotent. Koleksi singleFile menggunakan path derived yang sama;
+        // menambah media kedua sebelum media lama dibuang boleh memadam fail baharu sekali.
+        $existingDerived = $record->getFirstMedia('derived');
+        if ($record->ocr_status === OcrStatus::Siap
+            && $existingDerived
+            && Storage::disk($existingDerived->disk)->exists($existingDerived->getPathRelativeToRoot())) {
+            return;
+        }
+
+        // Pulihkan keadaan separa (rekod media wujud tetapi objek hilang/gagal) sebelum jana semula.
+        $existingDerived?->delete();
+
         $record->update(['ocr_status' => OcrStatus::DalamProses]);
 
         $tmpDir = storage_path('app/tmp/'.$record->ulid);

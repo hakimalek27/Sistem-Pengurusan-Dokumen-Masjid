@@ -49,7 +49,18 @@ it('OCR imej BM sebenar mengekstrak teks (§18.7 — perlu ocrmypdf/tesseract)',
     ProcessOcrJob::dispatchSync($record->id, $record->mosque_id);
 
     $fresh = $record->fresh();
+    $derived = $fresh->getFirstMedia('derived');
     expect($fresh->ocr_status)->toBe(OcrStatus::Siap)
         ->and(str_contains(strtoupper((string) $fresh->ocr_text), 'DEWAN'))->toBeTrue()
-        ->and($fresh->getFirstMedia('derived'))->not->toBeNull();
+        ->and($derived)->not->toBeNull()
+        ->and(Storage::disk($derived->disk)->exists($derived->getPathRelativeToRoot()))->toBeTrue();
+
+    // Retry queue tidak boleh mengganti rekod media lalu memadam fail pada path singleFile sama.
+    ProcessOcrJob::dispatchSync($record->id, $record->mosque_id);
+
+    $afterRetry = $record->fresh();
+    $derivedAfterRetry = $afterRetry->getFirstMedia('derived');
+    expect($afterRetry->ocr_status)->toBe(OcrStatus::Siap)
+        ->and($derivedAfterRetry?->id)->toBe($derived->id)
+        ->and(Storage::disk($derivedAfterRetry->disk)->exists($derivedAfterRetry->getPathRelativeToRoot()))->toBeTrue();
 });
