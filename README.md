@@ -4,6 +4,11 @@ Platform SaaS **multi-tenant** untuk pengurusan dokumen masjid: registri digital
 fail, carian kandungan (OCR), minit & routing, e-Kelulusan, kuota storan, dan enjin retensi
 arkib automatik. Setiap masjid = satu *tenant* (Filament tenancy); satu panel superadmin.
 
+> **Status 13 Julai 2026:** kod SPDM siap dan diuji, tetapi SPDM **belum dideploy ke production**.
+> Gateway `wassap.wehdah.my` sudah live; shared provisioning secret dan host production SPDM
+> masih belum tersedia. Baca [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md), kemudian
+> jalankan [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md) sebelum menyebut sistem “live/semua OK”.
+
 Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfasa:
 **`CLAUDE-CODE-PROMPTS.md`**.
 
@@ -15,8 +20,9 @@ Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfas
 ## Persekitaran Pembangunan (mesin ini)
 Dev/ujian pada mesin ini menggunakan **SQLite** + PHP 8.4 tempatan (tanpa Docker). Ujian penuh
 berjalan **tanpa** perkhidmatan luaran (`Storage::fake`, `WHATSAPP_DRIVER=log`,
-`MAIL_MAILER=log`, `IMAP_ENABLED=false`, Scout `collection`). OCR sebenar hanya berjalan dalam
-imej Docker (tesseract/ocrmypdf) — OcrPipelineTest melangkau bahagian itu di luar Docker.
+`MAIL_MAILER=log`, `IMAP_ENABLED=false`, Scout `collection`). OCR sebenar disokong secara rasmi
+dalam imej Docker; `OcrPipelineTest` turut berjalan di host jika tesseract/ocrmypdf tersedia dan
+akan melangkau bahagian itu jika tooling tiada.
 
 ```bash
 php composer.phar install
@@ -26,6 +32,10 @@ php artisan test                     # suite Pest
 ```
 
 ## Naik Produksi (Docker — Tencent Lighthouse)
+
+Pemilik memilih deployment terus ke production tanpa staging berasingan. Gunakan maintenance/
+canary mode dan ikut runbook [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md); arahan di bawah ialah
+rujukan teknikal asas, bukan bukti bahawa gate live sudah lulus.
 Prasyarat ✋ (§21): DNS + Caddy + swap; COS 2 bucket + CAM; Gmail App Password; BotFather;
 gateway `wassap.wehdah.my`; rclone crypt; harga & bank di Tetapan Platform; semakan Terma/DPA.
 

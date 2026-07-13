@@ -1,104 +1,124 @@
-# LAPORAN KESEDIAAN — Diwan (SPDM)
+# Laporan Kesediaan Semasa — Diwan SPDM
 
-**Tarikh:** 9 Julai 2026 | **Fasa:** 9/9 (Verifikasi Penuh) | **Status:** Kod SEDIA (menunggu §21 + staging)
+**Tarikh:** 13 Julai 2026
 
-Dibina mengikut `DIWAN-SPEC.md` v2.1 melalui 9 fasa berpagar ujian (`CLAUDE-CODE-PROMPTS.md`).
+**Baseline kod:** `main` — fungsi terakhir `d9fee0c`
 
----
+**Status yang tepat:** **kod siap dan diuji; SPDM belum live. Gateway WhatsApp live tetapi shared provisioning secret belum dipasang.**
 
-## (a) Suite Ujian — Output Sebenar
+Dokumen lama bertarikh 9 Julai yang menyebut 128 ujian dan OCR sebenar belum diuji telah digantikan oleh laporan ini. Konteks lengkap berada di [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md); urutan go-live berada di [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md).
 
-```
-php artisan test
-Tests:  128 passed, 1 skipped (320 assertions)
-```
+## 1. Ringkasan gate
 
-**10 fail ujian penerimaan §18 (semua hijau):**
-RecordNumberingTest · SensitivityPolicyTest · TenantIsolationTest · WhatsAppWebhookTest ·
-DedupTest · InboxClassifyTest · OcrPipelineTest · QuotaTest · RetentionEngineTest · RegistrationTest
+| Kawasan | Status | Bukti/halangan |
+|---|---|---|
+| Keselamatan P0 | Lulus kod/ujian | authorization, tenant/sensitivity query, append-only log, signed file/artifact |
+| Multi-tenant | Lulus kod/ujian | 9-role matrix, route/action/query/job/search/webhook/email isolation |
+| Dokumen/OCR | Lulus local + browser | dua imej sebenar -> OCR siap, derived PDF dan carian |
+| Workflow pejabat | Lulus kod/ujian | inbox, klasifikasi, rekod/fail, minit, approval, billing, retensi/pelupusan |
+| Gateway WhatsApp | Live/separa | health hijau, 2/2 sesi connected; provisioning secret masih missing |
+| SPDM production | **Belum** | host/domain/path/SSH belum dikenal pasti |
+| IMAP production | **Belum** | App Password/secret dan live host belum tersedia |
+| COS/Meili/SMTP/backup production | **Belum dibuktikan** | memerlukan host SPDM production |
+| Go-live | **Blocked oleh input/dependency** | ikut runbook `WHAT-TO-DO-NEXT.md` |
 
-**Ujian tambahan:** Membership, Suspend, Billing, Approval, Export, EmailRouting, Minit, MagicLink,
-SearchIsolation, RecordVersion, PublicPages, FilamentResources, AdminPanel, MigrationSmoke.
+## 2. Ujian SPDM
 
-**Smoke E2E berskrip (`php artisan diwan:smoke`):** 9/9 lulus —
-daftar → lulus (KF 40 nod) → jemput ahli → klasifikasi (SMOK.100-4/1(1)) → minit → kelulusan (IP) →
-carian → eksport ZIP → auto-padam (sijil + batu nisan).
+### Keputusan automatik
 
----
+- Suite penuh penutup pada 13 Julai: **190 passed, 647 assertions**, 123.09 saat.
+- Targeted `OcrPipelineTest` pada 13 Julai: **2 passed, 9 assertions**.
+- Ujian meliputi tenant isolation, matriks 9 role, sensitiviti, signed download, webhook WhatsApp, notification routing, e-mel intake, OCR/search, data integrity, billing, retensi, pelupusan dan workflow pejabat.
+- CI run [`29214854569`](https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/29214854569) direkodkan hijau untuk PostgreSQL 16, Redis 7, Meilisearch, OCR sebenar, full suite, runtime smoke, asset build serta image Docker `app` dan `web`.
+- GitHub CLI local kini gagal refresh run dengan `401 Bad credentials`; ini isu credential CLI, bukan keputusan test aplikasi.
 
-## (b) Jadual Verifikasi 41 Item §18
+### Nota larian 13 Julai
 
-| # | Item | Status | Bukti |
-|---|---|---|---|
-| 1 | RecordNumbering | ✔ | RecordNumberingTest (6) |
-| 2 | SensitivityPolicy | ✔ | SensitivityPolicyTest (6) |
-| 3 | TenantIsolation | ✔ | TenantIsolationTest (6) + FilamentResourcesTest (URL 404) |
-| 4 | WhatsAppWebhook | ✔ | WhatsAppWebhookTest (8: HMAC/idempotensi/sesi/ahli/kuota/intake) |
-| 5 | Dedup | ✔ | DedupTest (3) |
-| 6 | InboxClassify | ✔ | InboxClassifyTest (3) |
-| 7 | OcrPipeline | ✔/⚠ | Office-skip diuji; OCR sebenar **di-skip** (perlu tesseract/ocrmypdf dalam imej Docker §4.4) |
-| 8 | Quota | ✔ | QuotaTest (6) |
-| 9 | RetentionEngine | ✔ | RetentionEngineTest (7: positif + 5 negatif + gantung) |
-| 10 | Registration | ✔ | RegistrationTest (3) |
-| 11 | Halaman BM (compose) | ✔/⚠ | PublicPagesTest; Docker→justifikasi SQLite dev |
-| 12 | Magic link penuh | ✔ | MagicLinkTest (7) |
-| 13 | Nyahaktif/keluar tenant | ✔ | SuspendTest + TenantIsolationTest |
-| 14 | Muat naik 3 fail + sha256 | ✔ | QuotaTest (kaunter) + DedupTest (sha256/⚠) + UI Peti Masuk |
-| 15 | simulate-whatsapp | ✔ | WhatsAppWebhookTest + command `diwan:simulate-whatsapp` |
-| 16 | Klasifikasi buka fail | ✔ | InboxClassifyTest + wizard (FilamentResourcesTest render) |
-| 17 | OCR ≤2 min | ⚠ | Perlu container Docker (tesseract) — dijalankan di staging |
-| 18 | Carian highlight + isolasi | ✔ | SearchIsolationTest (4) |
-| 19 | Log akses sulit + IP | ✔ | FilamentResourcesTest (view sulit → SensitiveAccessLog) |
-| 20 | Edarkan minit + berantai | ✔ | MinitTest (create/reply/markDone) |
-| 21 | Reminder LEWAT | ✔ | MinitTest (§18.21) |
-| 22 | Kelulusan + IP + lencana | ✔ | ApprovalTest (3) |
-| 23 | QR + /r/{ulid} | ✔ | RecordVersionTest (QR) + TenantIsolationTest (/r) |
-| 24 | Jilid (Jld.2) | ✔ | RecordNumberingTest (openNextVolume) |
-| 25 | Pindah fail + audit | ✔ | InboxClassifyTest (moveToFile audit) |
-| 26 | Laporan | ⚠ | Versi asas (dashboard Filament); carta penuh §9.C.9 = penambahbaikan |
-| 27 | Pelupusan manual hujung-ke-hujung | ✔ | DisposalService prepare/approve/execute + RetentionEngineTest |
-| 28 | backup:run | ⚠ | config/backup.php (cos_backup); dijalankan di staging dengan disk sebenar |
-| 29 | Latihan pemulihan | ✋ | Manual di staging (README §4.6) |
-| 30 | Daftar→lulus→checklist | ✔ | RegistrationTest + smoke E2E |
-| 31 | Ubah kuota + sekat | ✔ | QuotaTest + MosqueResource (Ubah Kuota) |
-| 32 | Add-on 10GB | ✔ | BillingTest (§18.32) |
-| 33 | Luput addon | ✔ | BillingTest (§18.33) |
-| 34 | Retensi kitaran + 4 varian TIDAK | ✔ | RetentionEngineTest (7) |
-| 35 | Eksport ZIP (csv+pdf+media) | ✔ | ExportTest |
-| 36 | E-mel +man → peti MAN | ✔ | EmailRoutingTest (§18.36) |
-| 37 | Sesi man bukan ahli → tolak | ✔ | WhatsAppWebhookTest (§18.37) |
-| 38 | Gantung MAN | ✔ | SuspendTest + RetentionEngineTest (auto-padam dijeda) |
-| 39 | Superadmin log sulit (is_superadmin) | ✔ | ViewRecord::mount (is_superadmin ditulis) |
-| 40 | Ping gateway → banner | ✔ | Command `diwan:ping-gateway` + GatewayDownNotification |
-| 41 | test hijau + horizon + schedule | ✔ | 128 passed; `schedule:list` 9 tugasan (8 operasi §17.24 + prune-log) |
+Satu larian penuh pertama dihentikan oleh timeout alat 120 saat. Proses ujian yang sempat bertindih dengan larian kedua menyebabkan satu kegagalan retry OCR pada fake storage: **189 passed, 1 failed**. Selepas tiada proses bertindih, targeted OCR retry lulus **2/2**. Keputusan full suite terakhir selepas dokumentasi hendaklah direkod di bawah:
 
-Legenda: ✔ diuji automatik/smoke · ⚠ perlu perkhidmatan/imej sebenar (staging) · ✋ tindakan manusia.
+> **Final verification:** `190 passed (647 assertions)` — lulus, 123.09 saat, selepas memastikan hanya satu runner aktif.
 
----
+## 3. Bukti OCR sebenar
 
-## (c) Versi Terkunci (composer.lock)
-- PHP **8.4** (dev tempatan) / **8.3** (imej Docker produksi §3.2) · Laravel **12.63** · Filament **4.11.8** · Pest **3.8**
-- medialibrary 11 · activitylog 5 · backup 10 · scout 11 · meilisearch-php 1 · horizon 5 · dompdf 3 · simple-qrcode 4 · webklex/imap 6 · telegram 7
+| Record local | Fail | Status | OCR | Derived | Frasa carian |
+|---:|---|---|---:|---|---|
+| 14 | `WhatsApp Image 2026-07-10 at 12.39.18.jpeg` | `siap` | 916 aksara | `searchable.pdf` | `MESYUARAT JAWATANKUASA` |
+| 15 | `WhatsApp Image 2026-07-10 at 12.39.18 (1).jpeg` | `siap` | 1,165 aksara | `searchable.pdf` | `PENCERAHAN HUKUM` |
 
-## (d) Semakan Kesediaan Produksi
-- ✔ `.env.example`: `APP_ENV=production`, `APP_DEBUG=false`
-- ✔ Webhook WA: HMAC-SHA256 wajib + `throttle:60,1` (route/api.php)
-- ✔ `composer.lock` dikomit · ✔ Tiada `.env`/rahsia dalam repo (`.gitignore`)
-- ✔ Larangan §0.3 dipatuhi (tiada NRIC, tiada pustaka WA tidak rasmi, bucket cos private, tiada padam-atas-kuota)
+Browser E2E:
 
-## (e) Had Diketahui (selaras §19)
-- **OCR** tidak dijalankan di luar imej Docker (tesseract/ocrmypdf) — ⚠ item 7/17 disahkan di staging.
-- **Dev/ujian guna SQLite** (bukan pgsql) — justifikasi persekitaran (Kriteria Fasa 1); produksi kekal pgsql/Docker.
-- **Laporan/widget dashboard** (§9.C.9/§9.C.2) = versi asas — penambahbaikan visual pasca-MVP.
-- Semua had lain selaras §19 (whatsmeow tidak rasmi, SPOF, had OCR Jawi/tulisan tangan, bil manual).
+- Google Chrome upload -> queue OCR -> halaman OCR -> carian MAM: lulus, 32.9 saat.
+- Carian tenant MAN bagi frasa unik MAM: tiada hasil, lulus, 20.3 saat.
+- In-app Chrome MCP tiada tab/browser terpasang; standalone Chrome melalui Playwright digunakan.
 
-## Senarai §21 — MENUNGGU Tindakan Manusia (sebelum live)
-DNS+Caddy+swap · COS 2 bucket+CAM+lifecycle · Gmail App Password · BotFather+set-webhook ·
-**Gateway wassap.wehdah.my** (/send bersesi + logik kata kunci + QR UI + HMAC) · rclone crypt ·
-Harga+bank di Tetapan Platform · semakan Terma/DPA peguam · luluskan MAM + buang data demo ·
-masjid ANM: sahkan pendekatan retensi.
+## 4. Jaminan P0 yang dilaksanakan
 
----
+- `SensitiveAccessLog` tidak boleh update/delete dan resource/policy read-only.
+- Strict authorization/policy untuk resource serta custom action.
+- Query senarai/carian menapis tenant dan sensitiviti sebelum hasil dipulangkan.
+- Secure file, invois, sijil dan eksport memerlukan auth, signed URL dan policy.
+- Job OCR/eksport membawa `mosque_id` dan menapis payload tenant.
+- WhatsApp session, API key, sender, keyword slot, message dedup dan recipient berada dalam tenant.
+- E-mel memerlukan alias tepat, tenant aktif, toggle, allowlist dan keyword.
+- Media path mempunyai prefix `tenants/{mosque_id}`.
+- Retensi/pelupusan, billing/invois dan membership melalui service yang memvalidasi domain/tenant.
 
-**Pengisytiharan akhir:** Kod SEDIA. Go-live menunggu tindakan manusia §21 + satu larian staging
-(sahkan item ⚠: OCR sebenar, backup:run, pemulihan) dengan perkhidmatan sebenar (COS/gateway/SMTP/Meili).
+## 5. Keputusan gateway WhatsApp
+
+### Local
+
+- Laravel gateway: **168 passed, 488 assertions**.
+- `go vet ./...`: lulus.
+- `go test ./...`: lulus.
+- OpenAPI linter terdahulu: 100/100 tanpa warning; scorecard B 80.53.
+
+### Production pada 13 Julai 2026
+
+| Semakan | Keputusan |
+|---|---|
+| Remote HEAD | `d4c9b62` |
+| `https://wassap.wehdah.my/up` | HTTP 200 |
+| Provision tanpa HMAC | HTTP 401 |
+| `wassap-engine` | active |
+| `wassap-queue` | active |
+| `wassap-scheduler` | active |
+| Engine DB | `db_ok=true` |
+| Sesi | 2 connected / 2 total |
+| `DIWAN_PROVISIONING_SECRET` | **MISSING** |
+
+Backup sebelum deployment gateway:
+
+- DB: `/home/ubuntu/wassap-backups/wassap-wassap_multitenant-20260713-081859.sql.gz`
+- Release lama: `/var/www/wassap-old-20260713-081907`
+- Binary lama: `engine/bin/engine.pre-diwan-20260713`
+
+## 6. Blocker production SPDM
+
+1. Domain, host/IP, user SSH dan path production SPDM belum diketahui.
+2. Shared secret belum dipasang serentak sebagai `WHATSAPP_PROVISIONING_SECRET` dan `DIWAN_PROVISIONING_SECRET`.
+3. `WHATSAPP_WEBHOOK_URL` public HTTPS belum wujud.
+4. `IMAP_PASSWORD` production belum tersedia; local kosong dan intake tidak aktif.
+5. PostgreSQL/Redis/Horizon/COS/Meili/SMTP/IMAP/backup production belum boleh diuji tanpa host SPDM.
+6. WhatsApp/e-mel dokumen sebenar ke SPDM live belum boleh diuji tanpa URL live.
+7. Backup restore drill production SPDM belum dilakukan.
+
+## 7. Gate yang masih wajib sebelum label “live”
+
+- semua dependency dan secret production sah;
+- deploy/migrate/cache/service health hijau;
+- provisioning dan QR pairing tenant pilot berjaya;
+- muat naik, WhatsApp dan e-mel sebenar masuk tenant tepat;
+- OCR dan carian lulus;
+- negative cross-tenant matrix lulus;
+- notifikasi keluar dari nombor tenant tepat;
+- signed download/artefak authorize dengan betul;
+- backup dan restore drill lulus;
+- rollback tersedia dan bukti Pass/Fail/Evidence disimpan.
+
+## 8. Pengisytiharan akhir
+
+Projek mempunyai rangka domain dan perlindungan tenant yang kuat serta bukti ujian local/CI/browser. Namun, kenyataan **“semua OK/live” belum benar untuk SPDM** sehingga input host dan gate production di atas selesai.
+
+Kenyataan semasa yang sah:
+
+> **Gateway WhatsApp live dan sihat. Kod SPDM siap serta diuji. Production SPDM masih menunggu destinasi deployment, shared secret, IMAP dan verifikasi dependency/live E2E.**
