@@ -44,8 +44,14 @@ class MosqueForm
                 DateTimePicker::make('retention_ack_at'),
                 TextInput::make('retention_ack_by')
                     ->numeric(),
-                TextInput::make('wa_session_id'),
-                TextInput::make('wa_number'),
+                TextInput::make('wa_session_id')
+                    ->label('Sesi WhatsApp (urus di panel tenant)')
+                    ->disabled()
+                    ->dehydrated(false),
+                TextInput::make('wa_number')
+                    ->label('Nombor WhatsApp (urus di panel tenant)')
+                    ->disabled()
+                    ->dehydrated(false),
                 Textarea::make('settings')
                     ->required()
                     ->default('{}')

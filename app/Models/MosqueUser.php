@@ -11,12 +11,13 @@ class MosqueUser extends Pivot
 
     public $incrementing = true;
 
-    protected $fillable = ['mosque_id', 'user_id', 'role', 'joined_at'];
+    protected $fillable = ['mosque_id', 'user_id', 'role', 'phone_wa', 'notify_whatsapp', 'joined_at'];
 
     protected function casts(): array
     {
         return [
             'joined_at' => 'datetime',
+            'notify_whatsapp' => 'boolean',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\NotificationLog;
+use App\Models\WhatsAppIntegration;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,15 +25,29 @@ class WhatsAppGateway
         }
 
         try {
-            $response = Http::timeout(config('diwan.whatsapp.timeout', 8))
-                ->withToken((string) config('diwan.whatsapp.gateway_token'))
-                ->post(rtrim((string) config('diwan.whatsapp.gateway_url'), '/').'/send', [
-                    'session' => $session,
+            $integration = $mosqueId
+                ? WhatsAppIntegration::query()->forMosque($mosqueId)->first()
+                : null;
+
+            if (! $integration?->isReady() || ! hash_equals((string) $integration->session_id, $session)) {
+                $this->record($mosqueId, $userId, $to, $type, 'failed', 'integrasi/sesi tenant tidak sah atau tidak bersambung');
+
+                return false;
+            }
+
+            $response = Http::baseUrl(rtrim((string) config('diwan.whatsapp.gateway_url'), '/'))
+                ->connectTimeout(3)
+                ->timeout(config('diwan.whatsapp.timeout', 8))
+                ->acceptJson()
+                ->asJson()
+                ->withHeaders(['X-API-Key' => $integration->api_key])
+                ->post('/v1/messages/send', [
+                    'session_id' => $integration->session_id,
                     'to' => $to,
                     'message' => $message,
                 ]);
 
-            $ok = $response->successful();
+            $ok = $response->successful() && $response->json('success') === true;
             $this->record($mosqueId, $userId, $to, $type, $ok ? 'sent' : 'failed', $ok ? null : 'HTTP '.$response->status());
 
             return $ok;

@@ -16,18 +16,37 @@ class MailIngestService
     /** Ekstrak slug daripada alamat plus-addressing. */
     public function slugFromAddress(string $address): ?string
     {
-        if (preg_match('/\+([a-z0-9-]+)@/i', $address, $m)) {
+        $configured = strtolower(trim((string) config('imap.accounts.default.username')));
+        if (! filter_var($configured, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        [$local, $domain] = explode('@', $configured, 2);
+        $pattern = '/^'.preg_quote($local, '/').'\+([a-z0-9-]+)@'.preg_quote($domain, '/').'$/i';
+        if (preg_match($pattern, strtolower(trim($address)), $m)) {
             return strtolower($m[1]);
         }
 
         return null;
     }
 
+    public function intakeAddress(Mosque $mosque): ?string
+    {
+        $configured = strtolower(trim((string) config('imap.accounts.default.username')));
+        if (! filter_var($configured, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        [$local, $domain] = explode('@', $configured, 2);
+
+        return $local.'+'.$mosque->slug.'@'.$domain;
+    }
+
     /**
      * Proses satu mesej e-mel yang telah dihurai.
      * $recipients = senarai alamat To/Delivered-To. $attachments = [['content','filename','mime'], ...].
      */
-    public function ingestMessage(array $recipients, string $from, string $subject, string $messageId, array $attachments): array
+    public function ingestMessage(array $recipients, string $from, string $subject, string $messageId, array $attachments, string $body = ''): array
     {
         $slug = null;
         foreach ($recipients as $address) {
@@ -43,6 +62,21 @@ class MailIngestService
         $mosque = Mosque::query()->where('slug', $slug)->first();
         if (! $mosque || ! $mosque->isActive()) {
             return ['status' => 'unknown_or_inactive', 'slug' => $slug];
+        }
+
+        if (! $mosque->mailIntakeEnabled()) {
+            return ['status' => 'disabled', 'mosque' => $mosque];
+        }
+
+        $from = strtolower(trim($from));
+        if (! in_array($from, $mosque->mailIntakeSenders(), true)) {
+            return ['status' => 'sender_not_allowed', 'mosque' => $mosque];
+        }
+
+        $keyword = mb_strtolower(trim($mosque->mailIntakeKeyword()));
+        $haystack = mb_strtolower($subject."\n".$body);
+        if ($keyword === '' || ! str_contains($haystack, $keyword)) {
+            return ['status' => 'keyword_missing', 'mosque' => $mosque];
         }
 
         if ($mosque->storage_used_bytes >= $mosque->effectiveQuotaBytes()) {
@@ -66,7 +100,7 @@ class MailIngestService
                 $attachment['mime'] ?? 'application/octet-stream',
                 null,
                 SourceChannel::Emel,
-                ['from' => $from, 'subject' => $subject, 'message_id' => $messageId],
+                ['from' => $from, 'subject' => $subject, 'message_id' => $messageId, 'keyword' => $keyword],
                 skipIfDuplicate: true,
             );
 

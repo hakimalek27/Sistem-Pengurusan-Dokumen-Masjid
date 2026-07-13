@@ -3,6 +3,7 @@
 namespace App\Notifications\Concerns;
 
 use App\Notifications\Channels\WhatsAppChannel;
+use App\Services\WhatsAppRecipientResolver;
 use NotificationChannels\Telegram\TelegramChannel;
 
 /**
@@ -19,8 +20,12 @@ trait RoutesDiwanChannels
             $channels[] = 'mail';
         }
 
-        if (($notifiable->notify_whatsapp ?? false) && ($notifiable->phone_wa ?? null)) {
-            $channels[] = WhatsAppChannel::class;
+        if (method_exists($this, 'toWhatsApp')) {
+            $payload = $this->toWhatsApp($notifiable);
+            $to = app(WhatsAppRecipientResolver::class)->resolve($notifiable, $payload['mosque_id'] ?? null);
+            if ($to) {
+                $channels[] = WhatsAppChannel::class;
+            }
         }
 
         if (($notifiable->notify_telegram ?? false) && ($notifiable->telegram_chat_id ?? null)) {

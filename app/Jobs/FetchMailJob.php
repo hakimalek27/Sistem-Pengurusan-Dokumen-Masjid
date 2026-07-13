@@ -54,6 +54,7 @@ class FetchMailJob implements ShouldQueue
                 $from = (string) optional($message->getFrom()[0] ?? null)->mail;
                 $subject = (string) $message->getSubject();
                 $messageId = (string) $message->getMessageId();
+                $body = trim(strip_tags((string) ($message->getTextBody() ?: $message->getHTMLBody())));
 
                 $attachments = [];
                 foreach ($message->getAttachments() as $attachment) {
@@ -64,7 +65,7 @@ class FetchMailJob implements ShouldQueue
                     ];
                 }
 
-                $result = $mail->ingestMessage($recipients, $from, $subject, $messageId, $attachments);
+                $result = $mail->ingestMessage($recipients, $from, $subject, $messageId, $attachments, $body);
                 $message->setFlag('Seen');
 
                 if (($result['status'] ?? '') === 'ok' && ! empty($result['records'])) {

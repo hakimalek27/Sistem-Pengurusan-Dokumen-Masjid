@@ -4,11 +4,14 @@ namespace App\Filament\App\Resources\Inbox;
 
 use App\Enums\RecordStatus;
 use App\Filament\App\Resources\Inbox\Pages\ListInbox;
+use App\Filament\App\Resources\Inbox\Pages\ViewInbox;
 use App\Filament\App\Resources\Inbox\Tables\InboxTable;
+use App\Filament\App\Resources\Records\Schemas\RecordInfolist;
 use App\Models\Record;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,10 +60,16 @@ class InboxResource extends Resource
         return InboxTable::configure($table);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return RecordInfolist::configure($schema);
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => ListInbox::route('/'),
+            'view' => ViewInbox::route('/{record}'),
         ];
     }
 }

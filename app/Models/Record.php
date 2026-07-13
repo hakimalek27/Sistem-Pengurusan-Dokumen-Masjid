@@ -103,7 +103,9 @@ class Record extends Model implements HasMedia
 
     public function shouldBeSearchable(): bool
     {
-        return in_array($this->status, [RecordStatus::Difailkan, RecordStatus::Diganti], true);
+        // Peti Masuk perlu boleh dicari sebaik OCR siap supaya kerani boleh
+        // mengenal pasti dan mengklasifikasikan dokumen berdasarkan kandungan.
+        return in_array($this->status, [RecordStatus::PetiMasuk, RecordStatus::Difailkan, RecordStatus::Diganti], true);
     }
 
     /**

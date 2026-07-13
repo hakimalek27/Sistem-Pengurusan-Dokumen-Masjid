@@ -471,7 +471,7 @@ Konvensyen: semua jadual berdata-tenant ada `mosque_id` FK **NOT NULL + indeks k
 | retention_ack_at / retention_ack_by | timestamp / FK nullable | pengakuan §16.2 |
 | wa_session_id | string nullable unique | ID sesi masjid pada gateway whatsmeow (§11.1); NULL = saluran WA masjid tidak aktif |
 | wa_number | string(20) nullable | Nombor WA rasmi masjid (paparan sahaja) |
-| settings | jsonb default '{}' | `data_protection_rep{name,phone,email}`, `wa_intake_enabled:true`, `wa_intake_keyword:"spdm"` |
+| settings | jsonb default '{}' | `data_protection_rep{name,phone,email}`, `wa_intake_enabled:true`, `wa_intake_keyword:"spdm"`, `mail_intake_enabled`, `mail_intake_keyword`, `mail_intake_senders[]` |
 | approved_at / approved_by | timestamp / FK nullable | |
 | softDeletes | | tutup akaun §10.M |
 
@@ -864,7 +864,7 @@ PENTADBIRAN       Ahli & Peranan · Klasifikasi Fail · Pelupusan ·
 
 **9.C.13 Pentadbiran lain**: **Klasifikasi Fail** (urus pokok KF masjid: tambah/edit/nyahaktif; kod dikunci selepas ada fail) · **Pelupusan** (wizard manual §10.G; amaran §16.2 kekal terpapar) · **Log Audit** (penapis pengguna/model/tarikh) · **Log Akses Sulit** (audit, pengerusi, admin_masjid; lajur is_superadmin).
 
-**9.C.14 Tetapan Masjid** (`mosque.settings`): profil masjid (kod baca-sahaja selepas ada fail); **Wakil Perlindungan Data** (nama/tel/e-mel); **WhatsApp Masjid** — medan `wa_session_id` + nombor paparan, kata kunci intake (lalai `spdm`), toggle `wa_intake_enabled`, status hantar WA terakhir (dari `notification_logs`), arahan ✋ daftar sesi: imbas QR nombor masjid di gateway wassap.wehdah.my; paparan alamat pengimbas masjid: `scan.diwan+{slug}@gmail.com` + arahan set pada mesin; Runbook Insiden (teks §15.6 versi pengawal).
+**9.C.14 Tetapan Masjid** (`mosque.settings`): profil masjid (kod baca-sahaja selepas ada fail); **Wakil Perlindungan Data** (nama/tel/e-mel); **WhatsApp Masjid** — integrasi tenant/API key encrypted + pairing QR terus di SPDM, kata kunci intake (lalai `spdm`) dan toggle; **E-mel Pengimbas** — alamat alias unik dijana daripada akaun IMAP platform, toggle, kata kunci dan senarai e-mel pengirim dibenarkan per tenant; Runbook Insiden (teks §15.6 versi pengawal).
 
 **9.C.15 Profil** (menu pengguna): toggle 3 saluran notifikasi; nombor WhatsApp (baca sahaja — admin ubah); butang **"Sambung Telegram"** (deep-link §11.2); **"Hantar Notifikasi Ujian"** (semua saluran aktif; keputusan dipapar).
 
@@ -951,7 +951,7 @@ Melebihi kuota efektif → disekat di pintu (§5.14) dengan mesej jelas + pautan
 
 ### 11.1 Gateway WhatsApp whatsmeow (`wassap.wehdah.my`) — SESI PER MASJID + KATA KUNCI
 
-**Model:** setiap masjid mendaftar **nombor WhatsApp SENDIRI** sebagai satu sesi whatsmeow pada gateway (✋ imbas QR di UI gateway). `mosques.wa_session_id` = ID sesi (cth `mam`); `mosques.wa_number` = paparan. **Penghalaan tenant = ikut SESI** (nombor masjid yang menerima), bukan keahlian penghantar. Kemasukan dokumen dicetuskan **kata kunci** (lalai `spdm`; boleh ubah per masjid `settings.wa_intake_keyword`) — supaya trafik WhatsApp biasa masjid TIDAK memasuki sistem.
+**Model:** setiap masjid menggunakan **nombor WhatsApp SENDIRI** sebagai satu sesi whatsmeow pada gateway; provisioning tenant, API key dan pairing QR berlaku terus di SPDM tanpa berkongsi kata laluan. **Penghalaan tenant = ikut SESI** dan nombor pivot keahlian tenant. Kemasukan dokumen menggunakan aliran dua langkah: ahli hantar kata kunci (lalai `spdm`) untuk mengaktifkan slot sesi+nombor selama 10 minit, kemudian hantar satu dokumen. Caption yang mengandungi kata kunci masih disokong sebagai aliran satu langkah.
 
 ⚠️ **Kenyataan jujur (kekal):** gateway ialah kod pengguna sendiri; kontrak di bawah ialah apa yang **Diwan laksanakan**, diasingkan sepenuhnya dalam `App\Services\WhatsAppGateway` (`WHATSAPP_DRIVER=gateway|log`; semua ujian automatik guna `log`). Logik sisi-gateway ditanda ✋ — spesifikasi diberi supaya kedua-dua pihak sepadan; jika API sebenar berbeza, HANYA fail adapter itu diubah.
 
@@ -987,7 +987,7 @@ X-Diwan-Signature: hex( HMAC-SHA256( rawBody, WHATSAPP_WEBHOOK_SECRET ) )
   "timestamp": 1720252800
 }
 ```
-**Pemprosesan `WhatsAppWebhookController`:** (1) HMAC gagal → 401 tanpa maklumat. (2) Idempotensi: cache `wa_msg:{message_id}` 24 jam — ulangan → 200 kosong. (3) `session` → cari masjid `wa_session_id`; tidak dikenali → 200 + log sahaja (jangan dedah). (4) Semak masjid aktif + `wa_intake_enabled` + kuota (§5.14) — gagal kuota → balas melalui sesi "⚠️ Kuota storan masjid penuh. Dokumen tidak disimpan." (5) **Penghantar mesti AHLI masjid itu** (`users.phone_wa` + pivot `mosque_user`) — bukan ahli → balas "Maaf, nombor anda tidak berdaftar sebagai ahli {nama masjid} dalam Diwan." TANPA rekod. (6) Sah → media ke COS prefix tenant, `records` peti_masuk (source `whatsapp`; `source_meta` from/session/caption), `ProcessOcrJob`, ack melalui sesi: "✅ Diterima untuk *{nama masjid}*. Rujukan sementara: #{6-akhir-ULID}. Kerani akan memprosesnya." (7) SENTIASA balas HTTP 200 pantas — kerja berat ke queue. Notifikasi kerani masjid itu seperti biasa.
+**Pemprosesan `WhatsAppWebhookController`:** (1) sahkan HMAC `X-Signature` atas raw body. (2) Idempotensi berskop sesi 24 jam. (3) `session_id` mesti memetakan integrasi tenant aktif/connected. (4) Semak masjid aktif, toggle dan kuota. (5) Penghantar mesti sepadan dengan `mosque_user.phone_wa` tenant itu. (6) Mesej teks tepat kata kunci mengaktifkan cache `sesi+nombor` 10 minit; media tanpa slot/caption kata kunci ditolak dengan arahan. (7) Media sah dan bukan pendua → COS prefix tenant, `records` peti_masuk, queue OCR dan ack; slot dipadam selepas berjaya. (8) Group dan echo sendiri diabaikan; kerja berat kekal pada queue.
 
 **Simulator (WAJIB dibina):** `php artisan diwan:simulate-whatsapp {session} {phone} {path-fail}` — bina payload sebenar + HMAC sah → POST ke aplikasi sendiri. Digunakan §18.
 
@@ -1001,7 +1001,7 @@ X-Diwan-Signature: hex( HMAC-SHA256( rawBody, WHATSAPP_WEBHOOK_SECRET ) )
 
 ### 11.3 Ingest e-mel pengimbas — IMAP + plus-addressing per masjid
 - Pakej `webklex/laravel-imap`; satu peti Gmail; setiap masjid guna `scan.diwan+{slug}@gmail.com` (Gmail hantar semua +tag ke peti sama — ciri standard).
-- `FetchMailJob` dijadualkan **setiap minit** (`withoutOverlapping`; guard `IMAP_ENABLED`): sambung IMAP → INBOX UNSEEN → setiap mesej: baca header `To`/`Delivered-To` → ekstrak `{slug}` → masjid wujud & aktif? kuota OK? → setiap lampiran ber-MIME dibenarkan (§15.7): kira sha256 — **wujud dalam masjid itu → skip + log "duplikat"**; baharu → COS prefix tenant, `records` peti_masuk (source `emel`; source_meta from/subject/message_id), hantar OCR → tanda SEEN → notifikasi kerani masjid itu. Tanpa lampiran / slug tak dikenali / masjid tidak aktif → SEEN + log (kerap → e-mel amaran superadmin sekali sehari).
+- `FetchMailJob` dijadualkan **setiap minit** (`withoutOverlapping`; guard `IMAP_ENABLED`): sambung IMAP → INBOX UNSEEN → sahkan alamat `To`/`Delivered-To` benar-benar alias akaun IMAP platform + `{slug}` → masjid aktif dan intake e-mel dihidupkan → pengirim berada dalam allowlist tenant → subjek/isi mengandungi kata kunci tenant → kuota OK → lampiran MIME dibenarkan. SHA-256 didedup **dalam masjid itu sahaja**; baharu masuk COS prefix tenant + Peti Masuk + queue OCR + notifikasi. Semua kes ditolak ditanda SEEN tanpa mencipta rekod.
 - ✋Gmail khusus + 2FA + **App Password** → `.env`. ⚠️ Bergantung polisi Google semasa; mana-mana IMAP dengan plus-addressing boleh ganti melalui `.env`. Cloudflare Email Worker = Fasa 2.
 - Ralat sambungan IMAP 3 kali berturut → e-mel superadmin sekali sehari (elak spam).
 

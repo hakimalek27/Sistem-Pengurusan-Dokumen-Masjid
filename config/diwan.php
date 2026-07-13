@@ -25,7 +25,10 @@ return [
         'driver' => env('WHATSAPP_DRIVER', 'gateway'),   // gateway | log
         'gateway_url' => env('WHATSAPP_GATEWAY_URL'),
         'gateway_token' => env('WHATSAPP_GATEWAY_TOKEN'),
+        'provisioning_secret' => env('WHATSAPP_PROVISIONING_SECRET'),
+        'instance_id' => env('DIWAN_INSTANCE_ID', 'spdm-local'),
         'webhook_secret' => env('WHATSAPP_WEBHOOK_SECRET'),
+        'webhook_url' => env('WHATSAPP_WEBHOOK_URL', rtrim((string) env('APP_URL'), '/').'/api/webhooks/whatsapp'),
         'default_keyword' => 'spdm',                      // lalai kata kunci intake
         'timeout' => 8,                                   // saat (§11.1)
     ],
@@ -35,6 +38,9 @@ return [
     'imap' => [
         'host' => env('IMAP_HOST'),
         'port' => (int) env('IMAP_PORT', 993),
+    ],
+    'mail_intake' => [
+        'default_keyword' => env('MAIL_INTAKE_KEYWORD', 'spdm'),
     ],
 
     'meilisearch' => [

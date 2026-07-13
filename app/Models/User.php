@@ -42,7 +42,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function mosques(): BelongsToMany
     {
         return $this->belongsToMany(Mosque::class, 'mosque_user')
-            ->withPivot('role', 'joined_at')
+            ->withPivot('role', 'phone_wa', 'notify_whatsapp', 'joined_at')
             ->withTimestamps();
     }
 

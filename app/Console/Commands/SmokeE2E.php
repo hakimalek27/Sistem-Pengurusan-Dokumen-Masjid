@@ -64,8 +64,8 @@ class SmokeE2E extends Command
         $this->check('Lulus + KF disalin (40 nod)', $mosque->status === MosqueStatus::Aktif && $mosque->classificationNodes()->count() === 40);
 
         // 3. Jemput ahli.
-        $kerani = app(MembershipService::class)->invite($mosque, "kerani-{$slug}@smoke.test", 'Kerani', 'kerani');
-        $pengerusi = app(MembershipService::class)->invite($mosque, "pengerusi-{$slug}@smoke.test", 'Pengerusi', 'pengerusi');
+        $kerani = app(MembershipService::class)->invite($mosque, "kerani-{$slug}@smoke.test", 'Kerani', 'kerani', null, $admin);
+        $pengerusi = app(MembershipService::class)->invite($mosque, "pengerusi-{$slug}@smoke.test", 'Pengerusi', 'pengerusi', null, $admin);
         $this->check('Jemput ahli (kerani + pengerusi)', $kerani->roleIn($mosque) === 'kerani' && $pengerusi->roleIn($mosque) === 'pengerusi');
 
         // 4-5. Ingest + klasifikasi.

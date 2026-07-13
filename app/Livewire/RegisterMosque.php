@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\MosqueStatus;
 use App\Models\Mosque;
 use App\Models\User;
+use App\Services\WhatsAppRecipientResolver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -77,16 +78,29 @@ class RegisterMosque extends Component
         ], [], ['code' => 'kod akronim', 'slug' => 'slug']);
 
         DB::transaction(function () use ($data) {
+            $phoneWa = app(WhatsAppRecipientResolver::class)->normalize($data['phone_wa']);
+            if (! $phoneWa) {
+                throw ValidationException::withMessages([
+                    'phone_wa' => 'Nombor WhatsApp tidak sah.',
+                ]);
+            }
+
             $mosque = Mosque::query()->create([
                 'name' => $data['name'],
                 'slug' => $this->slug,
                 'code' => $this->code,
                 'state' => $data['state'],
                 'district' => $data['district'] ?: null,
-                'phone' => $data['phone_wa'],
+                'phone' => $phoneWa,
                 'status' => MosqueStatus::Menunggu,
                 'storage_quota_bytes' => (int) config('diwan.default_quota_gb', 20) * (1024 ** 3),
-                'settings' => ['wa_intake_enabled' => true, 'wa_intake_keyword' => 'spdm'],
+                'settings' => [
+                    'wa_intake_enabled' => true,
+                    'wa_intake_keyword' => 'spdm',
+                    'mail_intake_enabled' => true,
+                    'mail_intake_keyword' => 'spdm',
+                    'mail_intake_senders' => [strtolower($data['email'])],
+                ],
                 'retention_ack_at' => now(),
             ]);
 
@@ -95,14 +109,19 @@ class RegisterMosque extends Component
             if (! $user->exists) {
                 $user->fill([
                     'name' => $data['admin_name'],
-                    'phone_wa' => $data['phone_wa'],
+                    'phone_wa' => $phoneWa,
                     'is_active' => false,
                     'password' => null,
                 ])->save();
             }
 
             $mosque->users()->syncWithoutDetaching([
-                $user->id => ['role' => 'admin_masjid', 'joined_at' => now()],
+                $user->id => [
+                    'role' => 'admin_masjid',
+                    'phone_wa' => $phoneWa,
+                    'notify_whatsapp' => true,
+                    'joined_at' => now(),
+                ],
             ]);
 
             $mosque->update(['retention_ack_by' => $user->id]);

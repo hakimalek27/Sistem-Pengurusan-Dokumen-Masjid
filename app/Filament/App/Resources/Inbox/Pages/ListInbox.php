@@ -32,6 +32,7 @@ class ListInbox extends ListRecords
                         ->required()
                         ->disk('local')
                         ->directory('inbox-tmp')
+                        ->storeFileNamesIn('file_names')
                         ->acceptedFileTypes([
                             'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
                             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -61,8 +62,9 @@ class ListInbox extends ListRecords
                         $fullPath = Storage::disk('local')->path($path);
                         $contents = file_get_contents($fullPath);
                         $mime = mime_content_type($fullPath) ?: 'application/octet-stream';
+                        $originalName = $data['file_names'][$path] ?? basename($path);
 
-                        $service->ingest($mosque, $contents, basename($path), $mime, Auth::user(), SourceChannel::MuatNaik);
+                        $service->ingest($mosque, $contents, $originalName, $mime, Auth::user(), SourceChannel::MuatNaik);
                         Storage::disk('local')->delete($path);
                         $count++;
                     }

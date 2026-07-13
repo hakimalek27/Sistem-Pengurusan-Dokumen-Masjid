@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // §5.1 mosques (TENANT)
@@ -44,8 +45,13 @@ class Mosque extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'mosque_user')
-            ->withPivot('role', 'joined_at')
+            ->withPivot('role', 'phone_wa', 'notify_whatsapp', 'joined_at')
             ->withTimestamps();
+    }
+
+    public function whatsappIntegration(): HasOne
+    {
+        return $this->hasOne(WhatsAppIntegration::class);
     }
 
     public function classificationNodes(): HasMany
@@ -116,5 +122,26 @@ class Mosque extends Model
     public function waIntakeKeyword(): string
     {
         return (string) ($this->settings['wa_intake_keyword'] ?? config('diwan.whatsapp.default_keyword', 'spdm'));
+    }
+
+    public function mailIntakeEnabled(): bool
+    {
+        return (bool) ($this->settings['mail_intake_enabled'] ?? false);
+    }
+
+    public function mailIntakeKeyword(): string
+    {
+        return (string) ($this->settings['mail_intake_keyword'] ?? config('diwan.mail_intake.default_keyword', 'spdm'));
+    }
+
+    /** @return array<int, string> */
+    public function mailIntakeSenders(): array
+    {
+        return collect($this->settings['mail_intake_senders'] ?? [])
+            ->filter(fn ($email) => is_string($email) && filter_var($email, FILTER_VALIDATE_EMAIL))
+            ->map(fn ($email) => strtolower(trim($email)))
+            ->unique()
+            ->values()
+            ->all();
     }
 }

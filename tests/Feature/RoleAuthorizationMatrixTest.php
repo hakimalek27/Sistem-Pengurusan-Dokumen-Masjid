@@ -20,7 +20,7 @@ afterEach(function () {
     Filament::setTenant(null, isQuiet: true);
 });
 
-it('menguatkuasakan matriks 9 peranan pada Peti Masuk dan Log Akses Sulit', function () {
+it('menguatkuasakan matriks 9 peranan pada Peti Masuk, Log Akses dan tetapan tenant', function () {
     $inboxRoles = ['admin_masjid', 'kerani', 'setiausaha'];
     $auditRoles = ['admin_masjid', 'pengerusi', 'audit'];
 
@@ -33,6 +33,8 @@ it('menguatkuasakan matriks 9 peranan pada Peti Masuk dan Log Akses Sulit', func
 
         $inboxResponse = $this->get('/app/mam/peti-masuk');
         $logResponse = $this->get('/app/mam/sensitive-access-logs');
+        $settingsResponse = $this->get('/app/mam/tetapan-masjid');
+        $membersResponse = $this->get('/app/mam/ahli-peranan');
 
         in_array($role, $inboxRoles, true)
             ? $inboxResponse->assertOk()
@@ -41,6 +43,14 @@ it('menguatkuasakan matriks 9 peranan pada Peti Masuk dan Log Akses Sulit', func
         in_array($role, $auditRoles, true)
             ? $logResponse->assertOk()
             : $logResponse->assertForbidden();
+
+        $role === 'admin_masjid'
+            ? $settingsResponse->assertOk()
+            : $settingsResponse->assertForbidden();
+
+        $role === 'admin_masjid'
+            ? $membersResponse->assertOk()
+            : $membersResponse->assertForbidden();
     }
 });
 

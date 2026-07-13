@@ -12,6 +12,7 @@ it('mencipta semua jadual §5 + jadual pakej', function () {
         'retention_rules', 'disposal_batches', 'disposal_items', 'storage_orders',
         'storage_addons', 'platform_settings', 'sensitive_access_logs',
         'notification_logs', 'file_access_grants',
+        'whatsapp_integrations',
         // Pakej
         'media', 'activity_log', 'notifications', 'jobs',
     ];

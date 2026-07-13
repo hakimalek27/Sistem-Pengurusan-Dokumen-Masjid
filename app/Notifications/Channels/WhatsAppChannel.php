@@ -4,6 +4,8 @@ namespace App\Notifications\Channels;
 
 use App\Jobs\SendWhatsAppJob;
 use App\Models\NotificationLog;
+use App\Models\WhatsAppIntegration;
+use App\Services\WhatsAppRecipientResolver;
 use Illuminate\Notifications\Notification;
 
 /**
@@ -19,23 +21,27 @@ class WhatsAppChannel
         }
 
         $payload = $notification->toWhatsApp($notifiable);
-        $to = $notifiable->phone_wa ?? null;
+        $mosqueId = $payload['mosque_id'] ?? null;
+        $to = app(WhatsAppRecipientResolver::class)->resolve($notifiable, $mosqueId);
 
         if (! $to) {
             return;
         }
 
-        $session = $payload['session'] ?? null;
+        $integration = $mosqueId
+            ? WhatsAppIntegration::query()->forMosque($mosqueId)->first()
+            : null;
+        $session = $integration?->isReady() ? $integration->session_id : null;
 
         if (! $session) {
             NotificationLog::query()->create([
-                'mosque_id' => $payload['mosque_id'] ?? null,
+                'mosque_id' => $mosqueId,
                 'user_id' => $notifiable->id ?? null,
                 'channel' => 'whatsapp',
                 'to' => $to,
                 'notification_type' => class_basename($notification),
                 'status' => 'failed',
-                'error' => 'tiada wa_session_id — WA dilangkau (e-mel dihantar)',
+                'error' => 'integrasi WhatsApp tenant tidak aktif/bersambung — WA dilangkau (e-mel dihantar)',
             ]);
 
             return;
@@ -45,7 +51,7 @@ class WhatsAppChannel
             $session,
             $to,
             $payload['message'],
-            $payload['mosque_id'] ?? null,
+            $mosqueId,
             $notifiable->id ?? null,
             class_basename($notification),
         );

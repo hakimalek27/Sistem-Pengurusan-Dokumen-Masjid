@@ -17,6 +17,9 @@ use UnitEnum;
 
 class AhliPeranan extends Page
 {
+    /** @var array<int, array{phone_wa:string, notify_whatsapp:bool}> */
+    public array $whatsappSettings = [];
+
     protected string $view = 'filament.app.pages.ahli-peranan';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
@@ -36,6 +39,11 @@ class AhliPeranan extends Page
         $tenant = Filament::getTenant();
 
         return $tenant && Auth::user()?->canIn($tenant, 'users.manage');
+    }
+
+    public function mount(): void
+    {
+        $this->loadWhatsAppSettings();
     }
 
     public function changeRole(int $userId, string $role): void
@@ -64,6 +72,27 @@ class AhliPeranan extends Page
         }
     }
 
+    public function saveWhatsAppSettings(int $userId): void
+    {
+        $mosque = Filament::getTenant();
+        $target = $mosque->users()->whereKey($userId)->firstOrFail();
+        $settings = $this->whatsappSettings[$userId] ?? ['phone_wa' => '', 'notify_whatsapp' => false];
+
+        try {
+            app(MembershipService::class)->updateWhatsAppRouting(
+                $mosque,
+                $target,
+                $settings['phone_wa'] ?: null,
+                (bool) $settings['notify_whatsapp'],
+                Auth::user(),
+            );
+            $this->loadWhatsAppSettings();
+            Notification::make()->title('Tetapan WhatsApp ahli dikemas kini.')->success()->send();
+        } catch (\Throwable $e) {
+            Notification::make()->title($e->getMessage())->danger()->send();
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -78,7 +107,14 @@ class AhliPeranan extends Page
                     Select::make('role')->label('Peranan')->options(Roles::options())->required(),
                 ])
                 ->action(function (array $data) {
-                    app(MembershipService::class)->invite(Filament::getTenant(), $data['email'], $data['name'], $data['role'], $data['phone_wa'] ?? null);
+                    app(MembershipService::class)->invite(
+                        Filament::getTenant(),
+                        $data['email'],
+                        $data['name'],
+                        $data['role'],
+                        $data['phone_wa'] ?? null,
+                        Auth::user(),
+                    );
                     Notification::make()->title('Jemputan dihantar.')->success()->send();
                 }),
         ];
@@ -87,10 +123,27 @@ class AhliPeranan extends Page
     protected function getViewData(): array
     {
         $mosque = Filament::getTenant();
+        $members = $mosque->users()->get();
+        foreach ($members as $member) {
+            $this->whatsappSettings[$member->id] ??= [
+                'phone_wa' => (string) $member->pivot->phone_wa,
+                'notify_whatsapp' => (bool) $member->pivot->notify_whatsapp,
+            ];
+        }
 
         return [
-            'members' => $mosque->users()->get(),
+            'members' => $members,
             'roleOptions' => Roles::options(),
         ];
+    }
+
+    protected function loadWhatsAppSettings(): void
+    {
+        $this->whatsappSettings = Filament::getTenant()->users()->get()->mapWithKeys(fn ($member) => [
+            $member->id => [
+                'phone_wa' => (string) $member->pivot->phone_wa,
+                'notify_whatsapp' => (bool) $member->pivot->notify_whatsapp,
+            ],
+        ])->all();
     }
 }

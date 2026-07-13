@@ -10,6 +10,7 @@ use App\Models\RegistryFile;
 use App\Services\InboxIngestService;
 use App\Services\RecordNumberingService;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -50,6 +51,7 @@ class InboxTable
                     ->tooltip('Amaran: sha256 sama wujud pada rekod lain masjid ini'),
             ])
             ->recordActions([
+                ViewAction::make()->label('Lihat / OCR'),
                 self::classifyAction(),
                 self::deleteSpamAction(),
             ]);

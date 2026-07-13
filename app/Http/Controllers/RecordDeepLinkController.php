@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RecordStatus;
+use App\Filament\App\Resources\Inbox\InboxResource;
 use App\Filament\App\Resources\Records\RecordResource;
 use App\Models\Record;
 use Illuminate\Http\RedirectResponse;
@@ -27,6 +29,8 @@ class RecordDeepLinkController extends Controller
             abort(404);
         }
 
-        return redirect(RecordResource::getUrl('view', ['record' => $record], panel: 'app', tenant: $mosque));
+        $resource = $record->status === RecordStatus::PetiMasuk ? InboxResource::class : RecordResource::class;
+
+        return redirect($resource::getUrl('view', ['record' => $record], panel: 'app', tenant: $mosque));
     }
 }

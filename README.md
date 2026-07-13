@@ -99,6 +99,12 @@ ini dengan required reviewer sebelum menjalankan workflow **Deploy staging and r
 | `diwan:run-retention-notices` / `diwan:run-retention-execute` | Enjin retensi (§16) |
 | `diwan:reconcile-storage` · `diwan:expire-addons` · `diwan:ping-gateway` · `diwan:send-minit-reminders` · `diwan:prune-logs` | Tugasan operasi |
 
+## Intake dokumen tenant
+
+- **WhatsApp:** admin aktifkan integrasi di Tetapan Masjid dan pair nombor rasmi. Ahli hantar `spdm`, tunggu balasan slot 10 minit, kemudian hantar satu PDF/imej. Sesi, nombor ahli, API key dan dokumen semuanya disemak mengikut tenant.
+- **E-mel:** platform menyediakan satu akaun IMAP yang menyokong plus-addressing. Setiap tenant mendapat alias unik daripada halaman Tetapan Masjid, contohnya `scan.diwan+mam@domain`. Admin tenant mesti aktifkan fungsi, tetapkan kata kunci dan allowlist pengirim. Letak `spdm` pada subjek/isi serta lampirkan dokumen; scheduler mengambilnya setiap minit.
+- **OCR dan carian:** semua saluran masuk ke Peti Masuk dan queue `ocr`. Item Peti Masuk mempunyai tindakan `Lihat / OCR`; teks yang siap terus boleh dicari dan deep-link kekal pada tenant yang betul.
+
 ## Tindakan Manusia Sebelum Live (§21)
 Lihat `DIWAN-SPEC.md §21` — DNS/COS/Gmail/BotFather/gateway/rclone/harga/Terma; luluskan MAM
 sebagai tenant pertama; buang data demo sebelum produksi.

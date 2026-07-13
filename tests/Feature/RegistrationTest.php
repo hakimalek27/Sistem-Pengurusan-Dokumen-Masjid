@@ -42,6 +42,8 @@ it('pendaftaran → masjid menunggu + admin_masjid pivot + admin belum aktif + K
         ->and($admin)->not->toBeNull()
         ->and($admin->is_active)->toBeFalse()
         ->and($admin->roleIn($mosque))->toBe('admin_masjid')
+        ->and($mosque->users()->whereKey($admin->id)->first()->pivot->phone_wa)->toBe('60199999999')
+        ->and((bool) $mosque->users()->whereKey($admin->id)->first()->pivot->notify_whatsapp)->toBeTrue()
         ->and($mosque->classificationNodes()->count())->toBe(0);
 });
 
