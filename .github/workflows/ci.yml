@@ -100,7 +100,7 @@ jobs:
       - name: Install OCR tooling
         run: |
           sudo apt-get update
-          sudo apt-get install -y tesseract-ocr tesseract-ocr-msa ocrmypdf img2pdf ghostscript qpdf unpaper pngquant
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-msa ocrmypdf img2pdf ghostscript qpdf unpaper pngquant poppler-utils
 
       - name: Install dependencies
         run: |

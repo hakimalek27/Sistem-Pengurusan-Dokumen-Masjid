@@ -11,7 +11,7 @@ FROM php:8.4-fpm-bookworm AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libexif-dev \
     libxml2-dev libonig-dev \
-    tesseract-ocr tesseract-ocr-msa ghostscript qpdf unpaper pngquant \
+    tesseract-ocr tesseract-ocr-msa ghostscript qpdf unpaper pngquant poppler-utils \
     python3 python3-pip python3-venv postgresql-client curl \
  && python3 -m venv /opt/ocr \
  && /opt/ocr/bin/pip install --no-cache-dir ocrmypdf img2pdf \
