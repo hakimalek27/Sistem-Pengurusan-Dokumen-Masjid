@@ -2,6 +2,7 @@
 
 use App\Enums\MinitPriority;
 use App\Enums\MinitStatus;
+use App\Notifications\MinitCompletedNotification;
 use App\Notifications\MinitReminderNotification;
 use App\Notifications\MinitRoutedNotification;
 use App\Services\MinitService;
@@ -34,10 +35,12 @@ it('tanda selesai: minit selesai hanya bila SEMUA penerima tindakan selesai', fu
 
     $this->svc->markDone($minit, $this->pengerusi);
     expect($minit->fresh()->status)->toBe(MinitStatus::Terbuka); // nazir belum
+    Notification::assertNotSentTo($this->from, MinitCompletedNotification::class);
 
     $this->svc->markDone($minit, $this->nazir);
     expect($minit->fresh()->status)->toBe(MinitStatus::Selesai)
         ->and($minit->fresh()->completed_at)->not->toBeNull();
+    Notification::assertSentTo($this->from, MinitCompletedNotification::class);
 });
 
 it('balas & edarkan mencipta minit anak dalam bebenang', function () {

@@ -4,6 +4,7 @@ use App\Enums\MosqueStatus;
 use App\Livewire\RegisterMosque;
 use App\Models\LoginToken;
 use App\Models\Mosque;
+use App\Models\PlatformSetting;
 use App\Models\User;
 use App\Services\MosqueProvisioningService;
 use Illuminate\Support\Facades\RateLimiter;
@@ -62,6 +63,38 @@ it('menolak pendaftaran tanpa dua pengakuan (checkbox)', function () {
         ->assertHasErrors(['agree_terms', 'agree_retention']);
 
     expect(Mosque::query()->where('slug', 'mts')->exists())->toBeFalse();
+});
+
+it('menghormati suis tutup pendaftaran platform pada paparan dan submit', function () {
+    PlatformSetting::put('registration_open', false);
+
+    $this->get('/daftar')->assertOk()->assertSee('Pendaftaran ditutup sementara');
+
+    Livewire::test(RegisterMosque::class)
+        ->set('name', 'Masjid Tidak Patut Wujud')
+        ->call('submit')
+        ->assertHasErrors('name');
+
+    expect(Mosque::query()->where('name', 'Masjid Tidak Patut Wujud')->exists())->toBeFalse();
+});
+
+it('menolak nombor WhatsApp milik akaun lain sebagai ralat borang', function () {
+    User::factory()->create(['phone_wa' => '60198887777']);
+
+    Livewire::test(RegisterMosque::class)
+        ->set('name', 'Masjid Nombor Bertindih')
+        ->set('state', 'Selangor')
+        ->set('code', 'MNB')
+        ->set('slug', 'masjid-nombor-bertindih')
+        ->set('admin_name', 'Admin Baharu')
+        ->set('email', 'admin-baharu@example.test')
+        ->set('phone_wa', '60198887777')
+        ->set('agree_terms', true)
+        ->set('agree_retention', true)
+        ->call('submit')
+        ->assertHasErrors(['phone_wa' => 'unique']);
+
+    expect(Mosque::query()->where('slug', 'masjid-nombor-bertindih')->exists())->toBeFalse();
 });
 
 it('kelulusan superadmin → aktif + KF 40 nod + admin aktif + magic link dihantar', function () {

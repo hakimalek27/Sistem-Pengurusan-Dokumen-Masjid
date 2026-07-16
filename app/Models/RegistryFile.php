@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToMosque;
 use App\Enums\Sensitivity;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -55,5 +56,37 @@ class RegistryFile extends Model
     public function isOpen(): bool
     {
         return $this->status === 'terbuka';
+    }
+
+    /** Senarai fail yang boleh dilihat tanpa membocorkan tajuk fail sulit. */
+    public function scopeVisibleTo(Builder $query, User $user, Mosque $mosque): Builder
+    {
+        $query->where($query->qualifyColumn('mosque_id'), $mosque->id);
+
+        if ($user->is_superadmin) {
+            return $query;
+        }
+
+        $role = $user->roleIn($mosque);
+        if ($role === null || ! $user->canIn($mosque, 'files.view')) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        if (in_array($role, ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'], true)) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $allowed) use ($role, $user): void {
+            $allowed->where('sensitivity', '!=', Sensitivity::Sulit->value);
+
+            if ($role === 'bendahari') {
+                $allowed->orWhereHas('classificationNode', fn (Builder $node) => $node
+                    ->where(fn (Builder $prefix) => $prefix
+                        ->where('code', 'like', '200%')
+                        ->orWhere('code', 'like', '300%')));
+            }
+
+            $allowed->orWhereHas('accessGrants', fn (Builder $grant) => $grant->where('user_id', $user->id));
+        });
     }
 }

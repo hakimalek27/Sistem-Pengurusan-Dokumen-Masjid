@@ -42,6 +42,7 @@ class ListRecords extends BaseListRecords
                                 ->label('Fail Dokumen')
                                 ->disk('local')
                                 ->directory('record-tmp')
+                                ->storeFileNamesIn('file_name')
                                 ->acceptedFileTypes([
                                     'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
                                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -125,7 +126,7 @@ class ListRecords extends BaseListRecords
                         $record = $service->ingest(
                             $mosque,
                             file_get_contents($path),
-                            basename($path),
+                            $data['file_name'] ?? basename($path),
                             $mime,
                             Auth::user(),
                             SourceChannel::MuatNaik,

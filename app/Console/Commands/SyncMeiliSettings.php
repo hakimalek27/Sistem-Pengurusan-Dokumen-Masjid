@@ -29,7 +29,7 @@ class SyncMeiliSettings extends Command
 
             $index = $client->index((new Record)->searchableAs());
             // mosque_id PERTAMA (§13).
-            $index->updateFilterableAttributes(['mosque_id', 'sensitivity', 'record_type', 'status', 'registry_file_id', 'record_date']);
+            $index->updateFilterableAttributes(['id', 'mosque_id', 'sensitivity', 'record_type', 'status', 'registry_file_id', 'record_date']);
             $index->updateSortableAttributes(['record_date']);
             $index->updateSearchableAttributes(['title', 'our_ref', 'their_ref', 'sender_name', 'sender_org', 'recipient_name', 'file_no', 'ocr_text']);
 

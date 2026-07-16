@@ -2,6 +2,8 @@
 
 **Status mula:** gateway WhatsApp live; SPDM belum berada pada host production.
 
+**Gate local 16 Julai 2026:** 202 ujian/700 assertions, build Vite, pendaftaran tenant, dua imej UI→OCR→carian, workflow minit/kelulusan dan crawl 9 peranan lulus. Bukti penuh: [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md). Langkah seterusnya ialah menyediakan akses production yang masih tiada; jangan mengulang audit local sebagai ganti bukti production.
+
 **Prinsip:** production-first mengikut keputusan pemilik, tetapi aplikasi kekal dalam maintenance/canary sehingga gate keselamatan, data dan intake lulus.
 
 **Sumber konteks:** [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md).

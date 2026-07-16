@@ -60,7 +60,8 @@ class RecordPolicy
     public function delete(User $user, Record $record): bool
     {
         // Padam-spam peti masuk.
-        return $user->canIn($record->mosque, 'inbox.classify');
+        return $record->status->value === 'peti_masuk'
+            && $user->canIn($record->mosque, 'inbox.classify');
     }
 
     public function classify(User $user, Record $record): bool

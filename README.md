@@ -4,9 +4,10 @@ Platform SaaS **multi-tenant** untuk pengurusan dokumen masjid: registri digital
 fail, carian kandungan (OCR), minit & routing, e-Kelulusan, kuota storan, dan enjin retensi
 arkib automatik. Setiap masjid = satu *tenant* (Filament tenancy); satu panel superadmin.
 
-> **Status 13 Julai 2026:** kod SPDM siap dan diuji, tetapi SPDM **belum dideploy ke production**.
+> **Status 16 Julai 2026:** kod SPDM siap dan diuji, tetapi SPDM **belum dideploy ke production**.
 > Gateway `wassap.wehdah.my` sudah live; shared provisioning secret dan host production SPDM
-> masih belum tersedia. Baca [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md), kemudian
+> masih belum tersedia. Baca [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md) dan
+> [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md), kemudian
 > jalankan [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md) sebelum menyebut sistem “live/semua OK”.
 
 Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfasa:
@@ -21,8 +22,8 @@ Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfas
 Dev/ujian pada mesin ini menggunakan **SQLite** + PHP 8.4 tempatan (tanpa Docker). Ujian penuh
 berjalan **tanpa** perkhidmatan luaran (`Storage::fake`, `WHATSAPP_DRIVER=log`,
 `MAIL_MAILER=log`, `IMAP_ENABLED=false`, Scout `collection`). OCR sebenar disokong secara rasmi
-dalam imej Docker; `OcrPipelineTest` turut berjalan di host jika tesseract/ocrmypdf tersedia dan
-akan melangkau bahagian itu jika tooling tiada.
+dalam imej Docker; host Windows turut disokong melalui fallback Tesseract/Poppler dengan resolver
+path mutlak. `OcrPipelineTest` akan melangkau bahagian sebenar jika tooling tiada.
 
 ```bash
 php composer.phar install
@@ -30,6 +31,11 @@ php artisan key:generate
 php artisan migrate:fresh --seed     # data demo (mam/man) dalam local/testing
 php artisan test                     # suite Pest
 ```
+
+Regression Chrome berada dalam `e2e/`. Sediakan DB E2E/seeder dan server local seperti diterangkan
+dalam [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md), kemudian jalankan `npm run test:e2e`.
+Untuk bukti OCR fail sebenar, tetapkan `SPDM_OCR_FIXTURE_1/2` dan `SPDM_OCR_TERM_1/2` sebelum
+menjalankan Pest atau `e2e/ocr-upload.spec.js`; fail pengguna tidak disalin ke Git.
 
 ## Naik Produksi (Docker — Tencent Lighthouse)
 

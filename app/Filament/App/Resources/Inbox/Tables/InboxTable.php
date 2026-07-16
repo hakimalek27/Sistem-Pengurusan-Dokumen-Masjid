@@ -143,7 +143,7 @@ class InboxTable
 
                 Notification::make()
                     ->title('Difailkan sebagai '.$filed->registryFile->file_no.'('.$filed->enclosure_no.')')
-                    ->body('Mahu edarkan minit sekarang? Buka rekod → Edarkan Minit (Fasa 4).')
+                    ->body('Mahu edarkan minit sekarang? Buka rekod dan pilih “Edarkan Minit”.')
                     ->success()
                     ->send();
             });

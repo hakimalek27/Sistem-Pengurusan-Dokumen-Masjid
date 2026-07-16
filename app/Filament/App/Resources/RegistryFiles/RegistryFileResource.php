@@ -11,10 +11,13 @@ use App\Filament\App\Resources\RegistryFiles\Schemas\RegistryFileInfolist;
 use App\Filament\App\Resources\RegistryFiles\Tables\RegistryFilesTable;
 use App\Models\RegistryFile;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class RegistryFileResource extends Resource
@@ -48,6 +51,16 @@ class RegistryFileResource extends Resource
     public static function table(Table $table): Table
     {
         return RegistryFilesTable::configure($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $mosque = Filament::getTenant();
+        $user = Auth::user();
+
+        return ($mosque && $user)
+            ? parent::getEloquentQuery()->visibleTo($user, $mosque)
+            : parent::getEloquentQuery()->whereRaw('1 = 0');
     }
 
     public static function getRelations(): array

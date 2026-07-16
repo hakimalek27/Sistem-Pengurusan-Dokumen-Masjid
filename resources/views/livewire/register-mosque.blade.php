@@ -1,5 +1,11 @@
 <div class="card">
-    @if ($submitted)
+    @if (! $registrationOpen)
+        <div class="err">
+            <strong>Pendaftaran ditutup sementara.</strong><br>
+            Sila hubungi pentadbir platform jika organisasi anda memerlukan akaun baharu.
+        </div>
+        <p class="muted"><a href="{{ url('/log-masuk') }}">Sudah ada akaun? Log masuk</a></p>
+    @elseif ($submitted)
         <div class="ok">
             <strong>Permohonan diterima!</strong><br>
             Masjid anda kini <em>menunggu kelulusan</em> platform. Kami akan menghantar pautan

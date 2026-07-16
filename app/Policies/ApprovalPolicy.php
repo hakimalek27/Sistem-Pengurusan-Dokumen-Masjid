@@ -25,7 +25,8 @@ class ApprovalPolicy
 
     public function view(User $user, Approval $approval): bool
     {
-        return $user->canIn($approval->mosque, 'records.view');
+        return $user->can('view', $approval->record)
+            && in_array($user->id, [$approval->requested_by, $approval->approver_id], true);
     }
 
     public function create(User $user): bool

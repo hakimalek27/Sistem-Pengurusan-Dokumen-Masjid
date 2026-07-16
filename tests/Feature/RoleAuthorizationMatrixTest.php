@@ -2,6 +2,7 @@
 
 use App\Filament\App\Resources\Inbox\InboxResource;
 use App\Filament\App\Resources\Records\RecordResource;
+use App\Filament\App\Resources\RegistryFiles\RegistryFileResource;
 use App\Filament\App\Resources\SensitiveAccessLogs\SensitiveAccessLogResource;
 use App\Models\FileAccessGrant;
 use Filament\Facades\Filament;
@@ -69,6 +70,29 @@ it('menapis sensitiviti pada query senarai sebelum metadata dirender', function 
             expect($ids)->toEqualCanonicalizing([$this->dalaman->id, $this->sulit200->id]);
         } else {
             expect($ids)->toBe([$this->dalaman->id]);
+        }
+    }
+});
+
+it('menapis tajuk fail sulit pada query senarai fail sebelum dirender', function () {
+    $fullAccess = ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'];
+
+    foreach (config('roles.list') as $role) {
+        $user = makeMember($this->mosque, $role);
+        $this->actingAs($user);
+
+        $ids = RegistryFileResource::getEloquentQuery()->pluck('id')->all();
+
+        if (in_array($role, $fullAccess, true)) {
+            expect($ids)->toEqualCanonicalizing([
+                $this->dalaman->registry_file_id,
+                $this->sulit200->registry_file_id,
+                $this->sulit800->registry_file_id,
+            ]);
+        } elseif ($role === 'bendahari') {
+            expect($ids)->toEqualCanonicalizing([$this->dalaman->registry_file_id, $this->sulit200->registry_file_id]);
+        } else {
+            expect($ids)->toBe([$this->dalaman->registry_file_id]);
         }
     }
 });

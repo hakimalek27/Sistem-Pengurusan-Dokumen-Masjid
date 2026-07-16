@@ -8,6 +8,9 @@ return [
     // Bahasa OCR tesseract (§12).
     'ocr_langs' => env('OCR_LANGS', 'msa+eng'),
 
+    // Lokasi model bahasa Tesseract (Scoop Windows boleh memasangnya berasingan).
+    'tessdata_prefix' => env('TESSDATA_PREFIX'),
+
     // Had teks OCR disimpan (§5.7).
     'ocr_text_limit' => 1_000_000,
 

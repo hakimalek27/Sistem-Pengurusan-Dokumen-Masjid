@@ -51,6 +51,7 @@ class ViewRecord extends BaseViewRecord
                 ])
                 ->action(function (array $data) {
                     app(MinitService::class)->create($this->getRecord(), Auth::user(), $data['action'], $data['cc'] ?? [], $data['body'], MinitPriority::from($data['priority']));
+                    $this->getRecord()->unsetRelation('minits')->load('minits');
                     Notification::make()->title('Minit diedarkan.')->success()->send();
                 }),
 
@@ -65,6 +66,7 @@ class ViewRecord extends BaseViewRecord
                 ])
                 ->action(function (array $data) {
                     app(ApprovalService::class)->request($this->getRecord(), Auth::user(), User::findOrFail($data['approver_id']), $data['note'] ?? null);
+                    $this->getRecord()->unsetRelation('approvals')->load('approvals');
                     Notification::make()->title('Permohonan kelulusan dihantar.')->success()->send();
                 }),
 
@@ -74,11 +76,18 @@ class ViewRecord extends BaseViewRecord
                 ->authorize('supersede')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.supersede'))
                 ->schema([
-                    FileUpload::make('file')->label('Versi Baharu')->disk('local')->directory('ver-tmp')->required(),
+                    FileUpload::make('file')->label('Versi Baharu')->disk('local')->directory('ver-tmp')
+                        ->storeFileNamesIn('file_name')->required(),
                 ])
                 ->action(function (array $data) {
                     $path = Storage::disk('local')->path($data['file']);
-                    $new = app(InboxIngestService::class)->supersede($this->getRecord(), file_get_contents($path), basename($path), mime_content_type($path) ?: 'application/octet-stream', Auth::user());
+                    $new = app(InboxIngestService::class)->supersede(
+                        $this->getRecord(),
+                        file_get_contents($path),
+                        $data['file_name'] ?? basename($path),
+                        mime_content_type($path) ?: 'application/octet-stream',
+                        Auth::user(),
+                    );
                     Storage::disk('local')->delete($data['file']);
                     Notification::make()->title('Versi baharu dicipta.')->success()->send();
 

@@ -25,7 +25,9 @@ class MinitPolicy
 
     public function view(User $user, Minit $minit): bool
     {
-        return $user->canIn($minit->mosque, 'records.view');
+        return $user->can('view', $minit->record)
+            && ($minit->from_user_id === $user->id
+                || $minit->recipients()->where('user_id', $user->id)->exists());
     }
 
     public function create(User $user): bool
@@ -54,6 +56,6 @@ class MinitPolicy
 
     public function update(User $user, Minit $minit): bool
     {
-        return $user->canIn($minit->mosque, 'minit.respond');
+        return $this->respond($user, $minit);
     }
 }

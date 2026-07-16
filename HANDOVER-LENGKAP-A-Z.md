@@ -1,12 +1,20 @@
 # Handover Lengkap A-Z — Diwan SPDM
 
-**Snapshot:** 13 Julai 2026, 17:26 MYT
+**Snapshot asal:** 13 Julai 2026, 17:26 MYT
+
+**Addendum semasa:** 16 Julai 2026
 
 **Tujuan:** sumber sambungan kerja yang lengkap, selamat dan tidak mengelirukan untuk pemilik, pembangun atau sesi AI seterusnya.
 
 **Status ringkas:** kod SPDM telah dibina dan diuji, tetapi **SPDM belum dideploy ke production**. Gateway `wassap.wehdah.my` sudah live dan sihat, tetapi integrasi auto-provision belum boleh digunakan sehingga rahsia silang sistem dipasang pada kedua-dua aplikasi.
 
 > Jangan tafsir “ujian hijau” sebagai “SPDM sudah live”. Status production hanya boleh ditukar selepas semua langkah dalam [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md) mempunyai bukti lulus.
+
+### Addendum audit 16 Julai 2026
+
+Audit terkini dan paling berautoriti berada di [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md). Suite penuh semasa lulus **202 ujian / 700 assertions**, termasuk dua fail OCR sebenar. Chrome sebenar turut meluluskan pendaftaran tenant baharu, upload UI→OCR→carian, workflow minit/kelulusan, semua pautan kelihatan bagi sembilan peranan, dan penolakan silang tenant. Hardening tambahan meliputi pengarkiban tenant tanpa hard delete, sekatan tenant digantung, kebocoran tajuk fail/sensitiviti, ACL carian, route pesanan storan, pendaftaran fail-closed, superadmin terakhir, notifikasi minit selesai dan fallback OCR Windows.
+
+Bahagian bertarikh 13 Julai di bawah dikekalkan sebagai sejarah. Jika nombor ujian, keputusan browser atau status kod bercanggah, gunakan laporan 16 Julai. Status production masih **belum live** kerana host/domain/path/SSH SPDM dan secret/dependency production belum dibuktikan.
 
 ## 1. Mulakan di sini
 

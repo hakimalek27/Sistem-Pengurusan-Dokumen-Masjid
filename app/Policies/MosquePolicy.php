@@ -44,7 +44,7 @@ class MosquePolicy
 
     public function forceDelete(User $user, Mosque $mosque): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 
     public function deleteAny(User $user): bool
@@ -59,6 +59,6 @@ class MosquePolicy
 
     public function forceDeleteAny(User $user): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 }

@@ -4,11 +4,13 @@ namespace App\Livewire;
 
 use App\Enums\MosqueStatus;
 use App\Models\Mosque;
+use App\Models\PlatformSetting;
 use App\Models\User;
 use App\Services\WhatsAppRecipientResolver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -47,6 +49,13 @@ class RegisterMosque extends Component
 
     public bool $submitted = false;
 
+    public bool $registrationOpen = true;
+
+    public function mount(): void
+    {
+        $this->registrationOpen = (bool) PlatformSetting::get('registration_open', true);
+    }
+
     public function updatedName(): void
     {
         if ($this->slug === '') {
@@ -56,6 +65,13 @@ class RegisterMosque extends Component
 
     public function submit(): void
     {
+        if (! (bool) PlatformSetting::get('registration_open', true)) {
+            $this->registrationOpen = false;
+            throw ValidationException::withMessages([
+                'name' => 'Pendaftaran tenant baharu ditutup sementara oleh pentadbir platform.',
+            ]);
+        }
+
         // §15.1 — throttle 3 pendaftaran / jam / IP.
         $key = 'daftar:'.request()->ip();
         if (RateLimiter::tooManyAttempts($key, 3)) {
@@ -71,20 +87,29 @@ class RegisterMosque extends Component
         // Normalisasi kod (huruf besar) & slug (a-z0-9) sebelum semak keunikan.
         $this->code = Str::upper($this->code);
         $this->slug = Str::slug($this->slug !== '' ? $this->slug : $this->name);
+        $phoneWa = app(WhatsAppRecipientResolver::class)->normalize($data['phone_wa']);
+        if (! $phoneWa) {
+            throw ValidationException::withMessages([
+                'phone_wa' => 'Nombor WhatsApp tidak sah.',
+            ]);
+        }
+
+        // Akaun sedia ada boleh menyertai tenant lain melalui e-mel yang sama,
+        // tetapi nombor global milik akaun lain tidak boleh dirampas.
+        $existingUser = User::query()->where('email', strtolower($data['email']))->first();
+        $this->phone_wa = $phoneWa;
 
         $this->validate([
             'code' => 'unique:mosques,code',
             'slug' => 'unique:mosques,slug',
-        ], [], ['code' => 'kod akronim', 'slug' => 'slug']);
+            'phone_wa' => [Rule::unique('users', 'phone_wa')->ignore($existingUser?->id)],
+        ], [], [
+            'code' => 'kod akronim',
+            'slug' => 'slug',
+            'phone_wa' => 'nombor WhatsApp',
+        ]);
 
-        DB::transaction(function () use ($data) {
-            $phoneWa = app(WhatsAppRecipientResolver::class)->normalize($data['phone_wa']);
-            if (! $phoneWa) {
-                throw ValidationException::withMessages([
-                    'phone_wa' => 'Nombor WhatsApp tidak sah.',
-                ]);
-            }
-
+        DB::transaction(function () use ($data, $phoneWa) {
             $mosque = Mosque::query()->create([
                 'name' => $data['name'],
                 'slug' => $this->slug,

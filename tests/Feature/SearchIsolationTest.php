@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\FileAccessGrant;
 use App\Models\User;
 use App\Services\SearchService;
 use Illuminate\Support\Facades\Storage;
@@ -38,6 +39,36 @@ it('kerani (peranan istimewa) nampak rekod sulit dalam carian', function () {
     $kerani = makeMember($this->mam, 'kerani');
 
     $results = $this->svc->for($kerani, $this->mam, 'RAHSIA');
+
+    expect($results->contains('id', $this->recMamSulit->id))->toBeTrue();
+});
+
+it('bendahari boleh mencari rekod sulit kewangan tetapi bukan rekod sulit lain', function () {
+    $other = makeRecord(
+        $this->mam,
+        makeFile($this->mam, makeNode($this->mam, '800-1', 'sulit'), 'sulit'),
+        'sulit',
+        'surat_menyurat',
+        ['title' => 'RAHSIA pengurusan MAM'],
+    );
+    $bendahari = makeMember($this->mam, 'bendahari');
+
+    $results = $this->svc->for($bendahari, $this->mam, 'RAHSIA');
+
+    expect($results->contains('id', $this->recMamSulit->id))->toBeTrue()
+        ->and($results->contains('id', $other->id))->toBeFalse();
+});
+
+it('geran fail individu turut berkuat kuasa dalam carian OCR', function () {
+    $ajk = makeMember($this->mam, 'ajk');
+    $admin = makeMember($this->mam, 'admin_masjid');
+    FileAccessGrant::query()->create([
+        'registry_file_id' => $this->recMamSulit->registry_file_id,
+        'user_id' => $ajk->id,
+        'granted_by' => $admin->id,
+    ]);
+
+    $results = $this->svc->for($ajk, $this->mam, 'RAHSIA');
 
     expect($results->contains('id', $this->recMamSulit->id))->toBeTrue();
 });

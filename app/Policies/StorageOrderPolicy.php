@@ -19,22 +19,22 @@ class StorageOrderPolicy
 
     public function create(User $user): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 
     public function update(User $user, StorageOrder $order): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 
     public function delete(User $user, StorageOrder $order): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 
     public function deleteAny(User $user): bool
     {
-        return $user->is_superadmin;
+        return false;
     }
 
     public function download(User $user, StorageOrder $order): bool

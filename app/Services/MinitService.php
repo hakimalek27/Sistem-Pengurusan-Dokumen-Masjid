@@ -8,6 +8,7 @@ use App\Models\Minit;
 use App\Models\MinitRecipient;
 use App\Models\Record;
 use App\Models\User;
+use App\Notifications\MinitCompletedNotification;
 use App\Notifications\MinitRoutedNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -88,7 +89,7 @@ class MinitService
             throw new AuthorizationException('Pengguna bukan penerima tindakan minit ini.');
         }
 
-        DB::transaction(function () use ($minit, $user) {
+        $completed = DB::transaction(function () use ($minit, $user): bool {
             $minit->recipients()
                 ->where('user_id', $user->id)
                 ->where('jenis', 'tindakan')
@@ -103,9 +104,20 @@ class MinitService
                     'completed_by' => $user->id,
                 ]);
 
-                Log::info("[Minit] #{$minit->id} selesai — maklum pengirim {$minit->from_user_id}.");
+                return true;
             }
+
+            return false;
         });
+
+        if ($completed) {
+            $sender = $minit->fromUser;
+            if ($sender?->is_active && $sender->isMemberOf($minit->mosque)) {
+                Notification::send($sender, new MinitCompletedNotification($minit->fresh()));
+            }
+
+            Log::info("[Minit] #{$minit->id} selesai — pengirim {$minit->from_user_id} dimaklumkan.");
+        }
     }
 
     /** Tandakan minit dibaca oleh penerima. */

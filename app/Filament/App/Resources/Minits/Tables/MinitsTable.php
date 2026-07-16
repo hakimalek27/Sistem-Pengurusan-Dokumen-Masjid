@@ -23,6 +23,13 @@ class MinitsTable
             ->columns([
                 TextColumn::make('record.title')->label('Rekod')->wrap()->limit(50),
                 TextColumn::make('fromUser.name')->label('Daripada'),
+                TextColumn::make('body')->label('Arahan / Catatan')->wrap()->limit(120)->tooltip(fn ($state) => $state),
+                TextColumn::make('recipient_summary')->label('Penerima')
+                    ->state(fn ($record) => $record->recipients()->with('user')->get()
+                        ->map(fn ($recipient) => ($recipient->jenis === 'tindakan' ? 'Tindakan: ' : 's.k.: ').$recipient->user?->name)
+                        ->filter()->join(', '))
+                    ->wrap()
+                    ->toggleable(),
                 TextColumn::make('priority')->label('Keutamaan')->badge(),
                 TextColumn::make('due_at')->label('Tarikh Akhir')->date('d/m/Y')
                     ->color(fn ($record) => $record->due_at && $record->due_at->isPast() && $record->status->value === 'terbuka' ? 'danger' : null),
@@ -74,9 +81,9 @@ class MinitsTable
                         ->where('user_id', Auth::id())->where('jenis', 'tindakan')->exists())
                     ->schema([
                         Select::make('action')->label('Penerima Tindakan')->multiple()
-                            ->options(fn ($record) => $record->mosque->users()->pluck('name', 'users.id'))->required(),
+                            ->options(fn ($record) => self::eligibleRecipients($record))->required(),
                         Select::make('cc')->label('Makluman (s.k.)')->multiple()
-                            ->options(fn ($record) => $record->mosque->users()->pluck('name', 'users.id')),
+                            ->options(fn ($record) => self::eligibleRecipients($record)),
                         Textarea::make('body')->label('Catatan')->required(),
                         Select::make('priority')->label('Keutamaan')
                             ->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])->default('biasa')->required(),
@@ -88,5 +95,13 @@ class MinitsTable
                         Notification::make()->title('Balasan minit diedarkan.')->success()->send();
                     }),
             ]);
+    }
+
+    protected static function eligibleRecipients($minit): array
+    {
+        return $minit->mosque->users()->where('users.is_active', true)->get()
+            ->filter(fn ($user) => $user->can('view', $minit->record))
+            ->pluck('name', 'id')
+            ->toArray();
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Mosques;
 
-use App\Filament\Admin\Resources\Mosques\Pages\CreateMosque;
 use App\Filament\Admin\Resources\Mosques\Pages\EditMosque;
 use App\Filament\Admin\Resources\Mosques\Pages\ListMosques;
 use App\Filament\Admin\Resources\Mosques\Pages\ViewMosque;
@@ -23,6 +22,12 @@ class MosqueResource extends Resource
     protected static ?string $model = Mosque::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $navigationLabel = 'Tenant / Organisasi';
+
+    protected static ?string $modelLabel = 'Tenant';
+
+    protected static ?string $pluralModelLabel = 'Tenant / Organisasi';
 
     public static function form(Schema $schema): Schema
     {
@@ -50,10 +55,19 @@ class MosqueResource extends Resource
     {
         return [
             'index' => ListMosques::route('/'),
-            'create' => CreateMosque::route('/create'),
             'view' => ViewMosque::route('/{record}'),
             'edit' => EditMosque::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 
     public static function getRecordRouteBindingEloquentQuery(): Builder

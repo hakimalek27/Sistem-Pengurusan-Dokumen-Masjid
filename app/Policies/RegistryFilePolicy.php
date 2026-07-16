@@ -25,7 +25,11 @@ class RegistryFilePolicy
 
     public function view(User $user, RegistryFile $file): bool
     {
-        return $user->canIn($file->mosque, 'files.view');
+        return RegistryFile::query()
+            ->withoutGlobalScope('mosque')
+            ->visibleTo($user, $file->mosque)
+            ->whereKey($file->getKey())
+            ->exists();
     }
 
     public function create(User $user): bool

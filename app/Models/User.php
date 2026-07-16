@@ -81,13 +81,17 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return Mosque::query()->where('status', 'aktif')->get();
         }
 
-        return $this->mosques()->get();
+        return $this->mosques()->where('mosques.status', 'aktif')->get();
     }
 
     public function canAccessTenant(Model $tenant): bool
     {
+        if (! $tenant instanceof Mosque || ! $tenant->isActive() || $tenant->trashed()) {
+            return false;
+        }
+
         return $this->is_superadmin
-            || $this->mosques()->whereKey($tenant->getKey())->exists();
+            || $this->mosques()->whereKey($tenant->getKey())->where('mosques.status', 'aktif')->exists();
     }
 
     public function canAccessPanel(Panel $panel): bool
@@ -98,6 +102,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
         return $panel->getId() === 'admin'
             ? (bool) $this->is_superadmin
-            : ($this->is_superadmin || $this->mosques()->exists());
+            : ($this->is_superadmin || $this->mosques()->where('mosques.status', 'aktif')->exists());
     }
 }

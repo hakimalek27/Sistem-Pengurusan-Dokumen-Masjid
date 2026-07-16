@@ -64,3 +64,28 @@ it('OCR imej BM sebenar mengekstrak teks (§18.7 — perlu ocrmypdf/tesseract)',
         ->and($derivedAfterRetry?->id)->toBe($derived->id)
         ->and(Storage::disk($derivedAfterRetry->disk)->exists($derivedAfterRetry->getPathRelativeToRoot()))->toBeTrue();
 });
+
+it('PDF bertulis menghasilkan derived PDF dan teks boleh diindeks', function () {
+    if (! ProcessOcrJob::toolingAvailable()) {
+        $this->markTestSkipped('Tooling OCR/PDF tiada pada mesin ini.');
+    }
+
+    $pdf = app('dompdf.wrapper')
+        ->loadHTML('<h1>MINIT MESYUARAT PENGURUSAN MASJID</h1><p>Tindakan susulan setiausaha.</p>')
+        ->output();
+
+    $record = $this->ingest->ingest(
+        $this->mam,
+        $pdf,
+        'minit-pengurusan.pdf',
+        'application/pdf',
+        null,
+        SourceChannel::MuatNaik,
+    )->fresh();
+
+    $derived = $record->getFirstMedia('derived');
+    expect($record->ocr_status)->toBe(OcrStatus::Siap)
+        ->and(str_contains(strtoupper((string) $record->ocr_text), 'MESYUARAT'))->toBeTrue()
+        ->and($derived)->not->toBeNull()
+        ->and(Storage::disk($derived->disk)->exists($derived->getPathRelativeToRoot()))->toBeTrue();
+});

@@ -83,7 +83,12 @@ class Laporan extends Page
             'byStatus' => $records->groupBy(fn (Record $record) => $record->status?->getLabel() ?? '—')->map->count(),
             'bySource' => $records->groupBy(fn (Record $record) => $record->source_channel?->getLabel() ?? '—')->map->count(),
             'expiring90' => $records->filter(fn (Record $record) => $record->retention_due_at?->lte(now()->addDays(90)))->count(),
-            'overdueMinits' => Minit::query()->where('mosque_id', $mosque->id)->where('status', 'terbuka')->whereDate('due_at', '<', today())->count(),
+            'overdueMinits' => Minit::query()
+                ->where('mosque_id', $mosque->id)
+                ->whereIn('record_id', $records->pluck('id'))
+                ->where('status', 'terbuka')
+                ->whereDate('due_at', '<', today())
+                ->count(),
             'sensitiveViews30' => Auth::user()->canIn($mosque, 'audit.view')
                 ? SensitiveAccessLog::query()->where('mosque_id', $mosque->id)->where('created_at', '>=', now()->subDays(30))->count()
                 : null,

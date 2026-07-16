@@ -1,12 +1,12 @@
 # Laporan Kesediaan Semasa — Diwan SPDM
 
-**Tarikh:** 13 Julai 2026
+**Tarikh:** 16 Julai 2026
 
-**Baseline kod:** `main` — fungsi terakhir `d9fee0c`
+**Baseline kod:** `main` — audit/hardening 16 Julai 2026 (SHA akhir direkod selepas commit)
 
 **Status yang tepat:** **kod siap dan diuji; SPDM belum live. Gateway WhatsApp live tetapi shared provisioning secret belum dipasang.**
 
-Dokumen lama bertarikh 9 Julai yang menyebut 128 ujian dan OCR sebenar belum diuji telah digantikan oleh laporan ini. Konteks lengkap berada di [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md); urutan go-live berada di [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md).
+Dokumen lama bertarikh 9/13 Julai telah digantikan oleh bukti semasa. Audit fungsi/page/role terkini berada di [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md), konteks A-Z di [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md), dan urutan go-live di [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md).
 
 ## 1. Ringkasan gate
 
@@ -26,29 +26,31 @@ Dokumen lama bertarikh 9 Julai yang menyebut 128 ujian dan OCR sebenar belum diu
 
 ### Keputusan automatik
 
-- Suite penuh penutup pada 13 Julai: **190 passed, 647 assertions**, 123.09 saat.
-- Targeted `OcrPipelineTest` pada 13 Julai: **2 passed, 9 assertions**.
+- Suite penuh penutup pada 16 Julai: **202 passed, 700 assertions**, 57.24 saat.
+- Larian ini memasukkan `ActualOcrDocumentTest` dengan dua imej sebenar pengguna; tiada skip.
 - Ujian meliputi tenant isolation, matriks 9 role, sensitiviti, signed download, webhook WhatsApp, notification routing, e-mel intake, OCR/search, data integrity, billing, retensi, pelupusan dan workflow pejabat.
-- CI run [`29214854569`](https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/29214854569) direkodkan hijau untuk PostgreSQL 16, Redis 7, Meilisearch, OCR sebenar, full suite, runtime smoke, asset build serta image Docker `app` dan `web`.
-- GitHub CLI local kini gagal refresh run dengan `401 Bad credentials`; ini isu credential CLI, bukan keputusan test aplikasi.
+- CI run [`29214854569`](https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/29214854569) ialah bukti sejarah 13 Julai bagi PostgreSQL 16, Redis 7, Meilisearch, OCR sebenar, runtime smoke dan image Docker; commit 16 Julai masih perlu CI sendiri selepas push.
 
-### Nota larian 13 Julai
+### Nota larian penutup 16 Julai
 
-Satu larian penuh pertama dihentikan oleh timeout alat 120 saat. Proses ujian yang sempat bertindih dengan larian kedua menyebabkan satu kegagalan retry OCR pada fake storage: **189 passed, 1 failed**. Selepas tiada proses bertindih, targeted OCR retry lulus **2/2**. Keputusan full suite terakhir selepas dokumentasi hendaklah direkod di bawah:
+Satu larian awal menemui jangkaan status lama (`404` berbanding `403`) bagi ahli tenant digantung; kontrak ujian dikemas kini mengikut kawalan panel fail-closed. Larian penuh tunggal selepas pembetulan lulus tanpa kegagalan atau skip:
 
-> **Final verification:** `190 passed (647 assertions)` — lulus, 123.09 saat, selepas memastikan hanya satu runner aktif.
+> **Final verification:** `202 passed (700 assertions)` — lulus, 57.24 saat, dengan satu runner dan OCR sebenar.
 
 ## 3. Bukti OCR sebenar
 
 | Record local | Fail | Status | OCR | Derived | Frasa carian |
 |---:|---|---|---:|---|---|
-| 14 | `WhatsApp Image 2026-07-10 at 12.39.18.jpeg` | `siap` | 916 aksara | `searchable.pdf` | `MESYUARAT JAWATANKUASA` |
-| 15 | `WhatsApp Image 2026-07-10 at 12.39.18 (1).jpeg` | `siap` | 1,165 aksara | `searchable.pdf` | `PENCERAHAN HUKUM` |
+| 10 | `WhatsApp Image 2026-07-10 at 12.39.18.jpeg` | `siap` | 888 aksara | `searchable.pdf` | `MINIT MESYUARAT` |
+| 11 | `WhatsApp Image 2026-07-10 at 12.39.18 (1).jpeg` | `siap` | 1,163 aksara | `searchable.pdf` | `SENARAI KLUSTER` |
 
 Browser E2E:
 
-- Google Chrome upload -> queue OCR -> halaman OCR -> carian MAM: lulus, 32.9 saat.
-- Carian tenant MAN bagi frasa unik MAM: tiada hasil, lulus, 20.3 saat.
+- Google Chrome upload dua imej -> queue sync -> OCR -> derived PDF -> carian MAM: lulus, 2.2 minit.
+- Hasil semasa: 888 dan 1,163 aksara; frasa `MINIT MESYUARAT` dan `SENARAI KLUSTER` ditemui.
+- Pendaftaran baharu -> kelulusan superadmin -> magic link -> panel tenant: lulus, 1.3 minit.
+- Minit -> balas/susulan -> selesai -> mohon/lulus kelulusan: lulus, 1.6 minit.
+- Crawl navigasi semua 9 peranan dan cubaan silang tenant direkod dalam audit 16 Julai.
 - In-app Chrome MCP tiada tab/browser terpasang; standalone Chrome melalui Playwright digunakan.
 
 ## 4. Jaminan P0 yang dilaksanakan

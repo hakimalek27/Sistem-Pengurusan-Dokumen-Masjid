@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use LogicException;
 
 // §5.1 mosques (TENANT)
 class Mosque extends Model
@@ -39,6 +40,15 @@ class Mosque extends Model
     protected $attributes = [
         'settings' => '{}',
     ];
+
+    protected static function booted(): void
+    {
+        static::updating(function (self $mosque): void {
+            if ($mosque->isDirty('code') && $mosque->registryFiles()->exists()) {
+                throw new LogicException('Kod tenant tidak boleh diubah selepas fail registri digunakan.');
+            }
+        });
+    }
 
     // ---- Relationships ----
 

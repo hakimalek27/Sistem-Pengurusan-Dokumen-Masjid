@@ -29,7 +29,14 @@ class AppServiceProvider extends ServiceProvider
         Media::observe(MediaObserver::class);
         RetentionRule::observe(RetentionRuleObserver::class);
 
-        // §6.0 — superadmin lulus semua kebenaran (Gate::before).
-        Gate::before(fn (User $user, string $ability) => $user->is_superadmin ? true : null);
+        // §6.0 — superadmin lulus semua kebenaran kecuali pemadaman kekal.
+        // Tenant mesti boleh dipulihkan; pemusnahan kekal hanya melalui runbook operasi.
+        Gate::before(function (User $user, string $ability): ?bool {
+            if (! $user->is_superadmin) {
+                return null;
+            }
+
+            return in_array($ability, ['forceDelete', 'forceDeleteAny'], true) ? false : true;
+        });
     }
 }

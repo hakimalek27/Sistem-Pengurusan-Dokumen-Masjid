@@ -56,9 +56,16 @@ class ProcessOcrJob implements ShouldQueue
             return;
         }
 
-        // OCR sebenar memerlukan ocrmypdf (imej Docker §4.4). Jika tiada, biar 'belum'.
-        if (! self::toolingAvailable()) {
-            Log::info("[OCR] ocrmypdf tiada — langkau record {$record->id} (kekal 'belum').");
+        $isImage = str_starts_with((string) $media->mime_type, 'image/');
+        $canUseOcrMyPdf = self::commandAvailable('ocrmypdf')
+            && (! $isImage || self::commandAvailable('img2pdf'));
+        $canUseTesseract = self::commandAvailable('tesseract')
+            && ($isImage || self::commandAvailable('pdftotext') || self::commandAvailable('pdftoppm'));
+
+        // Produksi menggunakan ocrmypdf. Fallback Tesseract/Poppler membolehkan
+        // workstation Windows menjalankan OCR imej/PDF end-to-end juga.
+        if (! $canUseOcrMyPdf && ! $canUseTesseract) {
+            Log::info("[OCR] tooling tiada — langkau record {$record->id} (kekal 'belum').");
 
             return;
         }
@@ -84,24 +91,13 @@ class ProcessOcrJob implements ShouldQueue
             $localOriginal = $tmpDir.'/'.$media->file_name;
             file_put_contents($localOriginal, Storage::disk($media->disk)->get($media->getPathRelativeToRoot()));
 
-            // Imej → img2pdf; PDF → guna terus.
-            if (str_starts_with((string) $media->mime_type, 'image/')) {
-                $inputPdf = $tmpDir.'/input.pdf';
-                (new Process(['img2pdf', $localOriginal, '-o', $inputPdf]))->setTimeout(120)->mustRun();
+            if ($canUseOcrMyPdf) {
+                [$outPdf, $sidecar] = $this->runOcrMyPdf($localOriginal, $tmpDir, $isImage);
             } else {
-                $inputPdf = $localOriginal;
+                [$outPdf, $sidecar] = $isImage
+                    ? $this->runTesseractImage($localOriginal, $tmpDir)
+                    : $this->runTesseractPdf($localOriginal, $tmpDir);
             }
-
-            $outPdf = $tmpDir.'/searchable.pdf';
-            $sidecar = $tmpDir.'/sidecar.txt';
-
-            $process = new Process([
-                'ocrmypdf', '--skip-text', '-l', config('diwan.ocr_langs', 'msa+eng'),
-                '--rotate-pages', '--deskew', '--sidecar', $sidecar, '--output-type', 'pdfa',
-                $inputPdf, $outPdf,
-            ]);
-            $process->setTimeout(240);
-            $process->mustRun();
 
             // Muat naik derived (fail asal TIDAK diubah).
             $record->addMedia($outPdf)->usingFileName('searchable.pdf')->toMediaCollection('derived');
@@ -122,13 +118,171 @@ class ProcessOcrJob implements ShouldQueue
 
     public static function toolingAvailable(): bool
     {
-        $locator = stripos(PHP_OS, 'WIN') === 0 ? 'where' : 'which';
+        return self::commandAvailable('ocrmypdf') || self::commandAvailable('tesseract');
+    }
 
+    /** @return array{0:string,1:string} */
+    protected function runOcrMyPdf(string $localOriginal, string $tmpDir, bool $isImage): array
+    {
+        if ($isImage) {
+            $inputPdf = $tmpDir.'/input.pdf';
+            (new Process([self::commandPath('img2pdf'), $localOriginal, '-o', $inputPdf]))->setTimeout(120)->mustRun();
+        } else {
+            $inputPdf = $localOriginal;
+        }
+
+        $outPdf = $tmpDir.'/searchable.pdf';
+        $sidecar = $tmpDir.'/sidecar.txt';
+        $process = new Process([
+            self::commandPath('ocrmypdf'), '--skip-text', '-l', config('diwan.ocr_langs', 'msa+eng'),
+            '--rotate-pages', '--deskew', '--sidecar', $sidecar, '--output-type', 'pdfa',
+            $inputPdf, $outPdf,
+        ]);
+        $process->setTimeout(240);
+        $process->mustRun();
+
+        return [$outPdf, $sidecar];
+    }
+
+    /** @return array{0:string,1:string} */
+    protected function runTesseractImage(string $image, string $tmpDir): array
+    {
+        $base = $tmpDir.'/tesseract';
+        $this->renderTesseractPage($image, $base);
+
+        return [$base.'.pdf', $base.'.txt'];
+    }
+
+    /** @return array{0:string,1:string} */
+    protected function runTesseractPdf(string $pdf, string $tmpDir): array
+    {
+        $outPdf = $tmpDir.'/searchable.pdf';
+        $sidecar = $tmpDir.'/sidecar.txt';
+
+        // PDF yang memang mengandungi teks tidak perlu diraster/OCR semula.
+        if (self::commandAvailable('pdftotext')) {
+            (new Process([self::commandPath('pdftotext'), '-layout', $pdf, $sidecar]))->setTimeout(120)->mustRun();
+            if (is_file($sidecar) && trim((string) file_get_contents($sidecar)) !== '') {
+                copy($pdf, $outPdf);
+
+                return [$outPdf, $sidecar];
+            }
+        }
+
+        if (! self::commandAvailable('pdftoppm') || ! self::commandAvailable('pdfunite')) {
+            throw new \RuntimeException('PDF imbasan memerlukan pdftoppm dan pdfunite untuk fallback OCR.');
+        }
+
+        $prefix = $tmpDir.'/page';
+        (new Process([self::commandPath('pdftoppm'), '-jpeg', '-r', '200', $pdf, $prefix]))->setTimeout(180)->mustRun();
+        $images = glob($prefix.'-*.jpg') ?: [];
+        natsort($images);
+        if ($images === []) {
+            throw new \RuntimeException('PDF tidak menghasilkan halaman untuk OCR.');
+        }
+
+        $pagePdfs = [];
+        $texts = [];
+        foreach (array_values($images) as $index => $image) {
+            $base = $tmpDir.'/ocr-page-'.($index + 1);
+            $this->renderTesseractPage($image, $base);
+            $pagePdfs[] = $base.'.pdf';
+            $texts[] = is_file($base.'.txt') ? (string) file_get_contents($base.'.txt') : '';
+        }
+
+        (new Process(array_merge([self::commandPath('pdfunite')], $pagePdfs, [$outPdf])))->setTimeout(180)->mustRun();
+        file_put_contents($sidecar, implode("\n\f\n", $texts));
+
+        return [$outPdf, $sidecar];
+    }
+
+    protected function renderTesseractPage(string $image, string $base): void
+    {
+        $pdf = self::tesseractProcess([
+            self::commandPath('tesseract'), $image, $base, '-l', config('diwan.ocr_langs', 'msa+eng'),
+            '-c', 'tessedit_create_pdf=1', '-c', 'tessedit_create_txt=0',
+        ]);
+        $pdf->setTimeout(240)->mustRun();
+
+        $text = self::tesseractProcess([
+            self::commandPath('tesseract'), $image, 'stdout', '-l', config('diwan.ocr_langs', 'msa+eng'),
+        ]);
+        $text->setTimeout(240)->mustRun();
+        file_put_contents($base.'.txt', $text->getOutput());
+    }
+
+    protected static function commandAvailable(string $command): bool
+    {
         try {
-            return (new Process([$locator, 'ocrmypdf']))->run() === 0;
+            self::commandPath($command);
+
+            return true;
         } catch (\Throwable $e) {
             return false;
         }
+    }
+
+    /**
+     * Dapatkan path mutlak supaya queue/web Windows tidak bergantung pada PATH
+     * proses induk. Linux/Docker kekal menggunakan `which` seperti biasa.
+     */
+    protected static function commandPath(string $command): string
+    {
+        static $resolved = [];
+
+        if (isset($resolved[$command])) {
+            return $resolved[$command];
+        }
+
+        $isWindows = stripos(PHP_OS, 'WIN') === 0;
+        $profile = getenv('USERPROFILE') ?: null;
+        $candidates = [];
+
+        if ($isWindows && $profile) {
+            $candidates[] = $profile.'/scoop/shims/'.$command.'.exe';
+        }
+
+        foreach ($candidates as $candidate) {
+            if (is_file($candidate)) {
+                return $resolved[$command] = str_replace('/', DIRECTORY_SEPARATOR, $candidate);
+            }
+        }
+
+        $locator = $isWindows ? getenv('SystemRoot').'\\System32\\where.exe' : 'which';
+        $process = new Process([$locator, $command]);
+        if ($process->run() === 0 && ($path = trim(strtok($process->getOutput(), "\r\n")))) {
+            return $resolved[$command] = $path;
+        }
+
+        throw new \RuntimeException("Binary {$command} tidak ditemui.");
+    }
+
+    protected static function tesseractProcess(array $command): Process
+    {
+        $process = new Process($command);
+        if ($prefix = self::tessdataPrefix()) {
+            $process->setEnv(['TESSDATA_PREFIX' => $prefix]);
+        }
+
+        return $process;
+    }
+
+    protected static function tessdataPrefix(): ?string
+    {
+        $candidates = array_filter([
+            config('diwan.tessdata_prefix'),
+            getenv('TESSDATA_PREFIX') ?: null,
+            getenv('USERPROFILE') ? getenv('USERPROFILE').'/scoop/apps/tesseract-languages/current' : null,
+        ]);
+
+        foreach ($candidates as $candidate) {
+            $path = rtrim((string) $candidate, '/\\');
+            if (is_file($path.'/eng.traineddata')) {
+                return $path;
+            }
+        }
+
+        return null;
     }
 
     protected static function deleteDir(string $dir): void

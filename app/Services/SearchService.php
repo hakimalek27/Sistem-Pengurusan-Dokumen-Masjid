@@ -24,10 +24,27 @@ class SearchService
             return collect();
         }
 
+        // ACL sebenar dikira daripada query pangkalan data yang sama dengan
+        // senarai Rekod (termasuk prefix kewangan dan geran fail individu).
+        // ID ini kemudian menjadi filter wajib pada enjin carian/OCR.
+        $visibleIds = Record::query()->visibleTo($user, $tenant)->pluck('id')->all();
+        if ($visibleIds === []) {
+            return collect();
+        }
+
         $allowed = $this->allowedSensitivities($user, $tenant);
+
+        // Bendahari/geran individu mungkin dibenarkan melihat sebahagian rekod
+        // sulit. Filter ID mengehadkan subset itu tanpa membuka rekod sulit lain.
+        if ($user->roleIn($tenant) === 'bendahari'
+            || Record::query()->visibleTo($user, $tenant)->where('sensitivity', 'sulit')->exists()) {
+            $allowed[] = 'sulit';
+            $allowed = array_values(array_unique($allowed));
+        }
 
         $search = Record::search($query)
             ->where('mosque_id', $tenant->id)
+            ->whereIn('id', $visibleIds)
             ->whereIn('sensitivity', $allowed);
 
         if (! empty($filters['record_type'])) {
