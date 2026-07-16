@@ -2,7 +2,7 @@
 
 **Tarikh:** 16 Julai 2026
 
-**Baseline kod:** `main` — audit/hardening 16 Julai 2026 (SHA akhir direkod selepas commit)
+**Baseline kod:** `main` — `63d8e9c` (`fix: harden multi-tenant document workflows`)
 
 **Status yang tepat:** **kod siap dan diuji; SPDM belum live. Gateway WhatsApp live tetapi shared provisioning secret belum dipasang.**
 
