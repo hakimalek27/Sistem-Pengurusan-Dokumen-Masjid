@@ -91,7 +91,13 @@ class ProcessOcrJob implements ShouldQueue
             $localOriginal = $tmpDir.'/'.$media->file_name;
             file_put_contents($localOriginal, Storage::disk($media->disk)->get($media->getPathRelativeToRoot()));
 
-            if ($canUseOcrMyPdf) {
+            $nativeTextPdf = ! $isImage
+                ? $this->extractNativeTextPdf($localOriginal, $tmpDir)
+                : null;
+
+            if ($nativeTextPdf) {
+                [$outPdf, $sidecar] = $nativeTextPdf;
+            } elseif ($canUseOcrMyPdf) {
                 [$outPdf, $sidecar] = $this->runOcrMyPdf($localOriginal, $tmpDir, $isImage);
             } else {
                 [$outPdf, $sidecar] = $isImage
@@ -114,6 +120,38 @@ class ProcessOcrJob implements ShouldQueue
         } finally {
             self::deleteDir($tmpDir);
         }
+    }
+
+    /**
+     * PDF yang mempunyai lapisan teks perlu diindeks terus. Sidecar ocrmypdf
+     * dengan --skip-text hanya memuatkan teks halaman yang benar-benar di-OCR,
+     * lalu boleh mengosongkan indeks untuk PDF digital yang sah.
+     *
+     * @return array{0:string,1:string}|null
+     */
+    protected function extractNativeTextPdf(string $pdf, string $tmpDir): ?array
+    {
+        if (! self::commandAvailable('pdftotext')) {
+            return null;
+        }
+
+        $sidecar = $tmpDir.'/native-text.txt';
+        (new Process([self::commandPath('pdftotext'), '-layout', $pdf, $sidecar]))
+            ->setTimeout(120)
+            ->mustRun();
+
+        if (! is_file($sidecar) || trim((string) file_get_contents($sidecar)) === '') {
+            @unlink($sidecar);
+
+            return null;
+        }
+
+        $outPdf = $tmpDir.'/searchable.pdf';
+        if (! copy($pdf, $outPdf)) {
+            throw new \RuntimeException('PDF bertulis gagal disalin sebagai fail derived.');
+        }
+
+        return [$outPdf, $sidecar];
     }
 
     public static function toolingAvailable(): bool
@@ -158,16 +196,6 @@ class ProcessOcrJob implements ShouldQueue
     {
         $outPdf = $tmpDir.'/searchable.pdf';
         $sidecar = $tmpDir.'/sidecar.txt';
-
-        // PDF yang memang mengandungi teks tidak perlu diraster/OCR semula.
-        if (self::commandAvailable('pdftotext')) {
-            (new Process([self::commandPath('pdftotext'), '-layout', $pdf, $sidecar]))->setTimeout(120)->mustRun();
-            if (is_file($sidecar) && trim((string) file_get_contents($sidecar)) !== '') {
-                copy($pdf, $outPdf);
-
-                return [$outPdf, $sidecar];
-            }
-        }
 
         if (! self::commandAvailable('pdftoppm') || ! self::commandAvailable('pdfunite')) {
             throw new \RuntimeException('PDF imbasan memerlukan pdftoppm dan pdfunite untuk fallback OCR.');

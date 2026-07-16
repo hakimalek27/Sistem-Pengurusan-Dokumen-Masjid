@@ -50,6 +50,21 @@ class Mosque extends Model
         });
     }
 
+    /**
+     * Elakkan nilai route statik seperti `create` dihantar ke kolum bigint
+     * PostgreSQL apabila halaman cipta resource memang tidak didaftarkan.
+     */
+    public function resolveRouteBindingQuery($query, $value, $field = null)
+    {
+        $routeField = $field ?? $this->getRouteKeyName();
+
+        if ($routeField === $this->getKeyName() && ! ctype_digit((string) $value)) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return parent::resolveRouteBindingQuery($query, $value, $field);
+    }
+
     // ---- Relationships ----
 
     public function users(): BelongsToMany

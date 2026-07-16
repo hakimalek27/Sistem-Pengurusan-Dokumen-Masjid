@@ -20,7 +20,7 @@ it('OCR fail sebenar menghasilkan PDF boleh cari dan hasil carian tenant', funct
 
     Storage::fake(config('diwan.storage_disk'));
     config()->set('scout.driver', 'collection');
-    $mosque = makeMosque('OCR Masjid', 'ocr-masjid');
+    $mosque = makeMosque('OCR', 'ocr-masjid');
     $kerani = makeMember($mosque, 'kerani', 'ocr-kerani@ujian.test');
 
     foreach ($fixtures as $fixture) {

@@ -54,7 +54,7 @@ it('menggunakan zon masa operasi Malaysia', function () {
 });
 
 it('ahli biasa tidak boleh membuka tenant yang digantung atau diarkibkan', function () {
-    $mosque = makeMosque('Tenant Digantung', 'tenant-digantung');
+    $mosque = makeMosque('TDG', 'tenant-digantung');
     $member = makeMember($mosque, 'kerani', 'suspended-member@ujian.test');
 
     $mosque->update(['status' => 'digantung']);
