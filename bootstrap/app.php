@@ -13,6 +13,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Percayai proxy hadapan (Cloudflare / nginx dalaman) supaya skema HTTPS
+        // dan IP klien sebenar dikesan daripada header X-Forwarded-*. App container
+        // hanya dicapai melalui nginx dalaman, jadi 'at: *' selamat di sini.
+        $middleware->trustProxies(at: '*', headers:
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO |
+            \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB
+        );
+
         // Guest pada laluan bukan-panel (cth /r/{ulid}) → halaman log masuk magic link.
         $middleware->redirectGuestsTo(fn () => route('log-masuk'));
     })
