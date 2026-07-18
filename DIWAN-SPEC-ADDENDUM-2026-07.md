@@ -60,3 +60,78 @@
 Pest **234 passed / 1 skip**; Pint passed; Playwright chromium semua spec LULUS
 (registration+explore 9-peranan+office-workflow), ocr-upload skip. Produksi:
 `staging-check` 9/9, `diwan:smoke` 9/9, `/up` 200, 7 container running.
+
+---
+
+# ADDENDUM v2.3 (Pusingan 2 — 19 Julai 2026, pasca-ujian pemilik)
+
+> Pindaan susulan selepas ujian pemilik produk mendedahkan 6 kumpulan isu.
+> Semua dilaksana F0–F5 (commit per fasa), CI hijau, satu deploy, E2E disahkan.
+
+## §15.7′ — Format dokumen berpusat (F1)
+- **Satu sumber kebenaran** `App\Support\AllowedFormats` (config `diwan.allowed_formats`
+  peta extension→MIME kanonik). Format sah: **PDF, DOC/DOCX, XLS/XLSX, PPT/PPTX,
+  TXT, JPG/JPEG, PNG**. **webp DIBUANG**; doc/xls/ppt (Office lama) + txt DITAMBAH.
+- Digunakan SEMUA saluran: `InboxIngestService` (validasi pelayan), `MailIngestService`
+  (extension + MIME kanonik), `WhatsAppInboundService` (semak + tangkap
+  `ValidationException` → tutup lubang webhook 500), `ListInbox`/`ListRecords`
+  (acceptedFileTypes + helperText). MIME diterbit daripada extension (elak
+  `mime_content_type` salah label docx=zip).
+- **Penolakan bermaklum** setiap saluran: WA balas "format tidak disokong"; e-mel
+  kumpul `rejected_format` + notifikasi admin; UI mesej validasi.
+- OCR: `txt` diindeks terus; doc/xls/ppt/docx/xlsx/pptx langkau OCR (status Siap).
+
+## §11.3′ — Intake e-mel boleh-lihat + kata kunci PILIHAN (F2)
+- **Kata kunci intake e-mel kini PILIHAN** (`Mosque::mailIntakeKeyword` + config
+  lalai kosong). Kosong = terima semua daripada pengirim allowlist (allowlist =
+  pagar utama). Punca asal "emel tak masuk": subjek tiada kata kunci wajib lama.
+- **Hapus kegagalan senyap**: `MailIngestService::recordOutcome` — log SEMUA hasil
+  bukan-jaya + simpan diagnostik `settings.mail_intake_last` (dipapar di Tetapan
+  Masjid) + `MailIntakeRejectedNotification` (mail+WA+Telegram) kepada admin masjid,
+  throttle 1 jam/masjid+sebab. Sebab dimaklum: sender_not_allowed, keyword_missing,
+  quota, rejected_format.
+- `MailIngestService::isIntakeAddress` + validasi `TetapanMasjid`: tolak alamat
+  intake sistem dimasukkan tersilap sebagai "pengirim" (kekeliruan MAMAD).
+
+## §11.2″ — Telegram via UI superadmin (F3)
+- Konfigurasi penuh melalui `/admin` Tetapan Platform (TANPA sentuh `.env`):
+  aksi "Tetapan Telegram" (token password-revealable disimpan **tersulit**
+  `PlatformSetting::putEncrypted`, username, rahsia auto-jana) + "Set Webhook Telegram".
+- `TelegramService` (setWebhook/getWebhookInfo + `hydrateRuntimeConfig` statik).
+  `AppServiceProvider::boot` suntik config Telegram dari DB (DB-dahulu, fallback env,
+  try/catch, cache 5 min). Butang "Sambung Telegram" di Profil muncul selepas
+  username diset via UI.
+
+## §10 Aliran I″ — Wizard onboarding muncul sendiri (F4)
+- `MagicLoginController::landingUrl` — admin masjid belum selesai persediaan diarah
+  ke `/app/{slug}/persediaan?mula=1` selepas login. Banner "Siapkan persediaan
+  masjid" di Dashboard (renderHook PAGE_START, scoped Dashboard) sehingga selesai.
+  Aksi "Langkau Buat Sementara". (Checklist onboarding TIDAK pernah hilang — hanya
+  tidak bergaya sebelum tema F5.)
+
+## §9.0 — Tema Filament v4 + UI/UX (F5)
+- **Akar punca UI runtuh**: view custom guna utiliti Tailwind yang tiada dalam CSS
+  panel lalai. Fix: tema `resources/css/filament/theme.css` (`@import` vendor +
+  `@source` app/Filament + views custom), `->viteTheme()` kedua-dua panel.
+- Jenama: `->brandLogo` (SVG kubah "Diwan", **Htmlable** bukan string) + favicon.
+- **Dockerfile**: stage `assets` disusun semula (SELEPAS `vendor`, COPY vendor+app)
+  — wajib untuk tema build. Nav admin dikumpulkan (Operasi/Platform/Akaun);
+  Profil app masuk nav. Widget `ChannelStatusOverview`. AhliPeranan/StatusSambungan/
+  Profil guna jadual responsif + badge Filament.
+
+## CI (F0)
+- `pint` bersih (5 fail gaya dibaiki). Actions `checkout/setup-node/cache/upload-artifact`
+  @v4→@v5 (node24, atasi amaran Node 20). Env CI `DIWAN_LOGIN_RATE_LIMIT=100`
+  (cache Redis CI kekal merentas ujian serial); `PhoneLoginTest` clear rate-limiter.
+
+## Env baharu/berubah
+`MAIL_INTAKE_ADDRESS` (baharu), `MAIL_INTAKE_KEYWORD` lalai kini KOSONG (pilihan).
+Telegram token/username/secret kini boleh via UI DB (tersulit) — env kekal fallback.
+
+## Bukti Pusingan 2
+Pest **257 passed / 1 skip**; Pint passed; `npm run build` OK; **CI GitHub HIJAU**
+(integration + docker app/web). Playwright chromium: registration + office-workflow
++ explore (9-peranan; flake login DIBAIKI oleh rate-limit config) LULUS, ocr skip.
+Produksi (commit `4fcb000`): imej rebuild, `staging-check` **9/9** (imap+smtp),
+`diwan:smoke` **9/9**, `/up` 200, tema+logo termuat. **Emel MAMAD dipulihkan**:
+4 emel ujian diproses semula → 2 rekod E-mel dalam Peti Masuk (baki dedup).
