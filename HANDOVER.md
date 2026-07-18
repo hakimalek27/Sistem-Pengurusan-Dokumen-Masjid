@@ -1,6 +1,6 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE PENUH** (`staging-check imap LULUS`), **WhatsApp E2E LENGKAP** (pilot MAMAD connected + inbound/outbound SEBENAR + OCR), **bug OCR Ghostscript 10.0.0 dijumpai & dibaiki** (`fe5744a`, disahkan produksi), prod **`staging-check` 9/9 LULUS**.
+**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE PENUH** (`staging-check imap LULUS`), **WhatsApp E2E LENGKAP** (pilot MAMAD connected + inbound/outbound SEBENAR + OCR), **bug OCR Ghostscript 10.0.0 dijumpai & dibaiki** (`fe5744a`, disahkan produksi), prod **`staging-check` 9/9 LULUS**. Sesi lewat: password superadmin **ditukar** (nilai plaintext dibuang dari dokumen) + nota login ahli MAMAD (email `@mamad.local` placeholder → **login password** di `/app/login`, magic link mati).
 
 ---
 
@@ -41,7 +41,7 @@
 ### ✅ Login kata laluan (fallback magic link)
 - `/log-masuk` kini ada pautan **"Log masuk dengan kata laluan"** → `/app/login` (Filament).
 - Halaman **Profil** ada aksi **"Tetapkan Kata Laluan"**.
-- **Kesan:** boleh log masuk TANPA SMTP. Superadmin `azanmalek@maiwp.gov.my` sudah ada password (`cc8459737b42a05ca3` — **sila tukar**).
+- **Kesan:** boleh log masuk TANPA SMTP. Superadmin `azanmalek@maiwp.gov.my` — password **sudah ditukar** oleh operator (18 Jul; disimpan dalam pengurus kata laluan). Nilai awal dibuang dari dokumen atas sebab keselamatan (pernah ter-commit plaintext).
 
 ### ✅ WhatsApp (sisi SPDM sahaja)
 - `WHATSAPP_DRIVER=gateway`, `WHATSAPP_GATEWAY_URL=https://wassap.wehdah.my`, `WHATSAPP_WEBHOOK_URL=https://bakwim.my/api/webhooks/whatsapp`, 2 secret 32-byte, `DIWAN_INSTANCE_ID=spdm-production`.
@@ -99,6 +99,8 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 **🐛 BUG PRODUKSI DIJUMPAI + DIBAIKI (hasil E2E ini — go-live blocker):** dokumen dengan **teks bercetak GAGAL OCR** — `ocrmypdf --skip-text --output-type pdfa` **abort pada Ghostscript 10.0.0** (imej php:8.3 bookworm); imej tanpa teks lulus (kosong) menyembunyikan isu. **Fix (`fe5744a`):** `--output-type pdfa`→`pdf` dalam `ProcessOcrJob::runOcrMyPdf` (elak Ghostscript). **Disahkan di produksi selepas rebuild imej:** JPEG berteks → `ocr=siap, ocr_len=109`, teks betul diekstrak + searchable.pdf dijana ✅. PDF/A boleh dipulih dengan naik taraf Ghostscript >10.02.0; fail asal tak diubah.
 
 **Nota:** rekod ujian simulate (MAMAD id 2–4) = artifak, boleh padam. Junk gateway tenant `spdm-production:mosque:0` (tenantId 10, dari probe awal) boleh padam di gateway.
+
+**Login akaun ahli MAMAD (nota operasi, 18 Jul lewat):** 3 ahli guna email **placeholder** `admin@mamad.local` / `kerani@mamad.local` / `pengerusi@mamad.local` (bukan inbox sebenar → **magic link tak berguna**; guna **login password** sahaja di `/app/login`, BUKAN `/admin`). Admin ada password (ditukar operator); kerani/pengerusi asalnya **tiada** password → set via `/admin` → **Pengguna** → edit → medan **Kata Laluan** (auto-hash; model User cast `password => hashed`). Panel `/app` **tidak** paksa pengesahan email (User bukan `MustVerifyEmail`; AppPanelProvider tiada `emailVerification`) → `email_verified_at` kosong TAK halang login. Untuk pengguna SEBENAR nanti: tukar ke email betul mereka supaya magic link + notifikasi email hidup (notifikasi WhatsApp sudah aktif untuk MAMAD).
 
 ---
 
