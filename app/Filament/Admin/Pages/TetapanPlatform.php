@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Models\PlatformSetting;
+use App\Services\TelegramService;
 use App\Services\WhatsAppGateway;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -12,7 +13,9 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TetapanPlatform extends Page
 {
@@ -61,6 +64,51 @@ class TetapanPlatform extends Page
                     Notification::make()->title('Tetapan platform dikemas kini.')->success()->send();
                 }),
 
+            Action::make('telegram')
+                ->label('Tetapan Telegram')
+                ->icon('heroicon-o-paper-airplane')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->fillForm(fn () => [
+                    'bot_username' => config('diwan.telegram.bot_username'),
+                    'webhook_secret' => config('diwan.telegram.webhook_secret'),
+                ])
+                ->schema([
+                    TextInput::make('bot_token')
+                        ->label('Token Bot (BotFather)')
+                        ->password()
+                        ->revealable()
+                        ->autocomplete(false)
+                        ->helperText('Biarkan kosong untuk kekalkan token sedia ada.'),
+                    TextInput::make('bot_username')
+                        ->label('Nama Pengguna Bot (tanpa @)')
+                        ->placeholder('DiwanNotifBot'),
+                    TextInput::make('webhook_secret')
+                        ->label('Rahsia Webhook')
+                        ->helperText('Auto-jana rawak jika dibiarkan kosong.'),
+                ])
+                ->action(function (array $data) {
+                    if (filled($data['bot_token'] ?? null)) {
+                        PlatformSetting::putEncrypted('telegram_bot_token', $data['bot_token']);
+                    }
+                    PlatformSetting::put('telegram_bot_username', $data['bot_username'] ?: null);
+                    $secret = filled($data['webhook_secret'] ?? null) ? $data['webhook_secret'] : Str::random(32);
+                    PlatformSetting::putEncrypted('telegram_webhook_secret', $secret);
+                    Cache::forget('platform:telegram');
+                    Notification::make()->title('Tetapan Telegram disimpan. Klik "Set Webhook Telegram" untuk mengaktifkannya.')->success()->send();
+                }),
+
+            Action::make('setTelegramWebhook')
+                ->label('Set Webhook Telegram')
+                ->icon('heroicon-o-link')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->action(function () {
+                    // Muat nilai terkini dari DB (bypass cache) sebelum panggil API.
+                    Cache::forget('platform:telegram');
+                    TelegramService::hydrateRuntimeConfig(false);
+                    $result = app(TelegramService::class)->setWebhook(true);
+                    Notification::make()->title($result['message'])->status($result['ok'] ? 'success' : 'danger')->send();
+                }),
+
             Action::make('ujiGateway')
                 ->label('Uji Gateway WA')
                 ->icon('heroicon-o-signal')
@@ -96,6 +144,9 @@ class TetapanPlatform extends Page
             'bank' => PlatformSetting::get('bank_details', []),
             'gatewayStatus' => PlatformSetting::get('gateway_status', ['ok' => null]),
             'registrationOpen' => (bool) PlatformSetting::get('registration_open', true),
+            'telegramConfigured' => filled(config('diwan.telegram.bot_token')) && filled(config('diwan.telegram.webhook_secret')),
+            'telegramUsername' => config('diwan.telegram.bot_username'),
+            'telegramWebhookStatus' => PlatformSetting::get('telegram_webhook_status'),
         ];
     }
 }

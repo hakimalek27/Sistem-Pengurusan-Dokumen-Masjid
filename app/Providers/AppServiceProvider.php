@@ -6,6 +6,7 @@ use App\Models\RetentionRule;
 use App\Models\User;
 use App\Observers\MediaObserver;
 use App\Observers\RetentionRuleObserver;
+use App\Services\TelegramService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -38,5 +39,9 @@ class AppServiceProvider extends ServiceProvider
 
             return in_array($ability, ['forceDelete', 'forceDeleteAny'], true) ? false : true;
         });
+
+        // §11.2 — Suntik tetapan Telegram dari DB (UI superadmin) ke runtime config
+        // (DB-dahulu, fallback env; selamat bila DB belum wujud). Cache 5 min.
+        TelegramService::hydrateRuntimeConfig();
     }
 }
