@@ -21,8 +21,22 @@ return [
     // naikkan HANYA dalam persekitaran e2e (banyak peranan log masuk berturut).
     'login_rate_limit' => (int) env('DIWAN_LOGIN_RATE_LIMIT', 5),
 
-    // MIME dibenarkan (§15.7).
-    'allowed_mimes' => ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'docx', 'xlsx', 'pptx'],
+    // Format dokumen dibenarkan (§15.7) — SATU sumber kebenaran (extension => MIME
+    // kanonik) untuk semua saluran (App\Support\AllowedFormats). webp DIBUANG;
+    // doc/xls/ppt (Office lama) + txt DITAMBAH atas keperluan pemilik produk.
+    'allowed_formats' => [
+        'pdf' => 'application/pdf',
+        'doc' => 'application/msword',
+        'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'xls' => 'application/vnd.ms-excel',
+        'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'txt' => 'text/plain',
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+    ],
 
     // Bilangan kandungan sebelum cadang tutup jilid (Aliran F §10).
     'enclosure_volume_limit' => 100,

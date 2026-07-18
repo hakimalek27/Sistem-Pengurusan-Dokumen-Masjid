@@ -10,6 +10,7 @@ use App\Models\ClassificationNode;
 use App\Models\RegistryFile;
 use App\Services\InboxIngestService;
 use App\Services\RecordNumberingService;
+use App\Support\AllowedFormats;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
@@ -43,12 +44,8 @@ class ListRecords extends BaseListRecords
                                 ->disk('local')
                                 ->directory('record-tmp')
                                 ->storeFileNamesIn('file_name')
-                                ->acceptedFileTypes([
-                                    'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
-                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                                ])
+                                ->acceptedFileTypes(AllowedFormats::acceptedFileTypes())
+                                ->helperText('Format sah: '.AllowedFormats::label().'.')
                                 ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024)
                                 ->required(),
                             Select::make('record_type')
@@ -116,13 +113,9 @@ class ListRecords extends BaseListRecords
                     $service = app(InboxIngestService::class);
 
                     try {
-                        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-                        $mime = match ($extension) {
-                            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                            default => mime_content_type($path) ?: 'application/octet-stream',
-                        };
+                        $extension = strtolower(pathinfo($data['file_name'] ?? $path, PATHINFO_EXTENSION));
+                        $mime = AllowedFormats::mimeForExtension($extension)
+                            ?: (mime_content_type($path) ?: 'application/octet-stream');
                         $record = $service->ingest(
                             $mosque,
                             file_get_contents($path),

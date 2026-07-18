@@ -6,6 +6,7 @@ use App\Enums\SourceChannel;
 use App\Filament\App\Resources\Inbox\InboxResource;
 use App\Services\InboxIngestService;
 use App\Services\QuotaService;
+use App\Support\AllowedFormats;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
@@ -33,12 +34,8 @@ class ListInbox extends ListRecords
                         ->disk('local')
                         ->directory('inbox-tmp')
                         ->storeFileNamesIn('file_names')
-                        ->acceptedFileTypes([
-                            'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
-                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                        ])
+                        ->acceptedFileTypes(AllowedFormats::acceptedFileTypes())
+                        ->helperText('Format sah: '.AllowedFormats::label().'.')
                         ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024),
                 ])
                 ->action(function (array $data) {
@@ -61,8 +58,12 @@ class ListInbox extends ListRecords
                     foreach ((array) $data['files'] as $path) {
                         $fullPath = Storage::disk('local')->path($path);
                         $contents = file_get_contents($fullPath);
-                        $mime = mime_content_type($fullPath) ?: 'application/octet-stream';
                         $originalName = $data['file_names'][$path] ?? basename($path);
+                        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+                        // MIME kanonik daripada extension (mime_content_type tak boleh
+                        // dipercayai untuk docx/xlsx yang dilaporkan sebagai application/zip).
+                        $mime = AllowedFormats::mimeForExtension($ext)
+                            ?: (mime_content_type($fullPath) ?: 'application/octet-stream');
 
                         $service->ingest($mosque, $contents, $originalName, $mime, Auth::user(), SourceChannel::MuatNaik);
                         Storage::disk('local')->delete($path);

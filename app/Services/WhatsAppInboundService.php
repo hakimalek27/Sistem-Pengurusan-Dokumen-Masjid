@@ -7,9 +7,11 @@ use App\Models\Mosque;
 use App\Models\User;
 use App\Models\WhatsAppIntegration;
 use App\Notifications\InboxNewItemNotification;
+use App\Support\AllowedFormats;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 /** Proses event message.received selepas HMAC/envelope disahkan oleh controller. */
 class WhatsAppInboundService
@@ -105,10 +107,31 @@ class WhatsAppInboundService
         }
 
         $filename = (string) ($media['filename'] ?? $data['filename'] ?? ('wa-'.($messageId ?? 'dokumen').'.jpg'));
-        $mime = (string) ($media['mime_type'] ?? $data['media_mime'] ?? 'application/octet-stream');
-        $record = $this->ingest->ingest($mosque, $contents, $filename, $mime, $user, SourceChannel::WhatsApp, [
-            'from' => $from, 'session' => $session, 'caption' => $caption ?: null,
-        ], skipIfDuplicate: true);
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        // Semak format sebelum ingest — tolak dengan mesej, bukan biarkan
+        // ValidationException memecah webhook (pengirim tak dapat maklum balas).
+        if (! AllowedFormats::allowsExtension($ext)) {
+            $this->reply($mosque, $session, $from, '⚠️ Format fail tidak disokong. Hantar '.AllowedFormats::label().' sahaja.', $user->id, 'wa_reject');
+            Cache::forget($intakeKey);
+
+            return;
+        }
+
+        // MIME kanonik daripada extension (WhatsApp selalu octet-stream/tiada).
+        $mime = AllowedFormats::mimeForExtension($ext)
+            ?? (string) ($media['mime_type'] ?? $data['media_mime'] ?? 'application/octet-stream');
+
+        try {
+            $record = $this->ingest->ingest($mosque, $contents, $filename, $mime, $user, SourceChannel::WhatsApp, [
+                'from' => $from, 'session' => $session, 'caption' => $caption ?: null,
+            ], skipIfDuplicate: true);
+        } catch (ValidationException $e) {
+            $this->reply($mosque, $session, $from, '⚠️ Dokumen tidak dapat diproses: '.collect($e->errors())->flatten()->first(), $user->id, 'wa_reject');
+            Cache::forget($intakeKey);
+
+            return;
+        }
         Cache::forget($intakeKey);
 
         if (! $record) {

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\SourceChannel;
 use App\Models\Mosque;
+use App\Support\AllowedFormats;
 
 /**
  * §11.3 — Ingest e-mel pengimbas via plus-addressing (scan.diwan+{slug}@…).
@@ -98,21 +99,27 @@ class MailIngestService
             return ['status' => 'quota', 'mosque' => $mosque];
         }
 
-        $allowed = config('diwan.allowed_mimes', []);
         $created = [];
         $skipped = 0;
+        $rejectedFormat = [];
 
         foreach ($attachments as $attachment) {
             $ext = strtolower(pathinfo($attachment['filename'], PATHINFO_EXTENSION));
-            if (! in_array($ext, $allowed, true)) {
+            if (! AllowedFormats::allowsExtension($ext)) {
+                $rejectedFormat[] = $attachment['filename'];
+
                 continue;
             }
+
+            // MIME kanonik daripada extension (header e-mel selalunya octet-stream).
+            $mime = AllowedFormats::mimeForExtension($ext)
+                ?? ($attachment['mime'] ?? 'application/octet-stream');
 
             $record = $this->inbox->ingest(
                 $mosque,
                 $attachment['content'],
                 $attachment['filename'],
-                $attachment['mime'] ?? 'application/octet-stream',
+                $mime,
                 null,
                 SourceChannel::Emel,
                 ['from' => $from, 'subject' => $subject, 'message_id' => $messageId, 'keyword' => $keyword],
@@ -122,6 +129,18 @@ class MailIngestService
             $record ? $created[] = $record : $skipped++;
         }
 
-        return ['status' => 'ok', 'mosque' => $mosque, 'records' => $created, 'skipped_duplicate' => $skipped];
+        // Semua lampiran ditolak kerana format (tiada dicipta, tiada duplikat) =
+        // isyarat khusus untuk notifikasi admin (F2). E-mel tanpa lampiran kekal 'ok'.
+        $status = ($rejectedFormat !== [] && $created === [] && $skipped === 0)
+            ? 'all_rejected'
+            : 'ok';
+
+        return [
+            'status' => $status,
+            'mosque' => $mosque,
+            'records' => $created,
+            'skipped_duplicate' => $skipped,
+            'rejected_format' => $rejectedFormat,
+        ];
     }
 }

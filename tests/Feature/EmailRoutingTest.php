@@ -82,6 +82,33 @@ it('lampiran MIME tidak dibenarkan ditapis (§15.7)', function () {
     expect(Record::query()->count())->toBe(0);
 });
 
+it('menerima format tambahan (.txt, .doc) dan menolak .webp dengan rejected_format', function () {
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'a@b.com', 'SPDM pelbagai', 'MID-FMT',
+        [
+            ['content' => 'teks biasa', 'filename' => 'nota.txt', 'mime' => 'text/plain'],
+            ['content' => 'dok word', 'filename' => 'surat.doc', 'mime' => 'application/msword'],
+            ['content' => 'imej webp', 'filename' => 'gambar.webp', 'mime' => 'image/webp'],
+        ],
+    );
+
+    expect($result['status'])->toBe('ok')
+        ->and(Record::forMosque($this->mam)->count())->toBe(2)
+        ->and($result['rejected_format'])->toContain('gambar.webp')
+        ->and($result['rejected_format'])->not->toContain('nota.txt');
+});
+
+it('semua lampiran format tidak sah → status all_rejected', function () {
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'a@b.com', 'SPDM jahat', 'MID-ALLREJ',
+        [['content' => 'x', 'filename' => 'jahat.exe', 'mime' => 'application/octet-stream']],
+    );
+
+    expect($result['status'])->toBe('all_rejected')
+        ->and($result['rejected_format'])->toContain('jahat.exe')
+        ->and(Record::query()->count())->toBe(0);
+});
+
 it('menolak pengirim, kata kunci atau tenant yang tidak dibenarkan', function () {
     $attachment = [['content' => 'dokumen', 'filename' => 'a.pdf', 'mime' => 'application/pdf']];
 

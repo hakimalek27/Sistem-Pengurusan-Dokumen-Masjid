@@ -217,6 +217,18 @@ it('message_id sama pada dua sesi tenant tidak saling menyekat', function () {
         ->and(Record::query()->where('mosque_id', $this->man->id)->count())->toBe(1);
 });
 
+it('dokumen format tidak disokong (.zip) → tolak dengan mesej format, tiada rekod', function () {
+    postWebhook(waPayload([
+        'filename' => 'jahat.zip',
+        'media_mime' => 'application/zip',
+        'caption' => 'spdm',
+    ]))->assertOk();
+
+    expect(Record::query()->count())->toBe(0);
+    $this->gateway->shouldHaveReceived('send')
+        ->withArgs(fn ($session, $to, $message) => str_contains($message, 'Format fail tidak disokong'));
+});
+
 it('kuota penuh → balasan tolak, tiada rekod', function () {
     $this->mam->update(['storage_used_bytes' => $this->mam->effectiveQuotaBytes()]);
 

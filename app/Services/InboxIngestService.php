@@ -11,6 +11,7 @@ use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Models\User;
+use App\Support\AllowedFormats;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -54,16 +55,12 @@ class InboxIngestService
             throw new AuthorizationException('Pengguna bukan ahli tenant dokumen.');
         }
 
-        $allowedMimes = [
-            'application/pdf', 'image/jpeg', 'image/png', 'image/webp',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        ];
+        if (! AllowedFormats::allowsMime($mime)) {
+            throw ValidationException::withMessages(['file' => AllowedFormats::rejectionMessage()]);
+        }
 
-        if (! in_array($mime, $allowedMimes, true)
-            || strlen($contents) > ((int) config('diwan.max_upload_mb', 25) * 1024 * 1024)) {
-            throw ValidationException::withMessages(['file' => 'Jenis atau saiz dokumen tidak dibenarkan.']);
+        if (strlen($contents) > ((int) config('diwan.max_upload_mb', 25) * 1024 * 1024)) {
+            throw ValidationException::withMessages(['file' => 'Saiz dokumen melebihi had '.config('diwan.max_upload_mb', 25).'MB.']);
         }
 
         if (app(QuotaService::class)->isFull($mosque)) {

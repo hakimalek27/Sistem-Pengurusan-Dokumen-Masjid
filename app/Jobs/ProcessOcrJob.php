@@ -48,8 +48,20 @@ class ProcessOcrJob implements ShouldQueue
 
         $ext = strtolower(pathinfo((string) $media->file_name, PATHINFO_EXTENSION));
 
-        // Office → langkau (indeks metadata sahaja); ekstrak teks Office = Fasa 2.
-        if (in_array($ext, ['docx', 'xlsx', 'pptx'], true)) {
+        // Teks biasa → indeks kandungan terus (tiada OCR diperlukan).
+        if ($ext === 'txt') {
+            $raw = (string) Storage::disk($media->disk)->get($media->getPathRelativeToRoot());
+            $record->update([
+                'ocr_text' => mb_substr($raw, 0, (int) config('diwan.ocr_text_limit', 1_000_000)),
+                'ocr_status' => OcrStatus::Siap,
+            ]);
+            $record->searchable();
+
+            return;
+        }
+
+        // Office (lama & baharu) → langkau OCR (indeks metadata sahaja); ekstrak teks Office = Fasa 2.
+        if (in_array($ext, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'], true)) {
             $record->update(['ocr_status' => OcrStatus::Siap, 'ocr_text' => null]);
             $record->searchable();
 
