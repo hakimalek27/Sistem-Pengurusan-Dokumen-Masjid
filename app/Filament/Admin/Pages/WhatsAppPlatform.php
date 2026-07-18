@@ -37,7 +37,9 @@ class WhatsAppPlatform extends Page
 
     protected static ?string $title = 'WhatsApp Platform';
 
-    protected static ?int $navigationSort = 90;
+    protected static string|\UnitEnum|null $navigationGroup = 'Platform';
+
+    protected static ?int $navigationSort = 11;
 
     public static function canAccess(): bool
     {

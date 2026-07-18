@@ -25,7 +25,9 @@ class StatusSambungan extends Page
 
     protected static ?string $title = 'Status Sambungan';
 
-    protected static ?int $navigationSort = 91;
+    protected static string|\UnitEnum|null $navigationGroup = 'Platform';
+
+    protected static ?int $navigationSort = 12;
 
     public static function canAccess(): bool
     {

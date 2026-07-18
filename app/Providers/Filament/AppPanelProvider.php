@@ -35,6 +35,9 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->brandName('Diwan')
+            ->brandLogo(fn (): string => view('filament.brand-logo')->render())
+            ->favicon(asset('favicon.svg'))
+            ->viteTheme('resources/css/filament/theme.css')
             ->login(Login::class)
             ->strictAuthorization()
             ->renderHook(

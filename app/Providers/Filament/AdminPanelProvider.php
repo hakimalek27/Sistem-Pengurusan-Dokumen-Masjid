@@ -31,6 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Diwan · Pentadbir Platform')
+            ->brandLogo(fn (): string => view('filament.brand-logo', ['subtitle' => 'Pentadbir Platform'])->render())
+            ->favicon(asset('favicon.svg'))
+            ->viteTheme('resources/css/filament/theme.css')
             ->login(Login::class)
             ->strictAuthorization()
             ->renderHook(

@@ -27,6 +27,10 @@ class TetapanPlatform extends Page
 
     protected static ?string $navigationLabel = 'Tetapan Platform';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Platform';
+
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $title = 'Tetapan Platform';
 
     protected function getHeaderActions(): array

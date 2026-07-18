@@ -1,0 +1,12 @@
+@import '../../../vendor/filament/filament/resources/css/theme.css';
+
+/* Jana utiliti Tailwind yang digunakan dalam view Filament custom + kelas dalam
+   kod PHP (halaman/widget). Tanpa ini, kelas seperti grid-cols-2/gap-2/text-sm
+   tidak wujud dalam CSS panel → susun atur label/nilai runtuh (isu UI dilaporkan). */
+@source '../../../app/Filament';
+@source '../../views/filament';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}

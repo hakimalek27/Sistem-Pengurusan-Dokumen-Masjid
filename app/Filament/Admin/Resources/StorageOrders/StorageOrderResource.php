@@ -14,7 +14,11 @@ class StorageOrderResource extends Resource
 {
     protected static ?string $model = StorageOrder::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Operasi';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Pesanan Storan';
 

@@ -1,11 +1,3 @@
-FROM node:20-alpine AS assets
-WORKDIR /build
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
-COPY resources ./resources
-COPY vite.config.js ./
-RUN npm run build
-
 FROM php:8.4-fpm-bookworm AS runtime
 
 # Repo PGDG — pg_dump mesti sepadan versi server (postgres:16) untuk backup:run.
@@ -42,6 +34,19 @@ RUN composer install \
     --no-progress \
     --optimize-autoloader \
     --classmap-authoritative
+
+# Bina aset SELEPAS vendor: tema Filament (resources/css/filament/theme.css)
+# @import CSS vendor filament dan @source kelas dalam app/Filament — jadi stage
+# ini MESTI ada vendor + app, bukan resources sahaja.
+FROM node:20-alpine AS assets
+WORKDIR /build
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY resources ./resources
+COPY vite.config.js ./
+COPY app ./app
+COPY --from=vendor /build/vendor ./vendor
+RUN npm run build
 
 FROM runtime AS app
 WORKDIR /var/www/html

@@ -26,6 +26,8 @@ class ProfilSaya extends Page
 
     protected static ?string $title = 'Profil Saya';
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Akaun';
+
     protected static ?int $navigationSort = 99;
 
     protected function getHeaderActions(): array
