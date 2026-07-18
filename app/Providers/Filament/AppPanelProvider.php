@@ -8,6 +8,7 @@ use App\Http\Middleware\EnsureMosqueActive;
 use App\Http\Middleware\EnsurePasswordIsSet;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Models\Mosque;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,6 +23,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 // §9.C — Panel MASJID /app/{slug} (tenancy Mosque; pendaftaran tenant DIMATIKAN)
@@ -38,6 +40,21 @@ class AppPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn (): string => view('filament.auth.login-hints', ['panel' => 'app'])->render(),
+            )
+            // §10 Aliran I — banner persediaan pada Dashboard sehingga onboarding selesai.
+            ->renderHook(
+                PanelsRenderHook::PAGE_START,
+                function (): string {
+                    $mosque = Filament::getTenant();
+                    $user = Auth::user();
+                    if (! $mosque || ! $user?->canIn($mosque, 'mosque.settings')
+                        || filled(data_get($mosque->settings, 'onboarding_done'))) {
+                        return '';
+                    }
+
+                    return view('filament.app.partials.onboarding-banner')->render();
+                },
+                scopes: [Dashboard::class],
             )
             ->tenant(Mosque::class, slugAttribute: 'slug')
             ->colors([

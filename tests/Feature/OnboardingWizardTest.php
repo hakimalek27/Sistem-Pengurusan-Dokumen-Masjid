@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\App\Pages\OnboardingWizard;
+use App\Services\MagicLinkService;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
@@ -9,6 +10,44 @@ beforeEach(function () {
     Notification::fake();
     $this->mam = makeMosque('MAM', 'mam');
     $this->admin = makeMember($this->mam, 'admin_masjid', 'a@mam.test');
+});
+
+it('magic link admin yang belum selesai persediaan → mendarat di wizard (?mula=1)', function () {
+    $raw = app(MagicLinkService::class)->createTokenForUser($this->admin);
+
+    $this->get('/masuk/'.$raw)->assertRedirect('/app/mam/persediaan?mula=1');
+});
+
+it('magic link admin yang sudah selesai persediaan → mendarat di dashboard', function () {
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['onboarding_done' => now()->toIso8601String()])]);
+    $raw = app(MagicLinkService::class)->createTokenForUser($this->admin->fresh());
+
+    $this->get('/masuk/'.$raw)->assertRedirect('/app/mam');
+});
+
+it('dashboard papar banner persediaan bila belum selesai, tiada selepas selesai', function () {
+    $this->actingAs($this->admin)->get('/app/mam')->assertOk()->assertSee('Siapkan persediaan masjid');
+
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['onboarding_done' => now()->toIso8601String()])]);
+    $this->actingAs($this->admin->fresh())->get('/app/mam')->assertOk()->assertDontSee('Siapkan persediaan masjid');
+});
+
+it('kerani tidak nampak banner persediaan (bukan admin)', function () {
+    $kerani = makeMember($this->mam, 'kerani', 'k@mam.test');
+
+    $this->actingAs($kerani)->get('/app/mam')->assertOk()->assertDontSee('Siapkan persediaan masjid');
+});
+
+it('admin yang mendarat di wizard boleh melangkau (tandakan selesai)', function () {
+    Filament::setTenant($this->mam, isQuiet: true);
+    Filament::setCurrentPanel(Filament::getPanel('app'));
+    $this->actingAs($this->admin);
+
+    Livewire::test(OnboardingWizard::class)->callAction('langkau');
+
+    expect(data_get($this->mam->fresh()->settings, 'onboarding_done'))->not->toBeNull();
+
+    Filament::setTenant(null, isQuiet: true);
 });
 
 it('hanya admin (mosque.settings) boleh akses persediaan', function () {

@@ -35,7 +35,16 @@ class MagicLoginController extends Controller
         $mosques = $user->mosques()->where('status', 'aktif')->get();
 
         if ($mosques->count() === 1) {
-            return '/app/'.$mosques->first()->slug;
+            $mosque = $mosques->first();
+
+            // §10 Aliran I — admin masjid yang belum selesai persediaan dibawa
+            // terus ke wizard onboarding (auto-buka melalui ?mula=1).
+            if (blank(data_get($mosque->settings, 'onboarding_done'))
+                && $user->canIn($mosque, 'mosque.settings')) {
+                return '/app/'.$mosque->slug.'/persediaan?mula=1';
+            }
+
+            return '/app/'.$mosque->slug;
         }
 
         return '/app';

@@ -115,6 +115,24 @@ class OnboardingWizard extends Page
                         ]),
                 ])
                 ->action(fn (array $data) => $this->completeOnboarding($data)),
+
+            Action::make('langkau')
+                ->label('Langkau Buat Sementara')
+                ->icon('heroicon-o-forward')
+                ->color('gray')
+                ->link()
+                ->visible(fn () => blank(data_get(Filament::getTenant()?->settings, 'onboarding_done')))
+                ->requiresConfirmation()
+                ->modalDescription('Persediaan akan ditandakan selesai. Anda masih boleh membukanya semula bila-bila masa dari menu Pentadbiran.')
+                ->action(function () {
+                    $mosque = Filament::getTenant();
+                    $mosque->update(['settings' => array_merge($mosque->settings ?? [], [
+                        'onboarding_done' => now()->toIso8601String(),
+                    ])]);
+                    Notification::make()->title('Persediaan dilangkau. Buka semula dari menu Pentadbiran bila perlu.')->success()->send();
+
+                    return redirect('/app/'.$mosque->slug);
+                }),
         ];
     }
 
