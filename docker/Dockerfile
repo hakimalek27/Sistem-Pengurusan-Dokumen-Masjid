@@ -8,11 +8,17 @@ RUN npm run build
 
 FROM php:8.4-fpm-bookworm AS runtime
 
+# Repo PGDG — pg_dump mesti sepadan versi server (postgres:16) untuk backup:run.
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates gnupg \
+ && install -d /usr/share/postgresql-common/pgdg \
+ && curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+ && echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libexif-dev \
     libxml2-dev libonig-dev \
     tesseract-ocr tesseract-ocr-msa ghostscript qpdf unpaper pngquant poppler-utils \
-    python3 python3-pip python3-venv postgresql-client curl \
+    python3 python3-pip python3-venv postgresql-client-16 curl \
  && python3 -m venv /opt/ocr \
  && /opt/ocr/bin/pip install --no-cache-dir ocrmypdf img2pdf \
  && ln -s /opt/ocr/bin/ocrmypdf /usr/local/bin/ocrmypdf \

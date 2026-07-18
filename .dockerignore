@@ -18,3 +18,5 @@ tests
 .phpunit.cache
 .phpunit.result.cache
 *.log
+docker/certs
+docker-compose.override.yml
