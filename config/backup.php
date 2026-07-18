@@ -39,6 +39,11 @@ return [
                     base_path('vendor'),
                     base_path('node_modules'),
                     storage_path('framework'),
+                    // Rahsia — jangan masukkan ke arkib backup; .env di-mount 0600
+                    // (milik user host) → tak boleh dibaca www-data dalam container.
+                    base_path('.env'),
+                    base_path('docker/certs'),
+                    base_path('bootstrap/cache'),
                 ],
 
                 /*
