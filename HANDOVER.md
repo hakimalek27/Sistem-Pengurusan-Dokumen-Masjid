@@ -1,6 +1,6 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: Email Routing enabled + IMAP dikonfigur (tunggu App Password + verify), diagnosis WhatsApp secret mismatch (fix di PROMPT-GATEWAY), infra prod `staging-check` semua LULUS.
+**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: Email Routing enabled + IMAP dikonfigur (tunggu App Password + verify), **WhatsApp provisioning SELARAS** (probe SPDM-signed → 200; gateway secret dibetulkan), infra prod `staging-check` semua LULUS.
 
 ---
 
@@ -80,14 +80,16 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 4. Uji: `docker compose exec app php artisan diwan:staging-check --mail-to=<emel>` (tanpa `--skip-imap`) → `imap LULUS`.
 5. Reka bentuk: setiap masjid dapat alias unik `scan+{slug}@bakwim.my` (plus-addressing, satu peti mel — TIDAK perlu banyak akaun). Kawalan allowlist pengirim + kata kunci per masjid di **Tetapan Masjid**.
 
-### 🔴 D. WhatsApp — secret gateway BELUM SELARAS (disahkan probe 18 Jul) + QR
-**Diagnosis (probe payload sah + HMAC dari .env SPDM → gateway):** balas **HTTP 401 `"Tandatangan provisioning tidak sah"`**.
-Sisi **SPDM sempurna** (provisioning secret 64-hex, fingerprint `sha256`=`b5ee6a00d53e1af0`; webhook secret 64; URL/instance betul; driver=gateway). Punca: `DIWAN_PROVISIONING_SECRET` di gateway **≠** `WHATSAPP_PROVISIONING_SECRET` SPDM (nilai salin tak tepat, ATAU belum `config:cache` selepas set).
-> **Langkah pembetulan penuh + fingerprint + probe pengesahan:** [`PROMPT-GATEWAY-WHATSAPP.md`](PROMPT-GATEWAY-WHATSAPP.md) (seksyen **STATUS 18 Julai**).
+### 🟢 D. WhatsApp — provisioning secret SELARAS (disahkan 200, 18 Jul petang) + QR
+**SIAP:** gateway `DIWAN_PROVISIONING_SECRET` kini **padan** `WHATSAPP_PROVISIONING_SECRET` SPDM (fingerprint `b5ee6a00d53e1af0`). Probe SPDM-signed → **HTTP 200** `{"success":true,"data":{"tenantId":"10","status":"active","maxDevices":2}}`. Integrasi provisioning SPDM ↔ gateway **HIDUP**.
+- Punca asal 401: nilai **fingerprint 16-aksara tersalin sebagai secret** (bukan 64-hex); dibetulkan di gateway + `config:cache`.
+- SPDM `WhatsAppIntegrationService::baseRequest()` sudah `->acceptJson()` → hantar `Accept: application/json` (elak 302 gateway pada ralat validasi). **Tiada perubahan kod SPDM diperlukan.** Pengerasan gateway `shouldRenderJsonWhen` = pilihan sahaja.
+- ⚠️ Bersihkan: probe cipta tenant junk `spdm-production:mosque:0` (gateway tenantId 10) — boleh padam di gateway.
 
-1. Betulkan `DIWAN_PROVISIONING_SECRET` di wassap.wehdah.my → `php artisan config:cache` → reload php-fpm → fingerprint mesti `b5ee6a00d53e1af0`. Ulang probe → mesti bukan 401.
-2. Selepas selaras: SPDM Tetapan Masjid → **Aktifkan WhatsApp** (`linked`) → **Pasangkan** → **scan QR** telefon rasmi masjid → `connected`.
-3. Reka bentuk: **1 nombor/sesi per masjid** (skema `whatsapp_integrations.mosque_id` unique). 2 nombor = fasa berasingan (perlu migrasi + ubah routing/UI) — belum dibuat.
+**BAKI (E2E penuh — perlu tindakan pengguna):**
+1. Cipta masjid pilot di SPDM → Tetapan Masjid → **Aktifkan WhatsApp** (`linked`) → **Pasangkan** → **scan QR** telefon rasmi masjid → `connected`.
+2. Uji: ahli hantar `spdm` → slot 10 min → hantar PDF → Peti Masuk + OCR + carian.
+3. Reka bentuk: 1 nombor/sesi per masjid (skema unique). Gateway sokong `maxDevices=2`, SPDM kuatkuasa 1 — 2 nombor = fasa berasingan.
 
 ---
 
