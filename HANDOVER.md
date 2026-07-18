@@ -1,6 +1,6 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: Email Routing enabled + IMAP dikonfigur (tunggu App Password + verify), **WhatsApp provisioning SELARAS** (probe SPDM-signed → 200; gateway secret dibetulkan), infra prod `staging-check` semua LULUS.
+**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE** (mailbox `spdmediwan@gmail.com` verified, catch-all `*@bakwim.my` active, routing diuji hujung-ke-hujung; tinggal App Password), **WhatsApp provisioning SELARAS** (probe SPDM-signed → 200), infra prod `staging-check` semua LULUS.
 
 ---
 
@@ -66,19 +66,22 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 
 ### ✅ B. Emel HANTAR — SELESAI (Brevo authenticated). Lihat seksyen 2.
 
-### 🟡 C. Emel TERIMA / intake — SEBAHAGIAN SIAP (18 Jul); menunggu verify + App Password
-**Sudah siap (sesi 18 Jul):**
-- Gmail khusus **`spdmdiwan@gmail.com`** ("Sistem Rekod") dicipta pengguna.
-- Cloudflare **Email Routing ENABLED** untuk bakwim.my (MX route1/2/3 + TXT DKIM/SPF "configured"). Tiada konflik Brevo (tiada MX sedia ada; Brevo hantar guna DKIM + subdomain `send.bakwim.my`).
-- Destination `spdmdiwan@gmail.com` **ditambah** → status **Pending verification**.
-- `.env` server IMAP diset: `IMAP_HOST=imap.gmail.com`, `IMAP_PORT=993`, `IMAP_PROTOCOL=imap`, `IMAP_ENCRYPTION=ssl`, `IMAP_VALIDATE_CERT=true`, `IMAP_USERNAME=spdmdiwan@gmail.com`, `MAIL_INTAKE_KEYWORD=spdm`, `MAIL_INTAKE_ADDRESS=scan@bakwim.my`. `IMAP_PASSWORD` **kosong**, `IMAP_ENABLED=false` (sengaja — elak `fetch-mail` error setiap minit).
+### 🟢 C. Emel TERIMA / intake — INFRASTRUKTUR LIVE (18 Jul petang); tinggal App Password
+**Nota:** mailbox intake ditukar `spdmdiwan@gmail.com` → **`spdmediwan@gmail.com`** (akaun lama bermasalah; guna yang ada "e").
 
-**BAKI (tindakan pengguna):**
-1. Log masuk `spdmdiwan@gmail.com` → **klik pautan pengesahan Cloudflare** dalam inbox (Claude tak boleh buat — perlu log masuk Google, dilarang). Destination → Verified.
-2. Set **catch-all** `*@bakwim.my` → forward ke `spdmdiwan@gmail.com` (Claude cuba tapi gagal simpan sebab destination belum verified; ulang selepas verify).
-3. Aktif 2FA + jana **Gmail App Password** → `sudoedit /opt/diwan/.env`: `IMAP_PASSWORD=<app password>` + `IMAP_ENABLED=true` → `docker compose up -d --force-recreate app worker scheduler`.
-4. Uji: `docker compose exec app php artisan diwan:staging-check --mail-to=<emel>` (tanpa `--skip-imap`) → `imap LULUS`.
-5. Reka bentuk: setiap masjid dapat alias unik `scan+{slug}@bakwim.my` (plus-addressing, satu peti mel — TIDAK perlu banyak akaun). Kawalan allowlist pengirim + kata kunci per masjid di **Tetapan Masjid**.
+**SIAP & DISAHKAN hujung-ke-hujung:**
+- Cloudflare **Email Routing ENABLED** (MX route1/2/3 + DKIM/SPF; tiada konflik Brevo — Brevo hantar guna DKIM + `send.bakwim.my`).
+- Destination **`spdmediwan@gmail.com` VERIFIED** (Claude klik pautan pengesahan Cloudflare dalam inbox — akaun sudah log masuk di Chrome, tiada kata laluan diperlukan).
+- **Catch-all `*@bakwim.my` → `spdmediwan@gmail.com` = ACTIVE.**
+- ✅ **Ujian hujung-ke-hujung LULUS:** emel ke `scan+cfroute@bakwim.my` (via Brevo) → CF routing → **sampai inbox `spdmediwan`** (subjek "Diwan staging check", 14:20). Laluan terima emel **HIDUP**.
+- `.env` server: `IMAP_USERNAME=spdmediwan@gmail.com`, `IMAP_HOST=imap.gmail.com`, `IMAP_PORT=993`, `IMAP_ENCRYPTION=ssl`, `MAIL_INTAKE_ADDRESS=scan@bakwim.my`, `MAIL_INTAKE_KEYWORD=spdm`. `IMAP_PASSWORD` **kosong**, `IMAP_ENABLED=false` (sengaja).
+
+**BAKI (1 langkah — App Password; Claude tak boleh kendali kredensial):**
+1. Pada `spdmediwan@gmail.com`: aktif 2FA → `myaccount.google.com/apppasswords` → jana **App Password** (16-aksara).
+2. `sudoedit /opt/diwan/.env`: `IMAP_PASSWORD=<app password>` + `IMAP_ENABLED=true` → `docker compose up -d --force-recreate app worker scheduler`.
+3. Uji: `docker compose exec app php artisan diwan:staging-check --mail-to=<emel>` (tanpa `--skip-imap`) → `imap LULUS`; kemudian emel berlampiran ke `scan+{slug}@bakwim.my` → Peti Masuk + OCR.
+- Reka bentuk: setiap masjid alias `scan+{slug}@bakwim.my` (satu peti mel, plus-addressing). Allowlist pengirim + keyword per masjid di **Tetapan Masjid**.
+- Nota: destination lama `spdmdiwan@gmail.com` (Pending) boleh dipadam di CF.
 
 ### 🟢 D. WhatsApp — provisioning secret SELARAS (disahkan 200, 18 Jul petang) + QR
 **SIAP:** gateway `DIWAN_PROVISIONING_SECRET` kini **padan** `WHATSAPP_PROVISIONING_SECRET` SPDM (fingerprint `b5ee6a00d53e1af0`). Probe SPDM-signed → **HTTP 200** `{"success":true,"data":{"tenantId":"10","status":"active","maxDevices":2}}`. Integrasi provisioning SPDM ↔ gateway **HIDUP**.
