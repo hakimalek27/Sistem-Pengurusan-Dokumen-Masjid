@@ -69,7 +69,8 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     await user.locator('input[wire\\:model="password"]').fill('RahsiaBaru123!');
     await user.locator('input[wire\\:model="password_confirmation"]').fill('RahsiaBaru123!');
     await user.getByRole('button', { name: /Simpan.*Teruskan/i }).click();
-    await user.waitForURL(new RegExp(`/app/${slug}/?$`), { timeout: 60_000 });
+    // Fasa 4: admin baharu (onboarding belum selesai) diarah ke wizard persediaan.
+    await user.waitForURL(new RegExp(`/app/${slug}/persediaan`), { timeout: 60_000 });
     await expect(user.locator('main')).toBeVisible();
     await expect(user.getByText(name).first()).toBeVisible();
     await user.goto(`/app/${slug}/classification-nodes`);
