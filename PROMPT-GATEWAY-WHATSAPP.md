@@ -6,6 +6,41 @@
 
 ---
 
+## ⚠️ STATUS DISAHKAN 18 JULAI 2026 — SECRET BELUM SELARAS (INI BAKI KERJA UTAMA)
+
+Probe dari server SPDM (payload provisioning **sah + lengkap**, HMAC dikira dari
+`WHATSAPP_PROVISIONING_SECRET` SPDM) dibalas oleh gateway dengan:
+**`HTTP 401 {"success":false,"error":"Tandatangan provisioning tidak sah."}`**
+
+Maksudnya `DIWAN_PROVISIONING_SECRET` di gateway **TIDAK sama** dengan `WHATSAPP_PROVISIONING_SECRET`
+SPDM — sama ada nilai tersalin tak tepat (ruang/newline/terpotong), atau `php artisan config:cache`
+belum dijalankan selepas ia diset (nilai lama masih dicache).
+
+**Sisi SPDM sudah SEMPURNA (disahkan 18 Jul):** `WHATSAPP_PROVISIONING_SECRET` = **64 aksara hex**,
+fingerprint `sha256`(16-hex pertama) = **`b5ee6a00d53e1af0`**. `DIWAN_PROVISIONING_SECRET` gateway
+MESTI menghasilkan fingerprint yang SAMA.
+
+**Betulkan (di server gateway — jangan echo nilai):**
+```bash
+# 1. Dapatkan nilai TEPAT dari SPDM (operator, terminal selamat sendiri):
+ssh ubuntu@43.156.242.188 "sudo grep -m1 '^WHATSAPP_PROVISIONING_SECRET=' /opt/diwan/.env"
+#    salin 64-hex selepas '=' (tiada ruang/newline tambahan).
+
+# 2. Set di gateway:
+sudoedit /var/www/wassap.wehdah.my/.env      # DIWAN_PROVISIONING_SECRET=<64-hex sama>
+
+# 3. WAJIB muat semula cache config (langkah yang selalu terlupa):
+cd /var/www/wassap.wehdah.my && php artisan optimize:clear && php artisan config:cache
+sudo systemctl reload php8.4-fpm             # sesuaikan versi php-fpm
+
+# 4. Sahkan fingerprint padan TANPA dedah nilai:
+V=$(sudo grep -m1 '^DIWAN_PROVISIONING_SECRET=' /var/www/wassap.wehdah.my/.env | cut -d= -f2-)
+printf %s "$V" | sha256sum | cut -c1-16       # MESTI = b5ee6a00d53e1af0
+```
+Selepas padan, minta operator SPDM jalankan semula probe (seksyen VERIFIKASI di bawah) — mesti **bukan 401**.
+
+---
+
 ## PERANAN
 Anda bekerja pada **gateway WhatsApp multi-tenant "Wassap"** (Laravel 12 + Postgres + Livewire `backend/`,
 enjin Go whatsmeow `engine/`) yang di-deploy di **https://wassap.wehdah.my**. Satu consumer baharu —

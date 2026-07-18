@@ -1,6 +1,6 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password).
+**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: Email Routing enabled + IMAP dikonfigur (tunggu App Password + verify), diagnosis WhatsApp secret mismatch (fix di PROMPT-GATEWAY), infra prod `staging-check` semua LULUS.
 
 ---
 
@@ -52,6 +52,11 @@
 - **Domain `bakwim.my` AUTHENTICATED di Brevo** — DKIM1/DKIM2/DMARC/brevo-code + branded (send/img.send/r.send) semua diimport ke Cloudflare (DNS-only) & disahkan. Emel DKIM-signed + SPF-aligned → inbox, bukan spam.
 - Diuji: `MAIL_SENT_OK`. **Magic link kini berfungsi** (selain login password).
 
+### ✅ Bukti ujian (sesi 18 Julai — petang)
+- **Pest suite lokal:** `202 passed, 1 skipped (694 assertions)`, 57s (skip = OCR sebenar; tesseract hanya dalam imej Docker).
+- **Prod infra `diwan:staging-check` (di server):** `postgresql redis_cache horizon cos ocr meilisearch smtp gateway = LULUS`; `imap` dilangkau (menunggu App Password). `diwan:health = OK`. Bukti COS tulis/baca/padam + SMTP hantar sebenar via Brevo.
+- **Playwright e2e (lokal, server :8092 + seed demo, MAIL log):** `registration` (daftar→lulus superadmin→magic link→panel), `office-workflow` (minit/balas/susulan/kelulusan 4 peranan), `explore` panel superadmin = **LULUS**; `ocr-upload` = skip (tiada fixture OCR lokal); crawl 9-peranan = login `waitForURL` timeout pada peranan yang **berubah antara run** (admin_masjid / nazir / bendahari) walau dengan server berbilang-worker (`PHP_CLI_SERVER_WORKERS=10`) → **artifak ujian/persekitaran** (login 9× pantas/IP kena rate-limit, atau timing dev-server), **BUKAN pepijat app**. Logik semua 9 peranan hijau dalam Pest `RoleAuthorizationMatrixTest`; login peranan berjaya dalam `office-workflow` (4 peranan) & `explore` superadmin.
+
 ---
 
 ## 3. Yang TERTUNGGAK (perlu tindakan pengguna)
@@ -61,20 +66,28 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 
 ### ✅ B. Emel HANTAR — SELESAI (Brevo authenticated). Lihat seksyen 2.
 
-### 🔴 C. Emel TERIMA / intake dokumen (Cloudflare Email Routing + Gmail)
-1. Cipta **akaun Gmail** khusus (cth `spdm.bakwim@gmail.com`), aktif 2FA, jana **App Password**.
-2. Cloudflare → **Email Routing** → enable (rekod MX/DKIM/SPF sudah "Added") → **catch-all** `*@bakwim.my` → forward ke Gmail tsb (sahkan emel pengesahan di inbox Gmail).
-3. Beri App Password → saya set `.env`: `IMAP_ENABLED=true`, `IMAP_USERNAME=<gmail>`, `IMAP_PASSWORD=<app password>`, `MAIL_INTAKE_ADDRESS=scan@bakwim.my`.
-4. Reka bentuk: setiap masjid dapat alias unik `scan+{slug}@bakwim.my` (plus-addressing, satu peti mel sahaja — TIDAK perlu banyak akaun). Dikawal allowlist pengirim + kata kunci per masjid di **Tetapan Masjid**.
+### 🟡 C. Emel TERIMA / intake — SEBAHAGIAN SIAP (18 Jul); menunggu verify + App Password
+**Sudah siap (sesi 18 Jul):**
+- Gmail khusus **`spdmdiwan@gmail.com`** ("Sistem Rekod") dicipta pengguna.
+- Cloudflare **Email Routing ENABLED** untuk bakwim.my (MX route1/2/3 + TXT DKIM/SPF "configured"). Tiada konflik Brevo (tiada MX sedia ada; Brevo hantar guna DKIM + subdomain `send.bakwim.my`).
+- Destination `spdmdiwan@gmail.com` **ditambah** → status **Pending verification**.
+- `.env` server IMAP diset: `IMAP_HOST=imap.gmail.com`, `IMAP_PORT=993`, `IMAP_PROTOCOL=imap`, `IMAP_ENCRYPTION=ssl`, `IMAP_VALIDATE_CERT=true`, `IMAP_USERNAME=spdmdiwan@gmail.com`, `MAIL_INTAKE_KEYWORD=spdm`, `MAIL_INTAKE_ADDRESS=scan@bakwim.my`. `IMAP_PASSWORD` **kosong**, `IMAP_ENABLED=false` (sengaja — elak `fetch-mail` error setiap minit).
 
-### 🔴 D. WhatsApp — sisi gateway + QR
-> **Prompt lengkap untuk Claude gateway:** [`PROMPT-GATEWAY-WHATSAPP.md`](PROMPT-GATEWAY-WHATSAPP.md) —
-> salin ke sesi Claude yang mengakses repo/server `wassap.wehdah.my`. Ia merangkumi kontrak API penuh
-> (provision/session/webhook), langkah runbook, dan gate verifikasi.
+**BAKI (tindakan pengguna):**
+1. Log masuk `spdmdiwan@gmail.com` → **klik pautan pengesahan Cloudflare** dalam inbox (Claude tak boleh buat — perlu log masuk Google, dilarang). Destination → Verified.
+2. Set **catch-all** `*@bakwim.my` → forward ke `spdmdiwan@gmail.com` (Claude cuba tapi gagal simpan sebab destination belum verified; ulang selepas verify).
+3. Aktif 2FA + jana **Gmail App Password** → `sudoedit /opt/diwan/.env`: `IMAP_PASSWORD=<app password>` + `IMAP_ENABLED=true` → `docker compose up -d --force-recreate app worker scheduler`.
+4. Uji: `docker compose exec app php artisan diwan:staging-check --mail-to=<emel>` (tanpa `--skip-imap`) → `imap LULUS`.
+5. Reka bentuk: setiap masjid dapat alias unik `scan+{slug}@bakwim.my` (plus-addressing, satu peti mel — TIDAK perlu banyak akaun). Kawalan allowlist pengirim + kata kunci per masjid di **Tetapan Masjid**.
 
-1. Pada server **wassap.wehdah.my** (berasingan — ikut runbook, jangan sentuh selain servis wassap): set `DIWAN_PROVISIONING_SECRET` = nilai `WHATSAPP_PROVISIONING_SECRET` dari `/opt/diwan/.env` → `php artisan config:cache` + reload php-fpm.
-2. Dalam SPDM: Tetapan Masjid → **Aktifkan WhatsApp** (status `linked`) → **Pasangkan Nombor** → **scan QR** dengan telefon rasmi masjid → status `connected`.
-3. Reka bentuk semasa: **1 nombor/sesi per masjid** (dikuatkuasa skema `whatsapp_integrations.mosque_id` unique). Sokongan **2 nombor** = fasa berasingan (perlu migrasi skema + ubah routing/UI) — belum dibuat.
+### 🔴 D. WhatsApp — secret gateway BELUM SELARAS (disahkan probe 18 Jul) + QR
+**Diagnosis (probe payload sah + HMAC dari .env SPDM → gateway):** balas **HTTP 401 `"Tandatangan provisioning tidak sah"`**.
+Sisi **SPDM sempurna** (provisioning secret 64-hex, fingerprint `sha256`=`b5ee6a00d53e1af0`; webhook secret 64; URL/instance betul; driver=gateway). Punca: `DIWAN_PROVISIONING_SECRET` di gateway **≠** `WHATSAPP_PROVISIONING_SECRET` SPDM (nilai salin tak tepat, ATAU belum `config:cache` selepas set).
+> **Langkah pembetulan penuh + fingerprint + probe pengesahan:** [`PROMPT-GATEWAY-WHATSAPP.md`](PROMPT-GATEWAY-WHATSAPP.md) (seksyen **STATUS 18 Julai**).
+
+1. Betulkan `DIWAN_PROVISIONING_SECRET` di wassap.wehdah.my → `php artisan config:cache` → reload php-fpm → fingerprint mesti `b5ee6a00d53e1af0`. Ulang probe → mesti bukan 401.
+2. Selepas selaras: SPDM Tetapan Masjid → **Aktifkan WhatsApp** (`linked`) → **Pasangkan** → **scan QR** telefon rasmi masjid → `connected`.
+3. Reka bentuk: **1 nombor/sesi per masjid** (skema `whatsapp_integrations.mosque_id` unique). 2 nombor = fasa berasingan (perlu migrasi + ubah routing/UI) — belum dibuat.
 
 ---
 
