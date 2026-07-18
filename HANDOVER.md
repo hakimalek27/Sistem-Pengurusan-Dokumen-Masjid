@@ -68,6 +68,10 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 4. Reka bentuk: setiap masjid dapat alias unik `scan+{slug}@bakwim.my` (plus-addressing, satu peti mel sahaja — TIDAK perlu banyak akaun). Dikawal allowlist pengirim + kata kunci per masjid di **Tetapan Masjid**.
 
 ### 🔴 D. WhatsApp — sisi gateway + QR
+> **Prompt lengkap untuk Claude gateway:** [`PROMPT-GATEWAY-WHATSAPP.md`](PROMPT-GATEWAY-WHATSAPP.md) —
+> salin ke sesi Claude yang mengakses repo/server `wassap.wehdah.my`. Ia merangkumi kontrak API penuh
+> (provision/session/webhook), langkah runbook, dan gate verifikasi.
+
 1. Pada server **wassap.wehdah.my** (berasingan — ikut runbook, jangan sentuh selain servis wassap): set `DIWAN_PROVISIONING_SECRET` = nilai `WHATSAPP_PROVISIONING_SECRET` dari `/opt/diwan/.env` → `php artisan config:cache` + reload php-fpm.
 2. Dalam SPDM: Tetapan Masjid → **Aktifkan WhatsApp** (status `linked`) → **Pasangkan Nombor** → **scan QR** dengan telefon rasmi masjid → status `connected`.
 3. Reka bentuk semasa: **1 nombor/sesi per masjid** (dikuatkuasa skema `whatsapp_integrations.mosque_id` unique). Sokongan **2 nombor** = fasa berasingan (perlu migrasi skema + ubah routing/UI) — belum dibuat.
