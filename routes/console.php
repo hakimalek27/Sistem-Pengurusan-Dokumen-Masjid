@@ -32,5 +32,8 @@ Schedule::command('diwan:send-minit-reminders')->dailyAt('08:00');
 // 8. Ping gateway WhatsApp — setiap 5 minit (§11.1).
 Schedule::command('diwan:ping-gateway')->everyFiveMinutes();
 
+// 9. Pemantauan sesi WhatsApp per-masjid + platform & kesihatan IMAP — setiap 10 minit (§11.1).
+Schedule::command('diwan:check-wa-sessions')->everyTenMinutes()->withoutOverlapping();
+
 // Pangkas log > 24 bulan — bulanan (§15.5).
 Schedule::command('diwan:prune-logs')->monthlyOn(1, '04:00');

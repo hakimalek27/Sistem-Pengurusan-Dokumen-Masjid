@@ -27,7 +27,7 @@ class WhatsAppGateway
         try {
             $integration = $mosqueId
                 ? WhatsAppIntegration::query()->forMosque($mosqueId)->first()
-                : null;
+                : WhatsAppIntegration::query()->platform()->first();
 
             if (! $integration?->isReady() || ! hash_equals((string) $integration->session_id, $session)) {
                 $this->record($mosqueId, $userId, $to, $type, 'failed', 'integrasi/sesi tenant tidak sah atau tidak bersambung');

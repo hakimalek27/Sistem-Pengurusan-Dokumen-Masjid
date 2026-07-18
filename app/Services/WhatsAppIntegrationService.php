@@ -15,15 +15,23 @@ class WhatsAppIntegrationService
 {
     private const API_KEY_LENGTH = 40;
 
-    public function integrationFor(Mosque $mosque): WhatsAppIntegration
+    public function integrationFor(?Mosque $mosque = null): WhatsAppIntegration
     {
+        // mosque === null → integrasi peringkat platform (alert superadmin).
+        if ($mosque === null) {
+            return WhatsAppIntegration::query()->platform()->firstOrCreate(
+                ['external_id' => $this->externalId(null)],
+                ['mosque_id' => null],
+            );
+        }
+
         return WhatsAppIntegration::query()->forMosque($mosque)->firstOrCreate(
             ['mosque_id' => $mosque->id],
             ['external_id' => $this->externalId($mosque)],
         );
     }
 
-    public function provision(Mosque $mosque): WhatsAppIntegration
+    public function provision(?Mosque $mosque = null): WhatsAppIntegration
     {
         $integration = $this->integrationFor($mosque);
         $plainKey = $integration->api_key ?: 'sk_'.Str::lower(Str::random(self::API_KEY_LENGTH));
@@ -38,7 +46,7 @@ class WhatsAppIntegrationService
 
         $payload = [
             'externalId' => $integration->external_id,
-            'organizationName' => $mosque->name,
+            'organizationName' => $mosque?->name ?? 'Diwan Platform',
             'apiKey' => $plainKey,
             'webhookUrl' => (string) config('diwan.whatsapp.webhook_url'),
             'webhookSecret' => (string) config('diwan.whatsapp.webhook_secret'),
@@ -82,7 +90,7 @@ class WhatsAppIntegrationService
     }
 
     /** @return array<string, mixed> */
-    public function beginPairing(Mosque $mosque, string $deviceName, ?string $phone = null): array
+    public function beginPairing(?Mosque $mosque, string $deviceName, ?string $phone = null): array
     {
         $integration = $this->requireLinked($mosque);
         $payload = ['device_name' => $deviceName];
@@ -104,7 +112,7 @@ class WhatsAppIntegrationService
     }
 
     /** @return array<string, mixed> */
-    public function refreshQr(Mosque $mosque): array
+    public function refreshQr(?Mosque $mosque): array
     {
         $integration = $this->requireSession($mosque);
         $response = $this->tenantRequest($integration)->get('/v1/sessions/'.$integration->session_id.'/qr');
@@ -112,7 +120,7 @@ class WhatsAppIntegrationService
         return $this->responseData($integration, $response, 'Gagal mendapatkan QR WhatsApp.');
     }
 
-    public function syncStatus(Mosque $mosque): WhatsAppIntegration
+    public function syncStatus(?Mosque $mosque): WhatsAppIntegration
     {
         $integration = $this->requireSession($mosque);
         $response = $this->tenantRequest($integration)->get('/v1/sessions/'.$integration->session_id.'/status');
@@ -125,7 +133,7 @@ class WhatsAppIntegrationService
             'last_error' => null,
         ])->save();
 
-        if ($integration->status === 'connected') {
+        if ($integration->status === 'connected' && $mosque !== null) {
             $mosque->forceFill([
                 'wa_session_id' => $integration->session_id,
                 'wa_number' => $integration->phone,
@@ -135,7 +143,7 @@ class WhatsAppIntegrationService
         return $integration->fresh();
     }
 
-    public function setEnabled(Mosque $mosque, bool $enabled): WhatsAppIntegration
+    public function setEnabled(?Mosque $mosque, bool $enabled): WhatsAppIntegration
     {
         $integration = $this->integrationFor($mosque);
         $integration->update(['enabled' => $enabled]);
@@ -143,7 +151,7 @@ class WhatsAppIntegrationService
         return $integration->fresh();
     }
 
-    protected function requireLinked(Mosque $mosque): WhatsAppIntegration
+    protected function requireLinked(?Mosque $mosque): WhatsAppIntegration
     {
         $integration = $this->integrationFor($mosque);
         if (! $integration->enabled || blank($integration->api_key) || blank($integration->gateway_tenant_id)) {
@@ -153,7 +161,7 @@ class WhatsAppIntegrationService
         return $integration;
     }
 
-    protected function requireSession(Mosque $mosque): WhatsAppIntegration
+    protected function requireSession(?Mosque $mosque): WhatsAppIntegration
     {
         $integration = $this->requireLinked($mosque);
         if (blank($integration->session_id)) {
@@ -196,9 +204,11 @@ class WhatsAppIntegrationService
         return $integration->fresh();
     }
 
-    protected function externalId(Mosque $mosque): string
+    protected function externalId(?Mosque $mosque): string
     {
-        return (string) config('diwan.whatsapp.instance_id', 'spdm').':mosque:'.$mosque->id;
+        $instance = (string) config('diwan.whatsapp.instance_id', 'spdm');
+
+        return $mosque === null ? $instance.':platform' : $instance.':mosque:'.$mosque->id;
     }
 
     protected function normalizePhone(string $phone): string

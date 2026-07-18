@@ -30,7 +30,7 @@ class WhatsAppChannel
 
         $integration = $mosqueId
             ? WhatsAppIntegration::query()->forMosque($mosqueId)->first()
-            : null;
+            : WhatsAppIntegration::query()->platform()->first();
         $session = $integration?->isReady() ? $integration->session_id : null;
 
         if (! $session) {
