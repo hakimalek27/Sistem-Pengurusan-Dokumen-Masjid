@@ -51,13 +51,37 @@
             <p class="text-sm">Alamat unik tenant: <strong>{{ $scanEmail }}</strong></p>
             <ol class="mt-2 list-decimal space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
                 <li>Admin aktifkan fungsi dan tetapkan e-mel pengirim dibenarkan melalui “Edit Tetapan”.</li>
-                <li>Hantar e-mel daripada salah satu alamat itu dengan kata kunci <strong>{{ $mosque->mailIntakeKeyword() }}</strong> pada subjek atau isi.</li>
-                <li>Lampirkan PDF/imej/Office. Sistem mengambil e-mel setiap minit, memasukkannya ke Peti Masuk dan memulakan OCR.</li>
+                @if ($mosque->mailIntakeKeyword() !== '')
+                    <li>Hantar e-mel daripada salah satu alamat itu dengan kata kunci <strong>{{ $mosque->mailIntakeKeyword() }}</strong> pada subjek atau isi.</li>
+                @else
+                    <li>Hantar e-mel daripada salah satu alamat itu (tiada kata kunci diperlukan).</li>
+                @endif
+                <li>Lampirkan {{ \App\Support\AllowedFormats::label() }}. Sistem mengambil e-mel setiap minit, memasukkannya ke Peti Masuk dan memulakan OCR.</li>
             </ol>
             <dl class="mt-3 grid grid-cols-2 gap-2 text-sm">
                 <dt class="text-gray-500">Status</dt><dd>{{ $mosque->mailIntakeEnabled() ? 'Aktif' : 'Tidak aktif' }}</dd>
+                <dt class="text-gray-500">Kata kunci</dt><dd>{{ $mosque->mailIntakeKeyword() !== '' ? $mosque->mailIntakeKeyword() : 'Tiada (terima semua daripada pengirim dibenarkan)' }}</dd>
                 <dt class="text-gray-500">Pengirim dibenarkan</dt><dd>{{ implode(', ', $mosque->mailIntakeSenders()) ?: 'Belum ditetapkan' }}</dd>
             </dl>
+
+            @php($lastIntake = $mosque->settings['mail_intake_last'] ?? null)
+            @if ($lastIntake)
+                @php($reasonLabels = [
+                    'sender_not_allowed' => 'Pengirim tidak dalam senarai dibenarkan',
+                    'keyword_missing' => 'Subjek/isi tiada kata kunci intake',
+                    'quota' => 'Kuota storan penuh',
+                    'rejected_format' => 'Lampiran bukan format disokong',
+                    'disabled' => 'Intake e-mel dimatikan',
+                ])
+                <div class="mt-3 rounded-lg border border-warning-300 bg-warning-50 p-3 text-sm dark:border-warning-500/30 dark:bg-warning-500/10">
+                    <p class="font-medium text-warning-800 dark:text-warning-200">E-mel masuk terakhir TIDAK diproses</p>
+                    <p class="text-warning-700 dark:text-warning-300">
+                        {{ $reasonLabels[$lastIntake['status']] ?? $lastIntake['status'] }}
+                        — daripada {{ $lastIntake['from'] ?? '?' }}
+                        @if (! empty($lastIntake['at'])) ({{ \Illuminate\Support\Carbon::parse($lastIntake['at'])->format('d/m/Y H:i') }}) @endif
+                    </p>
+                </div>
+            @endif
         @else
             <p class="text-sm text-danger-700">Pentadbir platform belum mengkonfigurasi akaun IMAP. Intake e-mel belum tersedia.</p>
         @endif

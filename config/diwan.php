@@ -61,7 +61,9 @@ return [
         'port' => (int) env('IMAP_PORT', 993),
     ],
     'mail_intake' => [
-        'default_keyword' => env('MAIL_INTAKE_KEYWORD', 'spdm'),
+        // Kata kunci intake e-mel kini PILIHAN — lalai kosong (terima semua
+        // daripada pengirim dibenarkan). Set MAIL_INTAKE_KEYWORD untuk paksa.
+        'default_keyword' => env('MAIL_INTAKE_KEYWORD', ''),
         // Alamat intake rasmi (cth scan@bakwim.my) untuk plus-addressing per masjid.
         // Jika kosong, jatuh balik ke IMAP username (config imap.accounts.default.username).
         'address' => env('MAIL_INTAKE_ADDRESS'),

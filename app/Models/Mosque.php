@@ -154,9 +154,13 @@ class Mosque extends Model
         return (bool) ($this->settings['mail_intake_enabled'] ?? false);
     }
 
+    /**
+     * Kata kunci intake e-mel. PILIHAN — lalai kosong bermakna "terima semua
+     * e-mel daripada pengirim dibenarkan" (allowlist ialah pagar utama).
+     */
     public function mailIntakeKeyword(): string
     {
-        return (string) ($this->settings['mail_intake_keyword'] ?? config('diwan.mail_intake.default_keyword', 'spdm'));
+        return (string) ($this->settings['mail_intake_keyword'] ?? config('diwan.mail_intake.default_keyword', ''));
     }
 
     /** @return array<int, string> */

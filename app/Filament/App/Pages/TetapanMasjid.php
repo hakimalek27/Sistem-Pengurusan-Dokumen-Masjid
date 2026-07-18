@@ -75,11 +75,13 @@ class TetapanMasjid extends Page
                     TextInput::make('wa_intake_keyword')->label('Kata Kunci Intake')->default('spdm'),
                     Toggle::make('wa_intake_enabled')->label('Terima dokumen WhatsApp')->default(true),
                     Toggle::make('mail_intake_enabled')->label('Terima dokumen melalui e-mel')->default(false),
-                    TextInput::make('mail_intake_keyword')->label('Kata Kunci E-mel')->default('spdm')->required(),
+                    TextInput::make('mail_intake_keyword')
+                        ->label('Kata Kunci E-mel (pilihan)')
+                        ->helperText('Kosongkan untuk terima SEMUA e-mel daripada pengirim dibenarkan. Isi (cth. "spdm") jika mahu hanya e-mel dengan kata kunci itu pada subjek/isi diproses.'),
                     TagsInput::make('mail_intake_senders')
                         ->label('E-mel Pengirim Dibenarkan')
                         ->placeholder('admin@masjid.org')
-                        ->helperText('Tekan Enter selepas setiap alamat. Hanya pengirim ini boleh memasukkan dokumen.'),
+                        ->helperText('Masukkan alamat e-mel PENGHANTAR (cth. e-mel pengimbas pejabat anda), BUKAN alamat intake tenant di atas. Tekan Enter selepas setiap alamat.'),
                 ])
                 ->action(function (array $data) use ($mosque) {
                     $mailSenders = collect($data['mail_intake_senders'] ?? [])
@@ -94,12 +96,22 @@ class TetapanMasjid extends Page
                         ]);
                     }
 
+                    // Halang kesilapan biasa: memasukkan alamat intake sistem
+                    // (scan+{slug}@…) sebagai "pengirim" — ia takkan pernah padan.
+                    $mailService = app(MailIngestService::class);
+                    $intakeSender = collect($mailSenders)->first(fn ($s) => $mailService->isIntakeAddress($s));
+                    if ($intakeSender !== null) {
+                        throw ValidationException::withMessages([
+                            'mail_intake_senders' => "'{$intakeSender}' ialah alamat intake sistem, bukan pengirim. Masukkan alamat e-mel PENGHANTAR (cth. e-mel pengimbas pejabat anda).",
+                        ]);
+                    }
+
                     $settings = $mosque->settings ?? [];
                     $settings['data_protection_rep'] = ['name' => $data['dpr_name'], 'email' => $data['dpr_email'], 'phone' => null];
                     $settings['wa_intake_keyword'] = $data['wa_intake_keyword'];
                     $settings['wa_intake_enabled'] = (bool) $data['wa_intake_enabled'];
                     $settings['mail_intake_enabled'] = (bool) ($data['mail_intake_enabled'] ?? false);
-                    $settings['mail_intake_keyword'] = trim((string) ($data['mail_intake_keyword'] ?? 'spdm'));
+                    $settings['mail_intake_keyword'] = trim((string) ($data['mail_intake_keyword'] ?? ''));
                     $settings['mail_intake_senders'] = $mailSenders;
 
                     $mosque->update([

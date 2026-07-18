@@ -75,6 +75,9 @@ class FetchMailJob implements ShouldQueue
                 if (($result['status'] ?? '') === 'ok' && ! empty($result['records'])) {
                     $this->notifyInbox($result['mosque'], count($result['records']));
                 }
+
+                // Log + diagnostik + notifikasi admin untuk penolakan (elak lesap senyap).
+                $mail->recordOutcome($result, $from, $subject);
             } catch (\Throwable $e) {
                 Log::warning('[IMAP] ralat proses mesej: '.$e->getMessage());
             }

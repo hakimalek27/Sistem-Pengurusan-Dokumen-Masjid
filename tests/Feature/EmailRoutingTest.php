@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Record;
+use App\Notifications\MailIntakeRejectedNotification;
 use App\Services\MailIngestService;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
@@ -136,6 +138,46 @@ it('menerima kata kunci dalam isi e-mel dan kekal berskop tenant penerima', func
     expect($result['status'])->toBe('ok')
         ->and(Record::forMosque($this->man)->count())->toBe(1)
         ->and(Record::forMosque($this->mam)->count())->toBe(0);
+});
+
+it('kata kunci kosong → terima semua e-mel daripada pengirim dibenarkan', function () {
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_keyword' => ''])]);
+
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'a@b.com', 'Surat tanpa kata kunci', 'MID-NOKW',
+        [['content' => 'dokumen', 'filename' => 'surat.pdf', 'mime' => 'application/pdf']],
+    );
+
+    expect($result['status'])->toBe('ok')
+        ->and(Record::forMosque($this->mam)->count())->toBe(1);
+});
+
+it('isIntakeAddress mengenal pasti alamat intake sistem (bukan pengirim)', function () {
+    config()->set('diwan.mail_intake.address', 'scan@bakwim.my');
+
+    expect($this->svc->isIntakeAddress('scan+mam@bakwim.my'))->toBeTrue()
+        ->and($this->svc->isIntakeAddress('scan@bakwim.my'))->toBeTrue()
+        ->and($this->svc->isIntakeAddress('admin@masjid.org'))->toBeFalse();
+});
+
+it('recordOutcome memaklum admin sekali (throttle) dan menyimpan diagnostik', function () {
+    Notification::fake();
+    $admin = makeMember($this->mam, 'admin_masjid', 'admin@mam.test');
+
+    $result = ['status' => 'sender_not_allowed', 'mosque' => $this->mam->fresh(), 'rejected_format' => []];
+    $this->svc->recordOutcome($result, 'penipu@evil.test', 'Cubaan');
+    $this->svc->recordOutcome($result, 'penipu@evil.test', 'Cubaan lagi'); // dithrottle
+
+    Notification::assertSentToTimes($admin, MailIntakeRejectedNotification::class, 1);
+    expect($this->mam->fresh()->settings['mail_intake_last']['status'])->toBe('sender_not_allowed');
+});
+
+it('recordOutcome tidak memaklum bila tiada masjid (no_slug)', function () {
+    Notification::fake();
+
+    $this->svc->recordOutcome(['status' => 'no_slug'], 'x@y.test', 'X');
+
+    Notification::assertNothingSent();
 });
 
 it('allowlist pengirim satu tenant tidak terpakai kepada tenant lain', function () {
