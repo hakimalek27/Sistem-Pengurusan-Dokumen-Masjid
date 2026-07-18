@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\EnsureMosqueActive;
+use App\Http\Middleware\EnsurePasswordIsSet;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Models\Mosque;
 use Filament\Http\Middleware\Authenticate;
@@ -31,7 +32,7 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->brandName('Diwan')
-            ->login()
+            ->login(\App\Filament\Auth\Login::class)
             ->strictAuthorization()
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
@@ -61,6 +62,7 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 EnsureUserIsActive::class,
+                EnsurePasswordIsSet::class,
             ])
             ->tenantMiddleware([
                 ApplyTenantScopes::class,

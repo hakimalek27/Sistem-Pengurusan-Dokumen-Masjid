@@ -5,7 +5,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
 beforeEach(function () {
-    $this->super = User::query()->create(['name' => 'Super', 'email' => 's@x.test', 'is_superadmin' => true, 'is_active' => true]);
+    $this->super = User::query()->create(['name' => 'Super', 'email' => 's@x.test', 'password' => bcrypt('secret'), 'is_superadmin' => true, 'is_active' => true]);
     makeMosque('MAM', 'mam');
 });
 

@@ -55,9 +55,12 @@ function makeNode(Mosque $mosque, string $code, string $sensitivity = 'dalaman',
 
 function makeMember(Mosque $mosque, string $role, ?string $email = null, array $attrs = []): User
 {
+    // Default ada kata laluan (mewakili ahli yang sudah onboard) supaya tidak
+    // terkena gate EnsurePasswordIsSet. Ujian gate lulus ['password' => null].
     $user = User::query()->create(array_merge([
         'name' => ucwords(str_replace('_', ' ', $role)),
         'email' => $email ?? $role.'-'.$mosque->slug.'-'.uniqid().'@ujian.test',
+        'password' => bcrypt('kata-laluan-ujian'),
         'is_active' => true,
     ], $attrs));
 

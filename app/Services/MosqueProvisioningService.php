@@ -38,7 +38,7 @@ class MosqueProvisioningService
 
         // Hantar magic link kepada setiap admin_masjid (luar transaksi).
         $mosque->users()->wherePivot('role', 'admin_masjid')->get()
-            ->each(fn (User $u) => $this->magic->sendTo($u->email));
+            ->each(fn (User $u) => $this->magic->sendToUser($u));
     }
 
     /** Tolak permohonan pendaftaran (sebab wajib). */

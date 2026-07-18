@@ -89,3 +89,35 @@ it('boleh menukar peranan ahli biasa', function () {
 
     expect($this->kerani->fresh()->roleIn($this->mam))->toBe('setiausaha');
 });
+
+it('jemput ahli telefon-sahaja menormalkan nombor & tiada e-mel', function () {
+    $user = $this->svc->invite($this->mam, null, 'Pak Ali', 'ajk', '011-1222333', $this->admin);
+
+    expect($user->email)->toBeNull()
+        ->and($user->phone_wa)->toBe('60111222333')
+        ->and($user->roleIn($this->mam))->toBe('ajk');
+});
+
+it('jemputan tanpa e-mel & tanpa telefon ditolak', function () {
+    expect(fn () => $this->svc->invite($this->mam, null, 'X', 'ajk', null, $this->admin))
+        ->toThrow(Illuminate\Validation\ValidationException::class);
+});
+
+it('admin boleh set semula kata laluan ahli', function () {
+    $this->svc->resetPassword($this->mam, $this->kerani, 'BaruRahsia123!', $this->admin);
+
+    expect($this->kerani->fresh()->password)->not->toBeNull();
+});
+
+it('set semula kata laluan oleh bukan-admin ditolak', function () {
+    $kerani2 = makeMember($this->mam, 'kerani', 'k2@mam.test');
+
+    expect(fn () => $this->svc->resetPassword($this->mam, $this->kerani, 'x', $kerani2))
+        ->toThrow(AuthorizationException::class);
+});
+
+it('hantar semula pautan log masuk kepada ahli', function () {
+    $this->svc->resendLoginLink($this->mam, $this->kerani, $this->admin);
+
+    expect(LoginToken::query()->where('user_id', $this->kerani->id)->exists())->toBeTrue();
+});

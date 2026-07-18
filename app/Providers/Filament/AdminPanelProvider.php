@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\EnsurePasswordIsSet;
 use App\Http\Middleware\EnsureUserIsActive;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -29,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Diwan · Pentadbir Platform')
-            ->login()
+            ->login(\App\Filament\Auth\Login::class)
             ->strictAuthorization()
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
@@ -58,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 EnsureUserIsActive::class,
+                EnsurePasswordIsSet::class,
             ]);
     }
 }

@@ -28,7 +28,7 @@ it('memaparkan dashboard tenant lengkap dan wizard Rekod Baharu', function () {
 
 it('memaparkan dashboard superadmin dengan metrik platform', function () {
     $super = User::query()->create([
-        'name' => 'Superadmin', 'email' => 'super-office@ujian.test', 'is_superadmin' => true, 'is_active' => true,
+        'name' => 'Superadmin', 'email' => 'super-office@ujian.test', 'password' => bcrypt('secret'), 'is_superadmin' => true, 'is_active' => true,
     ]);
 
     $this->actingAs($super)->get('/admin')->assertOk()->assertSee('Ringkasan Platform');

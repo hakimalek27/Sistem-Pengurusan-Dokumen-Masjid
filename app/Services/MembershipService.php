@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Support\Roles;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
@@ -17,8 +18,12 @@ class MembershipService
 {
     public function __construct(protected MagicLinkService $magic) {}
 
-    /** Jemput ahli: wujud → attach; baharu → cipta + magic link. */
-    public function invite(Mosque $mosque, string $email, string $name, string $role, ?string $phoneWa = null, ?User $actor = null): User
+    /**
+     * Jemput ahli: wujud → attach; baharu → cipta + pautan log masuk.
+     * E-mel PILIHAN — ahli boleh guna telefon sahaja (admin selalunya tahu
+     * nombor, bukan e-mel). Sekurang-kurangnya satu saluran diperlukan.
+     */
+    public function invite(Mosque $mosque, ?string $email, string $name, string $role, ?string $phoneWa = null, ?User $actor = null): User
     {
         if (! $actor?->canIn($mosque, 'users.manage')) {
             throw new AuthorizationException('Tiada kebenaran menjemput ahli untuk tenant ini.');
@@ -27,12 +32,23 @@ class MembershipService
             throw ValidationException::withMessages(['role' => 'Peranan tidak sah.']);
         }
 
+        $email = filled($email) ? mb_strtolower(trim($email)) : null;
+
         $originalPhone = $phoneWa;
         $phoneWa = app(WhatsAppRecipientResolver::class)->normalize($phoneWa);
         if (filled($originalPhone) && ! $phoneWa) {
             throw ValidationException::withMessages(['phone_wa' => 'Nombor WhatsApp tidak sah.']);
         }
-        $user = User::query()->firstOrNew(['email' => $email]);
+
+        if (! $email && ! $phoneWa) {
+            throw ValidationException::withMessages(['phone_wa' => 'Sila beri sekurang-kurangnya e-mel atau nombor telefon.']);
+        }
+
+        // Identiti: cari ikut e-mel dahulu, kemudian nombor telefon global —
+        // orang sama boleh jadi ahli beberapa masjid dengan satu akaun global.
+        $user = ($email ? User::query()->where('email', $email)->first() : null)
+            ?? ($phoneWa ? User::query()->where('phone_wa', $phoneWa)->first() : null)
+            ?? new User;
 
         if ($phoneWa && DB::table('mosque_user')
             ->where('mosque_id', $mosque->id)
@@ -42,9 +58,15 @@ class MembershipService
             throw ValidationException::withMessages(['phone_wa' => 'Nombor WhatsApp telah digunakan oleh ahli lain dalam tenant ini.']);
         }
 
-        DB::transaction(function () use ($user, $name, $phoneWa, $mosque, $role) {
+        DB::transaction(function () use ($user, $name, $email, $phoneWa, $mosque, $role) {
             if (! $user->exists) {
-                $user->fill(['name' => $name, 'phone_wa' => $phoneWa, 'is_active' => true, 'password' => null])->save();
+                $user->fill([
+                    'name' => $name,
+                    'email' => $email,
+                    'phone_wa' => $phoneWa,
+                    'is_active' => true,
+                    'password' => null,
+                ])->save();
             }
 
             $membership = [
@@ -58,9 +80,48 @@ class MembershipService
             $mosque->users()->updateExistingPivot($user->id, $membership);
         });
 
-        $this->magic->sendTo($user->email);
+        $this->magic->sendToUser($user);
 
         return $user;
+    }
+
+    /**
+     * Set/set semula kata laluan ahli oleh admin (§6.4 users.manage). Guard
+     * ringkas — bukan sekatan penuh guard() (semakan admin terakhir tidak
+     * relevan untuk menetapkan kata laluan).
+     */
+    public function resetPassword(Mosque $mosque, User $target, string $password, User $actor): void
+    {
+        $this->guardManage($mosque, $target, $actor);
+
+        $target->update(['password' => Hash::make($password)]);
+
+        activity()->performedOn($target)->causedBy($actor)
+            ->withProperties(['mosque_id' => $mosque->id, 'ip' => request()->ip()])
+            ->log('set_semula_kata_laluan');
+    }
+
+    /** Hantar semula pautan log masuk (magic link) kepada ahli. */
+    public function resendLoginLink(Mosque $mosque, User $target, User $actor): void
+    {
+        $this->guardManage($mosque, $target, $actor);
+
+        $this->magic->sendToUser($target);
+
+        activity()->performedOn($target)->causedBy($actor)
+            ->withProperties(['mosque_id' => $mosque->id, 'ip' => request()->ip()])
+            ->log('hantar_semula_pautan_log_masuk');
+    }
+
+    /** Guard ringkas untuk operasi kredensial ahli (bukan sekatan §6.4 penuh). */
+    protected function guardManage(Mosque $mosque, User $target, User $actor): void
+    {
+        if (! $actor->canIn($mosque, 'users.manage') || ! $target->isMemberOf($mosque)) {
+            throw new AuthorizationException('Tiada kebenaran mengurus ahli tenant ini.');
+        }
+        if ($target->is_superadmin) {
+            throw new RuntimeException('Tidak boleh menyentuh akaun superadmin.');
+        }
     }
 
     /** Tetapan nombor/opt-in per keahlian; tidak mengubah tenant lain pengguna sama. */

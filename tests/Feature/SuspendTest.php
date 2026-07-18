@@ -19,7 +19,7 @@ it('ahli masjid aktif boleh akses panel', function () {
 
 it('superadmin mengurus tenant digantung dari panel platform dan tidak memasuki panel tenant', function () {
     $mam = makeMosque('MAM', 'mam', MosqueStatus::Digantung);
-    $super = User::query()->create(['name' => 'Super', 'email' => 's@x.test', 'is_superadmin' => true, 'is_active' => true]);
+    $super = User::query()->create(['name' => 'Super', 'email' => 's@x.test', 'password' => bcrypt('secret'), 'is_superadmin' => true, 'is_active' => true]);
 
     $this->actingAs($super)->get('/app/mam')->assertNotFound();
     $this->actingAs($super)->get('/admin/mosques')->assertOk();

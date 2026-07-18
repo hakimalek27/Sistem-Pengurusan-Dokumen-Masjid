@@ -31,10 +31,16 @@
                                    wire:model.defer="whatsappSettings.{{ $m->id }}.notify_whatsapp"
                                    @disabled($m->is_superadmin)>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right space-x-1 whitespace-nowrap">
                             @unless ($m->is_superadmin)
                                 <x-filament::button size="xs" color="gray"
                                     wire:click="saveWhatsAppSettings({{ $m->id }})">Simpan WA</x-filament::button>
+                                <x-filament::button size="xs" color="info"
+                                    wire:click="resendLoginLink({{ $m->id }})"
+                                    wire:confirm="Hantar semula pautan log masuk kepada ahli ini?">Hantar Pautan</x-filament::button>
+                                <x-filament::button size="xs" color="warning"
+                                    wire:click="resetPassword({{ $m->id }})"
+                                    wire:confirm="Jana kata laluan sementara untuk ahli ini?">Set Kata Laluan</x-filament::button>
                                 <x-filament::button size="xs" color="danger"
                                     wire:click="removeMember({{ $m->id }})"
                                     wire:confirm="Keluarkan ahli ini dari masjid?">Keluarkan</x-filament::button>

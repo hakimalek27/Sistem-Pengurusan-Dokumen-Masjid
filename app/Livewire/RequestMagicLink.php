@@ -8,10 +8,11 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 // §9.C.1 — Halaman "Hantar Pautan Log Masuk" (/log-masuk). Rate limit 5/min/IP.
+// Menerima e-mel ATAU nombor telefon (pautan dihantar ikut saluran tersedia).
 class RequestMagicLink extends Component
 {
-    #[Validate('required|email|max:255')]
-    public string $email = '';
+    #[Validate('required|string|max:255')]
+    public string $login = '';
 
     public bool $sent = false;
 
@@ -22,15 +23,15 @@ class RequestMagicLink extends Component
         $key = 'magic-link:'.request()->ip();
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
-            $this->addError('email', 'Terlalu banyak percubaan. Sila cuba lagi sebentar.');
+            $this->addError('login', 'Terlalu banyak percubaan. Sila cuba lagi sebentar.');
 
             return;
         }
 
         RateLimiter::hit($key, 60);
 
-        // Sentiasa papar mesej sama tanpa mengira kewujudan akaun (elak enumerasi e-mel).
-        $magic->sendTo($this->email, request()->ip());
+        // Sentiasa papar mesej sama tanpa mengira kewujudan akaun (elak enumerasi).
+        $magic->sendTo($this->login, request()->ip());
 
         $this->sent = true;
     }

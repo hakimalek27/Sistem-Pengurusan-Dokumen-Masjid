@@ -6,6 +6,7 @@ use App\Http\Controllers\SecureArtifactController;
 use App\Http\Controllers\SecureFileController;
 use App\Livewire\RegisterMosque;
 use App\Livewire\RequestMagicLink;
+use App\Livewire\SetFirstPassword;
 use Illuminate\Support\Facades\Route;
 
 // §9.A — Halaman awam
@@ -23,6 +24,12 @@ Route::get('/log-masuk', RequestMagicLink::class)
 Route::get('/masuk/{token}', MagicLoginController::class)
     ->middleware('throttle:10,1')
     ->name('magic-login');
+
+// Fasa B — tetapkan kata laluan kali pertama (akaun magic-link tanpa kata laluan).
+// Route di luar panel: tiada middleware EnsurePasswordIsSet → tiada gelung.
+Route::get('/tetapkan-kata-laluan', SetFirstPassword::class)
+    ->middleware('auth')
+    ->name('password.first');
 
 // §9.A — Deep-link rekod (auth; pengesahan keahlian tenant / 404)
 Route::get('/r/{ulid}', RecordDeepLinkController::class)

@@ -17,7 +17,8 @@ class UserForm
                 Section::make('Identiti & Akses')
                     ->schema([
                         TextInput::make('name')->label('Nama')->required()->maxLength(255),
-                        TextInput::make('email')->label('Alamat E-mel')->email()->required()->unique(ignoreRecord: true)->maxLength(255),
+                        TextInput::make('email')->label('Alamat E-mel (pilihan)')->email()->unique(ignoreRecord: true)->maxLength(255)
+                            ->helperText('Pilihan — akaun boleh guna telefon sahaja.'),
                         TextInput::make('password')
                             ->label('Kata Laluan')
                             ->password()

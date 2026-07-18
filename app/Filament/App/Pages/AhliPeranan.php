@@ -13,6 +13,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use UnitEnum;
 
 class AhliPeranan extends Page
@@ -93,6 +94,40 @@ class AhliPeranan extends Page
         }
     }
 
+    /** Hantar semula pautan log masuk (magic link) kepada ahli — aliran utama. */
+    public function resendLoginLink(int $userId): void
+    {
+        $mosque = Filament::getTenant();
+        $target = $mosque->users()->whereKey($userId)->firstOrFail();
+
+        try {
+            app(MembershipService::class)->resendLoginLink($mosque, $target, Auth::user());
+            Notification::make()->title('Pautan log masuk dihantar semula (e-mel/WhatsApp).')->success()->send();
+        } catch (\Throwable $e) {
+            Notification::make()->title($e->getMessage())->danger()->send();
+        }
+    }
+
+    /** Set kata laluan sementara untuk ahli & paparkan kepada admin untuk disampaikan. */
+    public function resetPassword(int $userId): void
+    {
+        $mosque = Filament::getTenant();
+        $target = $mosque->users()->whereKey($userId)->firstOrFail();
+        $temp = Str::password(10);
+
+        try {
+            app(MembershipService::class)->resetPassword($mosque, $target, $temp, Auth::user());
+            Notification::make()
+                ->title('Kata laluan sementara ditetapkan')
+                ->body("Kata laluan sementara untuk {$target->name}: {$temp} — sila sampaikan. Ahli boleh tukar di Profil.")
+                ->success()
+                ->persistent()
+                ->send();
+        } catch (\Throwable $e) {
+            Notification::make()->title($e->getMessage())->danger()->send();
+        }
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -101,21 +136,27 @@ class AhliPeranan extends Page
                 ->icon('heroicon-o-user-plus')
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'users.manage') ?? false)
                 ->schema([
-                    TextInput::make('email')->label('E-mel')->email()->required(),
                     TextInput::make('name')->label('Nama')->required(),
-                    TextInput::make('phone_wa')->label('No. WhatsApp')->nullable(),
+                    TextInput::make('phone_wa')->label('No. Telefon (WhatsApp)')->tel()->required()
+                        ->helperText('Ahli log masuk & terima notifikasi dengan nombor ini.'),
+                    TextInput::make('email')->label('E-mel (pilihan)')->email()
+                        ->helperText('Pilihan — untuk notifikasi & pautan log masuk e-mel.'),
                     Select::make('role')->label('Peranan')->options(Roles::options())->required(),
                 ])
                 ->action(function (array $data) {
-                    app(MembershipService::class)->invite(
-                        Filament::getTenant(),
-                        $data['email'],
-                        $data['name'],
-                        $data['role'],
-                        $data['phone_wa'] ?? null,
-                        Auth::user(),
-                    );
-                    Notification::make()->title('Jemputan dihantar.')->success()->send();
+                    try {
+                        app(MembershipService::class)->invite(
+                            Filament::getTenant(),
+                            $data['email'] ?? null,
+                            $data['name'],
+                            $data['role'],
+                            $data['phone_wa'] ?? null,
+                            Auth::user(),
+                        );
+                        Notification::make()->title('Ahli dijemput. Pautan log masuk dihantar.')->success()->send();
+                    } catch (\Throwable $e) {
+                        Notification::make()->title($e->getMessage())->danger()->send();
+                    }
                 }),
         ];
     }

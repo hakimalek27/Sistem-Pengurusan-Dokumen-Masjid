@@ -17,6 +17,10 @@ return [
     // Had saiz muat naik (MB) — selaras php.ini (§15.7).
     'max_upload_mb' => 25,
 
+    // Had kadar cubaan log masuk seminit (§15.1). Produksi kekal 5;
+    // naikkan HANYA dalam persekitaran e2e (banyak peranan log masuk berturut).
+    'login_rate_limit' => (int) env('DIWAN_LOGIN_RATE_LIMIT', 5),
+
     // MIME dibenarkan (§15.7).
     'allowed_mimes' => ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'docx', 'xlsx', 'pptx'],
 

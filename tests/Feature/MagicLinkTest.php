@@ -57,3 +57,25 @@ it('/masuk/{token} log masuk & mendarat di panel masjid tunggal', function () {
 it('/masuk/{token} tidak sah → 403', function () {
     $this->get('/masuk/'.str_repeat('x', 64))->assertForbidden();
 });
+
+it('menghantar pautan melalui pengecam telefon (0 → 60)', function () {
+    $mam = makeMosque('MAM', 'mam');
+    $user = makeMember($mam, 'kerani', 'k@mam.test', ['phone_wa' => '60123456789']);
+
+    $raw = $this->svc->sendTo('0123456789');
+    expect($raw)->not->toBeNull();
+
+    $resolved = $this->svc->consume($raw);
+    expect($resolved?->id)->toBe($user->id)
+        ->and(LoginToken::query()->where('user_id', $user->id)->exists())->toBeTrue();
+});
+
+it('token terikat user_id boleh diguna walau akaun tiada e-mel', function () {
+    $mam = makeMosque('MAM', 'mam');
+    $user = makeMember($mam, 'ajk', 'x@mam.test', ['email' => null, 'phone_wa' => '60111222333']);
+
+    $raw = $this->svc->sendToUser($user);
+    $resolved = $this->svc->consume($raw);
+
+    expect($resolved?->id)->toBe($user->id);
+});
