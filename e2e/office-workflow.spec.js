@@ -4,7 +4,7 @@ async function login(browser, baseURL, email) {
     const context = await browser.newContext({ baseURL });
     const page = await context.newPage();
     await page.goto('/app/login');
-    await page.locator('input[type="email"]').fill(email);
+    await page.locator('input[id="form.login"]').fill(email);
     await page.locator('input[type="password"]').fill('password');
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(/\/app\/mam\/?$/, { timeout: 60_000 });

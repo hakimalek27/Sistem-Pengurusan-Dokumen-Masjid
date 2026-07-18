@@ -43,6 +43,12 @@ it('halaman Tetapan Platform render', function () {
     $this->actingAs($this->super)->get('/admin/tetapan-platform')->assertOk();
 });
 
+it('halaman Profil Saya, WhatsApp Platform & Status Sambungan render (superadmin)', function () {
+    $this->actingAs($this->super)->get('/admin/profil-saya')->assertOk();
+    $this->actingAs($this->super)->get('/admin/whatsapp-platform')->assertOk();
+    $this->actingAs($this->super)->get('/admin/status-sambungan')->assertOk();
+});
+
 it('bukan superadmin tidak boleh akses /admin', function () {
     $user = makeMember(makeMosque('MAN', 'man'), 'kerani', 'k@man.test');
 

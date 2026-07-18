@@ -43,7 +43,7 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     const adminContext = await browser.newContext({ baseURL });
     const admin = await adminContext.newPage();
     await admin.goto('/admin/login');
-    await admin.locator('input[type="email"]').fill('superadmin@diwan.test');
+    await admin.locator('input[id="form.login"]').fill('superadmin@diwan.test');
     await admin.locator('input[type="password"]').fill('password');
     await admin.getByRole('button', { name: /Log masuk/i }).click();
     await admin.waitForURL(/\/admin\/?$/, { timeout: 60_000 });
@@ -64,6 +64,11 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     const userContext = await browser.newContext({ baseURL });
     const user = await userContext.newPage();
     await user.goto(`/masuk/${token}`);
+    // Fasa B: akaun baharu tiada kata laluan → gate paksa tetapkan dahulu.
+    await user.waitForURL(/tetapkan-kata-laluan/, { timeout: 60_000 });
+    await user.locator('input[wire\\:model="password"]').fill('RahsiaBaru123!');
+    await user.locator('input[wire\\:model="password_confirmation"]').fill('RahsiaBaru123!');
+    await user.getByRole('button', { name: /Simpan.*Teruskan/i }).click();
     await user.waitForURL(new RegExp(`/app/${slug}/?$`), { timeout: 60_000 });
     await expect(user.locator('main')).toBeVisible();
     await expect(user.getByText(name).first()).toBeVisible();

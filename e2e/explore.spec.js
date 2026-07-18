@@ -29,7 +29,7 @@ async function summary(page) {
 test('inventori panel superadmin', async ({ page }) => {
     await page.goto('/admin/login');
     await expect(page).toHaveTitle(/Diwan/i);
-    await page.locator('input[type="email"]').fill('superadmin@diwan.test');
+    await page.locator('input[id="form.login"]').fill('superadmin@diwan.test');
     await page.locator('input[type="password"]').fill('password');
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(/\/admin\/?$/, { timeout: 60_000 });
@@ -73,7 +73,7 @@ test('inventori dan smoke semua peranan tenant', async ({ browser, baseURL }) =>
         });
 
         await page.goto('/app/login');
-        await page.locator('input[type="email"]').fill(`${role}@demo.test`);
+        await page.locator('input[id="form.login"]').fill(`${role}@demo.test`);
         await page.locator('input[type="password"]').fill('password');
         await page.getByRole('button', { name: /Log masuk/i }).click();
         await page.waitForURL(/\/app\/mam\/?$/, { timeout: 60_000 });
