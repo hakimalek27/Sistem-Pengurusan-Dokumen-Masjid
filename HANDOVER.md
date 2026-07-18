@@ -47,6 +47,11 @@
 - `WHATSAPP_DRIVER=gateway`, `WHATSAPP_GATEWAY_URL=https://wassap.wehdah.my`, `WHATSAPP_WEBHOOK_URL=https://bakwim.my/api/webhooks/whatsapp`, 2 secret 32-byte, `DIWAN_INSTANCE_ID=spdm-production`.
 - Webhook `POST /api/webhooks/whatsapp` → **401 tanpa HMAC** (betul).
 
+### ✅ Emel HANTAR (SMTP) — magic link & notifikasi
+- **Brevo** (org "Wehdah Solution", akaun percuma 300/hari). `.env`: `MAIL_MAILER=smtp`, `MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, `MAIL_SCHEME=smtp` (STARTTLS), `MAIL_USERNAME=b269ee001@smtp-brevo.com`, `MAIL_PASSWORD=<SMTP key diwan-spdm>`, `MAIL_FROM_ADDRESS=admin@bakwim.my`.
+- **Domain `bakwim.my` AUTHENTICATED di Brevo** — DKIM1/DKIM2/DMARC/brevo-code + branded (send/img.send/r.send) semua diimport ke Cloudflare (DNS-only) & disahkan. Emel DKIM-signed + SPF-aligned → inbox, bukan spam.
+- Diuji: `MAIL_SENT_OK`. **Magic link kini berfungsi** (selain login password).
+
 ---
 
 ## 3. Yang TERTUNGGAK (perlu tindakan pengguna)
@@ -54,13 +59,7 @@
 ### 🔴 A. git push (commit belum naik GitHub)
 `GH_TOKEN` invalid (401). Commit lokal terkini belum push. **Tindakan:** beri PAT GitHub sah, atau jalankan `git push origin main` sendiri, atau tambah kunci SSH ke GitHub. Selepas push → server boleh `git pull` untuk selaras (kini server guna fail yang di-scp + imej rebuild).
 
-### 🔴 B. Emel HANTAR — magic link & notifikasi (Brevo, percuma)
-Tanpa ini, magic link tak sampai (guna login password buat masa ini).
-1. Daftar akaun **Brevo** (percuma 300 emel/hari) — https://www.brevo.com
-2. Senders & Domains → **Authenticate domain** `bakwim.my` → Brevo beri rekod DKIM/SPF.
-3. Beri rekod itu kepada saya → saya tambah di Cloudflare DNS (automasi).
-4. Dapatkan **SMTP key** Brevo → saya set di `.env`: `MAIL_MAILER=smtp`, `MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, `MAIL_USERNAME=<login>`, `MAIL_PASSWORD=<smtp key>`, `MAIL_FROM_ADDRESS=admin@bakwim.my`.
-   - *Alternatif pantas (kurang rasmi):* App Password Gmail sedia ada + smtp.gmail.com.
+### ✅ B. Emel HANTAR — SELESAI (Brevo authenticated). Lihat seksyen 2.
 
 ### 🔴 C. Emel TERIMA / intake dokumen (Cloudflare Email Routing + Gmail)
 1. Cipta **akaun Gmail** khusus (cth `spdm.bakwim@gmail.com`), aktif 2FA, jana **App Password**.
