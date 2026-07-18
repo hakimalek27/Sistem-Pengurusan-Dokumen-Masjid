@@ -1,6 +1,6 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE PENUH** (mailbox `spdmediwan@gmail.com` verified, catch-all active, **`staging-check imap LULUS`**), **WhatsApp provisioning SELARAS** (probe SPDM-signed → 200), prod **`staging-check` 9/9 LULUS**.
+**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE PENUH** (`staging-check imap LULUS`), **WhatsApp E2E LENGKAP** (pilot MAMAD connected + inbound/outbound SEBENAR + OCR), **bug OCR Ghostscript 10.0.0 dijumpai & dibaiki** (`fe5744a`, disahkan produksi), prod **`staging-check` 9/9 LULUS**.
 
 ---
 
@@ -81,16 +81,24 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 - Reka bentuk: alias `scan+{slug}@bakwim.my` (satu peti mel, plus-addressing). Destination lama `spdmdiwan` (Pending) boleh padam di CF.
 - 🔐 **Pengguna:** regenerate App Password (nilai tadi muncul dalam chat/transkrip) selepas sistem stabil.
 
-### 🟢 D. WhatsApp — provisioning secret SELARAS (disahkan 200, 18 Jul petang) + QR
+### 🟢 D. WhatsApp — E2E LENGKAP & LULUS (pilot MAMAD; provisioning + pairing + inbound + outbound + OCR-fix, 18 Jul petang)
 **SIAP:** gateway `DIWAN_PROVISIONING_SECRET` kini **padan** `WHATSAPP_PROVISIONING_SECRET` SPDM (fingerprint `b5ee6a00d53e1af0`). Probe SPDM-signed → **HTTP 200** `{"success":true,"data":{"tenantId":"10","status":"active","maxDevices":2}}`. Integrasi provisioning SPDM ↔ gateway **HIDUP**.
 - Punca asal 401: nilai **fingerprint 16-aksara tersalin sebagai secret** (bukan 64-hex); dibetulkan di gateway + `config:cache`.
 - SPDM `WhatsAppIntegrationService::baseRequest()` sudah `->acceptJson()` → hantar `Accept: application/json` (elak 302 gateway pada ralat validasi). **Tiada perubahan kod SPDM diperlukan.** Pengerasan gateway `shouldRenderJsonWhen` = pilihan sahaja.
 - ⚠️ Bersihkan: probe cipta tenant junk `spdm-production:mosque:0` (gateway tenantId 10) — boleh padam di gateway.
 
-**BAKI (E2E penuh — perlu tindakan pengguna):**
-1. Cipta masjid pilot di SPDM → Tetapan Masjid → **Aktifkan WhatsApp** (`linked`) → **Pasangkan** → **scan QR** telefon rasmi masjid → `connected`.
-2. Uji: ahli hantar `spdm` → slot 10 min → hantar PDF → Peti Masuk + OCR + carian.
-3. Reka bentuk: 1 nombor/sesi per masjid (skema unique). Gateway sokong `maxDevices=2`, SPDM kuatkuasa 1 — 2 nombor = fasa berasingan.
+**✅ E2E LENGKAP & LULUS — pilot MAMAD (Masjid Al-Mukhlisin Alam Damai, slug=mamad, mosque_id=1):**
+- Dicipta di server (login panel perlu kata laluan → Claude tak boleh UI): admin+WA **60176811605**, kerani **60189030363**, pengerusi **60199654974**; 40 nod KF; status aktif.
+- WhatsApp provision → gateway tenant 11, linked.
+- **Pairing kod telefon** (bukan QR): `beginPairing(phone)` → `linking_code` → pengguna taip di telefon → **connected**, wa_number=60176811605 ✅.
+- **Outbound**: `WhatsAppGateway::send` → pengerusi → ok=1 ✅.
+- **Inbound SEBENAR** (telefon pengguna): kerani hantar `spdm` → slot (`wa_intake_ready`) → hantar dokumen → **rekod Peti Masuk (channel=whatsapp) + OCR siap + `InboxNewItemNotification`** ke admin/kerani ✅. Aliran penuh terbukti.
+- Simulasi: `diwan:simulate-whatsapp <session> <phone> <file>` (webhook HMAC sebenar) untuk uji pipeline tanpa telefon.
+- Reka bentuk: 1 nombor/sesi per masjid. Gateway sokong `maxDevices=2`, SPDM kuatkuasa 1.
+
+**🐛 BUG PRODUKSI DIJUMPAI + DIBAIKI (hasil E2E ini — go-live blocker):** dokumen dengan **teks bercetak GAGAL OCR** — `ocrmypdf --skip-text --output-type pdfa` **abort pada Ghostscript 10.0.0** (imej php:8.3 bookworm); imej tanpa teks lulus (kosong) menyembunyikan isu. **Fix (`fe5744a`):** `--output-type pdfa`→`pdf` dalam `ProcessOcrJob::runOcrMyPdf` (elak Ghostscript). **Disahkan di produksi selepas rebuild imej:** JPEG berteks → `ocr=siap, ocr_len=109`, teks betul diekstrak + searchable.pdf dijana ✅. PDF/A boleh dipulih dengan naik taraf Ghostscript >10.02.0; fail asal tak diubah.
+
+**Nota:** rekod ujian simulate (MAMAD id 2–4) = artifak, boleh padam. Junk gateway tenant `spdm-production:mosque:0` (tenantId 10, dari probe awal) boleh padam di gateway.
 
 ---
 
