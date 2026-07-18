@@ -4,7 +4,15 @@ use App\Filament\Auth\Login;
 use App\Livewire\SetFirstPassword;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
+
+// Kunci had kadar log masuk (danharrin) dikongsi semua ujian kerana IP tetap
+// 127.0.0.1. Cache Redis CI kekal merentas ujian serial → hit terkumpul.
+// Bersihkan sebelum setiap ujian supaya setiap kes bermula dari sifar percubaan.
+beforeEach(function () {
+    RateLimiter::clear('livewire-rate-limiter:'.sha1(Login::class.'|authenticate|127.0.0.1'));
+});
 
 it('log masuk panel masjid dengan nombor telefon (0 dinormal ke 60)', function () {
     $mam = makeMosque('MAM', 'mam');

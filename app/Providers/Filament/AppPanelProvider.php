@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Auth\Login;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\EnsureMosqueActive;
 use App\Http\Middleware\EnsurePasswordIsSet;
@@ -32,7 +33,7 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->brandName('Diwan')
-            ->login(\App\Filament\Auth\Login::class)
+            ->login(Login::class)
             ->strictAuthorization()
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,

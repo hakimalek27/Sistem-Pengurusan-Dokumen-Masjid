@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Services\MembershipService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 beforeEach(function () {
     Notification::fake();
@@ -100,7 +101,7 @@ it('jemput ahli telefon-sahaja menormalkan nombor & tiada e-mel', function () {
 
 it('jemputan tanpa e-mel & tanpa telefon ditolak', function () {
     expect(fn () => $this->svc->invite($this->mam, null, 'X', 'ajk', null, $this->admin))
-        ->toThrow(Illuminate\Validation\ValidationException::class);
+        ->toThrow(ValidationException::class);
 });
 
 it('admin boleh set semula kata laluan ahli', function () {
