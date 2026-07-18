@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Mosque;
+use App\Models\PlatformSetting;
 use App\Notifications\InboxNewItemNotification;
 use App\Services\MailIngestService;
 use Illuminate\Bus\Queueable;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Webklex\IMAP\Client;
@@ -40,10 +42,12 @@ class FetchMailJob implements ShouldQueue
             $client->connect();
             $messages = $client->getFolderByName('INBOX')->query()->unseen()->get();
         } catch (\Throwable $e) {
-            Log::warning('[IMAP] gagal sambung: '.$e->getMessage());
+            $this->recordImapFailure($e->getMessage());
 
             return;
         }
+
+        $this->recordImapSuccess();
 
         foreach ($messages as $message) {
             try {
@@ -74,6 +78,40 @@ class FetchMailJob implements ShouldQueue
             } catch (\Throwable $e) {
                 Log::warning('[IMAP] ralat proses mesej: '.$e->getMessage());
             }
+        }
+    }
+
+    /**
+     * Rekod kegagalan sambungan IMAP dengan throttle log. 3 kegagalan pertama
+     * dilog penuh; selepas itu 1 log setiap 10 minit sahaja — elak spam log
+     * setiap minit. Streak disimpan (platform_settings) sebagai asas alert
+     * kesihatan saluran untuk superadmin.
+     */
+    protected function recordImapFailure(string $message): void
+    {
+        $streak = (int) PlatformSetting::get('imap_failure_streak', 0) + 1;
+        PlatformSetting::put('imap_failure_streak', $streak);
+        PlatformSetting::put('imap_last_error', $message);
+
+        $lastLoggedAt = PlatformSetting::get('imap_last_logged_at');
+        $throttled = $streak > 3
+            && $lastLoggedAt
+            && Carbon::parse($lastLoggedAt)->addMinutes(10)->isFuture();
+
+        if (! $throttled) {
+            Log::warning("[IMAP] gagal sambung (streak {$streak}): ".$message);
+            PlatformSetting::put('imap_last_logged_at', now()->toIso8601String());
+        }
+    }
+
+    /** Reset kiraan kegagalan bila sambungan IMAP pulih. */
+    protected function recordImapSuccess(): void
+    {
+        if ((int) PlatformSetting::get('imap_failure_streak', 0) !== 0) {
+            PlatformSetting::put('imap_failure_streak', 0);
+            PlatformSetting::put('imap_last_error', null);
+            PlatformSetting::put('imap_last_logged_at', null);
+            Log::info('[IMAP] sambungan pulih selepas gagal berturut.');
         }
     }
 

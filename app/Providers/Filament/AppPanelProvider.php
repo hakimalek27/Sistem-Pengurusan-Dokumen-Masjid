@@ -14,6 +14,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -32,6 +33,10 @@ class AppPanelProvider extends PanelProvider
             ->brandName('Diwan')
             ->login()
             ->strictAuthorization()
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn (): string => view('filament.auth.login-hints', ['panel' => 'app'])->render(),
+            )
             ->tenant(Mosque::class, slugAttribute: 'slug')
             ->colors([
                 'primary' => Color::Emerald,
