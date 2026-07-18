@@ -56,8 +56,8 @@
 
 ## 3. Yang TERTUNGGAK (perlu tindakan pengguna)
 
-### 🔴 A. git push (commit belum naik GitHub)
-`GH_TOKEN` invalid (401). Commit lokal terkini belum push. **Tindakan:** beri PAT GitHub sah, atau jalankan `git push origin main` sendiri, atau tambah kunci SSH ke GitHub. Selepas push → server boleh `git pull` untuk selaras (kini server guna fail yang di-scp + imej rebuild).
+### ✅ A. git push — SELESAI
+Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selepas token luput dikosongkan. Server boleh `git pull` untuk selaras (kini server guna fail scp + imej rebuild yang setara).
 
 ### ✅ B. Emel HANTAR — SELESAI (Brevo authenticated). Lihat seksyen 2.
 
