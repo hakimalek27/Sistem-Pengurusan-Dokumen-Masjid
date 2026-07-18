@@ -44,6 +44,9 @@ return [
     ],
     'mail_intake' => [
         'default_keyword' => env('MAIL_INTAKE_KEYWORD', 'spdm'),
+        // Alamat intake rasmi (cth scan@bakwim.my) untuk plus-addressing per masjid.
+        // Jika kosong, jatuh balik ke IMAP username (config imap.accounts.default.username).
+        'address' => env('MAIL_INTAKE_ADDRESS'),
     ],
 
     'meilisearch' => [

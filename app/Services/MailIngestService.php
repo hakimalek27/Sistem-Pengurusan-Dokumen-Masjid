@@ -13,11 +13,26 @@ class MailIngestService
 {
     public function __construct(protected InboxIngestService $inbox) {}
 
+    /**
+     * Alamat asas intake. Utamakan alamat rasmi (cth scan@bakwim.my) dari
+     * config diwan.mail_intake.address; jatuh balik ke IMAP username supaya
+     * alias yang dipaparkan/dipadan bebas daripada log masuk peti mel sebenar.
+     */
+    protected function intakeBaseAddress(): ?string
+    {
+        $address = strtolower(trim((string) config('diwan.mail_intake.address')));
+        if (! filter_var($address, FILTER_VALIDATE_EMAIL)) {
+            $address = strtolower(trim((string) config('imap.accounts.default.username')));
+        }
+
+        return filter_var($address, FILTER_VALIDATE_EMAIL) ? $address : null;
+    }
+
     /** Ekstrak slug daripada alamat plus-addressing. */
     public function slugFromAddress(string $address): ?string
     {
-        $configured = strtolower(trim((string) config('imap.accounts.default.username')));
-        if (! filter_var($configured, FILTER_VALIDATE_EMAIL)) {
+        $configured = $this->intakeBaseAddress();
+        if ($configured === null) {
             return null;
         }
 
@@ -32,8 +47,8 @@ class MailIngestService
 
     public function intakeAddress(Mosque $mosque): ?string
     {
-        $configured = strtolower(trim((string) config('imap.accounts.default.username')));
-        if (! filter_var($configured, FILTER_VALIDATE_EMAIL)) {
+        $configured = $this->intakeBaseAddress();
+        if ($configured === null) {
             return null;
         }
 

@@ -28,6 +28,17 @@ it('mengekstrak slug daripada plus-addressing', function () {
         ->and($this->svc->slugFromAddress('biasa@gmail.com'))->toBeNull();
 });
 
+it('mengutamakan alamat intake rasmi (scan@domain) berbanding IMAP username', function () {
+    // Alias rasmi @bakwim.my bebas daripada log masuk peti mel sebenar (gmail).
+    config()->set('diwan.mail_intake.address', 'scan@bakwim.my');
+
+    expect($this->svc->intakeAddress($this->mam))->toBe('scan+mam@bakwim.my')
+        ->and($this->svc->slugFromAddress('scan+man@bakwim.my'))->toBe('man')
+        // Alias lama (IMAP username) tidak lagi dipadan bila alamat rasmi ditetapkan.
+        ->and($this->svc->slugFromAddress('scan.diwan+mam@gmail.com'))->toBeNull()
+        ->and($this->svc->slugFromAddress('scan+mam@evil.test'))->toBeNull();
+});
+
 it('e-mel ke +man → rekod masuk peti MAN bukan MAM (§18.36)', function () {
     $result = $this->svc->ingestMessage(
         ['scan.diwan+man@gmail.com'],

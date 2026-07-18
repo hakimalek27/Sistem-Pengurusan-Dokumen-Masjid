@@ -5,11 +5,14 @@ namespace App\Filament\App\Pages;
 use App\Notifications\TestNotification;
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class Profil extends Page
 {
@@ -50,6 +53,35 @@ class Profil extends Page
                 ->action(function () {
                     Auth::user()->notify(new TestNotification);
                     Notification::make()->title('Notifikasi ujian dihantar ke saluran aktif.')->success()->send();
+                }),
+
+            // §15.1 — Kata laluan ialah laluan log masuk fallback (magic link kekal utama).
+            Action::make('kata_laluan')
+                ->label('Tetapkan Kata Laluan')
+                ->icon('heroicon-o-key')
+                ->authorize(fn () => Auth::check())
+                ->modalDescription('Tetapkan kata laluan untuk log masuk tanpa pautan e-mel. Pautan log masuk e-mel tetap boleh digunakan.')
+                ->schema([
+                    TextInput::make('password')
+                        ->label('Kata Laluan Baharu')
+                        ->password()
+                        ->revealable()
+                        ->required()
+                        ->rule(Password::default())
+                        ->same('password_confirmation'),
+                    TextInput::make('password_confirmation')
+                        ->label('Sahkan Kata Laluan')
+                        ->password()
+                        ->revealable()
+                        ->required()
+                        ->dehydrated(false),
+                ])
+                ->action(function (array $data) {
+                    Auth::user()->update(['password' => Hash::make($data['password'])]);
+                    Notification::make()
+                        ->title('Kata laluan dikemas kini. Anda kini boleh log masuk dengan kata laluan.')
+                        ->success()
+                        ->send();
                 }),
         ];
     }

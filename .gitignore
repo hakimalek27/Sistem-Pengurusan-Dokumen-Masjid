@@ -28,3 +28,6 @@ Thumbs.db
 # SQLite dev DB (DIWAN — jangan commit data dev)
 /database/*.sqlite
 /database/*.sqlite-journal
+
+# Sijil origin TLS (rahsia — dijana per-server, jangan commit)
+/docker/certs/

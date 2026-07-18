@@ -18,6 +18,11 @@
                 <button type="submit" class="btn">Hantar Pautan Log Masuk</button>
             </div>
         </form>
+        <hr style="margin:1.25rem 0; border:none; border-top:1px solid #e5e7eb;">
+        <p class="muted" style="text-align:center; margin:0;">
+            Sudah tetapkan kata laluan?
+            <a href="{{ url('/app/login') }}">Log masuk dengan kata laluan</a>
+        </p>
         <p class="muted"><a href="{{ url('/daftar') }}">Belum berdaftar? Daftar Masjid</a></p>
     @endif
 </div>
