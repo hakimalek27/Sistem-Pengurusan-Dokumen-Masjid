@@ -171,9 +171,14 @@ class ProcessOcrJob implements ShouldQueue
 
         $outPdf = $tmpDir.'/searchable.pdf';
         $sidecar = $tmpDir.'/sidecar.txt';
+        // --output-type pdf (bukan pdfa) untuk ELAK Ghostscript pada langkah akhir.
+        // Ghostscript 10.0.0–10.02.0 (imej Docker php:8.3 Debian bookworm) ada regресsi yang
+        // menyebabkan ocrmypdf --skip-text ABORT pada dokumen yang menghasilkan lapisan teks
+        // (mis. dokumen bercetak sebenar), menjadikan OCR gagal di produksi. `pdf` mengekalkan
+        // OCR + carian; PDF/A boleh dipulihkan kemudian dengan menaik taraf Ghostscript (>10.02.0).
         $process = new Process([
             self::commandPath('ocrmypdf'), '--skip-text', '-l', config('diwan.ocr_langs', 'msa+eng'),
-            '--rotate-pages', '--deskew', '--sidecar', $sidecar, '--output-type', 'pdfa',
+            '--rotate-pages', '--deskew', '--sidecar', $sidecar, '--output-type', 'pdf',
             $inputPdf, $outPdf,
         ]);
         $process->setTimeout(240);
