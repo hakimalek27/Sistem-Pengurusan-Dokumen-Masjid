@@ -1,6 +1,10 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-**Kemas kini:** 2026-07-18 (petang) · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`, 0 tenant). Sesi petang: **Email intake LIVE PENUH** (`staging-check imap LULUS`), **WhatsApp E2E LENGKAP** (pilot MAMAD connected + inbound/outbound SEBENAR + OCR), **bug OCR Ghostscript 10.0.0 dijumpai & dibaiki** (`fe5744a`, disahkan produksi), prod **`staging-check` 9/9 LULUS**. Sesi lewat: password superadmin **ditukar** (nilai plaintext dibuang dari dokumen) + nota login ahli MAMAD (email `@mamad.local` placeholder → **login password** di `/app/login`, magic link mati).
+**Kemas kini:** 2026-07-19 · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Mod **canary** (`DIWAN_REGISTRATION_OPEN=false`). Sesi 18 Jul: Email intake LIVE PENUH, WhatsApp E2E LENGKAP (pilot MAMAD), bug OCR Ghostscript dibaiki (`fe5744a`).
+
+**Sesi 19 Jul — Naik taraf Fasa A–E LIVE (commit `ad45887`):** (A) hint silang-panel log masuk + throttle log IMAP; (B) **log masuk telefon-ATAU-e-mel** kedua-dua panel + **gate kata laluan pertama** + kredensial ahli (e-mel jadi PILIHAN); (C) **wizard onboarding** pendaftaran masjid; (D) **Telegram produksi** (command set-webhook + sambung akaun) + **WhatsApp platform** (alert superadmin) + **pemantauan sesi** (`diwan:check-wa-sessions` /10 min, alert 3-saluran); (E) audit + e2e. Bukti: Pest **234 passed/1 skip**, Pint passed, Playwright semua LULUS, prod **staging-check 9/9 + smoke 9/9 + /up 200**. **IMAP dibaiki** (App Password baru disahkan berfungsi). Lihat `DIWAN-SPEC-ADDENDUM-2026-07.md`.
+
+**Login akaun MAMAD (kini):** boleh guna **telefon** (60176811605 admin / 60189030363 kerani / 60199654974 pengerusi) ATAU e-mel `@mamad.local` + kata laluan di `/app/login`. Akaun sudah ada kata laluan (tidak kena gate).
 
 ---
 
@@ -105,12 +109,17 @@ Semua commit di-push ke `origin/main` (HEAD `5bf9db4`) via GCM device-flow selep
 ---
 
 ## 4. Semakan penuh (gate) sebelum buka pengguna sebenar
-- [ ] git push + CI hijau
-- [ ] Emel: magic link sampai inbox sebenar (bukan spam)
-- [ ] Intake: WA + emel + upload manual → OCR `siap` → carian jumpa
-- [ ] Ujian silang tenant (2 masjid): carian/slug/signed URL/alias emel/sesi WA terasing
-- [ ] `backup:run` → objek di bucket backup (dibaiki: postgresql-client-16 dalam imej)
+- [x] git push + Pest 234✓/1 skip + Playwright semua LULUS + Pint
+- [x] Emel: magic link sampai inbox (Brevo authenticated); IMAP intake LULUS
+- [ ] Intake: WA + emel + upload manual → OCR `siap` → carian jumpa (MAMAD terbukti)
+- [ ] **Ujian silang tenant (2 masjid) di server sebenar** — carian/slug/signed URL/alias emel/sesi WA terasing (suite Pest membuktikan; belum diuji pd 2 tenant produksi)
+- [ ] `backup:run` → objek di bucket backup (restore drill)
 - [ ] Log 30–60 min tiada error berulang
+
+### Tindakan pengguna untuk ciri Fasa D (bila mahu aktif)
+- **Telegram**: BotFather → cipta bot → `sudoedit .env` (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_USERNAME`, `TELEGRAM_WEBHOOK_SECRET`) → recreate → `php artisan diwan:telegram-set-webhook` → superadmin & pengguna tekan **Sambung Telegram** (Profil).
+- **WhatsApp platform** (alert superadmin): sediakan nombor WA khas → `/admin` → **WhatsApp Platform** → Aktifkan → Pasangkan (QR/kod) → Segerakkan. Alert sesi-terputus akan hantar via nombor ini.
+- Nota: `diwan:check-wa-sessions` sudah dijadualkan (/10 min); alert e-mel+Telegram berfungsi tanpa WA platform.
 
 ## 5. Rujukan
 - Spec: `DIWAN-SPEC.md`. Checklist go-live: `WHAT-TO-DO-NEXT.md`. Bukti audit: `AUDIT-E2E-2026-07-16.md`.
