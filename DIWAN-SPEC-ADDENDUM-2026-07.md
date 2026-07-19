@@ -296,3 +296,70 @@ userId 1, 12:20) → borang **Cipta/Edit Nod Klasifikasi CRASH** pada render.
 ## Bukti
 Pest **277 passed / 1 skip** (931 assertions); Pint bersih; deploy rebuild imej app;
 `/up` 200; 7 container healthy; isolasi + restore + render borang disahkan pada produksi.
+
+---
+
+# ADDENDUM v2.4 — Ekstrak Teks Office (Fasa 2) + Penjajaran Tatacara ANM + Naik Taraf OCR (20 Julai 2026)
+
+> Diluluskan pemilik (soalan-jawapan 20 Jul). Berdasarkan kajian PENUH 2 dokumen rasmi:
+> *Tatacara Pengurusan Rekod Elektronik dalam DDMS di Pejabat Awam* (Arkib Negara, 2020) +
+> *Panduan Pengguna DDMS 2.0* (MAMPU). Commit `081ff2e` (office+ocr), `0d72f57` (tatacara).
+
+## Pindaan §3.3 — pakej baharu (kelulusan pemilik)
+Ditambah `phpoffice/phpword ^1.4` + `phpoffice/phpspreadsheet ^5.9` untuk ekstrak teks
+Office. ext-zip/dom/xmlreader/simplexml sudah dalam imej Docker (`docker/Dockerfile:19`).
+Larangan §0.3 lain kekal.
+
+## §20′ / §12 — Ekstrak teks Office boleh dicari (Fasa 2 → dilaksana)
+- `App\Support\OfficeTextExtractor::extract($path, $ext)` — **PhpOffice utama** (docx=PhpWord,
+  xlsx/xls=PhpSpreadsheet), **sandaran native ZipArchive+XMLReader** (bila PhpOffice gagal
+  atau xlsx > 8MB → streaming jimat RAM worker 768M). **pptx = native terus** (PhpPresentation
+  tidak dipasang). doc/xls lama = cubaan terbaik; ppt lama = metadata sahaja.
+- `ProcessOcrJob` laluan Office (dahulu no-op `ocr_text=null`) kini muat turun fail → ekstrak →
+  `ocr_text` (had `diwan.ocr_text_limit`) + `searchable()`. Gagal/tak dapat → `ocr_text` null,
+  status Siap (rekod kekal sah). `searchableAttributes` Meili sudah termasuk `ocr_text` — tiada
+  perubahan indeks. **Fail asal TIDAK diubah.**
+
+## §12′ — Naik taraf kualiti OCR
+- `ocrmypdf` +`--clean` (pra-proses unpaper, imej Docker) +`--optimize 1` (lossless) — ketepatan
+  & kekemasan lebih baik. KEKAL `--output-type pdf` (regresi Ghostscript 10.0–10.02). jbig2enc /
+  naik taraf Ghostscript / PDF-A = **nota tangguh** (belum dibuat).
+- `OfficeTextExtractor::normalizeText()` — sambung suku kata terpotong hujung baris
+  (`maklu-\nmat`→`maklumat`), buang aksara kawalan, kemas whitespace. Diguna pada **sidecar OCR**
+  + teks Office. `searchable.pdf` tidak disentuh.
+
+## §13′ — Snippet + highlight carian
+- `SearchService::snippetFor(Record, query)` — petikan ±90 aksara sekitar padanan pertama
+  (ocr_text → tajuk → rujukan → pengirim). `SearchService::highlight()` — teks di-escape DAHULU,
+  padanan dibalut `<mark>` gaya inline → selamat XSS. `CariRekod` + blade papar snippet.
+
+## §6.5.9 / §8 — "u.p." (Untuk Perhatian) hibrid + auto-cadang
+DDMS metadata "Surat Menyurat" TIADA medan u.p. — dalam tatacara, u.p. ialah keputusan
+**PENGEDARAN** (§6.5.9: hantar terus kepada pegawai + s.k. Ketua/Timbalan). Diwan menjadikannya
+**hibrid**: `metadata.untuk_perhatian` kekal teks bebas (nama pada surat mungkin bukan pengguna)
++ **datalist autocomplete** nama ahli; bila padan ahli aktif (tepat) → `attentionSuggestion()`
+cadang ahli itu sebagai penerima "Untuk Tindakan" (hanya jika kerani belum pilih) + Pengerusi ke
+s.k. Kerani bebas ubah. Guard kewujudan medan minit → wizard "Rekod Baharu" tidak terjejas.
+
+## Penjajaran tatacara lain
+- **§10 Aliran D — Ruj. Kami auto**: `InboxIngestService::fileRecord` isi `our_ref` =
+  `file_no(enclosure)` bila kosong (DDMS: No. Rujukan Kami WAJIB). Manual tidak ditindih.
+- **Carta 8.1 — Tarikh Terima**: prefill modal = tarikh masuk Peti Masuk.
+- **§6.9.1 — fail 100 kandungan**: helperText amaran pada "Failkan Ke" bila ≥90/≥100 (tidak menyekat).
+- **§6.4.2 — s.k. boleh balas**: `MinitPolicy::reply` kini benarkan penerima makluman + pengirim
+  (bukan tindakan sahaja). Tanda Selesai (`complete`/`respond`) kekal terhad penerima tindakan.
+
+## Rumusan perbandingan Diwan vs Tatacara ANM/DDMS (untuk rujukan)
+- **SELARAS**: tawan-dulu-sebelum-edar (§6.3.1=Peti Masuk); catatan atas surat dilarang, minit
+  digital (§6.4.1); s.k.=makluman tanpa tindakan (§6.4.2); arahan via fungsi Minit + penerima
+  dipilih + keutamaan (§6.5.7; DDMS 4.4.5); catat tindakan + maklum pemberi (§6.5.8/10); kod
+  klasifikasi Fungsi-Aktiviti/Sub/Transaksi `AKRONIM.###-#/#/#` (§5.13.1=`MAM.900-1/1`); semak
+  klasifikasi sebelum buka fail (§6.2). Diwan minit **lebih kaya** (threading, SLA 7/3/1, resit baca).
+- **JURANG DITUTUP** oleh addendum ini: u.p. berstruktur, Ruj. Kami auto, tarikh terima, amaran 100, s.k. balas.
+- **BEZA REKA BENTUK (sengaja)**: KF Diwan operasi, BUKAN diluluskan Arkib Negara (spec §7); eskalasi
+  SLA automatik + auto-klasifikasi AI + ekstrak teks .doc/.ppt lama = luar skop (nota Fasa 2 kekal).
+
+## Bukti v2.4
+Pest **296 passed / 1 skip** (971 assertions); Pint bersih; `npm run build` OK; Playwright
+chromium **office-workflow + explore + registration LULUS** (server e2e tunggal, DB buangan);
+ujian baharu: OfficeTextExtractionTest (7) + SearchSnippetTest (6) + TatacaraAlignmentTest (7).
