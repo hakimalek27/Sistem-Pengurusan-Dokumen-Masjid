@@ -73,6 +73,9 @@ class InboxTable
                 'record_type' => $record->record_type,
                 'title' => $record->title,
                 'record_date' => optional($record->record_date)->toDateString() ?? now()->toDateString(),
+                // Carta ANM 8.1 — surat dicap tarikh penerimaan; prefill = tarikh masuk Peti Masuk.
+                'received_date' => optional($record->received_date)->toDateString()
+                    ?? optional($record->created_at)->toDateString(),
             ])
             ->schema([
                 Select::make('record_type')
@@ -98,6 +101,28 @@ class InboxTable
                     ->searchable()
                     ->live()
                     ->required()
+                    ->helperText(function (Get $get): ?string {
+                        // §6.9.1 — fail ditutup pada 100 kandungan; amaran (tidak menyekat).
+                        $id = $get('registry_file_id');
+                        if (blank($id)) {
+                            return null;
+                        }
+                        $file = RegistryFile::query()
+                            ->where('mosque_id', Filament::getTenant()?->id)
+                            ->find($id);
+                        if (! $file) {
+                            return null;
+                        }
+                        $count = (int) $file->enclosure_count;
+                        if ($count >= 100) {
+                            return "⚠ Fail ini sudah {$count} kandungan — Tatacara ANM §6.9: tutup & buka fail jilid baharu.";
+                        }
+                        if ($count >= 90) {
+                            return "Fail ini sudah {$count} kandungan (had cadangan 100). Pertimbang jilid baharu tidak lama lagi.";
+                        }
+
+                        return null;
+                    })
                     ->createOptionForm([
                         Select::make('classification_node_id')
                             ->label('Nod Klasifikasi')

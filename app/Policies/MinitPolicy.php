@@ -49,9 +49,14 @@ class MinitPolicy
             && $minit->recipients()->where('user_id', $user->id)->where('status', '!=', 'selesai')->exists();
     }
 
+    // §6.4.2 — penerima s.k. (makluman) yang ingin minit boleh "Balas & Edarkan",
+    // bukan hanya penerima tindakan. Tanda Selesai kekal terhad kepada penerima tindakan
+    // (lihat respond()/complete()). Pengirim asal juga boleh menyusuli.
     public function reply(User $user, Minit $minit): bool
     {
-        return $this->respond($user, $minit);
+        return $user->canIn($minit->mosque, 'minit.respond')
+            && ($minit->from_user_id === $user->id
+                || $minit->recipients()->where('user_id', $user->id)->exists());
     }
 
     public function update(User $user, Minit $minit): bool

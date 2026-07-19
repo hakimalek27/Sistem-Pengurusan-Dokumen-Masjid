@@ -135,6 +135,12 @@ class InboxIngestService
         return DB::transaction(function () use ($record, $file, $attributes, $filer, $chosen) {
             $enclosureNo = $this->numbering->allocateEnclosureNo($file);
 
+            // §10 Aliran D — auto-cadang "Ruj. Kami" penuh apabila tidak diisi (DDMS: No.
+            // Rujukan Kami WAJIB). Rujukan = file_no(enclosure_no), cth MAM.900-1/1(23).
+            if (empty($attributes['our_ref'])) {
+                $attributes['our_ref'] = $this->numbering->fullReference($file, $enclosureNo);
+            }
+
             $chosen ??= $record->sensitivity ?? Sensitivity::Dalaman;
             $fileSensitivity = $file->sensitivity ?? Sensitivity::Dalaman;
             $effective = Sensitivity::max($chosen, $fileSensitivity);
