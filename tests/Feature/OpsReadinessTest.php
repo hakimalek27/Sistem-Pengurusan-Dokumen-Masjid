@@ -52,6 +52,7 @@ it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', f
     $dockerfile = file_get_contents(base_path('docker/Dockerfile'));
     $compose = file_get_contents(base_path('docker-compose.yml'));
     $nginx = file_get_contents(base_path('docker/nginx.conf'));
+    $nginxSsl = file_get_contents(base_path('docker/nginx-ssl.conf'));
     $envExample = file_get_contents(base_path('.env.example'));
 
     expect($dockerfile)->toContain('npm ci --no-audit --no-fund')
@@ -70,6 +71,9 @@ it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', f
         ->and($nginx)->toContain('limit_req_zone $binary_remote_addr zone=diwan_per_ip')
         ->and($nginx)->toContain('limit_req_zone $binary_remote_addr zone=diwan_auth')
         ->and($nginx)->toContain('limit_conn_zone $binary_remote_addr zone=diwan_conn')
+        ->and($nginxSsl)->toContain('limit_req_zone $binary_remote_addr zone=diwan_per_ip')
+        ->and($nginxSsl)->toContain('limit_req_zone $binary_remote_addr zone=diwan_auth')
+        ->and($nginxSsl)->toContain('limit_conn_zone $binary_remote_addr zone=diwan_conn')
         ->and($envExample)->toContain('SESSION_ENCRYPT=true')
         ->and(file_exists(base_path('package-lock.json')))->toBeTrue();
 });
