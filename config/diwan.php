@@ -58,6 +58,15 @@ return [
         'reject_cooldown_minutes' => (int) env('WHATSAPP_REJECT_COOLDOWN_MINUTES', 60),
         'reply_cap' => (int) env('WHATSAPP_REPLY_CAP', 5),
         'reply_cap_window_minutes' => (int) env('WHATSAPP_REPLY_CAP_WINDOW_MINUTES', 10),
+        // §11.1 — Intake WA kata-kunci-dahulu: Diwan SENYAP melainkan penghantar hantar
+        // kata kunci TUNGGAL (cth "spdm") atau sedang dalam tetingkap intake aktif.
+        'intake_window_minutes' => (int) env('WHATSAPP_INTAKE_WINDOW_MINUTES', 10),
+        // Benarkan nombor BUKAN-AHLI hantar dokumen selepas kata kunci (submission awam).
+        // false = ahli sahaja. Kerani tetap semak semua di Peti Masuk.
+        'allow_public_intake' => filter_var(env('WHATSAPP_ALLOW_PUBLIC_INTAKE', true), FILTER_VALIDATE_BOOLEAN),
+        // Had submission dokumen per nombor (elak banjir intake).
+        'submission_cap' => (int) env('WHATSAPP_SUBMISSION_CAP', 10),
+        'submission_window_minutes' => (int) env('WHATSAPP_SUBMISSION_WINDOW_MINUTES', 60),
     ],
 
     // Ingest e-mel pengimbas (§11.3).

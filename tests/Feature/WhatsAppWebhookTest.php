@@ -94,34 +94,43 @@ it('sesi tidak dikenali → 200 + tiada rekod', function () {
     expect(Record::query()->count())->toBe(0);
 });
 
-it('menghadkan balasan tolak berulang kepada nombor bukan-ahli (elak gelung spam §11.1)', function () {
-    $asing = '60174632511'; // bukan ahli — mensimulasikan auto-reply/pengirim berulang
+it('nombor asing tanpa kata kunci → SENYAP sepenuhnya (tiada balasan, tiada gelung §11.1)', function () {
+    $asing = '60174632511'; // orang luar tiada akaun — simulasi auto-reply/pengirim berulang
 
     for ($i = 0; $i < 6; $i++) {
         postWebhook(waPayload([
             'from' => $asing,
-            'message_id' => 'ASING'.$i,     // message_id unik → elak dedup idempotensi
-            'media_base64' => null,          // mesej teks: pemeriksa bukan-ahli sebelum media
+            'message_id' => 'ASING'.$i,
+            'media_base64' => null,
             'type' => 'text',
-            'caption' => 'helo',
+            'caption' => 'assalamualaikum, ini mesej panjang tanpa kata kunci intake',
         ]))->assertOk();
     }
 
-    // Walau 6 mesej diterima, HANYA satu balasan wa_reject dihantar ke nombor itu
-    // (selebihnya digugurkan oleh cooldown) — gelung ping-pong diputuskan.
-    $this->gateway->shouldHaveReceived('send')
-        ->withArgs(fn ($session, $to, $message, $mosqueId, $userId, $type) => $to === $asing && $type === 'wa_reject')
-        ->once();
-
+    // Diwan LANGSUNG tidak balas nombor yang tak hantar kata kunci tunggal — punca spam dihapus.
+    $this->gateway->shouldNotHaveReceived('send');
     expect(Record::query()->count())->toBe(0);
 });
 
-it('penghantar BUKAN ahli masjid sesi itu → balasan tolak, tiada rekod', function () {
+it('orang luar hantar kata kunci + dokumen → submission awam diterima (creator null)', function () {
+    postWebhook(waPayload(['from' => '60199999999']))->assertOk(); // kapsyen 'spdm' + media
+
+    $record = Record::query()->where('mosque_id', $this->mam->id)->first();
+    expect($record)->not->toBeNull()
+        ->and($record->created_by)->toBeNull()               // submission tanpa akaun
+        ->and($record->source_meta['from'])->toBe('60199999999');
+
+    $this->gateway->shouldHaveReceived('send')
+        ->withArgs(fn ($session, $to, $message, $mosqueId, $userId, $type) => $type === 'wa_ack');
+});
+
+it('mod ahli-sahaja (allow_public_intake=false): orang luar + kata kunci + dokumen → SENYAP, tiada rekod', function () {
+    config()->set('diwan.whatsapp.allow_public_intake', false);
+
     postWebhook(waPayload(['from' => '60199999999']))->assertOk();
 
     expect(Record::query()->count())->toBe(0);
-    $this->gateway->shouldHaveReceived('send')
-        ->withArgs(fn ($session, $to, $message) => str_contains($message, 'tidak berdaftar sebagai ahli'));
+    $this->gateway->shouldNotHaveReceived('send');
 });
 
 it('imej daripada ahli sah → peti masuk + ack sebut nama masjid', function () {
@@ -277,12 +286,11 @@ it('intake dimatikan → balasan tolak, tiada rekod', function () {
     expect(Record::query()->count())->toBe(0);
 });
 
-it('ahli MAM hantar ke sesi MAN (bukan ahli MAN) → tolak, tiada rekod (§18.37)', function () {
-    // $this->member ahli MAM sahaja; hantar ke sesi 'man'
+it('ahli MAM hantar kata kunci+dokumen ke sesi MAN → SENYAP, tiada rekod (isolasi §18.37)', function () {
+    // $this->member ahli MAM (60110000001) — pengguna berdaftar masjid LAIN. Walau intake
+    // awam dihidupkan, nombor berdaftar di tenant lain TIDAK boleh submit ke MAN → senyap.
     postWebhook(waPayload(['session' => 'man']))->assertOk();
 
     expect(Record::query()->count())->toBe(0);
-    $this->gateway->shouldHaveReceived('send')
-        ->withArgs(fn ($session, $to, $message) => $session === 'man'
-            && str_contains($message, 'tidak berdaftar sebagai ahli'));
+    $this->gateway->shouldNotHaveReceived('send');
 });
