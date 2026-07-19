@@ -167,7 +167,52 @@ class WhatsAppInboundService
 
     protected function reply(Mosque $mosque, ?string $session, ?string $to, string $message, ?int $userId, string $type): void
     {
+        if ($this->replySuppressed($session, $to, $type)) {
+            Log::warning('[WA] balasan auto digugurkan (had kadar per nombor) session='.$session.' to='.$to.' type='.$type);
+
+            return;
+        }
+
         $this->gateway->send((string) $session, (string) $to, $message, $mosque->id, $userId, $type);
+    }
+
+    /**
+     * §11.1 — Had kadar balasan auto untuk elak gelung ping-pong / spam ke nombor asing.
+     * (1) Balasan penolakan/ralat (wa_reject/wa_quota) dihantar SEKALI sahaja per nombor
+     *     setiap tetingkap cooldown — punca gelung yang disahkan (auto-reply pihak lain).
+     * (2) Pemutus litar sejagat: JUMLAH balasan per nombor dihadkan dalam tetingkap pendek
+     *     — melindungi juga jenis balasan lain daripada sebarang gelung tak dijangka.
+     */
+    protected function replySuppressed(?string $session, ?string $to, string $type): bool
+    {
+        if ($to === null || trim($to) === '') {
+            return true; // tiada penerima sah — jangan hantar
+        }
+
+        $sid = (string) $session;
+
+        // (1) Cooldown balasan penolakan/ralat.
+        if (in_array($type, ['wa_reject', 'wa_quota'], true)) {
+            $cooldown = (int) config('diwan.whatsapp.reject_cooldown_minutes', 60);
+            if ($cooldown > 0
+                && ! Cache::add('wa_reject_cd:'.hash('sha256', $sid.'|'.$to.'|'.$type), 1, now()->addMinutes($cooldown))) {
+                return true;
+            }
+        }
+
+        // (2) Pemutus litar sejagat per nombor.
+        $cap = (int) config('diwan.whatsapp.reply_cap', 5);
+        $window = (int) config('diwan.whatsapp.reply_cap_window_minutes', 10);
+        if ($cap > 0 && $window > 0) {
+            $capKey = 'wa_reply_cap:'.hash('sha256', $sid.'|'.$to);
+            $count = (int) Cache::get($capKey, 0);
+            if ($count >= $cap) {
+                return true;
+            }
+            Cache::put($capKey, $count + 1, now()->addMinutes($window));
+        }
+
+        return false;
     }
 
     protected function notifyInboxHolders(Mosque $mosque): void

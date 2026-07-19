@@ -52,6 +52,12 @@ return [
         'webhook_url' => env('WHATSAPP_WEBHOOK_URL', rtrim((string) env('APP_URL'), '/').'/api/webhooks/whatsapp'),
         'default_keyword' => 'spdm',                      // lalai kata kunci intake
         'timeout' => 8,                                   // saat (§11.1)
+        // §11.1 — Had kadar balasan auto WhatsApp (elak gelung/spam ke nombor asing).
+        // Balasan penolakan/ralat (wa_reject/wa_quota) dihadkan sekali per nombor setiap
+        // tetingkap ini; pemutus litar sejagat menghadkan JUMLAH balasan per nombor.
+        'reject_cooldown_minutes' => (int) env('WHATSAPP_REJECT_COOLDOWN_MINUTES', 60),
+        'reply_cap' => (int) env('WHATSAPP_REPLY_CAP', 5),
+        'reply_cap_window_minutes' => (int) env('WHATSAPP_REPLY_CAP_WINDOW_MINUTES', 10),
     ],
 
     // Ingest e-mel pengimbas (§11.3).

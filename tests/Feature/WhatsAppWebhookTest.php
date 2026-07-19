@@ -94,6 +94,28 @@ it('sesi tidak dikenali → 200 + tiada rekod', function () {
     expect(Record::query()->count())->toBe(0);
 });
 
+it('menghadkan balasan tolak berulang kepada nombor bukan-ahli (elak gelung spam §11.1)', function () {
+    $asing = '60174632511'; // bukan ahli — mensimulasikan auto-reply/pengirim berulang
+
+    for ($i = 0; $i < 6; $i++) {
+        postWebhook(waPayload([
+            'from' => $asing,
+            'message_id' => 'ASING'.$i,     // message_id unik → elak dedup idempotensi
+            'media_base64' => null,          // mesej teks: pemeriksa bukan-ahli sebelum media
+            'type' => 'text',
+            'caption' => 'helo',
+        ]))->assertOk();
+    }
+
+    // Walau 6 mesej diterima, HANYA satu balasan wa_reject dihantar ke nombor itu
+    // (selebihnya digugurkan oleh cooldown) — gelung ping-pong diputuskan.
+    $this->gateway->shouldHaveReceived('send')
+        ->withArgs(fn ($session, $to, $message, $mosqueId, $userId, $type) => $to === $asing && $type === 'wa_reject')
+        ->once();
+
+    expect(Record::query()->count())->toBe(0);
+});
+
 it('penghantar BUKAN ahli masjid sesi itu → balasan tolak, tiada rekod', function () {
     postWebhook(waPayload(['from' => '60199999999']))->assertOk();
 
