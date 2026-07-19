@@ -135,3 +135,60 @@ Pest **257 passed / 1 skip**; Pint passed; `npm run build` OK; **CI GitHub HIJAU
 Produksi (commit `4fcb000`): imej rebuild, `staging-check` **9/9** (imap+smtp),
 `diwan:smoke` **9/9**, `/up` 200, tema+logo termuat. **Emel MAMAD dipulihkan**:
 4 emel ujian diproses semula → 2 rekod E-mel dalam Peti Masuk (baki dedup).
+
+---
+
+# NOTA VERIFIKASI — Review Codex + E2E Produksi (19 Julai 2026, commit `86264e9`)
+
+> Bukan pindaan spec; rekod semakan bebas ke atas dua commit audit Codex
+> (`ff5f844` harden workflows+UI, `ae95d6e` nginx limits) yang sudah LIVE.
+
+## Skop
+Review A-Z (butang-ke-butang, isolasi tenant, keselamatan, workflow dokumen, UI)
+terhadap kod sebenar + E2E langsung di produksi (Chrome MCP) + SSH server.
+
+## Keputusan
+- **12/12 kategori dakwaan Codex disahkan SAH** dalam kod: modal klasifikasi + edaran
+  minit (§9.C.5/§14), ganti versi semak format/kuota (§9.C.4), eksport ZIP recheck role
+  + `visibleTo` (§16.4), download policy tiada auto-requester, privasi notifikasi
+  approval/minit (§14), batal pesanan storan superadmin+kata laluan+audit (§10.J),
+  filter carian tenant-safe (§13), webhook WA fail-closed rahsia kosong (§11.1),
+  header keselamatan global + Horizon gate superadmin (§0.3), nginx rate-limit,
+  homepage/dashboard, label BM retensi.
+- **Penemuan tunggal (F-1):** `RetentionRuleForm.php` (Schemas) ialah **dead code**
+  (sifar rujukan) — Codex mengeraskannya tetapi borang HIDUP ialah
+  `RetentionRuleResource::form()` inline yang tidak mendedah `mosque_id`, dilindungi
+  `getEloquentQuery()` skop tenant + `CreateRetentionRule::mutateFormDataBeforeCreate`.
+  Retensi sudah tenant-safe. **Tindakan:** tambah guard eksplisit
+  `EditRetentionRule::mutateFormDataBeforeSave` (paksa `mosque_id` = tenant semasa) +
+  `RetentionTenantScopeTest` (cross-tenant edit → 404; simpan tamper-safe). §15.2.
+- **F-3 (nota, bukan pepijat):** had nginx `~ ^/(app|admin)/login` hanya lindungi GET
+  halaman login; percubaan log masuk sebenar (Livewire `/livewire/update`) dilindungi
+  limiter aplikasi `DIWAN_LOGIN_RATE_LIMIT` + had global nginx 10r/s (burst 40, conn 40).
+- **Nota kosmetik:** `x-frame-options`/`x-content-type-options`/`referrer-policy` dihantar
+  DUA kali (nginx `add_header` + middleware `AddSecurityHeaders`) — benign (nilai sama).
+
+## Bukti
+Pint bersih · Pest **271 passed / 1 skip** (269 + 2 ujian tenant retensi) · **CI GitHub
+HIJAU** (`86264e9`: integration + docker app + docker web) · Playwright **5/5**
+(office-workflow termasuk ujian klasifikasi-minit Codex, registration, explore +
+cross-tenant 404). 🐛 Kegagalan Playwright "klasifikasi-minit" pada mulanya = **server
+`php artisan serve` hantu** (dua proses bind :8092 dari sesi lalu → Windows edar request
+rambang → jadual peti masuk kosong); membunuh server basi → LULUS. (Punca sama untuk
+"flake explore 9-peranan" yang direkod dahulu.)
+
+## E2E Chrome produksi (tenant `smoke`, login magic-link server — tiada kata laluan ditaip)
+- **Superadmin**: dashboard (widget Kesihatan Saluran + Ringkasan Platform ikon/warna),
+  Tenant/Organisasi, Akaun Pengguna, Pesanan Storan + **modal Batal (Sebab + Sahkan Kata
+  Laluan)**, Tetapan Platform + **Telegram (@spdmediwanbot, webhook Berjaya)**, Status
+  Sambungan (F5), Profil (Telegram Bersambung, 3 saluran ON) — semua render + berfungsi.
+- **Workflow tenant LIVE**: kerani klasifikasi rekod (modal memuat SEMUA medan — Jenis,
+  Arah, Ruj Kami/Tuan, u.p., Failkan Ke, Tahap Akses + helper max-waris, dan **Edaran
+  Minit**: Untuk Tindakan, Untuk Makluman s.k., Catatan/Arahan, Keutamaan) + minit Segera
+  → **pengerusi terima di Minit Saya → Tanda Selesai → Selesai**. Kelulusan terbukti
+  `diwan:smoke` 9/9.
+- **Isolasi tenant (§15.2)**: pengerusi-smoke → `/app/mamad/*` = **404**.
+
+## Deploy
+`local = origin = server = 86264e9`; `/up` 200; `diwan:smoke` **9/9**;
+`diwan:staging-check` 8/9 (smtp "GAGAL WAJIB" = perlu `--mail-to`, config tidak berubah).
