@@ -25,6 +25,19 @@ class WhatsAppInboundService
     /** @param array<string, mixed> $data */
     public function handle(array $data): void
     {
+        // === LOG DIAGNOSTIK SEMENTARA (siasatan spam WA — buang selepas root cause disahkan) ===
+        Log::info('[WA webhook RAW] keys=['.implode(',', array_keys($data)).']'
+            .' from='.json_encode($data['from_phone'] ?? $data['from'] ?? null)
+            .' from_me='.json_encode($data['from_me'] ?? '(tiada)')
+            .' fromMe='.json_encode($data['fromMe'] ?? '(tiada)')
+            .' isFromMe='.json_encode($data['isFromMe'] ?? '(tiada)')
+            .' message_id='.json_encode($data['message_id'] ?? $data['id'] ?? '(tiada)')
+            .' session='.json_encode($data['session_id'] ?? $data['session'] ?? null)
+            .' type='.json_encode($data['type'] ?? '(tiada)')
+            .' is_group='.json_encode($data['is_group'] ?? '(tiada)')
+            .' has_media='.json_encode(isset($data['media']) || isset($data['media_base64'])));
+        // === TAMAT LOG DIAGNOSTIK SEMENTARA ===
+
         if (($data['from_me'] ?? false) || ($data['is_group'] ?? false)) {
             return;
         }
