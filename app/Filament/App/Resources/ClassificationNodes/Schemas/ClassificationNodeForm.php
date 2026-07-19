@@ -17,10 +17,12 @@ class ClassificationNodeForm
         return $schema
             ->components([
                 // §15.2 — Select relationship DISKOP tenant secara eksplisit.
+                // Nota Filament v4: skop query MESTI dihantar sebagai argumen ke-3
+                // relationship() (modifyQueryUsing) — TIADA method berantai ->modifyQueryUsing()
+                // pada Select (BadMethodCallException). Global scope BelongsToMosque juga aktif.
                 Select::make('parent_id')
                     ->label('Nod Induk')
-                    ->relationship('parent', 'title')
-                    ->modifyQueryUsing(fn ($query) => $query->where('mosque_id', Filament::getTenant()?->id))
+                    ->relationship('parent', 'title', fn ($query) => $query->where('mosque_id', Filament::getTenant()?->id))
                     ->searchable()
                     ->disabled(fn (?ClassificationNode $record) => $record?->isUsed() ?? false)
                     ->nullable(),
