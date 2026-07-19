@@ -243,3 +243,56 @@ sendiri tidak mengandungi kata kunci → echo takkan mencetus → **gelung musta
 mod ahli-sahaja; §18.37 senyap; dua-langkah; kapsyen-kata-kunci). Pest **273 lulus/1 skip**;
 Pint bersih; **CI HIJAU**. **Ujian LIVE server:** `handle()` dengan mesej bukan-kata-kunci →
 `NotificationLog` tidak bertambah = **SENYAP disahkan** di produksi.
+
+---
+
+# GATE GO-LIVE + FIX BORANG KLASIFIKASI (19 Julai 2026, fix `268f860`)
+
+> Rekod menjalankan 3 gate go-live baki (arahan pemilik) pada server SEBENAR + satu
+> pepijat produksi ditemui melalui gate pantau-log, dibaiki, di-deploy & disahkan live.
+
+## Gate 1 — Isolasi silang-tenant (data produksi, tenant mamad id1 vs smoke id2)
+Skrip tinker terhadap DB produksi:
+- **Skop data `forMosque()`** 6 model (Record 8/4, RegistryFile 1/3, ClassificationNode 40/40,
+  Minit 2/4, Approval 0/3, StorageOrder 1/1) — **sifar baris bocor**.
+- **Global scope Filament** (login Admin MAMAD, tenant MAMAD aktif): `Record::count()=8`
+  (MAMAD sahaja), `RegistryFile::count()=1`; rekod/fail smoke `whereKey()->exists()`=false,
+  `find()`=NULL. Membuktikan laluan HTTP sebenar terlindung.
+- **Polisi `RecordPolicy::view`**: ahli B tak boleh view rekod A & sebaliknya (`canIn($record->mosque)`).
+- **SearchService fail-closed**: `for(ahli B, tenant A)`=kosong (bukan ahli), sebaliknya sama.
+- **Sesi WA + alias e-mel** terasing (`sess_…` MAMAD vs kosong smoke; scan+mamad@ vs scan+smoke@).
+- **RetentionRule**: sengaja TIADA `forMosque` (perlu lihat peraturan platform `mosque_id=NULL`,
+  §5.11) — 18 peraturan platform dikongsi; isolasi di lapisan resource/`getEloquentQuery` +
+  guard `EditRetentionRule` (RetentionTenantScopeTest). **Keputusan: SEMUA LULUS.**
+
+## Gate 2 — Restore drill backup
+`backup:run --only-db` → zip 37KB → disk `cos_backup` (COS ap-jakarta). Tarik balik zip dari
+COS (round-trip) + unzip → `db-dumps/postgresql-diwan.sql` **216,547 bytes, 32 CREATE TABLE +
+32 COPY**, semua jadual utama (mosques/records/users/minits/approvals/registry_files/
+classification_nodes) hadir = **dump sah & boleh dipulihkan**. Backup harian `02:30` (scheduler).
+
+## Gate 3 — Pantau log → BUG DITEMUI + DIBAIKI
+Log live 3 jam: **0 ralat app, 0 nginx 5xx, 0 failed_jobs**. `laravel.log` mendedah pepijat:
+`Filament\Forms\Components\Select::modifyQueryUsing does not exist` (BadMethodCallException,
+userId 1, 12:20) → borang **Cipta/Edit Nod Klasifikasi CRASH** pada render.
+- **Punca:** `ClassificationNodeForm` guna `->relationship('parent','title')->modifyQueryUsing(...)`
+  sebagai method BERANTAI pada Select — tidak wujud dalam Filament v4 (tandatangan sah:
+  `relationship($name, $titleAttribute, ?Closure $modifyQueryUsing, ...)`, Select.php:781).
+- **Fix (`268f860`):** hantar closure skop tenant sebagai **argumen ke-3** `relationship()`.
+  Global scope `BelongsToMosque` juga aktif; skop eksplisit dikekalkan (peraturan #10 / §15.2).
+- **Ujian regresi** `ClassificationNodeFormTest` (4): borang Cipta/Edit render tanpa ralat +
+  cipta nod induk sendiri berjaya + nod induk masjid lain ditolak (skop tenant kekal).
+- **Disahkan LIVE (Chrome, tenant smoke):** borang render penuh; dropdown "Nod Induk" muat
+  nod skop-tenant (Aktiviti & Program, Audit & Pemeriksaan, Bajet & Penyata…).
+
+## Nota ops
+- Config `monitor_backups.disks` diperbetul `['local']` → `[env('BACKUP_DISK','cos_backup')]`
+  supaya `backup:list`/`backup:monitor` menyemak disk destinasi SEBENAR (dulu lapor "tiada
+  backup" palsu). `backup:monitor` belum dijadualkan — hanya `backup:run` (02:30).
+- **OCR 6/13 rekod produksi `ocr_status=gagal`** (ralat "Couldn't find trailer dictionary/xref
+  table" = PDF input rosak/terpotong pada fail ujian pilot). OCR gagal-anggun pada PDF rosak =
+  betul; **perlu semakan pemilik dengan dokumen sebenar** untuk sahkan bukan isu format meluas.
+
+## Bukti
+Pest **277 passed / 1 skip** (931 assertions); Pint bersih; deploy rebuild imej app;
+`/up` 200; 7 container healthy; isolasi + restore + render borang disahkan pada produksi.

@@ -303,7 +303,10 @@ return [
     'monitor_backups' => [
         [
             'name' => env('APP_NAME', 'laravel-backup'),
-            'disks' => ['local'],
+            // §4.6 — pantau disk destinasi SEBENAR (cos_backup), bukan 'local'.
+            // Kalau tidak backup:list/backup:monitor sentiasa lapor "tiada backup" palsu
+            // sedangkan backup betul-betul mendarat di cos_backup (ap-jakarta).
+            'disks' => [env('BACKUP_DISK', 'cos_backup')],
             'health_checks' => [
                 MaximumAgeInDays::class => 1,
                 MaximumStorageInMegabytes::class => 5000,
