@@ -1,6 +1,8 @@
 <?php
 
 use App\Jobs\FailureProbeJob;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 it('healthcheck dalaman mengesahkan DB dan cache', function () {
     $this->artisan('diwan:health')->expectsOutput('OK')->assertSuccessful();
@@ -27,9 +29,30 @@ it('Horizon mengasingkan queue umum OCR dan eksport', function () {
         ->and(config('horizon.defaults.exports.timeout'))->toBeGreaterThan(1800);
 });
 
+it('Horizon dashboard hanya dibenarkan kepada superadmin', function () {
+    $superadmin = User::query()->create([
+        'name' => 'Superadmin',
+        'email' => 'super-horizon@ujian.test',
+        'password' => bcrypt('secret'),
+        'is_superadmin' => true,
+        'is_active' => true,
+    ]);
+    $user = User::query()->create([
+        'name' => 'Pengguna',
+        'email' => 'pengguna-horizon@ujian.test',
+        'password' => bcrypt('secret'),
+        'is_active' => true,
+    ]);
+
+    expect(Gate::forUser($superadmin)->allows('viewHorizon'))->toBeTrue()
+        ->and(Gate::forUser($user)->allows('viewHorizon'))->toBeFalse();
+});
+
 it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', function () {
     $dockerfile = file_get_contents(base_path('docker/Dockerfile'));
     $compose = file_get_contents(base_path('docker-compose.yml'));
+    $nginx = file_get_contents(base_path('docker/nginx.conf'));
+    $envExample = file_get_contents(base_path('.env.example'));
 
     expect($dockerfile)->toContain('npm ci --no-audit --no-fund')
         ->and($dockerfile)->toContain('FROM php:8.4-fpm-bookworm AS runtime')
@@ -44,6 +67,10 @@ it('Docker production membina vendor asset dan berjalan tanpa bind mount kod', f
         ->and($dockerfile)->toContain('HEALTHCHECK')
         ->and($compose)->not->toContain('./:/var/www/html')
         ->and($compose)->toContain('condition: service_healthy')
+        ->and($nginx)->toContain('limit_req_zone $binary_remote_addr zone=diwan_per_ip')
+        ->and($nginx)->toContain('limit_req_zone $binary_remote_addr zone=diwan_auth')
+        ->and($nginx)->toContain('limit_conn_zone $binary_remote_addr zone=diwan_conn')
+        ->and($envExample)->toContain('SESSION_ENCRYPT=true')
         ->and(file_exists(base_path('package-lock.json')))->toBeTrue();
 });
 

@@ -15,7 +15,13 @@ class WhatsAppWebhookController extends Controller
         // (1) HMAC-SHA256 wajib.
         $raw = $request->getContent();
         $signature = $request->header('X-Signature') ?: $request->header('X-Diwan-Signature');
-        $expected = hash_hmac('sha256', $raw, (string) config('diwan.whatsapp.webhook_secret'));
+        $secret = (string) config('diwan.whatsapp.webhook_secret');
+
+        if ($secret === '') {
+            return response()->json([], 401);
+        }
+
+        $expected = hash_hmac('sha256', $raw, $secret);
         $provided = str_starts_with((string) $signature, 'sha256=')
             ? substr((string) $signature, 7)
             : (string) $signature;

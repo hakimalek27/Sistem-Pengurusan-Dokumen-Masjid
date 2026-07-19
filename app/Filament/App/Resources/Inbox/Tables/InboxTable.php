@@ -2,12 +2,15 @@
 
 namespace App\Filament\App\Resources\Inbox\Tables;
 
+use App\Enums\MinitPriority;
 use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
 use App\Filament\App\Support\RecordTypeSchema;
 use App\Models\ClassificationNode;
+use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Services\InboxIngestService;
+use App\Services\MinitService;
 use App\Services\RecordNumberingService;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
@@ -21,6 +24,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InboxTable
 {
@@ -51,7 +55,7 @@ class InboxTable
                     ->tooltip('Amaran: sha256 sama wujud pada rekod lain masjid ini'),
             ])
             ->recordActions([
-                ViewAction::make()->label('Lihat / OCR'),
+                ViewAction::make()->label('Lihat Dokumen / OCR'),
                 self::classifyAction(),
                 self::deleteSpamAction(),
             ]);
@@ -92,6 +96,7 @@ class InboxTable
                         ->get()
                         ->mapWithKeys(fn ($f) => [$f->id => "{$f->file_no} — {$f->title}"]))
                     ->searchable()
+                    ->live()
                     ->required()
                     ->createOptionForm([
                         Select::make('classification_node_id')
@@ -116,10 +121,33 @@ class InboxTable
                             ->openFile(Filament::getTenant(), $node, $data['title'], Auth::id())->id;
                     }),
                 Select::make('sensitivity')
-                    ->label('Sensitiviti (lalai = max waris fail)')
+                    ->label('Tahap Akses Rekod')
                     ->options(collect(Sensitivity::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()]))
                     ->default('dalaman')
+                    ->helperText('Tahap akhir mengikut nilai tertinggi antara pilihan ini dan sensitiviti fail.')
+                    ->live()
                     ->required(),
+                Section::make('Edaran Minit Selepas Failkan')
+                    ->schema([
+                        Select::make('minit_action_ids')
+                            ->label('Untuk Tindakan (Minit)')
+                            ->multiple()
+                            ->options(fn (Get $get) => self::memberOptions($get))
+                            ->searchable(),
+                        Select::make('minit_cc_ids')
+                            ->label('Untuk Makluman (s.k.)')
+                            ->multiple()
+                            ->options(fn (Get $get) => self::memberOptions($get))
+                            ->searchable(),
+                        Textarea::make('minit_body')
+                            ->label('Catatan / Arahan Minit')
+                            ->required(fn (Get $get): bool => filled($get('minit_action_ids'))),
+                        Select::make('minit_priority')
+                            ->label('Keutamaan Minit')
+                            ->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])
+                            ->default('biasa'),
+                    ])
+                    ->columns(2),
             ])
             ->action(function ($record, array $data) {
                 $file = RegistryFile::query()
@@ -133,20 +161,75 @@ class InboxTable
                 $core['record_type'] = $data['record_type'];
                 $core['metadata'] = $data['metadata'] ?? [];
 
-                $filed = app(InboxIngestService::class)->fileRecord(
-                    $record,
-                    $file,
-                    $core,
-                    Auth::user(),
-                    Sensitivity::from($data['sensitivity']),
-                );
+                $minitActionIds = collect($data['minit_action_ids'] ?? [])->filter()->values()->all();
+                $minitCcIds = collect($data['minit_cc_ids'] ?? [])->filter()->values()->all();
+
+                $filed = DB::transaction(function () use ($record, $file, $core, $data, $minitActionIds, $minitCcIds) {
+                    $filed = app(InboxIngestService::class)->fileRecord(
+                        $record,
+                        $file,
+                        $core,
+                        Auth::user(),
+                        Sensitivity::from($data['sensitivity']),
+                    );
+
+                    if ($minitActionIds !== []) {
+                        app(MinitService::class)->create(
+                            $filed,
+                            Auth::user(),
+                            $minitActionIds,
+                            $minitCcIds,
+                            (string) ($data['minit_body'] ?? ''),
+                            MinitPriority::from($data['minit_priority'] ?? 'biasa'),
+                        );
+                    }
+
+                    return $filed;
+                });
 
                 Notification::make()
                     ->title('Difailkan sebagai '.$filed->registryFile->file_no.'('.$filed->enclosure_no.')')
-                    ->body('Mahu edarkan minit sekarang? Buka rekod dan pilih “Edarkan Minit”.')
+                    ->body($minitActionIds === []
+                        ? 'Rekod difailkan. Minit boleh diedarkan dari halaman rekod.'
+                        : 'Rekod difailkan dan minit tindakan telah dihantar.')
                     ->success()
                     ->send();
             });
+    }
+
+    protected static function memberOptions(Get $get): array
+    {
+        $tenant = Filament::getTenant();
+        if (! $tenant) {
+            return [];
+        }
+
+        $file = filled($get('registry_file_id'))
+            ? RegistryFile::query()
+                ->where('mosque_id', $tenant->id)
+                ->with('classificationNode')
+                ->find($get('registry_file_id'))
+            : null;
+        $chosen = Sensitivity::tryFrom((string) ($get('sensitivity') ?: 'dalaman')) ?? Sensitivity::Dalaman;
+        $effective = $file ? Sensitivity::max($chosen, $file->sensitivity ?? Sensitivity::Dalaman) : $chosen;
+
+        $preview = new Record([
+            'mosque_id' => $tenant->id,
+            'registry_file_id' => $file?->id,
+            'sensitivity' => $effective,
+        ]);
+        $preview->setRelation('mosque', $tenant);
+        if ($file) {
+            $preview->setRelation('registryFile', $file);
+        }
+
+        return $tenant->users()
+            ->where('users.is_active', true)
+            ->orderBy('name')
+            ->get()
+            ->filter(fn ($user) => $user->can('view', $preview))
+            ->pluck('name', 'id')
+            ->toArray() ?? [];
     }
 
     protected static function deleteSpamAction(): Action

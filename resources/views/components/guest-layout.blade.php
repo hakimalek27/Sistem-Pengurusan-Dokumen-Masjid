@@ -7,34 +7,84 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Diwan — Sistem Pengurusan Dokumen Masjid' }}</title>
     <style>
-        :root { --hijau:#047857; --hijau-t:#065f46; --abu:#6b7280; --bg:#f3f4f6; }
+        :root {
+            --hijau:#047857;
+            --hijau-t:#065f46;
+            --dakwat:#17211d;
+            --abu:#64706b;
+            --garis:#dbe5df;
+            --bg:#f6f8f6;
+            --panel:#ffffff;
+        }
         * { box-sizing:border-box; }
-        body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:#111827; line-height:1.5; }
-        .wrap { max-width:560px; margin:0 auto; padding:2rem 1rem; }
-        .brand { text-align:center; margin-bottom:1.5rem; }
-        .brand h1 { color:var(--hijau); font-size:1.75rem; margin:.25rem 0; }
+        body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--dakwat); line-height:1.5; }
+        .wrap { width:min(1040px, 100%); margin:0 auto; padding:2rem 1rem; }
+        .brand { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.5rem; }
+        .brand-mark { min-width:0; }
+        .brand h1 { color:var(--hijau); font-size:1.6rem; margin:.25rem 0; letter-spacing:0; }
         .brand p { color:var(--abu); margin:0; }
-        .card { background:#fff; border-radius:.75rem; box-shadow:0 1px 3px rgba(0,0,0,.1); padding:1.5rem; }
+        .brand-actions { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:flex-end; }
+        .brand-actions a { border:1px solid var(--garis); border-radius:.5rem; color:var(--dakwat); padding:.45rem .7rem; text-decoration:none; font-size:.9rem; font-weight:650; background:#fff; }
+        .brand-actions a:hover { border-color:var(--hijau); color:var(--hijau); }
+        .card { background:var(--panel); border:1px solid var(--garis); border-radius:.5rem; box-shadow:0 10px 30px rgba(23,33,29,.06); padding:1.5rem; max-width:560px; margin:0 auto; }
         h2 { margin-top:0; font-size:1.25rem; }
-        label { display:block; font-weight:600; font-size:.9rem; margin:.75rem 0 .25rem; }
-        input[type=text], input[type=email], select { width:100%; padding:.55rem .7rem; border:1px solid #d1d5db; border-radius:.5rem; font-size:1rem; }
+        label { display:block; font-weight:650; font-size:.9rem; margin:.75rem 0 .25rem; }
+        input[type=text], input[type=email], select { width:100%; padding:.62rem .75rem; border:1px solid #cfd9d3; border-radius:.45rem; font-size:1rem; background:#fff; }
+        input:focus, select:focus { outline:2px solid rgba(4,120,87,.18); border-color:var(--hijau); }
         .check { display:flex; gap:.5rem; align-items:flex-start; margin:.75rem 0; font-weight:400; font-size:.9rem; }
         .check input { margin-top:.2rem; }
-        .btn { display:inline-block; width:100%; text-align:center; background:var(--hijau); color:#fff; border:0; border-radius:.5rem; padding:.7rem 1rem; font-size:1rem; font-weight:600; cursor:pointer; text-decoration:none; }
+        .btn { display:inline-block; width:100%; text-align:center; background:var(--hijau); color:#fff; border:0; border-radius:.45rem; padding:.72rem 1rem; font-size:1rem; font-weight:700; cursor:pointer; text-decoration:none; }
         .btn:hover { background:var(--hijau-t); }
         .btn-ghost { background:transparent; color:var(--hijau); border:1px solid var(--hijau); }
         .err { color:#b91c1c; font-size:.85rem; margin-top:.25rem; }
         .ok { background:#ecfdf5; border:1px solid #a7f3d0; color:var(--hijau-t); padding:1rem; border-radius:.5rem; }
         .muted { color:var(--abu); font-size:.85rem; text-align:center; margin-top:1rem; }
         a { color:var(--hijau); }
+        .home-shell { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr); gap:1.25rem; align-items:stretch; }
+        .home-hero { min-height:430px; border-radius:.5rem; overflow:hidden; border:1px solid var(--garis); background:
+            linear-gradient(rgba(8,28,22,.74), rgba(8,28,22,.62)),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800' viewBox='0 0 1200 800'%3E%3Crect width='1200' height='800' fill='%23dfe8e2'/%3E%3Cpath d='M0 590h1200v210H0z' fill='%23f4f0e7'/%3E%3Cpath d='M120 570h960v40H120z' fill='%238b7d68'/%3E%3Cpath d='M210 300h780v270H210z' fill='%23ffffff'/%3E%3Cpath d='M240 330h210v210H240zM495 330h210v210H495zM750 330h210v210H750z' fill='%23e8efe9'/%3E%3Cpath d='M520 300c0-74 160-74 160 0z' fill='%23047857'/%3E%3Cpath d='M190 300h820v24H190z' fill='%23065f46'/%3E%3Cpath d='M160 245h880v55H160z' fill='%23fbfbf8'/%3E%3Cpath d='M280 245c70-110 570-110 640 0z' fill='%23fbfbf8'/%3E%3Cpath d='M600 115v100' stroke='%23047857' stroke-width='14' stroke-linecap='round'/%3E%3Cpath d='M570 145h60' stroke='%23047857' stroke-width='12' stroke-linecap='round'/%3E%3C/svg%3E") center/cover;
+            color:#fff; display:flex; align-items:flex-end; }
+        .home-hero-inner { padding:2rem; max-width:640px; }
+        .home-eyebrow { margin:0 0 .5rem; font-size:.88rem; color:#cde9dc; font-weight:750; text-transform:uppercase; }
+        .home-title { margin:0; font-size:clamp(2.1rem, 7vw, 4.25rem); line-height:1.02; letter-spacing:0; }
+        .home-copy { margin:1rem 0 0; color:#eef8f2; max-width:39rem; font-size:1.05rem; }
+        .home-panel { display:grid; gap:1rem; }
+        .quick-card { background:#fff; border:1px solid var(--garis); border-radius:.5rem; padding:1.15rem; }
+        .quick-card h2, .quick-card h3 { margin:.1rem 0 .45rem; }
+        .quick-card p { margin:.25rem 0; color:var(--abu); }
+        .metric-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; }
+        .metric { border:1px solid var(--garis); border-radius:.45rem; padding:.8rem; background:#fbfdfb; }
+        .metric strong { display:block; font-size:1.05rem; }
+        .metric span { color:var(--abu); font-size:.82rem; }
+        .workflow-list { display:grid; gap:.55rem; margin-top:.65rem; }
+        .workflow-step { display:flex; gap:.6rem; align-items:flex-start; color:#33433c; }
+        .workflow-step b { display:grid; place-items:center; flex:0 0 1.55rem; height:1.55rem; border-radius:999px; background:#e7f5ed; color:var(--hijau); font-size:.8rem; }
+        .footer-note { text-align:center; color:var(--abu); font-size:.82rem; margin:1.5rem 0 0; }
+        @media (max-width: 760px) {
+            .wrap { padding:1rem; }
+            .brand { align-items:flex-start; flex-direction:column; }
+            .brand-actions { justify-content:flex-start; width:100%; }
+            .home-shell { grid-template-columns:1fr; }
+            .home-hero { min-height:360px; }
+            .home-hero-inner { padding:1.25rem; }
+            .metric-grid { grid-template-columns:1fr; }
+        }
     </style>
     @livewireStyles
 </head>
 <body>
     <div class="wrap">
         <div class="brand">
-            <h1>ﺍﻟﺪﻳﻮﺍﻥ · Diwan</h1>
-            <p>Sistem Pengurusan Dokumen Masjid</p>
+            <div class="brand-mark">
+                <h1>ﺍﻟﺪﻳﻮﺍﻥ · Diwan</h1>
+                <p>Sistem Pengurusan Dokumen Masjid</p>
+            </div>
+            <nav class="brand-actions" aria-label="Navigasi utama">
+                <a href="{{ url('/') }}">Utama</a>
+                <a href="{{ url('/log-masuk') }}">Log Masuk</a>
+                <a href="{{ url('/daftar') }}">Daftar</a>
+            </nav>
         </div>
         {{ $slot }}
     </div>

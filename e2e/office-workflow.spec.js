@@ -12,16 +12,44 @@ async function login(browser, baseURL, email) {
 }
 
 async function submitVisibleAction(page) {
-    const submit = page.getByRole('dialog').getByRole('button', { name: /^(Hantar|Sahkan)$/ }).last();
+    const submit = page.getByRole('dialog').getByRole('button', { name: /^(Hantar|Sahkan|Klasifikasikan)$/ }).last();
     await expect(submit).toBeEnabled();
     await submit.click();
 }
 
-async function selectFilamentOption(page, index, label) {
+async function selectFilamentOption(page, index, label, exact = true) {
     const dialog = page.getByRole('dialog');
     await dialog.getByRole('button', { name: 'Pilih satu pilihan' }).nth(index).click();
-    await page.getByRole('option', { name: label, exact: true }).click();
+    await page.getByRole('option', { name: label, exact }).filter({ visible: true }).click();
 }
+
+test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browser, baseURL }) => {
+    const marker = Date.now();
+    const instruction = `Minit dari klasifikasi E2E ${marker}`;
+    const keraniSession = await login(browser, baseURL, 'kerani@demo.test');
+    const kerani = keraniSession.page;
+
+    await kerani.goto('/app/mam/peti-masuk');
+    const inboxRow = kerani.locator('tr').filter({ hasText: 'Dokumen baharu dalam peti masuk' }).first();
+    await expect(inboxRow).toBeVisible();
+    await inboxRow.getByRole('button', { name: 'Klasifikasikan' }).click();
+
+    await kerani.getByRole('dialog').getByLabel('Arah*', { exact: true }).selectOption('masuk');
+    await selectFilamentOption(kerani, 0, /MAM\.100-4\/1.*Surat-Menyurat Am 2026/, false);
+    await kerani.getByRole('dialog').getByLabel('Tahap Akses Rekod*', { exact: true }).selectOption('dalaman');
+    await selectFilamentOption(kerani, 0, 'Pengerusi (MAM)');
+    await kerani.getByRole('dialog').getByLabel('Catatan / Arahan Minit').fill(instruction);
+    await submitVisibleAction(kerani);
+
+    await expect(kerani.getByText('Rekod difailkan dan minit tindakan telah dihantar.')).toBeVisible({ timeout: 60_000 });
+    await keraniSession.context.close();
+
+    const pengerusiSession = await login(browser, baseURL, 'pengerusi@demo.test');
+    const pengerusi = pengerusiSession.page;
+    await pengerusi.goto('/app/mam/minit-saya');
+    await expect(pengerusi.locator('tr').filter({ hasText: instruction })).toBeVisible();
+    await pengerusiSession.context.close();
+});
 
 test('minit, maklum balas, susulan dan kelulusan pejabat melalui UI', async ({ browser, baseURL }) => {
     const marker = Date.now();

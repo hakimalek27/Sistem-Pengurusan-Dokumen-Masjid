@@ -32,22 +32,38 @@ class TenantStatsOverview extends StatsOverviewWidget
         $quota = app(QuotaService::class);
 
         $stats = [
-            Stat::make('Rekod Boleh Dilihat', (clone $visible)->whereIn('status', ['difailkan', 'diganti'])->count()),
-            Stat::make('Minit Lewat Saya', $overdue)->color($overdue ? 'danger' : 'success'),
+            Stat::make('Rekod Boleh Dilihat', (clone $visible)->whereIn('status', ['difailkan', 'diganti'])->count())
+                ->description('Mengikut peranan dan sensitiviti')
+                ->descriptionIcon('heroicon-o-document-magnifying-glass')
+                ->color('info'),
+            Stat::make('Minit Lewat Saya', $overdue)
+                ->description($overdue ? 'Perlu tindakan segera' : 'Tiada minit lewat')
+                ->descriptionIcon('heroicon-o-clock')
+                ->color($overdue ? 'danger' : 'success'),
         ];
 
         if ($user->canIn($mosque, 'inbox.view')) {
             $inbox = Record::query()->where('status', 'peti_masuk')->count();
-            array_unshift($stats, Stat::make('Peti Masuk', $inbox)->description('Belum diklasifikasikan')->color($inbox ? 'warning' : 'success'));
+            array_unshift($stats, Stat::make('Peti Masuk', $inbox)
+                ->description('Belum diklasifikasikan')
+                ->descriptionIcon('heroicon-o-inbox-stack')
+                ->color($inbox ? 'warning' : 'success'));
         }
 
         if ($user->canIn($mosque, 'retention.manage') || $user->canIn($mosque, 'retention.hold')) {
-            $stats[] = Stat::make('Akan Luput ≤90 Hari', (clone $visible)->whereNotNull('retention_due_at')->whereDate('retention_due_at', '<=', now()->addDays(90))->count());
+            $expiring = (clone $visible)->whereNotNull('retention_due_at')->whereDate('retention_due_at', '<=', now()->addDays(90))->count();
+            $stats[] = Stat::make('Akan Luput ≤90 Hari', $expiring)
+                ->description($expiring ? 'Semak eksport atau pegangan' : 'Tiada rekod hampir luput')
+                ->descriptionIcon('heroicon-o-archive-box')
+                ->color($expiring ? 'warning' : 'success');
         }
 
         if ($user->canIn($mosque, 'usage.view')) {
-            $stats[] = Stat::make('Penggunaan Storan', number_format($quota->usagePercent($mosque), 1).'%')
-                ->description(round($mosque->storage_used_bytes / (1024 ** 3), 2).' GB digunakan');
+            $usage = $quota->usagePercent($mosque);
+            $stats[] = Stat::make('Penggunaan Storan', number_format($usage, 1).'%')
+                ->description(round($mosque->storage_used_bytes / (1024 ** 3), 2).' GB digunakan')
+                ->descriptionIcon('heroicon-o-server-stack')
+                ->color($usage >= 100 ? 'danger' : ($usage >= 80 ? 'warning' : 'success'));
         }
 
         return $stats;

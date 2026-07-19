@@ -43,6 +43,17 @@ it('tanda selesai: minit selesai hanya bila SEMUA penerima tindakan selesai', fu
     Notification::assertSentTo($this->from, MinitCompletedNotification::class);
 });
 
+it('tidak memaklumkan pengirim apabila pengirim sudah hilang akses rekod', function () {
+    $minit = $this->svc->create($this->record, $this->from, [$this->pengerusi->id, $this->nazir->id], [], 'X', MinitPriority::Biasa);
+    $this->mam->users()->detach($this->from->id);
+
+    Notification::fake();
+    $this->svc->markDone($minit, $this->pengerusi);
+    $this->svc->markDone($minit, $this->nazir);
+
+    Notification::assertNotSentTo($this->from, MinitCompletedNotification::class);
+});
+
 it('balas & edarkan mencipta minit anak dalam bebenang', function () {
     $parent = $this->svc->create($this->record, $this->from, [$this->pengerusi->id], [], 'Untuk perhatian', MinitPriority::Biasa);
 

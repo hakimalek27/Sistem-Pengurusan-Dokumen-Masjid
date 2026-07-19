@@ -80,6 +80,14 @@ it('menolak HMAC salah dengan 401 tanpa maklumat', function () {
     expect(Record::query()->count())->toBe(0);
 });
 
+it('fail-closed jika rahsia webhook WhatsApp belum dikonfigurasi', function () {
+    config()->set('diwan.whatsapp.webhook_secret', '');
+
+    postWebhook(waPayload(), secret: '')->assertStatus(401);
+
+    expect(Record::query()->count())->toBe(0);
+});
+
 it('sesi tidak dikenali → 200 + tiada rekod', function () {
     postWebhook(waPayload(['session' => 'tiada-sesi']))->assertOk();
 

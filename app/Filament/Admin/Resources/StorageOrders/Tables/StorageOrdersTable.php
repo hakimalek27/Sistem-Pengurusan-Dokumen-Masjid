@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\StorageOrders\Tables;
 use App\Enums\OrderStatus;
 use App\Services\BillingService;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
@@ -53,7 +54,20 @@ class StorageOrdersTable
                     ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                     ->visible(fn ($record) => $record->status === OrderStatus::MenungguBayaran)
                     ->requiresConfirmation()
-                    ->action(fn ($record) => $record->update(['status' => OrderStatus::Dibatalkan])),
+                    ->schema([
+                        Textarea::make('reason')->label('Sebab Pembatalan')->required(),
+                        TextInput::make('password')->label('Sahkan Kata Laluan')->password()->required(),
+                    ])
+                    ->action(function ($record, array $data) {
+                        if (! Auth::user()->password || ! Hash::check($data['password'], Auth::user()->password)) {
+                            Notification::make()->title('Kata laluan salah.')->danger()->send();
+
+                            throw new Halt;
+                        }
+
+                        app(BillingService::class)->cancelOrder($record, Auth::user(), $data['reason']);
+                        Notification::make()->title('Pesanan storan dibatalkan.')->success()->send();
+                    }),
             ]);
     }
 }

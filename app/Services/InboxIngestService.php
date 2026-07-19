@@ -199,6 +199,18 @@ class InboxIngestService
             throw ValidationException::withMessages(['record' => 'Hanya rekod yang telah difailkan boleh diganti versi.']);
         }
 
+        if (! AllowedFormats::allowsExtension(pathinfo($filename, PATHINFO_EXTENSION)) || ! AllowedFormats::allowsMime($mime)) {
+            throw ValidationException::withMessages(['file' => AllowedFormats::rejectionMessage()]);
+        }
+
+        if (strlen($contents) > ((int) config('diwan.max_upload_mb', 25) * 1024 * 1024)) {
+            throw ValidationException::withMessages(['file' => 'Saiz dokumen melebihi had '.config('diwan.max_upload_mb', 25).'MB.']);
+        }
+
+        if (app(QuotaService::class)->isFull($old->mosque()->firstOrFail())) {
+            throw ValidationException::withMessages(['file' => 'Kuota storan masjid penuh.']);
+        }
+
         return DB::transaction(function () use ($old, $contents, $filename, $mime, $user) {
             $sha256 = hash('sha256', $contents);
 

@@ -3,15 +3,24 @@
 use App\Enums\RecordStatus;
 use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
+use App\Filament\App\Resources\Inbox\Pages\ListInbox;
+use App\Models\Minit;
+use App\Notifications\MinitRoutedNotification;
 use App\Services\InboxIngestService;
+use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function () {
+    Notification::fake();
     Storage::fake(config('diwan.storage_disk'));
     $this->svc = app(InboxIngestService::class);
     $this->mam = makeMosque('MAM', 'mam');
     $this->kerani = makeMember($this->mam, 'kerani');
+    $this->pengerusi = makeMember($this->mam, 'pengerusi');
+    $this->su = makeMember($this->mam, 'setiausaha');
     $this->node = makeNode($this->mam, '200-2', 'sulit');
     $this->file = makeFile($this->mam, $this->node, 'sulit');
 });
@@ -44,6 +53,38 @@ it('enclosure_no berturutan untuk beberapa rekod dalam fail sama', function () {
     expect($f1->enclosure_no)->toBe(1)
         ->and($f2->enclosure_no)->toBe(2)
         ->and($this->file->fresh()->enclosure_count)->toBe(2);
+});
+
+it('modal klasifikasi boleh terus edarkan minit dan menghantar notifikasi', function () {
+    Filament::setCurrentPanel(Filament::getPanel('app'));
+    Filament::setTenant($this->mam, isQuiet: true);
+    $this->actingAs($this->kerani);
+
+    $record = $this->svc->ingest($this->mam, 'dokumen minit', 'surat.pdf', 'application/pdf', $this->kerani, SourceChannel::MuatNaik);
+
+    Livewire::test(ListInbox::class)
+        ->callTableAction('klasifikasi', $record, data: [
+            'record_type' => 'surat_menyurat',
+            'title' => 'Surat Arahan Program',
+            'direction' => 'masuk',
+            'record_date' => now()->toDateString(),
+            'registry_file_id' => $this->file->id,
+            'sensitivity' => 'dalaman',
+            'minit_action_ids' => [$this->pengerusi->id],
+            'minit_cc_ids' => [$this->su->id],
+            'minit_body' => 'Untuk perhatian dan arahan tuan.',
+            'minit_priority' => 'segera',
+        ]);
+
+    $filed = $record->fresh();
+
+    expect($filed->status)->toBe(RecordStatus::Difailkan)
+        ->and(Minit::query()->where('record_id', $filed->id)->count())->toBe(1);
+
+    Notification::assertSentTo($this->pengerusi, MinitRoutedNotification::class);
+    Notification::assertSentTo($this->su, MinitRoutedNotification::class);
+
+    Filament::setTenant(null, isQuiet: true);
 });
 
 it('pindah fail merekod audit & memperuntuk enclosure baharu', function () {

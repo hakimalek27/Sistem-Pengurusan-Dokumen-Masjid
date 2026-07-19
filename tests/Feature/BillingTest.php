@@ -7,6 +7,8 @@ use App\Notifications\AddonExpiringNotification;
 use App\Services\BillingService;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use Spatie\Activitylog\Models\Activity;
 
 beforeEach(function () {
     Storage::fake(config('diwan.storage_disk'));
@@ -42,6 +44,18 @@ it('tandakan dibayar → addon aktif + kuota efektif naik serta-merta (§18.32)'
     expect($order->fresh()->status)->toBe(OrderStatus::Dibayar)
         ->and($addon->status)->toBe('aktif')
         ->and($this->mam->fresh()->effectiveQuotaBytes())->toBe((10 + 10) * (1024 ** 3));
+});
+
+it('batalkan pesanan storan wajib ada sebab dan direkod dalam audit', function () {
+    $order = $this->billing->createOrder($this->mam, $this->bendahari, 1);
+
+    expect(fn () => $this->billing->cancelOrder($order, $this->superadmin, ''))
+        ->toThrow(ValidationException::class);
+
+    $this->billing->cancelOrder($order, $this->superadmin, 'Bayaran tidak diterima');
+
+    expect($order->fresh()->status)->toBe(OrderStatus::Dibatalkan)
+        ->and(Activity::query()->where('description', 'batal_pesanan_storan')->exists())->toBeTrue();
 });
 
 it('luput addon → status luput + kuota turun semula (§18.33)', function () {

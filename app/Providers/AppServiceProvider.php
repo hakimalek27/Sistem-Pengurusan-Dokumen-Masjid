@@ -40,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
             return in_array($ability, ['forceDelete', 'forceDeleteAny'], true) ? false : true;
         });
 
+        Gate::define('viewHorizon', fn (User $user): bool => (bool) $user->is_superadmin);
+
         // §11.2 — Suntik tetapan Telegram dari DB (UI superadmin) ke runtime config
         // (DB-dahulu, fallback env; selamat bila DB belum wujud). Cache 5 min.
         TelegramService::hydrateRuntimeConfig();

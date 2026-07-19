@@ -24,6 +24,15 @@ it('halaman log masuk panel superadmin boleh diakses', function () {
     $this->get('/admin/login')->assertOk();
 });
 
+it('response awam membawa header keselamatan asas', function () {
+    $this->get('/')
+        ->assertOk()
+        ->assertHeader('X-Frame-Options', 'SAMEORIGIN')
+        ->assertHeader('X-Content-Type-Options', 'nosniff')
+        ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+        ->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+});
+
 it('log masuk /admin papar hint ke panel masjid', function () {
     $this->get('/admin/login')
         ->assertOk()

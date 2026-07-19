@@ -1,11 +1,23 @@
 <x-filament-panels::page>
-    <form wire:submit="search" class="flex gap-2">
+    <form wire:submit="search" class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px_280px_auto]">
         <input
             type="text"
             wire:model="query"
             placeholder="Cari tajuk, no. rujukan, atau kandungan surat…"
             class="fi-input block w-full rounded-lg border-gray-300 dark:border-white/10 dark:bg-white/5"
         />
+        <select wire:model="recordType" class="fi-input block w-full rounded-lg border-gray-300 dark:border-white/10 dark:bg-white/5">
+            <option value="">Semua jenis</option>
+            @foreach ($this->recordTypeOptions() as $value => $label)
+                <option value="{{ $value }}">{{ $label }}</option>
+            @endforeach
+        </select>
+        <select wire:model="registryFileId" class="fi-input block w-full rounded-lg border-gray-300 dark:border-white/10 dark:bg-white/5">
+            <option value="">Semua fail</option>
+            @foreach ($this->registryFileOptions() as $value => $label)
+                <option value="{{ $value }}">{{ $label }}</option>
+            @endforeach
+        </select>
         <x-filament::button type="submit">Cari</x-filament::button>
     </form>
 

@@ -11,6 +11,7 @@ use App\Services\InboxIngestService;
 use App\Services\MinitService;
 use App\Services\QrLabelService;
 use App\Services\SensitiveAccessLogger;
+use App\Support\AllowedFormats;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -77,15 +78,21 @@ class ViewRecord extends BaseViewRecord
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.supersede'))
                 ->schema([
                     FileUpload::make('file')->label('Versi Baharu')->disk('local')->directory('ver-tmp')
+                        ->acceptedFileTypes(AllowedFormats::acceptedFileTypes())
+                        ->helperText('Format sah: '.AllowedFormats::label().'.')
+                        ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024)
                         ->storeFileNamesIn('file_name')->required(),
                 ])
                 ->action(function (array $data) {
+                    $filename = $data['file_name'] ?? basename((string) $data['file']);
+                    $mime = AllowedFormats::mimeForExtension(pathinfo($filename, PATHINFO_EXTENSION))
+                        ?? (mime_content_type(Storage::disk('local')->path($data['file'])) ?: 'application/octet-stream');
                     $path = Storage::disk('local')->path($data['file']);
                     $new = app(InboxIngestService::class)->supersede(
                         $this->getRecord(),
                         file_get_contents($path),
-                        $data['file_name'] ?? basename($path),
-                        mime_content_type($path) ?: 'application/octet-stream',
+                        $filename,
+                        $mime,
                         Auth::user(),
                     );
                     Storage::disk('local')->delete($data['file']);

@@ -31,10 +31,20 @@ class BuildExportZipJob implements ShouldQueue
             return;
         }
 
-        $records = Record::query()->withoutGlobalScope('mosque')
-            ->where('mosque_id', $mosque->id)
-            ->whereIn('id', $this->recordIds)
-            ->get();
+        $user = $this->userId ? User::query()->find($this->userId) : null;
+        if ($this->userId !== null
+            && (! $user || ! $user->is_active || ! $user->isMemberOf($mosque) || ! ($user->canIn($mosque, 'export.create') || $user->canIn($mosque, 'audit.view')))) {
+            return;
+        }
+
+        $query = Record::query()->withoutGlobalScope('mosque')->whereIn('id', $this->recordIds);
+        $records = $user
+            ? $query->visibleTo($user, $mosque)->get()
+            : $query->where('mosque_id', $mosque->id)->get();
+
+        if ($records->isEmpty()) {
+            return;
+        }
 
         $path = $export->build($mosque, $records, $this->label);
 
@@ -46,7 +56,7 @@ class BuildExportZipJob implements ShouldQueue
             'expires_at' => now()->addDays(14),
         ]);
 
-        if ($user = User::query()->find($this->userId)) {
+        if ($user) {
             Notification::send([$user], new ExportReadyNotification($mosque, $storedExport));
         }
     }

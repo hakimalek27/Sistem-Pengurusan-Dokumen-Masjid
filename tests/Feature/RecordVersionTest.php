@@ -2,9 +2,11 @@
 
 use App\Enums\RecordStatus;
 use App\Enums\SourceChannel;
+use App\Models\Record;
 use App\Services\InboxIngestService;
 use App\Services\QrLabelService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 beforeEach(function () {
     Storage::fake(config('diwan.storage_disk'));
@@ -26,6 +28,32 @@ it('ganti versi: rekod baharu, lama=diganti, pautan dua hala (§9.C.4)', functio
         ->and($new->ulid)->not->toBe($old->ulid)
         ->and($new->supersedes()->count())->toBe(1)
         ->and($new->getFirstMedia('original'))->not->toBeNull();
+});
+
+it('ganti versi menolak format fail tidak dibenarkan', function () {
+    $old = $this->ingest->ingest($this->mam, 'versi-lama', 'draf.pdf', 'application/pdf', $this->kerani, SourceChannel::MuatNaik);
+    $old = $this->ingest->fileRecord($old, $this->file, [], $this->kerani);
+
+    expect(fn () => $this->ingest->supersede($old, 'kandungan-zip', 'arkib.zip', 'application/zip', $this->kerani))
+        ->toThrow(ValidationException::class);
+
+    expect($old->fresh()->status)->toBe(RecordStatus::Difailkan)
+        ->and(Record::query()->count())->toBe(1);
+});
+
+it('ganti versi menolak apabila kuota masjid penuh', function () {
+    $old = $this->ingest->ingest($this->mam, 'versi-lama', 'draf.pdf', 'application/pdf', $this->kerani, SourceChannel::MuatNaik);
+    $old = $this->ingest->fileRecord($old, $this->file, [], $this->kerani);
+    $this->mam->update([
+        'storage_quota_bytes' => 10,
+        'storage_used_bytes' => 10,
+    ]);
+
+    expect(fn () => $this->ingest->supersede($old, 'versi-baharu', 'akhir.pdf', 'application/pdf', $this->kerani))
+        ->toThrow(ValidationException::class);
+
+    expect($old->fresh()->status)->toBe(RecordStatus::Difailkan)
+        ->and(Record::query()->count())->toBe(1);
 });
 
 it('jana PDF label QR untuk rekod (§9.C.6)', function () {

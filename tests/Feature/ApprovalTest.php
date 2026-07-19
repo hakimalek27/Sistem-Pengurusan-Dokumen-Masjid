@@ -38,6 +38,16 @@ it('lulus dengan IP + timestamp direkod + audit + notifikasi pemohon (§18.22)',
     expect(Activity::query()->where('description', 'kelulusan')->exists())->toBeTrue();
 });
 
+it('tidak menghantar notifikasi keputusan kepada pemohon yang sudah hilang akses rekod', function () {
+    $approval = $this->svc->request($this->record, $this->su, $this->pengerusi, null);
+    $this->mam->users()->detach($this->su->id);
+
+    Notification::fake();
+    $this->svc->decide($approval, $this->pengerusi, ApprovalStatus::Lulus, 'Diluluskan', '1.2.3.4');
+
+    Notification::assertNotSentTo($this->su, ApprovalDecidedNotification::class);
+});
+
 it('tolak → status tolak + nota keputusan', function () {
     $approval = $this->svc->request($this->record, $this->su, $this->pengerusi, null);
 

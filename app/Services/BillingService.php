@@ -182,6 +182,32 @@ class BillingService
         return $addon;
     }
 
+    /** Batalkan pesanan belum bayar dengan audit actor/IP/sebab. */
+    public function cancelOrder(StorageOrder $order, ?User $canceller, string $reason): void
+    {
+        if (! $canceller?->is_superadmin) {
+            throw new AuthorizationException('Hanya superadmin boleh membatalkan pesanan storan.');
+        }
+
+        if (trim($reason) === '') {
+            throw ValidationException::withMessages(['reason' => 'Sebab pembatalan wajib diisi.']);
+        }
+
+        DB::transaction(function () use ($order): void {
+            $locked = StorageOrder::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($order->id);
+
+            if ($locked->status !== OrderStatus::MenungguBayaran) {
+                throw ValidationException::withMessages(['order' => 'Hanya pesanan menunggu bayaran boleh dibatalkan.']);
+            }
+
+            $locked->update(['status' => OrderStatus::Dibatalkan]);
+        });
+
+        activity()->performedOn($order)->causedBy($canceller)
+            ->withProperties(['ip' => request()->ip(), 'reason' => trim($reason)])
+            ->log('batal_pesanan_storan');
+    }
+
     /** §5.14 / Aliran J — Notis T-30/T-7, luput add-on → kira semula kuota. */
     public function processExpiringAddons(): array
     {

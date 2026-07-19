@@ -75,6 +75,9 @@ class ApprovalService
             ->withProperties(['ip' => $ip, 'decision' => $decision->value])
             ->log('kelulusan');
 
-        Notification::send([$approval->requestedBy], new ApprovalDecidedNotification($approval));
+        $requester = $approval->requestedBy;
+        if ($requester?->is_active && $requester->can('view', $approval->record)) {
+            Notification::send([$requester], new ApprovalDecidedNotification($approval));
+        }
     }
 }

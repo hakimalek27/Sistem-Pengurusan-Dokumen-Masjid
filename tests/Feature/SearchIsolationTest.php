@@ -27,6 +27,18 @@ it('carian MAM tidak memulangkan dokumen MAN (§18.3/§18.18)', function () {
         ->and($results->contains('id', $this->recMan->id))->toBeFalse();
 });
 
+it('carian menyokong filter jenis rekod dan fail tanpa membuka tenant lain', function () {
+    $admin = makeMember($this->mam, 'admin_masjid');
+
+    $typeResults = $this->svc->for($admin, $this->mam, 'MAM', ['record_type' => 'rekod_kewangan']);
+    $fileResults = $this->svc->for($admin, $this->mam, 'MAM', ['registry_file_id' => $this->recMamDalaman->registry_file_id]);
+
+    expect($typeResults->pluck('id')->all())->toBe([$this->recMamSulit->id])
+        ->and($fileResults->pluck('id')->all())->toBe([$this->recMamDalaman->id])
+        ->and($typeResults->contains('id', $this->recMan->id))->toBeFalse()
+        ->and($fileResults->contains('id', $this->recMan->id))->toBeFalse();
+});
+
 it('ajk TIDAK nampak rekod sulit dalam carian (§18.18)', function () {
     $ajk = makeMember($this->mam, 'ajk');
 

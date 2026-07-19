@@ -112,7 +112,7 @@ class MinitService
 
         if ($completed) {
             $sender = $minit->fromUser;
-            if ($sender?->is_active && $sender->isMemberOf($minit->mosque)) {
+            if ($sender?->is_active && $sender->isMemberOf($minit->mosque) && $sender->can('view', $minit->record)) {
                 Notification::send($sender, new MinitCompletedNotification($minit->fresh()));
             }
 

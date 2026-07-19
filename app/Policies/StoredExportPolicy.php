@@ -18,8 +18,7 @@ class StoredExportPolicy
         }
 
         return $user->isMemberOf($export->mosque)
-            && ($export->requested_by === $user->id
-                || $user->canIn($export->mosque, 'export.create')
+            && ($user->canIn($export->mosque, 'export.create')
                 || $user->canIn($export->mosque, 'audit.view'));
     }
 }
