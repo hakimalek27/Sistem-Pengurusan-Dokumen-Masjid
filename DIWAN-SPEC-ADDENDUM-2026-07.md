@@ -192,3 +192,54 @@ rambang → jadual peti masuk kosong); membunuh server basi → LULUS. (Punca sa
 ## Deploy
 `local = origin = server = 86264e9`; `/up` 200; `diwan:smoke` **9/9**;
 `diwan:staging-check` 8/9 (smtp "GAGAL WAJIB" = perlu `--mail-to`, config tidak berubah).
+
+---
+
+# INSIDEN + REKA BENTUK: Intake WhatsApp Kata-Kunci-Dahulu (19 Julai 2026, commit `48c8b2f`)
+
+> Insiden operasi sebenar dilaporkan pemilik + pembetulan reka bentuk (diluluskan pemilik).
+> Bukan pindaan spec asas; menggantikan tingkah laku balasan intake WA §11.1.
+
+## Insiden
+Nombor sesi MAMAD (60176811605) menghantar mesej berulang ke nombor **tidak dikenali**
+(0174632511, 0173070193, 0123198704, 0139718582, 01123744631). Disahkan 100% via jadual
+`NotificationLog`: **37 balasan `wa_reject`** ("Maaf, tidak berdaftar…") ke 6 nombor
+(5 bukan-ahli), letusan pantas (19 Jul 16:56–17:07 ~25 dlm 4 min). Nombor itu **tidak
+pernah menghantar mesej tulen** — 37 event webhook **TIADA `message_id`** (0 kunci dedup
+`wa_msg` dalam Redis; mesej WhatsApp tulen sentiasa berID) = **echo/sintetik dari gateway**.
+
+## Punca akar
+`WhatsAppInboundService::handle()` (kod lama) membalas `wa_reject` pada **SETIAP** mesej
+bukan-ahli **tanpa had kadar**; event tanpa `message_id` tidak di-dedup. Gateway echo mesej
+keluar sebagai event masuk `from_me:false` → Diwan balas → **gelung ping-pong**. (`WhatsAppGateway::send`
+merekod setiap penghantaran ke `NotificationLog`; driver `gateway` TIDAK `Log::info` → Docker
+log kosong. Guna `NotificationLog` sebagai audit hantar WA.)
+
+## Reka bentuk baharu — kata-kunci-dahulu (§11.1′)
+Diwan **SENYAP sepenuhnya** melainkan penghantar:
+1. menghantar kata kunci intake **TUNGGAL tepat** (cth `spdm`), ATAU
+2. sedang dalam **tetingkap intake aktif** (`intake_window_minutes`, lalai 10), ATAU
+3. menghantar **dokumen dengan kata kunci dalam kapsyen**.
+
+Perbualan biasa / echo / mesej panjang tanpa kata kunci → **TIADA balasan**. Balasan Diwan
+sendiri tidak mengandungi kata kunci → echo takkan mencetus → **gelung mustahil**.
+
+- `spdm` → buka tetingkap 10 min → hantar dokumen (boleh berbilang) → `spdm` semula = buka semula.
+- **Submission awam** (`allow_public_intake`, lalai `true`): orang luar tiada akaun boleh
+  hantar dokumen selepas kata kunci; kerani semak di Peti Masuk. `WHATSAPP_ALLOW_PUBLIC_INTAKE=false`
+  = ahli sahaja. **Pengguna berdaftar masjid LAIN diblok** (isolasi §18.37 kekal — semak
+  `mosque_user.phone_wa` global). Had `submission_cap` (10) / `submission_window_minutes` (60) per nombor.
+- Backstop: `replySuppressed()` menghadkan HANYA balasan penolakan (wa_reject/wa_quota) —
+  cooldown per nombor + pemutus litar; balasan kejayaan (ack/intake_ready) sentiasa dihantar.
+- Log ringkas event masuk (tanpa media) untuk audit.
+
+## Env baharu
+`WHATSAPP_INTAKE_WINDOW_MINUTES` (10), `WHATSAPP_ALLOW_PUBLIC_INTAKE` (true),
+`WHATSAPP_SUBMISSION_CAP` (10), `WHATSAPP_SUBMISSION_WINDOW_MINUTES` (60),
+`WHATSAPP_REJECT_COOLDOWN_MINUTES` (60), `WHATSAPP_REPLY_CAP` (5), `WHATSAPP_REPLY_CAP_WINDOW_MINUTES` (10).
+
+## Bukti
+`WhatsAppWebhookTest` **17 lulus** (senyap tanpa kata kunci; submission awam creator-null;
+mod ahli-sahaja; §18.37 senyap; dua-langkah; kapsyen-kata-kunci). Pest **273 lulus/1 skip**;
+Pint bersih; **CI HIJAU**. **Ujian LIVE server:** `handle()` dengan mesej bukan-kata-kunci →
+`NotificationLog` tidak bertambah = **SENYAP disahkan** di produksi.
