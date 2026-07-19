@@ -34,6 +34,10 @@
                             <div class="text-sm text-gray-500">
                                 {{ $r['ref'] }} · {{ $r['type'] }} · {{ $r['sensitivity'] }}
                             </div>
+                            @if (! empty($r['snippet']))
+                                {{-- Petikan sudah di-escape + dibalut <mark> oleh SearchService::highlight (selamat). --}}
+                                <div class="mt-1 text-sm text-gray-600 dark:text-gray-300">{!! $r['snippet'] !!}</div>
+                            @endif
                         </a>
                     @endforeach
                 </div>

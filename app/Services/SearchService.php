@@ -76,4 +76,68 @@ class SearchService
 
         return $allowed;
     }
+
+    /**
+     * Petikan konteks (±90 aksara) sekitar padanan pertama untuk hasil carian (§13′).
+     * Semak ocr_text (kandungan) dahulu, kemudian medan metadata utama. Teks BIASA
+     * (belum di-escape) — gunakan highlight() untuk render selamat.
+     */
+    public function snippetFor(Record $record, string $query): ?string
+    {
+        $query = trim($query);
+        if ($query === '') {
+            return null;
+        }
+
+        $haystacks = array_filter(
+            [$record->ocr_text, $record->title, $record->our_ref, $record->their_ref, $record->sender_name, $record->sender_org],
+            static fn ($value) => is_string($value) && $value !== '',
+        );
+
+        foreach ($haystacks as $text) {
+            $pos = mb_stripos($text, $query);
+            if ($pos !== false) {
+                return static::excerpt($text, $pos, mb_strlen($query));
+            }
+        }
+
+        return null;
+    }
+
+    protected static function excerpt(string $text, int $pos, int $length): string
+    {
+        $radius = 90;
+        $start = max(0, $pos - $radius);
+        $end = min(mb_strlen($text), $pos + $length + $radius);
+
+        $slice = trim((string) preg_replace('/\s+/u', ' ', mb_substr($text, $start, $end - $start)));
+
+        return ($start > 0 ? '… ' : '').$slice.($end < mb_strlen($text) ? ' …' : '');
+    }
+
+    /**
+     * Tandakan padanan query dalam petikan sebagai HTML SELAMAT: teks di-escape dahulu,
+     * kemudian padanan dibalut <mark> (gaya inline — tiada pergantungan purge Tailwind).
+     * Nilai pulangan boleh dirender dengan {!! !!} tanpa risiko XSS.
+     */
+    public static function highlight(?string $plain, string $query): ?string
+    {
+        if ($plain === null) {
+            return null;
+        }
+
+        $escaped = e($plain);
+        $query = trim($query);
+        if ($query === '') {
+            return $escaped;
+        }
+
+        $pattern = '/('.preg_quote(e($query), '/').')/iu';
+
+        return preg_replace(
+            $pattern,
+            '<mark style="background-color:#fde68a;color:#111827;border-radius:2px;padding:0 1px;">$1</mark>',
+            $escaped,
+        ) ?? $escaped;
+    }
 }

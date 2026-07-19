@@ -66,7 +66,9 @@ class CariRekod extends Page
             return;
         }
 
-        $records = app(SearchService::class)->for(Auth::user(), Filament::getTenant(), $this->query, array_filter([
+        $svc = app(SearchService::class);
+
+        $records = $svc->for(Auth::user(), Filament::getTenant(), $this->query, array_filter([
             'record_type' => $this->recordType ?: null,
             'registry_file_id' => $this->registryFileId ?: null,
         ]));
@@ -77,6 +79,7 @@ class CariRekod extends Page
             'ref' => $r->registryFile?->file_no ?? '—',
             'type' => config("record_types.{$r->record_type}.label", $r->record_type),
             'sensitivity' => $r->sensitivity?->getLabel() ?? '—',
+            'snippet' => SearchService::highlight($svc->snippetFor($r, $this->query), $this->query),
         ])->all();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\OcrStatus;
 use App\Models\Record;
+use App\Support\OfficeTextExtractor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -60,9 +61,27 @@ class ProcessOcrJob implements ShouldQueue
             return;
         }
 
-        // Office (lama & baharu) → langkau OCR (indeks metadata sahaja); ekstrak teks Office = Fasa 2.
+        // Office (lama & baharu) → ekstrak teks kandungan supaya boleh dicari (§20 Fasa 2).
+        // Gagal/tak dapat diekstrak → ocr_text null (rekod kekal sah, metadata sahaja).
         if (in_array($ext, ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'], true)) {
-            $record->update(['ocr_status' => OcrStatus::Siap, 'ocr_text' => null]);
+            $officeText = null;
+            $officeTmp = storage_path('app/tmp/office-'.$record->ulid);
+            @mkdir($officeTmp, 0775, true);
+
+            try {
+                $localOffice = $officeTmp.'/'.$media->file_name;
+                file_put_contents($localOffice, Storage::disk($media->disk)->get($media->getPathRelativeToRoot()));
+                $officeText = OfficeTextExtractor::extract($localOffice, $ext);
+            } catch (\Throwable $e) {
+                Log::warning("[OCR] ekstrak teks Office gagal record {$record->id}: ".$e->getMessage());
+            } finally {
+                self::deleteDir($officeTmp);
+            }
+
+            $record->update([
+                'ocr_text' => $officeText,
+                'ocr_status' => OcrStatus::Siap,
+            ]);
             $record->searchable();
 
             return;
@@ -120,7 +139,7 @@ class ProcessOcrJob implements ShouldQueue
             // Muat naik derived (fail asal TIDAK diubah).
             $record->addMedia($outPdf)->usingFileName('searchable.pdf')->toMediaCollection('derived');
 
-            $text = is_file($sidecar) ? (string) file_get_contents($sidecar) : '';
+            $text = is_file($sidecar) ? OfficeTextExtractor::normalizeText((string) file_get_contents($sidecar)) : '';
             $record->update([
                 'ocr_text' => mb_substr($text, 0, (int) config('diwan.ocr_text_limit', 1_000_000)),
                 'ocr_status' => OcrStatus::Siap,
@@ -188,9 +207,12 @@ class ProcessOcrJob implements ShouldQueue
         // menyebabkan ocrmypdf --skip-text ABORT pada dokumen yang menghasilkan lapisan teks
         // (mis. dokumen bercetak sebenar), menjadikan OCR gagal di produksi. `pdf` mengekalkan
         // OCR + carian; PDF/A boleh dipulihkan kemudian dengan menaik taraf Ghostscript (>10.02.0).
+        // --clean (unpaper, pra-proses sebelum OCR — imej Docker sahaja) + --optimize 1
+        // (lossless) meningkatkan ketepatan OCR & kekemasan tanpa menyentuh fail asal.
         $process = new Process([
             self::commandPath('ocrmypdf'), '--skip-text', '-l', config('diwan.ocr_langs', 'msa+eng'),
-            '--rotate-pages', '--deskew', '--sidecar', $sidecar, '--output-type', 'pdf',
+            '--rotate-pages', '--deskew', '--clean', '--optimize', '1',
+            '--sidecar', $sidecar, '--output-type', 'pdf',
             $inputPdf, $outPdf,
         ]);
         $process->setTimeout(240);

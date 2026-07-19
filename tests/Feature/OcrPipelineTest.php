@@ -12,7 +12,9 @@ beforeEach(function () {
     $this->mam = makeMosque('MAM', 'mam');
 });
 
-it('dokumen Office (docx) dilangkau OCR → status siap, teks kosong (§12)', function () {
+it('dokumen Office tak sah/korup → status siap, ocr_text null (gagal-anggun §20)', function () {
+    // Nota: laluan Office kini CUBA ekstrak teks (§20 Fasa 2). Fail tak sah gagal-anggun
+    // → ocr_text null (rekod kekal sah). Ekstraksi docx sah diuji dalam OfficeTextExtractionTest.
     $record = $this->ingest->ingest(
         $this->mam,
         'kandungan-docx-palsu',
@@ -22,7 +24,6 @@ it('dokumen Office (docx) dilangkau OCR → status siap, teks kosong (§12)', fu
         SourceChannel::MuatNaik,
     );
 
-    // ProcessOcrJob dijalankan segerak (sync) dalam ingest; laluan Office tidak perlukan tesseract.
     expect($record->fresh()->ocr_status)->toBe(OcrStatus::Siap)
         ->and($record->fresh()->ocr_text)->toBeNull();
 });
