@@ -23,9 +23,27 @@
             // Auto-hantar untuk pelayar manusia; bot pratonton pautan (WhatsApp/
             // Telegram) tidak menjalankan JS → token tidak terbakar oleh pratonton.
             window.addEventListener('DOMContentLoaded', function () {
+                var submitting = false;
+                var f = document.getElementById('magic-form');
+                var button = f ? f.querySelector('button[type="submit"]') : null;
+                var submitOnce = function () {
+                    if (!f || submitting) { return; }
+                    submitting = true;
+                    if (button) { button.disabled = true; }
+                    f.submit();
+                };
+
+                if (!f) { return; }
+                f.addEventListener('submit', function (event) {
+                    if (submitting) {
+                        event.preventDefault();
+                        return;
+                    }
+                    submitting = true;
+                    if (button) { button.disabled = true; }
+                });
                 setTimeout(function () {
-                    var f = document.getElementById('magic-form');
-                    if (f) { f.submit(); }
+                    submitOnce();
                 }, 300);
             });
         </script>

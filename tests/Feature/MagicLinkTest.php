@@ -52,7 +52,11 @@ it('/masuk/{token} interstisial (GET) tidak guna token; POST log masuk & mendara
     $raw = $this->svc->sendTo('k@ujian.test');
 
     // GET = interstisial (elak bot pratonton bakar token); token BELUM diguna.
-    $this->get('/masuk/'.$raw)->assertOk()->assertSee('Teruskan');
+    $this->get('/masuk/'.$raw)
+        ->assertOk()
+        ->assertSee('Teruskan')
+        ->assertSee('var submitting = false')
+        ->assertSee('submitOnce');
     expect(LoginToken::query()->first()->used_at)->toBeNull();
 
     // POST = guna token + log masuk.
