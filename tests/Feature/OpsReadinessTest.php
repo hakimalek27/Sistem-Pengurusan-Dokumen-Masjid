@@ -21,6 +21,17 @@ it('failure drill queue mempunyai mod pengesahan failed jobs', function () {
         ->and($command)->toContain('tidak muncul dalam failed_jobs');
 });
 
+it('Livewire menyimpan muat naik sementara ke disk local, bukan disk lalai COS', function () {
+    // §15.7 — Elak PUT pra-tandatangan terus ke bucket COS (tiada CORS) yang
+    // menyebabkan SEMUA muat naik UI gagal di produksi (FILESYSTEM_DISK=cos).
+    expect(config('livewire.temporary_file_upload.disk'))->toBe('local')
+        ->and(config('livewire.temporary_file_upload.rules'))->toContain('max:26624')
+        ->and((int) config('diwan.max_upload_mb') * 1024)->toBeLessThan(26624)
+        ->and(config('livewire.temporary_file_upload.cleanup'))->toBeTrue()
+        // Sanity: kunci lengkap wujud (config:cache produksi guna fail ini sepenuhnya).
+        ->and(config('livewire.class_namespace'))->toBe('App\\Livewire');
+});
+
 it('Horizon mengasingkan queue umum OCR dan eksport', function () {
     expect(config('horizon.defaults.general.queue'))->toBe(['default'])
         ->and(config('horizon.defaults.ocr.queue'))->toBe(['ocr'])
