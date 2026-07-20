@@ -35,5 +35,8 @@ Schedule::command('diwan:ping-gateway')->everyFiveMinutes();
 // 9. Pemantauan sesi WhatsApp per-masjid + platform & kesihatan IMAP — setiap 10 minit (§11.1).
 Schedule::command('diwan:check-wa-sessions')->everyTenMinutes()->withoutOverlapping();
 
+// 10. Reconcile mirror Google Drive + muat naik DB dump — setiap jam, minit 20 (§4.6′).
+Schedule::command('diwan:drive-reconcile')->hourlyAt(20)->withoutOverlapping();
+
 // Pangkas log > 24 bulan — bulanan (§15.5).
 Schedule::command('diwan:prune-logs')->monthlyOn(1, '04:00');

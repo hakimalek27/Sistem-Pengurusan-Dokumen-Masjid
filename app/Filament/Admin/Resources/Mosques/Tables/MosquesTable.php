@@ -32,6 +32,13 @@ class MosquesTable
                 TextColumn::make('users_count')->counts('users')->label('Ahli'),
                 TextColumn::make('storage_used_bytes')->label('Guna')
                     ->formatStateUsing(fn ($state, $record) => round($state / (1024 ** 3), 2).' / '.round($record->effectiveQuotaBytes() / (1024 ** 3), 1).' GB'),
+                TextColumn::make('gdrive_folder_id')->label('Drive')
+                    ->badge()
+                    ->state(fn ($record) => $record->gdrive_folder_id ? 'Bersambung' : 'Belum')
+                    ->color(fn ($state) => $state === 'Bersambung' ? 'success' : 'gray')
+                    ->tooltip(fn ($record) => ($v = data_get($record->settings, 'gdrive_verify'))
+                        ? "Layak {$v['eligible']} · Sync {$v['synced']} · Tertunggak {$v['pending']}"
+                        : null),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Status')
