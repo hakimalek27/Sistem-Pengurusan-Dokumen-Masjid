@@ -363,3 +363,71 @@ s.k. Kerani bebas ubah. Guard kewujudan medan minit → wizard "Rekod Baharu" ti
 Pest **296 passed / 1 skip** (971 assertions); Pint bersih; `npm run build` OK; Playwright
 chromium **office-workflow + explore + registration LULUS** (server e2e tunggal, DB buangan);
 ujian baharu: OfficeTextExtractionTest (7) + SearchSnippetTest (6) + TatacaraAlignmentTest (7).
+
+---
+
+# ADDENDUM v2.5 — Mirror Google Drive per-tenant + Magic link auto-login notifikasi + Fix salib landing (20 Julai 2026)
+
+> Diluluskan pemilik (soalan-jawapan 20 Jul). Tiga ciri besar + satu ops.
+> Commit: `1bc5cc0` (salib), `9789bfd` (magic teras), `c15e8d6` (notif deep-link),
+> `b5bff77`/`166f421`/`a0c8844` (Google Drive).
+
+## Pindaan §3.3 — pakej baharu (kelulusan pemilik)
+Ditambah `google/apiclient ^2.16` (Drive-only cleanup: `extra.google/apiclient-services=["Drive"]`
++ `scripts.pre-autoload-dump=Google\Task\Composer::cleanup`). Tiada ext PHP baharu (guna curl/guzzle
+sedia ada). Larangan §0.3 lain kekal.
+
+## Pindaan §4.6 — Mirror Google Drive boleh-browse (keputusan PDPA pemilik)
+Spec asal §4.6 hadkan salinan luar ke Google kepada bentuk TERSULIT sahaja (rclone crypt). **Pemilik
+LULUS (20 Jul) mirror plaintext boleh-browse SEMUA rekod** ke akaun Google sendiri sebagai jaring
+keselamatan tambahan (backup COS + pg_dump tersulit KEKAL). Rekod keputusan: risiko PDPA merentas
+sempadan diterima pemilik; akaun Google milik pemilik; skop `drive.file` (least privilege).
+- **Pokok**: `SPDM/Backup/{slug}/{fungsi kod-tajuk}/{aktiviti}/[{sub}]/{file_no - tajuk fail}/{enclosure - tajuk}.ext`;
+  DB dump → `SPDM/Backup/_Pangkalan-Data/`.
+- **Isolasi (§15.2, keperluan #1)**: resolusi folder SENTIASA dari id induk tersimpan
+  (`mosques/registry_files/classification_nodes.gdrive_folder_id`) + assert `mosque_id` setiap hop;
+  job `SyncRecordToDriveJob` refetch berskop `mosque_id` (rekod tenant lain tidak dijumpai walau id
+  dipalsukan). Diuji: `GoogleDriveMirrorTest` tamper silang-tenant = SIFAR upload.
+- **Aliran**: kelulusan masjid → `CreateMosqueDriveFolderJob`; klasifikasi/pindah/ganti-versi →
+  `SyncRecordToDriveJob` (afterCommit); **pelupusan → padam salinan Drive** (keputusan pemilik: selaras
+  sijil pelupusan ANM) + null kolum. Reconcile setiap jam (`diwan:drive-reconcile`, minit 20) tangkap
+  yang tercicir/berubah + muat naik DB dump + prune. Verify: `diwan:drive-verify`.
+- **Superadmin UI**: `/admin` Tetapan Platform → Tetapan/Sambung/Uji/Putus Google Drive + kad status
+  (akaun/kuota/kesihatan). OAuth akaun pemilik (client id/secret di Google Cloud Console — sekali sahaja).
+- **Ketahanan**: ralat maut (`invalid_grant`/kuota penuh) → pemutus litar 6 jam + alert superadmin
+  (e-mel/Telegram, throttle 24 jam). Supervisor Horizon `backup` (1 proses, memori 256M).
+- Env/PlatformSetting: `gdrive_client_id`, `gdrive_client_secret`+`gdrive_refresh_token` (tersulit),
+  `gdrive_enabled`, `gdrive_account`, `gdrive_root_folder_id`, `gdrive_status`, `gdrive_keep_dumps` (7),
+  `DIWAN_MAGIC_LINK_TTL_HOURS` (72).
+
+## §15.1″ — Magic link interstisial + deep-link auto-login (notifikasi)
+- **Interstisial**: `GET /masuk/{token}` TIDAK lagi guna token — papar halaman "Teruskan" (auto-submit JS).
+  Bot pratonton pautan (WhatsApp/Telegram) tidak jalankan JS → **token tidak terbakar oleh pratonton**.
+  `POST /masuk/{token}` guna token (atomik, sekali guna) → log masuk → deep-link.
+- **Deep-link**: notifikasi yang meng-mention penerima (minit tindakan/makluman, kelulusan, peti masuk)
+  kini bawa pautan magic PER PENERIMA (`MagicLinkService::deepLinkFor`, TTL 72 jam, `purpose=notification`).
+  Klik → auto-login + terus ke rekod/minit tanpa login manual. Akaun tanpa kata laluan → gate set-kata-laluan
+  dahulu → sambung ke sasaran (guna semula `EnsurePasswordIsSet` + `url.intended`).
+- **Fix bounce**: selaras `password_hash_web` sesi dengan pengguna baharu (elak Filament `AuthenticateSession`
+  paksa-logout bila sesi pengguna lain masih aktif). **Keselamatan**: `safeIntended()` whitelist relatif
+  `/app|/admin|/r` (sekat open redirect). `login_tokens` + `intended_url` + `purpose`.
+
+## §14″ — Deep-link dalam 6 notifikasi
+Trait `HasMagicDeepLink` (memo per penerima → 1 token walau merentas mail+WA+Telegram). Diguna:
+MinitRouted/MinitReminder/MinitCompleted + ApprovalRequested/ApprovalDecided (→`/r/{ulid}`) + InboxNewItem
+(→`/app/{slug}/peti-masuk`). Penerima bukan User → pautan biasa (perlu login).
+
+## §9.0′ — Fix imej landing (salib → bulan sabit)
+Hero SVG landing (`guest-layout`) melukis salib Latin hijau di puncak kubah → diganti tiang + bulan sabit
+(imej Islamik). Tiada aset salib lain di UI awam (audit penuh).
+
+## Ops — Re-OCR rekod Office lama
+Rekod Office (doc/docx/xls/xlsx/ppt/pptx) sebelum Fasa 2 (`ocr_text=null`) → re-dispatch `ProcessOcrJob` +
+`scout:import` supaya kandungan boleh dicari.
+
+## Bukti v2.5
+Pest **326 passed / 1 skip** (1091 assertions); Pint bersih; `npm run build` OK; **Playwright registration
+(interstisial magic-link) + office-workflow (klasifikasi/minit/kelulusan) LULUS** (DB benih segar; explore
+9-peranan = flake had-kadar terdokumentasi, diliputi Pest RoleAuthorizationMatrixTest). Ujian baharu:
+MagicLinkDeepLinkTest (10) + NotificationDeepLinkTest (4) + GoogleDriveConnectTest (5) + GoogleDriveMirrorTest (8)
++ GoogleDriveReconcileTest (4) + MagicLinkTest dikemas.
