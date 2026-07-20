@@ -4,11 +4,10 @@ Platform SaaS **multi-tenant** untuk pengurusan dokumen masjid: registri digital
 fail, carian kandungan (OCR), minit & routing, e-Kelulusan, kuota storan, dan enjin retensi
 arkib automatik. Setiap masjid = satu *tenant* (Filament tenancy); satu panel superadmin.
 
-> **Status 16 Julai 2026:** kod SPDM siap dan diuji, tetapi SPDM **belum dideploy ke production**.
-> Gateway `wassap.wehdah.my` sudah live; shared provisioning secret dan host production SPDM
-> masih belum tersedia. Baca [`AUDIT-E2E-2026-07-16.md`](AUDIT-E2E-2026-07-16.md) dan
-> [`HANDOVER-LENGKAP-A-Z.md`](HANDOVER-LENGKAP-A-Z.md), kemudian
-> jalankan [`WHAT-TO-DO-NEXT.md`](WHAT-TO-DO-NEXT.md) sebelum menyebut sistem “live/semua OK”.
+> **Status 21 Julai 2026:** SPDM live di `https://bakwim.my`. Bukti semasa, isu yang
+> dibaiki dan jurang terhadap rujukan DDMS direkod dalam
+> [`AUDIT-E2E-2026-07-21.md`](AUDIT-E2E-2026-07-21.md). Gunakan [`HANDOVER.md`](HANDOVER.md)
+> untuk operasi/deploy; dokumen 16 Julai ialah rekod sejarah sebelum production.
 
 Sumber kebenaran reka bentuk: **`DIWAN-SPEC.md`** (v2.1). Pelan pembinaan berfasa:
 **`CLAUDE-CODE-PROMPTS.md`**.

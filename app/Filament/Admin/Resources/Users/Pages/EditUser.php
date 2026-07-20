@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\Users\Pages;
 
 use App\Filament\Admin\Resources\Users\UserResource;
 use App\Models\User;
+use App\Services\WhatsAppRecipientResolver;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -36,6 +37,25 @@ class EditUser extends EditRecord
             throw ValidationException::withMessages([
                 'is_superadmin' => 'Superadmin aktif terakhir tidak boleh dinyahaktif atau diturunkan.',
             ]);
+        }
+
+        if (blank($data['phone_wa'] ?? null)) {
+            $data['phone_wa'] = null;
+        } else {
+            $phone = app(WhatsAppRecipientResolver::class)->normalize((string) $data['phone_wa']);
+            if ($phone === null) {
+                throw ValidationException::withMessages([
+                    'phone_wa' => 'Nombor WhatsApp tidak sah.',
+                ]);
+            }
+
+            if (User::query()->where('phone_wa', $phone)->whereKeyNot($record->getKey())->exists()) {
+                throw ValidationException::withMessages([
+                    'phone_wa' => 'Nombor WhatsApp ini sudah digunakan oleh akaun lain.',
+                ]);
+            }
+
+            $data['phone_wa'] = $phone;
         }
 
         return $data;

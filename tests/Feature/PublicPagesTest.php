@@ -50,3 +50,18 @@ it('log masuk /app papar hint ke panel pentadbir & magic link', function () {
 it('guest ke /admin dialih ke log masuk', function () {
     $this->get('/admin')->assertRedirect();
 });
+
+it('mengasingkan bucket kadar pendaftaran, halaman login dan magic login', function () {
+    cache()->flush();
+
+    $this->get('/daftar')->assertOk();
+    $this->get('/log-masuk')->assertOk();
+
+    foreach (range(1, 10) as $attempt) {
+        $this->get('/masuk/token-tidak-sah-'.$attempt)->assertStatus(410);
+    }
+
+    $limited = $this->get('/masuk/token-tidak-sah-11')->assertStatus(429);
+
+    expect((int) $limited->headers->get('Retry-After'))->toBeLessThanOrEqual(60);
+});

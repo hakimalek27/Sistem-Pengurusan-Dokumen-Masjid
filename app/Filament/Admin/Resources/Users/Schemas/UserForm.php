@@ -33,7 +33,9 @@ class UserForm
                     ->columns(2),
                 Section::make('Profil & Notifikasi')
                     ->schema([
-                        TextInput::make('phone_wa')->label('Nombor WhatsApp')->tel()->maxLength(20),
+                        TextInput::make('phone_wa')->label('Nombor WhatsApp')->tel()->unique(ignoreRecord: true)->maxLength(20)
+                            ->validationMessages(['unique' => 'Nombor WhatsApp ini sudah digunakan oleh akaun lain.'])
+                            ->helperText('Satu nombor hanya boleh dipautkan kepada satu akaun platform.'),
                         TextInput::make('telegram_chat_id')->label('ID Chat Telegram')->maxLength(255),
                         TextInput::make('jawatan')->label('Jawatan')->maxLength(255),
                         Toggle::make('notify_whatsapp')->label('Notifikasi WhatsApp'),

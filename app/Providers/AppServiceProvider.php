@@ -9,7 +9,10 @@ use App\Observers\MediaObserver;
 use App\Observers\RetentionRuleObserver;
 use App\Services\GoogleDrive\GoogleDriveClient;
 use App\Services\TelegramService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -33,6 +36,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Aliran awam perlu bucket berasingan. Throttle angka berkongsi
+        // tandatangan domain+IP, jadi tetingkap sejam /daftar boleh mengunci
+        // magic login walaupun hadnya sepatutnya hanya seminit.
+        RateLimiter::for('public-registration', fn (Request $request) => Limit::perHour(20)->by($request->ip()));
+        RateLimiter::for('public-login-page', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+        RateLimiter::for('magic-login', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+
         // §5.14 — kaunter kuota storan atomik.
         Media::observe(MediaObserver::class);
         RetentionRule::observe(RetentionRuleObserver::class);
