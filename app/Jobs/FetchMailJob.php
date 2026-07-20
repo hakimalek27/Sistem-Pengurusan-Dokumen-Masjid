@@ -28,13 +28,18 @@ class FetchMailJob implements ShouldQueue
 
     public function middleware(): array
     {
-        // §11.3 — expireAfter(600): kunci auto-luput selepas 10 minit. TANPA ini,
+        // §11.3 — expireAfter(120): kunci auto-luput selepas 2 minit. TANPA expiry,
         // expiresAfter lalai = 0 (KEKAL selamanya): jika satu larian terbunuh
         // (cth container di-recreate semasa deploy di tengah larian), kunci tinggal
-        // dan SETIAP fetch-mail berikutnya dilangkau senyap → e-mel tak diproses
-        // (punca sebenar e-mel intake tersekat, 20 Jul). dontRelease() = jangan
-        // baris gilir semula pada perebutan; larian berjadual seterusnya cuba lagi.
-        return [(new WithoutOverlapping('diwan-fetch-mail'))->expireAfter(600)->dontRelease()];
+        // dan SETIAP fetch-mail berikutnya dilangkau senyap → e-mel tak diproses.
+        //
+        // Diturunkan 600→120 pada 20 Jul: kunci ini DISAHKAN tersangkut semula
+        // sebaik sahaja deploy dilakukan (container recreate mid-run), menyekat
+        // intake 10 minit penuh setiap kali. Larian biasa <10 saat, jadi 2 minit
+        // sudah longgar; tetingkap kecil = tempoh gagal-senyap maksimum kecil.
+        // dontRelease() = jangan baris gilir semula pada perebutan; larian
+        // berjadual seterusnya (setiap minit) cuba lagi.
+        return [(new WithoutOverlapping('diwan-fetch-mail'))->expireAfter(120)->dontRelease()];
     }
 
     public function handle(MailIngestService $mail): void

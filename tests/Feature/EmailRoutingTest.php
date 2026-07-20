@@ -27,11 +27,18 @@ beforeEach(function () {
 it('FetchMailJob WithoutOverlapping mempunyai expiry (elak kunci tersekat kekal §11.3)', function () {
     // Punca sebenar e-mel intake tersekat 20 Jul: kunci job-level tanpa expiry
     // (expiresAfter=0) kekal selepas larian terbunuh → fetch-mail dilangkau selamanya.
+    //
+    // DIPINDA (20 Jul petang, peraturan #9): dahulu memaku nilai TEPAT 600.
+    // Kunci ini disahkan tersangkut semula sebaik selepas deploy (container
+    // recreate mid-run), menyekat intake 10 minit penuh setiap kali — jadi
+    // nilai diturunkan kepada 120. Ujian kini mengunci NIAT (wujud + pendek)
+    // supaya penalaan operasi tidak memerlukan pindaan ujian setiap kali.
     $mw = (new FetchMailJob)->middleware();
 
     expect($mw)->toHaveCount(1)
         ->and($mw[0])->toBeInstanceOf(WithoutOverlapping::class)
-        ->and($mw[0]->expiresAfter)->toBe(600);
+        ->and($mw[0]->expiresAfter)->toBeGreaterThan(0)
+        ->and($mw[0]->expiresAfter)->toBeLessThanOrEqual(180);
 });
 
 it('mengekstrak slug daripada plus-addressing', function () {

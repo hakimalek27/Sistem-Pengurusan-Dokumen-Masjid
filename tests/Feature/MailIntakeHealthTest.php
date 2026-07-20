@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Notifications\ConnectionAlertNotification;
 use App\Support\MailIntakeHealth;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
 /*
@@ -136,6 +138,31 @@ it('memaklumkan pulih selepas intake tersekat kembali sihat', function () {
 
     Notification::assertSentToTimes($superadmin, ConnectionAlertNotification::class, 2);
     expect((bool) PlatformSetting::get('imap_alerted'))->toBeFalse();
+});
+
+it('command fetch-mail melaporkan GAGAL bila kunci job tersangkut (bukan "selesai" palsu)', function () {
+    // Kunci job-level DISAHKAN tersangkut selepas setiap deploy (container
+    // recreate mid-run). Dahulu command tetap mencetak "selesai" walaupun
+    // middleware menelan larian — laporan palsu yang melambatkan diagnosis.
+    Cache::lock('laravel-queue-overlap:App\Jobs\FetchMailJob:diwan-fetch-mail', 120)->get();
+
+    $this->artisan('diwan:fetch-mail')
+        ->expectsOutputToContain('DILANGKAU')
+        ->assertFailed();
+});
+
+it('command fetch-mail --force melepaskan kunci tersangkut dan berjaya', function () {
+    Cache::lock('laravel-queue-overlap:App\Jobs\FetchMailJob:diwan-fetch-mail', 120)->get();
+
+    $this->artisan('diwan:fetch-mail', ['--force' => true])->assertSuccessful();
+});
+
+it('kunci job FetchMailJob mempunyai expiry pendek (tetingkap gagal-senyap kecil)', function () {
+    $middleware = (new FetchMailJob)->middleware()[0];
+
+    expect($middleware)->toBeInstanceOf(WithoutOverlapping::class)
+        ->and($middleware->expiresAfter)->toBeGreaterThan(0)
+        ->and($middleware->expiresAfter)->toBeLessThanOrEqual(180);
 });
 
 it('setiap mutex jadual mempunyai tempoh luput eksplisit (punca insiden 20 Jul)', function () {
