@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\TelegramChannel;
 use App\Notifications\Channels\WhatsAppChannel;
 use App\Services\WhatsAppRecipientResolver;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
 
 /**

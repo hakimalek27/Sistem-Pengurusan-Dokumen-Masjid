@@ -2,9 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\TelegramChannel;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
 
 // §4.6′ [DriveBackupAlert → superadmin; e-mel + Telegram SAHAJA]

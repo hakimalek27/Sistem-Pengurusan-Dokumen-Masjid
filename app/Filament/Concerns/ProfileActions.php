@@ -54,13 +54,15 @@ trait ProfileActions
                 ->visible(fn () => blank(Auth::user()->telegram_chat_id) && filled(config('diwan.telegram.bot_username')))
                 ->action(function () {
                     $token = Str::random(48);
-                    Cache::put('telegram_connect:'.$token, Auth::id(), now()->addMinutes(15));
+                    // TTL 60 minit (dinaikkan dari 15): AJK yang jarang buka telefon
+                    // sempat tekan Start sebelum pautan tamat tempoh.
+                    Cache::put('telegram_connect:'.$token, Auth::id(), now()->addMinutes(60));
                     $url = 'https://t.me/'.config('diwan.telegram.bot_username').'?start='.$token;
 
                     Notification::make()
                         ->title('Sambung Telegram')
                         ->body(new HtmlString(
-                            'Buka pautan ini di telefon anda &amp; tekan <strong>Start</strong> (sah 15 minit):<br>'
+                            'Buka pautan ini di telefon anda &amp; tekan <strong>Start</strong> (sah 60 minit):<br>'
                             .'<a href="'.e($url).'" target="_blank" class="underline text-primary-600">'.e($url).'</a>'
                         ))
                         ->persistent()

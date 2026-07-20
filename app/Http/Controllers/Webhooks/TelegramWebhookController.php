@@ -30,7 +30,10 @@ class TelegramWebhookController extends Controller
             $userId = Cache::pull('telegram_connect:'.$token);
 
             if ($userId) {
-                User::query()->whereKey($userId)->update(['telegram_chat_id' => (string) $chatId]);
+                // notify_telegram=true: tekan Start = niat eksplisit menerima notifikasi.
+                // Tanpa ini, chat_id disimpan tetapi via() masih SKIP Telegram (toggle
+                // lalai false) → pengguna "Bersambung" tapi tiada notifikasi (bug 20 Jul).
+                User::query()->whereKey($userId)->update(['telegram_chat_id' => (string) $chatId, 'notify_telegram' => true]);
                 $this->reply($chatId, 'Akaun Diwan anda kini bersambung dengan Telegram. Anda akan menerima notifikasi di sini.');
 
                 return response()->json(['ok' => true]);
@@ -41,11 +44,20 @@ class TelegramWebhookController extends Controller
                 $payload = Crypt::decrypt($token);
 
                 if (($payload['exp'] ?? 0) >= now()->timestamp && ! empty($payload['user_id'])) {
-                    User::query()->whereKey($payload['user_id'])->update(['telegram_chat_id' => (string) $chatId]);
+                    User::query()->whereKey($payload['user_id'])->update(['telegram_chat_id' => (string) $chatId, 'notify_telegram' => true]);
                     $this->reply($chatId, 'Akaun Diwan anda kini bersambung dengan Telegram.');
+
+                    return response()->json(['ok' => true]);
                 }
             } catch (\Throwable $e) {
-                // token tidak sah — abaikan.
+                // token tidak sah — jatuh ke semakan tamat tempoh di bawah.
+            }
+
+            // Token pendek sah-bentuk (48 aksara) tetapi tiada dalam cache = tamat
+            // tempoh / sudah diguna. Beri maklum balas supaya pengguna tidak
+            // tertanya-tanya bila bot "senyap". Payload /start rawak kekal senyap.
+            if (preg_match('/^[A-Za-z0-9]{48}$/', $token)) {
+                $this->reply($chatId, 'Pautan sambungan Telegram telah tamat tempoh atau telah digunakan. Sila jana pautan baharu di Diwan (Profil Saya → Sambung Telegram), kemudian tekan Start semula.');
             }
         }
 

@@ -2,9 +2,9 @@
 
 namespace App\Notifications\Concerns;
 
+use App\Notifications\Channels\TelegramChannel;
 use App\Notifications\Channels\WhatsAppChannel;
 use App\Services\WhatsAppRecipientResolver;
-use NotificationChannels\Telegram\TelegramChannel;
 
 /**
  * §14 — Saluran per pengguna: mail (jika notify_email) + whatsapp (jika notify_whatsapp &&
