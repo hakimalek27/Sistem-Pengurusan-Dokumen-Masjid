@@ -33,6 +33,20 @@ it('jemput semula ahli sedia ada mengemas kini pivot tenant tersebut', function 
         ->and($membership->phone_wa)->toBe('60191112233');
 });
 
+it('jemput semula ahli sedia ada dengan e-mel berbeza TIDAK mengubah e-mel akaun (governance §6.4)', function () {
+    // Keperluan pemilik: e-mel pengguna hanya boleh ditukar melalui superadmin
+    // (UserForm). Panel tenant tidak boleh mengubah e-mel akaun sedia ada —
+    // invite() mengisi e-mel HANYA untuk akaun BAHARU.
+    $existing = $this->svc->invite($this->mam, 'asal@mam.test', 'Ali', 'ajk', '0123334444', $this->admin);
+    expect($existing->email)->toBe('asal@mam.test');
+
+    // Jemput semula orang SAMA (telefon sama) tetapi beri e-mel berbeza.
+    $again = $this->svc->invite($this->mam, 'lain@penipu.test', 'Ali', 'ajk', '0123334444', $this->admin);
+
+    expect($again->id)->toBe($existing->id)                  // akaun yang sama
+        ->and($again->fresh()->email)->toBe('asal@mam.test'); // e-mel KEKAL tidak berubah
+});
+
 it('menolak jemputan oleh pelakon tanpa users.manage atau tenant lain', function () {
     $otherMosque = makeMosque('MAN', 'man');
     $otherAdmin = makeMember($otherMosque, 'admin_masjid', 'admin@man.test');

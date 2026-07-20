@@ -242,7 +242,10 @@ return [
         'notifiable' => Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            // Alert backup (gagal/tidak sihat/cleanup) → superadmin. Sebelum ini
+            // placeholder 'your@example.com' → alert lesap. Baca env supaya
+            // pemantauan backup benar-benar sampai (§4.6).
+            'to' => env('BACKUP_NOTIFY_EMAIL', env('MAIL_FROM_ADDRESS', 'admin@bakwim.my')),
 
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
