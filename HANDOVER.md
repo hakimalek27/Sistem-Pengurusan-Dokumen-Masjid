@@ -1,5 +1,33 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## LATEST RELEASE — Audit A-Z 21 Julai 2026
+
+**Status:** LIVE dan disahkan selepas deploy `980f12e` di `https://bakwim.my`.
+
+- Code release di tempatan, `origin/main` dan server `/opt/diwan` ialah `980f12e` selepas
+  pull/deploy; commit handover ini mengekalkan bukti selepas release. Untracked server
+  `.env.bak.1784338951` dan `docker-compose.override.yml`
+  dikekalkan kerana ia konfigurasi/backup operasi, bukan fail Git.
+- Dua fix release pertama `1d7c92b`: validasi nombor WhatsApp pendua sebelum DB 500;
+  named limiter berasingan untuk pendaftaran, login page dan magic-link; HSTS dan
+  `expose_php=Off`.
+- Fix susulan `980f12e`: guard magic-link supaya auto-submit 300 ms dan klik manual tidak
+  menghantar POST dua kali. Chrome membuktikan satu POST 302 bagi setiap mod.
+- Gate lokal: Pest `361 lulus, 1 skip, 1203 assertions`; Playwright `5 lulus, 1 skip`;
+  Pint, diff-check dan Vite build lulus. Skip OCR memerlukan fixture imej sebenar.
+- Chrome production, context/session berasingan: superadmin 8 halaman, admin masjid 18,
+  kerani 13, pengerusi 12, ahli biasa 9; semua halaman `200`, tiada JS error. Tenant
+  `smoke` tidak boleh membuka `/app/mamad/records` (`404`). Ahli biasa melalui gate
+  tetapan kata laluan pertama sebelum panel.
+- Production: `/up` `200`, `diwan:health` `OK`, `diwan:smoke` `9/9`, failed queue kosong,
+  `nginx -t` lulus, HSTS aktif dan `X-Powered-By` tidak terdedah. Fetch-mail selesai
+  setiap minit dalam 3-11 saat.
+- **Deploy rule:** selepas `docker compose up --force-recreate app worker scheduler`,
+  force-recreate nginx juga kerana nginx menyimpan IP upstream FastCGI lama; jika tidak,
+  origin boleh sementara `502`. Jika asset frontend berubah, build `app` dan `nginx`
+  kedua-duanya.
+- Rujukan bukti lengkap: [`AUDIT-E2E-2026-07-21.md`](AUDIT-E2E-2026-07-21.md).
+
 **Kemas kini:** 2026-07-20 · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Sesi 18 Jul: Email intake LIVE PENUH, WhatsApp E2E LENGKAP (pilot MAMAD), bug OCR Ghostscript dibaiki (`fe5744a`).
 
 ---
