@@ -2,6 +2,58 @@
 
 **Kemas kini:** 2026-07-20 · **Status:** LIVE di https://bakwim.my (Cloudflare Full strict, COS, login password, Brevo SMTP). Sesi 18 Jul: Email intake LIVE PENUH, WhatsApp E2E LENGKAP (pilot MAMAD), bug OCR Ghostscript dibaiki (`fe5744a`).
 
+---
+
+## 🐛 SESI 20 JUL (MALAM 2) — INTAKE E-MEL TERSEKAT: PUNCA & FIX (`91a229b`+`4e75dfd`+`0f543d8`; LIVE `0f543d8`)
+
+**Aduan pemilik:** e-mel dari `hakimalek27@gmail.com` ke `scan+mamad@bakwim.my` tidak masuk Peti Masuk (WhatsApp ok; upload UI ok selepas fix petang).
+
+### Punca sebenar — mutex JADUAL tersangkut (bukti keras, bukan teori)
+```
+schedule:list        → diwan:fetch-mail  "Has Mutex"        ← tidak pernah jalan
+redis TTL framework/schedule-accde773…  → 50950s (≈14.2 jam)
+logs scheduler       → ping-gateway/check-wa/drive jalan; fetch-mail TIADA
+log [IMAP] intake    → terakhir 19 Jul 03:11 (≈14 jam senyap, 0 ralat)
+```
+Kunci dicipta oleh kod **LAMA** `withoutOverlapping()` **tanpa argumen = lalai 1440 minit (24 JAM)**; container di-recreate mid-run semasa deploy → kunci tidak dilepaskan. Fix sesi lepas (`withoutOverlapping(10)`) hanya berkesan untuk kunci **baharu**.
+
+### Mengapa senyap sepenuhnya
+Kesihatan dinilai daripada `imap_failure_streak` **sahaja**. Streak hanya bertambah apabila job **berjalan** — job yang langsung tidak berjalan mengekalkan streak 0, jadi setiap penunjuk memaparkan **"OK" hijau palsu** dan sifar alert dihantar.
+
+### Dua hipotesis diuji dan TERBUKTI SALAH (dicatat supaya tidak diulang)
+1. `MAIL_INTAKE_ADDRESS` hilang → **salah**; nama config sebenar ialah `diwan.mail_intake.address` (bukan `diwan.mail_intake_address`).
+2. `getTo()` kosong selepas Cloudflare Routing → **salah**; ia pulang `scan+mamad@bakwim.my` betul. "Kosong" tadi ialah artifak skrip diagnostik (objek `Attribute`, perlu `->toArray()`).
+
+Yang **sihat sepanjang masa**: CF Routing kekalkan header `To:` asal, `slugFromAddress()` betul, `mail_intake_enabled=true`, allowlist mengandungi pengirim.
+
+### Halangan kedua (ditemui semasa E2E, bukan teori)
+Kunci **job-level** (`laravel-queue-overlap:App\Jobs\FetchMailJob:diwan-fetch-mail`) **tersangkut semula sebaik selepas deploy** — corak sama, menyekat 10 minit setiap deploy. Lebih buruk: `diwan:fetch-mail` mencetak **"FetchMailJob selesai"** walaupun middleware menelan larian = laporan palsu.
+
+### Pembaikan
+| Fail | Perubahan |
+|---|---|
+| `routes/console.php` | SEMUA mutex jadual bertempoh luput eksplisit: fetch-mail **2**, check-wa-sessions **10**, drive-reconcile **55** (dua terakhir masih lalai 24j = bom jangka sama) |
+| `app/Jobs/FetchMailJob.php` | Detak jantung `imap_last_success_at`; `expireAfter` **600→120** |
+| `app/Support/MailIntakeHealth.php` *(baharu)* | Satu sumber kebenaran: `disabled`/`ok`/`failing`/**`stalled`** |
+| `app/Console/Commands/CheckWaSessions.php` | Alert superadmin pada **TERSEKAT** (bukan hanya GAGAL), dipagar `IMAP_ENABLED` |
+| `app/Console/Commands/FetchMail.php` | Lapor **DILANGKAU** + exit FAILURE + bendera **`--force`** untuk lepaskan kunci |
+| Widget + Status Sambungan | Papar "Tersekat" + "Larian berjaya terakhir" + petunjuk pembaikan mutex |
+
+### Bukti
+- **Pest 358 lulus / 1 skip**, Pint bersih, **CI HIJAU** ketiga-tiga SHA (disahkan `conclusion=success`, tanpa pipe).
+- `MailIntakeHealthTest` (15) termasuk penjaga yang **gagal bila mana-mana mutex jadual >60 minit** — **dibuktikan menangkap regresi** (sengaja kembalikan `withoutOverlapping()` → merah; pulihkan → hijau).
+- **E2E produksi sebenar:** e-mel dihantar melalui laluan penuh (Brevo → Cloudflare → Gmail → IMAP → ingest) → rekod **#24** tenant smoke, `src=emel`, OCR siap, teks tepat `UJIAN E2E INTAKE EMEL SELEPAS FIX MUTEX`.
+- **E-mel pemilik "Jshd" turut diproses** → rekod **#22** mamad, `src=emel`, OCR siap 675 aksara. Andaian "sudah Seen → hilang selamanya" **salah**: Diwan sendiri menandakannya Seen semasa memprosesnya. **Tiada e-mel hilang.**
+- **Chrome MCP:** Peti Masuk mamad papar "Jshd" Sumber=E-mel OCR=Siap; `/admin` Status Sambungan papar `IMAP intake e-mel OK / Larian berjaya terakhir 17 saat lepas`; dashboard bergaya penuh (hash aset app==nginx, tiada regresi CSS).
+- `/up` 200, 7 container healthy, `diwan:smoke` **9/9**, `staging-check` 8/9 (smtp perlu `--mail-to`), `failed_jobs`=0. `local = origin = server = 0f543d8`.
+
+### ⚠️ Nota operasi penting
+- **Kata kunci intake:** `Mosque::mailIntakeKeyword()` jatuh balik ke `MAIL_INTAKE_KEYWORD=spdm` global apabila kunci `mail_intake_keyword` **tidak wujud** dalam settings. mamad ada kunci bernilai `''` → **tiada gate** ✔; smoke **tiada kunci** → efektif `spdm`. Bezakan "wujud tapi kosong" daripada "tiada".
+- **Risiko diterima secara sedar** (pilihan pemilik: kekal `->unseen()`): membuka peti masuk `spdmediwan` di Gmail menandakan e-mel dibaca → Diwan melangkaunya **selamanya**. **Sahkan intake tanpa membuka Gmail** — guna `grep "\[IMAP\] intake" storage/logs/laravel.log` + semak DB. Jika berulang → naik taraf kepada jejak-UID.
+- **Selepas SETIAP deploy:** semak `schedule:list` untuk "Has Mutex"; pulih dengan `php artisan diwan:fetch-mail --force`.
+
+---
+
 **Sesi 20 Jul (malam) — 3 BUG PEMILIK + 1 BUG BAHARU DIBAIKI + AUDIT E2E (commit `3459134`+`987a17e`+`6c74f37`+`01aa19c`; LIVE `01aa19c`):** pemilik lapor upload UI gagal, e-mel intake tak masuk, notifikasi Telegram tak sampai. **Punca sebenar (semua disahkan bukti kod + LIVE):** **(A) Upload UI** — `config/livewire.php` TIADA → temp Livewire guna disk lalai `cos` (S3) → pelayar PUT pra-tandatangan ke COS tanpa CORS → SEMUA upload UI gagal (dev=local, tak reproduce). Fix: `config/livewire.php` `temp.disk=local`. **BUKTI LIVE: rangkaian `POST /livewire/upload-file`=200 (bukan COS) → rekod #20 DB+COS+OCR.** **(B) E-mel intake** — kunci job `WithoutOverlapping('diwan-fetch-mail')` tanpa expiry (`expiresAfter=0`) KEKAL selepas container recreate mid-run → fetch-mail dilangkau SELAMANYA (bukan allowlist — pengirim sudah whitelisted!). Fix: `expireAfter(600)` + scheduler `withoutOverlapping(10)` + lepaskan kunci. E-mel pemilik (#18) kini di Peti Masuk. **(C) Telegram** — `notify_telegram` lalai DB=false; webhook `/start` hanya simpan `chat_id` → `via()` SKIP walau "Bersambung". Fix: `/start` set `notify_telegram=true` + wrapper `TelegramChannel` (log NotificationLog sent/failed + telan ralat) + `TestNotification::toTelegram` + TTL 15→60min + balasan token luput. **BUKTI: NotificationLog telegram `sent` to=667224545.** **(E, baharu) OCR imej** — `img2pdf` ABORT pada EXIF putaran tak sah (foto telefon). Fix: `--rotation=ifvalid`. Rekod #18 kini `ocr=siap`. **+ Intake e-mel awam** (permintaan pemilik): mana-mana pengirim diterima (had 10/jam), allowlist 100/jam (`MAIL_ALLOW_PUBLIC_INTAKE`). **+ indicator**: widget/StatusSambungan IMAP "Dimatikan" bila disabled; stat Telegram baharu. **+ backup**: `backup:monitor` harian + `BACKUP_NOTIFY_EMAIL` + `docs/RESTORE-RUNBOOK.md`. Bukti: Pest **342✓/1skip**, Pint, CI HIJAU (`01aa19c`), deploy rebuild app (tiada aset Vite → nginx tak rebuild). **AUDIT E2E MENYELURUH LIVE (Chrome MCP, `AUDIT-E2E-2026-07-20.md`) — 19 fungsi diuji SEBENAR di UI (input→output→hasil DB), TANPA skip** (pemilik tegas: jangan halusinasi/page-load): kitaran teras upload(rangkaian 200→DB→COS→OCR)→klasifikasi(18 medan+Choices.js→difailkan+enclosure+our_ref auto)→edarkan-minit(multi-select→routed)→minit-saya→tanda-selesai; + mohon-kelulusan(#7)/pindah-fail(→fail2)/jemput-ahli(user#8)/tutup-fail/peraturan-retensi(#19)/tambah-storan(order#1+invois+idempotency)/pelupusan(gate retensi betul)/paparan-Teks-OCR/laporan-CSV/kelulusan-lulus; superadmin ubah-kuota/mark-paid(order→dibayar+addon aktif); awam token-magic-tak-sah/secure-file→403. 5 persona log masuk tanpa bounce. **Aksi bergate kata laluan** (Lulus/Mark-Paid): gate "Sahkan Kata Laluan" DISAHKAN render (semakan keselamatan sebenar), keputusan via service (polisi larang taip kata laluan) — telus, bukan skip. **Kaedah pandu borang Filament v4 via Chrome MCP disimpan memori** ([[spdm-deploy-lessons]]): aksi Livewire=`element.click()` JS (klik-ref sintetik tak cetus); combobox=`form_input(ref,text)`; Choices butang=buka+klik `<li>` JS; medan biasa=native setter+events; nombor=`form_input`. ⚠️ **Gotcha deploy baharu**: `git reset` server GAGAL "Permission denied" (fail kod milik root dari deploy lepas) → `sudo chown -R ubuntu:ubuntu app config routes resources tests docs .git` (JANGAN chown storage/.env — container www-data perlu tulis).
 
 **Sesi 20 Jul (petang) — MIRROR GOOGLE DRIVE + MAGIC LINK AUTO-LOGIN + FIX SALIB (commit `1bc5cc0`+`9789bfd`+`c15e8d6`+`b5bff77`+`166f421`+`a0c8844`):** empat kerja pemilik. **(1) Mirror Google Drive per-tenant boleh-browse** (§4.6 dipinda, kelulusan PDPA pemilik): `google/apiclient` (§3.3), `SPDM/Backup/{slug}/{klasifikasi}/{fail}/…`; auto-cipta folder bila masjid diluluskan, auto-upload bila diklasifikasikan (afterCommit), padam bila dilupus (selaras sijil), reconcile setiap jam + DB dump + prune, verify. **ISOLASI** dijamin (id induk tersimpan + assert mosque_id + refetch berskop; ujian tamper silang-tenant = sifar upload). Superadmin `/admin` Tetapan Platform → Sambung/Uji Google Drive (OAuth akaun pemilik). Litar 6j + alert bila token dibatal/kuota penuh. **(2) Magic link auto-login notifikasi** (§15.1″): notifikasi mention (minit/kelulusan/peti masuk) bawa pautan magic PER PENERIMA (TTL 72j) → klik = auto-login terus ke rekod, tiada login manual; **interstisial** (GET tak guna token → bot pratonton WA/TG tak bakar token; POST guna); **fix bounce** (`password_hash_web`); guard open-redirect. **(3) Fix salib landing** → bulan sabit. **(4) Re-OCR rekod Office lama**. Bukti: Pest **326✓/1 skip**, Pint bersih, `npm run build` OK, Playwright registration+office-workflow LULUS. ⚠️ Tindakan pemilik SEKALI: Google Cloud Console → OAuth consent **PUBLISHED** (mod Testing = refresh token mati 7 hari!) + client id/secret → Tetapan Platform → Sambung. Lihat `DIWAN-SPEC-ADDENDUM-2026-07.md` v2.5.
