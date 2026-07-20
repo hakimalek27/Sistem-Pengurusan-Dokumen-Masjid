@@ -38,6 +38,7 @@
 **Container (7):** app, worker (horizon), scheduler, nginx, db (postgres:16), redis:7, meilisearch:v1.12.
 
 ### Nota operasi PENTING
+- 🐛 **ASET FRONTEND BERUBAH (blade/Filament/CSS) → WAJIB rebuild KEDUA-DUA imej `app` DAN `nginx`**: imej `nginx` (`diwan-web`) ada salinan `public/build` sendiri. Rebuild `app` sahaja → hash Vite baharu tapi nginx hidang hash lama → origin 404 → Cloudflare 503 → **UI Filament tak bergaya** (landing OK sebab CSS inline). Fix: `docker compose build app nginx && docker compose up -d --force-recreate app worker scheduler nginx`. (Insiden 20 Jul: rebuild app sahaja → UI panel pecah; dibaiki dgn rebuild nginx.)
 - Selepas **recreate `app`** → mesti `docker compose restart nginx` (nginx cache IP upstream → 502 jika tidak).
 - Selepas **ubah `.env`** → `docker compose up -d --force-recreate app worker scheduler` (env_file dibaca hanya semasa container start; www-data tak boleh baca `.env` chmod 600 terus).
 - `docker-compose.override.yml` (di server sahaja, tidak di git): port 80/443 + mount `docker/certs` + `nginx-ssl.conf`.
