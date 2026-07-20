@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
  */
 
 beforeEach(function () {
+    cache()->flush(); // reset kaunter throttle /masuk (CI cache redis dikongsi antara ujian serial)
     $this->svc = app(MagicLinkService::class);
 });
 

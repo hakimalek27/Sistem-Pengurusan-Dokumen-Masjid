@@ -8,6 +8,7 @@ use Livewire\Livewire;
 
 beforeEach(function () {
     Notification::fake();
+    cache()->flush(); // reset kaunter throttle /masuk (CI cache redis dikongsi antara ujian serial)
     $this->mam = makeMosque('MAM', 'mam');
     $this->admin = makeMember($this->mam, 'admin_masjid', 'a@mam.test');
 });

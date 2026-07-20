@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Services\MagicLinkService;
 
 beforeEach(function () {
+    cache()->flush(); // reset kaunter throttle /masuk (CI cache redis dikongsi antara ujian serial)
     $this->svc = app(MagicLinkService::class);
 });
 

@@ -18,6 +18,7 @@ beforeEach(function () {
     config()->set('scout.driver', 'collection');
     Storage::fake(config('diwan.storage_disk'));
     Storage::fake('cos_backup');
+    config()->set('backup.backup.destination.disks', ['cos_backup']); // syncDatabaseDump baca disk ini (elak BACKUP_DISK CI berbeza)
 
     $this->fake = new FakeDriveClient;
     app()->instance(DriveClient::class, $this->fake);
