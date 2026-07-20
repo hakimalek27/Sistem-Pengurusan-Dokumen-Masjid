@@ -89,6 +89,15 @@ return [
         // Alamat intake rasmi (cth scan@bakwim.my) untuk plus-addressing per masjid.
         // Jika kosong, jatuh balik ke IMAP username (config imap.accounts.default.username).
         'address' => env('MAIL_INTAKE_ADDRESS'),
+        // Submission awam (selaras intake WhatsApp §11.1): mana-mana pengirim yang
+        // menghantar ke scan+{slug}@… DITERIMA (dengan had kadar) walaupun tiada
+        // dalam allowlist. Allowlist = pengirim dipercayai (had lebih tinggi).
+        // false = allowlist SAHAJA (mod ketat).
+        'allow_public' => filter_var(env('MAIL_ALLOW_PUBLIC_INTAKE', true), FILTER_VALIDATE_BOOLEAN),
+        // Had dokumen per pengirim setiap tetingkap (elak banjir intake). 0 = tanpa had.
+        'submission_cap' => (int) env('MAIL_SUBMISSION_CAP', 10),          // pengirim awam
+        'allowlist_cap' => (int) env('MAIL_ALLOWLIST_CAP', 100),           // pengirim dibenarkan
+        'submission_window_minutes' => (int) env('MAIL_SUBMISSION_WINDOW_MINUTES', 60),
     ],
 
     'meilisearch' => [

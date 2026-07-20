@@ -1,13 +1,16 @@
 <?php
 
+use App\Jobs\FetchMailJob;
 use App\Models\Record;
 use App\Notifications\MailIntakeRejectedNotification;
 use App\Services\MailIngestService;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     Storage::fake(config('diwan.storage_disk'));
+    cache()->flush(); // reset kaunter had kadar submission (CI redis dikongsi antara ujian)
     config()->set('imap.accounts.default.username', 'scan.diwan@gmail.com');
     $this->svc = app(MailIngestService::class);
     $this->mam = makeMosque('MAM', 'mam');
@@ -19,6 +22,16 @@ beforeEach(function () {
             'mail_intake_senders' => ['pengirim@luar.com', 'a@b.com'],
         ])]);
     }
+});
+
+it('FetchMailJob WithoutOverlapping mempunyai expiry (elak kunci tersekat kekal §11.3)', function () {
+    // Punca sebenar e-mel intake tersekat 20 Jul: kunci job-level tanpa expiry
+    // (expiresAfter=0) kekal selepas larian terbunuh → fetch-mail dilangkau selamanya.
+    $mw = (new FetchMailJob)->middleware();
+
+    expect($mw)->toHaveCount(1)
+        ->and($mw[0])->toBeInstanceOf(WithoutOverlapping::class)
+        ->and($mw[0]->expiresAfter)->toBe(600);
 });
 
 it('mengekstrak slug daripada plus-addressing', function () {
@@ -111,18 +124,105 @@ it('semua lampiran format tidak sah → status all_rejected', function () {
         ->and(Record::query()->count())->toBe(0);
 });
 
-it('menolak pengirim, kata kunci atau tenant yang tidak dibenarkan', function () {
+it('mod ketat (allow_public=false): pengirim bukan-allowlist ditolak sender_not_allowed', function () {
+    config()->set('diwan.mail_intake.allow_public', false);
     $attachment = [['content' => 'dokumen', 'filename' => 'a.pdf', 'mime' => 'application/pdf']];
 
     expect($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'penipu@evil.test', 'SPDM surat', 'M1', $attachment)['status'])
         ->toBe('sender_not_allowed')
-        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'a@b.com', 'Surat biasa', 'M2', $attachment)['status'])
+        ->and(Record::query()->count())->toBe(0);
+});
+
+it('menolak kata kunci hilang & intake dimatikan', function () {
+    $attachment = [['content' => 'dokumen', 'filename' => 'a.pdf', 'mime' => 'application/pdf']];
+
+    // a@b.com dibenarkan tetapi subjek tiada kata kunci 'spdm' → keyword_missing.
+    expect($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'a@b.com', 'Surat biasa', 'M2', $attachment)['status'])
         ->toBe('keyword_missing');
 
     $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_enabled' => false])]);
     expect($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'a@b.com', 'SPDM surat', 'M3', $attachment)['status'])
         ->toBe('disabled')
         ->and(Record::query()->count())->toBe(0);
+});
+
+it('submission awam (allow_public lalai): pengirim luar + kata kunci → diterima', function () {
+    // Punca sebenar bug pemilik BUKAN allowlist (kunci mutex), tetapi pemilik mahu
+    // mana-mana pengirim boleh hantar terus. Lalai allow_public=true.
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'orang.luar@example.test', 'SPDM sumbangan', 'MID-PUB',
+        [['content' => 'dokumen awam', 'filename' => 'surat.pdf', 'mime' => 'application/pdf']],
+    );
+
+    expect($result['status'])->toBe('ok')
+        ->and(Record::forMosque($this->mam)->count())->toBe(1);
+});
+
+it('had kadar submission awam menyekat selepas cap dicapai', function () {
+    config()->set('diwan.mail_intake.submission_cap', 2);
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_keyword' => ''])]);
+    $att = fn ($n) => [['content' => "isi-{$n}", 'filename' => "s{$n}.pdf", 'mime' => 'application/pdf']];
+
+    expect($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'flood@example.test', 'X', 'F1', $att(1))['status'])->toBe('ok')
+        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'flood@example.test', 'X', 'F2', $att(2))['status'])->toBe('ok')
+        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'flood@example.test', 'X', 'F3', $att(3))['status'])->toBe('rate_limited')
+        ->and(Record::forMosque($this->mam)->count())->toBe(2);
+});
+
+it('pengirim dalam allowlist mendapat had lebih tinggi daripada awam', function () {
+    config()->set('diwan.mail_intake.submission_cap', 1);   // awam: 1
+    config()->set('diwan.mail_intake.allowlist_cap', 5);    // dipercayai: 5
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_keyword' => ''])]);
+    $att = fn ($n) => [['content' => "isi-{$n}", 'filename' => "s{$n}.pdf", 'mime' => 'application/pdf']];
+
+    // a@b.com dalam allowlist → melepasi had awam (1).
+    expect($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'a@b.com', 'X', 'A1', $att(1))['status'])->toBe('ok')
+        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'a@b.com', 'X', 'A2', $att(2))['status'])->toBe('ok')
+        // pengirim awam disekat pada dokumen ke-2.
+        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'awam@example.test', 'X', 'P1', $att(3))['status'])->toBe('ok')
+        ->and($this->svc->ingestMessage(['scan.diwan+mam@gmail.com'], 'awam@example.test', 'X', 'P2', $att(4))['status'])->toBe('rate_limited');
+});
+
+it('lampiran melebihi had saiz → rejected_oversize tanpa exception (bukan mesej racun)', function () {
+    config()->set('diwan.max_upload_mb', 1);
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_keyword' => ''])]);
+
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'a@b.com', 'Besar', 'MID-BIG',
+        [['content' => str_repeat('x', 2 * 1024 * 1024), 'filename' => 'besar.pdf', 'mime' => 'application/pdf']],
+    );
+
+    expect($result['status'])->toBe('all_rejected')
+        ->and($result['rejected_oversize'])->toContain('besar.pdf')
+        ->and(Record::query()->count())->toBe(0);
+});
+
+it('campuran lampiran sah + oversize → rekod sah dicipta, oversize direkod', function () {
+    config()->set('diwan.max_upload_mb', 1);
+    $this->mam->update(['settings' => array_merge($this->mam->settings, ['mail_intake_keyword' => ''])]);
+
+    $result = $this->svc->ingestMessage(
+        ['scan.diwan+mam@gmail.com'], 'a@b.com', 'Campur', 'MID-MIX',
+        [
+            ['content' => 'kecil', 'filename' => 'ok.pdf', 'mime' => 'application/pdf'],
+            ['content' => str_repeat('x', 2 * 1024 * 1024), 'filename' => 'besar.pdf', 'mime' => 'application/pdf'],
+        ],
+    );
+
+    expect($result['status'])->toBe('ok')
+        ->and($result['rejected_oversize'])->toContain('besar.pdf')
+        ->and(Record::forMosque($this->mam)->count())->toBe(1);
+});
+
+it('recordOutcome sebab oversize memaklum admin dan menyimpan diagnostik oversize', function () {
+    Notification::fake();
+    $admin = makeMember($this->mam, 'admin_masjid', 'admin-ov@mam.test');
+
+    $result = ['status' => 'all_rejected', 'mosque' => $this->mam->fresh(), 'rejected_format' => [], 'rejected_oversize' => ['besar.pdf']];
+    $this->svc->recordOutcome($result, 'a@b.com', 'Besar');
+
+    Notification::assertSentTo($admin, MailIntakeRejectedNotification::class);
+    expect($this->mam->fresh()->settings['mail_intake_last']['status'])->toBe('oversize');
 });
 
 it('menerima kata kunci dalam isi e-mel dan kekal berskop tenant penerima', function () {
@@ -180,11 +280,13 @@ it('recordOutcome tidak memaklum bila tiada masjid (no_slug)', function () {
     Notification::assertNothingSent();
 });
 
-it('allowlist pengirim satu tenant tidak terpakai kepada tenant lain', function () {
+it('mod ketat: allowlist pengirim satu tenant tidak terpakai kepada tenant lain', function () {
+    config()->set('diwan.mail_intake.allow_public', false);
     $this->man->update(['settings' => array_merge($this->man->settings, [
         'mail_intake_senders' => ['khusus-man@example.test'],
     ])]);
 
+    // a@b.com dibenarkan di MAM tetapi BUKAN MAN → ditolak di MAN (mod ketat).
     $result = $this->svc->ingestMessage(
         ['scan.diwan+man@gmail.com'],
         'a@b.com',

@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Webklex\IMAP\Client;
@@ -27,7 +28,13 @@ class FetchMailJob implements ShouldQueue
 
     public function middleware(): array
     {
-        return [new WithoutOverlapping('diwan-fetch-mail')];
+        // §11.3 — expireAfter(600): kunci auto-luput selepas 10 minit. TANPA ini,
+        // expiresAfter lalai = 0 (KEKAL selamanya): jika satu larian terbunuh
+        // (cth container di-recreate semasa deploy di tengah larian), kunci tinggal
+        // dan SETIAP fetch-mail berikutnya dilangkau senyap → e-mel tak diproses
+        // (punca sebenar e-mel intake tersekat, 20 Jul). dontRelease() = jangan
+        // baris gilir semula pada perebutan; larian berjadual seterusnya cuba lagi.
+        return [(new WithoutOverlapping('diwan-fetch-mail'))->expireAfter(600)->dontRelease()];
     }
 
     public function handle(MailIngestService $mail): void
@@ -80,6 +87,19 @@ class FetchMailJob implements ShouldQueue
                 $mail->recordOutcome($result, $from, $subject);
             } catch (\Throwable $e) {
                 Log::warning('[IMAP] ralat proses mesej: '.$e->getMessage());
+
+                // Mesej racun: selepas 3 kegagalan berturut, tandai Seen supaya ia
+                // tidak diproses berulang setiap minit. Ralat sementara (IMAP/S3)
+                // masih dicuba semula sebelum ambang dicapai.
+                $uid = rescue(fn () => (string) $message->getUid(), '', report: false);
+                if ($uid !== '') {
+                    Cache::add('imap_fail:'.$uid, 0, now()->addDay());
+                    if ((int) Cache::increment('imap_fail:'.$uid) >= 3) {
+                        rescue(fn () => $message->setFlag('Seen'), report: false);
+                        Cache::forget('imap_fail:'.$uid);
+                        Log::error('[IMAP] mesej dilangkau selepas 3 kegagalan berturut (uid '.$uid.'): '.$e->getMessage());
+                    }
+                }
             }
         }
     }

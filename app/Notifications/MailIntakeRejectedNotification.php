@@ -12,7 +12,7 @@ use NotificationChannels\Telegram\TelegramMessage;
 /**
  * §11.3 — Maklum admin masjid apabila e-mel intake TIDAK diproses, supaya
  * e-mel tidak lesap senyap. Sebab: sender_not_allowed | keyword_missing |
- * quota | rejected_format. Dithrottle 1 jam/masjid+sebab oleh pemanggil.
+ * quota | rejected_format | oversize | rate_limited. Dithrottle 1 jam/masjid+sebab.
  */
 class MailIntakeRejectedNotification extends Notification
 {
@@ -37,6 +37,8 @@ class MailIntakeRejectedNotification extends Notification
             'keyword_missing' => 'subjek/isi tiada kata kunci intake yang ditetapkan',
             'quota' => 'kuota storan masjid penuh',
             'rejected_format' => 'lampiran bukan format disokong ('.AllowedFormats::label().')',
+            'oversize' => 'lampiran melebihi had saiz '.config('diwan.max_upload_mb', 25).'MB',
+            'rate_limited' => 'had bilangan dokumen sejam bagi pengirim ini telah dicapai — cuba lagi kemudian',
             default => 'sebab tidak diketahui',
         };
     }

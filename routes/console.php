@@ -8,14 +8,19 @@ use Illuminate\Support\Facades\Schedule;
 |--------------------------------------------------------------------------
 */
 
-// 1. Ingest e-mel pengimbas — setiap minit (§11.3).
-Schedule::command('diwan:fetch-mail')->everyMinute()->withoutOverlapping();
+// 1. Ingest e-mel pengimbas — setiap minit (§11.3). withoutOverlapping(10): mutex
+//    jadual auto-luput selepas 10 minit (elak sekatan kekal jika larian terganggu).
+Schedule::command('diwan:fetch-mail')->everyMinute()->withoutOverlapping(10);
 
 // 2. Reconcile storan — 03:00 (§5.14).
 Schedule::command('diwan:reconcile-storage')->dailyAt('03:00');
 
 // 3. Sandaran pangkalan data + .env — 02:30 (§4.6).
 Schedule::command('backup:run')->dailyAt('02:30');
+
+// 3b. Pemantauan kesihatan backup — 08:30 (§4.6). Alert e-mel superadmin jika
+//     backup terkini gagal/terlalu lama/melebihi had storan (monitor_backups → cos_backup).
+Schedule::command('backup:monitor')->dailyAt('08:30');
 
 // 4. Notis retensi t90/t30/t7 — 07:00 (§16.3).
 Schedule::command('diwan:run-retention-notices')->dailyAt('07:00');

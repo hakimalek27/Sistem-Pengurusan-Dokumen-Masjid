@@ -61,7 +61,7 @@
             <dl class="mt-3 grid grid-cols-2 gap-2 text-sm">
                 <dt class="text-gray-500">Status</dt><dd>{{ $mosque->mailIntakeEnabled() ? 'Aktif' : 'Tidak aktif' }}</dd>
                 <dt class="text-gray-500">Kata kunci</dt><dd>{{ $mosque->mailIntakeKeyword() !== '' ? $mosque->mailIntakeKeyword() : 'Tiada (terima semua daripada pengirim dibenarkan)' }}</dd>
-                <dt class="text-gray-500">Pengirim dibenarkan</dt><dd>{{ implode(', ', $mosque->mailIntakeSenders()) ?: 'Belum ditetapkan' }}</dd>
+                <dt class="text-gray-500">Pengirim dibenarkan</dt><dd>{{ implode(', ', $mosque->mailIntakeSenders()) ?: 'Semua pengirim (had lebih rendah)' }}</dd>
             </dl>
 
             @php($lastIntake = $mosque->settings['mail_intake_last'] ?? null)
@@ -71,6 +71,8 @@
                     'keyword_missing' => 'Subjek/isi tiada kata kunci intake',
                     'quota' => 'Kuota storan penuh',
                     'rejected_format' => 'Lampiran bukan format disokong',
+                    'oversize' => 'Lampiran melebihi had saiz ' . config('diwan.max_upload_mb', 25) . 'MB',
+                    'rate_limited' => 'Had bilangan dokumen sejam bagi pengirim dicapai',
                     'disabled' => 'Intake e-mel dimatikan',
                 ])
                 <div class="mt-3 rounded-lg border border-warning-300 bg-warning-50 p-3 text-sm dark:border-warning-500/30 dark:bg-warning-500/10">

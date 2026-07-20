@@ -77,11 +77,11 @@ class TetapanMasjid extends Page
                     Toggle::make('mail_intake_enabled')->label('Terima dokumen melalui e-mel')->default(false),
                     TextInput::make('mail_intake_keyword')
                         ->label('Kata Kunci E-mel (pilihan)')
-                        ->helperText('Kosongkan untuk terima SEMUA e-mel daripada pengirim dibenarkan. Isi (cth. "spdm") jika mahu hanya e-mel dengan kata kunci itu pada subjek/isi diproses.'),
+                        ->helperText('Kosongkan untuk terima SEMUA e-mel. Isi (cth. "spdm") jika mahu hanya e-mel dengan kata kunci itu pada subjek/isi diproses.'),
                     TagsInput::make('mail_intake_senders')
-                        ->label('E-mel Pengirim Dibenarkan')
+                        ->label('E-mel Pengirim Dipercayai (pilihan)')
                         ->placeholder('admin@masjid.org')
-                        ->helperText('Masukkan alamat e-mel PENGHANTAR (cth. e-mel pengimbas pejabat anda), BUKAN alamat intake tenant di atas. Tekan Enter selepas setiap alamat.'),
+                        ->helperText('Mana-mana pengirim boleh hantar dokumen (had '.(int) config('diwan.mail_intake.submission_cap', 10).'/jam). Alamat dalam senarai ini dipercayai (had lebih tinggi, '.(int) config('diwan.mail_intake.allowlist_cap', 100).'/jam). Masukkan alamat PENGHANTAR (cth. e-mel pengimbas), BUKAN alamat intake tenant.'),
                 ])
                 ->action(function (array $data) use ($mosque) {
                     $mailSenders = collect($data['mail_intake_senders'] ?? [])
@@ -90,9 +90,12 @@ class TetapanMasjid extends Page
                         ->unique()
                         ->values()
                         ->all();
-                    if (($data['mail_intake_enabled'] ?? false) && $mailSenders === []) {
+                    // Submission awam (lalai) membenarkan intake tanpa allowlist. Hanya
+                    // paksa allowlist dalam mod ketat (allow_public=false).
+                    if (($data['mail_intake_enabled'] ?? false) && $mailSenders === []
+                        && ! (bool) config('diwan.mail_intake.allow_public', true)) {
                         throw ValidationException::withMessages([
-                            'mail_intake_senders' => 'Tetapkan sekurang-kurangnya satu e-mel pengirim dibenarkan.',
+                            'mail_intake_senders' => 'Mod ketat aktif: tetapkan sekurang-kurangnya satu e-mel pengirim dibenarkan.',
                         ]);
                     }
 

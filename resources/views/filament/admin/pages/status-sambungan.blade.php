@@ -17,7 +17,9 @@
             <div class="flex items-center justify-between gap-2">
                 <dt class="text-sm text-gray-500 dark:text-gray-400">IMAP intake e-mel</dt>
                 <dd>
-                    @if ($imapStreak === 0)
+                    @if (! $imapEnabled)
+                        <x-filament::badge color="gray">Dimatikan</x-filament::badge>
+                    @elseif ($imapStreak === 0)
                         <x-filament::badge color="success">OK</x-filament::badge>
                     @else
                         <x-filament::badge color="danger">Gagal ({{ $imapStreak }}×)</x-filament::badge>

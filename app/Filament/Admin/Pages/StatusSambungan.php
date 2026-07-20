@@ -45,6 +45,7 @@ class StatusSambungan extends Page
         return [
             'integrations' => $integrations,
             'gatewayStatus' => PlatformSetting::get('gateway_status', ['ok' => null]),
+            'imapEnabled' => (bool) config('diwan.imap_enabled'),
             'imapStreak' => (int) PlatformSetting::get('imap_failure_streak', 0),
             'imapError' => PlatformSetting::get('imap_last_error'),
         ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Admin\Widgets\ChannelStatusOverview;
 use App\Models\PlatformSetting;
 use App\Models\User;
 use App\Models\WhatsAppIntegration;
@@ -26,6 +27,21 @@ function mamIntegration(array $attrs = []): WhatsAppIntegration
         'session_id' => 'sess-mam',
     ], $attrs));
 }
+
+it('widget Kesihatan Saluran papar IMAP "Dimatikan" bila IMAP_ENABLED=false (§11.3)', function () {
+    // Tanpa keadaan ini widget tersilap papar "OK" hijau walau saluran mati
+    // (streak kekal 0 kerana FetchMailJob kembali awal).
+    config()->set('diwan.imap_enabled', false);
+    $widget = new ChannelStatusOverview;
+    $method = new ReflectionMethod($widget, 'getStats');
+    $method->setAccessible(true);
+
+    // Susunan tetap: [0]=Gateway, [1]=IMAP, [2]=Sesi WhatsApp.
+    expect($method->invoke($widget)[1]->getValue())->toBe('Dimatikan');
+
+    config()->set('diwan.imap_enabled', true);
+    expect($method->invoke($widget)[1]->getValue())->toBe('OK');
+});
 
 it('sesi terputus → alert superadmin + admin masjid, tandakan down', function () {
     mamIntegration();

@@ -195,7 +195,10 @@ class ProcessOcrJob implements ShouldQueue
     {
         if ($isImage) {
             $inputPdf = $tmpDir.'/input.pdf';
-            (new Process([self::commandPath('img2pdf'), $localOriginal, '-o', $inputPdf]))->setTimeout(120)->mustRun();
+            // --rotation=ifvalid: abaikan tag putaran EXIF tidak sah (cth nilai 0 pada
+            // foto/skrinsyot telefon). Tanpa ini img2pdf ABORT ("Invalid rotation")
+            // → OCR gagal pada imej pengguna sebenar (dijumpai 20 Jul, e-mel JPEG).
+            (new Process([self::commandPath('img2pdf'), $localOriginal, '--rotation=ifvalid', '-o', $inputPdf]))->setTimeout(120)->mustRun();
         } else {
             $inputPdf = $localOriginal;
         }

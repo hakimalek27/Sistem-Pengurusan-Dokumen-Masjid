@@ -10,6 +10,7 @@ use App\Support\AllowedFormats;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 
 /**
  * §11.3 — Ingest e-mel pengimbas via plus-addressing (scan.diwan+{slug}@…).
@@ -107,13 +108,18 @@ class MailIngestService
         }
 
         $from = strtolower(trim($from));
-        if (! in_array($from, $mosque->mailIntakeSenders(), true)) {
+        $isAllowed = in_array($from, $mosque->mailIntakeSenders(), true);
+
+        // Submission awam (selaras WhatsApp §11.1): allowlist KOSONG tidak lagi
+        // menolak semua. Mana-mana pengirim ke scan+{slug}@… DITERIMA dengan had
+        // kadar; allowlist = pengirim dipercayai (had lebih tinggi). Hanya tolak
+        // bukan-allowlist bila mod ketat (allow_public=false).
+        if (! $isAllowed && ! (bool) config('diwan.mail_intake.allow_public', true)) {
             return ['status' => 'sender_not_allowed', 'mosque' => $mosque];
         }
 
-        // Kata kunci kini PILIHAN: kosong = terima semua e-mel daripada pengirim
-        // dalam allowlist (allowlist ialah pagar keselamatan utama). Hanya tapis
-        // ikut kata kunci apabila masjid menetapkannya.
+        // Kata kunci kini PILIHAN: kosong = terima semua e-mel. Hanya tapis ikut
+        // kata kunci apabila masjid menetapkannya.
         $keyword = mb_strtolower(trim($mosque->mailIntakeKeyword()));
         if ($keyword !== '') {
             $haystack = mb_strtolower($subject."\n".$body);
@@ -126,9 +132,17 @@ class MailIngestService
             return ['status' => 'quota', 'mosque' => $mosque];
         }
 
+        // Had kadar submission per pengirim (awam vs allowlist) — hanya bila ada
+        // lampiran untuk diproses (e-mel tanpa lampiran tidak menggunakan kuota).
+        if ($attachments !== [] && $this->submissionRateLimited($mosque, $from, $isAllowed)) {
+            return ['status' => 'rate_limited', 'mosque' => $mosque];
+        }
+
+        $maxBytes = (int) config('diwan.max_upload_mb', 25) * 1024 * 1024;
         $created = [];
         $skipped = 0;
         $rejectedFormat = [];
+        $rejectedOversize = [];
 
         foreach ($attachments as $attachment) {
             $ext = strtolower(pathinfo($attachment['filename'], PATHINFO_EXTENSION));
@@ -138,27 +152,44 @@ class MailIngestService
                 continue;
             }
 
+            // Pra-semak saiz supaya lampiran oversize TIDAK menjadi ValidationException
+            // yang boleh menyekat pemprosesan mesej (elak mesej racun di FetchMailJob).
+            if (strlen((string) $attachment['content']) > $maxBytes) {
+                $rejectedOversize[] = $attachment['filename'];
+
+                continue;
+            }
+
             // MIME kanonik daripada extension (header e-mel selalunya octet-stream).
             $mime = AllowedFormats::mimeForExtension($ext)
                 ?? ($attachment['mime'] ?? 'application/octet-stream');
 
-            $record = $this->inbox->ingest(
-                $mosque,
-                $attachment['content'],
-                $attachment['filename'],
-                $mime,
-                null,
-                SourceChannel::Emel,
-                ['from' => $from, 'subject' => $subject, 'message_id' => $messageId, 'keyword' => $keyword],
-                skipIfDuplicate: true,
-            );
+            try {
+                $record = $this->inbox->ingest(
+                    $mosque,
+                    $attachment['content'],
+                    $attachment['filename'],
+                    $mime,
+                    null,
+                    SourceChannel::Emel,
+                    ['from' => $from, 'subject' => $subject, 'message_id' => $messageId, 'keyword' => $keyword],
+                    skipIfDuplicate: true,
+                );
+            } catch (ValidationException $e) {
+                // Pertahanan terakhir — penolakan deterministik tidak boleh terlepas
+                // sebagai exception (elak mesej racun diproses berulang).
+                $rejectedOversize[] = $attachment['filename'];
+
+                continue;
+            }
 
             $record ? $created[] = $record : $skipped++;
         }
 
-        // Semua lampiran ditolak kerana format (tiada dicipta, tiada duplikat) =
-        // isyarat khusus untuk notifikasi admin (F2). E-mel tanpa lampiran kekal 'ok'.
-        $status = ($rejectedFormat !== [] && $created === [] && $skipped === 0)
+        // Semua lampiran ditolak (format/oversize; tiada dicipta, tiada duplikat) =
+        // isyarat khusus untuk notifikasi admin. E-mel tanpa lampiran kekal 'ok'.
+        $hasRejected = $rejectedFormat !== [] || $rejectedOversize !== [];
+        $status = ($hasRejected && $created === [] && $skipped === 0)
             ? 'all_rejected'
             : 'ok';
 
@@ -168,7 +199,33 @@ class MailIngestService
             'records' => $created,
             'skipped_duplicate' => $skipped,
             'rejected_format' => $rejectedFormat,
+            'rejected_oversize' => $rejectedOversize,
         ];
+    }
+
+    /**
+     * Had submission dokumen e-mel per pengirim dalam tetingkap (elak banjir
+     * intake awam). Selaras corak WhatsApp §11.1: pengirim awam vs allowlist
+     * ada had berbeza; 0 = tanpa had.
+     */
+    protected function submissionRateLimited(Mosque $mosque, string $from, bool $isAllowed): bool
+    {
+        $cap = $isAllowed
+            ? (int) config('diwan.mail_intake.allowlist_cap', 100)
+            : (int) config('diwan.mail_intake.submission_cap', 10);
+        $window = (int) config('diwan.mail_intake.submission_window_minutes', 60);
+        if ($cap <= 0 || $window <= 0) {
+            return false; // tanpa had
+        }
+
+        $key = 'mail_submit_cap:'.$mosque->id.':'.hash('sha256', $from);
+        $count = (int) Cache::get($key, 0);
+        if ($count >= $cap) {
+            return true;
+        }
+        Cache::put($key, $count + 1, now()->addMinutes($window));
+
+        return false;
     }
 
     /**
@@ -184,7 +241,8 @@ class MailIngestService
         $status = (string) ($result['status'] ?? '');
         $mosque = $result['mosque'] ?? null;
         $rejected = $result['rejected_format'] ?? [];
-        $hasRejected = is_array($rejected) && $rejected !== [];
+        $oversize = $result['rejected_oversize'] ?? [];
+        $hasRejected = (is_array($rejected) && $rejected !== []) || (is_array($oversize) && $oversize !== []);
 
         // Kejayaan penuh (tiada lampiran ditolak) — tiada tindakan diperlukan.
         if ($status === 'ok' && ! $hasRejected) {
@@ -196,6 +254,7 @@ class MailIngestService
             'subject' => mb_substr($subject, 0, 150),
             'mosque' => $mosque instanceof Mosque ? $mosque->slug : null,
             'rejected' => $rejected,
+            'oversize' => $oversize,
         ]);
 
         // no_slug / unknown_or_inactive — tiada masjid untuk dimaklum; log sahaja.
@@ -203,9 +262,13 @@ class MailIngestService
             return;
         }
 
-        $reason = ($status === 'all_rejected' || ($status === 'ok' && $hasRejected))
-            ? 'rejected_format'
-            : $status;
+        // Sebab lampiran-ditolak: oversize diutamakan (lebih actionable) atas format;
+        // selainnya guna status (sender_not_allowed | quota | rate_limited | disabled).
+        if ($status === 'all_rejected' || ($status === 'ok' && $hasRejected)) {
+            $reason = $oversize !== [] ? 'oversize' : 'rejected_format';
+        } else {
+            $reason = $status;
+        }
 
         $mosque->forceFill(['settings' => array_merge($mosque->settings ?? [], [
             'mail_intake_last' => [
@@ -213,12 +276,13 @@ class MailIngestService
                 'from' => $from,
                 'subject' => mb_substr($subject, 0, 200),
                 'rejected' => array_values((array) $rejected),
+                'oversize' => array_values((array) $oversize),
                 'at' => now()->toIso8601String(),
             ],
         ])])->save();
 
         // 'disabled' = admin sengaja matikan → diagnostik cukup, jangan ganggu.
-        $notifyReasons = ['sender_not_allowed', 'keyword_missing', 'quota', 'rejected_format'];
+        $notifyReasons = ['sender_not_allowed', 'keyword_missing', 'quota', 'rejected_format', 'oversize', 'rate_limited'];
         if (! in_array($reason, $notifyReasons, true)) {
             return;
         }
