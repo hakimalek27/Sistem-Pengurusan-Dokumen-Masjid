@@ -127,9 +127,21 @@ class FetchMailJob implements ShouldQueue
         }
     }
 
-    /** Reset kiraan kegagalan bila sambungan IMAP pulih. */
+    /**
+     * Reset kiraan kegagalan bila sambungan IMAP pulih, dan rekod cap masa
+     * larian berjaya.
+     *
+     * imap_last_success_at ialah "detak jantung" intake: streak SAHAJA tidak
+     * memadai kerana ia hanya bertambah apabila job BERJALAN. Jika job tidak
+     * pernah dijalankan (cth mutex jadual tersangkut — punca sebenar intake
+     * tersekat 14 jam pada 20 Jul), streak kekal 0 dan setiap penunjuk tersilap
+     * papar "OK" hijau. Cap masa ini membolehkan pengesanan "tersekat senyap"
+     * (lihat CheckWaSessions::checkImap).
+     */
     protected function recordImapSuccess(): void
     {
+        PlatformSetting::put('imap_last_success_at', now()->toIso8601String());
+
         if ((int) PlatformSetting::get('imap_failure_streak', 0) !== 0) {
             PlatformSetting::put('imap_failure_streak', 0);
             PlatformSetting::put('imap_last_error', null);

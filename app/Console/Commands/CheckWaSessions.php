@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\WhatsAppIntegration;
 use App\Notifications\ConnectionAlertNotification;
 use App\Services\WhatsAppIntegrationService;
+use App\Support\MailIntakeHealth;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
@@ -98,23 +99,56 @@ class CheckWaSessions extends Command
         }
     }
 
+    /**
+     * Kesihatan intake e-mel. DUA mod kegagalan berbeza dipantau:
+     *
+     *  (a) GAGAL  — sambungan IMAP ditolak (kredential/rangkaian). Dikesan
+     *      melalui imap_failure_streak, iaitu job BERJALAN tetapi gagal.
+     *  (b) TERSEKAT — job langsung TIDAK berjalan (cth mutex jadual tersangkut,
+     *      insiden 19-20 Jul ~14 jam). Streak kekal 0 di sini, jadi semakan
+     *      streak sahaja BUTA sepenuhnya terhadap mod ini — inilah sebabnya
+     *      kegagalan itu senyap. Dikesan melalui detak jantung
+     *      imap_last_success_at (MailIntakeHealth).
+     *
+     * IMAP dimatikan (dev/staging) tidak pernah menghasilkan alert.
+     */
     protected function checkImap(): void
     {
-        $streak = (int) PlatformSetting::get('imap_failure_streak', 0);
+        $health = MailIntakeHealth::evaluate();
         $alerted = (bool) PlatformSetting::get('imap_alerted', false);
+        $streak = $health['streak'];
 
-        // Gagal berterusan (≥5 kitaran ~5 min) & belum dimaklumkan → alert.
-        if ($streak >= 5 && ! $alerted) {
-            $this->notifySuperadmins(new ConnectionAlertNotification(
-                'IMAP intake e-mel gagal',
-                "Sambungan IMAP gagal {$streak} kali berturut. Penerimaan dokumen e-mel terjeda — sila semak kata laluan aplikasi.",
-                viaPlatformWa: true,
-            ));
+        if ($health['state'] === MailIntakeHealth::STATE_DISABLED) {
+            return;
+        }
+
+        $shouldAlert = match ($health['state']) {
+            // Gagal berterusan (≥5 kitaran ~5 min) — elak alert pada gangguan seketika.
+            MailIntakeHealth::STATE_FAILING => $streak >= 5,
+            MailIntakeHealth::STATE_STALLED => true,
+            default => false,
+        };
+
+        if ($shouldAlert && ! $alerted) {
+            [$title, $body] = $health['state'] === MailIntakeHealth::STATE_FAILING
+                ? [
+                    'IMAP intake e-mel gagal',
+                    "Sambungan IMAP gagal {$streak} kali berturut. Penerimaan dokumen e-mel terjeda — sila semak kata laluan aplikasi.",
+                ]
+                : [
+                    'Intake e-mel tersekat',
+                    'Tiada larian fetch-mail berjaya sejak '.($health['minutes_since'] !== null
+                        ? $health['minutes_since'].' minit lalu'
+                        : 'sekian lama').
+                    '. Dokumen yang dihantar melalui e-mel TIDAK diterima. Semak `php artisan schedule:list` untuk mutex tersangkut pada diwan:fetch-mail.',
+                ];
+
+            $this->notifySuperadmins(new ConnectionAlertNotification($title, $body, viaPlatformWa: true));
             PlatformSetting::put('imap_alerted', true);
         }
 
-        // Streak reset (pulih) selepas pernah alert → maklumkan pulih.
-        if ($streak === 0 && $alerted) {
+        // Pulih sepenuhnya selepas pernah alert → maklumkan.
+        if ($health['state'] === MailIntakeHealth::STATE_OK && $alerted) {
             $this->notifySuperadmins(new ConnectionAlertNotification(
                 'IMAP intake e-mel pulih',
                 'Sambungan IMAP telah pulih. Penerimaan dokumen e-mel beroperasi semula.',

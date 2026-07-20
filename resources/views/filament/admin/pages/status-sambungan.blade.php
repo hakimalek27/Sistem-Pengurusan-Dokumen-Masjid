@@ -16,19 +16,26 @@
             </div>
             <div class="flex items-center justify-between gap-2">
                 <dt class="text-sm text-gray-500 dark:text-gray-400">IMAP intake e-mel</dt>
-                <dd>
-                    @if (! $imapEnabled)
-                        <x-filament::badge color="gray">Dimatikan</x-filament::badge>
-                    @elseif ($imapStreak === 0)
-                        <x-filament::badge color="success">OK</x-filament::badge>
-                    @else
-                        <x-filament::badge color="danger">Gagal ({{ $imapStreak }}×)</x-filament::badge>
-                    @endif
+                <dd class="text-right">
+                    <x-filament::badge :color="$imapHealth['color']">{{ $imapHealth['label'] }}</x-filament::badge>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ $imapHealth['description'] }}</p>
                 </dd>
             </div>
+            @if ($imapHealth['last_success_at'])
+                <div class="flex items-center justify-between gap-2">
+                    <dt class="text-sm text-gray-500 dark:text-gray-400">Larian berjaya terakhir</dt>
+                    <dd class="text-sm">{{ $imapHealth['last_success_at']->diffForHumans() }}</dd>
+                </div>
+            @endif
         </dl>
         @if ($imapError && $imapStreak > 0)
             <p class="mt-3 rounded-lg bg-danger-50 p-2 text-xs text-danger-700 dark:bg-danger-500/10 dark:text-danger-400">{{ $imapError }}</p>
+        @endif
+        @if ($imapHealth['state'] === \App\Support\MailIntakeHealth::STATE_STALLED)
+            <p class="mt-3 rounded-lg bg-danger-50 p-2 text-xs text-danger-700 dark:bg-danger-500/10 dark:text-danger-400">
+                Tugasan <code>diwan:fetch-mail</code> tidak berjalan. Semak mutex jadual tersangkut:
+                <code>php artisan schedule:list</code> — jika tertera "Has Mutex", lepaskan kunci jadual berkenaan.
+            </p>
         @endif
     </x-filament::section>
 

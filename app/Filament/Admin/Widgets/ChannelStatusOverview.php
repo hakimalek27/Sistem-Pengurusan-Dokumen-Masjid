@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Widgets;
 use App\Models\PlatformSetting;
 use App\Models\WhatsAppIntegration;
 use App\Services\TelegramService;
+use App\Support\MailIntakeHealth;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -22,18 +23,15 @@ class ChannelStatusOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         $gatewayOk = PlatformSetting::get('gateway_status', ['ok' => null])['ok'] ?? null;
-        $imapEnabled = (bool) config('diwan.imap_enabled');
-        $imapStreak = (int) PlatformSetting::get('imap_failure_streak', 0);
 
         $connected = WhatsAppIntegration::query()->withoutMosqueScope()->where('status', 'connected')->count();
         $total = WhatsAppIntegration::query()->withoutMosqueScope()->whereNotNull('session_id')->count();
         $telegramConfigured = app(TelegramService::class)->isConfigured();
 
-        // IMAP: "Dimatikan" (kelabu) bila IMAP_ENABLED=false — job kembali awal jadi
-        // streak kekal 0; tanpa keadaan ini widget tersilap papar "OK" hijau (§11.3).
-        $imapValue = ! $imapEnabled ? 'Dimatikan' : ($imapStreak === 0 ? 'OK' : "Gagal ({$imapStreak}×)");
-        $imapDesc = ! $imapEnabled ? 'IMAP_ENABLED=false' : ($imapStreak === 0 ? 'Poll setiap minit' : 'Semak App Password');
-        $imapColor = ! $imapEnabled ? 'gray' : ($imapStreak === 0 ? 'success' : 'danger');
+        // IMAP: dinilai oleh MailIntakeHealth — merangkumi keadaan TERSEKAT (job
+        // tidak berjalan langsung). Semakan streak sahaja memaparkan "OK" hijau
+        // palsu sepanjang insiden mutex tersangkut 14 jam pada 20 Jul (§11.3).
+        $imap = MailIntakeHealth::evaluate();
 
         return [
             Stat::make('Gateway WhatsApp', is_null($gatewayOk) ? 'Belum diuji' : ($gatewayOk ? 'OK' : 'GAGAL'))
@@ -41,9 +39,9 @@ class ChannelStatusOverview extends StatsOverviewWidget
                 ->color(is_null($gatewayOk) ? 'gray' : ($gatewayOk ? 'success' : 'danger'))
                 ->descriptionIcon('heroicon-o-signal'),
 
-            Stat::make('IMAP Intake E-mel', $imapValue)
-                ->description($imapDesc)
-                ->color($imapColor)
+            Stat::make('IMAP Intake E-mel', $imap['label'])
+                ->description($imap['description'])
+                ->color($imap['color'])
                 ->descriptionIcon('heroicon-o-envelope'),
 
             Stat::make('Sesi WhatsApp Tersambung', "{$connected} / {$total}")

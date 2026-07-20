@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Pages;
 
 use App\Models\PlatformSetting;
 use App\Models\WhatsAppIntegration;
+use App\Support\MailIntakeHealth;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
@@ -48,6 +49,8 @@ class StatusSambungan extends Page
             'imapEnabled' => (bool) config('diwan.imap_enabled'),
             'imapStreak' => (int) PlatformSetting::get('imap_failure_streak', 0),
             'imapError' => PlatformSetting::get('imap_last_error'),
+            // Kesihatan penuh termasuk keadaan TERSEKAT (job tidak berjalan).
+            'imapHealth' => MailIntakeHealth::evaluate(),
         ];
     }
 }
