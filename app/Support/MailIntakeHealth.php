@@ -37,7 +37,8 @@ class MailIntakeHealth
         $enabled = (bool) config('diwan.imap_enabled');
         $streak = (int) PlatformSetting::get('imap_failure_streak', 0);
         $lastSuccess = self::lastSuccessAt();
-        $minutesSince = $lastSuccess?->diffInMinutes(now());
+        // Carbon 3 pulangkan float; cast eksplisit elak amaran deprecation PHP 8.4.
+        $minutesSince = $lastSuccess === null ? null : (int) floor($lastSuccess->diffInMinutes(now()));
 
         if (! $enabled) {
             return self::state(self::STATE_DISABLED, 'Dimatikan', 'IMAP_ENABLED=false', 'gray', $streak, $lastSuccess, $minutesSince);
