@@ -21,6 +21,13 @@ return [
     // naikkan HANYA dalam persekitaran e2e (banyak peranan log masuk berturut).
     'login_rate_limit' => (int) env('DIWAN_LOGIN_RATE_LIMIT', 5),
 
+    // Magic link (§15.1). Pautan log masuk biasa sah 15 minit; pautan deep-link
+    // dalam notifikasi (minit/kelulusan/peti masuk) sah lebih lama supaya AJK
+    // yang jarang buka telefon sempat menekannya. Sekali guna kekal.
+    'magic_link' => [
+        'notification_ttl_hours' => (int) env('DIWAN_MAGIC_LINK_TTL_HOURS', 72),
+    ],
+
     // Format dokumen dibenarkan (§15.7) — SATU sumber kebenaran (extension => MIME
     // kanonik) untuk semua saluran (App\Support\AllowedFormats). webp DIBUANG;
     // doc/xls/ppt (Office lama) + txt DITAMBAH atas keperluan pemilik produk.

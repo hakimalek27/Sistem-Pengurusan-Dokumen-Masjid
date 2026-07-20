@@ -20,10 +20,14 @@ Route::get('/log-masuk', RequestMagicLink::class)
     ->middleware('throttle:60,1')
     ->name('log-masuk');
 
-// §15.1 — Magic link (sekali guna; sahihan dalam controller)
-Route::get('/masuk/{token}', MagicLoginController::class)
+// §15.1 — Magic link auto-login. GET = interstisial (elak bot pratonton
+// membakar token sekali-guna); POST = guna token + log masuk + deep-link.
+Route::get('/masuk/{token}', [MagicLoginController::class, 'show'])
     ->middleware('throttle:10,1')
     ->name('magic-login');
+Route::post('/masuk/{token}', [MagicLoginController::class, 'consume'])
+    ->middleware('throttle:10,1')
+    ->name('magic-login.consume');
 
 // Fasa B — tetapkan kata laluan kali pertama (akaun magic-link tanpa kata laluan).
 // Route di luar panel: tiada middleware EnsurePasswordIsSet → tiada gelung.

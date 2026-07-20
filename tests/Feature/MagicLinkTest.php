@@ -44,18 +44,24 @@ it('tidak menghantar pautan kepada pengguna dinyahaktif', function () {
         ->and(LoginToken::query()->count())->toBe(0);
 });
 
-it('/masuk/{token} log masuk & mendarat di panel masjid tunggal', function () {
+it('/masuk/{token} interstisial (GET) tidak guna token; POST log masuk & mendarat', function () {
     $mam = makeMosque('MAM', 'mam');
     $user = makeMember($mam, 'kerani', 'k@ujian.test');
 
     $raw = $this->svc->sendTo('k@ujian.test');
 
-    $this->get('/masuk/'.$raw)->assertRedirect('/app/mam');
+    // GET = interstisial (elak bot pratonton bakar token); token BELUM diguna.
+    $this->get('/masuk/'.$raw)->assertOk()->assertSee('Teruskan');
+    expect(LoginToken::query()->first()->used_at)->toBeNull();
+
+    // POST = guna token + log masuk.
+    $this->post('/masuk/'.$raw)->assertRedirect('/app/mam');
     $this->assertAuthenticatedAs($user->fresh());
+    expect(LoginToken::query()->first()->used_at)->not->toBeNull();
 });
 
-it('/masuk/{token} tidak sah → 403', function () {
-    $this->get('/masuk/'.str_repeat('x', 64))->assertForbidden();
+it('/masuk/{token} tidak sah → halaman 410 (bukan 403 kosong)', function () {
+    $this->get('/masuk/'.str_repeat('x', 64))->assertStatus(410);
 });
 
 it('menghantar pautan melalui pengecam telefon (0 → 60)', function () {

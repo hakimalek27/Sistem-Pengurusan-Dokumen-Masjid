@@ -9,7 +9,7 @@ class LoginToken extends Model
 {
     const UPDATED_AT = null;
 
-    protected $fillable = ['user_id', 'email', 'token', 'expires_at', 'used_at', 'ip'];
+    protected $fillable = ['user_id', 'email', 'intended_url', 'purpose', 'token', 'expires_at', 'used_at', 'ip'];
 
     protected function casts(): array
     {

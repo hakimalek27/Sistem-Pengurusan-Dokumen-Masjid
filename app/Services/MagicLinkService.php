@@ -33,20 +33,37 @@ class MagicLinkService
         return $raw;
     }
 
-    /** Jana token terikat kepada pengguna (menyokong akaun tanpa e-mel). */
-    public function createTokenForUser(User $user, ?string $ip = null): string
+    /**
+     * Jana token terikat kepada pengguna (menyokong akaun tanpa e-mel).
+     * $intendedUrl set = pautan deep-link notifikasi (auto-login → terus ke sasaran);
+     * $ttlMinutes null = 15 minit lalai (pautan log masuk biasa).
+     */
+    public function createTokenForUser(User $user, ?string $ip = null, ?string $intendedUrl = null, ?int $ttlMinutes = null): string
     {
         $raw = Str::random(64);
 
         LoginToken::query()->create([
             'user_id' => $user->id,
             'email' => $user->email,
+            'intended_url' => $intendedUrl,
+            'purpose' => $intendedUrl !== null ? 'notification' : 'login',
             'token' => hash('sha256', $raw),
-            'expires_at' => now()->addMinutes(15),
+            'expires_at' => now()->addMinutes($ttlMinutes ?? 15),
             'ip' => $ip,
         ]);
 
         return $raw;
+    }
+
+    /**
+     * Pautan magic deep-link untuk notifikasi — auto-login + terus ke sasaran
+     * (cth "/r/{ulid}"). TTL panjang (lalai 72 jam) supaya penerima sempat buka.
+     */
+    public function deepLinkFor(User $user, string $targetPath): string
+    {
+        $ttl = (int) config('diwan.magic_link.notification_ttl_hours', 72) * 60;
+
+        return url('/masuk/'.$this->createTokenForUser($user, null, $targetPath, $ttl));
     }
 
     /** Terima e-mel ATAU nombor telefon; cari pengguna aktif & hantar pautan. */
@@ -80,8 +97,8 @@ class MagicLinkService
         return $raw;
     }
 
-    /** Sahkan & guna token mentah. Pulangkan User jika sah (dan tandakan used), atau null. */
-    public function consume(string $rawToken, ?string $ip = null): ?User
+    /** Sahkan token TANPA guna (untuk interstisial GET). Pulangkan [token, user] atau null. */
+    public function peek(string $rawToken): ?array
     {
         $token = LoginToken::query()->where('token', hash('sha256', $rawToken))->first();
 
@@ -97,9 +114,26 @@ class MagicLinkService
             return null;
         }
 
-        $token->update(['used_at' => now(), 'ip' => $ip ?? $token->ip]);
+        return ['token' => $token, 'user' => $user];
+    }
 
-        return $user;
+    /** Sahkan & guna token mentah. Pulangkan User jika sah (dan tandakan used), atau null. */
+    public function consume(string $rawToken, ?string $ip = null): ?User
+    {
+        $peek = $this->peek($rawToken);
+
+        if (! $peek) {
+            return null;
+        }
+
+        // Atomik: hanya SATU permintaan berjaya tandakan used — elak double-POST
+        // atau bot pratonton pautan (WhatsApp/Telegram) menggunakan token dua kali.
+        $claimed = LoginToken::query()
+            ->whereKey($peek['token']->getKey())
+            ->whereNull('used_at')
+            ->update(['used_at' => now(), 'ip' => $ip ?? $peek['token']->ip]);
+
+        return $claimed === 1 ? $peek['user'] : null;
     }
 
     /** Cari pengguna melalui e-mel atau nombor telefon (dinormalkan). */
