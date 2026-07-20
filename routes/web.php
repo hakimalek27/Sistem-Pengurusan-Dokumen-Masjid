@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleDriveCallbackController;
 use App\Http\Controllers\MagicLoginController;
 use App\Http\Controllers\RecordDeepLinkController;
 use App\Http\Controllers\SecureArtifactController;
@@ -39,6 +40,11 @@ Route::get('/tetapkan-kata-laluan', SetFirstPassword::class)
 Route::get('/r/{ulid}', RecordDeepLinkController::class)
     ->middleware('auth')
     ->name('record.deeplink');
+
+// §4.6′ — Callback OAuth Google Drive (superadmin sahaja; sahihan dalam controller)
+Route::get('/gdrive/callback', GoogleDriveCallbackController::class)
+    ->middleware('auth')
+    ->name('gdrive.callback');
 
 Route::middleware(['auth', 'signed'])->group(function () {
     Route::get('/secure-file/{media}', SecureFileController::class)->name('secure-file.show');

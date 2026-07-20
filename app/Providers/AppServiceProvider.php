@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\DriveClient;
 use App\Models\RetentionRule;
 use App\Models\User;
 use App\Observers\MediaObserver;
 use App\Observers\RetentionRuleObserver;
+use App\Services\GoogleDrive\GoogleDriveClient;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // §4.6′ — Klien Google Drive (mirror backup). Ujian tukar dengan
+        // FakeDriveClient melalui app()->instance(DriveClient::class, ...).
+        $this->app->singleton(
+            DriveClient::class,
+            GoogleDriveClient::class,
+        );
     }
 
     /**

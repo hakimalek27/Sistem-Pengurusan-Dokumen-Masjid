@@ -15,14 +15,15 @@ beforeEach(function () {
 it('magic link admin yang belum selesai persediaan → mendarat di wizard (?mula=1)', function () {
     $raw = app(MagicLinkService::class)->createTokenForUser($this->admin);
 
-    $this->get('/masuk/'.$raw)->assertRedirect('/app/mam/persediaan?mula=1');
+    // §15.1 — GET = interstisial; pendaratan berlaku pada POST (guna token).
+    $this->post('/masuk/'.$raw)->assertRedirect('/app/mam/persediaan?mula=1');
 });
 
 it('magic link admin yang sudah selesai persediaan → mendarat di dashboard', function () {
     $this->mam->update(['settings' => array_merge($this->mam->settings, ['onboarding_done' => now()->toIso8601String()])]);
     $raw = app(MagicLinkService::class)->createTokenForUser($this->admin->fresh());
 
-    $this->get('/masuk/'.$raw)->assertRedirect('/app/mam');
+    $this->post('/masuk/'.$raw)->assertRedirect('/app/mam');
 });
 
 it('dashboard papar banner persediaan bila belum selesai, tiada selepas selesai', function () {

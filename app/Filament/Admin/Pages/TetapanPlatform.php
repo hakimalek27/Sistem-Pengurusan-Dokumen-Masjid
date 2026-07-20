@@ -2,7 +2,10 @@
 
 namespace App\Filament\Admin\Pages;
 
+use App\Contracts\DriveClient;
 use App\Models\PlatformSetting;
+use App\Services\GoogleDrive\DriveConfig;
+use App\Services\GoogleDrive\GoogleOAuthService;
 use App\Services\TelegramService;
 use App\Services\WhatsAppGateway;
 use BackedEnum;
@@ -138,6 +141,90 @@ class TetapanPlatform extends Page
                         Notification::make()->title('COS GAGAL: '.$e->getMessage())->danger()->send();
                     }
                 }),
+
+            // §4.6′ — Mirror backup Google Drive (akaun pemilik, boleh browse).
+            Action::make('gdrive')
+                ->label('Tetapan Google Drive')
+                ->icon('heroicon-o-cloud-arrow-up')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->fillForm(fn () => [
+                    'gdrive_client_id' => PlatformSetting::get('gdrive_client_id'),
+                    'gdrive_enabled' => (bool) PlatformSetting::get('gdrive_enabled', false),
+                    'gdrive_keep_dumps' => (int) PlatformSetting::get('gdrive_keep_dumps', 7),
+                ])
+                ->schema([
+                    TextInput::make('gdrive_client_id')
+                        ->label('Client ID (Google Cloud OAuth)')
+                        ->autocomplete(false),
+                    TextInput::make('gdrive_client_secret')
+                        ->label('Client Secret')
+                        ->password()
+                        ->revealable()
+                        ->autocomplete(false)
+                        ->helperText('Biarkan kosong untuk kekalkan secret sedia ada.'),
+                    Toggle::make('gdrive_enabled')
+                        ->label('Aktifkan mirror ke Google Drive')
+                        ->helperText('Dokumen setiap masjid disalin ke folder SPDM/Backup dalam Drive anda.'),
+                    TextInput::make('gdrive_keep_dumps')
+                        ->label('Simpan berapa salinan DB dump')
+                        ->numeric()->default(7)->minValue(1),
+                ])
+                ->action(function (array $data) {
+                    PlatformSetting::put('gdrive_client_id', $data['gdrive_client_id'] ?: null);
+                    if (filled($data['gdrive_client_secret'] ?? null)) {
+                        PlatformSetting::putEncrypted('gdrive_client_secret', $data['gdrive_client_secret']);
+                    }
+                    PlatformSetting::put('gdrive_enabled', (bool) ($data['gdrive_enabled'] ?? false));
+                    PlatformSetting::put('gdrive_keep_dumps', max(1, (int) ($data['gdrive_keep_dumps'] ?? 7)));
+                    DriveConfig::forget();
+                    Notification::make()->title('Tetapan Google Drive disimpan. Klik "Sambung Google Drive" untuk membenarkan akses.')->success()->send();
+                }),
+
+            Action::make('sambungGdrive')
+                ->label('Sambung Google Drive')
+                ->icon('heroicon-o-link')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->visible(fn () => DriveConfig::configured())
+                ->action(function () {
+                    $state = Str::random(40);
+                    Cache::put('gdrive_oauth_state:'.Auth::id(), $state, now()->addMinutes(10));
+
+                    return redirect()->away(app(GoogleOAuthService::class)->authUrl($state));
+                }),
+
+            Action::make('ujiGdrive')
+                ->label('Uji Google Drive')
+                ->icon('heroicon-o-cloud')
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->visible(fn () => DriveConfig::connected())
+                ->action(function () {
+                    try {
+                        $about = app(DriveClient::class)->about();
+                        $gb = fn ($b) => $b !== null ? round($b / (1024 ** 3), 2).' GB' : '—';
+                        Notification::make()
+                            ->title('Google Drive OK — '.($about['email'] ?? '—'))
+                            ->body('Guna: '.$gb($about['usage']).' / '.$gb($about['limit']))
+                            ->success()->send();
+                    } catch (\Throwable $e) {
+                        Notification::make()->title('Google Drive GAGAL: '.$e->getMessage())->danger()->send();
+                    }
+                }),
+
+            Action::make('putusGdrive')
+                ->label('Putus Google Drive')
+                ->icon('heroicon-o-x-circle')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
+                ->visible(fn () => DriveConfig::connected())
+                ->action(function () {
+                    PlatformSetting::putEncrypted('gdrive_refresh_token', null);
+                    PlatformSetting::put('gdrive_enabled', false);
+                    PlatformSetting::put('gdrive_account', null);
+                    PlatformSetting::put('gdrive_status', ['ok' => false, 'at' => now()->toIso8601String()]);
+                    DriveConfig::forget();
+                    Notification::make()->title('Google Drive diputuskan.')->success()->send();
+                }),
         ];
     }
 
@@ -151,6 +238,11 @@ class TetapanPlatform extends Page
             'telegramConfigured' => filled(config('diwan.telegram.bot_token')) && filled(config('diwan.telegram.webhook_secret')),
             'telegramUsername' => config('diwan.telegram.bot_username'),
             'telegramWebhookStatus' => PlatformSetting::get('telegram_webhook_status'),
+            'gdriveConfigured' => DriveConfig::configured(),
+            'gdriveConnected' => DriveConfig::connected(),
+            'gdriveEnabled' => (bool) PlatformSetting::get('gdrive_enabled', false),
+            'gdriveAccount' => PlatformSetting::get('gdrive_account'),
+            'gdriveStatus' => PlatformSetting::get('gdrive_status'),
         ];
     }
 }
