@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Enums\RecordStatus;
+use App\Jobs\DeleteDriveFileJob;
 use App\Models\DisposalBatch;
 use App\Models\DisposalItem;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\User;
+use App\Services\GoogleDrive\DriveConfig;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
@@ -200,6 +202,8 @@ class DisposalService
         }
 
         try {
+            $driveIds = [];
+
             foreach ($batch->items()->orderBy('id')->get() as $item) {
                 if ($item->state === 'finalized') {
                     continue;
@@ -209,12 +213,23 @@ class DisposalService
                     ->where('mosque_id', $mosque->id)
                     ->findOrFail($item->record_id);
 
+                // §4.6′ — kumpul id Drive SEBELUM padam (untuk hapus salinan mirror).
+                if ($record->gdrive_file_id) {
+                    $driveIds[] = $record->gdrive_file_id;
+                }
+                foreach ((array) data_get($record->gdrive_meta, 'attachments', []) as $attId) {
+                    $driveIds[] = $attId;
+                }
+
                 $this->blobs->deleteRecordMedia($record);
                 $item->update(['state' => 'blobs_deleted', 'error' => null]);
 
                 DB::transaction(function () use ($record, $item): void {
                     $locked = Record::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($record->id);
-                    $locked->update(['status' => RecordStatus::Dilupus, 'ocr_text' => null]);
+                    $locked->update([
+                        'status' => RecordStatus::Dilupus, 'ocr_text' => null,
+                        'gdrive_file_id' => null, 'gdrive_meta' => null, 'gdrive_synced_at' => null,
+                    ]);
                     $item->update(['state' => 'finalized', 'finalized_at' => now(), 'error' => null]);
                 });
 
@@ -229,6 +244,11 @@ class DisposalService
                 'certificate_path' => $certificatePath,
                 'failure_reason' => null,
             ]);
+
+            // §4.6′ — padam salinan Google Drive rekod dilupus (selaras sijil pelupusan).
+            if (! empty($driveIds) && DriveConfig::enabled()) {
+                DeleteDriveFileJob::dispatch($mosque->id, array_values(array_unique($driveIds)))->onQueue('backup')->afterCommit();
+            }
 
             return $batch->fresh();
         } catch (Throwable $e) {

@@ -21,7 +21,7 @@ class Mosque extends Model
         'name', 'slug', 'code', 'state', 'district', 'address', 'phone', 'status',
         'storage_quota_bytes', 'storage_used_bytes', 'auto_disposal_enabled',
         'retention_ack_at', 'retention_ack_by', 'wa_session_id', 'wa_number',
-        'settings', 'approved_at', 'approved_by',
+        'gdrive_folder_id', 'settings', 'approved_at', 'approved_by',
     ];
 
     protected function casts(): array

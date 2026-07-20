@@ -7,10 +7,12 @@ use App\Enums\RecordStatus;
 use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
 use App\Jobs\ProcessOcrJob;
+use App\Jobs\SyncRecordToDriveJob;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Models\User;
+use App\Services\GoogleDrive\DriveConfig;
 use App\Support\AllowedFormats;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -159,6 +161,7 @@ class InboxIngestService
             app(RetentionEngine::class)->refreshForRecord($record);
 
             $record->searchable();
+            $this->dispatchDriveSync($record);
 
             return $record;
         });
@@ -189,6 +192,7 @@ class InboxIngestService
                 'enclosure_no' => $enclosureNo,
             ]);
             $record->searchable();
+            $this->dispatchDriveSync($record);
 
             return $record;
         });
@@ -220,7 +224,8 @@ class InboxIngestService
         return DB::transaction(function () use ($old, $contents, $filename, $mime, $user) {
             $sha256 = hash('sha256', $contents);
 
-            $new = $old->replicate(['ulid', 'superseded_by_record_id', 'created_at', 'updated_at']);
+            // Kecuali id Drive — versi baharu dapat fail Drive SENDIRI (versi lama kekal).
+            $new = $old->replicate(['ulid', 'superseded_by_record_id', 'created_at', 'updated_at', 'gdrive_file_id', 'gdrive_meta', 'gdrive_synced_at']);
             $new->status = RecordStatus::Difailkan;
             $new->sha256 = $sha256;
             $new->created_by = $user->id;
@@ -241,9 +246,18 @@ class InboxIngestService
 
             $new->searchable();
             $old->searchable();
+            $this->dispatchDriveSync($new);
 
             return $new;
         });
+    }
+
+    /** §4.6′ — Mirror rekod ke Google Drive selepas commit (jika mirror aktif). */
+    protected function dispatchDriveSync(Record $record): void
+    {
+        if (DriveConfig::enabled()) {
+            SyncRecordToDriveJob::dispatch($record->id, $record->mosque_id)->onQueue('backup')->afterCommit();
+        }
     }
 
     protected function guessType(SourceChannel $source, string $filename): string

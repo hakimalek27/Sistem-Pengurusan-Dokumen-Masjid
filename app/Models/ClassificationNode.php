@@ -15,7 +15,7 @@ class ClassificationNode extends Model
     use BelongsToMosque, HasFactory;
 
     protected $fillable = [
-        'mosque_id', 'parent_id', 'level', 'code', 'title', 'default_sensitivity', 'is_active', 'sort',
+        'mosque_id', 'parent_id', 'level', 'code', 'title', 'default_sensitivity', 'is_active', 'sort', 'gdrive_folder_id',
     ];
 
     protected function casts(): array

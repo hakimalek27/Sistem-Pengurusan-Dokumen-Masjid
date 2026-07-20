@@ -18,7 +18,7 @@ class RegistryFile extends Model
     protected $fillable = [
         'mosque_id', 'classification_node_id', 'transaction_no', 'volume', 'file_no',
         'title', 'sensitivity', 'status', 'enclosure_count', 'opened_at', 'closed_at',
-        'closed_reason', 'created_by',
+        'closed_reason', 'created_by', 'gdrive_folder_id',
     ];
 
     protected function casts(): array

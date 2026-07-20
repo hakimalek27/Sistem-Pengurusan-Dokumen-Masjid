@@ -32,6 +32,7 @@ class Record extends Model implements HasMedia
         'sensitivity', 'status', 'enclosure_no', 'metadata', 'ocr_status', 'ocr_text', 'sha256',
         'source_channel', 'source_meta', 'created_by', 'filed_by', 'filed_at',
         'superseded_by_record_id', 'legal_hold', 'retention_due_at', 'retention_notified',
+        'gdrive_file_id', 'gdrive_meta', 'gdrive_synced_at',
     ];
 
     protected function casts(): array
@@ -51,6 +52,8 @@ class Record extends Model implements HasMedia
             'legal_hold' => 'boolean',
             'filed_at' => 'datetime',
             'retention_due_at' => 'date',
+            'gdrive_meta' => 'array',
+            'gdrive_synced_at' => 'datetime',
         ];
     }
 

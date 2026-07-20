@@ -13,6 +13,7 @@ return [
         'redis:default' => 60,
         'redis:ocr' => 300,
         'redis:exports' => 300,
+        'redis:backup' => 600,
     ],
     'trim' => [
         'recent' => 60,
@@ -65,17 +66,33 @@ return [
             'timeout' => 1900,
             'nice' => 5,
         ],
+        // §4.6′ — Mirror Google Drive (upload/hapus + DB dump). 1 proses, memori
+        // rendah (upload ≤25MB in-memory), tries 1 (job Sync ada backoff sendiri).
+        'backup' => [
+            'connection' => 'redis',
+            'queue' => ['backup'],
+            'balance' => 'simple',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 50,
+            'memory' => 256,
+            'tries' => 1,
+            'timeout' => 300,
+            'nice' => 10,
+        ],
     ],
     'environments' => [
         'production' => [
             'general' => ['maxProcesses' => (int) env('HORIZON_GENERAL_PROCESSES', 3)],
             'ocr' => ['maxProcesses' => 1],
             'exports' => ['maxProcesses' => 1],
+            'backup' => ['maxProcesses' => 1],
         ],
         'local' => [
             'general' => ['maxProcesses' => 2],
             'ocr' => ['maxProcesses' => 1],
             'exports' => ['maxProcesses' => 1],
+            'backup' => ['maxProcesses' => 1],
         ],
     ],
 ];

@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Enums\MosqueStatus;
+use App\Jobs\CreateMosqueDriveFolderJob;
 use App\Models\ClassificationNode;
 use App\Models\Mosque;
 use App\Models\User;
+use App\Services\GoogleDrive\DriveConfig;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -39,6 +41,11 @@ class MosqueProvisioningService
         // Hantar magic link kepada setiap admin_masjid (luar transaksi).
         $mosque->users()->wherePivot('role', 'admin_masjid')->get()
             ->each(fn (User $u) => $this->magic->sendToUser($u));
+
+        // §4.6′ — Sedia folder mirror Google Drive untuk masjid ini (jika aktif).
+        if (DriveConfig::enabled()) {
+            CreateMosqueDriveFolderJob::dispatch($mosque->id)->onQueue('backup');
+        }
     }
 
     /** Tolak permohonan pendaftaran (sebab wajib). */
