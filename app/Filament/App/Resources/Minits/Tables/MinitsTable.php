@@ -4,6 +4,7 @@ namespace App\Filament\App\Resources\Minits\Tables;
 
 use App\Enums\MinitPriority;
 use App\Models\MinitRecipient;
+use App\Services\DelegationService;
 use App\Services\MinitService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -66,8 +67,8 @@ class MinitsTable
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->authorize('complete')
-                    ->visible(fn ($record) => $record->recipients()
-                        ->where('user_id', Auth::id())->where('jenis', 'tindakan')->where('status', '!=', 'selesai')->exists())
+                    ->visible(fn ($record) => ($recipient = app(DelegationService::class)->recipientFor($record, Auth::user()))
+                        && $recipient->jenis === 'tindakan' && $recipient->status !== 'selesai')
                     ->requiresConfirmation()
                     ->action(function ($record) {
                         app(MinitService::class)->markDone($record, Auth::user());
@@ -77,8 +78,7 @@ class MinitsTable
                     ->label('Balas & Edarkan')
                     ->icon('heroicon-o-arrow-uturn-left')
                     ->authorize('reply')
-                    ->visible(fn ($record) => $record->recipients()
-                        ->where('user_id', Auth::id())->where('jenis', 'tindakan')->exists())
+                    ->visible(fn ($record) => app(DelegationService::class)->recipientFor($record, Auth::user()) !== null)
                     ->schema([
                         Select::make('action')->label('Penerima Tindakan')->multiple()
                             ->options(fn ($record) => self::eligibleRecipients($record))->required(),

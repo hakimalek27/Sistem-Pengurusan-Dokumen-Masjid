@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -42,19 +43,60 @@ class SearchService
             $allowed = array_values(array_unique($allowed));
         }
 
-        $search = Record::search($query)
-            ->where('mosque_id', $tenant->id)
-            ->whereIn('id', $visibleIds)
-            ->whereIn('sensitivity', $allowed);
+        $query = trim($query);
+        if ($query !== '') {
+            $matchedIds = Record::search($query)
+                ->where('mosque_id', $tenant->id)
+                ->whereIn('id', $visibleIds)
+                ->whereIn('sensitivity', $allowed)
+                ->take(500)
+                ->get()
+                ->pluck('id')
+                ->all();
 
-        if (! empty($filters['record_type'])) {
-            $search->where('record_type', $filters['record_type']);
-        }
-        if (! empty($filters['registry_file_id'])) {
-            $search->where('registry_file_id', $filters['registry_file_id']);
+            if ($matchedIds === []) {
+                return collect();
+            }
+
+            $visibleIds = array_values(array_intersect($visibleIds, $matchedIds));
         }
 
-        return $search->get();
+        $records = Record::query()
+            ->visibleTo($user, $tenant)
+            ->with('registryFile')
+            ->whereIn('id', $visibleIds);
+
+        $this->applyFilters($records, $filters);
+
+        return $records->latest('record_date')->latest('id')->limit(500)->get();
+    }
+
+    protected function applyFilters(Builder $query, array $filters): void
+    {
+        foreach (['record_type', 'registry_file_id', 'direction', 'sensitivity', 'status', 'source_channel'] as $field) {
+            if (($filters[$field] ?? '') !== '') {
+                $query->where($field, $filters[$field]);
+            }
+        }
+
+        foreach (['record_date_from' => '>=', 'record_date_to' => '<=', 'received_date_from' => '>=', 'received_date_to' => '<='] as $field => $operator) {
+            if (! empty($filters[$field])) {
+                $column = str_starts_with($field, 'record_') ? 'record_date' : 'received_date';
+                $query->whereDate($column, $operator, $filters[$field]);
+            }
+        }
+
+        $like = $query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+        foreach (['sender' => ['sender_name', 'sender_org'], 'reference' => ['our_ref', 'their_ref'], 'recipient' => ['recipient_name']] as $filter => $columns) {
+            if (! empty($filters[$filter])) {
+                $value = '%'.trim((string) $filters[$filter]).'%';
+                $query->where(function (Builder $nested) use ($columns, $like, $value): void {
+                    foreach ($columns as $index => $column) {
+                        $index === 0 ? $nested->where($column, $like, $value) : $nested->orWhere($column, $like, $value);
+                    }
+                });
+            }
+        }
     }
 
     /** Tahap sensitiviti yang dibenarkan untuk pengguna dalam masjid (§6.3). */

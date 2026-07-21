@@ -3,6 +3,7 @@
 namespace App\Filament\App\Resources\RegistryFiles;
 
 use App\Filament\App\Resources\RegistryFiles\Pages\CreateRegistryFile;
+use App\Filament\App\Resources\RegistryFiles\Pages\EditRegistryFile;
 use App\Filament\App\Resources\RegistryFiles\Pages\ListRegistryFiles;
 use App\Filament\App\Resources\RegistryFiles\Pages\ViewRegistryFile;
 use App\Filament\App\Resources\RegistryFiles\RelationManagers\AccessGrantsRelationManager;
@@ -76,6 +77,7 @@ class RegistryFileResource extends Resource
             'index' => ListRegistryFiles::route('/'),
             'create' => CreateRegistryFile::route('/create'),
             'view' => ViewRegistryFile::route('/{record}'),
+            'edit' => EditRegistryFile::route('/{record}/edit'),
         ];
     }
 }

@@ -44,6 +44,18 @@ it('halaman Carian render', function () {
     $this->actingAs($this->admin)->get('/app/mam/carian')->assertOk();
 });
 
+it('halaman Kegemaran render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/kegemaran')->assertOk();
+});
+
+it('halaman Pembetulan Rekod render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/pembetulan-rekod')->assertOk();
+});
+
+it('halaman Delegasi render', function () {
+    $this->actingAs($this->admin)->get('/app/mam/delegasi')->assertOk();
+});
+
 it('halaman Kelulusan render', function () {
     $this->actingAs($this->admin)->get('/app/mam/kelulusan')->assertOk();
 });
@@ -86,6 +98,10 @@ it('halaman Minit Saya render', function () {
 
 it('halaman view Fail render (termasuk relation manager grants)', function () {
     $this->actingAs($this->admin)->get('/app/mam/registry-files/'.$this->file->getKey())->assertOk();
+});
+
+it('halaman edit Fail render dengan medan medium fizikal', function () {
+    $this->actingAs($this->admin)->get('/app/mam/registry-files/'.$this->file->getKey().'/edit')->assertOk();
 });
 
 it('rekod MAN tidak dapat dilihat dalam konteks tenant MAM via URL resource → 404 (§18.3)', function () {

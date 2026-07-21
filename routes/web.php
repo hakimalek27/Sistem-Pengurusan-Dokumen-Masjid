@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentViewerController;
 use App\Http\Controllers\GoogleDriveCallbackController;
 use App\Http\Controllers\MagicLoginController;
 use App\Http\Controllers\RecordDeepLinkController;
@@ -47,6 +48,7 @@ Route::get('/gdrive/callback', GoogleDriveCallbackController::class)
     ->name('gdrive.callback');
 
 Route::middleware(['auth', 'signed'])->group(function () {
+    Route::get('/viewer/{media}', DocumentViewerController::class)->name('document-viewer.show');
     Route::get('/secure-file/{media}', SecureFileController::class)->name('secure-file.show');
     Route::get('/secure-artifact/invoice/{order}', [SecureArtifactController::class, 'invoice'])->name('secure-artifact.invoice');
     Route::get('/secure-artifact/certificate/{batch}', [SecureArtifactController::class, 'certificate'])->name('secure-artifact.certificate');

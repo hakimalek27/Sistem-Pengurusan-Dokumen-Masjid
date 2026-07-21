@@ -6,6 +6,7 @@ use App\Filament\App\Resources\Approvals\Pages\ListApprovals;
 use App\Filament\App\Resources\Approvals\Tables\ApprovalsTable;
 use App\Models\Approval;
 use App\Models\Record;
+use App\Services\DelegationService;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
@@ -38,13 +39,16 @@ class ApprovalResource extends Resource
         // Kelulusan yang ditujukan kepada saya (§9.C.7).
         $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
 
-        return parent::getEloquentQuery()->where('approver_id', Auth::id())->whereIn('record_id', $recordIds);
+        $ids = collect([Auth::id()])->merge(app(DelegationService::class)->principalIdsFor(Auth::user(), Filament::getTenant(), 'approvals'))->unique();
+
+        return parent::getEloquentQuery()->whereIn('approver_id', $ids)->whereIn('record_id', $recordIds);
     }
 
     public static function getNavigationBadge(): ?string
     {
         $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
-        $count = Approval::query()->whereIn('record_id', $recordIds)->where('approver_id', Auth::id())->where('status', 'menunggu')->count();
+        $ids = collect([Auth::id()])->merge(app(DelegationService::class)->principalIdsFor(Auth::user(), Filament::getTenant(), 'approvals'))->unique();
+        $count = Approval::query()->whereIn('record_id', $recordIds)->whereIn('approver_id', $ids)->where('status', 'menunggu')->count();
 
         return $count > 0 ? (string) $count : null;
     }

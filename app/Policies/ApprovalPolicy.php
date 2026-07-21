@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Approval;
 use App\Models\Mosque;
 use App\Models\User;
+use App\Services\DelegationService;
 use Filament\Facades\Filament;
 
 class ApprovalPolicy
@@ -26,7 +27,8 @@ class ApprovalPolicy
     public function view(User $user, Approval $approval): bool
     {
         return $user->can('view', $approval->record)
-            && in_array($user->id, [$approval->requested_by, $approval->approver_id], true);
+            && ($approval->requested_by === $user->id
+                || app(DelegationService::class)->canActFor($user, $approval->approver, $approval->mosque, 'approvals'));
     }
 
     public function create(User $user): bool
@@ -38,8 +40,8 @@ class ApprovalPolicy
 
     public function decide(User $user, Approval $approval): bool
     {
-        return $approval->approver_id === $user->id
-            && $user->canIn($approval->mosque, 'approvals.decide');
+        return app(DelegationService::class)->canActFor($user, $approval->approver, $approval->mosque, 'approvals')
+            && $user->can('view', $approval->record);
     }
 
     public function update(User $user, Approval $approval): bool

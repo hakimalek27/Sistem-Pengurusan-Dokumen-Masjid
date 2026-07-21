@@ -15,7 +15,7 @@ class Approval extends Model
 
     protected $fillable = [
         'mosque_id', 'record_id', 'requested_by', 'approver_id', 'status',
-        'request_note', 'decision_note', 'decided_at', 'decision_ip',
+        'request_note', 'decision_note', 'decided_at', 'decision_ip', 'decided_by', 'on_behalf_of',
     ];
 
     protected function casts(): array
@@ -39,5 +39,15 @@ class Approval extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approver_id');
+    }
+
+    public function decidedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'decided_by');
+    }
+
+    public function onBehalfOf(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'on_behalf_of');
     }
 }

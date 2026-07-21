@@ -18,7 +18,9 @@ class RegistryFile extends Model
     protected $fillable = [
         'mosque_id', 'classification_node_id', 'transaction_no', 'volume', 'file_no',
         'title', 'sensitivity', 'status', 'enclosure_count', 'opened_at', 'closed_at',
-        'closed_reason', 'created_by', 'gdrive_folder_id',
+        'closed_reason', 'created_by', 'gdrive_folder_id', 'medium', 'physical_reference',
+        'physical_location', 'custody_status', 'current_holder_user_id',
+        'current_holder_name', 'custody_due_at',
     ];
 
     protected function casts(): array
@@ -30,6 +32,7 @@ class RegistryFile extends Model
             'enclosure_count' => 'integer',
             'opened_at' => 'datetime',
             'closed_at' => 'datetime',
+            'custody_due_at' => 'datetime',
         ];
     }
 
@@ -51,6 +54,16 @@ class RegistryFile extends Model
     public function accessGrants(): HasMany
     {
         return $this->hasMany(FileAccessGrant::class);
+    }
+
+    public function currentHolder(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'current_holder_user_id');
+    }
+
+    public function movements(): HasMany
+    {
+        return $this->hasMany(FileMovement::class)->latest();
     }
 
     public function isOpen(): bool

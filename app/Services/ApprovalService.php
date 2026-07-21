@@ -64,6 +64,8 @@ class ApprovalService
                 'decision_note' => $note,
                 'decided_at' => now(),
                 'decision_ip' => $ip,
+                'decided_by' => $approver->id,
+                'on_behalf_of' => $approver->id === $locked->approver_id ? null : $locked->approver_id,
             ]);
         });
 

@@ -4,18 +4,24 @@ namespace App\Filament\App\Resources\Records\Pages;
 
 use App\Enums\MinitPriority;
 use App\Filament\App\Resources\Records\RecordResource;
+use App\Models\Favourite;
+use App\Models\RecordCorrectionRequest;
 use App\Models\RegistryFile;
 use App\Models\User;
 use App\Services\ApprovalService;
+use App\Services\FavouriteService;
 use App\Services\InboxIngestService;
 use App\Services\MinitService;
 use App\Services\QrLabelService;
+use App\Services\RecordCorrectionService;
 use App\Services\SensitiveAccessLogger;
 use App\Support\AllowedFormats;
 use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord as BaseViewRecord;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +45,39 @@ class ViewRecord extends BaseViewRecord
         $mosque = fn () => $this->getRecord()->mosque;
 
         return [
+            Action::make('kegemaran')
+                ->label('Kegemaran')
+                ->icon('heroicon-o-star')
+                ->action(function () use ($mosque): void {
+                    $active = app(FavouriteService::class)->toggle(Auth::user(), $mosque(), Favourite::RECORD, $this->getRecord()->id);
+                    Notification::make()->title($active ? 'Ditambah ke kegemaran.' : 'Dibuang daripada kegemaran.')->success()->send();
+                }),
+
+            Action::make('mohonPembetulan')
+                ->label('Mohon Pembetulan')
+                ->icon('heroicon-o-pencil-square')
+                ->authorize(fn () => Auth::user()->can('create', RecordCorrectionRequest::class))
+                ->schema([
+                    Textarea::make('reason')->label('Sebab Rekod Salah Tawan')->required()->minLength(10),
+                    TextInput::make('title')->label('Tajuk')->default(fn () => $this->getRecord()->title),
+                    Select::make('record_type')->label('Jenis Rekod')->options(fn () => collect(config('record_types'))->mapWithKeys(fn ($type, $key) => [$key => $type['label']])->all())->default(fn () => $this->getRecord()->record_type)->required(),
+                    TextInput::make('our_ref')->label('Ruj. Kami')->default(fn () => $this->getRecord()->our_ref),
+                    TextInput::make('their_ref')->label('Ruj. Tuan')->default(fn () => $this->getRecord()->their_ref),
+                    DatePicker::make('record_date')->label('Tarikh Rekod')->default(fn () => $this->getRecord()->record_date),
+                    DatePicker::make('received_date')->label('Tarikh Terima')->default(fn () => $this->getRecord()->received_date),
+                    Select::make('direction')->label('Arah')->options(['masuk' => 'Masuk', 'keluar' => 'Keluar', 'dalaman' => 'Dalaman'])->default(fn () => $this->getRecord()->direction?->value),
+                    TextInput::make('sender_name')->label('Nama Pengirim')->default(fn () => $this->getRecord()->sender_name),
+                    TextInput::make('sender_org')->label('Organisasi Pengirim')->default(fn () => $this->getRecord()->sender_org),
+                    TextInput::make('recipient_name')->label('Penerima')->default(fn () => $this->getRecord()->recipient_name),
+                    Select::make('sensitivity')->label('Sensitiviti')->options(['umum' => 'Umum', 'dalaman' => 'Dalaman', 'sulit' => 'Sulit'])->default(fn () => $this->getRecord()->sensitivity?->value)->required(),
+                ])
+                ->action(function (array $data): void {
+                    $reason = $data['reason'];
+                    unset($data['reason']);
+                    app(RecordCorrectionService::class)->request($this->getRecord(), Auth::user(), $reason, $data);
+                    Notification::make()->title('Permohonan pembetulan dihantar untuk semakan.')->success()->send();
+                }),
+
             Action::make('edarkanMinit')
                 ->label('Edarkan Minit')
                 ->icon('heroicon-o-paper-airplane')

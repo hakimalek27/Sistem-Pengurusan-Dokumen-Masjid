@@ -30,8 +30,9 @@ it('menyemai 2 masjid demo (MAM & MAN)', function () {
         ->and(Mosque::where('code', 'MAN')->exists())->toBeTrue();
 });
 
-it('config record_types mengandungi 17 jenis (§8)', function () {
-    expect(config('record_types'))->toHaveCount(17);
+it('config record_types mengandungi katalog teras dan tambahan DDMS', function () {
+    expect(config('record_types'))->toHaveCount(33)
+        ->and(config('record_types'))->toHaveKeys(['agenda_mesyuarat', 'rekod_aset', 'permit_lesen']);
 });
 
 it('config roles mengandungi 9 peranan (§6.1)', function () {

@@ -2,10 +2,13 @@
 
 namespace App\Filament\App\Resources\RegistryFiles\Tables;
 
+use App\Models\Favourite;
+use App\Services\FavouriteService;
 use App\Services\RecordNumberingService;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +26,9 @@ class RegistryFilesTable
                 TextColumn::make('status')->label('Status')->badge()
                     ->color(fn ($state) => $state === 'terbuka' ? 'success' : 'gray'),
                 TextColumn::make('enclosure_count')->label('Kandungan')->badge(),
+                TextColumn::make('medium')->label('Medium')->badge(),
+                TextColumn::make('physical_location')->label('Lokasi')->placeholder('—')->toggleable(),
+                TextColumn::make('custody_status')->label('Penjagaan')->badge()->toggleable(),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -51,6 +57,14 @@ class RegistryFilesTable
                         'closed_at' => now(),
                         'closed_reason' => $data['reason'],
                     ])),
+                Action::make('kegemaran')
+                    ->label('Kegemaran')
+                    ->icon('heroicon-o-star')
+                    ->authorize('view')
+                    ->action(function ($record): void {
+                        $active = app(FavouriteService::class)->toggle(Auth::user(), $record->mosque, Favourite::REGISTRY_FILE, $record->id);
+                        Notification::make()->title($active ? 'Fail ditambah ke kegemaran.' : 'Fail dibuang daripada kegemaran.')->success()->send();
+                    }),
             ]);
     }
 }

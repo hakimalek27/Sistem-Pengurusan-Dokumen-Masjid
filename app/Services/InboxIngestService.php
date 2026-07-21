@@ -69,13 +69,26 @@ class InboxIngestService
             throw ValidationException::withMessages(['file' => 'Kuota storan masjid penuh.']);
         }
 
+        $scan = app(AntivirusScanner::class)->scan($contents);
+        if ($scan['status'] === 'infected') {
+            throw ValidationException::withMessages(['file' => 'Fail ditolak kerana dikesan mengandungi ancaman: '.($scan['signature'] ?: 'tidak diketahui').'.']);
+        }
+        if (config('diwan.clamav.enabled') && config('diwan.clamav.fail_closed') && ! in_array($scan['status'], ['clean'], true)) {
+            throw ValidationException::withMessages(['file' => 'Fail ditolak kerana imbasan antivirus tidak dapat disahkan.']);
+        }
+
+        $sourceMeta = array_merge([
+            'ingested_at' => now()->toIso8601String(),
+            'uploader_id' => $creator?->id,
+        ], $sourceMeta, ['antivirus' => ['status' => $scan['status'], 'signature' => $scan['signature']]]);
+
         $sha256 = hash('sha256', $contents);
 
         if ($skipIfDuplicate && $this->hasDuplicate($mosque, $sha256)) {
             return null; // e-mel/webhook: skip senyap (log duplikat oleh pemanggil)
         }
 
-        $record = DB::transaction(function () use ($mosque, $contents, $filename, $mime, $creator, $source, $sourceMeta, $sha256) {
+        $record = DB::transaction(function () use ($mosque, $contents, $filename, $mime, $creator, $source, $sourceMeta, $sha256, $scan) {
             $record = Record::query()->create([
                 'mosque_id' => $mosque->id,
                 'record_type' => $this->guessType($source, $filename),
@@ -88,6 +101,9 @@ class InboxIngestService
                 'source_channel' => $source,
                 'source_meta' => $sourceMeta,
                 'created_by' => $creator?->id,
+                'virus_scan_status' => $scan['status'],
+                'virus_signature' => $scan['signature'],
+                'virus_scanned_at' => now(),
             ]);
 
             $safeName = Str::slug(pathinfo($filename, PATHINFO_FILENAME)).'.'.pathinfo($filename, PATHINFO_EXTENSION);

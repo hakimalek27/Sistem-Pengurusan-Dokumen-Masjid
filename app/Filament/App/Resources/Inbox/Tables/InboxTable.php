@@ -46,6 +46,13 @@ class InboxTable
                     ->label('Tarikh Terima')
                     ->date('d/m/Y')
                     ->placeholder('—'),
+                TextColumn::make('provenance')
+                    ->label('Penghantar / Sumber')
+                    ->state(fn (Record $record) => self::provenance($record))
+                    ->wrap()->limit(80),
+                TextColumn::make('created_at')->label('Diterima')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('virus_scan_status')->label('Antivirus')->badge()
+                    ->color(fn ($state) => $state === 'clean' ? 'success' : ($state === 'infected' ? 'danger' : 'warning')),
                 TextColumn::make('ocr_status')
                     ->label('OCR')
                     ->badge(),
@@ -255,6 +262,17 @@ class InboxTable
             ->filter(fn ($user) => $user->can('view', $preview))
             ->pluck('name', 'id')
             ->toArray() ?? [];
+    }
+
+    protected static function provenance(Record $record): string
+    {
+        $meta = $record->source_meta ?? [];
+
+        return match ($record->source_channel?->value) {
+            'emel' => 'E-mel: '.($meta['from'] ?? '—'),
+            'whatsapp' => 'WhatsApp: '.($meta['from'] ?? '—'),
+            default => 'UI: '.($record->createdBy?->name ?? '—'),
+        };
     }
 
     protected static function deleteSpamAction(): Action

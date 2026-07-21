@@ -17,6 +17,14 @@ return [
     // Had saiz muat naik (MB) — selaras php.ini (§15.7).
     'max_upload_mb' => 25,
 
+    'clamav' => [
+        'enabled' => filter_var(env('CLAMAV_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
+        'host' => env('CLAMAV_HOST', 'clamav'),
+        'port' => (int) env('CLAMAV_PORT', 3310),
+        'timeout' => (float) env('CLAMAV_TIMEOUT', 15),
+        'fail_closed' => filter_var(env('CLAMAV_FAIL_CLOSED', true), FILTER_VALIDATE_BOOLEAN),
+    ],
+
     // Had kadar cubaan log masuk seminit (§15.1). Produksi kekal 5;
     // naikkan HANYA dalam persekitaran e2e (banyak peranan log masuk berturut).
     'login_rate_limit' => (int) env('DIWAN_LOGIN_RATE_LIMIT', 5),

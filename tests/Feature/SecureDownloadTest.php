@@ -44,6 +44,29 @@ it('menolak URL media tanpa signature dan pengguna tanpa akses sensitiviti', fun
     $this->actingAs($ajk)->get(app(SecureDownloadUrl::class)->media($media))->assertNotFound();
 });
 
+it('viewer dokumen memerlukan signature, akses tenant dan memaparkan metadata cetakan', function () {
+    $record = makeRecord($this->mosque, makeFile($this->mosque, makeNode($this->mosque, '100-4')), 'dalaman', 'surat_menyurat', [
+        'title' => 'Surat Untuk Viewer',
+        'our_ref' => 'MAM/100/VIEWER-1',
+    ]);
+    $media = $record->addMediaFromString('%PDF-1.4 viewer')->usingFileName('viewer.pdf')->toMediaCollection('original');
+    $media->update(['mime_type' => 'application/pdf']);
+    $url = app(SecureDownloadUrl::class)->viewer($media);
+
+    $this->actingAs($this->admin)
+        ->get($url)
+        ->assertOk()
+        ->assertSee('Kawalan viewer dokumen')
+        ->assertSee('Surat Untuk Viewer')
+        ->assertSee('MAM/100/VIEWER-1')
+        ->assertSee('Halaman')
+        ->assertSee('Cari teks')
+        ->assertSee('Cetak Metadata');
+
+    $outsider = makeMember(makeMosque('MAN', 'man'), 'admin_masjid');
+    $this->actingAs($outsider)->get($url)->assertNotFound();
+});
+
 it('deep-link mendarat terus di halaman rekod dan menyembunyikan rekod sulit', function () {
     $record = makeRecord($this->mosque, makeFile($this->mosque, makeNode($this->mosque, '800-1', 'sulit'), 'sulit'), 'sulit');
     $ajk = makeMember($this->mosque, 'ajk');

@@ -29,6 +29,7 @@
         <env name="WHATSAPP_DRIVER" value="log"/>
         <env name="IMAP_ENABLED" value="false"/>
         <env name="DIWAN_STORAGE_DISK" value="local"/>
+        <env name="CLAMAV_ENABLED" value="false"/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

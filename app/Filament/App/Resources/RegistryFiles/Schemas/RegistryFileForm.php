@@ -32,6 +32,9 @@ class RegistryFileForm
                     ->label('Tajuk Fail')
                     ->required()
                     ->maxLength(255),
+                Select::make('medium')->label('Medium Rekod')->options(['elektronik' => 'Elektronik', 'hibrid' => 'Hibrid', 'fizikal' => 'Fizikal'])->default('elektronik')->required(),
+                TextInput::make('physical_reference')->label('Rujukan Salinan Fizikal')->maxLength(255),
+                TextInput::make('physical_location')->label('Lokasi Fizikal')->maxLength(255),
             ]);
     }
 }

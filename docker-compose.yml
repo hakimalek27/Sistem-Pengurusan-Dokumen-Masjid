@@ -16,6 +16,8 @@ x-app: &app
       condition: service_healthy
     meilisearch:
       condition: service_healthy
+    clamav:
+      condition: service_healthy
 
 services:
   app:
@@ -85,8 +87,23 @@ services:
       timeout: 5s
       retries: 10
 
+  clamav:
+    image: clamav/clamav:1.4
+    restart: unless-stopped
+    expose:
+      - "3310"
+    volumes:
+      - diwan_clamav:/var/lib/clamav
+    healthcheck:
+      test: ["CMD-SHELL", "clamdscan --ping 1 --wait 5 /dev/null >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 15s
+      start_period: 120s
+      retries: 5
+
 volumes:
   diwan_pgdata:
   diwan_redis:
   diwan_meili:
+  diwan_clamav:
   diwan_storage:

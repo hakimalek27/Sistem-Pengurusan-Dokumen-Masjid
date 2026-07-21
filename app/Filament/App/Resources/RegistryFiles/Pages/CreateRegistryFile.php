@@ -23,6 +23,9 @@ class CreateRegistryFile extends CreateRecord
             ->where('mosque_id', $mosque->id)
             ->findOrFail($data['classification_node_id']);
 
-        return app(RecordNumberingService::class)->openFile($mosque, $node, $data['title'], Auth::id());
+        $file = app(RecordNumberingService::class)->openFile($mosque, $node, $data['title'], Auth::id());
+        $file->update(collect($data)->only(['medium', 'physical_reference', 'physical_location'])->all());
+
+        return $file;
     }
 }

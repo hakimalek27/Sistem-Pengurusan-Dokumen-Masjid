@@ -7,6 +7,7 @@ use App\Filament\App\Resources\Minits\Tables\MinitsTable;
 use App\Models\Minit;
 use App\Models\MinitRecipient;
 use App\Models\Record;
+use App\Services\DelegationService;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
@@ -37,7 +38,8 @@ class MinitResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $uid = Auth::id();
-        $ids = MinitRecipient::query()->where('user_id', $uid)->pluck('minit_id')->all();
+        $recipientIds = collect([$uid])->merge(app(DelegationService::class)->principalIdsFor(Auth::user(), Filament::getTenant(), 'minit'))->unique();
+        $ids = MinitRecipient::query()->whereIn('user_id', $recipientIds)->pluck('minit_id')->all();
         $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
 
         return parent::getEloquentQuery()->whereIn('record_id', $recordIds)->where(function (Builder $q) use ($uid, $ids) {
@@ -47,12 +49,13 @@ class MinitResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
+        $recipientIds = collect([Auth::id()])->merge(app(DelegationService::class)->principalIdsFor(Auth::user(), Filament::getTenant(), 'minit'))->unique();
         $recordIds = Record::query()->visibleTo(Auth::user(), Filament::getTenant())->pluck('id');
         $count = Minit::query()
             ->whereIn('record_id', $recordIds)
             ->where('status', 'terbuka')
             ->whereIn('id', fn ($sub) => $sub->select('minit_id')->from('minit_recipients')
-                ->where('user_id', Auth::id())->where('jenis', 'tindakan')->where('status', '!=', 'selesai'))
+                ->whereIn('user_id', $recipientIds)->where('jenis', 'tindakan')->where('status', '!=', 'selesai'))
             ->count();
 
         return $count > 0 ? (string) $count : null;

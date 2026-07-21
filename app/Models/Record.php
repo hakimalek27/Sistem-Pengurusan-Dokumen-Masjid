@@ -31,6 +31,7 @@ class Record extends Model implements HasMedia
         'record_date', 'received_date', 'direction', 'sender_name', 'sender_org', 'recipient_name',
         'sensitivity', 'status', 'enclosure_no', 'metadata', 'ocr_status', 'ocr_text', 'sha256',
         'source_channel', 'source_meta', 'created_by', 'filed_by', 'filed_at',
+        'virus_scan_status', 'virus_signature', 'virus_scanned_at',
         'superseded_by_record_id', 'legal_hold', 'retention_due_at', 'retention_notified',
         'gdrive_file_id', 'gdrive_meta', 'gdrive_synced_at',
     ];
@@ -47,6 +48,7 @@ class Record extends Model implements HasMedia
             'source_channel' => SourceChannel::class,
             'metadata' => 'array',
             'source_meta' => 'array',
+            'virus_scanned_at' => 'datetime',
             'retention_notified' => 'array',
             'enclosure_no' => 'integer',
             'legal_hold' => 'boolean',
@@ -196,5 +198,10 @@ class Record extends Model implements HasMedia
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'subject');
+    }
+
+    public function correctionRequests(): HasMany
+    {
+        return $this->hasMany(RecordCorrectionRequest::class);
     }
 }

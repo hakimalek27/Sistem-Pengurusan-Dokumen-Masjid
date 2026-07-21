@@ -18,6 +18,11 @@ class SecureDownloadUrl
         ]);
     }
 
+    public function viewer(Media $media): string
+    {
+        return URL::temporarySignedRoute('document-viewer.show', now()->addMinutes(30), ['media' => $media->getKey()]);
+    }
+
     public function invoice(StorageOrder $order): string
     {
         return URL::temporarySignedRoute('secure-artifact.invoice', now()->addMinutes(5), ['order' => $order->getKey()]);

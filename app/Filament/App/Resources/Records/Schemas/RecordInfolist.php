@@ -34,6 +34,13 @@ class RecordInfolist
                                 TextEntry::make('sender_name')->label('Pengirim')->placeholder('—'),
                                 TextEntry::make('sensitivity')->label('Sensitiviti')->badge(),
                                 TextEntry::make('status')->label('Status')->badge(),
+                                TextEntry::make('received_date')->label('Tarikh Terima')->date('d/m/Y')->placeholder('—'),
+                                TextEntry::make('created_at')->label('Tarikh & Masa Upload')->dateTime('d/m/Y H:i:s'),
+                                TextEntry::make('source_channel')->label('Saluran')->badge(),
+                                TextEntry::make('_provenance')->label('Asal Dokumen')
+                                    ->state(fn (Record $record) => self::provenance($record))->placeholder('—'),
+                                TextEntry::make('virus_scan_status')->label('Antivirus')->badge(),
+                                TextEntry::make('virus_signature')->label('Tandatangan Ancaman')->placeholder('—'),
                                 KeyValueEntry::make('metadata')->label('Medan Khusus Jenis')->columnSpanFull(),
                             ])
                             ->columns(2),
@@ -68,6 +75,12 @@ class RecordInfolist
                                                 ->map(fn ($recipient) => ($recipient->jenis === 'tindakan' ? 'Tindakan: ' : 's.k.: ').$recipient->user?->name)
                                                 ->filter()->join(', '))
                                             ->columnSpanFull(),
+                                        TextEntry::make('actions_list')->label('Tindakan Direkod')
+                                            ->state(fn ($record) => $record->recipients()->with(['actedBy', 'actedOnBehalfOf'])->get()
+                                                ->filter(fn ($recipient) => $recipient->acted_by_user_id)
+                                                ->map(fn ($recipient) => ($recipient->actedBy?->name ?? '—').($recipient->acted_on_behalf_of_user_id ? ' bagi pihak '.($recipient->actedOnBehalfOf?->name ?? '—') : ''))
+                                                ->join(', ') ?: '—')
+                                            ->columnSpanFull(),
                                         TextEntry::make('body')->label('Catatan')->columnSpanFull(),
                                     ])
                                     ->columns(3),
@@ -83,6 +96,8 @@ class RecordInfolist
                                         TextEntry::make('created_at')->label('Dimohon')->dateTime('d/m/Y H:i'),
                                         TextEntry::make('decided_at')->label('Diputuskan')->dateTime('d/m/Y H:i')->placeholder('—'),
                                         TextEntry::make('decision_ip')->label('IP Keputusan')->placeholder('—'),
+                                        TextEntry::make('decidedBy.name')->label('Diputus Oleh')->placeholder('—'),
+                                        TextEntry::make('onBehalfOf.name')->label('Bagi Pihak')->placeholder('—'),
                                         TextEntry::make('request_note')->label('Nota Permohonan')->placeholder('—')->columnSpanFull(),
                                         TextEntry::make('decision_note')->label('Nota Keputusan')->placeholder('—')->columnSpanFull(),
                                     ])
@@ -119,7 +134,7 @@ class RecordInfolist
                     .'<div class="mt-2 flex gap-3 text-sm">';
 
                 if ($previewable) {
-                    $html .= '<a class="text-primary-600 underline" target="_blank" rel="noopener" href="'.e($url->media($media, 'inline')).'">Pratonton</a>';
+                    $html .= '<a class="text-primary-600 underline" target="_blank" rel="noopener" href="'.e($url->viewer($media)).'">Buka Viewer</a>';
                 }
 
                 $html .= '<a class="text-primary-600 underline" href="'.e($url->media($media, 'attachment')).'">Muat Turun</a>'
@@ -132,5 +147,16 @@ class RecordInfolist
         }
 
         return new HtmlString($html.'</div>');
+    }
+
+    protected static function provenance(Record $record): string
+    {
+        $meta = $record->source_meta ?? [];
+
+        return match ($record->source_channel?->value) {
+            'emel' => 'E-mel: '.($meta['from'] ?? '—').($meta['subject'] ?? null ? ' · Subjek: '.$meta['subject'] : ''),
+            'whatsapp' => 'WhatsApp: '.($meta['from'] ?? '—').($meta['caption'] ?? null ? ' · Kapsyen: '.$meta['caption'] : ''),
+            default => 'UI: '.($record->createdBy?->name ?? '—').($record->createdBy?->email ? ' · '.$record->createdBy->email : '').($record->createdBy?->phone_wa ? ' · '.$record->createdBy->phone_wa : ''),
+        };
     }
 }

@@ -24,7 +24,8 @@ class MinitService
     /** Cipta minit + recipients + notifikasi (§14 MinitRouted). */
     public function create(Record $record, User $from, array $actionUserIds, array $ccUserIds, string $body, MinitPriority $priority, ?Minit $parent = null): Minit
     {
-        if (! $from->is_active || ! $from->can('routeMinit', $record) || ! $from->can('view', $record)) {
+        $canRoute = $from->can('routeMinit', $record) || ($parent && $from->can('reply', $parent));
+        if (! $from->is_active || ! $canRoute || ! $from->can('view', $record)) {
             throw new AuthorizationException('Tiada kebenaran mengedarkan minit bagi rekod ini.');
         }
 
@@ -89,11 +90,18 @@ class MinitService
             throw new AuthorizationException('Pengguna bukan penerima tindakan minit ini.');
         }
 
-        $completed = DB::transaction(function () use ($minit, $user): bool {
-            $minit->recipients()
-                ->where('user_id', $user->id)
-                ->where('jenis', 'tindakan')
-                ->update(['status' => 'selesai', 'read_at' => now()]);
+        $recipient = app(DelegationService::class)->recipientFor($minit, $user);
+        if (! $recipient || $recipient->jenis !== 'tindakan') {
+            throw new AuthorizationException('Pengguna bukan penerima tindakan minit ini.');
+        }
+
+        $completed = DB::transaction(function () use ($minit, $user, $recipient): bool {
+            $recipient->update([
+                'status' => 'selesai',
+                'read_at' => now(),
+                'acted_by_user_id' => $user->id,
+                'acted_on_behalf_of_user_id' => $recipient->user_id === $user->id ? null : $recipient->user_id,
+            ]);
 
             $pending = $minit->recipients()->where('jenis', 'tindakan')->where('status', '!=', 'selesai')->count();
 
@@ -118,18 +126,22 @@ class MinitService
 
             Log::info("[Minit] #{$minit->id} selesai — pengirim {$minit->from_user_id} dimaklumkan.");
         }
+
+        activity()->performedOn($minit)->causedBy($user)->withProperties([
+            'recipient_id' => $recipient->id,
+            'on_behalf_of' => $recipient->user_id === $user->id ? null : $recipient->user_id,
+        ])->log('tindakan_minit_selesai');
     }
 
     /** Tandakan minit dibaca oleh penerima. */
     public function markRead(Minit $minit, User $user): void
     {
-        if (! $user->isMemberOf($minit->mosque)
-            || ! $minit->recipients()->where('user_id', $user->id)->exists()) {
+        $recipient = app(DelegationService::class)->recipientFor($minit, $user);
+        if (! $user->isMemberOf($minit->mosque) || ! $recipient) {
             throw new AuthorizationException('Pengguna bukan penerima minit ini.');
         }
 
-        $minit->recipients()
-            ->where('user_id', $user->id)
+        $minit->recipients()->whereKey($recipient->id)
             ->where('status', 'belum')
             ->update(['status' => 'dibaca', 'read_at' => now()]);
     }
