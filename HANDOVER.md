@@ -1,5 +1,24 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## LATEST DELIVERABLE — Manual Pengguna 9 Persona 22 Julai 2026
+
+**Status:** Lengkap dan disahkan menggunakan Google Chrome pada data latihan terasing.
+
+- Folder `Manual Penguna/` mengandungi 9 manual: Admin/Kerani, Pengerusi, Setiausaha,
+  Bendahari, Nazir, Ketua Imam, AJK, Juruaudit dan Orang Awam/Pendaftaran.
+- Liputan sebenar: 111/111 halaman sidebar HTTP 200, 8 konteks browser berasingan,
+  silang tenant 8/8 HTTP 404, browser error 0 dan 223 PNG beranotasi.
+- Semua 223 imej dirujuk tepat sekali dalam manual; pautan rosak 0, imej tidak dirujuk 0,
+  fail PNG rosak/kecil 0 dan corak rahsia/kata laluan/token tersimpan 0.
+- Viewer setiap role memaparkan halaman pertama PDF sebenar. Modal panjang klasifikasi
+  dirakam hingga medan edaran minit dan butang Hantar, bukan sekadar bahagian viewport atas.
+- Aliran pendaftaran awam diuji dari borang, penghantaran, kelulusan tempatan, pautan sekali
+  guna, tetapan kata laluan hingga persediaan pertama. Production tidak dimutasi.
+- Gate kod terfokus: 54 ujian lulus, 181 assertions untuk role, tenant/search isolation,
+  pendaftaran, klasifikasi peti masuk, sumber Filament dan regresi keselamatan P0.
+- Alat boleh ulang: `scripts/manual/prepare-manual.php`, `capture-manual.mjs` dan
+  `generate-manuals.mjs`. `MANUAL_DEMO_PASSWORD` wajib; tiada kata laluan lalai dalam kod.
+
 ## LATEST RELEASE — Gabungan Admin / Kerani 21 Julai 2026
 
 **Status:** LIVE. Runtime production dibina daripada `103b186` di `https://bakwim.my`.
