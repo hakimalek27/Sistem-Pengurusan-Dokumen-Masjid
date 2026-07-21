@@ -28,6 +28,7 @@ class MembershipService
         if (! $actor?->canIn($mosque, 'users.manage')) {
             throw new AuthorizationException('Tiada kebenaran menjemput ahli untuk tenant ini.');
         }
+        $role = Roles::canonical($role);
         if (! in_array($role, Roles::all(), true)) {
             throw ValidationException::withMessages(['role' => 'Peranan tidak sah.']);
         }
@@ -158,6 +159,7 @@ class MembershipService
     /** Tukar peranan ahli — §6.4 sekatan. */
     public function changeRole(Mosque $mosque, User $target, string $newRole, User $actor): void
     {
+        $newRole = Roles::canonical($newRole);
         $this->guard($mosque, $target, $actor, $newRole);
 
         $mosque->users()->updateExistingPivot($target->id, ['role' => $newRole]);
@@ -182,6 +184,7 @@ class MembershipService
     /** §6.4 — kuatkuasa sekatan. $newRole null = keluarkan. */
     protected function guard(Mosque $mosque, User $target, User $actor, ?string $newRole): void
     {
+        $newRole = $newRole !== null ? Roles::canonical($newRole) : null;
         if (! $actor->canIn($mosque, 'users.manage') || ! $target->isMemberOf($mosque)) {
             throw new AuthorizationException('Tiada kebenaran mengurus ahli tenant ini.');
         }

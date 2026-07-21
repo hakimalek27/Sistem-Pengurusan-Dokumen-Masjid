@@ -34,10 +34,10 @@ it('dashboard papar banner persediaan bila belum selesai, tiada selepas selesai'
     $this->actingAs($this->admin->fresh())->get('/app/mam')->assertOk()->assertDontSee('Siapkan persediaan masjid');
 });
 
-it('kerani tidak nampak banner persediaan (bukan admin)', function () {
+it('Admin / Kerani nampak banner persediaan', function () {
     $kerani = makeMember($this->mam, 'kerani', 'k@mam.test');
 
-    $this->actingAs($kerani)->get('/app/mam')->assertOk()->assertDontSee('Siapkan persediaan masjid');
+    $this->actingAs($kerani)->get('/app/mam')->assertOk()->assertSee('Siapkan persediaan masjid');
 });
 
 it('admin yang mendarat di wizard boleh melangkau (tandakan selesai)', function () {
@@ -55,8 +55,8 @@ it('admin yang mendarat di wizard boleh melangkau (tandakan selesai)', function 
 it('hanya admin (mosque.settings) boleh akses persediaan', function () {
     $this->actingAs($this->admin)->get('/app/mam/persediaan')->assertOk();
 
-    $kerani = makeMember($this->mam, 'kerani', 'k@mam.test');
-    $this->actingAs($kerani)->get('/app/mam/persediaan')->assertForbidden();
+    $ajk = makeMember($this->mam, 'ajk', 'ajk@mam.test');
+    $this->actingAs($ajk)->get('/app/mam/persediaan')->assertForbidden();
 });
 
 it('wizard mendaftar ahli, set telefon masjid & tandakan onboarding selesai', function () {

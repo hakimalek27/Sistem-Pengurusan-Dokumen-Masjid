@@ -32,7 +32,7 @@
                                     @disabled($m->is_superadmin)
                                 >
                                     @foreach ($roleOptions as $value => $label)
-                                        <option value="{{ $value }}" @selected($m->pivot->role === $value)>{{ $label }}</option>
+                                        <option value="{{ $value }}" @selected(\App\Support\Roles::canonical((string) $m->pivot->role) === $value)>{{ $label }}</option>
                                     @endforeach
                                 </select>
                             </td>

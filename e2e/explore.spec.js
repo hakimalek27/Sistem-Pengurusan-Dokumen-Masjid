@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 
 const tenantRoles = [
     'admin_masjid',
-    'kerani',
     'pengerusi',
     'setiausaha',
     'bendahari',

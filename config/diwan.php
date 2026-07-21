@@ -77,7 +77,7 @@ return [
         // kata kunci TUNGGAL (cth "spdm") atau sedang dalam tetingkap intake aktif.
         'intake_window_minutes' => (int) env('WHATSAPP_INTAKE_WINDOW_MINUTES', 10),
         // Benarkan nombor BUKAN-AHLI hantar dokumen selepas kata kunci (submission awam).
-        // false = ahli sahaja. Kerani tetap semak semua di Peti Masuk.
+        // false = ahli sahaja. Admin / Kerani tetap semak semua di Peti Masuk.
         'allow_public_intake' => filter_var(env('WHATSAPP_ALLOW_PUBLIC_INTAKE', true), FILTER_VALIDATE_BOOLEAN),
         // Had submission dokumen per nombor (elak banjir intake).
         'submission_cap' => (int) env('WHATSAPP_SUBMISSION_CAP', 10),

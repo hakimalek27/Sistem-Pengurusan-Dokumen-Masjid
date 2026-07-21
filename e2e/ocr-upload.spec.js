@@ -6,7 +6,7 @@ test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) =
     test.skip(files.length !== 2 || terms.length !== 2, 'Tetapkan dua fail dan dua istilah OCR.');
 
     await page.goto('/app/login');
-    await page.locator('input[id="form.login"]').fill('kerani@demo.test');
+    await page.locator('input[id="form.login"]').fill('admin_masjid@demo.test');
     await page.locator('input[type="password"]').fill('password');
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(/\/app\/mam\/?$/, { timeout: 60_000 });

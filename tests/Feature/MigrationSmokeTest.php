@@ -35,8 +35,10 @@ it('config record_types mengandungi katalog teras dan tambahan DDMS', function (
         ->and(config('record_types'))->toHaveKeys(['agenda_mesyuarat', 'rekod_aset', 'permit_lesen']);
 });
 
-it('config roles mengandungi 9 peranan (§6.1)', function () {
-    expect(config('roles.list'))->toHaveCount(9);
+it('config roles mengandungi 8 peranan dengan Admin / Kerani digabungkan (§6.1)', function () {
+    expect(config('roles.list'))->toHaveCount(8)
+        ->and(config('roles.list'))->not->toContain('kerani')
+        ->and(config('roles.labels.admin_masjid'))->toBe('Admin / Kerani');
 });
 
 it('peraturan retensi lalai platform wujud (§16.1)', function () {

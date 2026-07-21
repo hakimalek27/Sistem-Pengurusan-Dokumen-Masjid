@@ -85,7 +85,7 @@ class RegistryFile extends Model
             return $query->whereRaw('1 = 0');
         }
 
-        if (in_array($role, ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'], true)) {
+        if (in_array($role, ['admin_masjid', 'pengerusi', 'setiausaha', 'nazir'], true)) {
             return $query;
         }
 

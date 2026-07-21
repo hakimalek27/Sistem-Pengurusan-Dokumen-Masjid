@@ -50,10 +50,14 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function roleIn(Mosque $mosque): ?string
     {
         if ($this->relationLoaded('mosques')) {
-            return $this->mosques->firstWhere('id', $mosque->getKey())?->pivot?->role;
+            $role = $this->mosques->firstWhere('id', $mosque->getKey())?->pivot?->role;
+
+            return $role ? Roles::canonical($role) : null;
         }
 
-        return $this->mosques()->where('mosques.id', $mosque->getKey())->first()?->pivot?->role;
+        $role = $this->mosques()->where('mosques.id', $mosque->getKey())->first()?->pivot?->role;
+
+        return $role ? Roles::canonical($role) : null;
     }
 
     /** Boleh laksanakan kebenaran dalam masjid? superadmin lulus semua (§6.0). */

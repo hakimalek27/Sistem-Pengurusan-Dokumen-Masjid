@@ -21,8 +21,8 @@ afterEach(function () {
     Filament::setTenant(null, isQuiet: true);
 });
 
-it('menguatkuasakan matriks 9 peranan pada Peti Masuk, Log Akses dan tetapan tenant', function () {
-    $inboxRoles = ['admin_masjid', 'kerani', 'setiausaha'];
+it('menguatkuasakan matriks 8 peranan pada Peti Masuk, Log Akses dan tetapan tenant', function () {
+    $inboxRoles = ['admin_masjid', 'setiausaha'];
     $auditRoles = ['admin_masjid', 'pengerusi', 'audit'];
 
     foreach (config('roles.list') as $role) {
@@ -56,7 +56,7 @@ it('menguatkuasakan matriks 9 peranan pada Peti Masuk, Log Akses dan tetapan ten
 });
 
 it('menapis sensitiviti pada query senarai sebelum metadata dirender', function () {
-    $fullAccess = ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'];
+    $fullAccess = ['admin_masjid', 'pengerusi', 'setiausaha', 'nazir'];
 
     foreach (config('roles.list') as $role) {
         $user = makeMember($this->mosque, $role);
@@ -75,7 +75,7 @@ it('menapis sensitiviti pada query senarai sebelum metadata dirender', function 
 });
 
 it('menapis tajuk fail sulit pada query senarai fail sebelum dirender', function () {
-    $fullAccess = ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'];
+    $fullAccess = ['admin_masjid', 'pengerusi', 'setiausaha', 'nazir'];
 
     foreach (config('roles.list') as $role) {
         $user = makeMember($this->mosque, $role);

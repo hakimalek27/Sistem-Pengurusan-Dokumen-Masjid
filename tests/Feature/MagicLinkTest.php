@@ -60,7 +60,7 @@ it('/masuk/{token} interstisial (GET) tidak guna token; POST log masuk & mendara
     expect(LoginToken::query()->first()->used_at)->toBeNull();
 
     // POST = guna token + log masuk.
-    $this->post('/masuk/'.$raw)->assertRedirect('/app/mam');
+    $this->post('/masuk/'.$raw)->assertRedirect('/app/mam/persediaan?mula=1');
     $this->assertAuthenticatedAs($user->fresh());
     expect(LoginToken::query()->first()->used_at)->not->toBeNull();
 });

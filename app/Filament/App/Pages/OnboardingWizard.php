@@ -23,7 +23,7 @@ use UnitEnum;
 /**
  * §10 Aliran I — Persediaan berpandu untuk admin masjid selepas kelulusan:
  * jawatan, nombor WhatsApp masjid, dan daftar ahli sekali gus. Kekal 1 peranan
- * per ahli (Pentadbir sudah merangkumi kuasa Kerani/Setiausaha).
+ * per ahli (Admin / Kerani sudah merangkumi kuasa operasi kerani dan setiausaha).
  */
 class OnboardingWizard extends Page
 {
@@ -62,7 +62,7 @@ class OnboardingWizard extends Page
                         ->schema([
                             Placeholder::make('info_peranan')
                                 ->label('')
-                                ->content('Sebagai Pentadbir Masjid, anda sudah merangkumi semua kuasa Kerani dan Setiausaha — tidak perlu akaun berasingan untuk kerja tersebut. Isi jawatan anda untuk paparan sahaja (cth "Pentadbir / Setiausaha").'),
+                                ->content('Sebagai Admin / Kerani, anda sudah merangkumi semua kuasa operasi kerani dan setiausaha — tidak perlu akaun berasingan untuk kerja tersebut. Isi jawatan anda untuk paparan sahaja (cth "Admin / Kerani / Setiausaha").'),
                             TextInput::make('jawatan')
                                 ->label('Jawatan Anda')
                                 ->default(fn () => Auth::user()->jawatan)

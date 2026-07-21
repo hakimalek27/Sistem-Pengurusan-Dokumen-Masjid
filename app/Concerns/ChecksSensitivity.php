@@ -46,7 +46,7 @@ trait ChecksSensitivity
         }
 
         // sulit → senarai peranan istimewa.
-        if (in_array($role, ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'], true)) {
+        if (in_array($role, ['admin_masjid', 'pengerusi', 'setiausaha', 'nazir'], true)) {
             return true;
         }
 

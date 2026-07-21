@@ -26,8 +26,8 @@ async function selectFilamentOption(page, index, label, exact = true) {
 test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browser, baseURL }) => {
     const marker = Date.now();
     const instruction = `Minit dari klasifikasi E2E ${marker}`;
-    const keraniSession = await login(browser, baseURL, 'kerani@demo.test');
-    const kerani = keraniSession.page;
+    const adminKeraniSession = await login(browser, baseURL, 'admin_masjid@demo.test');
+    const kerani = adminKeraniSession.page;
 
     await kerani.goto('/app/mam/peti-masuk');
     const inboxRow = kerani.locator('tr').filter({ hasText: 'Dokumen baharu dalam peti masuk' }).first();
@@ -42,7 +42,7 @@ test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browse
     await submitVisibleAction(kerani);
 
     await expect(kerani.getByText('Rekod difailkan dan minit tindakan telah dihantar.')).toBeVisible({ timeout: 60_000 });
-    await keraniSession.context.close();
+    await adminKeraniSession.context.close();
 
     const pengerusiSession = await login(browser, baseURL, 'pengerusi@demo.test');
     const pengerusi = pengerusiSession.page;
@@ -57,8 +57,8 @@ test('minit, maklum balas, susulan dan kelulusan pejabat melalui UI', async ({ b
     const reply = `Maklum balas E2E ${marker}: semakan selesai, edarkan kepada setiausaha.`;
     const approvalNote = `Mohon kelulusan E2E ${marker}.`;
 
-    const keraniSession = await login(browser, baseURL, 'kerani@demo.test');
-    const kerani = keraniSession.page;
+    const adminKeraniSession = await login(browser, baseURL, 'admin_masjid@demo.test');
+    const kerani = adminKeraniSession.page;
     await kerani.goto('/app/mam/records');
     const recordUrl = await kerani.locator('a[href*="/app/mam/records/"]').first().getAttribute('href');
     expect(recordUrl).toBeTruthy();
@@ -71,7 +71,7 @@ test('minit, maklum balas, susulan dan kelulusan pejabat melalui UI', async ({ b
     await expect(kerani.getByText('Minit diedarkan.')).toBeVisible({ timeout: 60_000 });
     await kerani.getByRole('tab', { name: 'Minit' }).click();
     await expect(kerani.getByText(instruction)).toBeVisible();
-    await keraniSession.context.close();
+    await adminKeraniSession.context.close();
 
     const pengerusiSession = await login(browser, baseURL, 'pengerusi@demo.test');
     const pengerusi = pengerusiSession.page;

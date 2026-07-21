@@ -78,7 +78,7 @@ it('menyekat open redirect — intended luar domain jatuh ke pendaratan peranan'
         LoginToken::query()->delete();
         Auth::logout();
         $raw = $this->svc->createTokenForUser($user, null, $bad, 60);
-        $this->post('/masuk/'.$raw)->assertRedirect('/app/mam'); // bukan $bad
+        $this->post('/masuk/'.$raw)->assertRedirect('/app/mam/persediaan?mula=1'); // bukan $bad
     }
 });
 

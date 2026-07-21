@@ -7,7 +7,7 @@ beforeEach(function () {
     $this->mam = makeMosque('MAM', 'mam');
     $this->man = makeMosque('MAN', 'man');
     $this->adminMam = makeMember($this->mam, 'admin_masjid', 'admin@mam.test');
-    $this->keraniMam = makeMember($this->mam, 'kerani', 'kerani@mam.test');
+    $this->ahliMam = makeMember($this->mam, 'ajk', 'ahli@mam.test');
     $this->adminMan = makeMember($this->man, 'admin_masjid', 'admin@man.test');
 });
 
@@ -17,8 +17,8 @@ it('hanya pemegang kebenaran tenant boleh membuka tetapan WhatsApp dan ahli', fu
         ->assertSee('scan.diwan+mam@gmail.com');
     $this->actingAs($this->adminMam)->get('/app/mam/ahli-peranan')->assertOk();
 
-    $this->actingAs($this->keraniMam)->get('/app/mam/tetapan-masjid')->assertForbidden();
-    $this->actingAs($this->keraniMam)->get('/app/mam/ahli-peranan')->assertForbidden();
+    $this->actingAs($this->ahliMam)->get('/app/mam/tetapan-masjid')->assertForbidden();
+    $this->actingAs($this->ahliMam)->get('/app/mam/ahli-peranan')->assertForbidden();
 });
 
 it('admin satu tenant tidak boleh membuka halaman tenant lain', function () {

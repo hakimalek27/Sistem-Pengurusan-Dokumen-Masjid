@@ -10,8 +10,8 @@
 | Nota penguatkuasaan tambahan (di Policy, bukan di sini):
 | - bendahari: records.create/update terhad kepada rekod dalam fail klasifikasi
 |   `200` (Kewangan) — dikuatkuasa dalam RecordPolicy (§6.2 *).
-| - kerani: hanya boleh toggle legal_hold ('retention.hold'), BUKAN urus peraturan
-|   retensi masjid ('retention.manage') (§6.2 "hold sahaja").
+| - admin_masjid ialah role kanonik Admin / Kerani dan menggabungkan semua
+|   kebenaran operasi pentadbiran serta kerja kerani.
 | - Pengasingan tugas: disposal.approve (pengerusi) ≠ disposal.execute (admin_masjid).
 */
 
@@ -19,14 +19,13 @@ return [
 
     // Senarai peranan per masjid (§6.1).
     'list' => [
-        'admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'bendahari',
+        'admin_masjid', 'pengerusi', 'setiausaha', 'bendahari',
         'nazir', 'ketua_imam', 'ajk', 'audit',
     ],
 
     // Label BM untuk UI.
     'labels' => [
-        'admin_masjid' => 'Pentadbir Masjid',
-        'kerani' => 'Kerani',
+        'admin_masjid' => 'Admin / Kerani',
         'pengerusi' => 'Pengerusi',
         'setiausaha' => 'Setiausaha',
         'bendahari' => 'Bendahari',
@@ -66,19 +65,6 @@ return [
             'disposal.prepare', 'disposal.execute',
             'users.manage', 'mosque.settings',
             'usage.view', 'storage.order', 'audit.view',
-        ],
-
-        'kerani' => [
-            'inbox.view', 'inbox.classify',
-            'records.view', 'records.create', 'records.update', 'records.move', 'records.supersede',
-            'files.view', 'files.open', 'files.close', 'files.grant_access',
-            'minit.create', 'minit.respond',
-            'approvals.request',
-            'classification.manage',
-            'retention.hold',
-            'export.create',
-            'disposal.prepare',
-            'usage.view',
         ],
 
         'pengerusi' => [

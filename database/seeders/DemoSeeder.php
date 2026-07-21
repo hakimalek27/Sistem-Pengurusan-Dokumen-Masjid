@@ -42,7 +42,7 @@ class DemoSeeder extends Seeder
         $this->copyKf($mam);
         $this->copyKf($man);
 
-        // Pengguna semua peranan di MAM (§6.1).
+        // Pengguna semua peranan di MAM (§6.1); admin_masjid merangkumi kerani.
         $i = 1;
         foreach (config('roles.list', []) as $role) {
             $user = User::query()->updateOrCreate(
@@ -66,17 +66,17 @@ class DemoSeeder extends Seeder
         );
         $man->users()->syncWithoutDetaching([$manAdmin->id => ['role' => 'admin_masjid', 'joined_at' => now()]]);
 
-        // Pengguna dwi-masjid: ajk di MAM + kerani di MAN (§18.3 ujian isolasi).
+        // Pengguna dwi-masjid: ajk di MAM + Admin / Kerani di MAN (§18.3 ujian isolasi).
         $dwi = User::query()->updateOrCreate(
             ['email' => 'dwi@demo.test'],
             ['name' => 'Ahli Dwi-Masjid', 'password' => Hash::make('password'), 'is_active' => true, 'phone_wa' => '60133000001'],
         );
         $mam->users()->syncWithoutDetaching([$dwi->id => ['role' => 'ajk', 'joined_at' => now()]]);
-        $man->users()->syncWithoutDetaching([$dwi->id => ['role' => 'kerani', 'joined_at' => now()]]);
+        $man->users()->syncWithoutDetaching([$dwi->id => ['role' => 'admin_masjid', 'joined_at' => now()]]);
 
         // Fail & rekod contoh (idempotent — hanya jika belum ada).
         if (! $mam->registryFiles()->exists()) {
-            $kerani = User::query()->where('email', 'kerani@demo.test')->first();
+            $kerani = User::query()->where('email', 'admin_masjid@demo.test')->first();
 
             $f1 = $this->makeFile($mam, '100-4', 'Surat-Menyurat Am 2026', $kerani);
             $f2 = $this->makeFile($mam, '200-2', 'Resit & Baucar 2026', $kerani);

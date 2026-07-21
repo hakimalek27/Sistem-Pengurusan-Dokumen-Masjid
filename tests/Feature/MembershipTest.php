@@ -50,8 +50,9 @@ it('jemput semula ahli sedia ada dengan e-mel berbeza TIDAK mengubah e-mel akaun
 it('menolak jemputan oleh pelakon tanpa users.manage atau tenant lain', function () {
     $otherMosque = makeMosque('MAN', 'man');
     $otherAdmin = makeMember($otherMosque, 'admin_masjid', 'admin@man.test');
+    $ajk = makeMember($this->mam, 'ajk', 'ajk@mam.test');
 
-    expect(fn () => $this->svc->invite($this->mam, 'x@mam.test', 'X', 'ajk', null, $this->kerani))
+    expect(fn () => $this->svc->invite($this->mam, 'x@mam.test', 'X', 'ajk', null, $ajk))
         ->toThrow(AuthorizationException::class)
         ->and(fn () => $this->svc->invite($this->mam, 'y@mam.test', 'Y', 'ajk', null, $otherAdmin))
         ->toThrow(AuthorizationException::class);
@@ -81,14 +82,21 @@ it('boleh membuang admin jika ada admin_masjid lain', function () {
 });
 
 it('TIDAK boleh menurunkan admin_masjid terakhir', function () {
-    expect(fn () => $this->svc->changeRole($this->mam, $this->admin, 'kerani', $this->admin))
+    expect(fn () => $this->svc->changeRole($this->mam, $this->admin, 'ajk', $this->admin))
         ->toThrow(RuntimeException::class);
 });
 
 it('TIDAK boleh menurunkan peranan diri sendiri', function () {
     makeMember($this->mam, 'admin_masjid', 'a2@mam.test'); // ada admin lain
-    expect(fn () => $this->svc->changeRole($this->mam, $this->admin, 'kerani', $this->admin))
+    expect(fn () => $this->svc->changeRole($this->mam, $this->admin, 'ajk', $this->admin))
         ->toThrow(RuntimeException::class);
+});
+
+it('menerima input role lama kerani sebagai Admin / Kerani tanpa mencipta role kedua', function () {
+    $this->svc->changeRole($this->mam, $this->kerani, 'kerani', $this->admin);
+
+    expect($this->kerani->fresh()->roleIn($this->mam))->toBe('admin_masjid')
+        ->and($this->mam->users()->whereKey($this->kerani->id)->first()->pivot->role)->toBe('admin_masjid');
 });
 
 it('TIDAK boleh menyentuh akaun superadmin', function () {
@@ -100,9 +108,10 @@ it('TIDAK boleh menyentuh akaun superadmin', function () {
 });
 
 it('boleh menukar peranan ahli biasa', function () {
-    $this->svc->changeRole($this->mam, $this->kerani, 'setiausaha', $this->admin);
+    $ajk = makeMember($this->mam, 'ajk', 'ajk@mam.test');
+    $this->svc->changeRole($this->mam, $ajk, 'setiausaha', $this->admin);
 
-    expect($this->kerani->fresh()->roleIn($this->mam))->toBe('setiausaha');
+    expect($ajk->fresh()->roleIn($this->mam))->toBe('setiausaha');
 });
 
 it('jemput ahli telefon-sahaja menormalkan nombor & tiada e-mel', function () {
@@ -125,9 +134,9 @@ it('admin boleh set semula kata laluan ahli', function () {
 });
 
 it('set semula kata laluan oleh bukan-admin ditolak', function () {
-    $kerani2 = makeMember($this->mam, 'kerani', 'k2@mam.test');
+    $ajk = makeMember($this->mam, 'ajk', 'ajk2@mam.test');
 
-    expect(fn () => $this->svc->resetPassword($this->mam, $this->kerani, 'x', $kerani2))
+    expect(fn () => $this->svc->resetPassword($this->mam, $this->kerani, 'x', $ajk))
         ->toThrow(AuthorizationException::class);
 });
 

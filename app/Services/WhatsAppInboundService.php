@@ -177,7 +177,7 @@ class WhatsAppInboundService
         }
 
         $ref = strtoupper(substr($record->ulid, -6));
-        $this->reply($mosque, $session, $from, "✅ Diterima untuk *{$mosque->name}*. Rujukan sementara: #{$ref}. Kerani akan memprosesnya.", $user?->id, 'wa_ack');
+        $this->reply($mosque, $session, $from, "✅ Diterima untuk *{$mosque->name}*. Rujukan sementara: #{$ref}. Admin / Kerani akan memprosesnya.", $user?->id, 'wa_ack');
         $this->notifyInboxHolders($mosque);
     }
 

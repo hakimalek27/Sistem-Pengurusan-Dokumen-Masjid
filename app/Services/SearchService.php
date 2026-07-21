@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 class SearchService
 {
     /** Peranan yang boleh melihat rekod sulit dalam carian (§6.3). */
-    protected const SULIT_ROLES = ['admin_masjid', 'kerani', 'pengerusi', 'setiausaha', 'nazir'];
+    protected const SULIT_ROLES = ['admin_masjid', 'pengerusi', 'setiausaha', 'nazir'];
 
     public function for(User $user, Mosque $tenant, string $query, array $filters = []): Collection
     {

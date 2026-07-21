@@ -49,7 +49,7 @@ it('pengguna dwi-masjid: peranan berasingan setiap tenant, set rekod berasingan'
     $this->man->users()->attach($dwi->id, ['role' => 'kerani', 'joined_at' => now()]);
 
     expect($dwi->roleIn($this->mam))->toBe('ajk')
-        ->and($dwi->roleIn($this->man))->toBe('kerani')
+        ->and($dwi->roleIn($this->man))->toBe('admin_masjid')
         ->and(Record::forMosque($this->mam)->count())->toBe(1)
         ->and(Record::forMosque($this->man)->count())->toBe(1);
 });
