@@ -1,5 +1,29 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## LATEST RELEASE — Gabungan Admin / Kerani 21 Julai 2026
+
+**Status:** LIVE. Runtime production dibina daripada `103b186` di `https://bakwim.my`.
+
+- `admin_masjid` kini role kanonik tunggal berlabel **Admin / Kerani**. Role `kerani`
+  dibuang daripada pilihan UI/config dan migration
+  `2026_07_21_000002_merge_admin_kerani_roles` menukar semua pivot lama kepada
+  `admin_masjid`. Alias kod lama dinormalisasi untuk keselamatan semasa rollout.
+- Admin / Kerani mengandungi gabungan akses operasi kerani dan kuasa admin: peti masuk,
+  klasifikasi, rekod/fail, minit, kelulusan, retensi, pelupusan, pengguna, tetapan masjid,
+  storan dan audit. Perlindungan admin terakhir serta tenant isolation kekal aktif.
+- Bukti tempatan: Pest `377 lulus, 1 skip, 1243 assertions`; Pint lulus.
+- Bukti Chrome production selepas deploy: **8 BrowserContext berasingan**, satu bagi setiap
+  role tenant. Jumlah **111 halaman** terlihat dibuka dan semuanya `200`; tiada pageerror
+  atau console error sebelum probe silang tenant; semua 8 role menerima `404` untuk
+  `/app/mamad/records` dari sesi tenant `smoke`.
+- Pecahan halaman: Admin / Kerani `21`, Pengerusi `15`, Setiausaha `13`, Bendahari `13`,
+  Nazir `12`, Ketua Imam `12`, AJK `12`, Juruaudit `13`.
+- Lima akaun role sementara diwujudkan hanya dalam tenant `smoke` untuk audit dan dipadam
+  selepas ujian. Semakan akhir: akaun sementara `0`, pivot legacy `kerani=0`, failed job `0`,
+  `diwan:health OK`, `/up=200`, dan semua 8 container berjalan.
+- Superadmin ialah flag global, bukan salah satu role tenant dalam `config/roles.php`.
+  Akaun/kata laluan superadmin sebenar tidak diubah atau diteka dalam audit ini.
+
 ## LATEST RELEASE — DDMS Lanjutan + ClamAV 21 Julai 2026
 
 **Status:** LIVE. Imej production dibina daripada `9579897`; ciri utama `f2fcc75`.
@@ -8,8 +32,8 @@
   principal/delegate, 33 jenis rekod dan tracking fail fizikal/hibrid telah siap.
 - Intake UI/e-mel/WhatsApp kini fail-closed melalui ClamAV; EICAR production dikesan tepat
   dan port daemon tidak diterbitkan ke host. Inbox memaparkan pengirim/uploader dan masa.
-- Bukti tempatan: Pest `376 lulus, 1 skip, 1247 assertions`; Chrome workflow 4/4,
-  inventori 9 role lulus, silang tenant 404; audit Composer/npm bersih.
+- Bukti tempatan sebelum gabungan role: Pest `376 lulus, 1 skip, 1247 assertions`;
+  Chrome workflow 4/4, inventori 9 role lulus, silang tenant 404; audit Composer/npm bersih.
 - Bukti production: 8 container hidup, ClamAV healthy, migration baharu Ran,
   `diwan:health OK`, smoke `9/9`, failed queue kosong, Chrome read-only halaman baharu lulus.
 - Node build dinaikkan 20→22 untuk PDF.js. Guzzle dinaikkan 7.13.2→7.15.1 selepas empat

@@ -10,6 +10,15 @@ Semua kawalan baharu menggunakan `mosque_id`, policy dan query visibility sedia 
 Tiada route baharu yang membenarkan pengguna memilih tenant atau objek melalui ID tanpa
 semakan authorization semula pada server.
 
+## Pengesahan susulan: gabungan Admin / Kerani
+
+Release `103b186` menggabungkan role `kerani` ke role kanonik `admin_masjid` berlabel
+`Admin / Kerani`. Migration production selesai dan semakan DB selepas cleanup menunjukkan
+`kerani=0`. Chrome production menguji semua lapan role tenant dalam lapan BrowserContext
+berasingan: 111 halaman role-specific berstatus `200`, tiada ralat JavaScript sebelum probe,
+dan semua role menerima `404` apabila cuba membuka rekod tenant lain. Lima akaun role ujian
+sementara dalam tenant `smoke` dipadam selepas pengesahan.
+
 ## Fungsi yang dilaksanakan
 
 ### 1. Carian tersimpan, kegemaran dan carian lanjutan
@@ -83,7 +92,7 @@ semakan authorization semula pada server.
 | DB `migrate:fresh --seed` | Lulus termasuk migration baharu |
 | Chrome workflow pejabat DB bersih | 2/2 lulus: klasifikasi+minit dan minit+approval |
 | Chrome capability baharu | 2/2 lulus: carian/saved/favourite dan provenance/pembetulan |
-| Chrome sembilan peranan | Semua sidebar terlihat 200; silang tenant MAN 404 |
+| Chrome sembilan peranan (sebelum merge) | Semua sidebar terlihat 200; silang tenant MAN 404 |
 | Chrome production read-only | 1/1 lulus untuk 8 halaman baharu/teras; silang tenant 404 |
 | Viewer authorization | Signed viewer 200; tenant luar 404; metadata cetakan render |
 | Vite/Node 22 production build | Lulus; PDF.js worker dibundle |
