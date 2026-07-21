@@ -1,5 +1,24 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## LATEST RELEASE — DDMS Lanjutan + ClamAV 21 Julai 2026
+
+**Status:** LIVE. Imej production dibina daripada `9579897`; ciri utama `f2fcc75`.
+
+- Saved search/favourite, carian metadata/tarikh, viewer PDF/imej, workflow pembetulan,
+  principal/delegate, 33 jenis rekod dan tracking fail fizikal/hibrid telah siap.
+- Intake UI/e-mel/WhatsApp kini fail-closed melalui ClamAV; EICAR production dikesan tepat
+  dan port daemon tidak diterbitkan ke host. Inbox memaparkan pengirim/uploader dan masa.
+- Bukti tempatan: Pest `376 lulus, 1 skip, 1247 assertions`; Chrome workflow 4/4,
+  inventori 9 role lulus, silang tenant 404; audit Composer/npm bersih.
+- Bukti production: 8 container hidup, ClamAV healthy, migration baharu Ran,
+  `diwan:health OK`, smoke `9/9`, failed queue kosong, Chrome read-only halaman baharu lulus.
+- Node build dinaikkan 20→22 untuk PDF.js. Guzzle dinaikkan 7.13.2→7.15.1 selepas empat
+  advisory medium baharu ditemui. Healthcheck ClamAV kini melakukan scan fail kecil sebenar.
+- Build cache 11.03 GB dibersihkan; disk turun 82%→46%. VM 1.9 GB masih sempit walaupun
+  stabil; naik taraf 4 GB RAM disyorkan sebelum intake/OCR volum tinggi.
+- Bukti penuh, journey, masalah, penyelesaian dan rollback:
+  [`AUDIT-DDMS-EXTENDED-2026-07-21.md`](AUDIT-DDMS-EXTENDED-2026-07-21.md).
+
 ## LATEST RELEASE — Audit A-Z 21 Julai 2026
 
 **Status:** LIVE dan disahkan selepas deploy `980f12e` di `https://bakwim.my`.

@@ -10,14 +10,17 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Validation\ValidationException;
 
-class TenantWhatsAppTestNotification extends Notification
+function tenantWhatsAppTestNotification(int $mosqueId): Notification
 {
-    public function __construct(public int $mosqueId) {}
-
-    public function toWhatsApp(object $notifiable): array
+    return new class($mosqueId) extends Notification
     {
-        return ['mosque_id' => $this->mosqueId, 'message' => 'Ujian tenant'];
-    }
+        public function __construct(public int $mosqueId) {}
+
+        public function toWhatsApp(object $notifiable): array
+        {
+            return ['mosque_id' => $this->mosqueId, 'message' => 'Ujian tenant'];
+        }
+    };
 }
 
 beforeEach(function () {
@@ -79,7 +82,7 @@ it('menghantar job hanya menggunakan sesi dan nombor tenant tepat', function () 
         'session_id' => 'sess_man',
     ]);
 
-    app(WhatsAppChannel::class)->send($this->user, new TenantWhatsAppTestNotification($this->mam->id));
+    app(WhatsAppChannel::class)->send($this->user, tenantWhatsAppTestNotification($this->mam->id));
 
     Queue::assertPushed(SendWhatsAppJob::class, 1);
     Queue::assertPushed(SendWhatsAppJob::class, fn (SendWhatsAppJob $job) => $job->mosqueId === $this->mam->id
@@ -99,7 +102,7 @@ it('integrasi tenant yang mati tidak boleh menggunakan sesi tenant lain', functi
         'session_id' => 'sess_man',
     ]);
 
-    app(WhatsAppChannel::class)->send($this->user, new TenantWhatsAppTestNotification($this->mam->id));
+    app(WhatsAppChannel::class)->send($this->user, tenantWhatsAppTestNotification($this->mam->id));
 
     Queue::assertNothingPushed();
     $this->assertDatabaseHas('notification_logs', [
