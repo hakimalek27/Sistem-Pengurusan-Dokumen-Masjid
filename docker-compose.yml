@@ -95,7 +95,7 @@ services:
     volumes:
       - diwan_clamav:/var/lib/clamav
     healthcheck:
-      test: ["CMD-SHELL", "clamdscan --ping 1 --wait >/dev/null 2>&1"]
+      test: ["CMD-SHELL", "clamdscan --ping 1 --wait --no-summary /etc/hostname >/dev/null 2>&1"]
       interval: 30s
       timeout: 15s
       start_period: 120s
