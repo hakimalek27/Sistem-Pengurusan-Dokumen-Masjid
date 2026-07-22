@@ -14,6 +14,7 @@ let activeGuideId = null;
 let completed = false;
 let transitionObserver = null;
 let transitionTimer = null;
+let transitionPoller = null;
 let waitingBanner = null;
 let finalActionCleanup = null;
 let automaticModalGuard = null;
@@ -156,6 +157,8 @@ function clearTransitionWatch() {
     transitionObserver = null;
     if (transitionTimer) window.clearTimeout(transitionTimer);
     transitionTimer = null;
+    if (transitionPoller) window.clearInterval(transitionPoller);
+    transitionPoller = null;
 }
 
 function clearWaitingBanner() {
@@ -359,20 +362,31 @@ function watchForNextStep(guideSteps, index) {
     if (!current || !next || (next.route && !samePath(next.route))) return;
     if (!isActionStep(current, next) || resolveStepElement(next, false)) return;
 
-    transitionObserver = new MutationObserver(() => {
-        if (!activeDriver?.isActive() || activeDriver.getActiveIndex() !== index) return;
+    const advanceWhenReady = () => {
+        if (!activeDriver?.isActive()) return;
+        const activeIndex = activeDriver.getActiveIndex();
+        if (activeIndex !== undefined && activeIndex !== index) return;
         if (!resolveStepElement(next, false)) return;
 
         transitionObserver?.disconnect();
         transitionObserver = null;
+        if (transitionPoller) window.clearInterval(transitionPoller);
+        transitionPoller = null;
         transitionTimer = window.setTimeout(() => {
-            if (activeDriver?.isActive() && activeDriver.getActiveIndex() === index) {
+            const currentIndex = activeDriver?.getActiveIndex();
+            if (activeDriver?.isActive() && (currentIndex === undefined || currentIndex === index)) {
                 clearWaitingBanner();
                 activeDriver.moveNext();
             }
         }, 120);
-    });
+    };
+
+    transitionObserver = new MutationObserver(advanceWhenReady);
     transitionObserver.observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+    // Livewire may settle a replacement between observer delivery cycles while
+    // Driver.js has hidden its popover. Poll briefly so a valid next target can
+    // never leave the user stranded behind the waiting banner.
+    transitionPoller = window.setInterval(advanceWhenReady, 120);
 }
 
 function showUnavailableGuide(runtime, guide, step) {
