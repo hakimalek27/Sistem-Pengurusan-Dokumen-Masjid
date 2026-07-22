@@ -68,7 +68,7 @@ class SyncHelpIndex extends Command
             if ($failed) {
                 throw new \RuntimeException('Task indeks gagal: '.data_get($failed, 'error.message', 'ralat tidak diketahui'));
             }
-            $indexed = (int) data_get($index->getStats(), 'numberOfDocuments', 0);
+            $indexed = (int) data_get($index->stats(), 'numberOfDocuments', 0);
             if ($indexed !== count($documents)) {
                 throw new \RuntimeException("Bilangan guide indeks {$indexed} tidak sepadan dengan katalog ".count($documents).'.');
             }
