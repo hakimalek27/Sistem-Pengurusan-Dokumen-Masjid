@@ -29,7 +29,7 @@ class HelpSearchService
                 );
                 $response = $client->index((string) config('diwan.guidance.help_index'))->search($query, ['limit' => 30]);
                 $results = collect($response->getHits())
-                    ->map(fn (array $hit) => $visible->get($hit['id'] ?? ''))
+                    ->map(fn (array $hit) => $visible->get($hit['guide_id'] ?? ''))
                     ->filter()
                     ->take(12)
                     ->values();

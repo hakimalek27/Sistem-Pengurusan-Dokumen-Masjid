@@ -37,11 +37,18 @@ class SyncHelpIndex extends Command
             );
             $uid = (string) config('diwan.guidance.help_index');
             if ($this->option('delete')) {
-                rescue(fn () => $client->deleteIndex($uid), report: false);
+                $deleteTask = rescue(fn () => $client->deleteIndex($uid), report: false);
+                if (is_array($deleteTask) && isset($deleteTask['taskUid'])) {
+                    $deleted = $client->waitForTask($deleteTask['taskUid'], 30_000, 100);
+                    if (($deleted['status'] ?? null) === 'failed') {
+                        throw new \RuntimeException('Indeks lama gagal dipadam: '.data_get($deleted, 'error.message', 'ralat tidak diketahui'));
+                    }
+                }
             }
             $index = $client->index($uid);
             $documents = collect($catalog->raw()['guides'] ?? [])->map(fn (array $guide): array => [
-                'id' => $guide['id'],
+                'document_id' => self::documentId($guide['id']),
+                'guide_id' => $guide['id'],
                 'panel' => $guide['panel'],
                 'roles' => $guide['roles'],
                 'title' => $guide['title'],
@@ -51,7 +58,7 @@ class SyncHelpIndex extends Command
                 'troubleshooting_text' => collect($guide['troubleshooting'] ?? [])->implode(' '),
             ])->all();
             $tasks = [
-                $index->addDocuments($documents, 'id'),
+                $index->addDocuments($documents, 'document_id'),
                 $index->updateFilterableAttributes(['panel', 'roles']),
                 $index->updateSearchableAttributes(['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text']),
             ];
@@ -73,5 +80,10 @@ class SyncHelpIndex extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    public static function documentId(string $guideId): string
+    {
+        return hash('sha256', $guideId);
     }
 }

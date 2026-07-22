@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\SyncHelpIndex;
 use App\Models\HelpEvent;
 use App\Services\HelpCatalog;
 use App\Services\HelpSearchService;
@@ -39,6 +40,16 @@ it('tidak menyimpan teks carian mentah dalam analitik', function () {
     $event = HelpEvent::query()->latest('id')->first();
     expect($event->query_hash)->toHaveLength(64)
         ->and(json_encode($event->toArray()))->not->toContain($secretQuery);
+});
+
+it('menjana primary key Meilisearch sah tanpa mengubah guide id rasmi', function () {
+    $catalog = app(HelpCatalog::class)->raw();
+    $guideIds = collect($catalog['guides'])->pluck('id');
+    $documentIds = $guideIds->map(fn (string $guideId): string => SyncHelpIndex::documentId($guideId));
+
+    expect($documentIds->unique()->count())->toBe($guideIds->count());
+    $documentIds->each(fn (string $documentId) => expect($documentId)->toMatch('/^[a-z0-9_-]{1,511}$/'));
+    expect($guideIds)->toContain('tenant.dashboard');
 });
 
 it('meliputi setiap halaman dan skrin tindakan dalam manifest manual dengan guide role', function () {

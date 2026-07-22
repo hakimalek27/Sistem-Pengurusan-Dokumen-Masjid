@@ -179,3 +179,7 @@ Bahagian ini mesti dikemas kini selepas deploy dan sebelum handover ditutup:
   menyenaraikan dependency bundle WASI `@emnapi/core` dan `@emnapi/runtime`. Lockfile dijana semula
   dalam Node 24 Linux sambil mengekalkan versi dependency, kemudian `npm ci` Linux sebenar, build
   dan audit disahkan sebelum CI diulang.
+- Sync canary production mendapati Meilisearch tidak menerima `tenant.dashboard` sebagai primary
+  key kerana titik bukan aksara ID yang sah. Indeks ditukar kepada `document_id` SHA-256 yang sah
+  dan `guide_id` asal dikekalkan untuk pemetaan akses; pemadaman indeks kini menunggu task selesai.
+  Sepanjang pembetulan, carian kekal tersedia melalui fallback PHP dan nudges belum diaktifkan.
