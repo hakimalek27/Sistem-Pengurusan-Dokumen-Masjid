@@ -3,11 +3,14 @@ import { expect, test } from '@playwright/test';
 
 const catalog = JSON.parse(readFileSync('resources/help/guides.json', 'utf8'));
 const guideIds = catalog.guides.map((guide) => guide.id);
-const password = process.env.MANUAL_DEMO_PASSWORD ?? 'password';
-const loginDelayMs = Number(process.env.E2E_ROLE_LOGIN_DELAY_MS ?? 15_000);
+const defaultPassword = process.env.E2E_PROD_PASSWORD ?? process.env.MANUAL_DEMO_PASSWORD ?? 'password';
+const tenantSlug = process.env.E2E_PROD_TENANT ?? 'mam';
+const crossTenantSlug = process.env.E2E_PROD_CROSS_TENANT ?? 'man';
+const filePrefix = process.env.E2E_PROD_FILE_PREFIX ?? 'MAM';
+const loginDelayMs = Number(process.env.E2E_PROD_ROLE_LOGIN_DELAY_MS ?? process.env.E2E_ROLE_LOGIN_DELAY_MS ?? 15_000);
 let lastLoginAt = 0;
 
-const tenantRoles = [
+const localTenantRoles = [
     { role: 'admin_masjid', email: 'admin_masjid@demo.test', pages: 25 },
     { role: 'pengerusi', email: 'pengerusi@demo.test', pages: 17 },
     { role: 'setiausaha', email: 'setiausaha@demo.test', pages: 15 },
@@ -17,6 +20,13 @@ const tenantRoles = [
     { role: 'ajk', email: 'ajk@demo.test', pages: 13 },
     { role: 'audit', email: 'audit@demo.test', pages: 14 },
 ];
+const tenantRoles = process.env.E2E_PROD_ROLE_ACCOUNTS
+    ? JSON.parse(process.env.E2E_PROD_ROLE_ACCOUNTS)
+    : localTenantRoles;
+const superadminAccount = {
+    email: process.env.E2E_PROD_SUPERADMIN_EMAIL ?? 'superadmin@diwan.test',
+    password: process.env.E2E_PROD_SUPERADMIN_PASSWORD ?? defaultPassword,
+};
 
 async function disableAutomaticGuides(context) {
     await context.addInitScript((ids) => {
@@ -29,21 +39,21 @@ async function waitForLoginSlot(page) {
     if (remaining > 0) await page.waitForTimeout(remaining);
 }
 
-async function loginTenant(page, email) {
+async function loginTenant(page, account) {
     await waitForLoginSlot(page);
     await page.goto('/app/login');
-    await page.locator('input[id="form.login"]').fill(email);
-    await page.locator('input[type="password"]').fill(password);
+    await page.locator('input[id="form.login"]').fill(account.email);
+    await page.locator('input[type="password"]').fill(account.password ?? defaultPassword);
     await page.getByRole('button', { name: /Log masuk/i }).click();
-    await page.waitForURL(/\/app\/mam\/?$/, { timeout: 60_000 });
+    await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === `/app/${tenantSlug}`, { timeout: 60_000 });
     lastLoginAt = Date.now();
 }
 
 async function loginSuperadmin(page) {
     await waitForLoginSlot(page);
     await page.goto('/admin/login');
-    await page.locator('input[id="form.login"]').fill('superadmin@diwan.test');
-    await page.locator('input[type="password"]').fill(password);
+    await page.locator('input[id="form.login"]').fill(superadminAccount.email);
+    await page.locator('input[type="password"]').fill(superadminAccount.password);
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(/\/admin\/?$/, { timeout: 60_000 });
     lastLoginAt = Date.now();
@@ -133,7 +143,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
                 await disableAutomaticGuides(context);
                 const page = await context.newPage();
                 const browserErrors = monitorBrowserErrors(page);
-                await loginTenant(page, account.email);
+                await loginTenant(page, account);
 
                 let navigation = [];
                 if (viewport.name === 'desktop') {
@@ -146,7 +156,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
                     }
                 }
 
-                const help = await page.goto('/app/mam/bantuan');
+                const help = await page.goto(`/app/${tenantSlug}/bantuan`);
                 expect(help?.status()).toBe(200);
                 await expect(page.locator('[data-help-target="help-center"]')).toBeVisible();
                 await expect(page.locator('[data-help-target="help-launcher"]')).toBeVisible();
@@ -154,7 +164,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
                 await assertNoHorizontalPageOverflow(page);
                 expect([...new Set(browserErrors)], `${account.role} ${viewport.name}`).toEqual([]);
 
-                const crossTenant = await page.goto('/app/man/records');
+                const crossTenant = await page.goto(`/app/${crossTenantSlug}/records`);
                 expect(crossTenant?.status(), `${account.role} silang tenant`).toBe(404);
                 inventory.push({
                     viewport: viewport.name,
@@ -176,9 +186,9 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     await disableAutomaticGuides(context);
     const page = await context.newPage();
     const browserErrors = monitorBrowserErrors(page);
-    await loginTenant(page, 'admin_masjid@demo.test');
+    await loginTenant(page, tenantRoles[0]);
 
-    await page.goto('/app/mam/peti-masuk?panduan=tenant.peti-masuk&langkah=0');
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=tenant.peti-masuk&langkah=0`);
     const popover = page.locator('.driver-popover');
     await expect(popover).toBeVisible();
     await expect(popover).toContainText('1 daripada 6');
@@ -186,14 +196,15 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     await expect(popover).toBeHidden();
     await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('diwan-help:tenant.peti-masuk') ?? '{}').event)).toBe('dismissed');
 
-    await page.goto('/app/mam/peti-masuk?panduan=tenant.peti-masuk&langkah=0');
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=tenant.peti-masuk&langkah=0`);
     await expect(popover).toBeVisible();
     await popover.getByRole('button', { name: 'Seterusnya' }).click();
     await expect(popover).toContainText('2 daripada 6');
     await popover.getByRole('button', { name: 'Close' }).click();
     await page.waitForTimeout(700);
 
-    await page.goto('/app/mam/bantuan?asal=%2Fapp%2Fmam%2Fpeti-masuk');
+    const inboxPath = `/app/${tenantSlug}/peti-masuk`;
+    await page.goto(`/app/${tenantSlug}/bantuan?asal=${encodeURIComponent(inboxPath)}`);
     await page.locator('#help-query').fill('Peti Masuk');
     await page.getByRole('button', { name: 'Cari', exact: true }).click();
     const result = page.locator('.diwan-help-result').filter({ has: page.getByRole('heading', { name: 'Peti Masuk', exact: true }) }).first();
@@ -209,7 +220,7 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     await expect(popover).toBeHidden();
     await expect(page).not.toHaveURL(/panduan=/);
 
-    await page.goto('/app/mam/bantuan?asal=%2Fapp%2Fmam%2Fpeti-masuk');
+    await page.goto(`/app/${tenantSlug}/bantuan?asal=${encodeURIComponent(inboxPath)}`);
     await page.locator('#help-query').fill('Peti Masuk');
     await page.getByRole('button', { name: 'Cari', exact: true }).click();
     const repeatResult = page.locator('.diwan-help-result').filter({ has: page.getByRole('heading', { name: 'Peti Masuk', exact: true }) }).first();
@@ -252,8 +263,8 @@ async function verifyClassificationWizard(browser, baseURL, account, viewport) {
     await disableAutomaticGuides(context);
     const page = await context.newPage();
     const browserErrors = monitorBrowserErrors(page);
-    await loginTenant(page, account.email);
-    await page.goto('/app/mam/peti-masuk');
+    await loginTenant(page, account);
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
     const classify = page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first();
     await expect(classify).toHaveAttribute('data-help-target', 'inbox-classify');
     await classify.click();
@@ -286,7 +297,7 @@ async function verifyClassificationWizard(browser, baseURL, account, viewport) {
     await expect(modal.locator('form.fi-active')).toContainText('Tahap Akses Rekod');
     const fileStep = modal.locator('form.fi-active');
     await fileStep.locator('.fi-select-input-btn').first().click();
-    await page.getByRole('option', { name: /MAM\./ }).first().click();
+    await page.getByRole('option', { name: new RegExp(`${filePrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.`) }).first().click();
     await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
     await assertModalFits();
     await next().click();

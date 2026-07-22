@@ -114,7 +114,7 @@ Pemboleh ubah penting: `MANUAL_BASE_URL`, `MANUAL_DEMO_PASSWORD`,
 ## Bukti tempatan
 
 - Pest penuh: 405 lulus, 1 dilangkau, 1,635 assertion, 82.35 saat.
-- Ujian akhir pusat bantuan selepas pembetulan role-image: 4 lulus, 30 assertion.
+- Ujian akhir katalog/sokongan selepas pembetulan indeks: 12 lulus, 360 assertion.
 - Pint: lulus.
 - Vite production build: lulus; 63 modul ditransform.
 - `npm audit --audit-level=high`: 0 vulnerability.
@@ -138,21 +138,44 @@ lulus; skip ini bukan kegagalan pipeline release.
 
 ## Pemeriksaan production
 
-Bahagian ini mesti dikemas kini selepas deploy dan sebelum handover ditutup:
-
-- commit/ref dan keputusan GitHub Actions;
-- migration batch serta bilangan guide dalam Meilisearch;
-- status container app, worker, scheduler, nginx dan Meilisearch;
-- `/up`, `/app/login`, `/admin/login`, queue dan `failed_jobs`;
-- `nginx -T` selepas force-recreate;
-- inventori Chrome production untuk 20 context;
-- silang tenant HTTP 404, tour, wizard desktop/mobile dan public first-use;
-- bukti semua fixture tenant `smoke` dan akaun sementara telah dipadam.
+- Runtime aplikasi: `2fa18ba` (`feat: tune Malay help search stop words`). Ref rollback sebelum
+  release ialah `b8c362a`. GitHub Actions `29891811653` lulus penuh untuk runtime ini selepas dua
+  CI pembetulan terdahulu turut lulus.
+- Backup `cos_backup` disahkan reachable dan healthy sebelum deploy; terdapat 7 backup dan backup
+  terbaharu berumur kurang satu jam ketika semakan akhir.
+- Migration `2026_07_22_000002_create_guidance_and_support_tables` telah berjalan dalam batch 7.
+- `diwan:sync-help-index --delete` berjaya menyegerakkan tepat 83 guide. Pemeriksaan API sebenar
+  menunjukkan `numberOfDocuments=83`, `isIndexing=false`, primary key `document_id`, lapan
+  stop-word Melayu aktif dan tiada medan `mosque_id`, `tenant_id` atau `user_id` dalam sampel hit.
+- Carian production `nak klasifikasi surat` dijawab terus oleh Meilisearch dengan 11 hasil;
+  tiga hasil teratas ialah Peti Masuk, workflow klasifikasi Setiausaha dan Klasifikasi Fail.
+- Feature flag efektif dalam container: guidance, nudges dan support semuanya `true`. Digest
+  dijadualkan 08:15 tetapi tidak dihantar secara manual; saluran luar kekal opt-in pengguna.
+- `app`, `worker`, `scheduler`, PostgreSQL, Redis, ClamAV dan Meilisearch semuanya `healthy`;
+  nginx berjalan selepas force-recreate dan `nginx -t` lulus. `diwan:health` memulangkan `OK` dan
+  `failed_jobs=0`.
+- `/up`, `/`, `/bantuan`, `/app/login` dan `/admin/login` semuanya HTTP 200 dari luar server serta
+  mengandungi `X-Request-ID` unik.
+- `nginx -T` mengesahkan kadar umum 10 request/saat, auth 5 request/minit, zon connection limit
+  dan upstream `fastcgi_pass app:9000`.
+- Chrome production menggunakan tepat 20 BrowserContext berasingan pada 1440x1000 dan 390x844.
+  Desktop: public 3 halaman, superadmin 12, Admin/Kerani 25, Pengerusi 17, Setiausaha 15,
+  Bendahari 15, Nazir 13, Ketua Imam 13, AJK 13 dan Juruaudit 14.
+- Semua lapan role menerima 404 apabila mengakses tenant lain pada desktop dan mobile, iaitu 16
+  probe silang tenant. Tiada `pageerror`, console error atau overflow mendatar dikesan.
+- Empat ujian Chrome production lulus dalam 5.6 minit: matriks role/peranti, tour mula-tutup-
+  sambung-selesai-ulang, public first-use dan ikon `?`, serta wizard klasifikasi lima langkah bagi
+  Admin/Kerani desktop dan Setiausaha mobile tanpa submit.
+- Fixture terpencil menggunakan dua tenant, lapan role, satu superadmin, satu fail dan satu rekod.
+  Selepas ujian, baki tepat sifar bagi 2 tenant, 9 pengguna, rekod, progress, preference, event,
+  tiket sokongan dan sesi fixture. Tenant `smoke` lama yang bukan milik run ini tidak diubah.
+- Semakan akhir log container selama 20 minit tidak menemui error/exception/fatal; event
+  `target_missing` sejam terakhir dan failed jobs kedua-duanya sifar.
 
 ## Rollback
 
-1. Catat ref semasa sebelum deploy.
-2. Jika build, migration, health atau smoke gagal, checkout ref lama dan bina semula semua servis.
+1. Ref aplikasi sebelum release ini ialah `b8c362a`; runtime baharu yang disahkan ialah `2fa18ba`.
+2. Jika rollback diperlukan, checkout `b8c362a` dan bina semula semua servis aplikasi.
 3. Force-recreate nginx kerana production bind-mount `docker/nginx-ssl.conf` dan IP upstream app
    boleh berubah selepas container diganti.
 4. Tiga feature flag boleh dimatikan segera tanpa rollback migration. Jadual baharu bersifat
@@ -183,3 +206,9 @@ Bahagian ini mesti dikemas kini selepas deploy dan sebelum handover ditutup:
   key kerana titik bukan aksara ID yang sah. Indeks ditukar kepada `document_id` SHA-256 yang sah
   dan `guide_id` asal dikekalkan untuk pemetaan akses; pemadaman indeks kini menunggu task selesai.
   Sepanjang pembetulan, carian kekal tersedia melalui fallback PHP dan nudges belum diaktifkan.
+- Canary kedua menemui SDK `meilisearch-php` terkunci menyediakan `stats()`, bukan `getStats()`.
+  Pemeriksaan jumlah dokumen ditukar kepada API versi sebenar, diuji dan dideploy sebelum indeks
+  dibina semula.
+- Indeks pada awalnya memulangkan sifar bagi frasa penuh `nak klasifikasi surat` walaupun kata
+  utama mempunyai hasil. Kata pengisi Melayu konservatif ditambah sebagai stop-word; frasa yang
+  sama kemudian memulangkan 11 hasil terus dari Meilisearch tanpa bergantung pada fallback PHP.
