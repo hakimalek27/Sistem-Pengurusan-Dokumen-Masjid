@@ -76,6 +76,11 @@ node scripts/manual/verify-activity-log.mjs
 
 Gunakan `MANUAL_DEMO_PASSWORD`, `MANUAL_BASE_URL`, SQLite latihan dan `DIWAN_STORAGE_DISK=manual`. Jangan jalankan fixture terhadap production.
 
+Untuk semakan production baca sahaja, skrip yang sama menerima
+`ACTIVITY_LOG_BASE_URL`, `ACTIVITY_LOG_TENANT`, `ACTIVITY_LOG_CROSS_TENANT`,
+`ACTIVITY_LOG_LOGIN_DELAY_MS` dan JSON `ACTIVITY_LOG_ROLE_ACCOUNTS`. Akaun ujian
+mesti sementara, diletakkan pada tenant ujian dan dibersihkan dalam blok `finally`.
+
 ## Bukti verifikasi tempatan
 
 - PHPUnit: 383 lulus, 1281 assertion, 1 skip tooling.
@@ -88,4 +93,14 @@ Gunakan `MANUAL_DEMO_PASSWORD`, `MANUAL_BASE_URL`, SQLite latihan dan `DIWAN_STO
 
 ## Deployment
 
-Migration `2026_07_22_000001_create_mosque_activity_logs_table.php` mesti dijalankan sebelum app baharu menerima trafik. Selepas container app ditukar, force-recreate nginx kerana override production menggunakan upstream container yang boleh bertukar IP. Sahkan `/up`, migration, queue/worker dan halaman role production selepas deploy.
+Release aplikasi `b9a5c30` dibina dan dideploy ke `/opt/diwan` pada 22 Julai 2026.
+
+- Migration `2026_07_22_000001_create_mosque_activity_logs_table.php` berstatus `Ran` dalam batch 6 sebelum container aplikasi diganti.
+- App, worker dan scheduler kembali `healthy`; nginx di-force-recreate dan `nginx -t` lulus.
+- `/up` dalaman dan awam HTTP 200; `/app/login` HTTP 200; `diwan:health` memulangkan `OK`.
+- Route production `/app/{tenant}/log-aktiviti` berdaftar dan queue gagal kosong.
+- Nginx production kekal menggunakan had 10 permintaan/saat, login 5 permintaan/minit dan 40 sambungan/IP.
+- Chrome production menggunakan BrowserContext berasingan dan sela login 15 saat: Admin/Kerani, Pengerusi, Setiausaha dan Bendahari HTTP 200, modal berjaya dan silang tenant HTTP 404; AJK HTTP 403.
+- Carian production menjumpai fixture nombor WhatsApp dan e-mel. Selepas ujian, 2 log, 5 pivot dan 5 akaun sementara dipadam; data masjid sebenar dan kelayakan akaun sebenar tidak diubah.
+
+Selepas container app ditukar pada release akan datang, force-recreate nginx kerana override production menggunakan upstream container yang boleh bertukar IP. Jalankan migrasi sebelum app baharu menerima trafik.

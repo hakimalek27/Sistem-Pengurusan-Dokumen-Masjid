@@ -1,5 +1,19 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## LATEST RELEASE — Log Aktiviti Masjid + Manual Berurutan 22 Julai 2026
+
+**Status:** LIVE. Imej aplikasi production dibina daripada `b9a5c30` di `https://bakwim.my`.
+
+- Manual sembilan persona kini mempunyai arahan bersambung **Gambar 1 → Gambar 2 → hasil akhir** bagi setiap tugas, termasuk aliran Admin/Kerani dari Dashboard, Peti Masuk, modal klasifikasi, Minit Saya hingga Log Aktiviti.
+- Liputan manual terkini: 115/115 halaman sidebar HTTP 200, 8/8 silang tenant HTTP 404, 231 PNG, 309 rujukan imej, 0 imej hilang dan 0 browser error.
+- Halaman `/app/{tenant}/log-aktiviti` ialah timeline append-only tenant untuk Admin/Kerani, Pengerusi, Setiausaha dan Bendahari. Ia menyimpan snapshot pelaku, role, rekod/fail, saluran, pengirim/uploader, IP apabila tersedia dan metadata peristiwa.
+- Katalog log meliputi intake/klasifikasi, minit, kelulusan/pembetulan, fail, custody fizikal, pelupusan, ahli, storan dan legal hold. Bendahari ditapis lagi melalui skop rekod/fail yang boleh dilihat.
+- Gate tempatan: Pest `383 lulus, 1 skip, 1281 assertions`; fokus Log Aktiviti `6 lulus, 39 assertions`; Pint dan Vite lulus.
+- Production: migration batch 6 `Ran`; app/worker/scheduler `healthy`; nginx dicipta semula dan sah; `/up` dalaman/awam serta login HTTP 200; `diwan:health OK`; failed queue kosong.
+- Chrome production sebenar, context berasingan dan sela login 15 saat: empat role dibenarkan HTTP 200, modal berjaya, silang tenant 404, carian WhatsApp/e-mel berjaya; AJK HTTP 403.
+- Fixture audit production dibersihkan sepenuhnya: 2 log, 5 pivot dan 5 akaun ujian. Akaun dan data masjid sebenar tidak disentuh.
+- Journey, matriks keselamatan dan arahan ulangan: [`docs/HANDOVER-2026-07-22-LOG-AKTIVITI-DAN-MANUAL.md`](docs/HANDOVER-2026-07-22-LOG-AKTIVITI-DAN-MANUAL.md).
+
 ## LATEST DELIVERABLE — Manual Pengguna 9 Persona 22 Julai 2026
 
 **Status:** Lengkap dan disahkan menggunakan Google Chrome pada data latihan terasing.
