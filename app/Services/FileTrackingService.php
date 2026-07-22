@@ -51,6 +51,25 @@ class FileTrackingService
                 'physical_location' => trim((string) ($data['to_location'] ?? '')) ?: $locked->physical_location,
             ]);
 
+            $holder = $movement->holder_user_id
+                ? User::query()->find($movement->holder_user_id)?->name
+                : $movement->holder_name;
+            app(MosqueActivityLogger::class)->log(
+                $locked->mosque,
+                'physical_file_checked_out',
+                $actor->name.' mengeluarkan fail fizikal '.$locked->file_no.' kepada '.($holder ?: 'pemegang yang direkodkan').'.',
+                $actor,
+                $movement,
+                file: $locked,
+                metadata: [
+                    'holder' => $holder,
+                    'from_location' => $movement->from_location,
+                    'to_location' => $movement->to_location,
+                    'due_at' => $movement->due_at?->toIso8601String(),
+                    'notes' => $movement->notes,
+                ],
+            );
+
             return $movement;
         });
     }
@@ -85,6 +104,16 @@ class FileTrackingService
                 'physical_location' => $destination,
             ]);
 
+            app(MosqueActivityLogger::class)->log(
+                $locked->mosque,
+                'physical_file_returned',
+                $actor->name.' memulangkan fail fizikal '.$locked->file_no.' ke '.$destination.'.',
+                $actor,
+                $movement,
+                file: $locked,
+                metadata: ['from_location' => $movement->from_location, 'to_location' => $destination, 'notes' => $notes],
+            );
+
             return $movement;
         });
     }
@@ -109,6 +138,16 @@ class FileTrackingService
                 'handled_by' => $actor->id,
             ]);
             $locked->update(['physical_location' => trim($location)]);
+
+            app(MosqueActivityLogger::class)->log(
+                $locked->mosque,
+                'physical_file_relocated',
+                $actor->name.' memindahkan lokasi fail fizikal '.$locked->file_no.' ke '.trim($location).'.',
+                $actor,
+                $movement,
+                file: $locked,
+                metadata: ['from_location' => $movement->from_location, 'to_location' => trim($location), 'notes' => $notes],
+            );
 
             return $movement;
         });

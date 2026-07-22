@@ -110,6 +110,15 @@ class BillingService
             new NewStorageOrderNotification($order),
         );
 
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'storage_order_created',
+            $user->name.' memohon tambahan storan '.$order->gb.' GB melalui invois '.$order->invoice_no.'.',
+            $user,
+            $order,
+            metadata: ['order_id' => $order->id, 'invoice_no' => $order->invoice_no, 'gb' => $order->gb, 'amount_cents' => $order->amount_cents],
+        );
+
         return $order;
     }
 
@@ -179,6 +188,15 @@ class BillingService
         activity()->performedOn($order)->causedBy($confirmer)
             ->withProperties(['ip' => request()->ip()])->log('tandakan_dibayar');
 
+        app(MosqueActivityLogger::class)->log(
+            $order->mosque,
+            'storage_order_paid',
+            $confirmer->name.' mengesahkan bayaran invois '.$order->invoice_no.'; storan '.$order->gb.' GB diaktifkan.',
+            $confirmer,
+            $order,
+            metadata: ['order_id' => $order->id, 'invoice_no' => $order->invoice_no, 'gb' => $order->gb],
+        );
+
         return $addon;
     }
 
@@ -206,6 +224,15 @@ class BillingService
         activity()->performedOn($order)->causedBy($canceller)
             ->withProperties(['ip' => request()->ip(), 'reason' => trim($reason)])
             ->log('batal_pesanan_storan');
+
+        app(MosqueActivityLogger::class)->log(
+            $order->mosque,
+            'storage_order_cancelled',
+            $canceller->name.' membatalkan invois storan '.$order->invoice_no.'.',
+            $canceller,
+            $order,
+            metadata: ['order_id' => $order->id, 'invoice_no' => $order->invoice_no, 'reason' => trim($reason)],
+        );
     }
 
     /** §5.14 / Aliran J — Notis T-30/T-7, luput add-on → kira semula kuota. */

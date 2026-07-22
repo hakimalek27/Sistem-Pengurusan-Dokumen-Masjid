@@ -8,22 +8,22 @@ const generatedDate = '22 Julai 2026';
 const permissionSummary = {
     admin_masjid: {
         scope: 'Mengurus operasi registri dan pentadbiran masjid. Peranan ini ialah gabungan rasmi Admin dan Kerani.',
-        allowed: 'Peti masuk, klasifikasi, rekod, fail, minit, permohonan kelulusan, klasifikasi fail, retensi, pelupusan persediaan/pelaksanaan, ahli, tetapan masjid, storan dan log audit.',
+        allowed: 'Peti masuk, klasifikasi, rekod, fail, minit, permohonan kelulusan, klasifikasi fail, retensi, pelupusan persediaan/pelaksanaan, ahli, tetapan masjid, storan, Log Aktiviti Masjid dan log akses sulit.',
         boundary: 'Tidak membuat keputusan kelulusan dokumen dan tidak meluluskan batch pelupusan sendiri. Kelulusan itu kekal tugas Pengerusi/Nazir atau Pengerusi bagi pelupusan.',
     },
     pengerusi: {
         scope: 'Menyemak rekod, memberi arahan/minit, membuat keputusan kelulusan, meluluskan pelupusan dan memantau penggunaan serta audit.',
-        allowed: 'Rekod/fail, akses khas fail, minit, keputusan kelulusan, kelulusan pelupusan, penggunaan storan dan log akses sensitif.',
+        allowed: 'Rekod/fail, akses khas fail, minit, keputusan kelulusan, kelulusan pelupusan, penggunaan storan, Log Aktiviti Masjid dan log akses sensitif.',
         boundary: 'Tidak mengklasifikasikan peti masuk, tidak mengubah tetapan masjid, tidak melaksanakan pelupusan dan tidak mengurus ahli.',
     },
     setiausaha: {
         scope: 'Mengurus surat masuk, metadata, pemfailan, minit dan permohonan kelulusan bagi urusan pentadbiran.',
-        allowed: 'Peti masuk, klasifikasi, cipta/kemas kini/ganti versi rekod, fail, minit dan permohonan kelulusan.',
+        allowed: 'Peti masuk, klasifikasi, cipta/kemas kini/ganti versi rekod, fail, minit, permohonan kelulusan dan Log Aktiviti Masjid.',
         boundary: 'Tidak membuat keputusan kelulusan, tidak mengurus retensi/pelupusan, ahli, tetapan masjid atau pesanan storan.',
     },
     bendahari: {
         scope: 'Mengurus rekod kewangan yang dibenarkan, minit, permohonan kelulusan serta storan.',
-        allowed: 'Rekod dan fail yang boleh dilihat, cipta/kemas kini rekod kewangan, minit, permohonan kelulusan, penggunaan dan pesanan storan.',
+        allowed: 'Rekod dan fail yang boleh dilihat, cipta/kemas kini rekod kewangan, minit, permohonan kelulusan, penggunaan, pesanan storan dan Log Aktiviti Masjid mengikut akses rekod.',
         boundary: 'Cipta/kemas kini rekod terhad kepada klasifikasi kewangan kod 200/300. Tiada klasifikasi peti masuk, keputusan kelulusan atau tetapan masjid.',
     },
     nazir: {
@@ -68,6 +68,17 @@ const pageGuides = {
             'Laporkan akses tidak dikenali kepada Admin/Kerani dan wakil perlindungan data.',
         ],
         expected: 'Log hanya memaparkan tenant semasa dan kekal baca sahaja.',
+    },
+    'log-aktiviti': {
+        purpose: 'Timeline append-only bagi perjalanan dokumen, fail, minit, kelulusan, pelupusan, ahli dan storan dalam masjid semasa.',
+        steps: [
+            'Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.',
+            'Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.',
+            'Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa.',
+            'Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.',
+            'Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan.',
+        ],
+        expected: 'Timeline hanya memaparkan tenant semasa dan tidak mendedahkan rekod yang role tidak dibenarkan lihat.',
     },
     persediaan: {
         purpose: 'Wizard persediaan pertama bagi profil admin, telefon masjid, saluran WhatsApp dan ahli awal.',
@@ -328,6 +339,7 @@ const extraGuides = {
     'Balas dan edarkan minit': ['Baca arahan asal dan rekod.', 'Pilih penerima tindakan susulan.', 'Tambah penerima s.k. jika perlu.', 'Tulis catatan jawapan.', 'Pilih keutamaan dan hantar.', 'Tanda minit asal selesai hanya selepas tindakan sendiri selesai.'],
     'Tanda tindakan minit selesai': ['Pastikan kerja sebenar selesai.', 'Tekan Tanda Selesai.', 'Baca pengesahan.', 'Sahkan status penerima/ minit berubah.', 'Pengirim dimaklumkan apabila semua penerima tindakan selesai.'],
     'Buat keputusan kelulusan': ['Buka dan semak rekod asal.', 'Pilih Lulus atau Tolak.', 'Masukkan kata laluan sendiri.', 'Isi nota; nota wajib untuk Tolak.', 'Sahkan sekali sahaja.', 'Semak masa, IP dan pihak yang bertindak.'],
+    'Butiran log aktiviti': ['Semak tarikh dan masa tepat.', 'Sahkan pelaku dan role ketika aktiviti berlaku.', 'Bandingkan tajuk/rujukan rekod serta nombor fail.', 'Semak saluran, identiti pengirim dan IP jika tersedia.', 'Baca metadata peristiwa tanpa mengubah log.'],
     'Hasil carian lanjutan': ['Semak jumlah hasil.', 'Pastikan metadata hasil sepadan dengan kriteria.', 'Buka rekod untuk pengesahan.', 'Tambah bintang jika kerap dirujuk.', 'Ubah kriteria jika hasil terlalu luas.'],
 };
 
@@ -386,6 +398,212 @@ function renderExtra(extra, index) {
         (extra.labels?.length ? `\n**Medan/kawalan yang disahkan:** ${[...new Set(extra.labels)].map((label) => `\`${label}\``).join(', ')}.\n` : '') +
         `\n**Langkah terperinci**\n${numbered(steps)}\n\n` +
         `**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.\n`;
+}
+
+const loginTask = {
+    title: 'Log masuk dan sahkan masjid',
+    outcome: 'Pengguna masuk ke tenant yang betul sebelum membuka atau mengubah sebarang rekod.',
+    screens: [
+        { source: 'login', title: 'Halaman log masuk', steps: ['Masukkan e-mel atau nombor telefon akaun sendiri.', 'Masukkan kata laluan sendiri.', 'Tekan Log masuk sekali dan tunggu sehingga URL tenant dipaparkan.'] },
+        { source: 'page', key: 'dashboard', title: 'Papan pemuka tenant', steps: ['Semak nama dan kod masjid pada panel.', 'Semak role serta statistik yang dipaparkan.', 'Jika masjid salah, jangan teruskan; log keluar dan laporkan kepada Admin/Kerani.'] },
+    ],
+};
+
+const taskBlueprints = {
+    admin_masjid: [
+        {
+            title: 'Muat naik, semak dan klasifikasikan dokumen serta hantar minit',
+            outcome: 'Dokumen keluar daripada Peti Masuk, mendapat nombor fail/kandungan yang betul dan penerima tindakan menerima minit.',
+            screens: [
+                { source: 'page', key: 'dashboard', title: 'Mulakan dari Papan pemuka', steps: ['Sahkan tenant MAM/data masjid sendiri.', 'Pada menu kiri, tekan Peti Masuk.'] },
+                { source: 'page', key: 'peti-masuk', title: 'Senarai Peti Masuk', steps: ['Semak sumber, pengirim, tarikh dan masa diterima.', 'Semak Antivirus, OCR dan amaran Duplikat.', 'Untuk upload baharu tekan + Muat Naik Dokumen; untuk dokumen sedia ada pilih baris yang hendak diproses.'] },
+                { source: 'extra', title: 'Muat naik dokumen', steps: ['Pilih atau seret fail yang dibenarkan.', 'Tunggu upload selesai dan toast berjaya.', 'Kembali ke Peti Masuk; jangan klasifikasikan sebelum antivirus/OCR dan sumber disemak.'] },
+                { source: 'extra', title: 'Klasifikasi peti masuk', steps: ['Tekan Klasifikasikan pada dokumen yang tepat.', 'Isi Jenis Rekod, Tajuk, Arah, Ruj. Kami/Ruj. Tuan, tarikh, pengirim, penerima dan u.p.', 'Pilih Failkan Ke; jika perlu buka fail baharu pada nod yang betul.', 'Pilih penerima tindakan, s.k., arahan dan keutamaan.', 'Tekan Klasifikasikan dan catat nombor fail(kandungan) pada toast.'] },
+                { source: 'page', key: 'minit-saya', title: 'Sahkan minit diedarkan', steps: ['Buka Minit Saya.', 'Pilih kategori Saya Hantar.', 'Sahkan rekod, penerima, arahan, keutamaan dan tarikh akhir sepadan.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Sahkan perjalanan dalam Log Aktiviti', steps: ['Buka Log Aktiviti Masjid.', 'Cari tajuk rekod.', 'Sahkan urutan record_uploaded, record_classified dan minit_created dengan pelaku serta masa yang betul.'] },
+            ],
+        },
+        {
+            title: 'Betulkan rekod salah tawan tanpa memadam sejarah',
+            outcome: 'Cadangan pembetulan dihantar, disemak dan keputusan kekal dalam timeline.',
+            screens: [
+                { source: 'page', key: 'records', title: 'Cari rekod', steps: ['Cari tajuk atau nombor rujukan.', 'Buka Lihat pada rekod yang tepat.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Semak dokumen asal, metadata, OCR dan tab Audit.', 'Tekan Mohon Pembetulan hanya jika salah tawan disahkan.'] },
+                { source: 'extra', title: 'Mohon pembetulan rekod', steps: ['Nyatakan sebab khusus.', 'Ubah hanya medan yang salah.', 'Hantar dan jangan ubah rekod melalui jalan lain.'] },
+                { source: 'page', key: 'pembetulan-rekod', title: 'Pantau atau semak permohonan', steps: ['Bandingkan nilai asal dengan cadangan.', 'Reviewer berkuasa memilih Luluskan atau Tolak.', 'Sahkan status dan catatan semakan.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Semak jejak pembetulan', steps: ['Cari tajuk rekod.', 'Sahkan pemohon, reviewer, keputusan dan masa.', 'Pastikan tiada perubahan senyap tanpa log.'] },
+            ],
+        },
+        {
+            title: 'Urus fail fizikal atau hibrid dan jejak penjagaan',
+            outcome: 'Lokasi, pemegang dan setiap pergerakan fail fizikal boleh dijejak.',
+            screens: [
+                { source: 'page', key: 'registry-files', title: 'Pilih fail', steps: ['Cari nombor fail.', 'Semak Medium dan Status.', 'Buka Lihat.'] },
+                { source: 'extra', title: 'Butiran fail elektronik, fizikal atau hibrid', steps: ['Sahkan nombor, tajuk, lokasi dan status penjagaan.', 'Tekan Keluarkan Fail apabila serahan fizikal berlaku.'] },
+                { source: 'extra', title: 'Keluarkan fail fizikal', steps: ['Pilih pemegang ahli atau isi nama luar.', 'Isi lokasi tujuan, tarikh pulang dan catatan.', 'Simpan sebelum fail diserahkan.'] },
+                { source: 'extra', title: 'Pindah lokasi fizikal', steps: ['Masukkan lokasi rak/kotak baharu.', 'Tambah catatan dan simpan.', 'Kemas kini label fizikal yang sebenar.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Semak log pergerakan', steps: ['Tapis jenis aktiviti fail fizikal.', 'Sahkan pemegang, lokasi asal/tujuan, pelaku dan masa.'] },
+            ],
+        },
+        {
+            title: 'Sediakan dan laksanakan pelupusan terkawal',
+            outcome: 'Rekod cukup tempoh dilupuskan hanya selepas kelulusan berasingan dan sijil tersedia.',
+            screens: [
+                { source: 'page', key: 'retensi', title: 'Semak kelayakan retensi', steps: ['Semak tarikh cukup tempoh dan peraturan.', 'Pastikan Legal Hold tidak aktif.', 'Sediakan eksport luar jika diperlukan.'] },
+                { source: 'page', key: 'pelupusan', title: 'Buka Pelupusan', steps: ['Semak calon dan batch sedia ada.', 'Jangan cipta batch pendua.'] },
+                { source: 'extra', title: 'Sedia senarai pelupusan', steps: ['Pilih rekod satu per satu.', 'Baca amaran pemadaman kekal.', 'Hantar untuk kelulusan Pengerusi.'] },
+                { source: 'page', key: 'pelupusan', title: 'Laksana selepas diluluskan', steps: ['Tunggu status Lulus.', 'Tekan Laksana sekali.', 'Muat turun sijil apabila status Selesai.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Sahkan pemisahan tugas', steps: ['Sahkan penyedia, pelulus dan pelaksana ialah peristiwa berasingan.', 'Semak tajuk rekod, batch dan masa setiap tindakan.'] },
+            ],
+        },
+    ],
+    pengerusi: [
+        {
+            title: 'Terima, baca, balas dan selesaikan minit',
+            outcome: 'Arahan minit diproses dan pengirim mendapat status yang tepat.',
+            screens: [
+                { source: 'page', key: 'minit-saya', title: 'Pilih minit tindakan', steps: ['Tapis Perlu Tindakan.', 'Baca pengirim, arahan, keutamaan dan tarikh akhir.', 'Buka rekod berkaitan.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Sahkan kandungan, metadata, sumber dan sensitiviti.', 'Kembali ke Minit Saya selepas semakan.'] },
+                { source: 'extra', title: 'Balas dan edarkan minit', steps: ['Pilih penerima susulan.', 'Tulis jawapan atau arahan baharu.', 'Hantar dan semak bebenang.'] },
+                { source: 'extra', title: 'Tanda tindakan minit selesai', steps: ['Tanda selesai hanya selepas tindakan sebenar lengkap.', 'Sahkan status penerima berubah.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Sahkan timeline minit', steps: ['Cari tajuk rekod.', 'Sahkan baca, balas dan selesai direkod atas nama pelaku yang betul.'] },
+            ],
+        },
+        {
+            title: 'Buat keputusan kelulusan atau pelupusan',
+            outcome: 'Keputusan dibuat selepas semakan bukti dan direkod dengan masa serta pelaku.',
+            screens: [
+                { source: 'page', key: 'kelulusan', title: 'Pilih permohonan kelulusan', steps: ['Pilih item Menunggu yang ditujukan kepada anda.', 'Buka rekod asal sebelum memutuskan.'] },
+                { source: 'extra', title: 'Buat keputusan kelulusan', steps: ['Pilih Lulus atau Tolak.', 'Masukkan kata laluan sendiri dan nota keputusan.', 'Sahkan sekali sahaja.'] },
+                { source: 'page', key: 'pelupusan', title: 'Semak batch pelupusan', steps: ['Semak setiap rekod, retensi, hold dan sandaran.', 'Tekan Lulus hanya jika penyedia bukan diri sendiri dan semua bukti lengkap.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Audit keputusan', steps: ['Tapis kelulusan/pelupusan.', 'Sahkan pelaku, tajuk, keputusan, IP jika tersedia dan masa.'] },
+            ],
+        },
+    ],
+    setiausaha: [
+        {
+            title: 'Klasifikasikan surat masuk dan edarkan minit',
+            outcome: 'Surat menjadi rekod rasmi dalam fail yang betul dan penerima berkaitan dimaklumkan.',
+            screens: [
+                { source: 'page', key: 'dashboard', title: 'Mulakan dari Papan pemuka', steps: ['Sahkan tenant.', 'Tekan Peti Masuk.'] },
+                { source: 'page', key: 'peti-masuk', title: 'Pilih dokumen', steps: ['Semak sumber, pengirim, masa, antivirus, OCR dan duplikat.', 'Buka dokumen/OCR dan pilih Klasifikasikan.'] },
+                { source: 'extra', title: 'Klasifikasi peti masuk', steps: ['Lengkapkan semua metadata surat.', 'Pilih fail dan sensitiviti.', 'Pilih penerima tindakan/s.k., tulis arahan dan keutamaan.', 'Klasifikasikan dan semak nombor kandungan.'] },
+                { source: 'page', key: 'minit-saya', title: 'Pantau minit dihantar', steps: ['Tapis Saya Hantar.', 'Sahkan penerima dan status.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Semak urutan aktiviti', steps: ['Cari tajuk surat.', 'Sahkan klasifikasi dan minit direkod dalam tenant ini sahaja.'] },
+            ],
+        },
+        {
+            title: 'Mohon kelulusan dan pembetulan rekod',
+            outcome: 'Permohonan sampai kepada pelulus/reviewer yang betul dan boleh dijejak.',
+            screens: [
+                { source: 'page', key: 'records', title: 'Pilih rekod', steps: ['Cari rekod.', 'Buka Lihat dan semak media serta metadata.'] },
+                { source: 'extra', title: 'Mohon kelulusan', steps: ['Pilih Pengerusi/Nazir yang dibenarkan.', 'Tulis nota konteks dan hantar.'] },
+                { source: 'extra', title: 'Mohon pembetulan rekod', steps: ['Nyatakan salah tawan.', 'Ubah hanya medan yang salah dan hantar.'] },
+                { source: 'page', key: 'kelulusan', title: 'Pantau keputusan', steps: ['Semak status permohonan.', 'Jangan hantar pendua.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Sahkan jejak keputusan', steps: ['Cari tajuk.', 'Sahkan pemohon, penerima dan keputusan.'] },
+            ],
+        },
+    ],
+    bendahari: [
+        {
+            title: 'Urus rekod kewangan dan minit',
+            outcome: 'Rekod kewangan kod 200/300 diproses dalam skop akses Bendahari.',
+            screens: [
+                { source: 'page', key: 'records', title: 'Cari rekod kewangan', steps: ['Cari tajuk/rujukan dan semak fail kod 200/300.', 'Buka rekod yang dibenarkan sahaja.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Semak media dan metadata kewangan.', 'Pilih Edarkan Minit atau Mohon Kelulusan jika diperlukan.'] },
+                { source: 'extra', title: 'Edarkan minit', steps: ['Pilih penerima tindakan.', 'Tulis arahan dan keutamaan.', 'Hantar dan pantau di Minit Saya.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Semak log yang dibenarkan', steps: ['Cari rekod kewangan.', 'Sahkan aktiviti dan masa.', 'Rekod pentadbiran sulit di luar akses tidak akan dipulangkan.'] },
+            ],
+        },
+        {
+            title: 'Mohon storan tambahan',
+            outcome: 'Pesanan dibuat sekali dan kuota hanya dianggap aktif selepas bayaran disahkan.',
+            screens: [
+                { source: 'page', key: 'penggunaan', title: 'Semak penggunaan dan pesanan', steps: ['Semak kuota efektif dan baki.', 'Pastikan tiada pesanan menunggu yang sama.', 'Tekan Tambah Storan.'] },
+                { source: 'extra', title: 'Permohonan storan tambahan', steps: ['Pilih bilangan blok.', 'Semak jumlah dan invois.', 'Hantar sekali dan catat nombor invois.'] },
+                { source: 'page', key: 'log-aktiviti', title: 'Jejak permohonan storan', steps: ['Tapis storage_order_created.', 'Sahkan pemohon, GB, invois dan masa.', 'Tunggu storage_order_paid sebelum menganggap kuota bertambah.'] },
+            ],
+        },
+    ],
+    nazir: [
+        {
+            title: 'Proses minit dan keputusan kelulusan',
+            outcome: 'Arahan dan keputusan yang ditujukan kepada Nazir selesai dengan jejak yang tepat.',
+            screens: [
+                { source: 'page', key: 'minit-saya', title: 'Semak minit', steps: ['Tapis Perlu Tindakan.', 'Baca arahan dan buka rekod.'] },
+                { source: 'extra', title: 'Balas dan edarkan minit', steps: ['Tulis balasan.', 'Pilih penerima susulan dan hantar.'] },
+                { source: 'page', key: 'kelulusan', title: 'Semak kelulusan', steps: ['Pilih permohonan yang ditujukan kepada Nazir.', 'Buka rekod asal.'] },
+                { source: 'extra', title: 'Buat keputusan kelulusan', steps: ['Pilih keputusan.', 'Sahkan kata laluan dan nota.', 'Semak status akhir.'] },
+            ],
+        },
+    ],
+    ketua_imam: [
+        {
+            title: 'Laksanakan arahan minit',
+            outcome: 'Tindakan sebenar selesai dan pengirim menerima status.',
+            screens: [
+                { source: 'page', key: 'minit-saya', title: 'Pilih arahan', steps: ['Tapis Perlu Tindakan.', 'Baca arahan, keutamaan dan tarikh akhir.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Semak rekod dan lampiran.', 'Jangan muat turun jika tidak diperlukan.'] },
+                { source: 'extra', title: 'Balas dan edarkan minit', steps: ['Edarkan susulan jika perlu.', 'Tulis catatan yang jelas.'] },
+                { source: 'extra', title: 'Tanda tindakan minit selesai', steps: ['Selesaikan kerja sebenar.', 'Tanda selesai dan semak status.'] },
+            ],
+        },
+    ],
+    ajk: [
+        {
+            title: 'Baca rekod dan selesaikan tugasan minit',
+            outcome: 'AJK bertindak hanya pada rekod yang dibenarkan dan menutup tugasan dengan betul.',
+            screens: [
+                { source: 'page', key: 'minit-saya', title: 'Pilih tugasan', steps: ['Tapis Perlu Tindakan.', 'Baca arahan dan tarikh akhir.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Semak kandungan yang dibenarkan.', 'Jika akses ditolak, minta akses melalui Admin/Kerani; jangan ubah URL.'] },
+                { source: 'extra', title: 'Balas dan edarkan minit', steps: ['Catat tindakan atau susulan.', 'Hantar kepada ahli berkaitan jika perlu.'] },
+                { source: 'extra', title: 'Tanda tindakan minit selesai', steps: ['Tanda selesai hanya selepas kerja lengkap.', 'Sahkan status berubah.'] },
+            ],
+        },
+    ],
+    audit: [
+        {
+            title: 'Laksanakan semakan audit baca sahaja',
+            outcome: 'Sampel rekod disemak tanpa mengubah bukti atau melangkaui akses.',
+            screens: [
+                { source: 'page', key: 'carian', title: 'Cari sampel audit', steps: ['Gunakan metadata dan julat tarikh.', 'Simpan carian jika perlu.', 'Buka hanya hasil yang dibenarkan.'] },
+                { source: 'extra', title: 'Hasil carian lanjutan', steps: ['Semak jumlah hasil.', 'Pilih sampel dan buka rekod.'] },
+                { source: 'extra', title: 'Butiran rekod dan tindakan mengikut kebenaran', steps: ['Semak metadata, OCR, versi, minit, kelulusan dan audit.', 'Jangan gunakan sebarang kaedah untuk mengubah rekod.'] },
+                { source: 'page', key: 'sensitive-access-logs', title: 'Semak akses sensitif', steps: ['Semak pengguna, tindakan, IP dan masa.', 'Bandingkan dengan skop audit.'] },
+                { source: 'page', key: 'laporan', title: 'Semak ringkasan', steps: ['Bandingkan jumlah rekod, retensi dan minit lewat.', 'Eksport hanya jika dibenarkan dan simpan secara terkawal.'] },
+            ],
+        },
+    ],
+};
+
+function resolveTaskScreen(role, screen) {
+    if (screen.source === 'login') return { image: role.login.image, title: screen.title, steps: screen.steps };
+    if (screen.source === 'page') {
+        const page = role.pages.find((item) => pageKey(item) === screen.key);
+        return page ? { image: page.image, title: screen.title, steps: screen.steps } : null;
+    }
+    const extra = role.extras.find((item) => item.title === screen.title);
+    return extra ? { image: extra.image, title: screen.title, steps: screen.steps } : null;
+}
+
+function renderTaskManual(roleKey, role) {
+    const tasks = [loginTask, ...(taskBlueprints[roleKey] ?? [])];
+
+    return tasks.map((task, taskIndex) => {
+        const screens = task.screens.map((screen) => resolveTaskScreen(role, screen)).filter(Boolean);
+        const rendered = screens.map((screen, screenIndex) => {
+            const next = screens[screenIndex + 1];
+            return `#### Gambar ${screenIndex + 1}: ${screen.title}\n\n` +
+                `${mdImage(screen.image, `${task.title} - Gambar ${screenIndex + 1}`)}\n\n` +
+                `**Apa perlu dibuat pada Gambar ${screenIndex + 1}**\n${numbered(screen.steps)}\n\n` +
+                (next ? `**Kemudian:** teruskan ke **Gambar ${screenIndex + 2}: ${next.title}**.\n` : `**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.\n`);
+        }).join('\n\n');
+
+        return `### 3.${taskIndex + 1} ${task.title}\n\n` +
+            `**Hasil akhir:** ${task.outcome}\n\n` +
+            `Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.\n\n` +
+            rendered;
+    }).join('\n\n');
 }
 
 function roleWorkflow(roleKey) {
@@ -456,15 +674,18 @@ function internalManual(roleKey, role) {
         `- Gunakan pautan selamat atau minta Admin/Kerani hantar semula pautan.\n` +
         `- HTTP 403 bermaksud tindakan tidak dibenarkan; HTTP 404 juga digunakan untuk menyembunyikan tenant/rekod yang bukan milik anda.\n` +
         `- Jangan hantar screenshot kata laluan, token atau pautan sekali guna kepada sesiapa.\n\n` +
-        `## 3. Senarai halaman role\n\n` +
+        `## 3. Cara melaksanakan tugas - gambar demi gambar\n\n` +
+        `Bahagian ini menerangkan kesinambungan gambar untuk satu tugas lengkap. **Gambar 1** ialah titik mula workflow, diikuti **Gambar 2**, **Gambar 3** dan seterusnya sehingga hasil akhir disahkan.\n\n` +
+        `${renderTaskManual(roleKey, role)}\n\n` +
+        `## 4. Senarai halaman role\n\n` +
         `| # | Halaman | Laluan | Status Chrome |\n|---:|---|---|---:|\n${pageRows}\n\n` +
-        `## 4. Panduan setiap halaman\n\n` +
+        `## 5. Panduan setiap halaman\n\n` +
         `${role.pages.map(renderPage).join('\n\n')}\n\n` +
-        `## 5. Panduan tindakan dan modal\n\n` +
+        `## 6. Panduan tindakan dan modal\n\n` +
         `Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role ini semasa verifikasi. Medan bertanda \`*\` wajib.\n\n` +
         `${role.extras.map(renderExtra).join('\n\n')}\n\n` +
-        `## 6. Workflow hujung ke hujung untuk role ini\n\n${numbered(roleWorkflow(roleKey))}\n\n` +
-        `## 7. Peraturan klasifikasi, minit dan notifikasi\n\n` +
+        `## 7. Ringkasan workflow hujung ke hujung untuk role ini\n\n${numbered(roleWorkflow(roleKey))}\n\n` +
+        `## 8. Peraturan klasifikasi, minit dan notifikasi\n\n` +
         `- **Untuk Tindakan (Minit):** penerima wajib mengambil tindakan, boleh membalas/mengedarkan dan perlu menanda selesai.\n` +
         `- **Untuk Makluman (s.k.):** penerima dimaklumkan tetapi bukan pemilik tindakan asal.\n` +
         `- **Untuk Perhatian (u.p.):** nama/unit khusus yang patut membaca surat; ia metadata surat dan tidak menggantikan penerima minit.\n` +
@@ -472,7 +693,7 @@ function internalManual(roleKey, role) {
         `- **Arah Masuk:** diterima daripada luar. **Keluar:** dihantar keluar. **Dalaman:** diwujud/diedar dalam organisasi.\n` +
         `- Notifikasi dihantar hanya melalui saluran yang aktif dan tersedia: pangkalan data, e-mel, WhatsApp atau Telegram. Semak Profil dan tetapan tenant jika notifikasi tidak tiba.\n` +
         `- Penerima dipilih daripada ahli aktif tenant yang dibenarkan melihat sensitiviti rekod. Nama tenant lain tidak patut muncul.\n\n` +
-        `## 8. Keselamatan dan pengasingan data\n\n` +
+        `## 9. Keselamatan dan pengasingan data\n\n` +
         `1. Gunakan akaun sendiri; jangan guna akaun kongsi.\n` +
         `2. Semak tenant sebelum upload, klasifikasi, minit, kelulusan atau eksport.\n` +
         `3. Jangan ubah slug/ID pada URL. Ujian silang tenant manual ini mengembalikan HTTP ${role.crossTenantStatus}.\n` +
@@ -481,9 +702,9 @@ function internalManual(roleKey, role) {
         `6. Semak sumber dokumen (UI/e-mel/WhatsApp), masa upload, antivirus dan OCR sebelum pemfailan.\n` +
         `7. Jangan luluskan permintaan, pembetulan atau pelupusan tanpa membuka bukti asal.\n` +
         `8. Log keluar pada peranti awam dan jangan simpan kata laluan dalam browser yang dikongsi.\n\n` +
-        `## 9. Senarai semak sebelum menutup tugasan\n\n` +
+        `## 10. Senarai semak sebelum menutup tugasan\n\n` +
         `- [ ] Tenant betul.\n- [ ] Dokumen dan sumber telah disahkan.\n- [ ] Metadata/rujukan/tarikh tepat.\n- [ ] Fail dan sensitiviti tepat.\n- [ ] Penerima tindakan dan s.k. tepat.\n- [ ] Toast/status kejayaan dilihat.\n- [ ] Notifikasi atau audit disahkan jika berkaitan.\n- [ ] Tiada fail sensitif tertinggal pada peranti awam.\n\n` +
-        `## 10. Bantuan dan pelaporan masalah\n\n` +
+        `## 11. Bantuan dan pelaporan masalah\n\n` +
         `1. Catat masa kejadian, role, nama tenant, URL halaman, tindakan terakhir dan mesej ralat.\n` +
         `2. Jika berkaitan rekod/fail, sertakan nombor rujukan atau ID sahaja; lindungi kandungan dan data peribadi.\n` +
         `3. Hantar kepada Admin/Kerani. Admin/Kerani mengeskalasi kepada operator platform jika isu melibatkan tenant, keselamatan, intake atau servis luar.\n` +
@@ -497,9 +718,11 @@ function publicManual() {
         `## 1. Sebelum mendaftar\n\n` +
         `Sediakan nama rasmi masjid, negeri/daerah, kod akronim 3-6 huruf, cadangan slug URL, nama pentadbir pertama, e-mel aktif dan nombor WhatsApp format negara seperti \`60123456789\`. Pentadbir pertama akan menjadi **Admin / Kerani** tenant selepas diluluskan.\n\n` +
         `Jangan gunakan e-mel atau telefon yang anda tidak kawal. Baca Terma/DPA dan dasar retensi; rekod cukup tempoh boleh dipadam selepas notifikasi dan proses pelupusan yang berkenaan.\n\n` +
-        `## 2. Buka laman utama\n\n${mdImage('imej/01-laman-utama.png', 'Laman utama Diwan')}\n\n` +
+        `## 2. Aliran pendaftaran - Gambar 1 hingga Gambar 5\n\nIkuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sebelum langkah semasa selesai.\n\n` +
+        `### Gambar 1: Buka laman utama\n\n${mdImage('imej/01-laman-utama.png', 'Gambar 1 - Laman utama Diwan')}\n\n` +
         `1. Buka \`https://bakwim.my\`.\n2. Pilih **Daftar Masjid** untuk permohonan baharu.\n3. Jika sudah mempunyai akaun, pilih **Log Masuk** dan jangan daftar tenant pendua.\n\n` +
-        `## 3. Lengkapkan borang pendaftaran\n\n${mdImage('imej/02-borang-daftar.png', 'Borang daftar masjid bernombor')}\n\n` +
+        `**Kemudian:** teruskan ke **Gambar 2: Lengkapkan borang pendaftaran**.\n\n` +
+        `### Gambar 2: Lengkapkan borang pendaftaran\n\n${mdImage('imej/02-borang-daftar.png', 'Gambar 2 - Borang daftar masjid bernombor')}\n\n` +
         `1. **Nama Masjid:** nama rasmi penuh.\n` +
         `2. **Negeri/Daerah:** lokasi pentadbiran sebenar.\n` +
         `3. **Kod Akronim:** 3-6 huruf sahaja dan mesti unik, contoh \`MAM\`. Kod digunakan pada nombor fail.\n` +
@@ -511,27 +734,30 @@ function publicManual() {
         `9. Tandakan pengakuan dasar retensi selepas difahami.\n` +
         `10. Semak semula dan tekan **Hantar Permohonan** sekali.\n\n` +
         `Jika kod, slug, e-mel atau telefon tidak sah/pendua, baca mesej medan dan betulkan. Jangan tambah digit pada kod akronim kerana medan itu huruf sahaja.\n\n` +
-        `## 4. Permohonan diterima\n\n${mdImage('imej/03-permohonan-diterima.png', 'Permohonan diterima')}\n\n` +
+        `**Kemudian:** teruskan ke **Gambar 3: Permohonan diterima**.\n\n` +
+        `### Gambar 3: Permohonan diterima\n\n${mdImage('imej/03-permohonan-diterima.png', 'Gambar 3 - Permohonan diterima')}\n\n` +
         `1. Pastikan mesej **Permohonan diterima!** kelihatan.\n2. Permohonan berstatus menunggu kelulusan platform.\n3. Jangan daftar semula. Tunggu e-mel/WhatsApp rasmi.\n4. Jika terlalu lama, hubungi pentadbir platform dengan nama masjid, kod dan masa permohonan; jangan kirim kata laluan.\n\n` +
-        `## 5. Buka pautan kelulusan dan tetapkan kata laluan\n\n${mdImage('imej/04-tetapkan-kata-laluan.png', 'Tetapkan kata laluan pertama')}\n\n` +
+        `**Selepas permohonan diluluskan:** teruskan ke **Gambar 4: Tetapkan kata laluan**.\n\n` +
+        `### Gambar 4: Buka pautan kelulusan dan tetapkan kata laluan\n\n${mdImage('imej/04-tetapkan-kata-laluan.png', 'Gambar 4 - Tetapkan kata laluan pertama')}\n\n` +
         `1. Selepas diluluskan, buka pautan log masuk yang diterima. Pautan sah 15 minit dan sekali guna.\n` +
         `2. Pastikan domain ialah \`bakwim.my\`; jangan masukkan kata laluan pada domain lain.\n` +
         `3. Cipta kata laluan panjang dan unik.\n` +
         `4. Taip semula kata laluan yang sama.\n` +
         `5. Tekan **Simpan & Teruskan**.\n` +
         `6. Jika pautan tamat, gunakan halaman Log Masuk untuk meminta pautan baharu.\n\n` +
-        `## 6. Persediaan kali pertama\n\n${mdImage('imej/05-persediaan-pertama.png', 'Persediaan tenant kali pertama')}\n\n` +
+        `**Kemudian:** teruskan ke **Gambar 5: Persediaan kali pertama**.\n\n` +
+        `### Gambar 5: Persediaan kali pertama\n\n${mdImage('imej/05-persediaan-pertama.png', 'Gambar 5 - Persediaan tenant kali pertama')}\n\n` +
         `1. Tekan **Mula Persediaan Berpandu**.\n` +
         `2. Isi jawatan, telefon rasmi dan pilihan nombor WhatsApp.\n` +
         `3. Jemput ahli awal dengan role yang tepat.\n` +
         `4. Lengkapkan tetapan masjid dan notifikasi.\n` +
         `5. Jika perlu Langkau, kembali kemudian melalui menu Persediaan; jangan biarkan tetapan intake/ahli tidak disahkan.\n` +
         `6. Selepas ini, teruskan panduan dalam folder \`01-Admin-Kerani\`.\n\n` +
-        `## 7. Log masuk tanpa kata laluan\n\n${mdImage('imej/06-log-masuk-pautan.png', 'Minta pautan log masuk')}\n\n` +
+        `## 3. Log masuk tanpa kata laluan - Gambar 6\n\n${mdImage('imej/06-log-masuk-pautan.png', 'Gambar 6 - Minta pautan log masuk')}\n\n` +
         `1. Buka \`https://bakwim.my/log-masuk\`.\n2. Masukkan e-mel atau nombor telefon berdaftar.\n3. Tekan **Hantar Pautan Log Masuk** sekali.\n4. Semak e-mel/WhatsApp dan buka pautan dalam 15 minit.\n5. Respons halaman tidak mengesahkan kewujudan akaun demi keselamatan.\n6. Jika sudah menetapkan kata laluan, gunakan pautan **Log masuk dengan kata laluan**.\n\n` +
-        `## 8. Keselamatan pendaftaran\n\n` +
+        `## 4. Keselamatan pendaftaran\n\n` +
         `- Jangan daftar bagi pihak masjid tanpa kuasa.\n- Jangan kongsi pautan sekali guna, kata laluan atau kod Telegram/WhatsApp.\n- Jangan cipta permohonan pendua untuk mengatasi kelewatan.\n- Jika menerima pautan tanpa memohon, abaikan dan laporkan.\n- Selepas masuk, sahkan nama/slug tenant. Jika salah, log keluar dan hubungi platform.\n\n` +
-        `## 9. Bantuan dan pelaporan masalah\n\n` +
+        `## 5. Bantuan dan pelaporan masalah\n\n` +
         `1. Catat nama masjid, kod akronim, masa permohonan dan mesej ralat.\n` +
         `2. Hubungi operator platform melalui saluran rasmi yang dipaparkan organisasi.\n` +
         `3. Jangan sertakan kata laluan, token, pautan sekali guna atau dokumen pengenalan dalam laporan awal.\n` +
@@ -549,6 +775,11 @@ const matrixRows = internalKeys.map((key, index) => {
     const role = manifest.roles[key];
     return `| ${index + 1} | ${role.label} | ${role.actualPages} | ${role.extras.length + 1} | ${role.crossTenantStatus} | [Buka manual](<${role.folder}/MANUAL-PENGGUNA.md>) |`;
 }).join('\n');
+const totalPages = internalKeys.reduce((sum, key) => sum + manifest.roles[key].actualPages, 0);
+const totalImages = internalKeys.reduce((sum, key) => {
+    const role = manifest.roles[key];
+    return sum + role.pages.length + role.extras.length + 1;
+}, manifest.public.captures.length);
 
 const readme = `# Manual Pengguna Diwan\n\n` +
     `Pakej manual ini mempunyai **9 folder persona**: lapan role tenant dan satu aliran orang awam. Superadmin ialah operator platform global, bukan role tenant, maka tidak termasuk dalam sembilan folder yang diminta.\n\n` +
@@ -556,9 +787,9 @@ const readme = `# Manual Pengguna Diwan\n\n` +
     `- Tarikh: ${generatedDate}.\n` +
     `- Browser: Google Chrome melalui Playwright, konteks berasingan bagi setiap role.\n` +
     `- Pangkalan data: SQLite latihan terasing; tiada mutasi data production.\n` +
-    `- Halaman sidebar: 111/111 mendapat HTTP 200.\n` +
+    `- Halaman sidebar: ${totalPages}/${totalPages} mendapat HTTP 200.\n` +
     `- Ujian URL tenant lain: 8/8 mendapat HTTP 404.\n` +
-    `- Tangkapan: 223 PNG beranotasi, termasuk modal, viewer PDF dan pendaftaran penuh.\n` +
+    `- Tangkapan: ${totalImages} PNG beranotasi, termasuk modal, viewer PDF dan pendaftaran penuh.\n` +
     `- Viewer: setiap role menunggu “Halaman 1 dipaparkan” dan canvas PDF berisi sebelum gambar.\n\n` +
     `| # | Persona | Halaman | Gambar tindakan + login | Silang tenant | Manual |\n|---:|---|---:|---:|---:|---|\n${matrixRows}\n` +
     `| 9 | Orang Awam / Pendaftaran | 6 keadaan | 6 | Tidak berkenaan | [Buka manual](<09-Orang-Awam-Pendaftaran/MANUAL-PENGGUNA.md>) |\n\n` +

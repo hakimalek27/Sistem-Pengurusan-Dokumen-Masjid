@@ -52,11 +52,8 @@ class RegistryFilesTable
                     ->schema([
                         Textarea::make('reason')->label('Sebab Tutup')->required(),
                     ])
-                    ->action(fn ($record, array $data) => $record->update([
-                        'status' => 'tutup',
-                        'closed_at' => now(),
-                        'closed_reason' => $data['reason'],
-                    ])),
+                    ->action(fn ($record, array $data) => app(RecordNumberingService::class)
+                        ->closeFile($record, $data['reason'], Auth::user())),
                 Action::make('kegemaran')
                     ->label('Kegemaran')
                     ->icon('heroicon-o-star')

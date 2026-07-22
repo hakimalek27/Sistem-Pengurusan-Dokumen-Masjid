@@ -11,6 +11,7 @@ use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Services\InboxIngestService;
 use App\Services\MinitService;
+use App\Services\MosqueActivityLogger;
 use App\Services\RecordNumberingService;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
@@ -292,6 +293,16 @@ class InboxTable
                     ->causedBy(Auth::user())
                     ->withProperties(['reason' => $data['reason'], 'ip' => request()->ip()])
                     ->log('padam_spam');
+
+                app(MosqueActivityLogger::class)->log(
+                    $record->mosque,
+                    'inbox_spam_deleted',
+                    Auth::user()->name.' memadam item Peti Masuk "'.$record->title.'" sebagai spam atau tidak berkaitan.',
+                    Auth::user(),
+                    $record,
+                    $record,
+                    metadata: ['reason' => $data['reason']],
+                );
 
                 $record->delete();
 

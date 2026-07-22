@@ -51,6 +51,16 @@ class RecordCorrectionService
             ->withProperties(['correction_request_id' => $request->id, 'proposed_changes' => $changes])
             ->log('mohon_pembetulan');
 
+        app(MosqueActivityLogger::class)->log(
+            $record->mosque,
+            'record_correction_requested',
+            $requester->name.' memohon pembetulan rekod "'.$record->title.'".',
+            $requester,
+            $request,
+            $record,
+            metadata: ['correction_request_id' => $request->id, 'reason' => trim($reason), 'proposed_changes' => $changes],
+        );
+
         return $request;
     }
 
@@ -85,6 +95,22 @@ class RecordCorrectionService
                 'proposed_changes' => $locked->proposed_changes,
                 'note' => $note,
             ])->log('semak_pembetulan');
+
+            app(MosqueActivityLogger::class)->log(
+                $record->mosque,
+                'record_correction_reviewed',
+                $reviewer->name.' '.($approve ? 'meluluskan' : 'menolak').' pembetulan rekod "'.$record->title.'".',
+                $reviewer,
+                $locked,
+                $record,
+                metadata: [
+                    'correction_request_id' => $locked->id,
+                    'decision' => $approve ? 'diluluskan' : 'ditolak',
+                    'before' => $before,
+                    'proposed_changes' => $locked->proposed_changes,
+                    'note' => $note,
+                ],
+            );
         });
 
         $request->refresh();

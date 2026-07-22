@@ -3,9 +3,13 @@
 declare(strict_types=1);
 
 use App\Enums\MinitPriority;
+use App\Models\Approval;
 use App\Models\Delegation;
 use App\Models\Favourite;
 use App\Models\FileMovement;
+use App\Models\Minit;
+use App\Models\Mosque;
+use App\Models\MosqueActivityLog;
 use App\Models\RecordCorrectionRequest;
 use App\Models\SavedSearch;
 use App\Models\SensitiveAccessLog;
@@ -13,6 +17,7 @@ use App\Models\StorageOrder;
 use App\Models\User;
 use App\Services\ApprovalService;
 use App\Services\MinitService;
+use App\Services\MosqueActivityLogger;
 use Illuminate\Contracts\Console\Kernel;
 
 require dirname(__DIR__, 2).'/vendor/autoload.php';
@@ -25,7 +30,7 @@ if (! app()->environment(['local', 'testing'])) {
     exit(1);
 }
 
-$mosque = \App\Models\Mosque::query()->where('slug', 'mam')->firstOrFail();
+$mosque = Mosque::query()->where('slug', 'mam')->firstOrFail();
 $users = $mosque->users()->get()->keyBy(fn (User $user): ?string => $user->pivot?->role);
 $admin = $users->get('admin_masjid');
 $secretary = $users->get('setiausaha');
@@ -83,9 +88,9 @@ foreach ($users as $role => $user) {
         continue;
     }
 
-    $exists = \App\Models\Minit::query()
+    $exists = Minit::query()
         ->where('mosque_id', $mosque->id)
-        ->where('body', "like", "Arahan latihan manual untuk {$role}:%")
+        ->where('body', 'like', "Arahan latihan manual untuk {$role}:%")
         ->exists();
 
     if (! $exists) {
@@ -100,15 +105,15 @@ foreach ($users as $role => $user) {
     }
 }
 
-if (! \App\Models\Approval::query()->where('mosque_id', $mosque->id)->where('approver_id', $chairman->id)->where('status', 'menunggu')->exists()) {
+if (! Approval::query()->where('mosque_id', $mosque->id)->where('approver_id', $chairman->id)->where('status', 'menunggu')->exists()) {
     app(ApprovalService::class)->request($record, $secretary, $chairman, 'Mohon Pengerusi semak dan luluskan dokumen contoh ini.');
 }
 
-if (! \App\Models\Approval::query()->where('mosque_id', $mosque->id)->where('approver_id', $nazir->id)->where('status', 'menunggu')->exists()) {
+if (! Approval::query()->where('mosque_id', $mosque->id)->where('approver_id', $nazir->id)->where('status', 'menunggu')->exists()) {
     app(ApprovalService::class)->request($record, $secretary, $nazir, 'Mohon Nazir membuat keputusan bagi dokumen contoh ini.');
 }
 
-if ($financeRecord && ! \App\Models\Approval::query()->where('mosque_id', $mosque->id)->where('requested_by', $users->get('bendahari')->id)->exists()) {
+if ($financeRecord && ! Approval::query()->where('mosque_id', $mosque->id)->where('requested_by', $users->get('bendahari')->id)->exists()) {
     app(ApprovalService::class)->request($financeRecord, $users->get('bendahari'), $chairman, 'Permohonan kelulusan rekod kewangan contoh.');
 }
 
@@ -180,10 +185,72 @@ StorageOrder::query()->firstOrCreate([
     'idempotency_key' => '7ec8b852-5f24-4f84-8493-f83a37080fef',
 ]);
 
+$activityLogger = app(MosqueActivityLogger::class);
+$sampleActivities = [
+    [
+        'action' => 'record_uploaded',
+        'description' => $admin->name.' (Admin / Kerani) memuat naik dokumen "'.$record->title.'" melalui Dashboard.',
+        'actor' => $admin,
+        'source' => 'muat_naik',
+        'identifier' => $admin->name,
+        'ip' => '127.0.0.1',
+        'metadata' => ['original_filename' => 'surat-jemputan.pdf', 'antivirus_status' => 'clean'],
+    ],
+    [
+        'action' => 'record_received_email',
+        'description' => 'test123@example.test memuat naik dokumen "Surat Mesyuarat" melalui e-mel.',
+        'actor' => null,
+        'source' => 'emel',
+        'identifier' => 'test123@example.test',
+        'ip' => '203.0.113.8',
+        'metadata' => ['message_id' => 'MANUAL-EMAIL-001'],
+    ],
+    [
+        'action' => 'record_received_whatsapp',
+        'description' => '60123456789 memuat naik dokumen "Borang Permohonan" melalui WhatsApp.',
+        'actor' => null,
+        'source' => 'whatsapp',
+        'identifier' => '60123456789',
+        'ip' => '198.51.100.14',
+        'metadata' => ['session' => 'mam', 'message_id' => 'MANUAL-WA-001'],
+    ],
+    [
+        'action' => 'record_classified',
+        'description' => $admin->name.' mengklasifikasikan rekod "'.$record->title.'" ke fail '.$hybridFile->file_no.' ('.$hybridFile->title.').',
+        'actor' => $admin,
+        'source' => null,
+        'identifier' => null,
+        'ip' => '127.0.0.1',
+        'metadata' => ['enclosure_no' => $record->enclosure_no, 'our_ref' => $record->our_ref],
+    ],
+];
+
+foreach ($sampleActivities as $activity) {
+    if (! MosqueActivityLog::query()->withoutGlobalScope('mosque')
+        ->where('mosque_id', $mosque->id)
+        ->where('action', $activity['action'])
+        ->exists()) {
+        $activityLogger->log(
+            $mosque,
+            $activity['action'],
+            $activity['description'],
+            $activity['actor'],
+            $record,
+            $record,
+            $hybridFile,
+            $activity['metadata'],
+            $activity['source'],
+            $activity['identifier'],
+            $activity['ip'],
+        );
+    }
+}
+
 fwrite(STDOUT, json_encode([
     'mosque' => $mosque->slug,
     'users' => $users->count(),
     'record' => $record->id,
     'file' => $hybridFile->id,
     'media' => $record->getMedia('original')->count(),
+    'activity_logs' => MosqueActivityLog::query()->withoutGlobalScope('mosque')->where('mosque_id', $mosque->id)->count(),
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL);

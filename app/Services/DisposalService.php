@@ -109,6 +109,18 @@ class DisposalService
                 ]);
             }
 
+            foreach ($records as $record) {
+                app(MosqueActivityLogger::class)->log(
+                    $mosque,
+                    'disposal_requested',
+                    $creator->name.' menyediakan rekod "'.$record->title.'" untuk pelupusan; menunggu kelulusan Pengerusi.',
+                    $creator,
+                    $batch,
+                    $record,
+                    metadata: ['batch_id' => $batch->id, 'status' => 'menunggu_kelulusan'],
+                );
+            }
+
             return $batch;
         });
     }
@@ -128,6 +140,21 @@ class DisposalService
             }
 
             $locked->update(['status' => 'lulus', 'approved_by' => $approver->id]);
+
+            foreach ($locked->items()->get() as $item) {
+                $record = Record::query()->withoutGlobalScope('mosque')
+                    ->where('mosque_id', $locked->mosque_id)
+                    ->find($item->record_id);
+                app(MosqueActivityLogger::class)->log(
+                    $locked->mosque,
+                    'disposal_approved',
+                    $approver->name.' meluluskan pelupusan rekod "'.($item->metadata_snapshot['title'] ?? $record?->title ?? 'Rekod').'".',
+                    $approver,
+                    $locked,
+                    $record,
+                    metadata: ['batch_id' => $locked->id, 'snapshot' => $item->metadata_snapshot],
+                );
+            }
         });
     }
 
@@ -244,6 +271,22 @@ class DisposalService
                 'certificate_path' => $certificatePath,
                 'failure_reason' => null,
             ]);
+
+            foreach ($batch->items()->get() as $item) {
+                $record = Record::query()->withoutGlobalScope('mosque')
+                    ->where('mosque_id', $mosque->id)
+                    ->find($item->record_id);
+                $snapshot = $item->metadata_snapshot ?? [];
+                app(MosqueActivityLogger::class)->log(
+                    $mosque,
+                    'disposal_executed',
+                    ($executor?->name ?? 'Sistem').' melaksanakan pelupusan rekod "'.($snapshot['title'] ?? $record?->title ?? 'Rekod').'"; blob dipadam dan metadata batu nisan dikekalkan.',
+                    $executor,
+                    $batch,
+                    $record,
+                    metadata: ['batch_id' => $batch->id, 'kind' => $kind, 'certificate_path' => $certificatePath, 'snapshot' => $snapshot],
+                );
+            }
 
             // §4.6′ — padam salinan Google Drive rekod dilupus (selaras sijil pelupusan).
             if (! empty($driveIds) && DriveConfig::enabled()) {

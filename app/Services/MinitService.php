@@ -73,6 +73,26 @@ class MinitService
             Notification::send(User::query()->whereIn('id', $actionUserIds)->get(), new MinitRoutedNotification($minit, 'tindakan'));
             Notification::send(User::query()->whereIn('id', $ccUserIds)->get(), new MinitRoutedNotification($minit, 'makluman'));
 
+            $actionNames = User::query()->whereIn('id', $actionUserIds)->pluck('name')->all();
+            $ccNames = User::query()->whereIn('id', $ccUserIds)->pluck('name')->all();
+            app(MosqueActivityLogger::class)->log(
+                $record->mosque,
+                $parent ? 'minit_replied' : 'minit_created',
+                $from->name.' meminitkan rekod "'.$record->title.'" untuk tindakan '.implode(', ', $actionNames).($ccNames ? '; s.k. '.implode(', ', $ccNames) : '').'.',
+                $from,
+                $minit,
+                $record,
+                metadata: [
+                    'minit_id' => $minit->id,
+                    'parent_id' => $parent?->id,
+                    'action_recipients' => $actionNames,
+                    'cc_recipients' => $ccNames,
+                    'priority' => $priority->value,
+                    'due_at' => $minit->due_at?->toDateString(),
+                    'body' => $body,
+                ],
+            );
+
             return $minit;
         });
     }
@@ -131,6 +151,21 @@ class MinitService
             'recipient_id' => $recipient->id,
             'on_behalf_of' => $recipient->user_id === $user->id ? null : $recipient->user_id,
         ])->log('tindakan_minit_selesai');
+
+        app(MosqueActivityLogger::class)->log(
+            $minit->mosque,
+            $completed ? 'minit_completed' : 'minit_recipient_completed',
+            $user->name.' menandakan tindakan minit bagi rekod "'.$minit->record->title.'" sebagai selesai'.($completed ? '; semua penerima tindakan telah selesai.' : '.'),
+            $user,
+            $minit,
+            $minit->record,
+            metadata: [
+                'minit_id' => $minit->id,
+                'recipient_id' => $recipient->id,
+                'on_behalf_of' => $recipient->user_id === $user->id ? null : $recipient->user_id,
+                'all_completed' => $completed,
+            ],
+        );
     }
 
     /** Tandakan minit dibaca oleh penerima. */
@@ -141,8 +176,20 @@ class MinitService
             throw new AuthorizationException('Pengguna bukan penerima minit ini.');
         }
 
-        $minit->recipients()->whereKey($recipient->id)
+        $updated = $minit->recipients()->whereKey($recipient->id)
             ->where('status', 'belum')
             ->update(['status' => 'dibaca', 'read_at' => now()]);
+
+        if ($updated > 0) {
+            app(MosqueActivityLogger::class)->log(
+                $minit->mosque,
+                'minit_read',
+                $user->name.' membaca minit bagi rekod "'.$minit->record->title.'".',
+                $user,
+                $minit,
+                $minit->record,
+                metadata: ['minit_id' => $minit->id, 'recipient_id' => $recipient->id],
+            );
+        }
     }
 }

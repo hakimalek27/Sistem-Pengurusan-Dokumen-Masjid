@@ -47,6 +47,16 @@ return [
             'report' => false,
         ],
 
+        // Disk latihan berasingan untuk tangkapan manual Chrome. Tidak digunakan
+        // oleh production kecuali DIWAN_STORAGE_DISK=manual ditetapkan secara nyata.
+        'manual' => [
+            'driver' => 'local',
+            'root' => env('MANUAL_STORAGE_ROOT', storage_path('app/manual-capture')),
+            'serve' => true,
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

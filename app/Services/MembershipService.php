@@ -83,6 +83,15 @@ class MembershipService
 
         $this->magic->sendToUser($user);
 
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_invited',
+            ($actor?->name ?? 'Sistem').' menjemput '.$user->name.' sebagai '.Roles::label($role).'.',
+            $actor,
+            $user,
+            metadata: ['target_user_id' => $user->id, 'target_name' => $user->name, 'role' => $role],
+        );
+
         return $user;
     }
 
@@ -100,6 +109,15 @@ class MembershipService
         activity()->performedOn($target)->causedBy($actor)
             ->withProperties(['mosque_id' => $mosque->id, 'ip' => request()->ip()])
             ->log('set_semula_kata_laluan');
+
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_password_reset',
+            $actor->name.' menetapkan semula kata laluan '.$target->name.'.',
+            $actor,
+            $target,
+            metadata: ['target_user_id' => $target->id, 'target_name' => $target->name],
+        );
     }
 
     /** Hantar semula pautan log masuk (magic link) kepada ahli. */
@@ -112,6 +130,15 @@ class MembershipService
         activity()->performedOn($target)->causedBy($actor)
             ->withProperties(['mosque_id' => $mosque->id, 'ip' => request()->ip()])
             ->log('hantar_semula_pautan_log_masuk');
+
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_login_link_resent',
+            $actor->name.' menghantar semula pautan log masuk kepada '.$target->name.'.',
+            $actor,
+            $target,
+            metadata: ['target_user_id' => $target->id, 'target_name' => $target->name],
+        );
     }
 
     /** Guard ringkas untuk operasi kredensial ahli (bukan sekatan §6.4 penuh). */
@@ -154,6 +181,15 @@ class MembershipService
         activity()->performedOn($target)->causedBy($actor)
             ->withProperties(['mosque_id' => $mosque->id, 'notify_whatsapp' => $enabled, 'ip' => request()->ip()])
             ->log('tetapan_notifikasi_whatsapp');
+
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_whatsapp_settings_updated',
+            $actor->name.' mengemas kini tetapan notifikasi WhatsApp '.$target->name.'.',
+            $actor,
+            $target,
+            metadata: ['target_user_id' => $target->id, 'target_name' => $target->name, 'notify_whatsapp' => $enabled],
+        );
     }
 
     /** Tukar peranan ahli — §6.4 sekatan. */
@@ -162,11 +198,22 @@ class MembershipService
         $newRole = Roles::canonical($newRole);
         $this->guard($mosque, $target, $actor, $newRole);
 
+        $oldRole = $target->roleIn($mosque);
+
         $mosque->users()->updateExistingPivot($target->id, ['role' => $newRole]);
 
         activity()->performedOn($target)->causedBy($actor)
             ->withProperties(['mosque_id' => $mosque->id, 'role' => $newRole, 'ip' => request()->ip()])
             ->log('tukar_peranan');
+
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_role_changed',
+            $actor->name.' menukar peranan '.$target->name.' daripada '.Roles::label($oldRole ?? '').' kepada '.Roles::label($newRole).'.',
+            $actor,
+            $target,
+            metadata: ['target_user_id' => $target->id, 'target_name' => $target->name, 'old_role' => $oldRole, 'new_role' => $newRole],
+        );
     }
 
     /** Keluarkan ahli (detach pivot sahaja; akaun global kekal §15.9). */
@@ -174,11 +221,22 @@ class MembershipService
     {
         $this->guard($mosque, $target, $actor, null);
 
+        $oldRole = $target->roleIn($mosque);
+
         $mosque->users()->detach($target->id);
 
         activity()->performedOn($target)->causedBy($actor)
             ->withProperties(['mosque_id' => $mosque->id, 'ip' => request()->ip()])
             ->log('keluar_ahli');
+
+        app(MosqueActivityLogger::class)->log(
+            $mosque,
+            'member_removed',
+            $actor->name.' mengeluarkan '.$target->name.' daripada keahlian masjid.',
+            $actor,
+            $target,
+            metadata: ['target_user_id' => $target->id, 'target_name' => $target->name, 'old_role' => $oldRole],
+        );
     }
 
     /** §6.4 — kuatkuasa sekatan. $newRole null = keluarkan. */

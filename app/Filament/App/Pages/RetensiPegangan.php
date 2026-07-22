@@ -5,6 +5,7 @@ namespace App\Filament\App\Pages;
 use App\Jobs\BuildExportZipJob;
 use App\Models\Record;
 use App\Models\StoredExport;
+use App\Services\MosqueActivityLogger;
 use App\Services\RetentionEngine;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -53,6 +54,16 @@ class RetensiPegangan extends Page
 
         activity()->performedOn($record)->causedBy(Auth::user())
             ->withProperties(['legal_hold' => $newState, 'ip' => request()->ip()])->log('legal_hold');
+
+        app(MosqueActivityLogger::class)->log(
+            $record->mosque,
+            $newState ? 'record_legal_hold_applied' : 'record_legal_hold_released',
+            Auth::user()->name.($newState ? ' mengenakan' : ' melepaskan').' Legal Hold pada rekod "'.$record->title.'".',
+            Auth::user(),
+            $record,
+            $record,
+            metadata: ['legal_hold' => $newState],
+        );
 
         Notification::make()->title($newState ? 'Legal Hold diaktifkan.' : 'Legal Hold ditarik.')->success()->send();
     }

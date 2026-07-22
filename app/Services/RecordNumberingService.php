@@ -55,7 +55,7 @@ class RecordNumberingService
                 ->where('classification_node_id', $node->id)
                 ->max('transaction_no')) + 1;
 
-            return RegistryFile::query()->create([
+            $file = RegistryFile::query()->create([
                 'mosque_id' => $mosque->id,
                 'classification_node_id' => $node->id,
                 'transaction_no' => $txn,
@@ -68,6 +68,19 @@ class RecordNumberingService
                 'opened_at' => now(),
                 'created_by' => $userId,
             ]);
+
+            $actor = $userId ? User::query()->find($userId) : null;
+            app(MosqueActivityLogger::class)->log(
+                $mosque,
+                'file_opened',
+                ($actor?->name ?? 'Sistem').' membuka fail '.$file->file_no.' ('.$file->title.').',
+                $actor,
+                $file,
+                file: $file,
+                metadata: ['classification_code' => $lockedNode->code, 'volume' => 1],
+            );
+
+            return $file;
         });
     }
 
@@ -98,7 +111,7 @@ class RecordNumberingService
                 'closed_reason' => 'Jilid penuh',
             ]);
 
-            return RegistryFile::query()->create([
+            $newFile = RegistryFile::query()->create([
                 'mosque_id' => $locked->mosque_id,
                 'classification_node_id' => $locked->classification_node_id,
                 'transaction_no' => $locked->transaction_no,
@@ -111,6 +124,62 @@ class RecordNumberingService
                 'opened_at' => now(),
                 'created_by' => $userId,
             ]);
+
+            $actor = $userId ? User::query()->find($userId) : null;
+            $logger = app(MosqueActivityLogger::class);
+            $logger->log(
+                $locked->mosque,
+                'file_closed',
+                ($actor?->name ?? 'Sistem').' menutup fail '.$locked->file_no.' kerana jilid penuh.',
+                $actor,
+                $locked,
+                file: $locked,
+                metadata: ['reason' => 'Jilid penuh', 'next_file_id' => $newFile->id],
+            );
+            $logger->log(
+                $locked->mosque,
+                'file_volume_opened',
+                ($actor?->name ?? 'Sistem').' membuka jilid baharu '.$newFile->file_no.' untuk fail '.$newFile->title.'.',
+                $actor,
+                $newFile,
+                file: $newFile,
+                metadata: ['previous_file_id' => $locked->id, 'volume' => $newVolume],
+            );
+
+            return $newFile;
+        });
+    }
+
+    /** Tutup fail terbuka dengan sebab yang direkodkan. */
+    public function closeFile(RegistryFile $file, string $reason, User $actor): RegistryFile
+    {
+        if (! $actor->can('close', $file) || trim($reason) === '') {
+            throw new AuthorizationException('Tiada kebenaran menutup fail atau sebab tidak lengkap.');
+        }
+
+        return DB::transaction(function () use ($file, $reason, $actor): RegistryFile {
+            $locked = RegistryFile::query()->withoutGlobalScope('mosque')->lockForUpdate()->findOrFail($file->id);
+            if (! $locked->isOpen()) {
+                throw ValidationException::withMessages(['file' => 'Fail ini telah ditutup.']);
+            }
+
+            $locked->update([
+                'status' => 'tutup',
+                'closed_at' => now(),
+                'closed_reason' => trim($reason),
+            ]);
+
+            app(MosqueActivityLogger::class)->log(
+                $locked->mosque,
+                'file_closed',
+                $actor->name.' menutup fail '.$locked->file_no.' ('.$locked->title.').',
+                $actor,
+                $locked,
+                file: $locked,
+                metadata: ['reason' => trim($reason)],
+            );
+
+            return $locked;
         });
     }
 

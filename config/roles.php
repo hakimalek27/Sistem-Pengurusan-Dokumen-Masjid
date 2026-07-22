@@ -47,7 +47,7 @@ return [
         'export.create',
         'disposal.prepare', 'disposal.approve', 'disposal.execute',
         'users.manage', 'mosque.settings',
-        'usage.view', 'storage.order', 'audit.view',
+        'usage.view', 'storage.order', 'audit.view', 'activity.view',
     ],
 
     // Matriks §6.2 — peranan => senarai kebenaran yang dibenarkan.
@@ -64,7 +64,7 @@ return [
             'export.create',
             'disposal.prepare', 'disposal.execute',
             'users.manage', 'mosque.settings',
-            'usage.view', 'storage.order', 'audit.view',
+            'usage.view', 'storage.order', 'audit.view', 'activity.view',
         ],
 
         'pengerusi' => [
@@ -73,7 +73,7 @@ return [
             'minit.create', 'minit.respond',
             'approvals.decide',
             'disposal.approve',
-            'usage.view', 'audit.view',
+            'usage.view', 'audit.view', 'activity.view',
         ],
 
         'setiausaha' => [
@@ -82,6 +82,7 @@ return [
             'files.view',
             'minit.create', 'minit.respond',
             'approvals.request',
+            'activity.view',
         ],
 
         'bendahari' => [
@@ -90,6 +91,7 @@ return [
             'minit.create', 'minit.respond',
             'approvals.request',
             'usage.view', 'storage.order',
+            'activity.view',
         ],
 
         'nazir' => [

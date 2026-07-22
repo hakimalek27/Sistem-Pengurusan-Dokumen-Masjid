@@ -4,7 +4,7 @@
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
-**Liputan Chrome:** 15/15 halaman, silang tenant HTTP 404, 11 skrin tindakan tambahan.
+**Liputan Chrome:** 16/16 halaman, silang tenant HTTP 404, 12 skrin tindakan tambahan.
 
 Manual ini khusus untuk role **Pengerusi**. Gambar menggunakan data latihan. Nama, e-mel, nombor telefon dan dokumen sebenar organisasi tidak patut dimasukkan ke manual.
 
@@ -12,7 +12,7 @@ Manual ini khusus untuk role **Pengerusi**. Gambar menggunakan data latihan. Nam
 
 **Tanggungjawab:** Menyemak rekod, memberi arahan/minit, membuat keputusan kelulusan, meluluskan pelupusan dan memantau penggunaan serta audit.
 
-**Dibenarkan:** Rekod/fail, akses khas fail, minit, keputusan kelulusan, kelulusan pelupusan, penggunaan storan dan log akses sensitif.
+**Dibenarkan:** Rekod/fail, akses khas fail, minit, keputusan kelulusan, kelulusan pelupusan, penggunaan storan, Log Aktiviti Masjid dan log akses sensitif.
 
 **Had penting:** Tidak mengklasifikasikan peti masuk, tidak mengubah tetapan masjid, tidak melaksanakan pelupusan dan tidak mengurus ahli.
 
@@ -51,7 +51,155 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 - HTTP 403 bermaksud tindakan tidak dibenarkan; HTTP 404 juga digunakan untuk menyembunyikan tenant/rekod yang bukan milik anda.
 - Jangan hantar screenshot kata laluan, token atau pautan sekali guna kepada sesiapa.
 
-## 3. Senarai halaman role
+## 3. Cara melaksanakan tugas - gambar demi gambar
+
+Bahagian ini menerangkan kesinambungan gambar untuk satu tugas lengkap. **Gambar 1** ialah titik mula workflow, diikuti **Gambar 2**, **Gambar 3** dan seterusnya sehingga hasil akhir disahkan.
+
+### 3.1 Log masuk dan sahkan masjid
+
+**Hasil akhir:** Pengguna masuk ke tenant yang betul sebelum membuka atau mengubah sebarang rekod.
+
+Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.
+
+#### Gambar 1: Halaman log masuk
+
+![Log masuk dan sahkan masjid - Gambar 1](<imej/00-log-masuk.png>)
+
+**Apa perlu dibuat pada Gambar 1**
+1. Masukkan e-mel atau nombor telefon akaun sendiri.
+2. Masukkan kata laluan sendiri.
+3. Tekan Log masuk sekali dan tunggu sehingga URL tenant dipaparkan.
+
+**Kemudian:** teruskan ke **Gambar 2: Papan pemuka tenant**.
+
+
+#### Gambar 2: Papan pemuka tenant
+
+![Log masuk dan sahkan masjid - Gambar 2](<imej/01-dashboard.png>)
+
+**Apa perlu dibuat pada Gambar 2**
+1. Semak nama dan kod masjid pada panel.
+2. Semak role serta statistik yang dipaparkan.
+3. Jika masjid salah, jangan teruskan; log keluar dan laporkan kepada Admin/Kerani.
+
+**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
+
+
+### 3.2 Terima, baca, balas dan selesaikan minit
+
+**Hasil akhir:** Arahan minit diproses dan pengirim mendapat status yang tepat.
+
+Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.
+
+#### Gambar 1: Pilih minit tindakan
+
+![Terima, baca, balas dan selesaikan minit - Gambar 1](<imej/06-minit-saya.png>)
+
+**Apa perlu dibuat pada Gambar 1**
+1. Tapis Perlu Tindakan.
+2. Baca pengirim, arahan, keutamaan dan tarikh akhir.
+3. Buka rekod berkaitan.
+
+**Kemudian:** teruskan ke **Gambar 2: Butiran rekod dan tindakan mengikut kebenaran**.
+
+
+#### Gambar 2: Butiran rekod dan tindakan mengikut kebenaran
+
+![Terima, baca, balas dan selesaikan minit - Gambar 2](<imej/rekod-butiran.png>)
+
+**Apa perlu dibuat pada Gambar 2**
+1. Sahkan kandungan, metadata, sumber dan sensitiviti.
+2. Kembali ke Minit Saya selepas semakan.
+
+**Kemudian:** teruskan ke **Gambar 3: Balas dan edarkan minit**.
+
+
+#### Gambar 3: Balas dan edarkan minit
+
+![Terima, baca, balas dan selesaikan minit - Gambar 3](<imej/minit-balas.png>)
+
+**Apa perlu dibuat pada Gambar 3**
+1. Pilih penerima susulan.
+2. Tulis jawapan atau arahan baharu.
+3. Hantar dan semak bebenang.
+
+**Kemudian:** teruskan ke **Gambar 4: Tanda tindakan minit selesai**.
+
+
+#### Gambar 4: Tanda tindakan minit selesai
+
+![Terima, baca, balas dan selesaikan minit - Gambar 4](<imej/minit-selesai.png>)
+
+**Apa perlu dibuat pada Gambar 4**
+1. Tanda selesai hanya selepas tindakan sebenar lengkap.
+2. Sahkan status penerima berubah.
+
+**Kemudian:** teruskan ke **Gambar 5: Sahkan timeline minit**.
+
+
+#### Gambar 5: Sahkan timeline minit
+
+![Terima, baca, balas dan selesaikan minit - Gambar 5](<imej/12-log-aktiviti.png>)
+
+**Apa perlu dibuat pada Gambar 5**
+1. Cari tajuk rekod.
+2. Sahkan baca, balas dan selesai direkod atas nama pelaku yang betul.
+
+**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
+
+
+### 3.3 Buat keputusan kelulusan atau pelupusan
+
+**Hasil akhir:** Keputusan dibuat selepas semakan bukti dan direkod dengan masa serta pelaku.
+
+Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.
+
+#### Gambar 1: Pilih permohonan kelulusan
+
+![Buat keputusan kelulusan atau pelupusan - Gambar 1](<imej/07-kelulusan.png>)
+
+**Apa perlu dibuat pada Gambar 1**
+1. Pilih item Menunggu yang ditujukan kepada anda.
+2. Buka rekod asal sebelum memutuskan.
+
+**Kemudian:** teruskan ke **Gambar 2: Buat keputusan kelulusan**.
+
+
+#### Gambar 2: Buat keputusan kelulusan
+
+![Buat keputusan kelulusan atau pelupusan - Gambar 2](<imej/kelulusan-lulus.png>)
+
+**Apa perlu dibuat pada Gambar 2**
+1. Pilih Lulus atau Tolak.
+2. Masukkan kata laluan sendiri dan nota keputusan.
+3. Sahkan sekali sahaja.
+
+**Kemudian:** teruskan ke **Gambar 3: Semak batch pelupusan**.
+
+
+#### Gambar 3: Semak batch pelupusan
+
+![Buat keputusan kelulusan atau pelupusan - Gambar 3](<imej/14-pelupusan.png>)
+
+**Apa perlu dibuat pada Gambar 3**
+1. Semak setiap rekod, retensi, hold dan sandaran.
+2. Tekan Lulus hanya jika penyedia bukan diri sendiri dan semua bukti lengkap.
+
+**Kemudian:** teruskan ke **Gambar 4: Audit keputusan**.
+
+
+#### Gambar 4: Audit keputusan
+
+![Buat keputusan kelulusan atau pelupusan - Gambar 4](<imej/12-log-aktiviti.png>)
+
+**Apa perlu dibuat pada Gambar 4**
+1. Tapis kelulusan/pelupusan.
+2. Sahkan pelaku, tajuk, keputusan, IP jika tersedia dan masa.
+
+**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
+
+
+## 4. Senarai halaman role
 
 | # | Halaman | Laluan | Status Chrome |
 |---:|---|---|---:|
@@ -66,12 +214,13 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 | 9 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
 | 10 | Laporan | `/app/{tenant}/laporan` | 200 |
 | 11 | Pembetulan Rekod | `/app/{tenant}/pembetulan-rekod` | 200 |
-| 12 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
-| 13 | Pelupusan | `/app/{tenant}/pelupusan` | 200 |
-| 14 | Rekod | `/app/{tenant}/records` | 200 |
-| 15 | Fail | `/app/{tenant}/registry-files` | 200 |
+| 12 | Log Aktiviti Masjid | `/app/{tenant}/log-aktiviti` | 200 |
+| 13 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
+| 14 | Pelupusan | `/app/{tenant}/pelupusan` | 200 |
+| 15 | Rekod | `/app/{tenant}/records` | 200 |
+| 16 | Fail | `/app/{tenant}/registry-files` | 200 |
 
-## 4. Panduan setiap halaman
+## 5. Panduan setiap halaman
 
 ### 1. Papan pemuka
 
@@ -333,13 +482,37 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Tiada perubahan senyap; setiap pembetulan mempunyai pemohon, reviewer, masa dan keputusan.
 
 
-### 12. Klasifikasi Fail
+### 12. Log Aktiviti Masjid
+
+**URL:** `/app/{tenant}/log-aktiviti`
+
+**Tujuan:** Timeline append-only bagi perjalanan dokumen, fail, minit, kelulusan, pelupusan, ahli dan storan dalam masjid semasa.
+
+![Log Aktiviti Masjid - paparan 200](<imej/12-log-aktiviti.png>)
+
+**Nombor pada gambar**
+1. Tajuk halaman Log Aktiviti Masjid.
+2. Carian atau tapisan halaman.
+
+**Cara menggunakan**
+1. Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.
+2. Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.
+3. Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa.
+4. Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.
+5. Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan.
+
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Tarikh & Masa`, `Butiran`.
+
+**Hasil dijangka:** Timeline hanya memaparkan tenant semasa dan tidak mendedahkan rekod yang role tidak dibenarkan lihat.
+
+
+### 13. Klasifikasi Fail
 
 **URL:** `/app/{tenant}/classification-nodes`
 
 **Tujuan:** Katalog klasifikasi berhierarki Fungsi, Aktiviti dan Sub-Aktiviti untuk nombor serta tajuk fail.
 
-![Klasifikasi Fail - paparan 200](<imej/12-classification-nodes.png>)
+![Klasifikasi Fail - paparan 200](<imej/13-classification-nodes.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Klasifikasi Fail.
@@ -357,13 +530,13 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Nod baharu muncul hanya dalam tenant semasa dan tersedia pada pembukaan fail.
 
 
-### 13. Pelupusan
+### 14. Pelupusan
 
 **URL:** `/app/{tenant}/pelupusan`
 
 **Tujuan:** Mengurus pelupusan terkawal dengan pengasingan tugas antara penyedia, pelulus dan pelaksana.
 
-![Pelupusan - paparan 200](<imej/13-pelupusan.png>)
+![Pelupusan - paparan 200](<imej/14-pelupusan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Pelupusan.
@@ -380,13 +553,13 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Tiada individu menyediakan, meluluskan dan melaksanakan keseluruhan pelupusan seorang diri.
 
 
-### 14. Rekod
+### 15. Rekod
 
 **URL:** `/app/{tenant}/records`
 
 **Tujuan:** Senarai rekod rasmi yang telah difailkan, dengan metadata, media, OCR, minit, kelulusan dan audit.
 
-![Rekod - paparan 200](<imej/14-records.png>)
+![Rekod - paparan 200](<imej/15-records.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Rekod.
@@ -404,13 +577,13 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Senarai tidak merangkumi peti masuk dan tidak mendedahkan rekod tenant/sensitiviti yang tidak dibenarkan.
 
 
-### 15. Fail
+### 16. Fail
 
 **URL:** `/app/{tenant}/registry-files`
 
 **Tujuan:** Senarai fail mengikut nombor klasifikasi, jilid, sensitiviti, medium dan penjagaan fizikal.
 
-![Fail - paparan 200](<imej/15-registry-files.png>)
+![Fail - paparan 200](<imej/16-registry-files.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Fail.
@@ -430,7 +603,7 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Nombor fail elektronik dan fizikal sepadan; sejarah pergerakan tidak terputus.
 
 
-## 5. Panduan tindakan dan modal
+## 6. Panduan tindakan dan modal
 
 Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role ini semasa verifikasi. Medan bertanda `*` wajib.
 
@@ -472,7 +645,24 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 3. Butiran rekod dan tindakan mengikut kebenaran
+### 3. Butiran log aktiviti
+
+![Butiran log aktiviti](<imej/log-aktiviti-butiran.png>)
+
+**Nombor pada gambar**
+1. Semak semua medan dalam dialog sebelum menghantar.
+
+**Langkah terperinci**
+1. Semak tarikh dan masa tepat.
+2. Sahkan pelaku dan role ketika aktiviti berlaku.
+3. Bandingkan tajuk/rujukan rekod serta nombor fail.
+4. Semak saluran, identiti pengirim dan IP jika tersedia.
+5. Baca metadata peristiwa tanpa mengubah log.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 4. Butiran rekod dan tindakan mengikut kebenaran
 
 ![Butiran rekod dan tindakan mengikut kebenaran](<imej/rekod-butiran.png>)
 
@@ -494,7 +684,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 4. Mohon pembetulan rekod
+### 5. Mohon pembetulan rekod
 
 ![Mohon pembetulan rekod](<imej/rekod-mohon-pembetulan.png>)
 
@@ -514,7 +704,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 5. Edarkan minit
+### 6. Edarkan minit
 
 ![Edarkan minit](<imej/rekod-edarkan-minit.png>)
 
@@ -534,7 +724,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 6. Viewer dokumen
+### 7. Viewer dokumen
 
 ![Viewer dokumen](<imej/rekod-viewer.png>)
 
@@ -555,7 +745,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 7. Butiran fail elektronik, fizikal atau hibrid
+### 8. Butiran fail elektronik, fizikal atau hibrid
 
 ![Butiran fail elektronik, fizikal atau hibrid](<imej/fail-butiran.png>)
 
@@ -575,7 +765,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 8. Balas dan edarkan minit
+### 9. Balas dan edarkan minit
 
 ![Balas dan edarkan minit](<imej/minit-balas.png>)
 
@@ -596,7 +786,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 9. Tanda tindakan minit selesai
+### 10. Tanda tindakan minit selesai
 
 ![Tanda tindakan minit selesai](<imej/minit-selesai.png>)
 
@@ -614,7 +804,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 10. Buat keputusan kelulusan
+### 11. Buat keputusan kelulusan
 
 ![Buat keputusan kelulusan](<imej/kelulusan-lulus.png>)
 
@@ -635,13 +825,12 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 11. Hasil carian lanjutan
+### 12. Hasil carian lanjutan
 
 ![Hasil carian lanjutan](<imej/carian-hasil.png>)
 
 **Nombor pada gambar**
 1. Jumlah hasil yang pengguna ini dibenarkan lihat.
-2. Buka rekod atau tekan bintang untuk kegemaran.
 
 **Langkah terperinci**
 1. Semak jumlah hasil.
@@ -653,7 +842,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-## 6. Workflow hujung ke hujung untuk role ini
+## 7. Ringkasan workflow hujung ke hujung untuk role ini
 
 1. Terima notifikasi minit/kelulusan.
 2. Buka rekod dan semak media.
@@ -667,7 +856,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 10. Semak toast, status, tab Audit/Minit/Kelulusan dan notifikasi penerima.
 11. Log keluar atau kunci peranti selepas selesai.
 
-## 7. Peraturan klasifikasi, minit dan notifikasi
+## 8. Peraturan klasifikasi, minit dan notifikasi
 
 - **Untuk Tindakan (Minit):** penerima wajib mengambil tindakan, boleh membalas/mengedarkan dan perlu menanda selesai.
 - **Untuk Makluman (s.k.):** penerima dimaklumkan tetapi bukan pemilik tindakan asal.
@@ -677,7 +866,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 - Notifikasi dihantar hanya melalui saluran yang aktif dan tersedia: pangkalan data, e-mel, WhatsApp atau Telegram. Semak Profil dan tetapan tenant jika notifikasi tidak tiba.
 - Penerima dipilih daripada ahli aktif tenant yang dibenarkan melihat sensitiviti rekod. Nama tenant lain tidak patut muncul.
 
-## 8. Keselamatan dan pengasingan data
+## 9. Keselamatan dan pengasingan data
 
 1. Gunakan akaun sendiri; jangan guna akaun kongsi.
 2. Semak tenant sebelum upload, klasifikasi, minit, kelulusan atau eksport.
@@ -688,7 +877,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 7. Jangan luluskan permintaan, pembetulan atau pelupusan tanpa membuka bukti asal.
 8. Log keluar pada peranti awam dan jangan simpan kata laluan dalam browser yang dikongsi.
 
-## 9. Senarai semak sebelum menutup tugasan
+## 10. Senarai semak sebelum menutup tugasan
 
 - [ ] Tenant betul.
 - [ ] Dokumen dan sumber telah disahkan.
@@ -699,7 +888,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 - [ ] Notifikasi atau audit disahkan jika berkaitan.
 - [ ] Tiada fail sensitif tertinggal pada peranti awam.
 
-## 10. Bantuan dan pelaporan masalah
+## 11. Bantuan dan pelaporan masalah
 
 1. Catat masa kejadian, role, nama tenant, URL halaman, tindakan terakhir dan mesej ralat.
 2. Jika berkaitan rekod/fail, sertakan nombor rujukan atau ID sahaja; lindungi kandungan dan data peribadi.

@@ -116,6 +116,32 @@ class InboxIngestService
             return $record;
         });
 
+        $logger = app(MosqueActivityLogger::class);
+        $sourceIdentifier = match ($source) {
+            SourceChannel::Emel, SourceChannel::WhatsApp => data_get($sourceMeta, 'from'),
+            default => $creator?->name,
+        };
+        $uploader = $creator
+            ? $logger->actorLabel($creator, $mosque)
+            : ($sourceIdentifier ?: 'Penghantar luar');
+        $logger->log(
+            $mosque,
+            'record_uploaded',
+            "{$uploader} memuat naik dokumen \"{$record->title}\" melalui {$logger->sourceLabel($source)}.",
+            $creator,
+            $record,
+            $record,
+            metadata: [
+                'original_filename' => $filename,
+                'mime' => $mime,
+                'antivirus_status' => $scan['status'],
+                'message_id' => data_get($sourceMeta, 'message_id'),
+            ],
+            source: $source,
+            sourceIdentifier: $sourceIdentifier,
+            ip: data_get($sourceMeta, 'ip'),
+        );
+
         // §12 — Hantar OCR ke queue 'ocr' (no-op jika tooling tiada; imej Docker sahaja).
         ProcessOcrJob::dispatch($record->id, $mosque->id)->onQueue('ocr');
 
@@ -179,6 +205,23 @@ class InboxIngestService
             $record->searchable();
             $this->dispatchDriveSync($record);
 
+            app(MosqueActivityLogger::class)->log(
+                $record->mosque,
+                'record_classified',
+                $filer->name.' mengklasifikasikan rekod "'.$record->title.'" ke fail '.$file->file_no.' ('.$file->title.').',
+                $filer,
+                $record,
+                $record,
+                $file,
+                [
+                    'enclosure_no' => $enclosureNo,
+                    'direction' => $record->direction?->value,
+                    'our_ref' => $record->our_ref,
+                    'their_ref' => $record->their_ref,
+                    'sensitivity' => $record->sensitivity?->value,
+                ],
+            );
+
             return $record;
         });
     }
@@ -209,6 +252,17 @@ class InboxIngestService
             ]);
             $record->searchable();
             $this->dispatchDriveSync($record);
+
+            app(MosqueActivityLogger::class)->log(
+                $record->mosque,
+                'record_moved',
+                $mover->name.' memindahkan rekod "'.$record->title.'" ke fail '.$target->file_no.' ('.$target->title.').',
+                $mover,
+                $record,
+                $record,
+                $target,
+                ['reason' => $reason, 'enclosure_no' => $enclosureNo],
+            );
 
             return $record;
         });
@@ -263,6 +317,18 @@ class InboxIngestService
             $new->searchable();
             $old->searchable();
             $this->dispatchDriveSync($new);
+
+            app(MosqueActivityLogger::class)->log(
+                $old->mosque,
+                'record_superseded',
+                $user->name.' menggantikan versi rekod "'.$old->title.'" dengan versi baharu.',
+                $user,
+                $new,
+                $new,
+                metadata: ['previous_record_id' => $old->id, 'previous_ulid' => $old->ulid],
+                source: SourceChannel::MuatNaik,
+                sourceIdentifier: $user->name,
+            );
 
             return $new;
         });

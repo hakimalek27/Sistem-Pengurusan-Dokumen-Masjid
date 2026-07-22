@@ -51,7 +51,103 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 - HTTP 403 bermaksud tindakan tidak dibenarkan; HTTP 404 juga digunakan untuk menyembunyikan tenant/rekod yang bukan milik anda.
 - Jangan hantar screenshot kata laluan, token atau pautan sekali guna kepada sesiapa.
 
-## 3. Senarai halaman role
+## 3. Cara melaksanakan tugas - gambar demi gambar
+
+Bahagian ini menerangkan kesinambungan gambar untuk satu tugas lengkap. **Gambar 1** ialah titik mula workflow, diikuti **Gambar 2**, **Gambar 3** dan seterusnya sehingga hasil akhir disahkan.
+
+### 3.1 Log masuk dan sahkan masjid
+
+**Hasil akhir:** Pengguna masuk ke tenant yang betul sebelum membuka atau mengubah sebarang rekod.
+
+Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.
+
+#### Gambar 1: Halaman log masuk
+
+![Log masuk dan sahkan masjid - Gambar 1](<imej/00-log-masuk.png>)
+
+**Apa perlu dibuat pada Gambar 1**
+1. Masukkan e-mel atau nombor telefon akaun sendiri.
+2. Masukkan kata laluan sendiri.
+3. Tekan Log masuk sekali dan tunggu sehingga URL tenant dipaparkan.
+
+**Kemudian:** teruskan ke **Gambar 2: Papan pemuka tenant**.
+
+
+#### Gambar 2: Papan pemuka tenant
+
+![Log masuk dan sahkan masjid - Gambar 2](<imej/01-dashboard.png>)
+
+**Apa perlu dibuat pada Gambar 2**
+1. Semak nama dan kod masjid pada panel.
+2. Semak role serta statistik yang dipaparkan.
+3. Jika masjid salah, jangan teruskan; log keluar dan laporkan kepada Admin/Kerani.
+
+**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
+
+
+### 3.2 Laksanakan semakan audit baca sahaja
+
+**Hasil akhir:** Sampel rekod disemak tanpa mengubah bukti atau melangkaui akses.
+
+Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langkah gambar semasa selesai.
+
+#### Gambar 1: Cari sampel audit
+
+![Laksanakan semakan audit baca sahaja - Gambar 1](<imej/05-carian.png>)
+
+**Apa perlu dibuat pada Gambar 1**
+1. Gunakan metadata dan julat tarikh.
+2. Simpan carian jika perlu.
+3. Buka hanya hasil yang dibenarkan.
+
+**Kemudian:** teruskan ke **Gambar 2: Hasil carian lanjutan**.
+
+
+#### Gambar 2: Hasil carian lanjutan
+
+![Laksanakan semakan audit baca sahaja - Gambar 2](<imej/carian-hasil.png>)
+
+**Apa perlu dibuat pada Gambar 2**
+1. Semak jumlah hasil.
+2. Pilih sampel dan buka rekod.
+
+**Kemudian:** teruskan ke **Gambar 3: Butiran rekod dan tindakan mengikut kebenaran**.
+
+
+#### Gambar 3: Butiran rekod dan tindakan mengikut kebenaran
+
+![Laksanakan semakan audit baca sahaja - Gambar 3](<imej/rekod-butiran.png>)
+
+**Apa perlu dibuat pada Gambar 3**
+1. Semak metadata, OCR, versi, minit, kelulusan dan audit.
+2. Jangan gunakan sebarang kaedah untuk mengubah rekod.
+
+**Kemudian:** teruskan ke **Gambar 4: Semak akses sensitif**.
+
+
+#### Gambar 4: Semak akses sensitif
+
+![Laksanakan semakan audit baca sahaja - Gambar 4](<imej/02-sensitive-access-logs.png>)
+
+**Apa perlu dibuat pada Gambar 4**
+1. Semak pengguna, tindakan, IP dan masa.
+2. Bandingkan dengan skop audit.
+
+**Kemudian:** teruskan ke **Gambar 5: Semak ringkasan**.
+
+
+#### Gambar 5: Semak ringkasan
+
+![Laksanakan semakan audit baca sahaja - Gambar 5](<imej/07-laporan.png>)
+
+**Apa perlu dibuat pada Gambar 5**
+1. Bandingkan jumlah rekod, retensi dan minit lewat.
+2. Eksport hanya jika dibenarkan dan simpan secara terkawal.
+
+**Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
+
+
+## 4. Senarai halaman role
 
 | # | Halaman | Laluan | Status Chrome |
 |---:|---|---|---:|
@@ -69,7 +165,7 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 | 12 | Delegasi | `/app/{tenant}/delegasi` | 200 |
 | 13 | Profil Saya | `/app/{tenant}/profil` | 200 |
 
-## 4. Panduan setiap halaman
+## 5. Panduan setiap halaman
 
 ### 1. Papan pemuka
 
@@ -382,7 +478,7 @@ Jika butang tidak kelihatan, itu lazimnya sekatan role, status, sensitiviti atau
 **Hasil dijangka:** Notifikasi ujian sampai melalui saluran aktif; kata laluan lama tidak lagi boleh digunakan selepas ditukar.
 
 
-## 5. Panduan tindakan dan modal
+## 6. Panduan tindakan dan modal
 
 Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role ini semasa verifikasi. Medan bertanda `*` wajib.
 
@@ -534,7 +630,6 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 
 **Nombor pada gambar**
 1. Jumlah hasil yang pengguna ini dibenarkan lihat.
-2. Buka rekod atau tekan bintang untuk kegemaran.
 
 **Langkah terperinci**
 1. Semak jumlah hasil.
@@ -546,7 +641,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-## 6. Workflow hujung ke hujung untuk role ini
+## 7. Ringkasan workflow hujung ke hujung untuk role ini
 
 1. Gunakan carian/laporan untuk sampel.
 2. Buka rekod/fail secara baca sahaja.
@@ -559,7 +654,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 9. Semak toast, status, tab Audit/Minit/Kelulusan dan notifikasi penerima.
 10. Log keluar atau kunci peranti selepas selesai.
 
-## 7. Peraturan klasifikasi, minit dan notifikasi
+## 8. Peraturan klasifikasi, minit dan notifikasi
 
 - **Untuk Tindakan (Minit):** penerima wajib mengambil tindakan, boleh membalas/mengedarkan dan perlu menanda selesai.
 - **Untuk Makluman (s.k.):** penerima dimaklumkan tetapi bukan pemilik tindakan asal.
@@ -569,7 +664,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 - Notifikasi dihantar hanya melalui saluran yang aktif dan tersedia: pangkalan data, e-mel, WhatsApp atau Telegram. Semak Profil dan tetapan tenant jika notifikasi tidak tiba.
 - Penerima dipilih daripada ahli aktif tenant yang dibenarkan melihat sensitiviti rekod. Nama tenant lain tidak patut muncul.
 
-## 8. Keselamatan dan pengasingan data
+## 9. Keselamatan dan pengasingan data
 
 1. Gunakan akaun sendiri; jangan guna akaun kongsi.
 2. Semak tenant sebelum upload, klasifikasi, minit, kelulusan atau eksport.
@@ -580,7 +675,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 7. Jangan luluskan permintaan, pembetulan atau pelupusan tanpa membuka bukti asal.
 8. Log keluar pada peranti awam dan jangan simpan kata laluan dalam browser yang dikongsi.
 
-## 9. Senarai semak sebelum menutup tugasan
+## 10. Senarai semak sebelum menutup tugasan
 
 - [ ] Tenant betul.
 - [ ] Dokumen dan sumber telah disahkan.
@@ -591,7 +686,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 - [ ] Notifikasi atau audit disahkan jika berkaitan.
 - [ ] Tiada fail sensitif tertinggal pada peranti awam.
 
-## 10. Bantuan dan pelaporan masalah
+## 11. Bantuan dan pelaporan masalah
 
 1. Catat masa kejadian, role, nama tenant, URL halaman, tindakan terakhir dan mesej ralat.
 2. Jika berkaitan rekod/fail, sertakan nombor rujukan atau ID sahaja; lindungi kandungan dan data peribadi.

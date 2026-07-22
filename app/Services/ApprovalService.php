@@ -42,6 +42,16 @@ class ApprovalService
 
         Notification::send([$approver], new ApprovalRequestedNotification($approval));
 
+        app(MosqueActivityLogger::class)->log(
+            $record->mosque,
+            'approval_requested',
+            $requester->name.' memohon kelulusan '.$approver->name.' bagi rekod "'.$record->title.'".',
+            $requester,
+            $approval,
+            $record,
+            metadata: ['approval_id' => $approval->id, 'approver' => $approver->name, 'note' => $note],
+        );
+
         return $approval;
     }
 
@@ -76,6 +86,22 @@ class ApprovalService
             ->causedBy($approver)
             ->withProperties(['ip' => $ip, 'decision' => $decision->value])
             ->log('kelulusan');
+
+        app(MosqueActivityLogger::class)->log(
+            $approval->record->mosque,
+            'approval_decided',
+            $approver->name.' merekod keputusan '.$decision->getLabel().' bagi rekod "'.$approval->record->title.'".',
+            $approver,
+            $approval,
+            $approval->record,
+            metadata: [
+                'approval_id' => $approval->id,
+                'decision' => $decision->value,
+                'note' => $note,
+                'on_behalf_of' => $approval->on_behalf_of,
+            ],
+            ip: $ip,
+        );
 
         $requester = $approval->requestedBy;
         if ($requester?->is_active && $requester->can('view', $approval->record)) {

@@ -12,10 +12,10 @@ if (!password) {
 }
 
 const roles = [
-    { key: 'admin_masjid', label: 'Admin / Kerani', folder: '01-Admin-Kerani', email: 'admin_masjid@demo.test', pages: 21 },
-    { key: 'pengerusi', label: 'Pengerusi', folder: '02-Pengerusi', email: 'pengerusi@demo.test', pages: 15 },
-    { key: 'setiausaha', label: 'Setiausaha', folder: '03-Setiausaha', email: 'setiausaha@demo.test', pages: 13 },
-    { key: 'bendahari', label: 'Bendahari', folder: '04-Bendahari', email: 'bendahari@demo.test', pages: 13 },
+    { key: 'admin_masjid', label: 'Admin / Kerani', folder: '01-Admin-Kerani', email: 'admin_masjid@demo.test', pages: 22 },
+    { key: 'pengerusi', label: 'Pengerusi', folder: '02-Pengerusi', email: 'pengerusi@demo.test', pages: 16 },
+    { key: 'setiausaha', label: 'Setiausaha', folder: '03-Setiausaha', email: 'setiausaha@demo.test', pages: 14 },
+    { key: 'bendahari', label: 'Bendahari', folder: '04-Bendahari', email: 'bendahari@demo.test', pages: 14 },
     { key: 'nazir', label: 'Nazir', folder: '05-Nazir', email: 'nazir@demo.test', pages: 12 },
     { key: 'ketua_imam', label: 'Ketua Imam', folder: '06-Ketua-Imam', email: 'ketua_imam@demo.test', pages: 12 },
     { key: 'ajk', label: 'AJK', folder: '07-AJK', email: 'ajk@demo.test', pages: 12 },
@@ -377,6 +377,7 @@ async function captureRole(browser, role) {
         ['/app/mam/peti-masuk', '+ Muat Naik Dokumen', 'inbox-muat-naik.png', 'Muat naik dokumen'],
         ['/app/mam/profil', 'Tetapan Notifikasi', 'profil-notifikasi.png', 'Tetapan notifikasi'],
         ['/app/mam/profil', 'Tetapkan Kata Laluan', 'profil-kata-laluan.png', 'Tetapkan kata laluan'],
+        ['/app/mam/log-aktiviti', 'Butiran', 'log-aktiviti-butiran.png', 'Butiran log aktiviti'],
     ];
     for (const [url, button, imageName, title] of extraModals) {
         if (!visiblePaths.has(url)) continue;

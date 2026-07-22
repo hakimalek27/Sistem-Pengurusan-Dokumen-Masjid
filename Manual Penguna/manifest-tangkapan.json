@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-21T18:16:17.803Z",
+  "generatedAt": "2026-07-21T23:58:52.822Z",
   "baseURL": "http://127.0.0.1:8094",
   "roles": {
     "admin_masjid": {
       "label": "Admin / Kerani",
       "folder": "01-Admin-Kerani",
-      "expectedPages": 21,
-      "actualPages": 21,
+      "expectedPages": 22,
+      "actualPages": 22,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -525,6 +525,41 @@
             "Tolak"
           ],
           "tabs": []
+        },
+        {
+          "order": 22,
+          "label": "Log Aktiviti Masjid",
+          "path": "/app/mam/log-aktiviti",
+          "status": 200,
+          "image": "imej/22-log-aktiviti.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Log Aktiviti Masjid."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh & Masa",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "1",
+            "2"
+          ],
+          "tabs": []
         }
       ],
       "extras": [
@@ -677,6 +712,17 @@
             {
               "number": 2,
               "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/log-aktiviti-butiran.png",
+          "title": "Butiran log aktiviti",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
             }
           ]
         },
@@ -985,10 +1031,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -999,8 +1041,8 @@
     "pengerusi": {
       "label": "Pengerusi",
       "folder": "02-Pengerusi",
-      "expectedPages": 15,
-      "actualPages": 15,
+      "expectedPages": 16,
+      "actualPages": 16,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -1244,10 +1286,45 @@
         },
         {
           "order": 12,
+          "label": "Log Aktiviti Masjid",
+          "path": "/app/mam/log-aktiviti",
+          "status": 200,
+          "image": "imej/12-log-aktiviti.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Log Aktiviti Masjid."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh & Masa",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "1",
+            "2"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 13,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/12-classification-nodes.png",
+          "image": "imej/13-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -1269,11 +1346,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Pelupusan",
           "path": "/app/mam/pelupusan",
           "status": 200,
-          "image": "imej/13-pelupusan.png",
+          "image": "imej/14-pelupusan.png",
           "notes": [
             {
               "number": 1,
@@ -1286,11 +1363,11 @@
           "tabs": []
         },
         {
-          "order": 14,
+          "order": 15,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/14-records.png",
+          "image": "imej/15-records.png",
           "notes": [
             {
               "number": 1,
@@ -1309,11 +1386,11 @@
           "tabs": []
         },
         {
-          "order": 15,
+          "order": 16,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/15-registry-files.png",
+          "image": "imej/16-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -1373,6 +1450,17 @@
             {
               "number": 2,
               "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/log-aktiviti-butiran.png",
+          "title": "Butiran log aktiviti",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
             }
           ]
         },
@@ -1554,10 +1642,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -1568,8 +1652,8 @@
     "setiausaha": {
       "label": "Setiausaha",
       "folder": "03-Setiausaha",
-      "expectedPages": 13,
-      "actualPages": 13,
+      "expectedPages": 14,
+      "actualPages": 14,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -1826,10 +1910,45 @@
         },
         {
           "order": 11,
+          "label": "Log Aktiviti Masjid",
+          "path": "/app/mam/log-aktiviti",
+          "status": 200,
+          "image": "imej/11-log-aktiviti.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Log Aktiviti Masjid."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh & Masa",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "1",
+            "2"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 12,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/11-classification-nodes.png",
+          "image": "imej/12-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -1851,11 +1970,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/12-delegasi.png",
+          "image": "imej/13-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -1872,11 +1991,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/13-profil.png",
+          "image": "imej/14-profil.png",
           "notes": [
             {
               "number": 1,
@@ -1942,6 +2061,17 @@
             {
               "number": 2,
               "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/log-aktiviti-butiran.png",
+          "title": "Butiran log aktiviti",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
             }
           ]
         },
@@ -2172,10 +2302,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -2186,8 +2312,8 @@
     "bendahari": {
       "label": "Bendahari",
       "folder": "04-Bendahari",
-      "expectedPages": 13,
-      "actualPages": 13,
+      "expectedPages": 14,
+      "actualPages": 14,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -2409,10 +2535,45 @@
         },
         {
           "order": 11,
+          "label": "Log Aktiviti Masjid",
+          "path": "/app/mam/log-aktiviti",
+          "status": 200,
+          "image": "imej/11-log-aktiviti.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Log Aktiviti Masjid."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh & Masa",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "Butiran",
+            "1",
+            "2"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 12,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/11-classification-nodes.png",
+          "image": "imej/12-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -2434,11 +2595,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/12-records.png",
+          "image": "imej/13-records.png",
           "notes": [
             {
               "number": 1,
@@ -2458,11 +2619,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/13-registry-files.png",
+          "image": "imej/14-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -2539,6 +2700,17 @@
             {
               "number": 2,
               "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/log-aktiviti-butiran.png",
+          "title": "Butiran log aktiviti",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
             }
           ]
         },
@@ -2720,10 +2892,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -3236,10 +3404,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -3725,10 +3889,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -4175,10 +4335,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -4650,10 +4806,6 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            },
-            {
-              "number": 2,
-              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -4664,39 +4816,133 @@
   },
   "public": {
     "folder": "09-Orang-Awam-Pendaftaran",
-    "completedRegistration": true,
     "captures": [
       {
         "image": "imej/01-laman-utama.png",
         "title": "Laman utama",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Pilih Daftar untuk permohonan masjid baharu."
+          },
+          {
+            "number": 2,
+            "note": "Pengguna sedia ada memilih Log Masuk."
+          }
+        ]
       },
       {
         "image": "imej/02-borang-daftar.png",
         "title": "Borang pendaftaran",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Nama rasmi masjid."
+          },
+          {
+            "number": 2,
+            "note": "Negeri dan daerah masjid."
+          },
+          {
+            "number": 3,
+            "note": "Kod akronim unik 3 hingga 6 huruf."
+          },
+          {
+            "number": 4,
+            "note": "Slug URL ringkas, huruf kecil dan nombor sahaja."
+          },
+          {
+            "number": 5,
+            "note": "Nama orang yang akan menjadi Admin / Kerani pertama."
+          },
+          {
+            "number": 6,
+            "note": "E-mel aktif untuk menerima pautan kelulusan."
+          },
+          {
+            "number": 7,
+            "note": "Nombor WhatsApp format negara, contoh 60123456789."
+          },
+          {
+            "number": 8,
+            "note": "Baca dan setuju Terma serta DPA."
+          },
+          {
+            "number": 9,
+            "note": "Fahami dan setuju dasar retensi."
+          },
+          {
+            "number": 10,
+            "note": "Hantar selepas semua maklumat disemak."
+          }
+        ]
       },
       {
         "image": "imej/03-permohonan-diterima.png",
         "title": "Permohonan diterima",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Simpan bukti ini dan tunggu kelulusan platform."
+          },
+          {
+            "number": 2,
+            "note": "Tiada tindakan lain sehingga pautan kelulusan diterima."
+          }
+        ]
       },
       {
         "image": "imej/04-tetapkan-kata-laluan.png",
         "title": "Tetapkan kata laluan kali pertama",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Cipta kata laluan panjang dan unik."
+          },
+          {
+            "number": 2,
+            "note": "Taip semula kata laluan yang sama."
+          },
+          {
+            "number": 3,
+            "note": "Simpan dan teruskan ke persediaan masjid."
+          }
+        ]
       },
       {
         "image": "imej/05-persediaan-pertama.png",
         "title": "Persediaan masjid kali pertama",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Mulakan wizard bagi profil, WhatsApp dan ahli."
+          },
+          {
+            "number": 2,
+            "note": "Langkau hanya jika maklumat belum tersedia; lengkapkan kemudian."
+          }
+        ]
       },
       {
         "image": "imej/06-log-masuk-pautan.png",
         "title": "Log masuk tanpa kata laluan",
-        "notes": []
+        "notes": [
+          {
+            "number": 1,
+            "note": "Masukkan e-mel atau nombor telefon yang berdaftar."
+          },
+          {
+            "number": 2,
+            "note": "Pautan sah 15 minit dan hanya sekali guna."
+          },
+          {
+            "number": 3,
+            "note": "Gunakan log masuk kata laluan jika sudah ditetapkan."
+          }
+        ]
       }
-    ]
+    ],
+    "completedRegistration": true
   },
   "errors": []
 }
