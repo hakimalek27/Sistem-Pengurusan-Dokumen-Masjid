@@ -46,6 +46,9 @@ Schedule::command('diwan:expire-addons')->dailyAt('06:00');
 // 7. Peringatan minit — 08:00 (§9.C.5).
 Schedule::command('diwan:send-minit-reminders')->dailyAt('08:00');
 
+// 7b. Digest bantuan opt-in; tidak memasukkan peringatan minit sedia ada.
+Schedule::command('diwan:send-guidance-digests')->dailyAt('08:15');
+
 // 8. Ping gateway WhatsApp — setiap 5 minit (§11.1).
 Schedule::command('diwan:ping-gateway')->everyFiveMinutes();
 

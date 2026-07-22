@@ -35,11 +35,13 @@ class TenantStatsOverview extends StatsOverviewWidget
             Stat::make('Rekod Boleh Dilihat', (clone $visible)->whereIn('status', ['difailkan', 'diganti'])->count())
                 ->description('Mengikut peranan dan sensitiviti')
                 ->descriptionIcon('heroicon-o-document-magnifying-glass')
-                ->color('info'),
+                ->color('info')
+                ->url('/app/'.$mosque->slug.'/records'),
             Stat::make('Minit Lewat Saya', $overdue)
                 ->description($overdue ? 'Perlu tindakan segera' : 'Tiada minit lewat')
                 ->descriptionIcon('heroicon-o-clock')
-                ->color($overdue ? 'danger' : 'success'),
+                ->color($overdue ? 'danger' : 'success')
+                ->url('/app/'.$mosque->slug.'/minit-saya?tableFilters[kategori][value]=tindakan'),
         ];
 
         if ($user->canIn($mosque, 'inbox.view')) {
@@ -47,7 +49,8 @@ class TenantStatsOverview extends StatsOverviewWidget
             array_unshift($stats, Stat::make('Peti Masuk', $inbox)
                 ->description('Belum diklasifikasikan')
                 ->descriptionIcon('heroicon-o-inbox-stack')
-                ->color($inbox ? 'warning' : 'success'));
+                ->color($inbox ? 'warning' : 'success')
+                ->url('/app/'.$mosque->slug.'/peti-masuk'));
         }
 
         if ($user->canIn($mosque, 'retention.manage') || $user->canIn($mosque, 'retention.hold')) {
@@ -55,7 +58,8 @@ class TenantStatsOverview extends StatsOverviewWidget
             $stats[] = Stat::make('Akan Luput ≤90 Hari', $expiring)
                 ->description($expiring ? 'Semak eksport atau pegangan' : 'Tiada rekod hampir luput')
                 ->descriptionIcon('heroicon-o-archive-box')
-                ->color($expiring ? 'warning' : 'success');
+                ->color($expiring ? 'warning' : 'success')
+                ->url('/app/'.$mosque->slug.'/retensi');
         }
 
         if ($user->canIn($mosque, 'usage.view')) {
@@ -63,7 +67,8 @@ class TenantStatsOverview extends StatsOverviewWidget
             $stats[] = Stat::make('Penggunaan Storan', number_format($usage, 1).'%')
                 ->description(round($mosque->storage_used_bytes / (1024 ** 3), 2).' GB digunakan')
                 ->descriptionIcon('heroicon-o-server-stack')
-                ->color($usage >= 100 ? 'danger' : ($usage >= 80 ? 'warning' : 'success'));
+                ->color($usage >= 100 ? 'danger' : ($usage >= 80 ? 'warning' : 'success'))
+                ->url('/app/'.$mosque->slug.'/penggunaan');
         }
 
         return $stats;

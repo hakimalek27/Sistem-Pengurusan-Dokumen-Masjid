@@ -39,6 +39,7 @@ class RegisterMosque extends Component
     #[Validate('required|string|max:20')]
     public string $phone_wa = '';
 
+    #[Validate('required|string|max:255|regex:/^[a-z0-9-]+$/')]
     public string $slug = '';
 
     #[Validate('accepted')]
@@ -51,6 +52,8 @@ class RegisterMosque extends Component
 
     public bool $registrationOpen = true;
 
+    public int $step = 1;
+
     public function mount(): void
     {
         $this->registrationOpen = (bool) PlatformSetting::get('registration_open', true);
@@ -61,6 +64,32 @@ class RegisterMosque extends Component
         if ($this->slug === '') {
             $this->slug = Str::slug($this->name);
         }
+    }
+
+    public function nextStep(): void
+    {
+        if ($this->step === 1) {
+            $this->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'state' => ['required', 'string'],
+                'district' => ['nullable', 'string', 'max:255'],
+                'code' => ['required', 'string', 'min:3', 'max:6', 'alpha'],
+                'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9-]+$/'],
+            ]);
+        } elseif ($this->step === 2) {
+            $this->validate([
+                'admin_name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'max:255'],
+                'phone_wa' => ['required', 'string', 'max:20'],
+            ]);
+        }
+
+        $this->step = min(3, $this->step + 1);
+    }
+
+    public function previousStep(): void
+    {
+        $this->step = max(1, $this->step - 1);
     }
 
     public function submit(): void

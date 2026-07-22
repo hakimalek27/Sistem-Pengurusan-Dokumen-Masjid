@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\DocumentViewerController;
 use App\Http\Controllers\GoogleDriveCallbackController;
+use App\Http\Controllers\HelpImageController;
 use App\Http\Controllers\MagicLoginController;
 use App\Http\Controllers\RecordDeepLinkController;
 use App\Http\Controllers\SecureArtifactController;
 use App\Http\Controllers\SecureFileController;
+use App\Http\Controllers\SupportAttachmentController;
+use App\Livewire\PublicHelpCenter;
 use App\Livewire\RegisterMosque;
 use App\Livewire\RequestMagicLink;
 use App\Livewire\SetFirstPassword;
@@ -21,6 +24,14 @@ Route::get('/daftar', RegisterMosque::class)
 Route::get('/log-masuk', RequestMagicLink::class)
     ->middleware('throttle:public-login-page')
     ->name('log-masuk');
+
+Route::get('/bantuan', PublicHelpCenter::class)
+    ->middleware('throttle:public-help')
+    ->name('bantuan');
+
+Route::get('/bantuan/imej/{guideId}', HelpImageController::class)
+    ->middleware('throttle:public-help')
+    ->name('help-image.show');
 
 // §15.1 — Magic link auto-login. GET = interstisial (elak bot pratonton
 // membakar token sekali-guna); POST = guna token + log masuk + deep-link.
@@ -54,3 +65,7 @@ Route::middleware(['auth', 'signed'])->group(function () {
     Route::get('/secure-artifact/certificate/{batch}', [SecureArtifactController::class, 'certificate'])->name('secure-artifact.certificate');
     Route::get('/secure-artifact/export/{export}', [SecureArtifactController::class, 'export'])->name('secure-artifact.export');
 });
+
+Route::get('/support-attachment/{attachment}', SupportAttachmentController::class)
+    ->middleware(['auth', 'throttle:30,1'])
+    ->name('support-attachment.show');

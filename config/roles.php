@@ -48,6 +48,7 @@ return [
         'disposal.prepare', 'disposal.approve', 'disposal.execute',
         'users.manage', 'mosque.settings',
         'usage.view', 'storage.order', 'audit.view', 'activity.view',
+        'support.manage', 'help.analytics',
     ],
 
     // Matriks §6.2 — peranan => senarai kebenaran yang dibenarkan.
@@ -65,6 +66,7 @@ return [
             'disposal.prepare', 'disposal.execute',
             'users.manage', 'mosque.settings',
             'usage.view', 'storage.order', 'audit.view', 'activity.view',
+            'support.manage', 'help.analytics',
         ],
 
         'pengerusi' => [

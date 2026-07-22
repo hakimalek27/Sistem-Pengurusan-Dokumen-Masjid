@@ -4,7 +4,7 @@
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
-**Liputan Chrome:** 16/16 halaman, silang tenant HTTP 404, 12 skrin tindakan tambahan.
+**Liputan Chrome:** 17/17 halaman, silang tenant HTTP 404, 12 skrin tindakan tambahan.
 
 Manual ini khusus untuk role **Pengerusi**. Gambar menggunakan data latihan. Nama, e-mel, nombor telefon dan dokumen sebenar organisasi tidak patut dimasukkan ke manual.
 
@@ -93,7 +93,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 1: Pilih minit tindakan
 
-![Terima, baca, balas dan selesaikan minit - Gambar 1](<imej/06-minit-saya.png>)
+![Terima, baca, balas dan selesaikan minit - Gambar 1](<imej/07-minit-saya.png>)
 
 **Apa perlu dibuat pada Gambar 1**
 1. Tapis Perlu Tindakan.
@@ -139,7 +139,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 5: Sahkan timeline minit
 
-![Terima, baca, balas dan selesaikan minit - Gambar 5](<imej/12-log-aktiviti.png>)
+![Terima, baca, balas dan selesaikan minit - Gambar 5](<imej/13-log-aktiviti.png>)
 
 **Apa perlu dibuat pada Gambar 5**
 1. Cari tajuk rekod.
@@ -156,7 +156,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 1: Pilih permohonan kelulusan
 
-![Buat keputusan kelulusan atau pelupusan - Gambar 1](<imej/07-kelulusan.png>)
+![Buat keputusan kelulusan atau pelupusan - Gambar 1](<imej/08-kelulusan.png>)
 
 **Apa perlu dibuat pada Gambar 1**
 1. Pilih item Menunggu yang ditujukan kepada anda.
@@ -179,7 +179,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 3: Semak batch pelupusan
 
-![Buat keputusan kelulusan atau pelupusan - Gambar 3](<imej/14-pelupusan.png>)
+![Buat keputusan kelulusan atau pelupusan - Gambar 3](<imej/15-pelupusan.png>)
 
 **Apa perlu dibuat pada Gambar 3**
 1. Semak setiap rekod, retensi, hold dan sandaran.
@@ -190,7 +190,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 4: Audit keputusan
 
-![Buat keputusan kelulusan atau pelupusan - Gambar 4](<imej/12-log-aktiviti.png>)
+![Buat keputusan kelulusan atau pelupusan - Gambar 4](<imej/13-log-aktiviti.png>)
 
 **Apa perlu dibuat pada Gambar 4**
 1. Tapis kelulusan/pelupusan.
@@ -205,20 +205,21 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 |---:|---|---|---:|
 | 1 | Papan pemuka | `/app/{tenant}` | 200 |
 | 2 | Log Akses Sulit | `/app/{tenant}/sensitive-access-logs` | 200 |
-| 3 | Penggunaan & Storan | `/app/{tenant}/penggunaan` | 200 |
-| 4 | Delegasi | `/app/{tenant}/delegasi` | 200 |
-| 5 | Profil Saya | `/app/{tenant}/profil` | 200 |
-| 6 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
-| 7 | Kelulusan 2 | `/app/{tenant}/kelulusan` | 200 |
-| 8 | Carian | `/app/{tenant}/carian` | 200 |
-| 9 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
-| 10 | Laporan | `/app/{tenant}/laporan` | 200 |
-| 11 | Pembetulan Rekod | `/app/{tenant}/pembetulan-rekod` | 200 |
-| 12 | Log Aktiviti Masjid | `/app/{tenant}/log-aktiviti` | 200 |
-| 13 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
-| 14 | Pelupusan | `/app/{tenant}/pelupusan` | 200 |
-| 15 | Rekod | `/app/{tenant}/records` | 200 |
-| 16 | Fail | `/app/{tenant}/registry-files` | 200 |
+| 3 | Pusat Bantuan | `/app/{tenant}/bantuan` | 200 |
+| 4 | Penggunaan & Storan | `/app/{tenant}/penggunaan` | 200 |
+| 5 | Delegasi | `/app/{tenant}/delegasi` | 200 |
+| 6 | Profil Saya | `/app/{tenant}/profil` | 200 |
+| 7 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
+| 8 | Kelulusan 2 | `/app/{tenant}/kelulusan` | 200 |
+| 9 | Carian | `/app/{tenant}/carian` | 200 |
+| 10 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
+| 11 | Laporan | `/app/{tenant}/laporan` | 200 |
+| 12 | Pembetulan Rekod | `/app/{tenant}/pembetulan-rekod` | 200 |
+| 13 | Log Aktiviti Masjid | `/app/{tenant}/log-aktiviti` | 200 |
+| 14 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
+| 15 | Pelupusan | `/app/{tenant}/pelupusan` | 200 |
+| 16 | Rekod | `/app/{tenant}/records` | 200 |
+| 17 | Fail | `/app/{tenant}/registry-files` | 200 |
 
 ## 5. Panduan setiap halaman
 
@@ -232,6 +233,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 **Nombor pada gambar**
 1. Tajuk halaman Papan pemuka.
+2. Tindakan utama yang dibenarkan untuk peranan ini.
 
 **Cara menggunakan**
 1. Semak nama masjid pada panel untuk memastikan tenant yang betul.
@@ -267,13 +269,36 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Log hanya memaparkan tenant semasa dan kekal baca sahaja.
 
 
-### 3. Penggunaan & Storan
+### 3. Pusat Bantuan
+
+**URL:** `/app/{tenant}/bantuan`
+
+**Tujuan:** Halaman fungsi bagi role ini.
+
+![Pusat Bantuan - paparan 200](<imej/03-bantuan.png>)
+
+**Nombor pada gambar**
+1. Tajuk halaman Pusat Bantuan.
+2. Carian atau tapisan halaman.
+3. Tindakan utama yang dibenarkan untuk peranan ini.
+
+**Cara menggunakan**
+1. Buka melalui menu kiri.
+2. Semak data dan gunakan hanya tindakan yang dipaparkan.
+3. Pastikan hasil kekal dalam tenant semasa.
+
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+
+**Hasil dijangka:** Halaman berfungsi tanpa ralat.
+
+
+### 4. Penggunaan & Storan
 
 **URL:** `/app/{tenant}/penggunaan`
 
 **Tujuan:** Memantau kuota, pesanan storan dan add-on aktif.
 
-![Penggunaan & Storan - paparan 200](<imej/03-penggunaan.png>)
+![Penggunaan & Storan - paparan 200](<imej/04-penggunaan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Penggunaan & Storan.
@@ -290,13 +315,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Pesanan idempotent muncul sekali dan kuota bertambah hanya selepas disahkan.
 
 
-### 4. Delegasi
+### 5. Delegasi
 
 **URL:** `/app/{tenant}/delegasi`
 
 **Tujuan:** Paparan principal/delegate untuk mewakilkan minit atau keputusan kelulusan dalam tempoh tertentu.
 
-![Delegasi - paparan 200](<imej/04-delegasi.png>)
+![Delegasi - paparan 200](<imej/05-delegasi.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Delegasi.
@@ -315,13 +340,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Delegate hanya boleh bertindak dalam tenant, capability dan julat masa yang diluluskan.
 
 
-### 5. Profil Saya
+### 6. Profil Saya
 
 **URL:** `/app/{tenant}/profil`
 
 **Tujuan:** Maklumat akaun, saluran notifikasi, Telegram dan kata laluan sendiri.
 
-![Profil Saya - paparan 200](<imej/05-profil.png>)
+![Profil Saya - paparan 200](<imej/06-profil.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Profil Saya.
@@ -339,13 +364,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Notifikasi ujian sampai melalui saluran aktif; kata laluan lama tidak lagi boleh digunakan selepas ditukar.
 
 
-### 6. Minit Saya 1
+### 7. Minit Saya 1
 
 **URL:** `/app/{tenant}/minit-saya`
 
 **Tujuan:** Arahan, makluman, balasan dan status tindakan minit yang berkaitan dengan pengguna.
 
-![Minit Saya 1 - paparan 200](<imej/06-minit-saya.png>)
+![Minit Saya 1 - paparan 200](<imej/07-minit-saya.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Minit Saya 1.
@@ -363,13 +388,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Apabila semua penerima tindakan selesai, minit ditutup dan pengirim dimaklumkan.
 
 
-### 7. Kelulusan 2
+### 8. Kelulusan 2
 
 **URL:** `/app/{tenant}/kelulusan`
 
 **Tujuan:** Permohonan dan keputusan kelulusan dengan pengesahan semula kata laluan, masa, IP dan pihak yang bertindak.
 
-![Kelulusan 2 - paparan 200](<imej/07-kelulusan.png>)
+![Kelulusan 2 - paparan 200](<imej/08-kelulusan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Kelulusan 2.
@@ -387,13 +412,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Keputusan direkod sekali, tidak boleh ditindih, dan pemohon menerima notifikasi.
 
 
-### 8. Carian
+### 9. Carian
 
 **URL:** `/app/{tenant}/carian`
 
 **Tujuan:** Carian penuh dan metadata dengan saved search, julat tarikh serta hasil yang ditapis mengikut akses.
 
-![Carian - paparan 200](<imej/08-carian.png>)
+![Carian - paparan 200](<imej/09-carian.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Carian.
@@ -414,13 +439,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Hasil hanya mengandungi rekod yang policy role dan tenant benarkan.
 
 
-### 9. Kegemaran
+### 10. Kegemaran
 
 **URL:** `/app/{tenant}/kegemaran`
 
 **Tujuan:** Pintasan peribadi kepada rekod dan fail yang kerap dirujuk.
 
-![Kegemaran - paparan 200](<imej/09-kegemaran.png>)
+![Kegemaran - paparan 200](<imej/10-kegemaran.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Kegemaran.
@@ -437,13 +462,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Senarai kegemaran adalah per pengguna dan per tenant.
 
 
-### 10. Laporan
+### 11. Laporan
 
 **URL:** `/app/{tenant}/laporan`
 
 **Tujuan:** Ringkasan jumlah rekod, retensi, minit lewat, sumber dan akses sensitif mengikut kebenaran.
 
-![Laporan - paparan 200](<imej/10-laporan.png>)
+![Laporan - paparan 200](<imej/11-laporan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Laporan.
@@ -459,13 +484,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Angka dan eksport menggunakan skop rekod yang pengguna dibenarkan lihat.
 
 
-### 11. Pembetulan Rekod
+### 12. Pembetulan Rekod
 
 **URL:** `/app/{tenant}/pembetulan-rekod`
 
 **Tujuan:** Workflow pembetulan salah tawan tanpa memadam jejak nilai asal.
 
-![Pembetulan Rekod - paparan 200](<imej/11-pembetulan-rekod.png>)
+![Pembetulan Rekod - paparan 200](<imej/12-pembetulan-rekod.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Pembetulan Rekod.
@@ -482,13 +507,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Tiada perubahan senyap; setiap pembetulan mempunyai pemohon, reviewer, masa dan keputusan.
 
 
-### 12. Log Aktiviti Masjid
+### 13. Log Aktiviti Masjid
 
 **URL:** `/app/{tenant}/log-aktiviti`
 
 **Tujuan:** Timeline append-only bagi perjalanan dokumen, fail, minit, kelulusan, pelupusan, ahli dan storan dalam masjid semasa.
 
-![Log Aktiviti Masjid - paparan 200](<imej/12-log-aktiviti.png>)
+![Log Aktiviti Masjid - paparan 200](<imej/13-log-aktiviti.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Log Aktiviti Masjid.
@@ -506,13 +531,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Timeline hanya memaparkan tenant semasa dan tidak mendedahkan rekod yang role tidak dibenarkan lihat.
 
 
-### 13. Klasifikasi Fail
+### 14. Klasifikasi Fail
 
 **URL:** `/app/{tenant}/classification-nodes`
 
 **Tujuan:** Katalog klasifikasi berhierarki Fungsi, Aktiviti dan Sub-Aktiviti untuk nombor serta tajuk fail.
 
-![Klasifikasi Fail - paparan 200](<imej/13-classification-nodes.png>)
+![Klasifikasi Fail - paparan 200](<imej/14-classification-nodes.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Klasifikasi Fail.
@@ -530,13 +555,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Nod baharu muncul hanya dalam tenant semasa dan tersedia pada pembukaan fail.
 
 
-### 14. Pelupusan
+### 15. Pelupusan
 
 **URL:** `/app/{tenant}/pelupusan`
 
 **Tujuan:** Mengurus pelupusan terkawal dengan pengasingan tugas antara penyedia, pelulus dan pelaksana.
 
-![Pelupusan - paparan 200](<imej/14-pelupusan.png>)
+![Pelupusan - paparan 200](<imej/15-pelupusan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Pelupusan.
@@ -553,13 +578,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Tiada individu menyediakan, meluluskan dan melaksanakan keseluruhan pelupusan seorang diri.
 
 
-### 15. Rekod
+### 16. Rekod
 
 **URL:** `/app/{tenant}/records`
 
 **Tujuan:** Senarai rekod rasmi yang telah difailkan, dengan metadata, media, OCR, minit, kelulusan dan audit.
 
-![Rekod - paparan 200](<imej/15-records.png>)
+![Rekod - paparan 200](<imej/16-records.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Rekod.
@@ -577,13 +602,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Senarai tidak merangkumi peti masuk dan tidak mendedahkan rekod tenant/sensitiviti yang tidak dibenarkan.
 
 
-### 16. Fail
+### 17. Fail
 
 **URL:** `/app/{tenant}/registry-files`
 
 **Tujuan:** Senarai fail mengikut nombor klasifikasi, jilid, sensitiviti, medium dan penjagaan fizikal.
 
-![Fail - paparan 200](<imej/16-registry-files.png>)
+![Fail - paparan 200](<imej/17-registry-files.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Fail.
@@ -831,6 +856,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 
 **Nombor pada gambar**
 1. Jumlah hasil yang pengguna ini dibenarkan lihat.
+2. Buka rekod atau tekan bintang untuk kegemaran.
 
 **Langkah terperinci**
 1. Semak jumlah hasil.

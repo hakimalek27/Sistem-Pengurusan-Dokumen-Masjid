@@ -120,6 +120,11 @@ jobs:
       - name: Build assets
         run: npm run build
 
+      - name: Validate help catalog
+        env:
+          SCOUT_DRIVER: collection
+        run: php artisan diwan:sync-help-index
+
       - name: Migrate PostgreSQL and run full suite
         run: |
           php artisan config:clear

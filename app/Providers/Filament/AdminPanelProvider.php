@@ -41,6 +41,14 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn (): string => view('filament.auth.login-hints', ['panel' => 'admin'])->render(),
             )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn (): string => view('filament.help-launcher', ['panel' => 'admin'])->render(),
+            )
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): string => view('filament.help-assets')->render(),
+            )
             ->colors([
                 'primary' => Color::Emerald,
             ])

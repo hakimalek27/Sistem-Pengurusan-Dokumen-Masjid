@@ -17,6 +17,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "driver.js": "^1.4.0",
         "pdfjs-dist": "^6.1.200"
     }
 }

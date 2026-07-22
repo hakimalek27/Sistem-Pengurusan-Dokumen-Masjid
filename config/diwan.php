@@ -2,6 +2,17 @@
 
 return [
 
+    'guidance' => [
+        'enabled' => filter_var(env('DIWAN_GUIDANCE_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
+        'nudges_enabled' => filter_var(env('DIWAN_GUIDANCE_NUDGES_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
+        'support_enabled' => filter_var(env('DIWAN_SUPPORT_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
+        'catalog_path' => resource_path('help/guides.json'),
+        'help_index' => env('DIWAN_HELP_INDEX', 'diwan_help_guides'),
+        'analytics_retention_days' => (int) env('DIWAN_HELP_ANALYTICS_RETENTION_DAYS', 90),
+        'support_retention_months' => (int) env('DIWAN_SUPPORT_RETENTION_MONTHS', 24),
+        'support_attachment_max_kb' => 5120,
+    ],
+
     // Disk storan blob (§17): 'cos' produksi, 'local' dev, Storage::fake dalam ujian.
     'storage_disk' => env('DIWAN_STORAGE_DISK', 'cos'),
 

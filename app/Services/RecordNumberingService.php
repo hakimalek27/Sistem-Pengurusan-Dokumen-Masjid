@@ -196,6 +196,9 @@ class RecordNumberingService
             if (! $locked->isOpen()) {
                 throw ValidationException::withMessages(['file' => 'Fail telah ditutup dan tidak menerima kandungan baharu.']);
             }
+            if ((int) $locked->enclosure_count >= 100) {
+                throw ValidationException::withMessages(['file' => 'Fail telah mencapai 100 kandungan. Tutup fail dan buka jilid baharu.']);
+            }
 
             $next = (int) $locked->enclosure_count + 1;
             $locked->update(['enclosure_count' => $next]);

@@ -7,22 +7,22 @@ Pakej manual ini mempunyai **9 folder persona**: lapan role tenant dan satu alir
 - Tarikh: 22 Julai 2026.
 - Browser: Google Chrome melalui Playwright, konteks berasingan bagi setiap role.
 - Pangkalan data: SQLite latihan terasing; tiada mutasi data production.
-- Halaman sidebar: 115/115 mendapat HTTP 200.
+- Halaman sidebar: 125/125 mendapat HTTP 200.
 - Ujian URL tenant lain: 8/8 mendapat HTTP 404.
-- Tangkapan: 231 PNG beranotasi, termasuk modal, viewer PDF dan pendaftaran penuh.
+- Tangkapan: 252 PNG beranotasi, termasuk modal, viewer PDF dan pendaftaran penuh.
 - Viewer: setiap role menunggu “Halaman 1 dipaparkan” dan canvas PDF berisi sebelum gambar.
 
 | # | Persona | Halaman | Gambar tindakan + login | Silang tenant | Manual |
 |---:|---|---:|---:|---:|---|
-| 1 | Admin / Kerani | 22 | 26 | 404 | [Buka manual](<01-Admin-Kerani/MANUAL-PENGGUNA.md>) |
-| 2 | Pengerusi | 16 | 13 | 404 | [Buka manual](<02-Pengerusi/MANUAL-PENGGUNA.md>) |
-| 3 | Setiausaha | 14 | 16 | 404 | [Buka manual](<03-Setiausaha/MANUAL-PENGGUNA.md>) |
-| 4 | Bendahari | 14 | 14 | 404 | [Buka manual](<04-Bendahari/MANUAL-PENGGUNA.md>) |
-| 5 | Nazir | 12 | 12 | 404 | [Buka manual](<05-Nazir/MANUAL-PENGGUNA.md>) |
-| 6 | Ketua Imam | 12 | 11 | 404 | [Buka manual](<06-Ketua-Imam/MANUAL-PENGGUNA.md>) |
-| 7 | AJK | 12 | 9 | 404 | [Buka manual](<07-AJK/MANUAL-PENGGUNA.md>) |
-| 8 | Juruaudit | 13 | 9 | 404 | [Buka manual](<08-Juruaudit/MANUAL-PENGGUNA.md>) |
-| 9 | Orang Awam / Pendaftaran | 6 keadaan | 6 | Tidak berkenaan | [Buka manual](<09-Orang-Awam-Pendaftaran/MANUAL-PENGGUNA.md>) |
+| 1 | Admin / Kerani | 25 | 30 | 404 | [Buka manual](<01-Admin-Kerani/MANUAL-PENGGUNA.md>) |
+| 2 | Pengerusi | 17 | 13 | 404 | [Buka manual](<02-Pengerusi/MANUAL-PENGGUNA.md>) |
+| 3 | Setiausaha | 15 | 20 | 404 | [Buka manual](<03-Setiausaha/MANUAL-PENGGUNA.md>) |
+| 4 | Bendahari | 15 | 14 | 404 | [Buka manual](<04-Bendahari/MANUAL-PENGGUNA.md>) |
+| 5 | Nazir | 13 | 12 | 404 | [Buka manual](<05-Nazir/MANUAL-PENGGUNA.md>) |
+| 6 | Ketua Imam | 13 | 11 | 404 | [Buka manual](<06-Ketua-Imam/MANUAL-PENGGUNA.md>) |
+| 7 | AJK | 13 | 9 | 404 | [Buka manual](<07-AJK/MANUAL-PENGGUNA.md>) |
+| 8 | Juruaudit | 14 | 9 | 404 | [Buka manual](<08-Juruaudit/MANUAL-PENGGUNA.md>) |
+| 9 | Orang Awam / Pendaftaran | 9 keadaan | 9 | Tidak berkenaan | [Buka manual](<09-Orang-Awam-Pendaftaran/MANUAL-PENGGUNA.md>) |
 
 ## Cara membaca gambar
 

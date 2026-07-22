@@ -6,25 +6,29 @@ import path from 'node:path';
 const baseURL = process.env.MANUAL_BASE_URL ?? 'http://127.0.0.1:8094';
 const outputRoot = path.resolve(process.cwd(), 'Manual Penguna');
 const password = process.env.MANUAL_DEMO_PASSWORD;
+const helpCatalog = JSON.parse(await readFile(path.resolve(process.cwd(), 'resources/help/guides.json'), 'utf8'));
+const helpGuideIds = (helpCatalog.guides ?? []).map((guide) => guide.id);
 
 if (!password) {
     throw new Error('MANUAL_DEMO_PASSWORD is required for the isolated manual-capture accounts.');
 }
 
 const roles = [
-    { key: 'admin_masjid', label: 'Admin / Kerani', folder: '01-Admin-Kerani', email: 'admin_masjid@demo.test', pages: 22 },
-    { key: 'pengerusi', label: 'Pengerusi', folder: '02-Pengerusi', email: 'pengerusi@demo.test', pages: 16 },
-    { key: 'setiausaha', label: 'Setiausaha', folder: '03-Setiausaha', email: 'setiausaha@demo.test', pages: 14 },
-    { key: 'bendahari', label: 'Bendahari', folder: '04-Bendahari', email: 'bendahari@demo.test', pages: 14 },
-    { key: 'nazir', label: 'Nazir', folder: '05-Nazir', email: 'nazir@demo.test', pages: 12 },
-    { key: 'ketua_imam', label: 'Ketua Imam', folder: '06-Ketua-Imam', email: 'ketua_imam@demo.test', pages: 12 },
-    { key: 'ajk', label: 'AJK', folder: '07-AJK', email: 'ajk@demo.test', pages: 12 },
-    { key: 'audit', label: 'Juruaudit', folder: '08-Juruaudit', email: 'audit@demo.test', pages: 13 },
+    { key: 'admin_masjid', label: 'Admin / Kerani', folder: '01-Admin-Kerani', email: 'admin_masjid@demo.test', pages: 25 },
+    { key: 'pengerusi', label: 'Pengerusi', folder: '02-Pengerusi', email: 'pengerusi@demo.test', pages: 17 },
+    { key: 'setiausaha', label: 'Setiausaha', folder: '03-Setiausaha', email: 'setiausaha@demo.test', pages: 15 },
+    { key: 'bendahari', label: 'Bendahari', folder: '04-Bendahari', email: 'bendahari@demo.test', pages: 15 },
+    { key: 'nazir', label: 'Nazir', folder: '05-Nazir', email: 'nazir@demo.test', pages: 13 },
+    { key: 'ketua_imam', label: 'Ketua Imam', folder: '06-Ketua-Imam', email: 'ketua_imam@demo.test', pages: 13 },
+    { key: 'ajk', label: 'AJK', folder: '07-AJK', email: 'ajk@demo.test', pages: 13 },
+    { key: 'audit', label: 'Juruaudit', folder: '08-Juruaudit', email: 'audit@demo.test', pages: 14 },
 ];
 
 const manifestPath = path.join(outputRoot, 'manifest-tangkapan.json');
 const requestedRoleKey = process.env.MANUAL_ROLE;
-const selectedRoles = requestedRoleKey
+const selectedRoles = process.env.MANUAL_ONLY_PUBLIC === '1'
+    ? []
+    : requestedRoleKey
     ? roles.filter((role) => role.key === requestedRoleKey)
     : roles;
 
@@ -62,6 +66,12 @@ function letterCode(seed) {
         value = Math.floor(value / 26);
     }
     return code;
+}
+
+async function disableAutomaticGuides(context) {
+    await context.addInitScript((guideIds) => {
+        for (const guideId of guideIds) localStorage.setItem(`diwan-help-seen:${guideId}`, '1');
+    }, helpGuideIds);
 }
 
 async function ensureFolders() {
@@ -187,16 +197,38 @@ async function captureModal(page, role, imageName, buttonName, title, calloutNot
         { locator: (p) => p.locator('.fi-modal-window:visible').last().getByRole('button', { name: /Hantar|Simpan|Sahkan|Klasifikasikan|Cipta|Luluskan|Lulus|Tolak/i }).filter({ visible: true }).last(), note: calloutNotes[1] ?? 'Tekan hanya selepas maklumat disemak.' },
     ];
     const target = path.join(outputRoot, role.folder, 'imej', imageName);
+    await expandDialogForCapture(dialog);
+    const notes = await shot(page, target, title, callouts, true);
+    await page.goto(page.url().split('?')[0]);
+    return { image: `imej/${imageName}`, title, labels: labels.map((v) => v.replace(/\s+/g, ' ').trim()).filter(Boolean), notes };
+}
+
+async function expandDialogForCapture(dialog) {
     await dialog.evaluate((windowElement) => {
         const container = windowElement.closest('.fi-modal-window-ctn');
-        if (!container || container.scrollHeight <= container.clientHeight) return;
+        if (!container) return;
+
+        const closeOverlay = container.querySelector('.fi-modal-close-overlay');
+        container.style.position = '';
+        container.style.height = '';
+        container.style.overflow = '';
+        if (closeOverlay) {
+            closeOverlay.style.position = '';
+            closeOverlay.style.height = '';
+        }
+        document.documentElement.style.height = '';
+        document.body.style.height = '';
+        document.body.style.minHeight = '';
+        document.body.style.overflow = '';
+        void container.offsetHeight;
+
+        if (container.scrollHeight <= container.clientHeight) return;
 
         const height = Math.ceil(Math.max(container.scrollHeight, windowElement.getBoundingClientRect().bottom + 16));
         container.style.position = 'absolute';
         container.style.height = `${height}px`;
         container.style.overflow = 'visible';
 
-        const closeOverlay = container.querySelector('.fi-modal-close-overlay');
         if (closeOverlay) {
             closeOverlay.style.position = 'absolute';
             closeOverlay.style.height = '100%';
@@ -207,9 +239,6 @@ async function captureModal(page, role, imageName, buttonName, title, calloutNot
         document.body.style.minHeight = `${height}px`;
         document.body.style.overflow = 'visible';
     });
-    const notes = await shot(page, target, title, callouts, true);
-    await page.goto(page.url().split('?')[0]);
-    return { image: `imej/${imageName}`, title, labels: labels.map((v) => v.replace(/\s+/g, ' ').trim()).filter(Boolean), notes };
 }
 
 async function captureModalAtUrl(page, url, role, imageName, buttonName, title, calloutNotes = []) {
@@ -220,6 +249,84 @@ async function captureModalAtUrl(page, url, role, imageName, buttonName, title, 
     } finally {
         await freshPage.close();
     }
+}
+
+async function captureClassificationWizard(page, role) {
+    await page.goto('/app/mam/peti-masuk');
+    const button = page.getByRole('button', { name: 'Klasifikasikan', exact: true }).filter({ visible: true }).first();
+    if (await button.count() === 0) return [];
+
+    await button.click();
+    const dialog = page.locator('.fi-modal-window:visible').last();
+    await dialog.waitFor({ state: 'visible', timeout: 10_000 });
+    const captures = [];
+
+    const captureStep = async (number, slug, title, notes) => {
+        const activeStep = dialog.locator('form.fi-sc-wizard-step.fi-active');
+        await activeStep.waitFor({ state: 'visible', timeout: 10_000 });
+        await expandDialogForCapture(dialog);
+        const imageName = number === 1 ? 'inbox-klasifikasi.png' : `inbox-klasifikasi-${String(number).padStart(2, '0')}-${slug}.png`;
+        const imagePath = path.join(outputRoot, role.folder, 'imej', imageName);
+        const labels = (await activeStep.locator('label').allTextContents()).map((value) => value.replace(/\s+/g, ' ').trim()).filter(Boolean);
+        const callouts = [
+            { locator: () => activeStep, note: notes[0] },
+            { locator: (p) => p.locator('.fi-modal-window:visible').last().getByRole('button', { name: /Seterus|Klasifikasikan/i }).filter({ visible: true }).last(), note: notes[1] },
+        ];
+
+        captures.push({
+            image: `imej/${imageName}`,
+            title: `Klasifikasi peti masuk ${number}/5 - ${title}`,
+            labels,
+            notes: await shot(page, imagePath, `Klasifikasi ${number}/5 - ${title}`, callouts, true),
+        });
+    };
+
+    const next = () => dialog.getByRole('button', { name: 'Seterus', exact: true });
+
+    await captureStep(1, 'semak-sumber', 'Semak dokumen dan sumber', [
+        'Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.',
+        'Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.',
+    ]);
+    await next().click();
+    await dialog.locator('form.fi-active').getByText('Butiran Rekod', { exact: true }).waitFor({ state: 'visible', timeout: 10_000 });
+    await captureStep(2, 'jenis-metadata', 'Jenis dan metadata', [
+        'Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.',
+        'u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.',
+    ]);
+
+    const recordType = page.locator('#mountedActionSchema0\\.record_type');
+    if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
+    await page.waitForTimeout(500);
+    await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    await next().click();
+    await dialog.locator('form.fi-active').getByText('Failkan Ke', { exact: false }).first().waitFor({ state: 'visible', timeout: 10_000 });
+    await captureStep(3, 'fail-sensitiviti', 'Fail dan sensitiviti', [
+        'Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.',
+        'Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.',
+    ]);
+
+    const fileStep = dialog.locator('form.fi-active');
+    await fileStep.locator('.fi-select-input-btn').first().click();
+    await page.getByRole('option', { name: /MAM\./ }).first().click();
+    await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await next().click();
+    await dialog.locator('form.fi-active').getByText('Untuk Tindakan (Minit)', { exact: false }).first().waitFor({ state: 'visible', timeout: 10_000 });
+    await captureStep(4, 'edaran-minit', 'Edaran minit', [
+        'Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.',
+        'Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.',
+    ]);
+
+    await page.locator('#mountedActionSchema0\\.minit_priority').selectOption('biasa');
+    await next().click();
+    await dialog.locator('form.fi-active').getByText('Kesan hantar', { exact: true }).waitFor({ state: 'visible', timeout: 10_000 });
+    await captureStep(5, 'semakan-akhir', 'Semakan akhir', [
+        'Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.',
+        'Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.',
+    ]);
+
+    await page.goto('/app/mam/peti-masuk');
+
+    return captures;
 }
 
 async function captureRecordDetails(page, role, extras) {
@@ -335,12 +442,39 @@ async function captureRole(browser, role) {
         locale: 'ms-MY',
         colorScheme: 'light',
     });
+    await disableAutomaticGuides(context);
     const page = await context.newPage();
     const browserErrors = [];
     page.on('pageerror', (error) => browserErrors.push(error.message));
     page.on('console', (message) => { if (message.type() === 'error') browserErrors.push(message.text()); });
 
     const loginCapture = await login(page, role);
+    if (process.env.MANUAL_ONLY_CLASSIFICATION === '1') {
+        const previous = manifest.roles[role.key];
+        if (!previous || !['admin_masjid', 'setiausaha'].includes(role.key)) {
+            throw new Error('MANUAL_ONLY_CLASSIFICATION requires an existing Admin/Kerani or Setiausaha manifest entry.');
+        }
+        const classification = await captureClassificationWizard(page, role);
+        const crossTenant = await page.goto('/app/man/records');
+        const errors = [...new Set(browserErrors)].filter((message) => !message.includes('Failed to load resource: the server responded with a status of 404'));
+        manifest.roles[role.key] = {
+            ...previous,
+            login: loginCapture,
+            extras: [
+                ...previous.extras.filter((extra) => !extra.title.startsWith('Klasifikasi peti masuk')),
+                ...classification,
+            ],
+            crossTenantStatus: crossTenant?.status() ?? null,
+            browserErrors: errors,
+        };
+        if (manifest.roles[role.key].crossTenantStatus !== 404) {
+            manifest.errors.push(`${role.label}: cross-tenant route returned ${manifest.roles[role.key].crossTenantStatus}`);
+        }
+        if (errors.length) manifest.errors.push(`${role.label}: browser errors: ${errors.join(' | ')}`);
+        await context.close();
+
+        return;
+    }
     const navigation = await page.locator('.fi-sidebar a[href]').evaluateAll((nodes) => nodes
         .filter((node) => node.offsetParent !== null)
         .map((node) => ({ label: (node.textContent ?? '').replace(/\s+/g, ' ').trim(), href: node.href }))
@@ -388,12 +522,7 @@ async function captureRole(browser, role) {
     }
 
     if (['admin_masjid', 'setiausaha'].includes(role.key)) {
-        await page.goto('/app/mam/peti-masuk');
-        const captured = await captureModal(page, role, 'inbox-klasifikasi.png', 'Klasifikasikan', 'Klasifikasi peti masuk', [
-            'Lengkapkan metadata, pilih atau buka fail, tetapkan sensitiviti dan penerima minit.',
-            'Klasifikasikan hanya selepas dokumen, rujukan dan penerima disahkan.',
-        ]);
-        if (captured) extras.push(captured);
+        extras.push(...await captureClassificationWizard(page, role));
     }
 
     if (role.key === 'admin_masjid') {
@@ -471,6 +600,7 @@ async function captureRole(browser, role) {
 async function capturePublic(browser) {
     const folder = path.join(outputRoot, '09-Orang-Awam-Pendaftaran', 'imej');
     const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 }, locale: 'ms-MY' });
+    await disableAutomaticGuides(context);
     const page = await context.newPage();
     const captures = [];
 
@@ -481,17 +611,12 @@ async function capturePublic(browser) {
     ]) });
 
     await page.goto('/daftar');
-    captures.push({ image: 'imej/02-borang-daftar.png', title: 'Borang pendaftaran', notes: await shot(page, path.join(folder, '02-borang-daftar.png'), 'Daftar masjid', [
+    captures.push({ image: 'imej/02-borang-daftar.png', title: 'Pendaftaran langkah 1 - Masjid', notes: await shot(page, path.join(folder, '02-borang-daftar.png'), 'Daftar masjid - langkah 1', [
         { locator: (p) => p.locator('input[wire\\:model\\.blur="name"]'), note: 'Nama rasmi masjid.' },
         { locator: (p) => p.locator('select[wire\\:model="state"]'), note: 'Negeri dan daerah masjid.' },
         { locator: (p) => p.locator('input[wire\\:model="code"]'), note: 'Kod akronim unik 3 hingga 6 huruf.' },
         { locator: (p) => p.locator('input[wire\\:model="slug"]'), note: 'Slug URL ringkas, huruf kecil dan nombor sahaja.' },
-        { locator: (p) => p.locator('input[wire\\:model="admin_name"]'), note: 'Nama orang yang akan menjadi Admin / Kerani pertama.' },
-        { locator: (p) => p.locator('input[wire\\:model="email"]'), note: 'E-mel aktif untuk menerima pautan kelulusan.' },
-        { locator: (p) => p.locator('input[wire\\:model="phone_wa"]'), note: 'Nombor WhatsApp format negara, contoh 60123456789.' },
-        { locator: (p) => p.locator('input[type="checkbox"]').first(), note: 'Baca dan setuju Terma serta DPA.' },
-        { locator: (p) => p.locator('input[type="checkbox"]').nth(1), note: 'Fahami dan setuju dasar retensi.' },
-        { locator: (p) => p.getByRole('button', { name: 'Hantar Permohonan' }), note: 'Hantar selepas semua maklumat disemak.' },
+        { locator: (p) => p.getByRole('button', { name: 'Seterusnya' }), note: 'Teruskan selepas identiti masjid disemak.' },
     ], true) });
 
     const suffix = String(Date.now()).slice(-7);
@@ -504,9 +629,27 @@ async function capturePublic(browser) {
     await page.locator('input[wire\\:model="district"]').fill('Gombak');
     await page.locator('input[wire\\:model="code"]').fill(letterCode(Date.now()));
     await page.locator('input[wire\\:model="slug"]').fill(slug);
+    await page.getByRole('button', { name: 'Seterusnya' }).click();
+    await page.locator('[data-help-target="registration-admin"]').waitFor({ state: 'visible', timeout: 15_000 });
+    captures.push({ image: 'imej/02b-pentadbir.png', title: 'Pendaftaran langkah 2 - Pentadbir', notes: await shot(page, path.join(folder, '02b-pentadbir.png'), 'Daftar masjid - langkah 2', [
+        { locator: (p) => p.locator('input[wire\\:model="admin_name"]'), note: 'Nama orang yang akan menjadi Admin / Kerani pertama.' },
+        { locator: (p) => p.locator('input[wire\\:model="email"]'), note: 'E-mel aktif untuk menerima pautan kelulusan.' },
+        { locator: (p) => p.locator('input[wire\\:model="phone_wa"]'), note: 'Nombor WhatsApp format negara, contoh 60123456789.' },
+        { locator: (p) => p.getByRole('button', { name: 'Kembali' }), note: 'Kembali jika maklumat masjid perlu dibetulkan.' },
+        { locator: (p) => p.getByRole('button', { name: 'Seterusnya' }), note: 'Teruskan selepas butiran pentadbir disemak.' },
+    ]) });
     await page.locator('input[wire\\:model="admin_name"]').fill('Pentadbir Manual Latihan');
     await page.locator('input[wire\\:model="email"]').fill(email);
     await page.locator('input[wire\\:model="phone_wa"]').fill(`6011${suffix}`);
+    await page.getByRole('button', { name: 'Seterusnya' }).click();
+    await page.locator('[data-help-target="registration-consent"]').waitFor({ state: 'visible', timeout: 15_000 });
+    captures.push({ image: 'imej/02c-persetujuan.png', title: 'Pendaftaran langkah 3 - Semakan dan persetujuan', notes: await shot(page, path.join(folder, '02c-persetujuan.png'), 'Daftar masjid - langkah 3', [
+        { locator: (p) => p.locator('.registration-review'), note: 'Sahkan masjid dan pentadbir yang akan diwujudkan.' },
+        { locator: (p) => p.locator('input[type="checkbox"]').first(), note: 'Baca dan setuju Terma serta DPA.' },
+        { locator: (p) => p.locator('input[type="checkbox"]').nth(1), note: 'Fahami dan setuju dasar retensi.' },
+        { locator: (p) => p.getByRole('button', { name: 'Kembali' }), note: 'Kembali jika ringkasan tidak tepat.' },
+        { locator: (p) => p.getByRole('button', { name: 'Hantar Permohonan' }), note: 'Hantar sekali selepas semua maklumat disahkan.' },
+    ], true) });
     await page.locator('input[type="checkbox"]').nth(0).check();
     await page.locator('input[type="checkbox"]').nth(1).check();
     await page.getByRole('button', { name: 'Hantar Permohonan' }).click();
@@ -517,6 +660,7 @@ async function capturePublic(browser) {
     ]) });
 
     const adminContext = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(adminContext);
     const admin = await adminContext.newPage();
     await admin.goto('/admin/login');
     await admin.locator('input[id="form.login"]').fill('superadmin@diwan.test');
@@ -559,6 +703,13 @@ async function capturePublic(browser) {
         { locator: (p) => p.getByRole('link', { name: /kata laluan/i }), note: 'Gunakan log masuk kata laluan jika sudah ditetapkan.' },
     ]) });
 
+    await page.goto('/bantuan');
+    captures.push({ image: 'imej/07-pusat-bantuan.png', title: 'Pusat bantuan orang awam', notes: await shot(page, path.join(folder, '07-pusat-bantuan.png'), 'Pusat bantuan orang awam', [
+        { locator: (p) => p.locator('#help-query'), note: 'Cari panduan dengan ayat biasa atau istilah yang hampir sama.' },
+        { locator: (p) => p.locator('[data-help-target="help-diagnosis"]'), note: 'Jalankan diagnosis baca sahaja bagi masalah pendaftaran atau log masuk.' },
+        { locator: (p) => p.locator('[data-help-target="help-support"]'), note: 'Lapor masalah tanpa memasukkan kata laluan, token atau dokumen sensitif.' },
+    ], true) });
+
     manifest.public = { folder: '09-Orang-Awam-Pendaftaran', captures, completedRegistration: true };
     await context.close();
 }
@@ -573,10 +724,13 @@ try {
             captures: [
                 ['01-laman-utama.png', 'Laman utama'],
                 ['02-borang-daftar.png', 'Borang pendaftaran'],
+                ['02b-pentadbir.png', 'Pendaftaran langkah 2 - Pentadbir'],
+                ['02c-persetujuan.png', 'Pendaftaran langkah 3 - Semakan dan persetujuan'],
                 ['03-permohonan-diterima.png', 'Permohonan diterima'],
                 ['04-tetapkan-kata-laluan.png', 'Tetapkan kata laluan kali pertama'],
                 ['05-persediaan-pertama.png', 'Persediaan masjid kali pertama'],
                 ['06-log-masuk-pautan.png', 'Log masuk tanpa kata laluan'],
+                ['07-pusat-bantuan.png', 'Pusat bantuan orang awam'],
             ].map(([image, title]) => ({ image: `imej/${image}`, title, notes: [] })),
         };
     } else if (process.env.MANUAL_SKIP_PUBLIC !== '1') {

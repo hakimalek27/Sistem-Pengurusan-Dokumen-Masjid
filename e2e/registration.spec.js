@@ -2,6 +2,13 @@ import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 const logPath = 'storage/logs/laravel.log';
+const guideIds = JSON.parse(readFileSync('resources/help/guides.json', 'utf8')).guides.map((guide) => guide.id);
+
+async function disableAutomaticGuides(context) {
+    await context.addInitScript((ids) => {
+        for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
+    }, guideIds);
+}
 
 function letterCode(seed) {
     let value = seed;
@@ -24,6 +31,7 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     const initialLogSize = readFileSync(logPath, 'utf8').length;
 
     const publicContext = await browser.newContext({ baseURL });
+    await disableAutomaticGuides(publicContext);
     const registration = await publicContext.newPage();
     await registration.goto('/daftar');
     await registration.locator('input[wire\\:model\\.blur="name"]').fill(name);
@@ -31,9 +39,15 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     await registration.locator('input[wire\\:model="district"]').fill('Gombak');
     await registration.locator('input[wire\\:model="code"]').fill(code);
     await registration.locator('input[wire\\:model="slug"]').fill(slug);
+    await registration.getByRole('button', { name: 'Seterusnya' }).click();
+    await expect(registration.locator('[data-help-target="registration-admin"]')).toBeVisible();
     await registration.locator('input[wire\\:model="admin_name"]').fill('Pentadbir E2E');
     await registration.locator('input[wire\\:model="email"]').fill(email);
     await registration.locator('input[wire\\:model="phone_wa"]').fill(phone);
+    await registration.getByRole('button', { name: 'Seterusnya' }).click();
+    const review = registration.locator('.registration-review');
+    await expect(review).toContainText(name);
+    await expect(review).toContainText('Pentadbir E2E');
     await registration.locator('input[type="checkbox"]').nth(0).check();
     await registration.locator('input[type="checkbox"]').nth(1).check();
     await registration.getByRole('button', { name: 'Hantar Permohonan' }).click();
@@ -41,6 +55,7 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     await publicContext.close();
 
     const adminContext = await browser.newContext({ baseURL });
+    await disableAutomaticGuides(adminContext);
     const admin = await adminContext.newPage();
     await admin.goto('/admin/login');
     await admin.locator('input[id="form.login"]').fill('superadmin@diwan.test');
@@ -62,6 +77,7 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     expect(token, 'Magic link tidak ditemui dalam mail log').toBeTruthy();
 
     const userContext = await browser.newContext({ baseURL });
+    await disableAutomaticGuides(userContext);
     const user = await userContext.newPage();
     await user.goto(`/masuk/${token}`);
     // Fasa B: akaun baharu tiada kata laluan → gate paksa tetapkan dahulu.

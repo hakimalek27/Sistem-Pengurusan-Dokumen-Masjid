@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-21T23:58:52.822Z",
-  "baseURL": "http://127.0.0.1:8094",
+  "generatedAt": "2026-07-22T03:52:09.507Z",
+  "baseURL": "http://127.0.0.1:8095",
   "roles": {
     "admin_masjid": {
       "label": "Admin / Kerani",
       "folder": "01-Admin-Kerani",
-      "expectedPages": 22,
-      "actualPages": 22,
+      "expectedPages": 25,
+      "actualPages": 25,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -39,6 +39,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -70,10 +74,105 @@
         },
         {
           "order": 3,
+          "label": "Analitik Bantuan",
+          "path": "/app/mam/analitik-bantuan",
+          "status": 200,
+          "image": "imej/03-analitik-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Analitik Bantuan."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 4,
+          "label": "Tiket Sokongan",
+          "path": "/app/mam/tiket-sokongan",
+          "status": 200,
+          "image": "imej/04-tiket-sokongan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Tiket Sokongan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Diterima"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 5,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/05-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 6,
           "label": "Persediaan Berpandu",
           "path": "/app/mam/persediaan",
           "status": 200,
-          "image": "imej/03-persediaan.png",
+          "image": "imej/06-persediaan.png",
           "notes": [
             {
               "number": 1,
@@ -88,11 +187,11 @@
           "tabs": []
         },
         {
-          "order": 4,
+          "order": 7,
           "label": "Ahli & Peranan",
           "path": "/app/mam/ahli-peranan",
           "status": 200,
-          "image": "imej/04-ahli-peranan.png",
+          "image": "imej/07-ahli-peranan.png",
           "notes": [
             {
               "number": 1,
@@ -128,11 +227,11 @@
           "tabs": []
         },
         {
-          "order": 5,
+          "order": 8,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/05-classification-nodes.png",
+          "image": "imej/08-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -158,11 +257,11 @@
           "tabs": []
         },
         {
-          "order": 6,
+          "order": 9,
           "label": "Pelupusan",
           "path": "/app/mam/pelupusan",
           "status": 200,
-          "image": "imej/06-pelupusan.png",
+          "image": "imej/09-pelupusan.png",
           "notes": [
             {
               "number": 1,
@@ -176,11 +275,11 @@
           "tabs": []
         },
         {
-          "order": 7,
+          "order": 10,
           "label": "Peraturan Retensi",
           "path": "/app/mam/retensi-peraturan",
           "status": 200,
-          "image": "imej/07-retensi-peraturan.png",
+          "image": "imej/10-retensi-peraturan.png",
           "notes": [
             {
               "number": 1,
@@ -197,11 +296,11 @@
           "tabs": []
         },
         {
-          "order": 8,
+          "order": 11,
           "label": "Tetapan Masjid",
           "path": "/app/mam/tetapan-masjid",
           "status": 200,
-          "image": "imej/08-tetapan-masjid.png",
+          "image": "imej/11-tetapan-masjid.png",
           "notes": [
             {
               "number": 1,
@@ -220,11 +319,11 @@
           "tabs": []
         },
         {
-          "order": 9,
+          "order": 12,
           "label": "Penggunaan & Storan",
           "path": "/app/mam/penggunaan",
           "status": 200,
-          "image": "imej/09-penggunaan.png",
+          "image": "imej/12-penggunaan.png",
           "notes": [
             {
               "number": 1,
@@ -242,11 +341,11 @@
           "tabs": []
         },
         {
-          "order": 10,
+          "order": 13,
           "label": "Retensi & Pegangan",
           "path": "/app/mam/retensi",
           "status": 200,
-          "image": "imej/10-retensi.png",
+          "image": "imej/13-retensi.png",
           "notes": [
             {
               "number": 1,
@@ -264,11 +363,11 @@
           "tabs": []
         },
         {
-          "order": 11,
+          "order": 14,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/11-delegasi.png",
+          "image": "imej/14-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -286,11 +385,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 15,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/12-profil.png",
+          "image": "imej/15-profil.png",
           "notes": [
             {
               "number": 1,
@@ -306,11 +405,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 16,
           "label": "Peti Masuk 1",
           "path": "/app/mam/peti-masuk",
           "status": 200,
-          "image": "imej/13-peti-masuk.png",
+          "image": "imej/16-peti-masuk.png",
           "notes": [
             {
               "number": 1,
@@ -335,11 +434,11 @@
           "tabs": []
         },
         {
-          "order": 14,
+          "order": 17,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/14-records.png",
+          "image": "imej/17-records.png",
           "notes": [
             {
               "number": 1,
@@ -359,11 +458,11 @@
           "tabs": []
         },
         {
-          "order": 15,
+          "order": 18,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/15-registry-files.png",
+          "image": "imej/18-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -391,11 +490,11 @@
           "tabs": []
         },
         {
-          "order": 16,
+          "order": 19,
           "label": "Minit Saya",
           "path": "/app/mam/minit-saya",
           "status": 200,
-          "image": "imej/16-minit-saya.png",
+          "image": "imej/19-minit-saya.png",
           "notes": [
             {
               "number": 1,
@@ -409,11 +508,11 @@
           "tabs": []
         },
         {
-          "order": 17,
+          "order": 20,
           "label": "Kelulusan",
           "path": "/app/mam/kelulusan",
           "status": 200,
-          "image": "imej/17-kelulusan.png",
+          "image": "imej/20-kelulusan.png",
           "notes": [
             {
               "number": 1,
@@ -426,11 +525,11 @@
           "tabs": []
         },
         {
-          "order": 18,
+          "order": 21,
           "label": "Carian",
           "path": "/app/mam/carian",
           "status": 200,
-          "image": "imej/18-carian.png",
+          "image": "imej/21-carian.png",
           "notes": [
             {
               "number": 1,
@@ -453,11 +552,11 @@
           "tabs": []
         },
         {
-          "order": 19,
+          "order": 22,
           "label": "Kegemaran",
           "path": "/app/mam/kegemaran",
           "status": 200,
-          "image": "imej/19-kegemaran.png",
+          "image": "imej/22-kegemaran.png",
           "notes": [
             {
               "number": 1,
@@ -472,11 +571,11 @@
           "tabs": []
         },
         {
-          "order": 20,
+          "order": 23,
           "label": "Laporan",
           "path": "/app/mam/laporan",
           "status": 200,
-          "image": "imej/20-laporan.png",
+          "image": "imej/23-laporan.png",
           "notes": [
             {
               "number": 1,
@@ -494,11 +593,11 @@
           "tabs": []
         },
         {
-          "order": 21,
+          "order": 24,
           "label": "Pembetulan Rekod",
           "path": "/app/mam/pembetulan-rekod",
           "status": 200,
-          "image": "imej/21-pembetulan-rekod.png",
+          "image": "imej/24-pembetulan-rekod.png",
           "notes": [
             {
               "number": 1,
@@ -527,11 +626,11 @@
           "tabs": []
         },
         {
-          "order": 22,
+          "order": 25,
           "label": "Log Aktiviti Masjid",
           "path": "/app/mam/log-aktiviti",
           "status": 200,
-          "image": "imej/22-log-aktiviti.png",
+          "image": "imej/25-log-aktiviti.png",
           "notes": [
             {
               "number": 1,
@@ -723,40 +822,6 @@
             {
               "number": 1,
               "note": "Semak semua medan dalam dialog sebelum menghantar."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi.png",
-          "title": "Klasifikasi peti masuk",
-          "labels": [
-            "Jenis Rekod*",
-            "Tajuk",
-            "Arah*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod*",
-            "Tarikh Terima",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Nama Penerima",
-            "Jumlah Lampiran",
-            "Untuk Perhatian (u.p.)",
-            "Failkan Ke*",
-            "Tahap Akses Rekod*",
-            "Untuk Tindakan (Minit)",
-            "Untuk Makluman (s.k.)",
-            "Catatan / Arahan Minit",
-            "Keutamaan Minit"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Lengkapkan metadata, pilih atau buka fail, tetapkan sensitiviti dan penerima minit."
-            },
-            {
-              "number": 2,
-              "note": "Klasifikasikan hanya selepas dokumen, rujukan dan penerima disahkan."
             }
           ]
         },
@@ -1031,6 +1096,106 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi.png",
+          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
+            },
+            {
+              "number": 2,
+              "note": "Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
+          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
+          "labels": [
+            "Jenis Rekod*",
+            "Tajuk",
+            "Arah*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod*",
+            "Tarikh Terima",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Nama Penerima",
+            "Jumlah Lampiran",
+            "Untuk Perhatian (u.p.)"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
+            },
+            {
+              "number": 2,
+              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
+          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
+          "labels": [
+            "Failkan Ke*",
+            "Tahap Akses Rekod*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
+            },
+            {
+              "number": 2,
+              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
+          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
+          "labels": [
+            "Untuk Tindakan (Minit)",
+            "Untuk Makluman (s.k.)",
+            "Catatan / Arahan Minit",
+            "Keutamaan Minit*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
+            },
+            {
+              "number": 2,
+              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
+          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
+            },
+            {
+              "number": 2,
+              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
             }
           ]
         }
@@ -1041,8 +1206,8 @@
     "pengerusi": {
       "label": "Pengerusi",
       "folder": "02-Pengerusi",
-      "expectedPages": 16,
-      "actualPages": 16,
+      "expectedPages": 17,
+      "actualPages": 17,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -1075,6 +1240,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -1106,10 +1275,65 @@
         },
         {
           "order": 3,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/03-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 4,
           "label": "Penggunaan & Storan",
           "path": "/app/mam/penggunaan",
           "status": 200,
-          "image": "imej/03-penggunaan.png",
+          "image": "imej/04-penggunaan.png",
           "notes": [
             {
               "number": 1,
@@ -1122,11 +1346,11 @@
           "tabs": []
         },
         {
-          "order": 4,
+          "order": 5,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/04-delegasi.png",
+          "image": "imej/05-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -1144,11 +1368,11 @@
           "tabs": []
         },
         {
-          "order": 5,
+          "order": 6,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/05-profil.png",
+          "image": "imej/06-profil.png",
           "notes": [
             {
               "number": 1,
@@ -1164,11 +1388,11 @@
           "tabs": []
         },
         {
-          "order": 6,
+          "order": 7,
           "label": "Minit Saya 1",
           "path": "/app/mam/minit-saya",
           "status": 200,
-          "image": "imej/06-minit-saya.png",
+          "image": "imej/07-minit-saya.png",
           "notes": [
             {
               "number": 1,
@@ -1184,11 +1408,11 @@
           "tabs": []
         },
         {
-          "order": 7,
+          "order": 8,
           "label": "Kelulusan 2",
           "path": "/app/mam/kelulusan",
           "status": 200,
-          "image": "imej/07-kelulusan.png",
+          "image": "imej/08-kelulusan.png",
           "notes": [
             {
               "number": 1,
@@ -1205,11 +1429,11 @@
           "tabs": []
         },
         {
-          "order": 8,
+          "order": 9,
           "label": "Carian",
           "path": "/app/mam/carian",
           "status": 200,
-          "image": "imej/08-carian.png",
+          "image": "imej/09-carian.png",
           "notes": [
             {
               "number": 1,
@@ -1232,11 +1456,11 @@
           "tabs": []
         },
         {
-          "order": 9,
+          "order": 10,
           "label": "Kegemaran",
           "path": "/app/mam/kegemaran",
           "status": 200,
-          "image": "imej/09-kegemaran.png",
+          "image": "imej/10-kegemaran.png",
           "notes": [
             {
               "number": 1,
@@ -1251,11 +1475,11 @@
           "tabs": []
         },
         {
-          "order": 10,
+          "order": 11,
           "label": "Laporan",
           "path": "/app/mam/laporan",
           "status": 200,
-          "image": "imej/10-laporan.png",
+          "image": "imej/11-laporan.png",
           "notes": [
             {
               "number": 1,
@@ -1268,11 +1492,11 @@
           "tabs": []
         },
         {
-          "order": 11,
+          "order": 12,
           "label": "Pembetulan Rekod",
           "path": "/app/mam/pembetulan-rekod",
           "status": 200,
-          "image": "imej/11-pembetulan-rekod.png",
+          "image": "imej/12-pembetulan-rekod.png",
           "notes": [
             {
               "number": 1,
@@ -1285,11 +1509,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Log Aktiviti Masjid",
           "path": "/app/mam/log-aktiviti",
           "status": 200,
-          "image": "imej/12-log-aktiviti.png",
+          "image": "imej/13-log-aktiviti.png",
           "notes": [
             {
               "number": 1,
@@ -1320,11 +1544,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/13-classification-nodes.png",
+          "image": "imej/14-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -1346,11 +1570,11 @@
           "tabs": []
         },
         {
-          "order": 14,
+          "order": 15,
           "label": "Pelupusan",
           "path": "/app/mam/pelupusan",
           "status": 200,
-          "image": "imej/14-pelupusan.png",
+          "image": "imej/15-pelupusan.png",
           "notes": [
             {
               "number": 1,
@@ -1363,11 +1587,11 @@
           "tabs": []
         },
         {
-          "order": 15,
+          "order": 16,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/15-records.png",
+          "image": "imej/16-records.png",
           "notes": [
             {
               "number": 1,
@@ -1386,11 +1610,11 @@
           "tabs": []
         },
         {
-          "order": 16,
+          "order": 17,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/16-registry-files.png",
+          "image": "imej/17-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -1642,6 +1866,10 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -1652,8 +1880,8 @@
     "setiausaha": {
       "label": "Setiausaha",
       "folder": "03-Setiausaha",
-      "expectedPages": 14,
-      "actualPages": 14,
+      "expectedPages": 15,
+      "actualPages": 15,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -1686,6 +1914,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -1695,10 +1927,65 @@
         },
         {
           "order": 2,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/02-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 3,
           "label": "Peti Masuk 1",
           "path": "/app/mam/peti-masuk",
           "status": 200,
-          "image": "imej/02-peti-masuk.png",
+          "image": "imej/03-peti-masuk.png",
           "notes": [
             {
               "number": 1,
@@ -1723,11 +2010,11 @@
           "tabs": []
         },
         {
-          "order": 3,
+          "order": 4,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/03-records.png",
+          "image": "imej/04-records.png",
           "notes": [
             {
               "number": 1,
@@ -1747,11 +2034,11 @@
           "tabs": []
         },
         {
-          "order": 4,
+          "order": 5,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/04-registry-files.png",
+          "image": "imej/05-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -1776,11 +2063,11 @@
           "tabs": []
         },
         {
-          "order": 5,
+          "order": 6,
           "label": "Minit Saya 1",
           "path": "/app/mam/minit-saya",
           "status": 200,
-          "image": "imej/05-minit-saya.png",
+          "image": "imej/06-minit-saya.png",
           "notes": [
             {
               "number": 1,
@@ -1796,11 +2083,11 @@
           "tabs": []
         },
         {
-          "order": 6,
+          "order": 7,
           "label": "Kelulusan",
           "path": "/app/mam/kelulusan",
           "status": 200,
-          "image": "imej/06-kelulusan.png",
+          "image": "imej/07-kelulusan.png",
           "notes": [
             {
               "number": 1,
@@ -1813,11 +2100,11 @@
           "tabs": []
         },
         {
-          "order": 7,
+          "order": 8,
           "label": "Carian",
           "path": "/app/mam/carian",
           "status": 200,
-          "image": "imej/07-carian.png",
+          "image": "imej/08-carian.png",
           "notes": [
             {
               "number": 1,
@@ -1840,11 +2127,11 @@
           "tabs": []
         },
         {
-          "order": 8,
+          "order": 9,
           "label": "Kegemaran",
           "path": "/app/mam/kegemaran",
           "status": 200,
-          "image": "imej/08-kegemaran.png",
+          "image": "imej/09-kegemaran.png",
           "notes": [
             {
               "number": 1,
@@ -1859,11 +2146,11 @@
           "tabs": []
         },
         {
-          "order": 9,
+          "order": 10,
           "label": "Laporan",
           "path": "/app/mam/laporan",
           "status": 200,
-          "image": "imej/09-laporan.png",
+          "image": "imej/10-laporan.png",
           "notes": [
             {
               "number": 1,
@@ -1876,11 +2163,11 @@
           "tabs": []
         },
         {
-          "order": 10,
+          "order": 11,
           "label": "Pembetulan Rekod",
           "path": "/app/mam/pembetulan-rekod",
           "status": 200,
-          "image": "imej/10-pembetulan-rekod.png",
+          "image": "imej/11-pembetulan-rekod.png",
           "notes": [
             {
               "number": 1,
@@ -1909,11 +2196,11 @@
           "tabs": []
         },
         {
-          "order": 11,
+          "order": 12,
           "label": "Log Aktiviti Masjid",
           "path": "/app/mam/log-aktiviti",
           "status": 200,
-          "image": "imej/11-log-aktiviti.png",
+          "image": "imej/12-log-aktiviti.png",
           "notes": [
             {
               "number": 1,
@@ -1944,11 +2231,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/12-classification-nodes.png",
+          "image": "imej/13-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -1970,11 +2257,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/13-delegasi.png",
+          "image": "imej/14-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -1991,11 +2278,11 @@
           "tabs": []
         },
         {
-          "order": 14,
+          "order": 15,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/14-profil.png",
+          "image": "imej/15-profil.png",
           "notes": [
             {
               "number": 1,
@@ -2072,40 +2359,6 @@
             {
               "number": 1,
               "note": "Semak semua medan dalam dialog sebelum menghantar."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi.png",
-          "title": "Klasifikasi peti masuk",
-          "labels": [
-            "Jenis Rekod*",
-            "Tajuk",
-            "Arah*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod*",
-            "Tarikh Terima",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Nama Penerima",
-            "Jumlah Lampiran",
-            "Untuk Perhatian (u.p.)",
-            "Failkan Ke*",
-            "Tahap Akses Rekod*",
-            "Untuk Tindakan (Minit)",
-            "Untuk Makluman (s.k.)",
-            "Catatan / Arahan Minit",
-            "Keutamaan Minit"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Lengkapkan metadata, pilih atau buka fail, tetapkan sensitiviti dan penerima minit."
-            },
-            {
-              "number": 2,
-              "note": "Klasifikasikan hanya selepas dokumen, rujukan dan penerima disahkan."
             }
           ]
         },
@@ -2302,6 +2555,106 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi.png",
+          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
+            },
+            {
+              "number": 2,
+              "note": "Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
+          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
+          "labels": [
+            "Jenis Rekod*",
+            "Tajuk",
+            "Arah*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod*",
+            "Tarikh Terima",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Nama Penerima",
+            "Jumlah Lampiran",
+            "Untuk Perhatian (u.p.)"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
+            },
+            {
+              "number": 2,
+              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
+          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
+          "labels": [
+            "Failkan Ke*",
+            "Tahap Akses Rekod*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
+            },
+            {
+              "number": 2,
+              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
+          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
+          "labels": [
+            "Untuk Tindakan (Minit)",
+            "Untuk Makluman (s.k.)",
+            "Catatan / Arahan Minit",
+            "Keutamaan Minit*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
+            },
+            {
+              "number": 2,
+              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
+          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
+            },
+            {
+              "number": 2,
+              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
             }
           ]
         }
@@ -2312,8 +2665,8 @@
     "bendahari": {
       "label": "Bendahari",
       "folder": "04-Bendahari",
-      "expectedPages": 14,
-      "actualPages": 14,
+      "expectedPages": 15,
+      "actualPages": 15,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -2346,6 +2699,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -2355,10 +2712,65 @@
         },
         {
           "order": 2,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/02-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 3,
           "label": "Penggunaan & Storan",
           "path": "/app/mam/penggunaan",
           "status": 200,
-          "image": "imej/02-penggunaan.png",
+          "image": "imej/03-penggunaan.png",
           "notes": [
             {
               "number": 1,
@@ -2376,11 +2788,11 @@
           "tabs": []
         },
         {
-          "order": 3,
+          "order": 4,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/03-delegasi.png",
+          "image": "imej/04-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -2397,11 +2809,11 @@
           "tabs": []
         },
         {
-          "order": 4,
+          "order": 5,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/04-profil.png",
+          "image": "imej/05-profil.png",
           "notes": [
             {
               "number": 1,
@@ -2417,11 +2829,11 @@
           "tabs": []
         },
         {
-          "order": 5,
+          "order": 6,
           "label": "Minit Saya 1",
           "path": "/app/mam/minit-saya",
           "status": 200,
-          "image": "imej/05-minit-saya.png",
+          "image": "imej/06-minit-saya.png",
           "notes": [
             {
               "number": 1,
@@ -2437,11 +2849,11 @@
           "tabs": []
         },
         {
-          "order": 6,
+          "order": 7,
           "label": "Kelulusan",
           "path": "/app/mam/kelulusan",
           "status": 200,
-          "image": "imej/06-kelulusan.png",
+          "image": "imej/07-kelulusan.png",
           "notes": [
             {
               "number": 1,
@@ -2454,11 +2866,11 @@
           "tabs": []
         },
         {
-          "order": 7,
+          "order": 8,
           "label": "Carian",
           "path": "/app/mam/carian",
           "status": 200,
-          "image": "imej/07-carian.png",
+          "image": "imej/08-carian.png",
           "notes": [
             {
               "number": 1,
@@ -2481,11 +2893,11 @@
           "tabs": []
         },
         {
-          "order": 8,
+          "order": 9,
           "label": "Kegemaran",
           "path": "/app/mam/kegemaran",
           "status": 200,
-          "image": "imej/08-kegemaran.png",
+          "image": "imej/09-kegemaran.png",
           "notes": [
             {
               "number": 1,
@@ -2500,11 +2912,11 @@
           "tabs": []
         },
         {
-          "order": 9,
+          "order": 10,
           "label": "Laporan",
           "path": "/app/mam/laporan",
           "status": 200,
-          "image": "imej/09-laporan.png",
+          "image": "imej/10-laporan.png",
           "notes": [
             {
               "number": 1,
@@ -2517,11 +2929,11 @@
           "tabs": []
         },
         {
-          "order": 10,
+          "order": 11,
           "label": "Pembetulan Rekod",
           "path": "/app/mam/pembetulan-rekod",
           "status": 200,
-          "image": "imej/10-pembetulan-rekod.png",
+          "image": "imej/11-pembetulan-rekod.png",
           "notes": [
             {
               "number": 1,
@@ -2534,11 +2946,11 @@
           "tabs": []
         },
         {
-          "order": 11,
+          "order": 12,
           "label": "Log Aktiviti Masjid",
           "path": "/app/mam/log-aktiviti",
           "status": 200,
-          "image": "imej/11-log-aktiviti.png",
+          "image": "imej/12-log-aktiviti.png",
           "notes": [
             {
               "number": 1,
@@ -2569,11 +2981,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/12-classification-nodes.png",
+          "image": "imej/13-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -2595,11 +3007,11 @@
           "tabs": []
         },
         {
-          "order": 13,
+          "order": 14,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/13-records.png",
+          "image": "imej/14-records.png",
           "notes": [
             {
               "number": 1,
@@ -2619,11 +3031,11 @@
           "tabs": []
         },
         {
-          "order": 14,
+          "order": 15,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/14-registry-files.png",
+          "image": "imej/15-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -2892,6 +3304,10 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -2902,8 +3318,8 @@
     "nazir": {
       "label": "Nazir",
       "folder": "05-Nazir",
-      "expectedPages": 12,
-      "actualPages": 12,
+      "expectedPages": 13,
+      "actualPages": 13,
       "login": {
         "image": "imej/00-log-masuk.png",
         "notes": [
@@ -2936,6 +3352,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -2945,10 +3365,65 @@
         },
         {
           "order": 2,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/02-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 3,
           "label": "Minit Saya 2",
           "path": "/app/mam/minit-saya",
           "status": 200,
-          "image": "imej/02-minit-saya.png",
+          "image": "imej/03-minit-saya.png",
           "notes": [
             {
               "number": 1,
@@ -2966,11 +3441,11 @@
           "tabs": []
         },
         {
-          "order": 3,
+          "order": 4,
           "label": "Kelulusan 3",
           "path": "/app/mam/kelulusan",
           "status": 200,
-          "image": "imej/03-kelulusan.png",
+          "image": "imej/04-kelulusan.png",
           "notes": [
             {
               "number": 1,
@@ -2989,11 +3464,11 @@
           "tabs": []
         },
         {
-          "order": 4,
+          "order": 5,
           "label": "Carian",
           "path": "/app/mam/carian",
           "status": 200,
-          "image": "imej/04-carian.png",
+          "image": "imej/05-carian.png",
           "notes": [
             {
               "number": 1,
@@ -3016,11 +3491,11 @@
           "tabs": []
         },
         {
-          "order": 5,
+          "order": 6,
           "label": "Kegemaran",
           "path": "/app/mam/kegemaran",
           "status": 200,
-          "image": "imej/05-kegemaran.png",
+          "image": "imej/06-kegemaran.png",
           "notes": [
             {
               "number": 1,
@@ -3035,11 +3510,11 @@
           "tabs": []
         },
         {
-          "order": 6,
+          "order": 7,
           "label": "Laporan",
           "path": "/app/mam/laporan",
           "status": 200,
-          "image": "imej/06-laporan.png",
+          "image": "imej/07-laporan.png",
           "notes": [
             {
               "number": 1,
@@ -3052,11 +3527,11 @@
           "tabs": []
         },
         {
-          "order": 7,
+          "order": 8,
           "label": "Pembetulan Rekod",
           "path": "/app/mam/pembetulan-rekod",
           "status": 200,
-          "image": "imej/07-pembetulan-rekod.png",
+          "image": "imej/08-pembetulan-rekod.png",
           "notes": [
             {
               "number": 1,
@@ -3069,11 +3544,11 @@
           "tabs": []
         },
         {
-          "order": 8,
+          "order": 9,
           "label": "Klasifikasi Fail",
           "path": "/app/mam/classification-nodes",
           "status": 200,
-          "image": "imej/08-classification-nodes.png",
+          "image": "imej/09-classification-nodes.png",
           "notes": [
             {
               "number": 1,
@@ -3095,11 +3570,11 @@
           "tabs": []
         },
         {
-          "order": 9,
+          "order": 10,
           "label": "Rekod",
           "path": "/app/mam/records",
           "status": 200,
-          "image": "imej/09-records.png",
+          "image": "imej/10-records.png",
           "notes": [
             {
               "number": 1,
@@ -3118,11 +3593,11 @@
           "tabs": []
         },
         {
-          "order": 10,
+          "order": 11,
           "label": "Fail",
           "path": "/app/mam/registry-files",
           "status": 200,
-          "image": "imej/10-registry-files.png",
+          "image": "imej/11-registry-files.png",
           "notes": [
             {
               "number": 1,
@@ -3147,11 +3622,11 @@
           "tabs": []
         },
         {
-          "order": 11,
+          "order": 12,
           "label": "Delegasi",
           "path": "/app/mam/delegasi",
           "status": 200,
-          "image": "imej/11-delegasi.png",
+          "image": "imej/12-delegasi.png",
           "notes": [
             {
               "number": 1,
@@ -3168,11 +3643,11 @@
           "tabs": []
         },
         {
-          "order": 12,
+          "order": 13,
           "label": "Profil Saya",
           "path": "/app/mam/profil",
           "status": 200,
-          "image": "imej/12-profil.png",
+          "image": "imej/13-profil.png",
           "notes": [
             {
               "number": 1,
@@ -3404,6 +3879,10 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -3414,937 +3893,6 @@
     "ketua_imam": {
       "label": "Ketua Imam",
       "folder": "06-Ketua-Imam",
-      "expectedPages": 12,
-      "actualPages": 12,
-      "login": {
-        "image": "imej/00-log-masuk.png",
-        "notes": [
-          {
-            "number": 1,
-            "note": "Masukkan e-mel atau nombor telefon yang didaftarkan."
-          },
-          {
-            "number": 2,
-            "note": "Masukkan kata laluan sendiri. Jangan kongsi dengan orang lain."
-          },
-          {
-            "number": 3,
-            "note": "Tekan Log masuk selepas kedua-dua medan lengkap."
-          },
-          {
-            "number": 4,
-            "note": "Gunakan pautan selamat jika terlupa atau belum menetapkan kata laluan."
-          }
-        ]
-      },
-      "pages": [
-        {
-          "order": 1,
-          "label": "Papan pemuka",
-          "path": "/app/mam",
-          "status": 200,
-          "image": "imej/01-dashboard.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Papan pemuka."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 2,
-          "label": "Minit Saya 1",
-          "path": "/app/mam/minit-saya",
-          "status": 200,
-          "image": "imej/02-minit-saya.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Minit Saya 1."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "0",
-            "Tanda Selesai",
-            "Balas & Edarkan"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 3,
-          "label": "Kelulusan",
-          "path": "/app/mam/kelulusan",
-          "status": 200,
-          "image": "imej/03-kelulusan.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Kelulusan."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 4,
-          "label": "Carian",
-          "path": "/app/mam/carian",
-          "status": 200,
-          "image": "imej/04-carian.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Carian."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            },
-            {
-              "number": 3,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Simpan",
-            "Cari"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 5,
-          "label": "Kegemaran",
-          "path": "/app/mam/kegemaran",
-          "status": 200,
-          "image": "imej/05-kegemaran.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Kegemaran."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "★",
-            "★"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 6,
-          "label": "Laporan",
-          "path": "/app/mam/laporan",
-          "status": 200,
-          "image": "imej/06-laporan.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Laporan."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 7,
-          "label": "Pembetulan Rekod",
-          "path": "/app/mam/pembetulan-rekod",
-          "status": 200,
-          "image": "imej/07-pembetulan-rekod.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Pembetulan Rekod."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 8,
-          "label": "Klasifikasi Fail",
-          "path": "/app/mam/classification-nodes",
-          "status": 200,
-          "image": "imej/08-classification-nodes.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Klasifikasi Fail."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Kod",
-            "1",
-            "2",
-            "3",
-            "4"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 9,
-          "label": "Rekod",
-          "path": "/app/mam/records",
-          "status": 200,
-          "image": "imej/09-records.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Rekod."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "0",
-            "Tarikh"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 10,
-          "label": "Fail",
-          "path": "/app/mam/registry-files",
-          "status": 200,
-          "image": "imej/10-registry-files.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Fail."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            },
-            {
-              "number": 3,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "No. Fail",
-            "Kegemaran",
-            "Kegemaran"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 11,
-          "label": "Delegasi",
-          "path": "/app/mam/delegasi",
-          "status": 200,
-          "image": "imej/11-delegasi.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Delegasi."
-            },
-            {
-              "number": 2,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 12,
-          "label": "Profil Saya",
-          "path": "/app/mam/profil",
-          "status": 200,
-          "image": "imej/12-profil.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Profil Saya."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Tetapan Notifikasi",
-            "Hantar Notifikasi Ujian",
-            "Tetapkan Kata Laluan"
-          ],
-          "tabs": []
-        }
-      ],
-      "extras": [
-        {
-          "image": "imej/profil-notifikasi.png",
-          "title": "Tetapan notifikasi",
-          "labels": [
-            "E-mel",
-            "WhatsApp",
-            "Telegram"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/profil-kata-laluan.png",
-          "title": "Tetapkan kata laluan",
-          "labels": [
-            "Kata Laluan Baharu*",
-            "Sahkan Kata Laluan*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-butiran.png",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Metadata utama, sumber, tarikh upload dan status antivirus."
-            },
-            {
-              "number": 2,
-              "note": "Buka viewer atau muat turun fail yang dibenarkan."
-            },
-            {
-              "number": 3,
-              "note": "Jejak arahan, penerima, status dan bebenang minit."
-            },
-            {
-              "number": 4,
-              "note": "Jejak permohonan dan keputusan kelulusan."
-            },
-            {
-              "number": 5,
-              "note": "Mohon pembetulan metadata tanpa mengubah rekod secara senyap."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-mohon-pembetulan.png",
-          "title": "Mohon pembetulan rekod",
-          "labels": [
-            "Sebab Rekod Salah Tawan*",
-            "Tajuk",
-            "Jenis Rekod*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod",
-            "Tarikh Terima",
-            "Arah",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Penerima",
-            "Sensitiviti*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Nyatakan sebab salah tawan dan hanya ubah medan yang benar-benar salah."
-            },
-            {
-              "number": 2,
-              "note": "Hantar untuk semakan; rekod asal kekal sehingga diluluskan."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-edarkan-minit.png",
-          "title": "Edarkan minit",
-          "labels": [
-            "Penerima Tindakan*",
-            "Makluman (s.k.)",
-            "Catatan / Arahan*",
-            "Keutamaan*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tetapkan penerima tindakan, penerima makluman, arahan dan keutamaan."
-            },
-            {
-              "number": 2,
-              "note": "Hantar minit selepas penerima disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-viewer.png",
-          "title": "Viewer dokumen",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Ke halaman sebelumnya."
-            },
-            {
-              "number": 2,
-              "note": "Ke halaman seterusnya."
-            },
-            {
-              "number": 3,
-              "note": "Cari teks dalam PDF yang mempunyai lapisan teks."
-            },
-            {
-              "number": 4,
-              "note": "Cetak dokumen bersama metadata yang dibenarkan."
-            }
-          ]
-        },
-        {
-          "image": "imej/fail-butiran.png",
-          "title": "Butiran fail elektronik, fizikal atau hibrid",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pastikan nombor fail sepadan dengan klasifikasi."
-            },
-            {
-              "number": 2,
-              "note": "Semak sama ada elektronik, fizikal atau hibrid."
-            },
-            {
-              "number": 3,
-              "note": "Lokasi sebenar salinan fizikal."
-            },
-            {
-              "number": 4,
-              "note": "Jejak keluar, pulang dan pindah lokasi fail."
-            }
-          ]
-        },
-        {
-          "image": "imej/minit-balas.png",
-          "title": "Balas dan edarkan minit",
-          "labels": [
-            "Penerima Tindakan*",
-            "Makluman (s.k.)",
-            "Catatan*",
-            "Keutamaan*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/minit-selesai.png",
-          "title": "Tanda tindakan minit selesai",
-          "labels": [],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/carian-hasil.png",
-          "title": "Hasil carian lanjutan",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            }
-          ]
-        }
-      ],
-      "crossTenantStatus": 404,
-      "browserErrors": []
-    },
-    "ajk": {
-      "label": "AJK",
-      "folder": "07-AJK",
-      "expectedPages": 12,
-      "actualPages": 12,
-      "login": {
-        "image": "imej/00-log-masuk.png",
-        "notes": [
-          {
-            "number": 1,
-            "note": "Masukkan e-mel atau nombor telefon yang didaftarkan."
-          },
-          {
-            "number": 2,
-            "note": "Masukkan kata laluan sendiri. Jangan kongsi dengan orang lain."
-          },
-          {
-            "number": 3,
-            "note": "Tekan Log masuk selepas kedua-dua medan lengkap."
-          },
-          {
-            "number": 4,
-            "note": "Gunakan pautan selamat jika terlupa atau belum menetapkan kata laluan."
-          }
-        ]
-      },
-      "pages": [
-        {
-          "order": 1,
-          "label": "Papan pemuka",
-          "path": "/app/mam",
-          "status": 200,
-          "image": "imej/01-dashboard.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Papan pemuka."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 2,
-          "label": "Minit Saya",
-          "path": "/app/mam/minit-saya",
-          "status": 200,
-          "image": "imej/02-minit-saya.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Minit Saya."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "0"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 3,
-          "label": "Kelulusan",
-          "path": "/app/mam/kelulusan",
-          "status": 200,
-          "image": "imej/03-kelulusan.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Kelulusan."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 4,
-          "label": "Carian",
-          "path": "/app/mam/carian",
-          "status": 200,
-          "image": "imej/04-carian.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Carian."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            },
-            {
-              "number": 3,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Simpan",
-            "Cari"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 5,
-          "label": "Kegemaran",
-          "path": "/app/mam/kegemaran",
-          "status": 200,
-          "image": "imej/05-kegemaran.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Kegemaran."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 6,
-          "label": "Laporan",
-          "path": "/app/mam/laporan",
-          "status": 200,
-          "image": "imej/06-laporan.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Laporan."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 7,
-          "label": "Pembetulan Rekod",
-          "path": "/app/mam/pembetulan-rekod",
-          "status": 200,
-          "image": "imej/07-pembetulan-rekod.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Pembetulan Rekod."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 8,
-          "label": "Klasifikasi Fail",
-          "path": "/app/mam/classification-nodes",
-          "status": 200,
-          "image": "imej/08-classification-nodes.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Klasifikasi Fail."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Kod",
-            "1",
-            "2",
-            "3",
-            "4"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 9,
-          "label": "Rekod",
-          "path": "/app/mam/records",
-          "status": 200,
-          "image": "imej/09-records.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Rekod."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "0",
-            "Tarikh"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 10,
-          "label": "Fail",
-          "path": "/app/mam/registry-files",
-          "status": 200,
-          "image": "imej/10-registry-files.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Fail."
-            },
-            {
-              "number": 2,
-              "note": "Carian atau tapisan halaman."
-            },
-            {
-              "number": 3,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "No. Fail",
-            "Kegemaran",
-            "Kegemaran"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 11,
-          "label": "Delegasi",
-          "path": "/app/mam/delegasi",
-          "status": 200,
-          "image": "imej/11-delegasi.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Delegasi."
-            },
-            {
-              "number": 2,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
-          ],
-          "tabs": []
-        },
-        {
-          "order": 12,
-          "label": "Profil Saya",
-          "path": "/app/mam/profil",
-          "status": 200,
-          "image": "imej/12-profil.png",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tajuk halaman Profil Saya."
-            }
-          ],
-          "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati",
-            "Tetapan Notifikasi",
-            "Hantar Notifikasi Ujian",
-            "Tetapkan Kata Laluan"
-          ],
-          "tabs": []
-        }
-      ],
-      "extras": [
-        {
-          "image": "imej/profil-notifikasi.png",
-          "title": "Tetapan notifikasi",
-          "labels": [
-            "E-mel",
-            "WhatsApp",
-            "Telegram"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/profil-kata-laluan.png",
-          "title": "Tetapkan kata laluan",
-          "labels": [
-            "Kata Laluan Baharu*",
-            "Sahkan Kata Laluan*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Semak semua medan dalam dialog sebelum menghantar."
-            },
-            {
-              "number": 2,
-              "note": "Tekan hanya selepas maklumat disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-butiran.png",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Metadata utama, sumber, tarikh upload dan status antivirus."
-            },
-            {
-              "number": 2,
-              "note": "Buka viewer atau muat turun fail yang dibenarkan."
-            },
-            {
-              "number": 3,
-              "note": "Jejak arahan, penerima, status dan bebenang minit."
-            },
-            {
-              "number": 4,
-              "note": "Jejak permohonan dan keputusan kelulusan."
-            },
-            {
-              "number": 5,
-              "note": "Mohon pembetulan metadata tanpa mengubah rekod secara senyap."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-mohon-pembetulan.png",
-          "title": "Mohon pembetulan rekod",
-          "labels": [
-            "Sebab Rekod Salah Tawan*",
-            "Tajuk",
-            "Jenis Rekod*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod",
-            "Tarikh Terima",
-            "Arah",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Penerima",
-            "Sensitiviti*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Nyatakan sebab salah tawan dan hanya ubah medan yang benar-benar salah."
-            },
-            {
-              "number": 2,
-              "note": "Hantar untuk semakan; rekod asal kekal sehingga diluluskan."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-edarkan-minit.png",
-          "title": "Edarkan minit",
-          "labels": [
-            "Penerima Tindakan*",
-            "Makluman (s.k.)",
-            "Catatan / Arahan*",
-            "Keutamaan*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Tetapkan penerima tindakan, penerima makluman, arahan dan keutamaan."
-            },
-            {
-              "number": 2,
-              "note": "Hantar minit selepas penerima disemak."
-            }
-          ]
-        },
-        {
-          "image": "imej/rekod-viewer.png",
-          "title": "Viewer dokumen",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Ke halaman sebelumnya."
-            },
-            {
-              "number": 2,
-              "note": "Ke halaman seterusnya."
-            },
-            {
-              "number": 3,
-              "note": "Cari teks dalam PDF yang mempunyai lapisan teks."
-            },
-            {
-              "number": 4,
-              "note": "Cetak dokumen bersama metadata yang dibenarkan."
-            }
-          ]
-        },
-        {
-          "image": "imej/fail-butiran.png",
-          "title": "Butiran fail elektronik, fizikal atau hibrid",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pastikan nombor fail sepadan dengan klasifikasi."
-            },
-            {
-              "number": 2,
-              "note": "Semak sama ada elektronik, fizikal atau hibrid."
-            },
-            {
-              "number": 3,
-              "note": "Lokasi sebenar salinan fizikal."
-            },
-            {
-              "number": 4,
-              "note": "Jejak keluar, pulang dan pindah lokasi fail."
-            }
-          ]
-        },
-        {
-          "image": "imej/carian-hasil.png",
-          "title": "Hasil carian lanjutan",
-          "notes": [
-            {
-              "number": 1,
-              "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
-            }
-          ]
-        }
-      ],
-      "crossTenantStatus": 404,
-      "browserErrors": []
-    },
-    "audit": {
-      "label": "Juruaudit",
-      "folder": "08-Juruaudit",
       "expectedPages": 13,
       "actualPages": 13,
       "login": {
@@ -4379,6 +3927,10 @@
             {
               "number": 1,
               "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
@@ -4388,23 +3940,56 @@
         },
         {
           "order": 2,
-          "label": "Log Akses Sulit",
-          "path": "/app/mam/sensitive-access-logs",
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
           "status": 200,
-          "image": "imej/02-sensitive-access-logs.png",
+          "image": "imej/02-bantuan.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Log Akses Sulit."
+              "note": "Tajuk halaman Pusat Bantuan."
             },
             {
               "number": 2,
               "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
-            "Masa"
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
           ],
           "tabs": []
         },
@@ -4423,6 +4008,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "0",
+            "Tanda Selesai",
             "Balas & Edarkan"
           ],
           "tabs": []
@@ -4736,6 +4322,1084 @@
           ]
         },
         {
+          "image": "imej/rekod-edarkan-minit.png",
+          "title": "Edarkan minit",
+          "labels": [
+            "Penerima Tindakan*",
+            "Makluman (s.k.)",
+            "Catatan / Arahan*",
+            "Keutamaan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tetapkan penerima tindakan, penerima makluman, arahan dan keutamaan."
+            },
+            {
+              "number": 2,
+              "note": "Hantar minit selepas penerima disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-viewer.png",
+          "title": "Viewer dokumen",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Ke halaman sebelumnya."
+            },
+            {
+              "number": 2,
+              "note": "Ke halaman seterusnya."
+            },
+            {
+              "number": 3,
+              "note": "Cari teks dalam PDF yang mempunyai lapisan teks."
+            },
+            {
+              "number": 4,
+              "note": "Cetak dokumen bersama metadata yang dibenarkan."
+            }
+          ]
+        },
+        {
+          "image": "imej/fail-butiran.png",
+          "title": "Butiran fail elektronik, fizikal atau hibrid",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pastikan nombor fail sepadan dengan klasifikasi."
+            },
+            {
+              "number": 2,
+              "note": "Semak sama ada elektronik, fizikal atau hibrid."
+            },
+            {
+              "number": 3,
+              "note": "Lokasi sebenar salinan fizikal."
+            },
+            {
+              "number": 4,
+              "note": "Jejak keluar, pulang dan pindah lokasi fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/minit-balas.png",
+          "title": "Balas dan edarkan minit",
+          "labels": [
+            "Penerima Tindakan*",
+            "Makluman (s.k.)",
+            "Catatan*",
+            "Keutamaan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/minit-selesai.png",
+          "title": "Tanda tindakan minit selesai",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/carian-hasil.png",
+          "title": "Hasil carian lanjutan",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
+            }
+          ]
+        }
+      ],
+      "crossTenantStatus": 404,
+      "browserErrors": []
+    },
+    "ajk": {
+      "label": "AJK",
+      "folder": "07-AJK",
+      "expectedPages": 13,
+      "actualPages": 13,
+      "login": {
+        "image": "imej/00-log-masuk.png",
+        "notes": [
+          {
+            "number": 1,
+            "note": "Masukkan e-mel atau nombor telefon yang didaftarkan."
+          },
+          {
+            "number": 2,
+            "note": "Masukkan kata laluan sendiri. Jangan kongsi dengan orang lain."
+          },
+          {
+            "number": 3,
+            "note": "Tekan Log masuk selepas kedua-dua medan lengkap."
+          },
+          {
+            "number": 4,
+            "note": "Gunakan pautan selamat jika terlupa atau belum menetapkan kata laluan."
+          }
+        ]
+      },
+      "pages": [
+        {
+          "order": 1,
+          "label": "Papan pemuka",
+          "path": "/app/mam",
+          "status": 200,
+          "image": "imej/01-dashboard.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 2,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/02-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 3,
+          "label": "Minit Saya",
+          "path": "/app/mam/minit-saya",
+          "status": 200,
+          "image": "imej/03-minit-saya.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Minit Saya."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 4,
+          "label": "Kelulusan",
+          "path": "/app/mam/kelulusan",
+          "status": 200,
+          "image": "imej/04-kelulusan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Kelulusan."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 5,
+          "label": "Carian",
+          "path": "/app/mam/carian",
+          "status": 200,
+          "image": "imej/05-carian.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Carian."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Simpan",
+            "Cari"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 6,
+          "label": "Kegemaran",
+          "path": "/app/mam/kegemaran",
+          "status": 200,
+          "image": "imej/06-kegemaran.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Kegemaran."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 7,
+          "label": "Laporan",
+          "path": "/app/mam/laporan",
+          "status": 200,
+          "image": "imej/07-laporan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Laporan."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 8,
+          "label": "Pembetulan Rekod",
+          "path": "/app/mam/pembetulan-rekod",
+          "status": 200,
+          "image": "imej/08-pembetulan-rekod.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pembetulan Rekod."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 9,
+          "label": "Klasifikasi Fail",
+          "path": "/app/mam/classification-nodes",
+          "status": 200,
+          "image": "imej/09-classification-nodes.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Klasifikasi Fail."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Kod",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 10,
+          "label": "Rekod",
+          "path": "/app/mam/records",
+          "status": 200,
+          "image": "imej/10-records.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Rekod."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 11,
+          "label": "Fail",
+          "path": "/app/mam/registry-files",
+          "status": 200,
+          "image": "imej/11-registry-files.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Fail."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "No. Fail",
+            "Kegemaran",
+            "Kegemaran"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 12,
+          "label": "Delegasi",
+          "path": "/app/mam/delegasi",
+          "status": 200,
+          "image": "imej/12-delegasi.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Delegasi."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 13,
+          "label": "Profil Saya",
+          "path": "/app/mam/profil",
+          "status": 200,
+          "image": "imej/13-profil.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Profil Saya."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Tetapan Notifikasi",
+            "Hantar Notifikasi Ujian",
+            "Tetapkan Kata Laluan"
+          ],
+          "tabs": []
+        }
+      ],
+      "extras": [
+        {
+          "image": "imej/profil-notifikasi.png",
+          "title": "Tetapan notifikasi",
+          "labels": [
+            "E-mel",
+            "WhatsApp",
+            "Telegram"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/profil-kata-laluan.png",
+          "title": "Tetapkan kata laluan",
+          "labels": [
+            "Kata Laluan Baharu*",
+            "Sahkan Kata Laluan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-butiran.png",
+          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Metadata utama, sumber, tarikh upload dan status antivirus."
+            },
+            {
+              "number": 2,
+              "note": "Buka viewer atau muat turun fail yang dibenarkan."
+            },
+            {
+              "number": 3,
+              "note": "Jejak arahan, penerima, status dan bebenang minit."
+            },
+            {
+              "number": 4,
+              "note": "Jejak permohonan dan keputusan kelulusan."
+            },
+            {
+              "number": 5,
+              "note": "Mohon pembetulan metadata tanpa mengubah rekod secara senyap."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-mohon-pembetulan.png",
+          "title": "Mohon pembetulan rekod",
+          "labels": [
+            "Sebab Rekod Salah Tawan*",
+            "Tajuk",
+            "Jenis Rekod*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod",
+            "Tarikh Terima",
+            "Arah",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Penerima",
+            "Sensitiviti*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Nyatakan sebab salah tawan dan hanya ubah medan yang benar-benar salah."
+            },
+            {
+              "number": 2,
+              "note": "Hantar untuk semakan; rekod asal kekal sehingga diluluskan."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-edarkan-minit.png",
+          "title": "Edarkan minit",
+          "labels": [
+            "Penerima Tindakan*",
+            "Makluman (s.k.)",
+            "Catatan / Arahan*",
+            "Keutamaan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tetapkan penerima tindakan, penerima makluman, arahan dan keutamaan."
+            },
+            {
+              "number": 2,
+              "note": "Hantar minit selepas penerima disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-viewer.png",
+          "title": "Viewer dokumen",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Ke halaman sebelumnya."
+            },
+            {
+              "number": 2,
+              "note": "Ke halaman seterusnya."
+            },
+            {
+              "number": 3,
+              "note": "Cari teks dalam PDF yang mempunyai lapisan teks."
+            },
+            {
+              "number": 4,
+              "note": "Cetak dokumen bersama metadata yang dibenarkan."
+            }
+          ]
+        },
+        {
+          "image": "imej/fail-butiran.png",
+          "title": "Butiran fail elektronik, fizikal atau hibrid",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pastikan nombor fail sepadan dengan klasifikasi."
+            },
+            {
+              "number": 2,
+              "note": "Semak sama ada elektronik, fizikal atau hibrid."
+            },
+            {
+              "number": 3,
+              "note": "Lokasi sebenar salinan fizikal."
+            },
+            {
+              "number": 4,
+              "note": "Jejak keluar, pulang dan pindah lokasi fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/carian-hasil.png",
+          "title": "Hasil carian lanjutan",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
+            }
+          ]
+        }
+      ],
+      "crossTenantStatus": 404,
+      "browserErrors": []
+    },
+    "audit": {
+      "label": "Juruaudit",
+      "folder": "08-Juruaudit",
+      "expectedPages": 14,
+      "actualPages": 14,
+      "login": {
+        "image": "imej/00-log-masuk.png",
+        "notes": [
+          {
+            "number": 1,
+            "note": "Masukkan e-mel atau nombor telefon yang didaftarkan."
+          },
+          {
+            "number": 2,
+            "note": "Masukkan kata laluan sendiri. Jangan kongsi dengan orang lain."
+          },
+          {
+            "number": 3,
+            "note": "Tekan Log masuk selepas kedua-dua medan lengkap."
+          },
+          {
+            "number": 4,
+            "note": "Gunakan pautan selamat jika terlupa atau belum menetapkan kata laluan."
+          }
+        ]
+      },
+      "pages": [
+        {
+          "order": 1,
+          "label": "Papan pemuka",
+          "path": "/app/mam",
+          "status": 200,
+          "image": "imej/01-dashboard.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Papan pemuka."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 2,
+          "label": "Log Akses Sulit",
+          "path": "/app/mam/sensitive-access-logs",
+          "status": 200,
+          "image": "imej/02-sensitive-access-logs.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Log Akses Sulit."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Masa"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 3,
+          "label": "Pusat Bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "image": "imej/03-bantuan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pusat Bantuan."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Cari",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Baca langkah",
+            "Mulakan panduan",
+            "Periksa",
+            "Simpan tetapan",
+            "Senyap 1 hari",
+            "Senyap 7 hari",
+            "Hantar laporan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 4,
+          "label": "Minit Saya 1",
+          "path": "/app/mam/minit-saya",
+          "status": 200,
+          "image": "imej/04-minit-saya.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Minit Saya 1."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Balas & Edarkan"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 5,
+          "label": "Kelulusan",
+          "path": "/app/mam/kelulusan",
+          "status": 200,
+          "image": "imej/05-kelulusan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Kelulusan."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 6,
+          "label": "Carian",
+          "path": "/app/mam/carian",
+          "status": 200,
+          "image": "imej/06-carian.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Carian."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Simpan",
+            "Cari"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 7,
+          "label": "Kegemaran",
+          "path": "/app/mam/kegemaran",
+          "status": 200,
+          "image": "imej/07-kegemaran.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Kegemaran."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "★",
+            "★"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 8,
+          "label": "Laporan",
+          "path": "/app/mam/laporan",
+          "status": 200,
+          "image": "imej/08-laporan.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Laporan."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 9,
+          "label": "Pembetulan Rekod",
+          "path": "/app/mam/pembetulan-rekod",
+          "status": 200,
+          "image": "imej/09-pembetulan-rekod.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Pembetulan Rekod."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 10,
+          "label": "Klasifikasi Fail",
+          "path": "/app/mam/classification-nodes",
+          "status": 200,
+          "image": "imej/10-classification-nodes.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Klasifikasi Fail."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Kod",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 11,
+          "label": "Rekod",
+          "path": "/app/mam/records",
+          "status": 200,
+          "image": "imej/11-records.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Rekod."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "0",
+            "Tarikh"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 12,
+          "label": "Fail",
+          "path": "/app/mam/registry-files",
+          "status": 200,
+          "image": "imej/12-registry-files.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Fail."
+            },
+            {
+              "number": 2,
+              "note": "Carian atau tapisan halaman."
+            },
+            {
+              "number": 3,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "No. Fail",
+            "Kegemaran",
+            "Kegemaran"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 13,
+          "label": "Delegasi",
+          "path": "/app/mam/delegasi",
+          "status": 200,
+          "image": "imej/13-delegasi.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Delegasi."
+            },
+            {
+              "number": 2,
+              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati"
+          ],
+          "tabs": []
+        },
+        {
+          "order": 14,
+          "label": "Profil Saya",
+          "path": "/app/mam/profil",
+          "status": 200,
+          "image": "imej/14-profil.png",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Tajuk halaman Profil Saya."
+            }
+          ],
+          "buttons": [
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Tetapan Notifikasi",
+            "Hantar Notifikasi Ujian",
+            "Tetapkan Kata Laluan"
+          ],
+          "tabs": []
+        }
+      ],
+      "extras": [
+        {
+          "image": "imej/profil-notifikasi.png",
+          "title": "Tetapan notifikasi",
+          "labels": [
+            "E-mel",
+            "WhatsApp",
+            "Telegram"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/profil-kata-laluan.png",
+          "title": "Tetapkan kata laluan",
+          "labels": [
+            "Kata Laluan Baharu*",
+            "Sahkan Kata Laluan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-butiran.png",
+          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "notes": [
+            {
+              "number": 1,
+              "note": "Metadata utama, sumber, tarikh upload dan status antivirus."
+            },
+            {
+              "number": 2,
+              "note": "Buka viewer atau muat turun fail yang dibenarkan."
+            },
+            {
+              "number": 3,
+              "note": "Jejak arahan, penerima, status dan bebenang minit."
+            },
+            {
+              "number": 4,
+              "note": "Jejak permohonan dan keputusan kelulusan."
+            },
+            {
+              "number": 5,
+              "note": "Mohon pembetulan metadata tanpa mengubah rekod secara senyap."
+            }
+          ]
+        },
+        {
+          "image": "imej/rekod-mohon-pembetulan.png",
+          "title": "Mohon pembetulan rekod",
+          "labels": [
+            "Sebab Rekod Salah Tawan*",
+            "Tajuk",
+            "Jenis Rekod*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod",
+            "Tarikh Terima",
+            "Arah",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Penerima",
+            "Sensitiviti*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Nyatakan sebab salah tawan dan hanya ubah medan yang benar-benar salah."
+            },
+            {
+              "number": 2,
+              "note": "Hantar untuk semakan; rekod asal kekal sehingga diluluskan."
+            }
+          ]
+        },
+        {
           "image": "imej/rekod-viewer.png",
           "title": "Viewer dokumen",
           "notes": [
@@ -4806,6 +5470,10 @@
             {
               "number": 1,
               "note": "Jumlah hasil yang pengguna ini dibenarkan lihat."
+            },
+            {
+              "number": 2,
+              "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
         }
@@ -4833,7 +5501,7 @@
       },
       {
         "image": "imej/02-borang-daftar.png",
-        "title": "Borang pendaftaran",
+        "title": "Pendaftaran langkah 1 - Masjid",
         "notes": [
           {
             "number": 1,
@@ -4853,27 +5521,59 @@
           },
           {
             "number": 5,
+            "note": "Teruskan selepas identiti masjid disemak."
+          }
+        ]
+      },
+      {
+        "image": "imej/02b-pentadbir.png",
+        "title": "Pendaftaran langkah 2 - Pentadbir",
+        "notes": [
+          {
+            "number": 1,
             "note": "Nama orang yang akan menjadi Admin / Kerani pertama."
           },
           {
-            "number": 6,
+            "number": 2,
             "note": "E-mel aktif untuk menerima pautan kelulusan."
           },
           {
-            "number": 7,
+            "number": 3,
             "note": "Nombor WhatsApp format negara, contoh 60123456789."
           },
           {
-            "number": 8,
+            "number": 4,
+            "note": "Kembali jika maklumat masjid perlu dibetulkan."
+          },
+          {
+            "number": 5,
+            "note": "Teruskan selepas butiran pentadbir disemak."
+          }
+        ]
+      },
+      {
+        "image": "imej/02c-persetujuan.png",
+        "title": "Pendaftaran langkah 3 - Semakan dan persetujuan",
+        "notes": [
+          {
+            "number": 1,
+            "note": "Sahkan masjid dan pentadbir yang akan diwujudkan."
+          },
+          {
+            "number": 2,
             "note": "Baca dan setuju Terma serta DPA."
           },
           {
-            "number": 9,
+            "number": 3,
             "note": "Fahami dan setuju dasar retensi."
           },
           {
-            "number": 10,
-            "note": "Hantar selepas semua maklumat disemak."
+            "number": 4,
+            "note": "Kembali jika ringkasan tidak tepat."
+          },
+          {
+            "number": 5,
+            "note": "Hantar sekali selepas semua maklumat disahkan."
           }
         ]
       },
@@ -4938,6 +5638,24 @@
           {
             "number": 3,
             "note": "Gunakan log masuk kata laluan jika sudah ditetapkan."
+          }
+        ]
+      },
+      {
+        "image": "imej/07-pusat-bantuan.png",
+        "title": "Pusat bantuan orang awam",
+        "notes": [
+          {
+            "number": 1,
+            "note": "Cari panduan dengan ayat biasa atau istilah yang hampir sama."
+          },
+          {
+            "number": 2,
+            "note": "Jalankan diagnosis baca sahaja bagi masalah pendaftaran atau log masuk."
+          },
+          {
+            "number": 3,
+            "note": "Lapor masalah tanpa memasukkan kata laluan, token atau dokumen sensitif."
           }
         ]
       }

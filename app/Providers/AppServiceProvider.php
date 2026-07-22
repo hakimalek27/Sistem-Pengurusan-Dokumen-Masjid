@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         // magic login walaupun hadnya sepatutnya hanya seminit.
         RateLimiter::for('public-registration', fn (Request $request) => Limit::perHour(20)->by($request->ip()));
         RateLimiter::for('public-login-page', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+        RateLimiter::for('public-help', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
         RateLimiter::for('magic-login', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
 
         // §5.14 — kaunter kuota storan atomik.

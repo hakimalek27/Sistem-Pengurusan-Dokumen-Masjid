@@ -26,6 +26,7 @@
         .brand-actions { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:flex-end; }
         .brand-actions a { border:1px solid var(--garis); border-radius:.5rem; color:var(--dakwat); padding:.45rem .7rem; text-decoration:none; font-size:.9rem; font-weight:650; background:#fff; }
         .brand-actions a:hover { border-color:var(--hijau); color:var(--hijau); }
+        .brand-actions .diwan-help-launcher-button { display:grid; place-items:center; width:2.2rem; height:2.2rem; padding:0; border-radius:999px; font-size:1rem; }
         .card { background:var(--panel); border:1px solid var(--garis); border-radius:.5rem; box-shadow:0 10px 30px rgba(23,33,29,.06); padding:1.5rem; max-width:560px; margin:0 auto; }
         h2 { margin-top:0; font-size:1.25rem; }
         label { display:block; font-weight:650; font-size:.9rem; margin:.75rem 0 .25rem; }
@@ -36,6 +37,16 @@
         .btn { display:inline-block; width:100%; text-align:center; background:var(--hijau); color:#fff; border:0; border-radius:.45rem; padding:.72rem 1rem; font-size:1rem; font-weight:700; cursor:pointer; text-decoration:none; }
         .btn:hover { background:var(--hijau-t); }
         .btn-ghost { background:transparent; color:var(--hijau); border:1px solid var(--hijau); }
+        .registration-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.4rem; list-style:none; padding:0; margin:0 0 1rem; }
+        .registration-steps li { display:flex; align-items:center; gap:.4rem; color:var(--abu); font-size:.78rem; min-width:0; }
+        .registration-steps li::after { content:""; height:1px; background:var(--garis); flex:1; }
+        .registration-steps li:last-child::after { display:none; }
+        .registration-steps b { display:grid; place-items:center; width:1.55rem; height:1.55rem; border-radius:999px; border:1px solid var(--garis); background:#fff; flex:0 0 auto; }
+        .registration-steps .active { color:var(--hijau); font-weight:700; }
+        .registration-steps .active b { background:var(--hijau); color:#fff; border-color:var(--hijau); }
+        .registration-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; margin-top:1rem; }
+        .registration-actions .btn:only-child { grid-column:2; }
+        .registration-review { display:grid; gap:.2rem; border-left:3px solid var(--hijau); padding:.7rem .8rem; margin-bottom:1rem; background:#f2faf6; font-size:.88rem; }
         .err { color:#b91c1c; font-size:.85rem; margin-top:.25rem; }
         .ok { background:#ecfdf5; border:1px solid #a7f3d0; color:var(--hijau-t); padding:1rem; border-radius:.5rem; }
         .muted { color:var(--abu); font-size:.85rem; text-align:center; margin-top:1rem; }
@@ -72,6 +83,7 @@
         }
     </style>
     @livewireStyles
+    @vite('resources/js/help.js')
 </head>
 <body>
     <div class="wrap">
@@ -84,6 +96,7 @@
                 <a href="{{ url('/') }}">Utama</a>
                 <a href="{{ url('/log-masuk') }}">Log Masuk</a>
                 <a href="{{ url('/daftar') }}">Daftar</a>
+                <livewire:help-launcher panel="public" />
             </nav>
         </div>
         {{ $slot }}

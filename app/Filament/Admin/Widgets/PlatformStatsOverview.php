@@ -24,15 +24,18 @@ class PlatformStatsOverview extends StatsOverviewWidget
             Stat::make('Masjid Aktif', Mosque::query()->where('status', 'aktif')->count())
                 ->description('Tenant boleh digunakan')
                 ->descriptionIcon('heroicon-o-building-office-2')
-                ->color('success'),
+                ->color('success')
+                ->url('/admin/mosques'),
             Stat::make('Menunggu Kelulusan', $pendingTenants)
                 ->description($pendingTenants ? 'Perlu semakan superadmin' : 'Tiada permohonan baharu')
                 ->descriptionIcon('heroicon-o-clipboard-document-check')
-                ->color($pendingTenants ? 'warning' : 'success'),
+                ->color($pendingTenants ? 'warning' : 'success')
+                ->url('/admin/mosques'),
             Stat::make('Pengguna Aktif', User::query()->where('is_active', true)->count())
                 ->description('Semua panel')
                 ->descriptionIcon('heroicon-o-users')
-                ->color('info'),
+                ->color('info')
+                ->url('/admin/users'),
             Stat::make('Jumlah Rekod', Record::query()->withoutGlobalScope('mosque')->count())
                 ->description('Merentas semua tenant')
                 ->descriptionIcon('heroicon-o-document-text')
@@ -40,7 +43,8 @@ class PlatformStatsOverview extends StatsOverviewWidget
             Stat::make('Pesanan Belum Dibayar', $pendingOrders)
                 ->description($pendingOrders ? 'Menunggu pengesahan bayaran' : 'Tiada tindakan bayaran')
                 ->descriptionIcon('heroicon-o-banknotes')
-                ->color($pendingOrders ? 'warning' : 'success'),
+                ->color($pendingOrders ? 'warning' : 'success')
+                ->url('/admin/storage-orders'),
             Stat::make('Storan Digunakan', number_format(Mosque::query()->sum('storage_used_bytes') / (1024 ** 3), 2).' GB')
                 ->description('Jumlah objek dokumen')
                 ->descriptionIcon('heroicon-o-server-stack')

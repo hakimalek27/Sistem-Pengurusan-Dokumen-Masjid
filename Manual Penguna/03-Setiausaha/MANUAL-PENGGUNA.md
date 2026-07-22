@@ -4,7 +4,7 @@
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
-**Liputan Chrome:** 14/14 halaman, silang tenant HTTP 404, 15 skrin tindakan tambahan.
+**Liputan Chrome:** 15/15 halaman, silang tenant HTTP 404, 19 skrin tindakan tambahan.
 
 Manual ini khusus untuk role **Setiausaha**. Gambar menggunakan data latihan. Nama, e-mel, nombor telefon dan dokumen sebenar organisasi tidak patut dimasukkan ke manual.
 
@@ -104,44 +104,86 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 2: Pilih dokumen
 
-![Klasifikasikan surat masuk dan edarkan minit - Gambar 2](<imej/02-peti-masuk.png>)
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 2](<imej/03-peti-masuk.png>)
 
 **Apa perlu dibuat pada Gambar 2**
 1. Semak sumber, pengirim, masa, antivirus, OCR dan duplikat.
 2. Buka dokumen/OCR dan pilih Klasifikasikan.
 
-**Kemudian:** teruskan ke **Gambar 3: Klasifikasi peti masuk**.
+**Kemudian:** teruskan ke **Gambar 3: Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber**.
 
 
-#### Gambar 3: Klasifikasi peti masuk
+#### Gambar 3: Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber
 
 ![Klasifikasikan surat masuk dan edarkan minit - Gambar 3](<imej/inbox-klasifikasi.png>)
 
 **Apa perlu dibuat pada Gambar 3**
-1. Lengkapkan semua metadata surat.
-2. Pilih fail dan sensitiviti.
-3. Pilih penerima tindakan/s.k., tulis arahan dan keutamaan.
-4. Klasifikasikan dan semak nombor kandungan.
+1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
+2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
 
-**Kemudian:** teruskan ke **Gambar 4: Pantau minit dihantar**.
+**Kemudian:** teruskan ke **Gambar 4: Klasifikasi peti masuk 2/5 - Jenis dan metadata**.
 
 
-#### Gambar 4: Pantau minit dihantar
+#### Gambar 4: Klasifikasi peti masuk 2/5 - Jenis dan metadata
 
-![Klasifikasikan surat masuk dan edarkan minit - Gambar 4](<imej/05-minit-saya.png>)
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 4](<imej/inbox-klasifikasi-02-jenis-metadata.png>)
 
 **Apa perlu dibuat pada Gambar 4**
+1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
+2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
+
+**Kemudian:** teruskan ke **Gambar 5: Klasifikasi peti masuk 3/5 - Fail dan sensitiviti**.
+
+
+#### Gambar 5: Klasifikasi peti masuk 3/5 - Fail dan sensitiviti
+
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 5](<imej/inbox-klasifikasi-03-fail-sensitiviti.png>)
+
+**Apa perlu dibuat pada Gambar 5**
+1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
+2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
+
+**Kemudian:** teruskan ke **Gambar 6: Klasifikasi peti masuk 4/5 - Edaran minit**.
+
+
+#### Gambar 6: Klasifikasi peti masuk 4/5 - Edaran minit
+
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 6](<imej/inbox-klasifikasi-04-edaran-minit.png>)
+
+**Apa perlu dibuat pada Gambar 6**
+1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
+2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
+
+**Kemudian:** teruskan ke **Gambar 7: Klasifikasi peti masuk 5/5 - Semakan akhir**.
+
+
+#### Gambar 7: Klasifikasi peti masuk 5/5 - Semakan akhir
+
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 7](<imej/inbox-klasifikasi-05-semakan-akhir.png>)
+
+**Apa perlu dibuat pada Gambar 7**
+1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
+2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
+
+**Kemudian:** teruskan ke **Gambar 8: Pantau minit dihantar**.
+
+
+#### Gambar 8: Pantau minit dihantar
+
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 8](<imej/06-minit-saya.png>)
+
+**Apa perlu dibuat pada Gambar 8**
 1. Tapis Saya Hantar.
 2. Sahkan penerima dan status.
 
-**Kemudian:** teruskan ke **Gambar 5: Semak urutan aktiviti**.
+**Kemudian:** teruskan ke **Gambar 9: Semak urutan aktiviti**.
 
 
-#### Gambar 5: Semak urutan aktiviti
+#### Gambar 9: Semak urutan aktiviti
 
-![Klasifikasikan surat masuk dan edarkan minit - Gambar 5](<imej/11-log-aktiviti.png>)
+![Klasifikasikan surat masuk dan edarkan minit - Gambar 9](<imej/12-log-aktiviti.png>)
 
-**Apa perlu dibuat pada Gambar 5**
+**Apa perlu dibuat pada Gambar 9**
 1. Cari tajuk surat.
 2. Sahkan klasifikasi dan minit direkod dalam tenant ini sahaja.
 
@@ -156,7 +198,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 1: Pilih rekod
 
-![Mohon kelulusan dan pembetulan rekod - Gambar 1](<imej/03-records.png>)
+![Mohon kelulusan dan pembetulan rekod - Gambar 1](<imej/04-records.png>)
 
 **Apa perlu dibuat pada Gambar 1**
 1. Cari rekod.
@@ -189,7 +231,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 4: Pantau keputusan
 
-![Mohon kelulusan dan pembetulan rekod - Gambar 4](<imej/06-kelulusan.png>)
+![Mohon kelulusan dan pembetulan rekod - Gambar 4](<imej/07-kelulusan.png>)
 
 **Apa perlu dibuat pada Gambar 4**
 1. Semak status permohonan.
@@ -200,7 +242,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 #### Gambar 5: Sahkan jejak keputusan
 
-![Mohon kelulusan dan pembetulan rekod - Gambar 5](<imej/11-log-aktiviti.png>)
+![Mohon kelulusan dan pembetulan rekod - Gambar 5](<imej/12-log-aktiviti.png>)
 
 **Apa perlu dibuat pada Gambar 5**
 1. Cari tajuk.
@@ -214,19 +256,20 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 | # | Halaman | Laluan | Status Chrome |
 |---:|---|---|---:|
 | 1 | Papan pemuka | `/app/{tenant}` | 200 |
-| 2 | Peti Masuk 1 | `/app/{tenant}/peti-masuk` | 200 |
-| 3 | Rekod | `/app/{tenant}/records` | 200 |
-| 4 | Fail | `/app/{tenant}/registry-files` | 200 |
-| 5 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
-| 6 | Kelulusan | `/app/{tenant}/kelulusan` | 200 |
-| 7 | Carian | `/app/{tenant}/carian` | 200 |
-| 8 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
-| 9 | Laporan | `/app/{tenant}/laporan` | 200 |
-| 10 | Pembetulan Rekod | `/app/{tenant}/pembetulan-rekod` | 200 |
-| 11 | Log Aktiviti Masjid | `/app/{tenant}/log-aktiviti` | 200 |
-| 12 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
-| 13 | Delegasi | `/app/{tenant}/delegasi` | 200 |
-| 14 | Profil Saya | `/app/{tenant}/profil` | 200 |
+| 2 | Pusat Bantuan | `/app/{tenant}/bantuan` | 200 |
+| 3 | Peti Masuk 1 | `/app/{tenant}/peti-masuk` | 200 |
+| 4 | Rekod | `/app/{tenant}/records` | 200 |
+| 5 | Fail | `/app/{tenant}/registry-files` | 200 |
+| 6 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
+| 7 | Kelulusan | `/app/{tenant}/kelulusan` | 200 |
+| 8 | Carian | `/app/{tenant}/carian` | 200 |
+| 9 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
+| 10 | Laporan | `/app/{tenant}/laporan` | 200 |
+| 11 | Pembetulan Rekod | `/app/{tenant}/pembetulan-rekod` | 200 |
+| 12 | Log Aktiviti Masjid | `/app/{tenant}/log-aktiviti` | 200 |
+| 13 | Klasifikasi Fail | `/app/{tenant}/classification-nodes` | 200 |
+| 14 | Delegasi | `/app/{tenant}/delegasi` | 200 |
+| 15 | Profil Saya | `/app/{tenant}/profil` | 200 |
 
 ## 5. Panduan setiap halaman
 
@@ -240,6 +283,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 **Nombor pada gambar**
 1. Tajuk halaman Papan pemuka.
+2. Tindakan utama yang dibenarkan untuk peranan ini.
 
 **Cara menggunakan**
 1. Semak nama masjid pada panel untuk memastikan tenant yang betul.
@@ -252,13 +296,36 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Dashboard terbuka tanpa ralat dan tiada metadata masjid lain dipaparkan.
 
 
-### 2. Peti Masuk 1
+### 2. Pusat Bantuan
+
+**URL:** `/app/{tenant}/bantuan`
+
+**Tujuan:** Halaman fungsi bagi role ini.
+
+![Pusat Bantuan - paparan 200](<imej/02-bantuan.png>)
+
+**Nombor pada gambar**
+1. Tajuk halaman Pusat Bantuan.
+2. Carian atau tapisan halaman.
+3. Tindakan utama yang dibenarkan untuk peranan ini.
+
+**Cara menggunakan**
+1. Buka melalui menu kiri.
+2. Semak data dan gunakan hanya tindakan yang dipaparkan.
+3. Pastikan hasil kekal dalam tenant semasa.
+
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+
+**Hasil dijangka:** Halaman berfungsi tanpa ralat.
+
+
+### 3. Peti Masuk 1
 
 **URL:** `/app/{tenant}/peti-masuk`
 
 **Tujuan:** Pintu masuk dokumen UI, e-mel, WhatsApp atau imbasan sebelum menjadi rekod rasmi.
 
-![Peti Masuk 1 - paparan 200](<imej/02-peti-masuk.png>)
+![Peti Masuk 1 - paparan 200](<imej/03-peti-masuk.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Peti Masuk 1.
@@ -278,13 +345,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Item hanya keluar daripada peti masuk selepas berjaya difailkan atau dipadam dengan audit.
 
 
-### 3. Rekod
+### 4. Rekod
 
 **URL:** `/app/{tenant}/records`
 
 **Tujuan:** Senarai rekod rasmi yang telah difailkan, dengan metadata, media, OCR, minit, kelulusan dan audit.
 
-![Rekod - paparan 200](<imej/03-records.png>)
+![Rekod - paparan 200](<imej/04-records.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Rekod.
@@ -302,13 +369,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Senarai tidak merangkumi peti masuk dan tidak mendedahkan rekod tenant/sensitiviti yang tidak dibenarkan.
 
 
-### 4. Fail
+### 5. Fail
 
 **URL:** `/app/{tenant}/registry-files`
 
 **Tujuan:** Senarai fail mengikut nombor klasifikasi, jilid, sensitiviti, medium dan penjagaan fizikal.
 
-![Fail - paparan 200](<imej/04-registry-files.png>)
+![Fail - paparan 200](<imej/05-registry-files.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Fail.
@@ -328,13 +395,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Nombor fail elektronik dan fizikal sepadan; sejarah pergerakan tidak terputus.
 
 
-### 5. Minit Saya 1
+### 6. Minit Saya 1
 
 **URL:** `/app/{tenant}/minit-saya`
 
 **Tujuan:** Arahan, makluman, balasan dan status tindakan minit yang berkaitan dengan pengguna.
 
-![Minit Saya 1 - paparan 200](<imej/05-minit-saya.png>)
+![Minit Saya 1 - paparan 200](<imej/06-minit-saya.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Minit Saya 1.
@@ -352,13 +419,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Apabila semua penerima tindakan selesai, minit ditutup dan pengirim dimaklumkan.
 
 
-### 6. Kelulusan
+### 7. Kelulusan
 
 **URL:** `/app/{tenant}/kelulusan`
 
 **Tujuan:** Permohonan dan keputusan kelulusan dengan pengesahan semula kata laluan, masa, IP dan pihak yang bertindak.
 
-![Kelulusan - paparan 200](<imej/06-kelulusan.png>)
+![Kelulusan - paparan 200](<imej/07-kelulusan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Kelulusan.
@@ -376,13 +443,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Keputusan direkod sekali, tidak boleh ditindih, dan pemohon menerima notifikasi.
 
 
-### 7. Carian
+### 8. Carian
 
 **URL:** `/app/{tenant}/carian`
 
 **Tujuan:** Carian penuh dan metadata dengan saved search, julat tarikh serta hasil yang ditapis mengikut akses.
 
-![Carian - paparan 200](<imej/07-carian.png>)
+![Carian - paparan 200](<imej/08-carian.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Carian.
@@ -403,13 +470,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Hasil hanya mengandungi rekod yang policy role dan tenant benarkan.
 
 
-### 8. Kegemaran
+### 9. Kegemaran
 
 **URL:** `/app/{tenant}/kegemaran`
 
 **Tujuan:** Pintasan peribadi kepada rekod dan fail yang kerap dirujuk.
 
-![Kegemaran - paparan 200](<imej/08-kegemaran.png>)
+![Kegemaran - paparan 200](<imej/09-kegemaran.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Kegemaran.
@@ -426,13 +493,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Senarai kegemaran adalah per pengguna dan per tenant.
 
 
-### 9. Laporan
+### 10. Laporan
 
 **URL:** `/app/{tenant}/laporan`
 
 **Tujuan:** Ringkasan jumlah rekod, retensi, minit lewat, sumber dan akses sensitif mengikut kebenaran.
 
-![Laporan - paparan 200](<imej/09-laporan.png>)
+![Laporan - paparan 200](<imej/10-laporan.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Laporan.
@@ -448,13 +515,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Angka dan eksport menggunakan skop rekod yang pengguna dibenarkan lihat.
 
 
-### 10. Pembetulan Rekod
+### 11. Pembetulan Rekod
 
 **URL:** `/app/{tenant}/pembetulan-rekod`
 
 **Tujuan:** Workflow pembetulan salah tawan tanpa memadam jejak nilai asal.
 
-![Pembetulan Rekod - paparan 200](<imej/10-pembetulan-rekod.png>)
+![Pembetulan Rekod - paparan 200](<imej/11-pembetulan-rekod.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Pembetulan Rekod.
@@ -471,13 +538,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Tiada perubahan senyap; setiap pembetulan mempunyai pemohon, reviewer, masa dan keputusan.
 
 
-### 11. Log Aktiviti Masjid
+### 12. Log Aktiviti Masjid
 
 **URL:** `/app/{tenant}/log-aktiviti`
 
 **Tujuan:** Timeline append-only bagi perjalanan dokumen, fail, minit, kelulusan, pelupusan, ahli dan storan dalam masjid semasa.
 
-![Log Aktiviti Masjid - paparan 200](<imej/11-log-aktiviti.png>)
+![Log Aktiviti Masjid - paparan 200](<imej/12-log-aktiviti.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Log Aktiviti Masjid.
@@ -495,13 +562,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Timeline hanya memaparkan tenant semasa dan tidak mendedahkan rekod yang role tidak dibenarkan lihat.
 
 
-### 12. Klasifikasi Fail
+### 13. Klasifikasi Fail
 
 **URL:** `/app/{tenant}/classification-nodes`
 
 **Tujuan:** Katalog klasifikasi berhierarki Fungsi, Aktiviti dan Sub-Aktiviti untuk nombor serta tajuk fail.
 
-![Klasifikasi Fail - paparan 200](<imej/12-classification-nodes.png>)
+![Klasifikasi Fail - paparan 200](<imej/13-classification-nodes.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Klasifikasi Fail.
@@ -519,13 +586,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Nod baharu muncul hanya dalam tenant semasa dan tersedia pada pembukaan fail.
 
 
-### 13. Delegasi
+### 14. Delegasi
 
 **URL:** `/app/{tenant}/delegasi`
 
 **Tujuan:** Paparan principal/delegate untuk mewakilkan minit atau keputusan kelulusan dalam tempoh tertentu.
 
-![Delegasi - paparan 200](<imej/13-delegasi.png>)
+![Delegasi - paparan 200](<imej/14-delegasi.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Delegasi.
@@ -544,13 +611,13 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Delegate hanya boleh bertindak dalam tenant, capability dan julat masa yang diluluskan.
 
 
-### 14. Profil Saya
+### 15. Profil Saya
 
 **URL:** `/app/{tenant}/profil`
 
 **Tujuan:** Maklumat akaun, saluran notifikasi, Telegram dan kata laluan sendiri.
 
-![Profil Saya - paparan 200](<imej/14-profil.png>)
+![Profil Saya - paparan 200](<imej/15-profil.png>)
 
 **Nombor pada gambar**
 1. Tajuk halaman Profil Saya.
@@ -645,31 +712,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 5. Klasifikasi peti masuk
-
-![Klasifikasi peti masuk](<imej/inbox-klasifikasi.png>)
-
-**Nombor pada gambar**
-1. Lengkapkan metadata, pilih atau buka fail, tetapkan sensitiviti dan penerima minit.
-2. Klasifikasikan hanya selepas dokumen, rujukan dan penerima disahkan.
-
-**Medan/kawalan yang disahkan:** `Jenis Rekod*`, `Tajuk`, `Arah*`, `Ruj. Kami`, `Ruj. Tuan`, `Tarikh Rekod*`, `Tarikh Terima`, `Nama Pengirim`, `Organisasi Pengirim`, `Nama Penerima`, `Jumlah Lampiran`, `Untuk Perhatian (u.p.)`, `Failkan Ke*`, `Tahap Akses Rekod*`, `Untuk Tindakan (Minit)`, `Untuk Makluman (s.k.)`, `Catatan / Arahan Minit`, `Keutamaan Minit`.
-
-**Langkah terperinci**
-1. Sahkan dokumen, sumber dan status antivirus/OCR dahulu.
-2. Pilih Jenis Rekod; medan metadata khusus akan berubah mengikut jenis.
-3. Isi Tajuk, Arah, Ruj. Kami/Ruj. Tuan dan kedua-dua tarikh.
-4. Isi nama/organisasi pengirim, penerima, jumlah lampiran dan Untuk Perhatian (u.p.).
-5. Pilih Failkan Ke. Jika tiada fail sesuai, buka fail baharu pada nod klasifikasi yang betul.
-6. Tetapkan Tahap Akses. Nilai efektif tidak boleh lebih rendah daripada sensitiviti fail.
-7. Pilih Untuk Tindakan bagi orang yang wajib bertindak; pilih s.k. bagi makluman sahaja.
-8. Jika ada penerima tindakan, isi arahan yang jelas dan keutamaan.
-9. Tekan Klasifikasikan dan sahkan nombor fail/kandungan pada notifikasi kejayaan.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 6. Butiran rekod dan tindakan mengikut kebenaran
+### 5. Butiran rekod dan tindakan mengikut kebenaran
 
 ![Butiran rekod dan tindakan mengikut kebenaran](<imej/rekod-butiran.png>)
 
@@ -691,7 +734,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 7. Mohon pembetulan rekod
+### 6. Mohon pembetulan rekod
 
 ![Mohon pembetulan rekod](<imej/rekod-mohon-pembetulan.png>)
 
@@ -711,7 +754,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 8. Edarkan minit
+### 7. Edarkan minit
 
 ![Edarkan minit](<imej/rekod-edarkan-minit.png>)
 
@@ -731,7 +774,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 9. Mohon kelulusan
+### 8. Mohon kelulusan
 
 ![Mohon kelulusan](<imej/rekod-mohon-kelulusan.png>)
 
@@ -751,7 +794,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 10. Ganti versi rekod
+### 9. Ganti versi rekod
 
 ![Ganti versi rekod](<imej/rekod-ganti-versi.png>)
 
@@ -768,7 +811,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 11. Viewer dokumen
+### 10. Viewer dokumen
 
 ![Viewer dokumen](<imej/rekod-viewer.png>)
 
@@ -789,7 +832,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 12. Butiran fail elektronik, fizikal atau hibrid
+### 11. Butiran fail elektronik, fizikal atau hibrid
 
 ![Butiran fail elektronik, fizikal atau hibrid](<imej/fail-butiran.png>)
 
@@ -809,7 +852,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 13. Balas dan edarkan minit
+### 12. Balas dan edarkan minit
 
 ![Balas dan edarkan minit](<imej/minit-balas.png>)
 
@@ -830,7 +873,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 14. Tanda tindakan minit selesai
+### 13. Tanda tindakan minit selesai
 
 ![Tanda tindakan minit selesai](<imej/minit-selesai.png>)
 
@@ -848,12 +891,13 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 15. Hasil carian lanjutan
+### 14. Hasil carian lanjutan
 
 ![Hasil carian lanjutan](<imej/carian-hasil.png>)
 
 **Nombor pada gambar**
 1. Jumlah hasil yang pengguna ini dibenarkan lihat.
+2. Buka rekod atau tekan bintang untuk kegemaran.
 
 **Langkah terperinci**
 1. Semak jumlah hasil.
@@ -861,6 +905,87 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 3. Buka rekod untuk pengesahan.
 4. Tambah bintang jika kerap dirujuk.
 5. Ubah kriteria jika hasil terlalu luas.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 15. Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber
+
+![Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber](<imej/inbox-klasifikasi.png>)
+
+**Nombor pada gambar**
+1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
+2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
+
+**Langkah terperinci**
+1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
+2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 16. Klasifikasi peti masuk 2/5 - Jenis dan metadata
+
+![Klasifikasi peti masuk 2/5 - Jenis dan metadata](<imej/inbox-klasifikasi-02-jenis-metadata.png>)
+
+**Nombor pada gambar**
+1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
+2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
+
+**Medan/kawalan yang disahkan:** `Jenis Rekod*`, `Tajuk`, `Arah*`, `Ruj. Kami`, `Ruj. Tuan`, `Tarikh Rekod*`, `Tarikh Terima`, `Nama Pengirim`, `Organisasi Pengirim`, `Nama Penerima`, `Jumlah Lampiran`, `Untuk Perhatian (u.p.)`.
+
+**Langkah terperinci**
+1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
+2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 17. Klasifikasi peti masuk 3/5 - Fail dan sensitiviti
+
+![Klasifikasi peti masuk 3/5 - Fail dan sensitiviti](<imej/inbox-klasifikasi-03-fail-sensitiviti.png>)
+
+**Nombor pada gambar**
+1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
+2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
+
+**Medan/kawalan yang disahkan:** `Failkan Ke*`, `Tahap Akses Rekod*`.
+
+**Langkah terperinci**
+1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
+2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 18. Klasifikasi peti masuk 4/5 - Edaran minit
+
+![Klasifikasi peti masuk 4/5 - Edaran minit](<imej/inbox-klasifikasi-04-edaran-minit.png>)
+
+**Nombor pada gambar**
+1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
+2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
+
+**Medan/kawalan yang disahkan:** `Untuk Tindakan (Minit)`, `Untuk Makluman (s.k.)`, `Catatan / Arahan Minit`, `Keutamaan Minit*`.
+
+**Langkah terperinci**
+1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
+2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 19. Klasifikasi peti masuk 5/5 - Semakan akhir
+
+![Klasifikasi peti masuk 5/5 - Semakan akhir](<imej/inbox-klasifikasi-05-semakan-akhir.png>)
+
+**Nombor pada gambar**
+1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
+2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
+
+**Langkah terperinci**
+1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
+2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
 
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 

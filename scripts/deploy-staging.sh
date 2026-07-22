@@ -39,9 +39,10 @@ git fetch --force origin "$REF"
 git checkout --detach FETCH_HEAD
 
 DIWAN_IMAGE_TAG="$DEPLOY_TAG" docker compose build --pull
+DIWAN_IMAGE_TAG="$DEPLOY_TAG" docker compose run --rm app php artisan migrate --force --no-interaction
 DIWAN_IMAGE_TAG="$DEPLOY_TAG" docker compose up -d --remove-orphans
-docker compose exec -T app php artisan migrate --force --no-interaction
 docker compose exec -T app php artisan diwan:sync-meili
+docker compose exec -T app php artisan diwan:sync-help-index
 
 STAGING_CHECK_EMAIL="$CHECK_EMAIL" APP_URL="$APP_URL" ./scripts/staging-smoke.sh
 

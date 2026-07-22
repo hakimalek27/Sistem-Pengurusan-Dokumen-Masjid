@@ -1,6 +1,12 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
+const guideIds = JSON.parse(readFileSync('resources/help/guides.json', 'utf8')).guides.map((guide) => guide.id);
+
 async function login(page) {
+    await page.context().addInitScript((ids) => {
+        for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
+    }, guideIds);
     await page.goto('/app/login');
     await page.locator('input[id="form.login"]').fill('admin_masjid@demo.test');
     await page.locator('input[type="password"]').fill('password');

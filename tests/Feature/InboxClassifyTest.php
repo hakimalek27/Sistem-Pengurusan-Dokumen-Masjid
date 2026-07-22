@@ -87,6 +87,52 @@ it('modal klasifikasi boleh terus edarkan minit dan menghantar notifikasi', func
     Filament::setTenant(null, isQuiet: true);
 });
 
+it('modal klasifikasi membenarkan minit kosong tetapi menyekat kandungan ke-101 secara atomik', function () {
+    Filament::setCurrentPanel(Filament::getPanel('app'));
+    Filament::setTenant($this->mam, isQuiet: true);
+    $this->actingAs($this->kerani);
+    $this->file->update(['enclosure_count' => 99]);
+
+    $record = $this->svc->ingest($this->mam, 'tanpa minit', 'tanpa-minit.pdf', 'application/pdf', $this->kerani, SourceChannel::MuatNaik);
+    Livewire::test(ListInbox::class)
+        ->callTableAction('klasifikasi', $record, data: [
+            'record_type' => 'surat_menyurat',
+            'title' => 'Rekod Tanpa Edaran Minit',
+            'direction' => 'masuk',
+            'record_date' => now()->toDateString(),
+            'registry_file_id' => $this->file->id,
+            'sensitivity' => 'dalaman',
+            'minit_action_ids' => [],
+            'minit_cc_ids' => [],
+            'minit_body' => '',
+            'minit_priority' => 'biasa',
+        ]);
+
+    expect($record->fresh()->status)->toBe(RecordStatus::Difailkan)
+        ->and($this->file->fresh()->enclosure_count)->toBe(100)
+        ->and(Minit::query()->where('record_id', $record->id)->count())->toBe(0);
+
+    $overflow = $this->svc->ingest($this->mam, 'melebihi jilid', 'lebihan.pdf', 'application/pdf', $this->kerani, SourceChannel::MuatNaik);
+    Livewire::test(ListInbox::class)
+        ->callTableAction('klasifikasi', $overflow, data: [
+            'record_type' => 'surat_menyurat',
+            'title' => 'Kandungan Ke-101',
+            'direction' => 'masuk',
+            'record_date' => now()->toDateString(),
+            'registry_file_id' => $this->file->id,
+            'sensitivity' => 'dalaman',
+            'minit_action_ids' => [],
+            'minit_cc_ids' => [],
+            'minit_body' => '',
+            'minit_priority' => 'biasa',
+        ]);
+
+    expect($overflow->fresh()->status)->toBe(RecordStatus::PetiMasuk)
+        ->and($overflow->fresh()->registry_file_id)->toBeNull()
+        ->and($this->file->fresh()->enclosure_count)->toBe(100);
+    Filament::setTenant(null, isQuiet: true);
+});
+
 it('pindah fail merekod audit & memperuntuk enclosure baharu', function () {
     $node2 = makeNode($this->mam, '100-4', 'dalaman');
     $file2 = makeFile($this->mam, $node2, 'dalaman');

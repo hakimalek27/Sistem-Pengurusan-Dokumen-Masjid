@@ -45,6 +45,14 @@ class AppPanelProvider extends PanelProvider
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn (): string => view('filament.auth.login-hints', ['panel' => 'app'])->render(),
             )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_END,
+                fn (): string => view('filament.help-launcher', ['panel' => 'app'])->render(),
+            )
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): string => view('filament.help-assets')->render(),
+            )
             // §10 Aliran I — banner persediaan pada Dashboard sehingga onboarding selesai.
             ->renderHook(
                 PanelsRenderHook::PAGE_START,

@@ -1,7 +1,13 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+
+const guideIds = JSON.parse(readFileSync('resources/help/guides.json', 'utf8')).guides.map((guide) => guide.id);
 
 async function login(browser, baseURL, email) {
     const context = await browser.newContext({ baseURL });
+    await context.addInitScript((ids) => {
+        for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
+    }, guideIds);
     const page = await context.newPage();
     await page.goto('/app/login');
     await page.locator('input[id="form.login"]').fill(email);
@@ -34,11 +40,23 @@ test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browse
     await expect(inboxRow).toBeVisible();
     await inboxRow.getByRole('button', { name: 'Klasifikasikan' }).click();
 
-    await kerani.getByRole('dialog').getByLabel('Arah*', { exact: true }).selectOption('masuk');
+    const dialog = kerani.getByRole('dialog');
+    const next = () => dialog.getByRole('button', { name: 'Seterus', exact: true });
+    await expect(dialog).toContainText('Asal dokumen');
+    await next().click();
+    await kerani.locator('#mountedActionSchema0\\.record_type').selectOption('surat_menyurat');
+    await kerani.waitForTimeout(500);
+    await kerani.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    await next().click();
     await selectFilamentOption(kerani, 0, /MAM\.100-4\/1.*Surat-Menyurat Am 2026/, false);
-    await kerani.getByRole('dialog').getByLabel('Tahap Akses Rekod*', { exact: true }).selectOption('dalaman');
+    await kerani.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await next().click();
     await selectFilamentOption(kerani, 0, 'Pengerusi (MAM)');
-    await kerani.getByRole('dialog').getByLabel('Catatan / Arahan Minit').fill(instruction);
+    await kerani.locator('#mountedActionSchema0\\.minit_body').fill(instruction);
+    await kerani.locator('#mountedActionSchema0\\.minit_priority').selectOption('biasa');
+    await next().click();
+    await expect(dialog).toContainText('Sensitiviti efektif: Dalaman');
+    await expect(dialog).toContainText('Pengerusi (MAM)');
     await submitVisibleAction(kerani);
 
     await expect(kerani.getByText('Rekod difailkan dan minit tindakan telah dihantar.')).toBeVisible({ timeout: 60_000 });

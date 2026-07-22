@@ -61,14 +61,18 @@ class RecordTypeSchema
     {
         return match ($name) {
             'direction' => Select::make('direction')->label('Arah')
-                ->options(['masuk' => 'Masuk', 'keluar' => 'Keluar', 'dalaman' => 'Dalaman']),
-            'our_ref' => TextInput::make('our_ref')->label('Ruj. Kami'),
-            'their_ref' => TextInput::make('their_ref')->label('Ruj. Tuan'),
+                ->options(['masuk' => 'Masuk', 'keluar' => 'Keluar', 'dalaman' => 'Dalaman'])
+                ->helperText('Masuk: diterima daripada luar. Keluar: dihantar oleh masjid. Dalaman: urusan dalam organisasi.'),
+            'our_ref' => TextInput::make('our_ref')->label('Ruj. Kami')
+                ->helperText('Nombor rujukan rasmi masjid. Jika kosong semasa klasifikasi, sistem menjana nombor fail(kandungan).'),
+            'their_ref' => TextInput::make('their_ref')->label('Ruj. Tuan')
+                ->helperText('Nombor rujukan yang dicetak oleh pihak pengirim pada dokumen.'),
             'record_date' => DatePicker::make('record_date')->label('Tarikh Rekod')->native(false)->displayFormat('d/m/Y'),
             'received_date' => DatePicker::make('received_date')->label('Tarikh Terima')->native(false)->displayFormat('d/m/Y'),
             'sender_name' => TextInput::make('sender_name')->label('Nama Pengirim'),
             'sender_org' => TextInput::make('sender_org')->label('Organisasi Pengirim'),
-            'recipient_name' => TextInput::make('recipient_name')->label('Nama Penerima'),
+            'recipient_name' => TextInput::make('recipient_name')->label('Nama Penerima')
+                ->helperText('Nama/jawatan pada kepala surat. Ini metadata dokumen, bukan penerima tindakan minit.'),
             default => null,
         };
     }
@@ -83,6 +87,7 @@ class RecordTypeSchema
         if (($field['name'] ?? null) === 'untuk_perhatian') {
             return TextInput::make($field['name'])
                 ->label($label)
+                ->helperText('u.p. ialah nama/jawatan yang dinyatakan pada surat. Padanan ahli aktif mencadangkan penerima tindakan dan s.k. Pengerusi; semak cadangan sebelum hantar.')
                 ->datalist(fn () => static::activeMemberNames())
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (?string $state, Get $get, Set $set, Component $component): void {

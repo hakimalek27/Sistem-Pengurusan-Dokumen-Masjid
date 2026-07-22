@@ -112,6 +112,8 @@ ini dengan required reviewer sebelum menjalankan workflow **Deploy staging and r
 | `diwan:simulate-whatsapp {session} {phone} {path}` | Uji webhook WhatsApp masuk |
 | `diwan:fetch-mail` | Tarik e-mel pengimbas (IMAP) |
 | `diwan:run-retention-notices` / `diwan:run-retention-execute` | Enjin retensi (§16) |
+| `diwan:sync-help-index` | Sahkan dan segarkan indeks katalog bantuan tanpa data tenant |
+| `diwan:send-guidance-digests` | Hantar digest bantuan opt-in maksimum sekali sehari |
 | `diwan:reconcile-storage` · `diwan:expire-addons` · `diwan:ping-gateway` · `diwan:send-minit-reminders` · `diwan:prune-logs` | Tugasan operasi |
 
 ## Intake dokumen tenant
