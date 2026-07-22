@@ -175,3 +175,7 @@ Bahagian ini mesti dikemas kini selepas deploy dan sebelum handover ditutup:
   dalam folder role yang betul, bukan menganggap indeks gambar sama dengan indeks role.
 - Login berulang tanpa sela mencetuskan had 5/minit yang sah. Semua audit role menggunakan sela
   15 saat; had production tidak dinaikkan.
+- CI pertama untuk release ini berhenti di `npm ci` kerana lockfile yang dijana pada Windows tidak
+  menyenaraikan dependency bundle WASI `@emnapi/core` dan `@emnapi/runtime`. Lockfile dijana semula
+  dalam Node 24 Linux sambil mengekalkan versi dependency, kemudian `npm ci` Linux sebenar, build
+  dan audit disahkan sebelum CI diulang.
