@@ -26,6 +26,8 @@ class ListInbox extends ListRecords
                 ->label('+ Muat Naik Dokumen')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'records.create') ?? false)
+                ->extraAttributes(['data-help-target' => 'inbox-upload'])
+                ->extraModalWindowAttributes(['data-help-target' => 'inbox-upload-modal'])
                 ->schema([
                     FileUpload::make('files')
                         ->label('Dokumen (boleh berbilang)')

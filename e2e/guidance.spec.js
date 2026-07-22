@@ -87,6 +87,40 @@ async function assertNoHorizontalPageOverflow(page) {
     expect(overflow).toBeLessThanOrEqual(2);
 }
 
+async function closeGuideIfOpen(page) {
+    const close = page.locator('.driver-popover-close-btn');
+    if (await close.isVisible().catch(() => false)) await close.click();
+}
+
+async function ensureInboxFixture(page) {
+    if (await page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first().isVisible().catch(() => false)) return;
+
+    const marker = Date.now();
+    await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
+    const dialog = page.getByRole('dialog');
+    await dialog.locator('input[type="file"]').setInputFiles({
+        name: `Dokumen panduan E2E ${marker}.txt`,
+        mimeType: 'text/plain',
+        buffer: Buffer.from(`Dokumen ujian panduan ${marker}.`),
+    });
+    await expect(dialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
+    const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
+    await expect(submit).toBeEnabled({ timeout: 60_000 });
+    await submit.click();
+    await expect(page.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible({ timeout: 60_000 });
+}
+
+async function assertFloatingHelpLauncher(page, viewportHeight) {
+    const launcher = page.locator('[data-help-target="help-launcher"]');
+    await expect(launcher).toBeVisible();
+    await expect(launcher).toHaveAttribute('aria-label', 'Buka Pembantu Diwan');
+    expect(await launcher.evaluate((element) => getComputedStyle(element).position)).toBe('fixed');
+    const box = await launcher.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box.y).toBeGreaterThan(viewportHeight - 100);
+    expect(box.width).toBeLessThanOrEqual(60);
+}
+
 test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop serta mobile', async ({ browser, baseURL }) => {
     test.setTimeout(900_000);
     const contextKeys = new Set();
@@ -130,7 +164,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
         const adminHelp = await superadmin.goto('/admin/bantuan');
         expect(adminHelp?.status()).toBe(200);
         await expect(superadmin.locator('[data-help-target="help-center"]')).toBeVisible();
-        await expect(superadmin.locator('[data-help-target="help-launcher"]')).toBeVisible();
+        await assertFloatingHelpLauncher(superadmin, viewport.height);
         await assertNoHorizontalPageOverflow(superadmin);
         expect([...new Set(superadminErrors)]).toEqual([]);
         inventory.push({ viewport: viewport.name, role: 'superadmin', pages: adminNavigation.length || 1 });
@@ -159,7 +193,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
                 const help = await page.goto(`/app/${tenantSlug}/bantuan`);
                 expect(help?.status()).toBe(200);
                 await expect(page.locator('[data-help-target="help-center"]')).toBeVisible();
-                await expect(page.locator('[data-help-target="help-launcher"]')).toBeVisible();
+                await assertFloatingHelpLauncher(page, viewport.height);
                 await expect(page.locator('.diwan-help-result').first()).toBeVisible();
                 await assertNoHorizontalPageOverflow(page);
                 expect([...new Set(browserErrors)], `${account.role} ${viewport.name}`).toEqual([]);
@@ -192,7 +226,7 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     const popover = page.locator('.driver-popover');
     await expect(popover).toBeVisible();
     await expect(popover).toContainText('1 daripada 6');
-    await popover.getByRole('button', { name: 'Close' }).click();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
     await expect(popover).toBeHidden();
     await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem('diwan-help:tenant.peti-masuk') ?? '{}').event)).toBe('dismissed');
 
@@ -200,7 +234,7 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     await expect(popover).toBeVisible();
     await popover.getByRole('button', { name: 'Seterusnya' }).click();
     await expect(popover).toContainText('2 daripada 6');
-    await popover.getByRole('button', { name: 'Close' }).click();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
     await page.waitForTimeout(700);
 
     const inboxPath = `/app/${tenantSlug}/peti-masuk`;
@@ -226,7 +260,7 @@ test('tour boleh dimula, ditutup, disambung, diselesaikan dan diulang', async ({
     const repeatResult = page.locator('.diwan-help-result').filter({ has: page.getByRole('heading', { name: 'Peti Masuk', exact: true }) }).first();
     await repeatResult.getByRole('button', { name: 'Mulakan panduan' }).click();
     await expect(popover).toContainText('1 daripada 6');
-    await popover.getByRole('button', { name: 'Close' }).click();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
 
     expect([...new Set(browserErrors)]).toEqual([]);
     await context.close();
@@ -240,9 +274,10 @@ test('panduan pendaftaran awam bermula automatik sekali dan ikon bantuan kekal t
 
     const popover = page.locator('.driver-popover');
     await expect(popover).toBeVisible();
-    await expect(popover).toContainText('1 daripada 3');
+    await expect(popover).toContainText('1 daripada 4');
+    await expect(popover).toContainText('Tindakan anda');
     await expect(page.locator('[data-help-target="registration-organisation"]')).toBeVisible();
-    await popover.getByRole('button', { name: 'Close' }).click();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
     await expect(popover).toBeHidden();
 
     await page.reload();
@@ -250,10 +285,168 @@ test('panduan pendaftaran awam bermula automatik sekali dan ikon bantuan kekal t
     await expect(popover).toBeHidden();
     const launcher = page.locator('[data-help-target="help-launcher"]');
     await expect(launcher).toBeVisible();
+    await expect(launcher).toContainText('Pembantu Diwan');
     await launcher.click();
     await expect(page).toHaveURL(/\/bantuan\?asal=/);
     await expect(page.locator('[data-help-target="help-center"]')).toBeVisible();
     await assertNoHorizontalPageOverflow(page);
+    expect([...new Set(browserErrors)]).toEqual([]);
+    await context.close();
+});
+
+test('carian bantuan memberi hasil, status dan sempadan role yang jelas', async ({ browser, baseURL }) => {
+    const publicContext = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 } });
+    await disableAutomaticGuides(publicContext);
+    const publicPage = await publicContext.newPage();
+    const publicErrors = monitorBrowserErrors(publicPage);
+    await publicPage.goto('/bantuan');
+    await expect(publicPage.getByText('Skop panduan:')).toContainText('Orang Awam');
+    await publicPage.locator('#help-query').fill('klasifikasi surat');
+    await publicPage.getByRole('button', { name: 'Cari', exact: true }).click();
+    await expect(publicPage.locator('.diwan-help-search-status')).toContainText('0 hasil');
+    await expect(publicPage.locator('.diwan-help-empty')).toContainText('log masuk ke akaun masjid');
+    await publicPage.getByRole('button', { name: 'Daftar masjid', exact: true }).click();
+    await expect(publicPage.locator('.diwan-help-search-status')).toContainText('hasil dalam skop Orang Awam');
+    await expect(publicPage.getByRole('heading', { name: 'Daftar Masjid', exact: true })).toBeVisible();
+    expect([...new Set(publicErrors)]).toEqual([]);
+    await publicContext.close();
+
+    const appContext = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(appContext);
+    const appPage = await appContext.newPage();
+    const appErrors = monitorBrowserErrors(appPage);
+    await loginTenant(appPage, tenantRoles[0]);
+    await appPage.goto(`/app/${tenantSlug}/bantuan`);
+    await closeGuideIfOpen(appPage);
+    await expect(appPage.getByText('Skop panduan:')).toContainText('Admin / Kerani');
+    await appPage.locator('#help-query').fill('nak klasfikasi surat wasap');
+    await appPage.getByRole('button', { name: 'Cari', exact: true }).click();
+    await expect(appPage.locator('.diwan-help-search-status')).not.toContainText('0 hasil');
+    await expect(appPage.locator('.diwan-help-result').filter({ hasText: /Klasifikasi|Peti Masuk/i }).first()).toBeVisible();
+    expect([...new Set(appErrors)]).toEqual([]);
+    await appContext.close();
+});
+
+test('imej bantuan yang gagal tidak meninggalkan ruang kosong atau ralat halaman', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 } });
+    await disableAutomaticGuides(context);
+    await context.route('**/bantuan/imej/tenant.dashboard**', (route) => route.fulfill({
+        status: 404,
+        contentType: 'text/plain',
+        body: 'not found',
+    }));
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}/bantuan`);
+    const media = page.locator('[data-help-image-wrap]').first();
+    await expect(media).toHaveClass(/is-missing/);
+    await expect(media.locator('.diwan-help-image-fallback')).toBeVisible();
+    expect([...new Set(browserErrors.filter((error) => !error.includes('404 (Not Found)')))]).toEqual([]);
+    await context.close();
+});
+
+test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await page.goto('/daftar?panduan=public.registration&langkah=0');
+
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toContainText('1 daripada 4');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await expect(page.locator('[data-diwan-tour-waiting]')).toContainText('Panduan menunggu');
+    await expect(page.locator('[data-diwan-tour-waiting]')).toHaveAttribute('role', 'status');
+    await expect(popover).toBeHidden();
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[data-help-target="registration-organisation"]')))).toBe(true);
+
+    const organisation = page.locator('[data-help-target="registration-organisation"]');
+    await organisation.locator('input').nth(0).fill(`Masjid Tour ${Date.now()}`);
+    await organisation.locator('select').selectOption({ label: 'Selangor' });
+    await organisation.locator('input').nth(1).fill('Petaling');
+    await organisation.locator('input').nth(2).fill('TURAA');
+    await organisation.locator('input').nth(3).fill(`tour-${Date.now()}`);
+    await page.locator('[data-help-target="registration-next"]').click();
+    await expect(page.locator('[data-help-target="registration-admin"]')).toBeVisible();
+    await expect(popover).toContainText('2 daripada 4');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+
+    const admin = page.locator('[data-help-target="registration-admin"]');
+    await admin.locator('input').nth(0).fill('Pentadbir Tour');
+    await admin.locator('input').nth(1).fill(`tour-${Date.now()}@example.test`);
+    await admin.locator('input').nth(2).fill('60123456789');
+    await page.locator('[data-help-target="registration-next"]').click();
+    await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
+    await expect(popover).toContainText('3 daripada 4');
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    expect([...new Set(browserErrors)]).toEqual([]);
+    await context.close();
+});
+
+test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
+    await ensureInboxFixture(page);
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=screen.klasifikasi-peti-masuk&langkah=0`);
+
+    const classify = page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first();
+    await expect(classify, 'Fixture Peti Masuk diperlukan untuk audit tour klasifikasi').toBeVisible();
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toContainText('1 daripada 11');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await classify.click();
+
+    const modal = page.locator('.fi-modal-window:visible').last();
+    await expect(modal).toBeVisible();
+    await expect(page.locator('[data-help-target="classification-source"]:visible')).toBeVisible();
+    await expect(popover).toContainText('2 daripada 11');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+
+    await expect(page.locator('[data-help-target="classification-metadata"]:visible')).toBeVisible();
+    await expect(popover).toContainText('3 daripada 11');
+    const recordType = page.locator('#mountedActionSchema0\\.record_type');
+    if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
+    await page.waitForTimeout(400);
+    await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await expect(popover).toContainText('4 daripada 11');
+    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await expect(popover).toContainText('5 daripada 11');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+
+    await expect(page.locator('[data-help-target="classification-file"]:visible')).toBeVisible();
+    await expect(popover).toContainText('6 daripada 11');
+    const fileStep = modal.locator('form.fi-active');
+    await fileStep.locator('.fi-select-input-btn').first().click();
+    await page.getByRole('option', { name: new RegExp(`${filePrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.`) }).first().click();
+    await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await expect(popover).toContainText('7 daripada 11');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+
+    await expect(page.locator('[data-help-target="classification-minit"]:visible')).toBeVisible();
+    await expect(popover).toContainText('8 daripada 11');
+    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await expect(popover).toContainText('9 daripada 11');
+    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+
+    await expect(page.locator('[data-help-target="classification-review"]:visible')).toBeVisible();
+    await expect(popover).toContainText('10 daripada 11');
+    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await expect(popover).toContainText('11 daripada 11');
+    await expect(page.locator('[data-help-target="classification-submit"]:visible')).toBeVisible();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    await modal.getByRole('button', { name: 'Tutup' }).click();
+    await expect(modal).toBeHidden();
     expect([...new Set(browserErrors)]).toEqual([]);
     await context.close();
 });

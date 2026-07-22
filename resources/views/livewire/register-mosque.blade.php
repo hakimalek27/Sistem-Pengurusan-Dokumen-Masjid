@@ -6,7 +6,7 @@
         </div>
         <p class="muted"><a href="{{ url('/log-masuk') }}">Sudah ada akaun? Log masuk</a></p>
     @elseif ($submitted)
-        <div class="ok">
+        <div class="ok" data-help-target="registration-complete">
             <strong>Permohonan diterima!</strong><br>
             Masjid anda kini <em>menunggu kelulusan</em> platform. Kami akan menghantar pautan
             log masuk ke e-mel anda sebaik sahaja diluluskan.
@@ -19,9 +19,9 @@
             <li class="{{ $step >= 2 ? 'active' : '' }}"><b>2</b><span>Pentadbir</span></li>
             <li class="{{ $step >= 3 ? 'active' : '' }}"><b>3</b><span>Persetujuan</span></li>
         </ol>
-        <form wire:submit="submit">
+        <form wire:submit="submit" data-help-target="registration-{{ $step === 1 ? 'organisation' : ($step === 2 ? 'admin' : 'consent') }}">
             @if ($step === 1)
-                <section wire:key="registration-step-organisation" data-help-target="registration-organisation">
+                <section wire:key="registration-step-organisation">
                     <label>Nama Masjid <span style="color:#b91c1c">*</span></label>
                     <input type="text" wire:model.blur="name" placeholder="cth Masjid Al-Muttaqin Wangsa Melawati">
                     @error('name') <div class="err">{{ $message }}</div> @enderror
@@ -45,7 +45,7 @@
                     @error('slug') <div class="err">{{ $message }}</div> @enderror
                 </section>
             @elseif ($step === 2)
-                <section wire:key="registration-step-admin" data-help-target="registration-admin">
+                <section wire:key="registration-step-admin">
                     <label>Nama Pentadbir <span style="color:#b91c1c">*</span></label>
                     <input type="text" wire:model="admin_name" autocomplete="name">
                     @error('admin_name') <div class="err">{{ $message }}</div> @enderror
@@ -59,7 +59,7 @@
                     @error('phone_wa') <div class="err">{{ $message }}</div> @enderror
                 </section>
             @else
-                <section wire:key="registration-step-consent" data-help-target="registration-consent">
+                <section wire:key="registration-step-consent">
                     <div class="registration-review">
                         <strong>{{ $name }}</strong>
                         <span>{{ strtoupper($code) }} · {{ $state }}{{ $district ? ' · '.$district : '' }}</span>
@@ -80,11 +80,11 @@
             @endif
 
             <div class="registration-actions">
-                @if ($step > 1)<button type="button" class="btn btn-ghost" wire:click="previousStep">Kembali</button>@endif
+                @if ($step > 1)<button type="button" class="btn btn-ghost" wire:click="previousStep" data-help-target="registration-previous">Kembali</button>@endif
                 @if ($step < 3)
-                    <button type="button" class="btn" wire:click="nextStep">Seterusnya</button>
+                    <button type="button" class="btn" wire:click="nextStep" data-help-target="registration-next">Seterusnya</button>
                 @else
-                    <button type="submit" class="btn">Hantar Permohonan</button>
+                    <button type="submit" class="btn" data-help-target="registration-submit">Hantar Permohonan</button>
                 @endif
             </div>
         </form>

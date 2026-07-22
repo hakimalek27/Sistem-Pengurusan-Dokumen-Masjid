@@ -11,7 +11,7 @@ class Bantuan extends Page
 {
     protected string $view = 'filament.app.pages.bantuan';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLifebuoy;
 
     protected static ?string $navigationLabel = 'Pusat Bantuan';
 

@@ -24,8 +24,16 @@
         <div class="diwan-help-heading">
             <div>
                 <h2 id="help-search-title">Cari panduan</h2>
-                <p>Versi katalog {{ $catalogVersion }}</p>
+                <p>Taip perkara yang hendak dibuat atau masalah yang sedang berlaku.</p>
             </div>
+        </div>
+
+        <div class="diwan-help-context">
+            <span>Skop panduan: <strong>{{ $contextLabel }}</strong></span>
+            <span>Versi {{ $catalogVersion }}</span>
+            @if ($panel === 'public')
+                <span>Panduan dalaman dipaparkan selepas <a href="{{ url('/log-masuk') }}">log masuk</a>.</span>
+            @endif
         </div>
 
         <form wire:submit="search" class="diwan-help-search">
@@ -33,16 +41,42 @@
             <div>
                 <input id="help-query" type="search" wire:model="query" maxlength="200"
                     placeholder="Contoh: nak klasifikasi surat" autocomplete="off">
-                <button type="submit" wire:loading.attr="disabled">Cari</button>
+                <button type="submit" wire:loading.attr="disabled" wire:target="search,searchFor">Cari</button>
             </div>
             @error('query') <p class="diwan-help-error">{{ $message }}</p> @enderror
         </form>
+
+        <div class="diwan-help-suggestions" aria-label="Cadangan carian">
+            @foreach ($panel === 'public'
+                ? ['Daftar masjid', 'Log masuk', 'Lapor masalah']
+                : ['Klasifikasi surat', 'Minit untuk tindakan', 'Butang tidak kelihatan'] as $suggestion)
+                <button type="button" wire:click="searchFor('{{ $suggestion }}')" wire:loading.attr="disabled" wire:target="search,searchFor">
+                    {{ $suggestion }}
+                </button>
+            @endforeach
+        </div>
+
+        <div class="diwan-help-search-status" role="status" aria-live="polite">
+            <span wire:loading wire:target="search,searchFor">Sedang mencari panduan...</span>
+            <span wire:loading.remove wire:target="search,searchFor">
+                @if ($searchPerformed)
+                    <strong>{{ count($results) }}</strong> hasil dalam skop {{ $contextLabel }}
+                    @if ($lastQuery !== '') untuk “{{ $lastQuery }}” @endif
+                    <button type="button" class="diwan-help-secondary" wire:click="clearSearch">Kosongkan carian</button>
+                @else
+                    {{ count($results) }} panduan disyorkan untuk {{ $contextLabel }}.
+                @endif
+            </span>
+        </div>
 
         <div class="diwan-help-results" aria-live="polite">
             @forelse ($results as $guide)
                 <article class="diwan-help-result" wire:key="guide-{{ $guide['id'] }}">
                     @if (filled($guide['images'] ?? []))
-                        <img class="diwan-help-thumb" src="{{ route('help-image.show', ['guideId' => $guide['id'], 'tenant' => $mosqueId]) }}" alt="Paparan latihan {{ $guide['title'] }}" loading="lazy">
+                        <div class="diwan-help-media" data-help-image-wrap>
+                            <img class="diwan-help-thumb" data-help-image src="{{ route('help-image.show', ['guideId' => $guide['id'], 'tenant' => $mosqueId]) }}" alt="Paparan latihan {{ $guide['title'] }}" loading="eager" decoding="async">
+                            <span class="diwan-help-image-fallback">Paparan latihan belum tersedia.</span>
+                        </div>
                     @endif
                     <div>
                         <span class="diwan-help-kicker">{{ str_starts_with($guide['id'], 'workflow.') ? 'Workflow' : 'Panduan' }}</span>
@@ -56,7 +90,12 @@
                 </article>
             @empty
                 <div class="diwan-help-empty">
-                    Tiada panduan sepadan. Jalankan diagnosis atau sertakan pertanyaan ini dalam laporan masalah dengan persetujuan anda.
+                    Tiada panduan sepadan dalam skop <strong>{{ $contextLabel }}</strong>.
+                    @if ($panel === 'public')
+                        Panduan kerja masjid hanya tersedia selepas <a href="{{ url('/log-masuk') }}">log masuk ke akaun masjid</a>.
+                    @else
+                        Cuba istilah tugas, nama halaman atau jalankan diagnosis di bawah.
+                    @endif
                 </div>
             @endforelse
         </div>

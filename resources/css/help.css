@@ -8,6 +8,73 @@
     color: var(--help-ink);
 }
 
+.diwan-help-launcher { display: contents; }
+.diwan-help-launcher-button {
+    display: inline-flex;
+    min-height: 2.4rem;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    border: 1px solid #047857;
+    border-radius: .45rem;
+    padding: .5rem .72rem;
+    background: #fff;
+    color: #065f46;
+    box-shadow: 0 8px 24px rgba(23, 33, 29, .14);
+    font-size: .82rem;
+    font-weight: 750;
+    line-height: 1;
+    text-decoration: none;
+}
+.diwan-help-launcher-button:hover { background: #ecfdf5; color: #064e3b; }
+.diwan-help-launcher-button:focus-visible { outline: 3px solid rgba(4, 120, 87, .25); outline-offset: 2px; }
+.diwan-help-launcher-button svg { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; }
+.diwan-help-launcher-button b {
+    position: relative;
+    display: grid;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    place-items: center;
+    border-radius: 999px;
+    padding: 0 .25rem;
+    background: #b91c1c;
+    color: #fff;
+    font-size: .68rem;
+    line-height: 1;
+}
+.diwan-help-launcher[data-panel="app"] .diwan-help-launcher-button,
+.diwan-help-launcher[data-panel="admin"] .diwan-help-launcher-button {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 45;
+}
+.diwan-help-launcher[data-panel="app"] .diwan-help-launcher-button,
+.diwan-help-launcher[data-panel="admin"] .diwan-help-launcher-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0;
+    border-radius: .5rem;
+}
+.diwan-help-launcher[data-panel="app"] .diwan-help-launcher-label,
+.diwan-help-launcher[data-panel="admin"] .diwan-help-launcher-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+.diwan-help-launcher[data-panel="app"] .diwan-help-launcher-button b,
+.diwan-help-launcher[data-panel="admin"] .diwan-help-launcher-button b {
+    position: absolute;
+    top: -.35rem;
+    right: -.35rem;
+}
+.dark .diwan-help-launcher-button { border-color: #34d399; background: #18181b; color: #a7f3d0; }
+body.driver-active .diwan-help-launcher-button { visibility: hidden; }
+
 .diwan-help-band { padding: 0 0 1.25rem; border-bottom: 1px solid var(--help-line); }
 .diwan-help-band:last-child { border-bottom: 0; }
 .diwan-help h2, .diwan-help h3 { margin: 0; letter-spacing: 0; }
@@ -16,6 +83,9 @@
 .diwan-help p { margin: .3rem 0 0; color: var(--help-muted); }
 .diwan-help-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: .9rem; }
 .diwan-help-kicker { display: block; color: var(--help-green); font-size: .72rem; font-weight: 750; text-transform: uppercase; margin-bottom: .2rem; }
+.diwan-help-context { display: flex; flex-wrap: wrap; gap: .4rem .7rem; align-items: center; margin-bottom: .8rem; color: var(--help-muted); font-size: .84rem; }
+.diwan-help-context strong { color: var(--help-ink); }
+.diwan-help-context a { color: var(--help-green); font-weight: 700; }
 .diwan-help-search label, .diwan-help-diagnosis-form label, .diwan-help-support-form label, .diwan-help-time-grid label { display: grid; gap: .3rem; font-size: .86rem; font-weight: 650; }
 .diwan-help-search > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; }
 .diwan-help input[type="search"], .diwan-help input[type="text"], .diwan-help input[type="time"], .diwan-help input[type="file"], .diwan-help select, .diwan-help textarea {
@@ -27,10 +97,21 @@
 .diwan-help .diwan-help-secondary { background: transparent; color: var(--help-green); }
 .diwan-help-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-top: .9rem; }
 .diwan-help-result { display: flex; min-width: 0; min-height: 10rem; flex-direction: column; justify-content: space-between; gap: .8rem; border: 1px solid var(--help-line); border-radius: .45rem; padding: .85rem; background: #fff; }
-.diwan-help-thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; border: 1px solid var(--help-line); border-radius: .35rem; background: #f8fafc; }
+.diwan-help-media { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--help-line); border-radius: .35rem; background: #f8fafc; }
+.diwan-help-thumb { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.diwan-help-image-fallback { display: none; padding: .75rem; color: var(--help-muted); font-size: .8rem; }
+.diwan-help-media.is-missing { display: block; aspect-ratio: auto; min-height: 3rem; }
+.diwan-help-media.is-missing .diwan-help-thumb { display: none; }
+.diwan-help-media.is-missing .diwan-help-image-fallback { display: block; }
 .dark .diwan-help-result { background: transparent; }
 .diwan-help-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
+.diwan-help-search-status { min-height: 1.3rem; margin-top: .55rem; color: var(--help-muted); font-size: .84rem; }
+.diwan-help-search-status strong { color: var(--help-ink); }
+.diwan-help-search-status button { min-height: auto; margin-left: .35rem; border: 0; padding: .1rem .2rem; text-decoration: underline; }
+.diwan-help-suggestions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .55rem; }
+.diwan-help-suggestions button { min-height: 1.9rem; padding: .3rem .55rem; background: transparent; color: var(--help-green); font-size: .76rem; }
 .diwan-help-empty { grid-column: 1 / -1; padding: .9rem; border-left: 3px solid #d97706; background: #fffbeb; color: #78350f; }
+.diwan-help-empty a { color: #065f46; font-weight: 750; }
 .diwan-help-steps { display: grid; gap: .65rem; padding: 0; margin: 0; list-style: none; }
 .diwan-help-steps li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr); gap: .6rem; align-items: start; }
 .diwan-help-steps li > span { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: 999px; background: #e7f5ed; color: var(--help-green); font-weight: 800; font-size: .8rem; }
@@ -57,10 +138,79 @@
 .diwan-help-tickets > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; gap: .6rem; padding: .55rem 0; border-top: 1px solid var(--help-line); align-items: center; }
 .diwan-help-tickets small { color: var(--help-muted); }
 
+.fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header-step-description { display: none; }
+@media (min-width: 768px) {
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        overflow: visible !important;
+    }
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header-step,
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header-step-btn,
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header-step-text {
+        width: auto !important;
+        min-width: 0 !important;
+    }
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header-step-label {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+}
+@media (max-width: 767px) {
+    .fi-modal-window[data-help-workflow="classification"] .fi-sc-wizard-header {
+        grid-auto-columns: minmax(9.5rem, 1fr);
+        scrollbar-width: thin;
+    }
+}
+
+.driver-popover.diwan-tour-popover {
+    width: min(23rem, calc(100vw - 1.5rem));
+    max-width: min(23rem, calc(100vw - 1.5rem));
+    border-radius: .45rem;
+    padding: 1rem;
+    color: #17211d;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.diwan-tour-popover .driver-popover-title { padding-right: 1.6rem; font-size: 1rem; line-height: 1.35; letter-spacing: 0; }
+.diwan-tour-popover .driver-popover-description { color: #405048; font-size: .86rem; line-height: 1.5; }
+.diwan-tour-instruction { margin: 0; color: #17211d; }
+.diwan-tour-hint { margin: .65rem 0 0; border-left: 3px solid #047857; padding: .48rem .6rem; background: #f2faf6; color: #33433c; }
+.diwan-tour-status { display: none; margin: .65rem 0 0; padding: .48rem .6rem; border-left: 3px solid #d97706; background: #fffbeb; color: #78350f; }
+.diwan-tour-status:not(:empty) { display: block; }
+.diwan-tour-status[data-tone="error"] { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
+.diwan-tour-article { display: inline-block; margin-top: .65rem; color: #047857; font-weight: 750; }
+.diwan-tour-popover .driver-popover-footer { margin-top: .8rem; }
+.diwan-tour-popover .driver-popover-next-btn,
+.diwan-tour-popover .driver-popover-prev-btn { min-height: 2rem; border-radius: .35rem; padding: .35rem .62rem; text-shadow: none; font: inherit; font-size: .78rem; font-weight: 750; }
+.diwan-tour-popover .driver-popover-next-btn { border-color: #047857; background: #047857; color: #fff; }
+.diwan-tour-popover .driver-popover-prev-btn { border-color: #b8c5be; background: #fff; color: #33433c; }
+.diwan-tour-popover .driver-popover-close-btn { width: 2rem; height: 2rem; color: #52615a; font-size: 1.4rem; }
+.diwan-tour-waiting {
+    position: fixed;
+    top: .75rem;
+    right: .75rem;
+    z-index: 10002;
+    display: flex;
+    max-width: min(28rem, calc(100vw - 1.5rem));
+    align-items: center;
+    gap: .65rem;
+    border: 1px solid #047857;
+    border-radius: .4rem;
+    padding: .55rem .65rem;
+    background: #fff;
+    color: #17211d;
+    box-shadow: 0 8px 24px rgba(23, 33, 29, .18);
+    font-size: .8rem;
+    font-weight: 650;
+}
+.diwan-tour-waiting span { min-width: 0; flex: 1; }
+.diwan-tour-waiting button { flex: 0 0 auto; border: 0; border-radius: .3rem; padding: .38rem .5rem; background: #047857; color: #fff; font: inherit; font-size: .75rem; font-weight: 750; cursor: pointer; }
+
 @media (max-width: 720px) {
     .diwan-help-results { grid-template-columns: 1fr; }
     .diwan-help-heading { align-items: stretch; flex-direction: column; }
     .diwan-help-search > div, .diwan-help-diagnosis-form { grid-template-columns: 1fr; }
     .diwan-help-time-grid { grid-template-columns: 1fr; }
     .diwan-help-tickets > div { grid-template-columns: 1fr; gap: .15rem; }
+    .diwan-help-launcher[data-panel="app"] .diwan-help-launcher-button,
+    .diwan-help-launcher[data-panel="admin"] .diwan-help-launcher-button { right: .75rem; bottom: .75rem; }
 }

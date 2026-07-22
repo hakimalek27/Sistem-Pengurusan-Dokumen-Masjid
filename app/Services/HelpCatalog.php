@@ -193,11 +193,22 @@ class HelpCatalog
             if (filled($step['route'] ?? null)) {
                 $step['route'] = str_replace('{tenant}', $mosque?->slug ?? '{tenant}', (string) $step['route']);
             }
+            if (preg_match('/^Langkah\s+\d+$/i', (string) ($step['title'] ?? ''))) {
+                $step['title'] = $this->meaningfulStepTitle((string) ($step['instruction'] ?? ''));
+            }
 
             return $step;
         })->all();
 
         return $guide;
+    }
+
+    protected function meaningfulStepTitle(string $instruction): string
+    {
+        $firstClause = trim((string) preg_split('/[.;](?:\s|$)/u', $instruction, 2)[0]);
+        $title = $firstClause !== '' ? $firstClause : 'Ikuti arahan pada skrin';
+
+        return Str::limit($title, 72, '...');
     }
 
     protected function normalise(string $value): string

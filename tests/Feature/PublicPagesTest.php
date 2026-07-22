@@ -65,3 +65,11 @@ it('mengasingkan bucket kadar pendaftaran, halaman login dan magic login', funct
 
     expect((int) $limited->headers->get('Retry-After'))->toBeLessThanOrEqual(60);
 });
+
+it('memisahkan bucket imej bantuan supaya thumbnail tidak mengunci halaman bantuan', function () {
+    cache()->flush();
+
+    foreach (range(1, 61) as $attempt) {
+        $this->get('/bantuan/imej/public.registration')->assertOk();
+    }
+});

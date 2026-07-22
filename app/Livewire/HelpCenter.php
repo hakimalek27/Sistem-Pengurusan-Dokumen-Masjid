@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\HelpAnnouncement;
 use App\Models\Mosque;
 use App\Models\SupportRequest;
+use App\Models\User;
 use App\Services\GuidanceService;
 use App\Services\HelpCatalog;
 use App\Services\HelpDiagnosisService;
@@ -37,6 +38,10 @@ class HelpCenter extends Component
     public string $query = '';
 
     public array $results = [];
+
+    public bool $searchPerformed = false;
+
+    public string $lastQuery = '';
 
     public ?string $selectedGuideId = null;
 
@@ -124,12 +129,36 @@ class HelpCenter extends Component
     {
         $this->throttlePublic('search', 30);
         $this->validate(['query' => ['nullable', 'string', 'max:200']]);
+        $this->query = trim($this->query);
+        $this->lastQuery = $this->query;
+        $this->searchPerformed = true;
         $this->results = app(HelpSearchService::class)
             ->search($this->query, $this->panel, Auth::user(), $this->mosque())
             ->all();
         $this->unmatchedQuery = $this->results === [] ? $this->query : '';
         $this->selectedGuide = [];
         $this->selectedGuideId = null;
+    }
+
+    public function searchFor(string $query): void
+    {
+        abort_if(mb_strlen($query) > 200, 422);
+        $this->query = $query;
+        $this->search();
+    }
+
+    public function clearSearch(): void
+    {
+        $this->query = '';
+        $this->lastQuery = '';
+        $this->searchPerformed = false;
+        $this->unmatchedQuery = '';
+        $this->selectedGuide = [];
+        $this->selectedGuideId = null;
+        $this->results = app(HelpCatalog::class)
+            ->forContext($this->panel, Auth::user(), $this->mosque())
+            ->take(12)
+            ->all();
     }
 
     public function selectGuide(string $guideId): void
@@ -259,7 +288,17 @@ class HelpCenter extends Component
             'tickets' => $tickets,
             'diagnosisCategories' => HelpDiagnosisService::CATEGORIES,
             'catalogVersion' => app(HelpCatalog::class)->version(),
+            'contextLabel' => $this->contextLabel($user, $mosque),
         ]);
+    }
+
+    protected function contextLabel(?User $user, ?Mosque $mosque): string
+    {
+        return match ($this->panel) {
+            'admin' => 'Pentadbir Platform',
+            'app' => (string) (config('roles.labels.'.($user && $mosque ? $user->roleIn($mosque) : '')) ?: 'Ahli Masjid'),
+            default => 'Orang Awam',
+        };
     }
 
     protected function mosque(): ?Mosque

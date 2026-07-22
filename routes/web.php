@@ -30,7 +30,7 @@ Route::get('/bantuan', PublicHelpCenter::class)
     ->name('bantuan');
 
 Route::get('/bantuan/imej/{guideId}', HelpImageController::class)
-    ->middleware('throttle:public-help')
+    ->middleware('throttle:public-help-images')
     ->name('help-image.show');
 
 // §15.1 — Magic link auto-login. GET = interstisial (elak bot pratonton

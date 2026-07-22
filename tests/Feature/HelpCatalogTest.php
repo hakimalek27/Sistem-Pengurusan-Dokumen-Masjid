@@ -31,6 +31,29 @@ it('menerima istilah biasa singkatan dan salah ejaan melalui fallback PHP', func
         ->and($minute)->not->toBeEmpty();
 });
 
+it('menghidrat tajuk langkah yang menerangkan tindakan dan sasaran wizard stabil', function () {
+    $catalog = app(HelpCatalog::class);
+    $visible = collect(config('roles.list'))
+        ->flatMap(function (string $role) use ($catalog) {
+            $member = makeMember($this->mam, $role);
+
+            return $catalog->forContext('app', $member, $this->mam);
+        });
+    $titles = $visible->flatMap(fn (array $guide) => collect($guide['steps'])->pluck('title'));
+    $classification = $catalog->findVisible('screen.klasifikasi-peti-masuk', 'app', $this->admin, $this->mam);
+
+    expect($titles->contains(fn (string $title): bool => (bool) preg_match('/^Langkah\s+\d+$/i', $title)))->toBeFalse()
+        ->and(collect($classification['steps'])->pluck('target'))->toContain(
+            'inbox-classify',
+            'classification-source',
+            'classification-metadata',
+            'classification-file',
+            'classification-minit',
+            'classification-review',
+            'classification-submit',
+        );
+});
+
 it('tidak menyimpan teks carian mentah dalam analitik', function () {
     config()->set('scout.meilisearch.host', null);
     $secretQuery = 'rahsia pertanyaan unik 123';

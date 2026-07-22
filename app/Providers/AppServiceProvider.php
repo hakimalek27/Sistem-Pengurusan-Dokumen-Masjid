@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('public-registration', fn (Request $request) => Limit::perHour(20)->by($request->ip()));
         RateLimiter::for('public-login-page', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
         RateLimiter::for('public-help', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
+        // Satu pusat bantuan memuatkan beberapa imej. Kekalkan had bot khusus
+        // yang lebih tinggi supaya thumbnail tidak menghabiskan bucket halaman.
+        RateLimiter::for('public-help-images', fn (Request $request) => Limit::perMinute(180)->by($request->ip()));
         RateLimiter::for('magic-login', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
 
         // §5.14 — kaunter kuota storan atomik.

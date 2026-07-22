@@ -7,8 +7,9 @@
     data-help-url="{{ $helpUrl }}">
     @if ($showButton)
         <a href="{{ $helpUrl }}" class="diwan-help-launcher-button" data-help-target="help-launcher"
-            aria-label="Pusat Bantuan" title="Pusat Bantuan">
-            <span aria-hidden="true">?</span>
+            aria-label="Buka Pembantu Diwan" title="Buka Pembantu Diwan">
+            <x-filament::icon icon="heroicon-o-lifebuoy" aria-hidden="true" />
+            <span class="diwan-help-launcher-label" aria-hidden="true">Pembantu Diwan</span>
             @if ($taskCount > 0)
                 <b aria-label="{{ $taskCount }} tugasan perlu tindakan">{{ min($taskCount, 99) }}</b>
             @endif

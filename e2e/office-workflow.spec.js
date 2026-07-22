@@ -31,12 +31,26 @@ async function selectFilamentOption(page, index, label, exact = true) {
 
 test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browser, baseURL }) => {
     const marker = Date.now();
+    const documentTitle = `Dokumen aliran pejabat E2E ${marker}`;
     const instruction = `Minit dari klasifikasi E2E ${marker}`;
     const adminKeraniSession = await login(browser, baseURL, 'admin_masjid@demo.test');
     const kerani = adminKeraniSession.page;
 
     await kerani.goto('/app/mam/peti-masuk');
-    const inboxRow = kerani.locator('tr').filter({ hasText: 'Dokumen baharu dalam peti masuk' }).first();
+    await kerani.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
+    const uploadDialog = kerani.getByRole('dialog');
+    await uploadDialog.locator('input[type="file"]').setInputFiles({
+        name: `${documentTitle}.txt`,
+        mimeType: 'text/plain',
+        buffer: Buffer.from(`Dokumen ujian aliran pejabat ${marker}.`),
+    });
+    await expect(uploadDialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
+    const upload = uploadDialog.getByRole('button', { name: 'Hantar', exact: true });
+    await expect(upload).toBeEnabled({ timeout: 60_000 });
+    await upload.click();
+    await expect(kerani.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible({ timeout: 60_000 });
+
+    const inboxRow = kerani.locator('tr').filter({ hasText: documentTitle }).first();
     await expect(inboxRow).toBeVisible();
     await inboxRow.getByRole('button', { name: 'Klasifikasikan' }).click();
 

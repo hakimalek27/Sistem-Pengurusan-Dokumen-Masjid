@@ -26,7 +26,7 @@
         .brand-actions { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:flex-end; }
         .brand-actions a { border:1px solid var(--garis); border-radius:.5rem; color:var(--dakwat); padding:.45rem .7rem; text-decoration:none; font-size:.9rem; font-weight:650; background:#fff; }
         .brand-actions a:hover { border-color:var(--hijau); color:var(--hijau); }
-        .brand-actions .diwan-help-launcher-button { display:grid; place-items:center; width:2.2rem; height:2.2rem; padding:0; border-radius:999px; font-size:1rem; }
+        .brand-actions .diwan-help-launcher-button { min-height:2.2rem; padding:.45rem .7rem; border-radius:.5rem; font-size:.9rem; }
         .card { background:var(--panel); border:1px solid var(--garis); border-radius:.5rem; box-shadow:0 10px 30px rgba(23,33,29,.06); padding:1.5rem; max-width:560px; margin:0 auto; }
         h2 { margin-top:0; font-size:1.25rem; }
         label { display:block; font-weight:650; font-size:.9rem; margin:.75rem 0 .25rem; }

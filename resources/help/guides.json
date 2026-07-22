@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.07.22.1",
+  "catalog_version": "2026.07.22.2",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -2733,7 +2733,7 @@
     },
     {
       "id": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Muat naik, semak dan klasifikasikan dokumen serta hantar minit",
       "summary": "Dokumen keluar daripada Peti Masuk, mendapat nombor fail/kandungan yang betul dan penerima tindakan menerima minit.",
@@ -2825,15 +2825,15 @@
           "id": "admin_masjid.1.5",
           "title": "Senarai Peti Masuk",
           "instruction": "Untuk upload baharu tekan + Muat Naik Dokumen; untuk dokumen sedia ada pilih baris yang hendak diproses.",
-          "target": "page-content",
+          "target": "inbox-upload",
           "route": "/app/{tenant}/peti-masuk",
-          "wait_for_user": false
+          "wait_for_user": true
         },
         {
           "id": "admin_masjid.1.6",
           "title": "Muat naik dokumen",
           "instruction": "Pilih atau seret fail yang dibenarkan.",
-          "target": "page-primary",
+          "target": "inbox-upload-modal",
           "route": null,
           "wait_for_user": true
         },
@@ -2841,7 +2841,7 @@
           "id": "admin_masjid.1.7",
           "title": "Muat naik dokumen",
           "instruction": "Tunggu upload selesai dan toast berjaya.",
-          "target": "page-primary",
+          "target": "inbox-upload-modal",
           "route": null,
           "wait_for_user": true
         },
@@ -2849,7 +2849,7 @@
           "id": "admin_masjid.1.8",
           "title": "Muat naik dokumen",
           "instruction": "Kembali ke Peti Masuk; jangan klasifikasikan sebelum antivirus/OCR dan sumber disemak.",
-          "target": "page-primary",
+          "target": "page-content",
           "route": null,
           "wait_for_user": true
         },
@@ -2857,7 +2857,15 @@
           "id": "admin_masjid.1.9",
           "title": "Klasifikasi peti masuk",
           "instruction": "Tekan Klasifikasikan pada dokumen yang tepat.",
-          "target": "inbox-classification-modal",
+          "target": "inbox-classify",
+          "route": null,
+          "wait_for_user": true
+        },
+        {
+          "id": "admin_masjid.1.9a",
+          "title": "Klasifikasi peti masuk",
+          "instruction": "Semak semula sumber, masa diterima, antivirus dan OCR. Tekan Seterus jika semuanya tepat untuk masjid ini.",
+          "target": "classification-source",
           "route": null,
           "wait_for_user": true
         },
@@ -2865,7 +2873,7 @@
           "id": "admin_masjid.1.10",
           "title": "Klasifikasi peti masuk",
           "instruction": "Isi Jenis Rekod, Tajuk, Arah, Ruj. Kami/Ruj. Tuan, tarikh, pengirim, penerima dan u.p.",
-          "target": "inbox-classification-modal",
+          "target": "classification-metadata",
           "route": null,
           "wait_for_user": true
         },
@@ -2873,7 +2881,7 @@
           "id": "admin_masjid.1.11",
           "title": "Klasifikasi peti masuk",
           "instruction": "Pilih Failkan Ke; jika perlu buka fail baharu pada nod yang betul.",
-          "target": "inbox-classification-modal",
+          "target": "classification-file",
           "route": null,
           "wait_for_user": true
         },
@@ -2881,7 +2889,7 @@
           "id": "admin_masjid.1.12",
           "title": "Klasifikasi peti masuk",
           "instruction": "Pilih penerima tindakan, s.k., arahan dan keutamaan.",
-          "target": "inbox-classification-modal",
+          "target": "classification-minit",
           "route": null,
           "wait_for_user": true
         },
@@ -2889,7 +2897,7 @@
           "id": "admin_masjid.1.13",
           "title": "Klasifikasi peti masuk",
           "instruction": "Tekan Klasifikasikan dan catat nombor fail(kandungan) pada toast.",
-          "target": "inbox-classification-modal",
+          "target": "classification-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -3681,7 +3689,7 @@
     },
     {
       "id": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Klasifikasikan surat masuk dan edarkan minit",
       "summary": "Surat menjadi rekod rasmi dalam fail yang betul dan penerima berkaitan dimaklumkan.",
@@ -3755,16 +3763,24 @@
         {
           "id": "setiausaha.1.4",
           "title": "Pilih dokumen",
-          "instruction": "Buka dokumen/OCR dan pilih Klasifikasikan.",
-          "target": "page-content",
+          "instruction": "Selepas membuka dan menyemak dokumen/OCR, tekan Klasifikasikan pada dokumen yang sama.",
+          "target": "inbox-classify",
           "route": "/app/{tenant}/peti-masuk",
-          "wait_for_user": false
+          "wait_for_user": true
+        },
+        {
+          "id": "setiausaha.1.4a",
+          "title": "Semak dokumen dan sumber",
+          "instruction": "Sahkan penghantar, saluran, masa diterima, antivirus dan OCR sebelum menekan Seterus.",
+          "target": "classification-source",
+          "route": null,
+          "wait_for_user": true
         },
         {
           "id": "setiausaha.1.5",
           "title": "Klasifikasi peti masuk",
           "instruction": "Lengkapkan semua metadata surat.",
-          "target": "inbox-classification-modal",
+          "target": "classification-metadata",
           "route": null,
           "wait_for_user": true
         },
@@ -3772,7 +3788,7 @@
           "id": "setiausaha.1.6",
           "title": "Klasifikasi peti masuk",
           "instruction": "Pilih fail dan sensitiviti.",
-          "target": "inbox-classification-modal",
+          "target": "classification-file",
           "route": null,
           "wait_for_user": true
         },
@@ -3780,7 +3796,7 @@
           "id": "setiausaha.1.7",
           "title": "Klasifikasi peti masuk",
           "instruction": "Pilih penerima tindakan/s.k., tulis arahan dan keutamaan.",
-          "target": "inbox-classification-modal",
+          "target": "classification-minit",
           "route": null,
           "wait_for_user": true
         },
@@ -3788,7 +3804,7 @@
           "id": "setiausaha.1.8",
           "title": "Klasifikasi peti masuk",
           "instruction": "Klasifikasikan dan semak nombor kandungan.",
-          "target": "inbox-classification-modal",
+          "target": "classification-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -5060,7 +5076,7 @@
     },
     {
       "id": "public.registration",
-      "version": 1,
+      "version": 2,
       "panel": "public",
       "title": "Daftar Masjid",
       "route": "/daftar",
@@ -5091,20 +5107,29 @@
         {
           "id": "registration.1",
           "title": "Maklumat masjid",
-          "instruction": "Isi nama, negeri, daerah, kod akronim dan slug URL.",
-          "target": "registration-organisation"
+          "instruction": "Isi nama, negeri, daerah, kod akronim dan slug URL. Kemudian tekan Seterusnya pada borang pendaftaran.",
+          "target": "registration-organisation",
+          "wait_for_user": true
         },
         {
           "id": "registration.2",
           "title": "Pentadbir pertama",
-          "instruction": "Isi nama, e-mel dan nombor WhatsApp pentadbir.",
-          "target": "registration-admin"
+          "instruction": "Isi nama, e-mel dan nombor WhatsApp pentadbir. Kemudian tekan Seterusnya pada borang pendaftaran.",
+          "target": "registration-admin",
+          "wait_for_user": true
         },
         {
           "id": "registration.3",
           "title": "Persetujuan",
-          "instruction": "Baca persetujuan perkhidmatan dan retensi sebelum menghantar.",
-          "target": "registration-consent"
+          "instruction": "Semak semula maklumat, baca kedua-dua persetujuan dan tandakan kotak hanya jika bersetuju. Tekan Hantar Permohonan pada borang.",
+          "target": "registration-consent",
+          "wait_for_user": true
+        },
+        {
+          "id": "registration.4",
+          "title": "Permohonan diterima",
+          "instruction": "Pastikan mesej Permohonan diterima dipaparkan. Permohonan kini menunggu semakan Pentadbir Platform.",
+          "target": "registration-complete"
         }
       ],
       "troubleshooting": [
@@ -5718,7 +5743,7 @@
     },
     {
       "id": "screen.klasifikasi-peti-masuk",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Klasifikasi peti masuk",
       "summary": "Panduan skrin dan tindakan: Klasifikasi peti masuk.",
@@ -5760,65 +5785,79 @@
       "steps": [
         {
           "id": "klasifikasi-peti-masuk.1",
-          "title": "Langkah 1",
+          "title": "Buka klasifikasi",
           "instruction": "Tekan Klasifikasikan pada dokumen yang telah disahkan sumber, antivirus dan OCRnya.",
           "target": "inbox-classify",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.2",
-          "title": "Langkah 2",
-          "instruction": "Pilih Jenis Rekod; medan metadata khusus akan berubah mengikut jenis.",
-          "target": "inbox-classification-modal",
+          "title": "Semak dokumen dan sumber",
+          "instruction": "Pastikan penghantar, saluran, masa diterima, status antivirus dan OCR adalah betul. Hentikan jika dokumen meragukan atau salah masjid, atau tekan Seterus untuk meneruskan.",
+          "target": "classification-source",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.3",
-          "title": "Langkah 3",
-          "instruction": "Isi Tajuk, Arah, Ruj. Kami/Ruj. Tuan dan kedua-dua tarikh.",
-          "target": "inbox-classification-modal",
+          "title": "Pilih jenis rekod",
+          "instruction": "Pilih Jenis Rekod; medan metadata khusus akan berubah mengikut jenis.",
+          "target": "classification-metadata",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.4",
-          "title": "Langkah 4",
-          "instruction": "Isi nama/organisasi pengirim, penerima, jumlah lampiran dan Untuk Perhatian (u.p.).",
-          "target": "inbox-classification-modal",
+          "title": "Isi rujukan dan tarikh",
+          "instruction": "Isi Tajuk, Arah, Ruj. Kami/Ruj. Tuan dan kedua-dua tarikh.",
+          "target": "classification-metadata",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.5",
-          "title": "Langkah 5",
-          "instruction": "Pilih Failkan Ke. Jika tiada fail sesuai, buka fail baharu pada nod klasifikasi yang betul.",
-          "target": "inbox-classification-modal",
+          "title": "Isi pihak berkaitan",
+          "instruction": "Isi nama/organisasi pengirim, penerima, jumlah lampiran dan Untuk Perhatian (u.p.).",
+          "target": "classification-metadata",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.6",
-          "title": "Langkah 6",
-          "instruction": "Tetapkan Tahap Akses. Nilai efektif tidak boleh lebih rendah daripada sensitiviti fail.",
-          "target": "inbox-classification-modal",
+          "title": "Pilih fail destinasi",
+          "instruction": "Pilih Failkan Ke. Jika tiada fail sesuai, buka fail baharu pada nod klasifikasi yang betul.",
+          "target": "classification-file",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.7",
-          "title": "Langkah 7",
-          "instruction": "Pilih Untuk Tindakan bagi orang yang wajib bertindak; pilih s.k. bagi makluman sahaja.",
-          "target": "inbox-classification-modal",
+          "title": "Tetapkan tahap akses",
+          "instruction": "Tetapkan Tahap Akses. Nilai efektif tidak boleh lebih rendah daripada sensitiviti fail.",
+          "target": "classification-file",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.8",
-          "title": "Langkah 8",
-          "instruction": "Jika ada penerima tindakan, isi arahan yang jelas dan keutamaan.",
-          "target": "inbox-classification-modal",
+          "title": "Pilih penerima minit",
+          "instruction": "Pilih Untuk Tindakan bagi orang yang wajib bertindak; pilih s.k. bagi makluman sahaja.",
+          "target": "classification-minit",
           "wait_for_user": true
         },
         {
           "id": "klasifikasi-peti-masuk.9",
-          "title": "Langkah 9",
-          "instruction": "Tekan Klasifikasikan dan sahkan nombor fail/kandungan pada notifikasi kejayaan.",
-          "target": "inbox-classification-modal",
+          "title": "Isi arahan dan keutamaan",
+          "instruction": "Jika ada penerima tindakan, isi arahan yang jelas dan keutamaan.",
+          "target": "classification-minit",
+          "wait_for_user": true
+        },
+        {
+          "id": "klasifikasi-peti-masuk.10",
+          "title": "Semak kesan akhir",
+          "instruction": "Semak fail, sensitiviti efektif, penerima tindakan, penerima makluman dan saluran notifikasi sebelum meneruskan.",
+          "target": "classification-review",
+          "wait_for_user": true
+        },
+        {
+          "id": "klasifikasi-peti-masuk.11",
+          "title": "Hantar klasifikasi",
+          "instruction": "Tekan Klasifikasikan sekali. Sahkan nombor fail dan kandungan pada notifikasi kejayaan sebelum menamatkan panduan.",
+          "target": "classification-submit",
           "wait_for_user": true
         }
       ],

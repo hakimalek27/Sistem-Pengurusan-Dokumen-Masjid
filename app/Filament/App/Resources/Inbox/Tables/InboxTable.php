@@ -83,13 +83,19 @@ class InboxTable
             ->color('primary')
             ->authorize('classify')
             ->extraAttributes(['data-help-target' => 'inbox-classify'])
-            ->extraModalWindowAttributes(['data-help-target' => 'inbox-classification-modal'])
+            ->extraModalWindowAttributes([
+                'data-help-target' => 'inbox-classification-modal',
+                'data-help-workflow' => 'classification',
+            ])
             ->modalWidth('4xl')
             ->modalSubmitActionLabel('Klasifikasikan')
+            ->modalSubmitAction(fn (Action $action): Action => $action->extraAttributes(['data-help-target' => 'classification-submit']))
             ->fillForm(fn ($record) => [
                 'record_type' => $record->record_type,
                 'title' => $record->title,
                 'record_date' => optional($record->record_date)->toDateString() ?? now()->toDateString(),
+                'sensitivity' => $record->sensitivity?->value ?? Sensitivity::Dalaman->value,
+                'minit_priority' => MinitPriority::Biasa->value,
                 // Carta ANM 8.1 — surat dicap tarikh penerimaan; prefill = tarikh masuk Peti Masuk.
                 'received_date' => optional($record->received_date)->toDateString()
                     ?? optional($record->created_at)->toDateString(),
@@ -97,6 +103,7 @@ class InboxTable
             ->steps([
                 Step::make('Semak Dokumen & Sumber')
                     ->description('Pastikan dokumen benar dan tenant tepat')
+                    ->extraAttributes(['data-help-target' => 'classification-source'])
                     ->schema([
                         Placeholder::make('source_summary')->label('Asal dokumen')
                             ->content(fn (Record $record): string => self::sourceSummary($record)),
@@ -107,6 +114,7 @@ class InboxTable
                     ]),
                 Step::make('Jenis & Metadata')
                     ->description('Tawan butiran rasmi dokumen')
+                    ->extraAttributes(['data-help-target' => 'classification-metadata'])
                     ->schema([
                         Select::make('record_type')
                             ->label('Jenis Rekod')
@@ -122,6 +130,7 @@ class InboxTable
                     ]),
                 Step::make('Fail & Sensitiviti')
                     ->description('Pilih fail registri dan tahap akses efektif')
+                    ->extraAttributes(['data-help-target' => 'classification-file'])
                     ->schema([
                         Select::make('registry_file_id')
                             ->label('Failkan Ke')
@@ -160,6 +169,7 @@ class InboxTable
                     ]),
                 Step::make('Edaran Minit')
                     ->description('Bezakan tindakan dan makluman')
+                    ->extraAttributes(['data-help-target' => 'classification-minit'])
                     ->schema([
                         Select::make('minit_action_ids')
                             ->label('Untuk Tindakan (Minit)')
@@ -180,6 +190,7 @@ class InboxTable
                     ])->columns(2),
                 Step::make('Semakan Akhir')
                     ->description('Sahkan kesan sebelum transaksi dihantar')
+                    ->extraAttributes(['data-help-target' => 'classification-review'])
                     ->schema([
                         Placeholder::make('review_file')->label('Fail & akses efektif')
                             ->content(fn (Get $get): string => self::fileReview($get)),
