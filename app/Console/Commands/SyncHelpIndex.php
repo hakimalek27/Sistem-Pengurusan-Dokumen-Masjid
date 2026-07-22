@@ -9,6 +9,17 @@ use Throwable;
 
 class SyncHelpIndex extends Command
 {
+    public const HELP_STOP_WORDS = [
+        'bagaimana',
+        'bolehkah',
+        'hendak',
+        'macam',
+        'mahu',
+        'nak',
+        'saya',
+        'tolong',
+    ];
+
     protected $signature = 'diwan:sync-help-index {--delete : Padam indeks bantuan sebelum bina semula}';
 
     protected $description = 'Sahkan katalog dan segerakkan indeks panduan bantuan tanpa data tenant';
@@ -61,6 +72,7 @@ class SyncHelpIndex extends Command
                 $index->addDocuments($documents, 'document_id'),
                 $index->updateFilterableAttributes(['panel', 'roles']),
                 $index->updateSearchableAttributes(['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text']),
+                $index->updateStopWords(self::HELP_STOP_WORDS),
             ];
             $taskUids = collect($tasks)->pluck('taskUid')->filter()->values()->all();
             $completed = $client->waitForTasks($taskUids, 30_000, 100);

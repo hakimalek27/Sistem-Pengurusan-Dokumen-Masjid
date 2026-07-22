@@ -50,6 +50,7 @@ it('menjana primary key Meilisearch sah tanpa mengubah guide id rasmi', function
     expect($documentIds->unique()->count())->toBe($guideIds->count());
     $documentIds->each(fn (string $documentId) => expect($documentId)->toMatch('/^[a-z0-9_-]{1,511}$/'));
     expect($guideIds)->toContain('tenant.dashboard');
+    expect(SyncHelpIndex::HELP_STOP_WORDS)->toContain('nak', 'bagaimana', 'tolong');
 });
 
 it('meliputi setiap halaman dan skrin tindakan dalam manifest manual dengan guide role', function () {
