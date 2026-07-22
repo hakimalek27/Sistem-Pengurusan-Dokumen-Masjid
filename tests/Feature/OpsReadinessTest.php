@@ -117,7 +117,7 @@ it('menyediakan CI integration Docker dan deploy staging berrollback', function 
         ->and($ci)->toContain('getmeili/meilisearch:v1.12')
         ->and($ci)->toContain('poppler-utils')
         ->and($ci)->toContain('php artisan diwan:staging-check')
-        ->and($ci)->toContain('docker/build-push-action@v6')
+        ->and($ci)->toContain('docker/build-push-action@v7')
         ->and($ci)->toContain('Run built image smoke')
         ->and($ci)->toContain('PHP runtime extensions OK')
         ->and($ci)->toContain('--add-host app:127.0.0.1 --entrypoint nginx "$IMAGE" -t')
