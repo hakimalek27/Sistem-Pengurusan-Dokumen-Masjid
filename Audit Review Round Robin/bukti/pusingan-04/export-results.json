@@ -1,0 +1,29 @@
+{
+    "mam": {
+        "records_selected": [
+            "Surat jemputan Mesyuarat AJK Bil 3\/2026",
+            "Resit derma jariah Julai 2026"
+        ],
+        "zip_entries": [
+            "metadata.csv",
+            "senarai.pdf"
+        ],
+        "metadata_csv": "file_no,enclosure,title,record_type,record_date,sensitivity\n\"MAM.100-4\/1\",\"1\",\"Surat jemputan Mesyuarat AJK Bil 3\/2026\",\"surat_menyurat\",\"01\/08\/2026\",\"dalaman\"\n\"MAM.200-2\/1\",\"1\",\"Resit derma jariah Julai 2026\",\"rekod_kewangan\",\"01\/08\/2026\",\"sulit\"\n",
+        "pdf_text": "Senarai Rekod Dieksport — Masjid Al-Muttaqin Wangsa\r\nMelawati\r\nTarikh: 01\/08\/2026 09:32 | Bilangan: 2\r\nRujukan\r\n\r\nTajuk\r\n\r\nTarikh\r\n\r\nMAM.100-4\/1(1)\r\n\r\nSurat jemputan Mesyuarat AJK Bil 3\/2026\r\n\r\n01\/08\/2026\r\n\r\nMAM.200-2\/1(1)\r\n\r\nResit derma jariah Julai 2026\r\n\r\n01\/08\/2026\r\n\r\n\f",
+        "foreign_titles_detected": [],
+        "status": "PASS"
+    },
+    "man": {
+        "records_selected": [
+            "Surat pekeliling MAIS 2026"
+        ],
+        "zip_entries": [
+            "metadata.csv",
+            "senarai.pdf"
+        ],
+        "metadata_csv": "file_no,enclosure,title,record_type,record_date,sensitivity\n\"MAN.900-1\/1\",\"1\",\"Surat pekeliling MAIS 2026\",\"surat_menyurat\",\"01\/08\/2026\",\"dalaman\"\n",
+        "pdf_text": "Senarai Rekod Dieksport — Masjid An-Nur Demo\r\nTarikh: 01\/08\/2026 09:32 | Bilangan: 1\r\nRujukan\r\n\r\nTajuk\r\n\r\nTarikh\r\n\r\nMAN.900-1\/1(1)\r\n\r\nSurat pekeliling MAIS 2026\r\n\r\n01\/08\/2026\r\n\r\n\f",
+        "foreign_titles_detected": [],
+        "status": "PASS"
+    }
+}

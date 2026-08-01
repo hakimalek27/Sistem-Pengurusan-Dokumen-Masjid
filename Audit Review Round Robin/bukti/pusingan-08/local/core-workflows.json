@@ -1,0 +1,265 @@
+[
+  {
+    "route": "/app/mam/peti-masuk",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/peti-masuk",
+    "h1": [
+      "\n                Peti Masuk\n            "
+    ],
+    "inputs": 6,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "+ Muat Naik Dokumen",
+      "Klasifikasikan",
+      "Padam (Spam)"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nPeti Masuk\nSenarai\nPeti Masuk\n+ Muat Naik Dokumen\nCari\nSumber\tTajuk / Fail\tTarikh Terima\tPenghantar / Sumber\t\nDiterima\n\tAntivirus\tOCR\tDuplikat\t\n\n📤 Muat Naik\n\t\naudit-rr7-nota\n\t\n\n—\n\n\t\nUI: Admin Masjid (MAM)\n\t\n01/08/2026 10:25\n\t\ndisabled\n\t\nSiap\n\t\n\t\nLihat Dokumen / OCR\nKlasifikasikan\nPadam (Spam)\nMemaparkan 1 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/app/mam/records",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/records",
+    "h1": [
+      "\n                Rekod\n            "
+    ],
+    "inputs": 16,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Rekod Baharu",
+      "0",
+      "Tetapkan semula tapisan",
+      "Gunakan tapisan",
+      "Togol lajur",
+      "Reset",
+      "Apply columns"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nRekod\nSenarai\nRekod\nRekod Baharu\nCari\n0\nRujukan\tTajuk\tJenis\tFail\t\nTarikh\n\tSensitiviti\tStatus\t\n\nMAM.100-4/1(2)\n\t\nAUDIT-RR7 Surat jemputan mesyuarat penyelarasan\n\t\nSurat Menyurat\n\t\nMAM.100-4/1\n\t\n01/08/2026\n\t\nDalaman\n\t\nDifailkan\n\t\nPaparan\n\n\nMAM.500-1/1(1)\n\t\nPermohonan guna dewan serbaguna (2019)\n\t\nSurat Menyurat\n\t\nMAM.500-1/1\n\t\n01/07/2019\n\t\nDalaman\n\t\nDifailkan\n\t\nPaparan\n\n\nMAM.200-2/1(1)\n\t\nResit derma jariah Julai 2026\n\t\nRekod Kewangan (Resit/Baucar)\n\t\nMAM.200-2/1\n\t\n01/08/2026\n\t\nSulit\n\t\nDifailkan\n\t\nPaparan\n\n\nMAM.100-4/1(1)\n\t\nSurat jemputan Mesyuarat AJK Bil 3/2026\n\t\nSurat Menyurat\n\t\nMAM.100-4/1\n\t\n01/08/2026\n\t\nDalaman\n\t\nDifailkan\n\t\nPaparan\nMemaparkan 1 hingga 4 daripada 4 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/app/mam/registry-files",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/registry-files",
+    "h1": [
+      "\n                Fail\n            "
+    ],
+    "inputs": 14,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Togol lajur",
+      "Reset",
+      "Apply columns",
+      "Tutup Fail",
+      "Kegemaran",
+      "Tutup Fail",
+      "Kegemaran",
+      "Tutup Fail",
+      "Kegemaran"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nFail\nSenarai\nFail\nCipta\nCari\nNo. Fail\n\tTajuk\tSensitiviti\tStatus\tKandungan\tMedium\tLokasi\tPenjagaan\t\n\nMAM.100-4/1\n\t\nSurat-Menyurat Am 2026\n\t\nDalaman\n\t\nterbuka\n\t\n2\n\t\nelektronik\n\t\n\n—\n\n\t\ndalam_simpanan\n\t\nPaparan\nTutup Fail\nKegemaran\n\n\nMAM.200-2/1\n\t\nResit & Baucar 2026\n\t\nSulit\n\t\nterbuka\n\t\n1\n\t\nelektronik\n\t\n\n—\n\n\t\ndalam_simpanan\n\t\nPaparan\nTutup Fail\nKegemaran\n\n\nMAM.500-1/1\n\t\nTempahan Dewan 2019\n\t\nDalaman\n\t\nterbuka\n\t\n1\n\t\nelektronik\n\t\n\n—\n\n\t\ndalam_simpanan\n\t\nPaparan\nTutup Fail\nKegemaran\nMemaparkan 1 hingga 3 daripada 3 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/app/mam/minit-saya",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/minit-saya",
+    "h1": [
+      "\n                Minit Saya\n            "
+    ],
+    "inputs": 13,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "0",
+      "Tetapkan semula tapisan",
+      "Gunakan tapisan",
+      "Togol lajur",
+      "Reset",
+      "Apply columns"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nMinit Saya\nSenarai\nMinit Saya\n0\nRekod\tDaripada\tArahan / Catatan\tPenerima\tKeutamaan\tTarikh Akhir\tStatus\t\n\nAUDIT-RR7 Surat jemputan mesyuarat penyelarasan\n\t\nAdmin Masjid (MAM)\n\t\nAUDIT-RR7: sila semak dan ambil tindakan sewajarnya.\n\t\nTindakan: Pengerusi (MAM), Tindakan: Setiausaha (MAM)\n\t\nBiasa\n\t\n08/08/2026\n\t\nTerbuka\n\t\nMemaparkan 1 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/app/mam/kelulusan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/kelulusan",
+    "h1": [
+      "\n                Kelulusan\n            "
+    ],
+    "inputs": 9,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Togol lajur",
+      "Reset",
+      "Apply columns"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nKelulusan\nSenarai\nKelulusan\nRekod\tPemohon\tNota\tTarikh\tStatus\tBagi pihak\nTiada rekod dijumpai"
+  },
+  {
+    "route": "/app/mam/carian",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/carian",
+    "h1": [
+      "\n                Carian Rekod\n            "
+    ],
+    "inputs": 19,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Simpan",
+      "Cari"
+    ],
+    "bodyTail": "andu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nCarian Rekod\nCarian tersimpan\nPilih carian\nNama carian\nLalai\nSimpan\nTeks\nJenis rekod\nSemua\nSurat Menyurat\nMemo\nE-mel\nE-mel Muat Naik\nMinit Mesyuarat\nLaporan\nKertas Kerja / Konsep\nBorang\nDokumen Tender / Sebut Harga\nPerjanjian / Kontrak / MoU\nPekeliling\nGaris Panduan\nJadual\nPoster / Hebahan\nFoto / Dokumentasi\nSijil\nRekod Kewangan (Resit/Baucar)\nAgenda Mesyuarat\nKeputusan Mesyuarat\nSurat Keputusan / Kelulusan\nPolisi\nProsedur / SOP\nPelan / Lukisan\nBajet / Anggaran\nPesanan Tempatan\nPenyata Bank\nRekod Aset / Inventori\nRekod Perolehan\nPermit / Lesen\nAduan / Maklum Balas\nPermohonan\nAudio / Video\nRekod Kehadiran\nFail\nSemua\nMAM.100-4/1 — Surat-Menyurat Am 2026\nMAM.200-2/1 — Resit & Baucar 2026\nMAM.500-1/1 — Tempahan Dewan 2019\nArah\nSemua\nMasuk\nKeluar\nDalaman\nSensitiviti\nSemua dibenarkan\nUmum\nDalaman\nSulit\nStatus\nSemua\nPeti Masuk\nDifailkan\nDiganti\nSaluran\nSemua\nMuat Naik UI\nE-mel\nWhatsApp\nImbasan\nPengirim / organisasi\nRuj. kami / tuan\nPenerima\nTarikh rekod dari\nTarikh rekod hingga\nTarikh terima dari\nTarikh terima hingga\nCari"
+  },
+  {
+    "route": "/app/mam/kegemaran",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/kegemaran",
+    "h1": [
+      "\n                Rekod & Fail Kegemaran\n            "
+    ],
+    "inputs": 2,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nRekod & Fail Kegemaran\n\nBelum ada rekod atau fail kegemaran."
+  },
+  {
+    "route": "/app/mam/laporan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/laporan",
+    "h1": [
+      "\n                Laporan Pejabat\n            "
+    ],
+    "inputs": 2,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Eksport CSV"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nLaporan Pejabat\nEksport CSV\nJumlah Rekod\n4\nAkan Luput ≤90 Hari\n0\nMinit Lewat\n0\nAkses Sulit 30 Hari\n0\nJenis Rekod\nSurat Menyurat\n3\nRekod Kewangan (Resit/Baucar)\n1\nStatus\nDifailkan\n4\nSumber\nMuat Naik\n4"
+  },
+  {
+    "route": "/app/mam/pembetulan-rekod",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/pembetulan-rekod",
+    "h1": [
+      "\n                Pembetulan Rekod\n            "
+    ],
+    "inputs": 3,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nPembetulan Rekod\nSenarai\nPembetulan Rekod\nRekod\tPemohon\tSebab\tPerubahan\tStatus\tDimohon\nTiada rekod dijumpai"
+  },
+  {
+    "route": "/app/mam/log-aktiviti",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/log-aktiviti",
+    "h1": [
+      "\n                Log Aktiviti Masjid\n            "
+    ],
+    "inputs": 29,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "0",
+      "Tetapkan semula tapisan",
+      "Gunakan tapisan",
+      "Togol lajur",
+      "Reset",
+      "Apply columns",
+      "Butiran",
+      "Butiran",
+      "Butiran",
+      "Butiran",
+      "Butiran"
+    ],
+    "bodyTail": "hli masjid\n\n\t\nSuperadmin Diwan mengesahkan bayaran invois INV-2026-0001; storan 10 GB diaktifkan.\n\t\n\n—\n\n\t\n\n—\n\n\t\n\t\nButiran\n\n\n01/08/2026 10:26:42 AM\n\t\n\nAdmin Masjid (MAM)\n\nAdmin / Kerani\n\n\t\nAdmin Masjid (MAM) memohon tambahan storan 10 GB melalui invois INV-2026-0001.\n\t\n\n—\n\n\t\n\n—\n\n\t\n\t\nButiran\n\n\n01/08/2026 10:25:14 AM\n\t\n\nAdmin Masjid (MAM)\n\nAdmin / Kerani\n\n\t\nAdmin Masjid (MAM) (Admin / Kerani) memuat naik dokumen \"audit-rr7-nota\" melalui Dashboard.\n\t\n\naudit-rr7-nota\n\n#HEJ77D\n\n\t\n\n—\n\n\t\n\nDashboard\n\nAdmin Masjid (MAM)\n\n\t\nButiran\n\n\n01/08/2026 10:19:26 AM\n\t\n\nAdmin Masjid (MAM)\n\nAdmin / Kerani\n\n\t\nAdmin Masjid (MAM) meminitkan rekod \"AUDIT-RR7 Surat jemputan mesyuarat penyelarasan\" untuk tindakan Pengerusi (MAM), Setiausaha (MAM).\n\t\n\nAUDIT-RR7 Surat jemputan mesyuarat penyelarasan\n\nMAM.100-4/1(2)\n\n\t\n\nMAM.100-4/1\n\nSurat-Menyurat Am 2026\n\n\t\n\nDashboard\n\nAdmin Masjid (MAM)\n\n\t\nButiran\n\n\n01/08/2026 10:19:26 AM\n\t\n\nAdmin Masjid (MAM)\n\nAdmin / Kerani\n\n\t\nAdmin Masjid (MAM) mengklasifikasikan rekod \"AUDIT-RR7 Surat jemputan mesyuarat penyelarasan\" ke fail MAM.100-4/1 (Surat-Menyurat Am 2026).\n\t\n\nAUDIT-RR7 Surat jemputan mesyuarat penyelarasan\n\nMAM.100-4/1(2)\n\n\t\n\nMAM.100-4/1\n\nSurat-Menyurat Am 2026\n\n\t\n\nDashboard\n\nAdmin Masjid (MAM)\n\n\t\nButiran\nMemaparkan 1 hingga 5 daripada 5 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/app/mam/penggunaan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/app/mam/penggunaan",
+    "h1": [
+      "\n                Penggunaan & Storan\n            "
+    ],
+    "inputs": 2,
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Tambah Storan"
+    ],
+    "bodyTail": "Diwan\nCarian global\nPembantu Diwan\nMasjid Al-Muttaqin Wangsa Melawati\nPapan pemuka\nLog Akses Sulit\nBantuan\nAnalitik Bantuan\nTiket Sokongan\nPusat Bantuan\nPentadbiran\nPersediaan Berpandu\nAhli & Peranan\nKlasifikasi Fail\nPelupusan\nPeraturan Retensi\nTetapan Masjid\nAkaun\nPenggunaan & Storan\nRetensi & Pegangan\nDelegasi\nProfil Saya\nRegistri\nPeti Masuk\n1\nRekod\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nPenggunaan & Storan\nTambah Storan\nTolok Storan\n0 GB / 30 GB\n0%\nAdd-on Storan\nSaiz\tMula\tLuput\tStatus\n10 GB\t01/08/2026\t01/08/2027\tAktif\nSejarah Pesanan & Invois\nNo. Invois\tSaiz\tJumlah (RM)\tStatus\t\nINV-2026-0001\t10 GB\t0.00\tDibayar\tMuat Turun Invois"
+  }
+]

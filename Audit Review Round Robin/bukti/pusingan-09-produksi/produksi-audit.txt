@@ -1,0 +1,60 @@
+
+===== PRODUKSI [desktop] log masuk OK → /app/smoke =====
+  200  Papan pemuka           baris=  0 
+  200  Log Akses Sulit        baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 4] btn="Seterusnya" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Analitik Bantuan       baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 2] btn="Buat pada skrin" sorot=page-content(1056x538) GENERIK
+  200  Tiket Sokongan         baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 2] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK
+  200  Pusat Bantuan          baris=  0 
+  200  Persediaan Berpandu    baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Ahli & Peranan         baris=  4 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Klasifikasi Fail       baris= 10 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x899) GENERIK TAJUK=HURAIAN
+  200  Pelupusan              baris= 11 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x955) GENERIK TAJUK-TERPOTONG
+  200  Peraturan Retensi      baris=  1 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Tetapan Masjid         baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Seterusnya" sorot=page-content(1120x1031) GENERIK TAJUK=HURAIAN
+  200  Penggunaan & Storan    baris=  2 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Retensi & Pegangan     baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Delegasi               baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Profil Saya            baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Seterusnya" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Peti Masuk             baris=  1 
+  200  Rekod                  baris= 10 
+  200  Fail                   baris= 10 
+  200  Minit Saya             baris=  1 
+  200  Kelulusan              baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 6] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Carian                 baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 7] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Kegemaran              baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Laporan                baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 4] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Pembetulan Rekod       baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  200  Log Aktiviti Masjid    baris=  0 guideId-HILANG ; helpUrl-ROSAK ; TOUR[1 daripada 5] btn="Buat pada skrin" sorot=page-content(1120x836) GENERIK TAJUK=HURAIAN
+  [silang-tenant] /app/mamad → 404
+  [silang-tenant] /app/mamad/records → 404
+  [silang-tenant] /app/mamad/peti-masuk → 404
+
+===== PRODUKSI [mobile] log masuk OK → /app/smoke =====
+  200  Papan pemuka           baris=  0 
+  200  Log Akses Sulit        baris=  0 
+  200  Analitik Bantuan       baris=  0 
+  200  Tiket Sokongan         baris=  0 
+  200  Pusat Bantuan          baris=  0 
+  200  Persediaan Berpandu    baris=  0 
+  200  Ahli & Peranan         baris=  4 
+  200  Klasifikasi Fail       baris= 10 
+  200  Pelupusan              baris= 11 
+  200  Peraturan Retensi      baris=  1 
+  200  Tetapan Masjid         baris=  0 
+  200  Penggunaan & Storan    baris=  2 
+  200  Retensi & Pegangan     baris=  0 
+  200  Delegasi               baris=  0 
+  200  Profil Saya            baris=  0 
+  200  Peti Masuk             baris=  1 
+  200  Rekod                  baris= 10 
+  200  Fail                   baris= 10 
+  200  Minit Saya             baris=  1 
+  200  Kelulusan              baris=  0 
+  200  Carian                 baris=  0 
+  200  Kegemaran              baris=  0 
+  200  Laporan                baris=  0 
+  200  Pembetulan Rekod       baris=  0 
+  200  Log Aktiviti Masjid    baris=  0 
+  [silang-tenant] /app/mamad → 404
+  [silang-tenant] /app/mamad/records → 404
+  [silang-tenant] /app/mamad/peti-masuk → 404

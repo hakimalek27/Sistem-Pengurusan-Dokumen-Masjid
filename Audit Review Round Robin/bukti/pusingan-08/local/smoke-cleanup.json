@@ -1,0 +1,11 @@
+{
+  "slug": "audit-rr8-smoke-1125",
+  "mosqueCount": 0,
+  "userFixtureCount": 0,
+  "tenantFilePathsPreserved": [
+    "storage/app/private/tenants/4/disposal-certs/2.pdf",
+    "storage/app/private/tenants/4/exports/01kx87mc7dq5skc8ph4ddhp22q.zip",
+    "storage/app/private/tenants/4/records/2026/01kx87mbpgrdst4bjdvhfvqb8/original/surat.pdf"
+  ],
+  "currentAuditFilesDeleted": true
+}

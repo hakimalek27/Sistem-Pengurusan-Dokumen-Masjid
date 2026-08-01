@@ -1,0 +1,134 @@
+[
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/ahli-peranan",
+    "status": 200,
+    "title": "Ahli & Peranan - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/tetapan-masjid",
+    "status": 200,
+    "title": "Tetapan Masjid - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/retensi-peraturan",
+    "status": 200,
+    "title": "Peraturan Retensi - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/log-aktiviti",
+    "status": 200,
+    "title": "Log Aktiviti Masjid - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/analitik-bantuan",
+    "status": 200,
+    "title": "Analitik Bantuan - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/peti-masuk",
+    "status": 200,
+    "title": "Peti Masuk - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/kelulusan",
+    "status": 200,
+    "title": "Kelulusan - Diwan"
+  },
+  {
+    "vp": "desktop",
+    "path": "/admin",
+    "status": 403,
+    "title": "Forbidden"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad/records",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad/peti-masuk",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/ahli-peranan",
+    "status": 200,
+    "title": "Ahli & Peranan - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/tetapan-masjid",
+    "status": 200,
+    "title": "Tetapan Masjid - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/retensi-peraturan",
+    "status": 200,
+    "title": "Peraturan Retensi - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/log-aktiviti",
+    "status": 200,
+    "title": "Log Aktiviti Masjid - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/analitik-bantuan",
+    "status": 200,
+    "title": "Analitik Bantuan - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/peti-masuk",
+    "status": 200,
+    "title": "Peti Masuk - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/kelulusan",
+    "status": 200,
+    "title": "Kelulusan - Diwan"
+  },
+  {
+    "vp": "mobile",
+    "path": "/admin",
+    "status": 403,
+    "title": "Forbidden"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad/records",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad/peti-masuk",
+    "status": 404,
+    "title": "Not Found"
+  }
+]

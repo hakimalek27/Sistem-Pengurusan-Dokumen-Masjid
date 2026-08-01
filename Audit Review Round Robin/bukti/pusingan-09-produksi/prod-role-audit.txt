@@ -1,0 +1,36 @@
+
+===== [pengerusi] PRODUKSI — 17 halaman sidebar =====
+  Papan pemuka · Log Akses Sulit · Pusat Bantuan · Penggunaan & Storan · Delegasi · Profil Saya · Minit Saya · Kelulusan · Carian · Kegemaran · Laporan · Pembetulan Rekod · Log Aktiviti Masjid · Klasifikasi Fail · Pelupusan · Rekod · Fail
+   403  Ahli & Peranan       ✅ 403 ditolak
+   403  Tetapan Masjid       ✅ 403 ditolak
+   403  Peraturan Retensi    ✅ 403 ditolak
+   200  Log Aktiviti         ✅ dibenarkan (ada dlm nav)
+   403  Analitik Bantuan     ✅ 403 ditolak
+   403  Peti Masuk           ✅ 403 ditolak
+   200  Kelulusan            ✅ dibenarkan (ada dlm nav)
+   403  Panel superadmin     ✅ 403 ditolak
+   [silang-tenant] /app/mamad/records → 404
+
+===== [kerani] PRODUKSI — 25 halaman sidebar =====
+  Papan pemuka · Log Akses Sulit · Analitik Bantuan · Tiket Sokongan · Pusat Bantuan · Persediaan Berpandu · Ahli & Peranan · Klasifikasi Fail · Pelupusan · Peraturan Retensi · Tetapan Masjid · Penggunaan & Storan · Retensi & Pegangan · Delegasi · Profil Saya · Peti Masuk · Rekod · Fail · Minit Saya · Kelulusan · Carian · Kegemaran · Laporan · Pembetulan Rekod · Log Aktiviti Masjid
+   200  Ahli & Peranan       ✅ dibenarkan (ada dlm nav)
+   200  Tetapan Masjid       ✅ dibenarkan (ada dlm nav)
+   200  Peraturan Retensi    ✅ dibenarkan (ada dlm nav)
+   200  Log Aktiviti         ✅ dibenarkan (ada dlm nav)
+   200  Analitik Bantuan     ✅ dibenarkan (ada dlm nav)
+   200  Peti Masuk           ✅ dibenarkan (ada dlm nav)
+   200  Kelulusan            ✅ dibenarkan (ada dlm nav)
+   403  Panel superadmin     ✅ 403 ditolak
+   [silang-tenant] /app/mamad/records → 404
+
+===== [ajk] PRODUKSI — 13 halaman sidebar =====
+  Papan pemuka · Pusat Bantuan · Minit Saya · Kelulusan · Carian · Kegemaran · Laporan · Pembetulan Rekod · Klasifikasi Fail · Rekod · Fail · Delegasi · Profil Saya
+   403  Ahli & Peranan       ✅ 403 ditolak
+   403  Tetapan Masjid       ✅ 403 ditolak
+   403  Peraturan Retensi    ✅ 403 ditolak
+   403  Log Aktiviti         ✅ 403 ditolak
+   403  Analitik Bantuan     ✅ 403 ditolak
+   403  Peti Masuk           ✅ 403 ditolak
+   200  Kelulusan            ✅ dibenarkan (ada dlm nav)
+   403  Panel superadmin     ✅ 403 ditolak
+   [silang-tenant] /app/mamad/records → 404

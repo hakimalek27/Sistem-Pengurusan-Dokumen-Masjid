@@ -1,0 +1,331 @@
+[
+  {
+    "name": "desktop",
+    "runs": [
+      {
+        "label": "dashboard",
+        "path": "/app/mam",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 7
+          }
+        ],
+        "passes": 42
+      },
+      {
+        "label": "peti-masuk",
+        "path": "/app/mam/peti-masuk",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10
+          },
+          {
+            "id": "th-has-data-cells",
+            "impact": "serious",
+            "help": "Table headers in a data table must refer to data cells",
+            "nodes": 1
+          }
+        ],
+        "passes": 47
+      },
+      {
+        "label": "rekod",
+        "path": "/app/mam/records",
+        "violations": [
+          {
+            "id": "empty-table-header",
+            "impact": "minor",
+            "help": "Table header text should not be empty",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-ta-actions-header-cell"
+                ],
+                "html": "<th aria-label=\"Tindakan\" class=\"fi-ta-actions-header-cell fi-ta-empty-header-cell\"></th>"
+              }
+            ]
+          },
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 11
+          }
+        ],
+        "passes": 49
+      },
+      {
+        "label": "carian",
+        "path": "/app/mam/carian",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10
+          }
+        ],
+        "passes": 43
+      },
+      {
+        "label": "bantuan",
+        "path": "/app/mam/bantuan",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "help": "Elements must only use permitted ARIA attributes",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 2
+          }
+        ],
+        "passes": 43
+      }
+    ],
+    "errors": []
+  },
+  {
+    "name": "mobile",
+    "runs": [
+      {
+        "label": "dashboard",
+        "path": "/app/mam",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 6
+          }
+        ],
+        "passes": 42
+      },
+      {
+        "label": "peti-masuk",
+        "path": "/app/mam/peti-masuk",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "th-has-data-cells",
+            "impact": "serious",
+            "help": "Table headers in a data table must refer to data cells",
+            "nodes": 1
+          }
+        ],
+        "passes": 47
+      },
+      {
+        "label": "rekod",
+        "path": "/app/mam/records",
+        "violations": [
+          {
+            "id": "empty-table-header",
+            "impact": "minor",
+            "help": "Table header text should not be empty",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-ta-actions-header-cell"
+                ],
+                "html": "<th aria-label=\"Tindakan\" class=\"fi-ta-actions-header-cell fi-ta-empty-header-cell\"></th>"
+              }
+            ]
+          },
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 10
+          }
+        ],
+        "passes": 49
+      },
+      {
+        "label": "carian",
+        "path": "/app/mam/carian",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": 43
+      },
+      {
+        "label": "bantuan",
+        "path": "/app/mam/bantuan",
+        "violations": [
+          {
+            "id": "landmark-unique",
+            "impact": "moderate",
+            "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+            "nodes": [
+              {
+                "target": [
+                  ".fi-topbar"
+                ],
+                "html": "<nav class=\"fi-topbar\">"
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "aria-prohibited-attr",
+            "impact": "serious",
+            "help": "Elements must only use permitted ARIA attributes",
+            "nodes": 1
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": 2
+          }
+        ],
+        "passes": 43
+      }
+    ],
+    "errors": []
+  }
+]

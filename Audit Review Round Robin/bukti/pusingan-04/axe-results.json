@@ -1,0 +1,250 @@
+{
+  "axeVersion": "4.10.3",
+  "viewports": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "runs": [
+        {
+          "label": "dashboard",
+          "path": "/app/mam",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 6
+            }
+          ],
+          "passes": 29,
+          "overflow": 0
+        },
+        {
+          "label": "peti-masuk",
+          "path": "/app/mam/peti-masuk",
+          "status": 200,
+          "violations": [
+            {
+              "id": "link-name",
+              "impact": "serious",
+              "help": "Links must have discernible text",
+              "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-name?application=axeAPI",
+              "tags": [
+                "cat.name-role-value",
+                "wcag2a",
+                "wcag244",
+                "wcag412",
+                "section508",
+                "section508.22.a",
+                "TTv5",
+                "TT6.a",
+                "EN-301-549",
+                "EN-9.2.4.4",
+                "EN-9.4.1.2",
+                "ACT"
+              ],
+              "nodes": [
+                {
+                  "target": [
+                    ".fi-ta-cell-duplikat > .fi-ta-col"
+                  ],
+                  "html": "<a href=\"http://127.0.0.1:8080/app/mam/peti-masuk/4\" class=\"fi-ta-col\">\n                                                                \n            <div class=\"fi-ta-text\">\n                            </div>\n\n            \n                                                            </a>",
+                  "summary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+                }
+              ]
+            }
+          ],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 13
+            }
+          ],
+          "passes": 33,
+          "overflow": 0
+        },
+        {
+          "label": "rekod",
+          "path": "/app/mam/records",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 11
+            }
+          ],
+          "passes": 33,
+          "overflow": 0
+        },
+        {
+          "label": "carian",
+          "path": "/app/mam/carian",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 10
+            }
+          ],
+          "passes": 30,
+          "overflow": 0
+        },
+        {
+          "label": "bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "aria-prohibited-attr",
+              "impact": "serious",
+              "help": "Elements must only use permitted ARIA attributes",
+              "nodes": 1
+            },
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 2
+            }
+          ],
+          "passes": 30,
+          "overflow": 0
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "runs": [
+        {
+          "label": "dashboard",
+          "path": "/app/mam",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 6
+            }
+          ],
+          "passes": 29,
+          "overflow": 0
+        },
+        {
+          "label": "peti-masuk",
+          "path": "/app/mam/peti-masuk",
+          "status": 200,
+          "violations": [
+            {
+              "id": "link-name",
+              "impact": "serious",
+              "help": "Links must have discernible text",
+              "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-name?application=axeAPI",
+              "tags": [
+                "cat.name-role-value",
+                "wcag2a",
+                "wcag244",
+                "wcag412",
+                "section508",
+                "section508.22.a",
+                "TTv5",
+                "TT6.a",
+                "EN-301-549",
+                "EN-9.2.4.4",
+                "EN-9.4.1.2",
+                "ACT"
+              ],
+              "nodes": [
+                {
+                  "target": [
+                    ".fi-ta-cell-duplikat > .fi-ta-col"
+                  ],
+                  "html": "<a href=\"http://127.0.0.1:8080/app/mam/peti-masuk/4\" class=\"fi-ta-col\">\n                                                                \n            <div class=\"fi-ta-text\">\n                            </div>\n\n            \n                                                            </a>",
+                  "summary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+                }
+              ]
+            }
+          ],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 6
+            }
+          ],
+          "passes": 33,
+          "overflow": 0
+        },
+        {
+          "label": "rekod",
+          "path": "/app/mam/records",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 7
+            }
+          ],
+          "passes": 33,
+          "overflow": 0
+        },
+        {
+          "label": "carian",
+          "path": "/app/mam/carian",
+          "status": 200,
+          "violations": [],
+          "incomplete": [],
+          "passes": 30,
+          "overflow": 0
+        },
+        {
+          "label": "bantuan",
+          "path": "/app/mam/bantuan",
+          "status": 200,
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "aria-prohibited-attr",
+              "impact": "serious",
+              "help": "Elements must only use permitted ARIA attributes",
+              "nodes": 1
+            },
+            {
+              "id": "color-contrast",
+              "impact": "serious",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 2
+            }
+          ],
+          "passes": 30,
+          "overflow": 0
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

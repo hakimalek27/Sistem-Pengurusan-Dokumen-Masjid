@@ -1,0 +1,368 @@
+[
+  {
+    "viewport": "desktop",
+    "name": "landing",
+    "path": "/",
+    "status": 200,
+    "title": "Diwan — Sistem Pengurusan Dokumen Masjid",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 1440,
+    "tour": null,
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2F%2F"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-landing.png"
+  },
+  {
+    "viewport": "desktop",
+    "name": "log-masuk",
+    "path": "/log-masuk",
+    "status": 200,
+    "title": "Log Masuk — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher"
+    ],
+    "hOverflow": false,
+    "overflowing": [
+      "path.[object"
+    ],
+    "vw": 1440,
+    "tour": {
+      "title": "Tindakan belum tersedia",
+      "next": "Tutup",
+      "prev": "← Previous",
+      "progress": "1 of 1",
+      "offscreen": false,
+      "rect": {
+        "x": 10,
+        "y": 563,
+        "w": 368,
+        "h": 196
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [
+      "Previous"
+    ],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-log-masuk.png"
+  },
+  {
+    "viewport": "desktop",
+    "name": "daftar",
+    "path": "/daftar",
+    "status": 200,
+    "title": "Daftar Masjid — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher",
+      "registration-organisation",
+      "registration-next"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 1440,
+    "tour": {
+      "title": "Maklumat masjid",
+      "next": "Buat pada skrin",
+      "prev": "Kembali",
+      "progress": "1 daripada 4",
+      "offscreen": false,
+      "rect": {
+        "x": 77,
+        "y": 229,
+        "w": 368,
+        "h": 284
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-daftar.png"
+  },
+  {
+    "viewport": "desktop",
+    "name": "bantuan",
+    "path": "/bantuan",
+    "status": 200,
+    "title": "Pusat Bantuan — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher",
+      "page-content",
+      "help-center",
+      "help-search",
+      "help-diagnosis",
+      "help-support"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 1440,
+    "tour": {
+      "title": "Buka fungsi",
+      "next": "Buat pada skrin",
+      "prev": "Kembali",
+      "progress": "1 daripada 2",
+      "offscreen": false,
+      "rect": {
+        "x": 536,
+        "y": 606,
+        "w": 368,
+        "h": 284
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-bantuan.png"
+  },
+  {
+    "viewport": "desktop",
+    "name": "app-login",
+    "path": "/app/login",
+    "status": 200,
+    "title": "Log masuk - Diwan",
+    "hasMain": true,
+    "helpTargets": [
+      "page-content"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 1440,
+    "tour": null,
+    "helpRuntime": null,
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-app-login.png"
+  },
+  {
+    "viewport": "desktop",
+    "name": "admin-login",
+    "path": "/admin/login",
+    "status": 200,
+    "title": "Log masuk - Diwan · Pentadbir Platform",
+    "hasMain": true,
+    "helpTargets": [
+      "page-content"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 1440,
+    "tour": null,
+    "helpRuntime": null,
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/desktop-admin-login.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "landing",
+    "path": "/",
+    "status": 200,
+    "title": "Diwan — Sistem Pengurusan Dokumen Masjid",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 390,
+    "tour": null,
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2F%2F"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-landing.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "log-masuk",
+    "path": "/log-masuk",
+    "status": 200,
+    "title": "Log Masuk — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher"
+    ],
+    "hOverflow": false,
+    "overflowing": [
+      "path.[object"
+    ],
+    "vw": 390,
+    "tour": {
+      "title": "Tindakan belum tersedia",
+      "next": "Tutup",
+      "prev": "← Previous",
+      "progress": "1 of 1",
+      "offscreen": false,
+      "rect": {
+        "x": 12,
+        "y": 458,
+        "w": 366,
+        "h": 196
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [
+      "Previous"
+    ],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-log-masuk.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "daftar",
+    "path": "/daftar",
+    "status": 200,
+    "title": "Daftar Masjid — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher",
+      "registration-organisation",
+      "registration-next"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 390,
+    "tour": {
+      "title": "Maklumat masjid",
+      "next": "Buat pada skrin",
+      "prev": "Kembali",
+      "progress": "1 daripada 4",
+      "offscreen": false,
+      "rect": {
+        "x": 12,
+        "y": 349,
+        "w": 366,
+        "h": 305
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-daftar.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "bantuan",
+    "path": "/bantuan",
+    "status": 200,
+    "title": "Pusat Bantuan — Diwan",
+    "hasMain": false,
+    "helpTargets": [
+      "help-launcher",
+      "page-content",
+      "help-center",
+      "help-search",
+      "help-diagnosis",
+      "help-support"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 390,
+    "tour": {
+      "title": "Buka fungsi",
+      "next": "Buat pada skrin",
+      "prev": "Kembali",
+      "progress": "1 daripada 2",
+      "offscreen": false,
+      "rect": {
+        "x": 12,
+        "y": 370,
+        "w": 366,
+        "h": 284
+      }
+    },
+    "helpRuntime": {
+      "guideId": null,
+      "autoStart": "0",
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate"
+    },
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-bantuan.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "app-login",
+    "path": "/app/login",
+    "status": 200,
+    "title": "Log masuk - Diwan",
+    "hasMain": true,
+    "helpTargets": [
+      "page-content"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 390,
+    "tour": null,
+    "helpRuntime": null,
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-app-login.png"
+  },
+  {
+    "viewport": "mobile",
+    "name": "admin-login",
+    "path": "/admin/login",
+    "status": 200,
+    "title": "Log masuk - Diwan · Pentadbir Platform",
+    "hasMain": true,
+    "helpTargets": [
+      "page-content"
+    ],
+    "hOverflow": false,
+    "overflowing": [],
+    "vw": 390,
+    "tour": null,
+    "helpRuntime": null,
+    "englishLeak": [],
+    "errors": [],
+    "bad": [],
+    "shot": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/Audit Review Round Robin/bukti/pusingan-01/mobile-admin-login.png"
+  }
+]

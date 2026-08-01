@@ -1,0 +1,256 @@
+{
+  "tool": "Playwright channel chrome",
+  "base": "https://bakwim.my",
+  "started": "2026-08-01T01:11:30.674Z",
+  "viewports": [
+    {
+      "name": "desktop",
+      "pages": [
+        {
+          "path": "/",
+          "status": 200,
+          "title": "Diwan — Sistem Pengurusan Dokumen Masjid",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/log-masuk",
+          "status": 200,
+          "title": "Log Masuk — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/daftar",
+          "status": 200,
+          "title": "Daftar Masjid — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher",
+            "registration-organisation",
+            "registration-next"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/bantuan",
+          "status": 200,
+          "title": "Pusat Bantuan — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher",
+            "page-content",
+            "help-center",
+            "help-search",
+            "help-diagnosis",
+            "help-support"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/app/login",
+          "status": 200,
+          "title": "Log masuk - Diwan",
+          "h1": "\n            Log masuk ke akaun anda\n        ",
+          "targets": [
+            "page-content"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/admin/login",
+          "status": 200,
+          "title": "Log masuk - Diwan · Pentadbir Platform",
+          "h1": "\n            Log masuk ke akaun anda\n        ",
+          "targets": [
+            "page-content"
+          ],
+          "overflow": 0
+        }
+      ],
+      "errors": [],
+      "bad": [],
+      "failed": [
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "name": "mobile",
+      "pages": [
+        {
+          "path": "/",
+          "status": 200,
+          "title": "Diwan — Sistem Pengurusan Dokumen Masjid",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/log-masuk",
+          "status": 200,
+          "title": "Log Masuk — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/daftar",
+          "status": 200,
+          "title": "Daftar Masjid — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher",
+            "registration-organisation",
+            "registration-next"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/bantuan",
+          "status": 200,
+          "title": "Pusat Bantuan — Diwan",
+          "h1": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan",
+          "targets": [
+            "help-launcher",
+            "page-content",
+            "help-center",
+            "help-search",
+            "help-diagnosis",
+            "help-support"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/app/login",
+          "status": 200,
+          "title": "Log masuk - Diwan",
+          "h1": "\n            Log masuk ke akaun anda\n        ",
+          "targets": [
+            "page-content"
+          ],
+          "overflow": 0
+        },
+        {
+          "path": "/admin/login",
+          "status": 200,
+          "title": "Log masuk - Diwan · Pentadbir Platform",
+          "h1": "\n            Log masuk ke akaun anda\n        ",
+          "targets": [
+            "page-content"
+          ],
+          "overflow": 0
+        }
+      ],
+      "errors": [],
+      "bad": [],
+      "failed": [
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://bakwim.my/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "RR-01-11",
+      "viewport": "desktop",
+      "rootHelpHref": "/bantuan?asal=%2F%2F"
+    },
+    {
+      "id": "HELP-SEARCH",
+      "viewport": "desktop",
+      "after": "\n            Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Orang Awam\n                     untuk “daftar masjid”                     Kosongkan carian\n                            \n        ",
+      "results": 1,
+      "errors": []
+    },
+    {
+      "id": "RR-01-11",
+      "viewport": "mobile",
+      "rootHelpHref": "/bantuan?asal=%2F%2F"
+    },
+    {
+      "id": "HELP-SEARCH",
+      "viewport": "mobile",
+      "after": "\n            Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Orang Awam\n                     untuk “daftar masjid”                     Kosongkan carian\n                            \n        ",
+      "results": 1,
+      "errors": []
+    },
+    {
+      "id": "RR-01-01/RR-01-04",
+      "autoStart": "0",
+      "guideId": null,
+      "helpUrl": "/bantuan?asal=%2Flivewire%2Fupdate",
+      "targets": [
+        "help-launcher"
+      ],
+      "popoverVisible": true,
+      "popoverText": "×Tindakan belum tersediaKawalan untuk Masukkan identiti tidak kelihatan pada halaman ini. Semak prasyarat atau data yang diperlukan dahulu.Baca panduan dan penyelesaian1 of 1← PreviousTutup",
+      "previous": "← Previous",
+      "progress": "1 of 1",
+      "errors": []
+    },
+    {
+      "id": "RR-01-03",
+      "validation": [
+        "The name field is required.",
+        "The state field is required.",
+        "The code field is required.",
+        "The slug field is required."
+      ],
+      "allText": [
+        "The name field is required.",
+        "The state field is required.",
+        "The code field is required.",
+        "The slug field is required."
+      ],
+      "errors": []
+    }
+  ],
+  "finished": "2026-08-01T01:11:48.506Z"
+}

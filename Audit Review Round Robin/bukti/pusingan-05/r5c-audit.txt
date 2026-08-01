@@ -1,0 +1,23 @@
+===== WIZARD PENUH — kendali Choices.js =====
+  --- L1 [01 Semak Dokumen & Sumber] medan: 
+       tekan "Seterus" → OK
+  --- L2 [02 Jenis & Metadata] medan: Jenis Rekod* | Tajuk | Arah* | Ruj. Kami | Ruj. Tuan | Tarikh Rekod* | Tarikh Terima | Nama Pengirim | Organisasi Pengirim | Nama 
+       tekan "Seterus" → OK
+  --- L3 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       tekan "Seterus" → OK
+  --- L4 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       RALAT: The failkan Ke field is required.
+       tekan "Seterus" → OK
+  --- L5 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       RALAT: The failkan Ke field is required.
+       tekan "Seterus" → OK
+  --- L6 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       RALAT: The failkan Ke field is required.
+       tekan "Seterus" → OK
+  --- L7 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       RALAT: The failkan Ke field is required.
+       tekan "Seterus" → OK
+  --- L8 [03 Fail & Sensitiviti] medan: Failkan Ke* | Tahap Akses Rekod*
+       RALAT: The failkan Ke field is required.
+       tekan "Seterus" → OK
+  Modal selepas selesai: MASIH TERBUKA ralat=The failkan Ke field is required.

@@ -1,0 +1,5 @@
+{
+  "initialBatch": "rate-limited after repeated attempts",
+  "reset": "php artisan cache:clear",
+  "singleAdminLogin": "dashboard rendered"
+}

@@ -1,0 +1,24 @@
+{
+  "controlsBefore": [
+    {
+      "name": "Halaman sebelumnya",
+      "disabled": false
+    },
+    {
+      "name": "Halaman seterusnya",
+      "disabled": false
+    }
+  ],
+  "zoomIn": "150%",
+  "zoomOut": "100%",
+  "page": "1",
+  "findStatus": "Padanan ditemui pada halaman 1.",
+  "printCalled": true,
+  "download": {
+    "status": 200,
+    "contentType": "application/pdf",
+    "disposition": "attachment; filename=AUDIT-RR8-viewer.pdf",
+    "bytes": 2109
+  },
+  "errors": []
+}

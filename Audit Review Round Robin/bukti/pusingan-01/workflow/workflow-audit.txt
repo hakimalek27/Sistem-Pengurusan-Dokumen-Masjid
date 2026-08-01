@@ -1,0 +1,34 @@
+===== WORKFLOW A: Admin/Kerani klasifikasi dokumen Peti Masuk =====
+  1. Peti Masuk dibuka: 1 baris.
+     Lajur: Sumber | Tajuk / Fail | Tarikh Terima | Penghantar / Sumber | Diterima | Antivirus | OCR | Duplikat | 
+  2. Modal Klasifikasikan terbuka.
+     Langkah wizard: Klasifikasikan / 01 / Semak Dokumen & Sumber / 02 / Jenis & Metadata / 03 / Fail & Sensitiviti / 04 / Edaran Minit / 05 / Semakan Akhir / Asal dokumen
+  --- Wizard langkah 1: Klasifikasikan / 01 / Semak Dokumen & Sumber
+      medan:  |  |  |  |  |  |  |  |  |  |  | 
+      (tiada butang Seterusnya — langkah terakhir)
+
+===== SEMAKAN KANDUNGAN HALAMAN TERAS =====
+  Rekod                  baris=  3  aksi=[Rekod, Rekod Baharu]
+      lajur: Rujukan | Tajuk | Jenis | Fail | Tarikh | Sensitiviti | Status
+  Fail                   baris=  3  aksi=[Fail, Cipta]
+      lajur: No. Fail | Tajuk | Sensitiviti | Status | Kandungan | Medium | Lokasi | Penjagaan
+  Minit Saya             baris=  0  aksi=[Minit Saya]
+      lajur: Rekod | Daripada | Arahan / Catatan | Penerima | Keutamaan | Tarikh Akhir | Status
+      kosong: "Tiada rekod dijumpai"
+  Kelulusan              baris=  0  aksi=[Kelulusan]
+      lajur: Rekod | Pemohon | Nota | Tarikh | Status | Bagi pihak
+      kosong: "Tiada rekod dijumpai"
+  Carian                 baris=  0  aksi=[]
+  Laporan                baris=  0  aksi=[Eksport CSV]
+  Log Aktiviti           baris=  0  aksi=[Log Aktiviti Masjid]
+      lajur: Tarikh & Masa | Pelaku | Aktiviti | Rekod | Fail | Sumber
+  Penggunaan & Storan    baris=  0  aksi=[Tambah Storan]
+      kosong: "Tiada add-on storan."
+  Ahli & Peranan         baris=  9  aksi=[Jemput Ahli]
+      lajur: NAMA | E-MEL | PERANAN | NO. WHATSAPP TENANT | NOTI WA | TINDAKAN
+  Klasifikasi Fail       baris= 10  aksi=[Klasifikasi Fail, Cipta]
+      lajur: Kod | Tajuk | Peringkat | Sensitiviti | Aktif
+  Pelupusan              baris=  0  aksi=[Sedia Senarai Semakan]
+      kosong: "Tiada batch pelupusan."
+  Tetapan Masjid         baris=  0  aksi=[Edit Tetapan, Aktifkan WhatsApp]
+      kosong: "Hantar e-mel daripada salah satu alamat itu (tiada kata kunci diperlukan)."

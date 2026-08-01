@@ -1,0 +1,59 @@
+{
+    "transaction": "rolled_back",
+    "production_touched": false,
+    "notifications_sent": false,
+    "mail_sent": false,
+    "queue_executed": false,
+    "results": [
+        {
+            "id": "WRITE-01 klasifikasi fail asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Validation\\ValidationException: Rekod dan fail mesti dalam tenant sama, item Peti Masuk dan fail masih terbuka."
+        },
+        {
+            "id": "WRITE-02 klasifikasi tenant sendiri",
+            "status": "PASS",
+            "detail": "difailkan"
+        },
+        {
+            "id": "WRITE-03 minit penerima asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Validation\\ValidationException: Semua penerima mesti ahli aktif tenant dan dibenarkan melihat rekod."
+        },
+        {
+            "id": "WRITE-04 minit tenant sendiri",
+            "status": "PASS",
+            "detail": "minit_id=1 recipients=2"
+        },
+        {
+            "id": "WRITE-05 pelulus asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Validation\\ValidationException: Pelulus mesti ahli aktif tenant dan dibenarkan melihat rekod ini."
+        },
+        {
+            "id": "WRITE-06 keputusan oleh pengguna asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Auth\\Access\\AuthorizationException: Pengguna bukan pelulus yang ditetapkan."
+        },
+        {
+            "id": "WRITE-07 keputusan pelulus tenant sendiri",
+            "status": "PASS",
+            "detail": "lulus"
+        },
+        {
+            "id": "WRITE-08 kelulusan pelupusan asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Auth\\Access\\AuthorizationException: Tiada kebenaran meluluskan pelupusan."
+        },
+        {
+            "id": "WRITE-09 pelaksanaan pelupusan asing",
+            "status": "PASS",
+            "detail": "Illuminate\\Auth\\Access\\AuthorizationException: Tiada kebenaran melaksanakan pelupusan."
+        },
+        {
+            "id": "WRITE-10 pelupusan tenant sendiri",
+            "status": "PASS",
+            "detail": "status=selesai record=dilupus"
+        }
+    ]
+}

@@ -1,0 +1,551 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\ExampleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthat true is true[39m
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Feature\ActualOcrDocumentTest[39m
+  [33;1m-[39;22m[90m [39m[90mit OCR fail sebenar menghasilkan PDF boleh cari dan hasil carian tenant[39m[90m [39m[33m→ Tetapkan SPDM_OCR_FIXTURE_1/2 dan[39m[90m…[39m [90m0.56s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\AdminPanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit papan pemuka superadmin render[39m[90m                                                                           [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit senarai Masjid render[39m[90m                                                                                    [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit senarai Pesanan Storan render[39m[90m                                                                            [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pesanan storan hanya boleh berubah melalui aliran bil terkawal[39m[90m                                           [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tenant didaftarkan melalui borang awam dan tidak boleh dimusnahkan kekal[39m[90m                                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit senarai Pengguna render[39m[90m                                                                                  [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Tetapan Platform render[39m[90m                                                                          [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Profil Saya, WhatsApp Platform & Status Sambungan render (superadmin)[39m[90m                            [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bukan superadmin tidak boleh akses /admin[39m[90m                                                                [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menggunakan zon masa operasi Malaysia[39m[90m                                                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ahli biasa tidak boleh membuka tenant yang digantung atau diarkibkan[39m[90m                                     [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\AdminUserPhoneValidationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menolak nombor WhatsApp akaun lain sebelum database menghasilkan 500[39m[90m                                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menormalkan nombor WhatsApp tempatan sebelum simpan[39m[90m                                                      [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\AllowedFormatsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit peta format mengandungi 11 extension yang dijangka dan bukan webp[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allowsExtension case-insensitive dan menolak format luar senarai[39m[90m                                         [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allowsMime mengabai parameter charset dan menolak webp/octet-stream[39m[90m                                      [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mimeForExtension memulangkan MIME kanonik[39m[90m                                                                [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit acceptedFileTypes selaras dengan mimes dan unik[39m[90m                                                          [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ApprovalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mohon kelulusan → status menunggu + notifikasi approver[39m[90m                                                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lulus dengan IP + timestamp direkod + audit + notifikasi pemohon (§18.22)[39m[90m                                [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menghantar notifikasi keputusan kepada pemohon yang sudah hilang akses rekod[39m[90m                       [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tolak → status tolak + nota keputusan[39m[90m                                                                    [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\BillingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit cipta pesanan → invois bersiri INV-YYYY-0001/0002 + PDF + menunggu bayaran[39m[90m                               [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tandakan dibayar → addon aktif + kuota efektif naik serta-merta (§18.32)[39m[90m                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit batalkan pesanan storan wajib ada sebab dan direkod dalam audit[39m[90m                                          [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit luput addon → status luput + kuota turun semula (§18.33)[39m[90m                                                 [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notis T-30 dihantar untuk addon yang akan luput[39m[90m                                                          [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ClassificationNodeFormTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit borang Cipta Klasifikasi render tanpa ralat (regresi modifyQueryUsing)[39m[90m                                   [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit borang Edit Klasifikasi render tanpa ralat (regresi modifyQueryUsing)[39m[90m                                    [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cipta nod dengan induk masjid sendiri berjaya[39m[90m                                                            [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nod induk dari masjid lain ditolak — skop tenant kekal (§15.2)[39m[90m                                           [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\DataIntegrityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mengunci struktur klasifikasi yang telah digunakan tetapi membenarkan nyahaktif[39m[90m                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengira semula retensi selepas create update delete peraturan dan sebelum notis[39m[90m                          [39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menjadikan invois dan pengesahan bayaran atomic serta idempotent[39m[90m                                         [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengekalkan snapshot dan boleh retry apabila pemadaman blob gagal[39m[90m                                        [39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak klasifikasi silang tenant pada lapisan service[39m[90m                                                   [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pelulus dan penerima minit yang tidak layak tenant atau sensitiviti[39m[90m                              [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\DdmsExtendedCapabilitiesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit saved search dan favourite terikat kepada pengguna serta tenant[39m[90m                                          [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carian lanjutan filter tarikh, pengirim dan sumber tanpa melangkaui tenant[39m[90m                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pembetulan rekod memerlukan semakan dan menyimpan audit sebelum/sesudah[39m[90m                                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit delegasi approval merekodkan actor sebenar dan principal asal[39m[90m                                            [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit delegasi minit membolehkan principal menerima tindakan tanpa membuka rekod tenant lain[39m[90m                   [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tracking fizikal merekodkan keluar, pulang dan tenant file yang tepat[39m[90m                                    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fail elektronik tidak boleh menggunakan tracking fizikal[39m[90m                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tracking fizikal menolak pemegang tenant lain dan pulangan tanpa rekod keluar[39m[90m                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit delegate boleh melihat tetapi tidak boleh membatalkan delegasi principal[39m[90m                                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit intake menyimpan status antivirus dan metadata masa masuk[39m[90m                                                [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\DedupTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit muat naik: duplikat dalam masjid sama tetap dicipta tetapi ditanda ⚠[39m[90m                                     [39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit e-mel/webhook: duplikat dalam masjid sama diskip (null, tiada rekod kedua)[39m[90m                               [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sha256 sama DIBENARKAN merentas masjid berbeza[39m[90m                                                           [39m [90m0.94s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\EmailRoutingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FetchMailJob WithoutOverlapping mempunyai expiry (elak kunci tersekat kekal §11.3)[39m[90m                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengekstrak slug daripada plus-addressing[39m[90m                                                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengutamakan alamat intake rasmi (scan@domain) berbanding IMAP username[39m[90m                                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit e-mel ke +man → rekod masuk peti MAN bukan MAM (§18.36)[39m[90m                                                  [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slug tidak dikenali → tiada rekod[39m[90m                                                                        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lampiran duplikat skop-masjid diskip (§11.3)[39m[90m                                                             [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lampiran MIME tidak dibenarkan ditapis (§15.7)[39m[90m                                                           [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima format tambahan (.txt, .doc) dan menolak .webp dengan rejected_format[39m[90m                           [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit semua lampiran format tidak sah → status all_rejected[39m[90m                                                    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mod ketat (allow_public=false): pengirim bukan-allowlist ditolak sender_not_allowed[39m[90m                      [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak kata kunci hilang & intake dimatikan[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit submission awam (allow_public lalai): pengirim luar + kata kunci → diterima[39m[90m                              [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit had kadar submission awam menyekat selepas cap dicapai[39m[90m                                                   [39m [90m0.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pengirim dalam allowlist mendapat had lebih tinggi daripada awam[39m[90m                                         [39m [90m1.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit lampiran melebihi had saiz → rejected_oversize tanpa exception (bukan mesej racun)[39m[90m                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit campuran lampiran sah + oversize → rekod sah dicipta, oversize direkod[39m[90m                                   [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recordOutcome sebab oversize memaklum admin dan menyimpan diagnostik oversize[39m[90m                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima kata kunci dalam isi e-mel dan kekal berskop tenant penerima[39m[90m                                    [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kata kunci kosong → terima semua e-mel daripada pengirim dibenarkan[39m[90m                                      [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit isIntakeAddress mengenal pasti alamat intake sistem (bukan pengirim)[39m[90m                                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recordOutcome memaklum admin sekali (throttle) dan menyimpan diagnostik[39m[90m                                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recordOutcome tidak memaklum bila tiada masjid (no_slug)[39m[90m                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mod ketat: allowlist pengirim satu tenant tidak terpakai kepada tenant lain[39m[90m                              [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ExampleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe application returns a successful response[39m[90m                                                               [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\ExportTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit bina Eksport ZIP mengandungi metadata.csv, senarai.pdf & media (§18.35)[39m[90m                                  [39m [90m0.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit job eksport zip semak semula role pemohon sebelum membina fail[39m[90m                                           [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit download eksport tidak dibenarkan selepas pemohon hilang kebenaran eksport[39m[90m                               [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\FilamentResourcesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit halaman Peti Masuk render[39m[90m                                                                                [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Rekod render[39m[90m                                                                                     [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Fail render[39m[90m                                                                                      [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Klasifikasi Fail render[39m[90m                                                                          [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman buka fail (create) render[39m[90m                                                                        [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit view rekod sulit render + tulis log akses sulit (§15.4)[39m[90m                                                  [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Carian render[39m[90m                                                                                    [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Kegemaran render[39m[90m                                                                                 [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Pembetulan Rekod render[39m[90m                                                                          [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Delegasi render[39m[90m                                                                                  [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Kelulusan render[39m[90m                                                                                 [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Retensi & Pegangan render[39m[90m                                                                        [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Peraturan Retensi render[39m[90m                                                                         [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Ahli & Peranan render[39m[90m                                                                            [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Tetapan Masjid render[39m[90m                                                                            [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Pelupusan Manual render[39m[90m                                                                          [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Profil render[39m[90m                                                                                    [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Log Akses Sulit render[39m[90m                                                                           [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Penggunaan & Storan render[39m[90m                                                                       [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman Minit Saya render[39m[90m                                                                                [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman view Fail render (termasuk relation manager grants)[39m[90m                                              [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman edit Fail render dengan medan medium fizikal[39m[90m                                                     [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rekod MAN tidak dapat dilihat dalam konteks tenant MAM via URL resource → 404 (§18.3)[39m[90m                    [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\GoogleDriveConnectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit DriveConfig: configured/connected/enabled ikut tetapan tersulit[39m[90m                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit callback OAuth (superadmin, state sah) menyimpan sambungan + redirect[39m[90m                                    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit callback OAuth menolak bukan-superadmin (403)[39m[90m                                                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit callback OAuth menolak state tidak sah (419 CSRF)[39m[90m                                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit putus Google Drive mengosongkan refresh token + status[39m[90m                                                   [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\GoogleDriveMirrorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit cipta folder masjid pada resolusi pertama (SPDM/Backup/{slug})[39m[90m                                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rekod difailkan → mirror ke rantaian folder klasifikasi yang betul[39m[90m                                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ISOLASI: job dgn mosque_id salah tidak mirror rekod tenant lain (sifar upload)[39m[90m                           [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ganti versi → versi baharu dapat fail Drive SENDIRI (versi lama kekal)[39m[90m                                   [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pindah fail → fail Drive dipindah ke folder baharu (id sama)[39m[90m                                             [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pelupusan → kolum Drive dinull + engine padam fail[39m[90m                                                       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sanitasi segmen: "/" jadi "-", had panjang[39m[90m                                                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirror dimatikan (tidak bersambung) → syncRecord no-op[39m[90m                                                   [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\GoogleDriveReconcileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reconcile hantar sync HANYA untuk rekod tercicir/berubah per tenant[39m[90m                                      [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reconcile dimatikan → tiada dispatch[39m[90m                                                                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit syncDatabaseDump muat naik dump terkini + prune ke had[39m[90m                                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drive-verify mengira layak/sync/tertunggak per masjid[39m[90m                                                    [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\GuidanceDigestTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menghantar maksimum satu digest sehari dan menghormati quiet hours[39m[90m                                       [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak mengulang peringatan minit dalam digest bantuan[39m[90m                                                    [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\GuidanceSupportTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mengasingkan progress mengikut pengguna dan tenant[39m[90m                                                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyambung tour ditutup dan mengulang tour yang telah selesai dari awal[39m[90m                                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mencipta tiket tenant dengan lampiran private dan antivirus metadata[39m[90m                                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak tiket silang tenant dan akses tiket tenant lain[39m[90m                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak kategori yang diubah suai dan lampiran yang dikesan antivirus[39m[90m                                    [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memadam fail lampiran private bersama tiket selepas tempoh retensi[39m[90m                                       [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengembalikan request id pada respons tanpa mempercayai nilai klien[39m[90m                                      [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\HelpCatalogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit memuatkan katalog sah dan menapis guide mengikut panel role dan permission[39m[90m                               [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima istilah biasa singkatan dan salah ejaan melalui fallback PHP[39m[90m                                    [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghidrat tajuk langkah yang menerangkan tindakan dan sasaran wizard stabil[39m[90m                             [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menyimpan teks carian mentah dalam analitik[39m[90m                                                        [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menjana primary key Meilisearch sah tanpa mengubah guide id rasmi[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit meliputi setiap halaman dan skrin tindakan dalam manifest manual dengan guide role[39m[90m                       [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\HelpCenterAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit merender pusat bantuan dan analitik mengikut role[39m[90m                                                        [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghadkan resource tiket kepada Admin Kerani tenant dan superadmin[39m[90m                                      [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghidang gambar latihan ikut akses guide[39m[90m                                                               [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menutup pusat bantuan apabila feature flag dimatikan[39m[90m                                                     [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\InboxClassifyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit failkan rekod: enclosure diperuntuk, difailkan, waris sensitiviti max, mosque_id betul[39m[90m                   [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enclosure_no berturutan untuk beberapa rekod dalam fail sama[39m[90m                                             [39m [90m0.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit modal klasifikasi boleh terus edarkan minit dan menghantar notifikasi[39m[90m                                    [39m [90m1.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit modal klasifikasi membenarkan minit kosong tetapi menyekat kandungan ke-101 secara atomik[39m[90m                [39m [90m1.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pindah fail merekod audit & memperuntuk enclosure baharu[39m[90m                                                 [39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MagicLinkDeepLinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit deepLinkFor menjana pautan notifikasi (purpose=notification, TTL ~72 jam, intended)[39m[90m                      [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET interstisial tidak guna token — dua GET berturut kekal selamat[39m[90m                                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST deep-link mendarat pada destinasi (intended_url) + log masuk[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit token deep-link sekali guna — POST kedua → 410[39m[90m                                                           [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit token tamat tempoh → halaman 410 (GET dan POST)[39m[90m                                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyekat open redirect — intended luar domain jatuh ke pendaratan peranan[39m[90m                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit klik semula sebagai pengguna sama → redirect tanpa guna token[39m[90m                                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit membaiki bounce — magic login selaras password_hash_web walau sesi lama wujud[39m[90m                            [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gate kata laluan — akaun tanpa kata laluan magic login → dipaksa set kata laluan di panel[39m[90m                [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MagicLinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menghantar & menggunakan token sah → pulangkan pengguna dan tandakan used[39m[90m                                [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak token yang telah tamat tempoh (15 minit)[39m[90m                                                         [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak token yang telah digunakan (sekali guna)[39m[90m                                                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menghantar pautan kepada pengguna dinyahaktif[39m[90m                                                      [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit /masuk/{token} interstisial (GET) tidak guna token; POST log masuk & mendarat[39m[90m                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit /masuk/{token} tidak sah → halaman 410 (bukan 403 kosong)[39m[90m                                                [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghantar pautan melalui pengecam telefon (0 → 60)[39m[90m                                                      [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit token terikat user_id boleh diguna walau akaun tiada e-mel[39m[90m                                               [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MailIntakeHealthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menandakan intake TERSEKAT bila tiada larian berjaya melebihi ambang[39m[90m                                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menandakan intake OK bila detak jantung segar[39m[90m                                                            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak melaporkan OK bila streak 0 tetapi tiada detak jantung langsung[39m[90m                                    [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengutamakan keadaan GAGAL bila sambungan IMAP ditolak[39m[90m                                                   [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sentiasa Dimatikan bila IMAP_ENABLED=false (tiada alert palsu pada dev)[39m[90m                                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FetchMailJob merekod detak jantung imap_last_success_at[39m[90m                                                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit check-wa-sessions menghantar alert superadmin bila intake tersekat[39m[90m                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menghantar alert bila intake sihat[39m[90m                                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menghantar alert bila IMAP dimatikan walaupun detak jantung basi[39m[90m                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit alert tersekat dithrottle — tidak berulang setiap 10 minit[39m[90m                                               [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memaklumkan pulih selepas intake tersekat kembali sihat[39m[90m                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit command fetch-mail melaporkan GAGAL bila kunci job tersangkut (bukan "selesai" palsu)[39m[90m                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit command fetch-mail --force melepaskan kunci tersangkut dan berjaya[39m[90m                                       [39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kunci job FetchMailJob mempunyai expiry pendek (tetingkap gagal-senyap kecil)[39m[90m                            [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit setiap mutex jadual mempunyai tempoh luput eksplisit (punca insiden 20 Jul)[39m[90m                              [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MembershipTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit jemput ahli baharu → cipta + attach peranan + magic link[39m[90m                                                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit jemput semula ahli sedia ada mengemas kini pivot tenant tersebut[39m[90m                                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit jemput semula ahli sedia ada dengan e-mel berbeza TIDAK mengubah e-mel akaun (governance §6.4)[39m[90m           [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak jemputan oleh pelakon tanpa users.manage atau tenant lain[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak perubahan peranan oleh admin tenant lain[39m[90m                                                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit TIDAK boleh membuang admin_masjid terakhir (§6.4)[39m[90m                                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit boleh membuang admin jika ada admin_masjid lain[39m[90m                                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit TIDAK boleh menurunkan admin_masjid terakhir[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit TIDAK boleh menurunkan peranan diri sendiri[39m[90m                                                              [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima input role lama kerani sebagai Admin / Kerani tanpa mencipta role kedua[39m[90m                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit TIDAK boleh menyentuh akaun superadmin[39m[90m                                                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit boleh menukar peranan ahli biasa[39m[90m                                                                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit jemput ahli telefon-sahaja menormalkan nombor & tiada e-mel[39m[90m                                              [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit jemputan tanpa e-mel & tanpa telefon ditolak[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit admin boleh set semula kata laluan ahli[39m[90m                                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set semula kata laluan oleh bukan-admin ditolak[39m[90m                                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hantar semula pautan log masuk kepada ahli[39m[90m                                                               [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MigrationSmokeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mencipta semua jadual §5 + jadual pakej[39m[90m                                                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyemai 2 masjid demo (MAM & MAN)[39m[90m                                                                       [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit config record_types mengandungi katalog teras dan tambahan DDMS[39m[90m                                          [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit config roles mengandungi 8 peranan dengan Admin / Kerani digabungkan (§6.1)[39m[90m                              [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit peraturan retensi lalai platform wujud (§16.1)[39m[90m                                                           [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit KF tersalin ke setiap masjid dengan 40 nod (9 fungsi + 31 aktiviti)[39m[90m                                      [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MinitTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit cipta minit + recipients + due ikut SLA + notifikasi[39m[90m                                                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tanda selesai: minit selesai hanya bila SEMUA penerima tindakan selesai[39m[90m                                  [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak memaklumkan pengirim apabila pengirim sudah hilang akses rekod[39m[90m                                     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit balas & edarkan mencipta minit anak dalam bebenang[39m[90m                                                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit minit due semalam → peringatan LEWAT (§18.21)[39m[90m                                                            [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit minit due esok → peringatan biasa[39m[90m                                                                        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak menghantar peringatan kepada pengguna tidak aktif atau bukan lagi ahli[39m[90m                             [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MosqueActivityLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit membenarkan Log Aktiviti hanya kepada empat role yang ditetapkan[39m[90m                                         [39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengasingkan timeline dan snapshot antara dua masjid[39m[90m                                                     [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak membocorkan tajuk rekod terhad kepada Bendahari melalui log[39m[90m                                        [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak snapshot rekod atau fail tenant lain[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit merekod perjalanan upload klasifikasi dan minit dengan provenance lengkap[39m[90m                                [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak membenarkan log diubah atau dipadam dan tiada route mutasi[39m[90m                                         [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\MosqueIntegrityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mengunci kod tenant selepas fail registri digunakan[39m[90m                                                      [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\NotificationDeepLinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit setiap penerima dapat pautan magic /masuk/ berbeza (deep-link ke rekod)[39m[90m                                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memo: satu penerima → satu token walau merentas saluran (waMessage+toMail+toWhatsApp+toTelegram)[39m[90m         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit penerima bukan User (AnonymousNotifiable) → pautan biasa tanpa token[39m[90m                                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit InboxNewItem deep-link menyasarkan Peti Masuk (/app/{slug}/peti-masuk)[39m[90m                                   [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OcrPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit dokumen Office tak sah/korup → status siap, ocr_text null (gagal-anggun §20)[39m[90m                             [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit OCR imej BM sebenar mengekstrak teks (§18.7 — perlu ocrmypdf/tesseract)[39m[90m                                  [39m [90m1.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit PDF bertulis menghasilkan derived PDF dan teks boleh diindeks[39m[90m                                            [39m [90m0.76s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OcrSearchWorkflowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit item peti masuk mempunyai halaman semakan OCR dan deep-link yang hidup[39m[90m                                   [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit teks OCR peti masuk boleh dicari tetapi tidak bocor ke tenant lain[39m[90m                                       [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OfficeTextExtractionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ekstrak teks docx (PhpWord) mengandungi kandungan perenggan[39m[90m                                              [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ekstrak teks xlsx (PhpSpreadsheet) mengandungi nama helaian + sel[39m[90m                                        [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ekstrak teks pptx (native XML) mengandungi teks slaid[39m[90m                                                    [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fail Office korup → null (gagal-anggun, rekod kekal sah)[39m[90m                                                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit teks melebihi had ocr_text_limit dipotong[39m[90m                                                                [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit normalizeText menyambung suku kata terpotong hujung baris + kemas whitespace[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit docx yang diingest → OCR siap, teks diindeks, boleh dicari (hujung-ke-hujung)[39m[90m                            [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OfficeUatFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit melengkapkan UAT kerani pengerusi setiausaha admin dan audit hujung ke hujung[39m[90m                            [39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OfficeWorkflowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit memaparkan dashboard tenant lengkap dan wizard Rekod Baharu[39m[90m                                              [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memaparkan dashboard superadmin dengan metrik platform[39m[90m                                                   [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memaparkan laporan pejabat mengikut tenant[39m[90m                                                               [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memaparkan bebenang minit sejarah kelulusan dan audit pada rekod[39m[90m                                         [39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OnboardingWizardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit magic link admin yang belum selesai persediaan → mendarat di wizard (?mula=1)[39m[90m                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit magic link admin yang sudah selesai persediaan → mendarat di dashboard[39m[90m                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dashboard papar banner persediaan bila belum selesai, tiada selepas selesai[39m[90m                              [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Admin / Kerani nampak banner persediaan[39m[90m                                                                  [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit admin yang mendarat di wizard boleh melangkau (tandakan selesai)[39m[90m                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hanya admin (mosque.settings) boleh akses persediaan[39m[90m                                                     [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit wizard mendaftar ahli, set telefon masjid & tandakan onboarding selesai[39m[90m                                  [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\OpsReadinessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit healthcheck dalaman mengesahkan DB dan cache[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit failure probe job gagal dengan id yang boleh dijejak[39m[90m                                                     [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit failure drill queue mempunyai mod pengesahan failed jobs[39m[90m                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Livewire menyimpan muat naik sementara ke disk local, bukan disk lalai COS[39m[90m                               [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Horizon mengasingkan queue umum OCR dan eksport[39m[90m                                                          [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Horizon dashboard hanya dibenarkan kepada superadmin[39m[90m                                                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Docker production membina vendor asset dan berjalan tanpa bind mount kod[39m[90m                                 [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyediakan staging smoke failure injection dan restore drill sebenar[39m[90m                                    [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyediakan CI integration Docker dan deploy staging berrollback[39m[90m                                         [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\P0SecurityRegressionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menjadikan log akses sulit append-only pada lapisan model[39m[90m                                                [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit job eksport menolak id rekod tenant lain[39m[90m                                                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit job OCR mengesahkan mosque_id dalam payload[39m[90m                                                              [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PhoneLoginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit log masuk panel masjid dengan nombor telefon (0 dinormal ke 60)[39m[90m                                          [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit log masuk dengan e-mel masih berfungsi[39m[90m                                                                   [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit akaun telefon-sahaja (tanpa e-mel) boleh log masuk[39m[90m                                                       [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit telefon tidak wujud → ralat, kekal guest[39m[90m                                                                 [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit superadmin log masuk dengan telefon di panel /admin[39m[90m                                                      [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gate: akaun tanpa kata laluan dipaksa tetapkan kata laluan dahulu[39m[90m                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gate: akaun berkata laluan tidak terganggu[39m[90m                                                               [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set kata laluan pertama → teruskan ke destinasi asal[39m[90m                                                     [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PlatformWhatsAppTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit provision platform mencipta integrasi mosque_id null terasing daripada tenant[39m[90m                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman WhatsApp Platform & Status Sambungan superadmin sahaja[39m[90m                                           [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mesej masuk ke sesi platform diabaikan (tiada intake dokumen)[39m[90m                                            [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PublicHelpAndRegistrationStepperTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit memaparkan pusat bantuan awam dan pendaftaran tiga langkah[39m[90m                                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengesahkan setiap langkah pendaftaran sebelum bergerak[39m[90m                                                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memberi maklum balas carian awam dan menerangkan sempadan panduan role[39m[90m                                   [39m [90m4.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\PublicPagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit halaman utama papar jenama Diwan (BM)[39m[90m                                                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman /daftar boleh diakses & memaparkan medan BM[39m[90m                                                      [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman /log-masuk papar borang magic link (BM)[39m[90m                                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit halaman log masuk panel superadmin boleh diakses[39m[90m                                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit response awam membawa header keselamatan asas[39m[90m                                                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit log masuk /admin papar hint ke panel masjid[39m[90m                                                              [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit log masuk /app papar hint ke panel pentadbir & magic link[39m[90m                                                [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guest ke /admin dialih ke log masuk[39m[90m                                                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengasingkan bucket kadar pendaftaran, halaman login dan magic login[39m[90m                                     [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memisahkan bucket imej bantuan supaya thumbnail tidak mengunci halaman bantuan[39m[90m                           [39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit kaunter storan bertambah bila media dicipta (§5.14)[39m[90m                                                      [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kaunter storan berkurang bila media dipadam[39m[90m                                                              [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kuota efektif = base + Σ addon AKTIF (luput tidak dikira)[39m[90m                                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sekat TULIS bila 100% penuh; addon buka semula[39m[90m                                                           [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notifikasi ambang dihantar bila melepasi 80% (maks sekali/bulan)[39m[90m                                         [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reconcile membetulkan drift kaunter[39m[90m                                                                      [39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RecordNumberingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit memformat file_no mengikut §5.15 (MAM.500-1/2/3)[39m[90m                                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memformat jilid > 1 sebagai " Jld.{n}"[39m[90m                                                                   [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memberi transaction_no berturutan bawah nod sama[39m[90m                                                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit memperuntuk enclosure_no berturutan tanpa langkau[39m[90m                                                        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit membenarkan transaction_no sama merentas masjid berbeza (skop masjid)[39m[90m                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit membuka jilid baharu: fail lama ditutup, jilid+1 dengan transaksi sama[39m[90m                                   [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RecordVersionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ganti versi: rekod baharu, lama=diganti, pautan dua hala (§9.C.4)[39m[90m                                        [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ganti versi menolak format fail tidak dibenarkan[39m[90m                                                         [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ganti versi menolak apabila kuota masjid penuh[39m[90m                                                           [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit jana PDF label QR untuk rekod (§9.C.6)[39m[90m                                                                   [39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RegistrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit pendaftaran → masjid menunggu + admin_masjid pivot + admin belum aktif + KF belum disalin[39m[90m                [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pendaftaran tanpa dua pengakuan (checkbox)[39m[90m                                                       [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghormati suis tutup pendaftaran platform pada paparan dan submit[39m[90m                                      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak nombor WhatsApp milik akaun lain sebagai ralat borang[39m[90m                                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kelulusan superadmin → aktif + KF 40 nod + admin aktif + magic link dihantar[39m[90m                             [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RetentionEngineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POSITIF: padam bila due + t30 + t7 → dilupus + snapshot + sijil + blob dipadam[39m[90m                           [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIF kekal: jenis minit_mesyuarat (kekal) TIDAK dipadam[39m[90m                                               [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIF legal_hold: rekod dipegang TIDAK dipadam[39m[90m                                                         [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIF toggle-off: masjid auto_disposal_enabled=false TIDAK dipadam[39m[90m                                     [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIF tiada-notis: due tetapi t30/t7 belum dihantar → TIDAK dipadam (invarian kritikal §16.3)[39m[90m          [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NEGATIF masjid digantung: pelupusan DIJEDA (§10.M)[39m[90m                                                       [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kitaran penuh command: notices ×1 → t90/t30/t7 direkod → execute memadam[39m[90m                                 [39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RetentionTenantScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admin masjid tidak boleh membuka edit peraturan retensi masjid lain (skop getEloquentQuery)[39m[90m              [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit simpan peraturan retensi kekal terikat tenant walau payload mosque_id diusik[39m[90m                             [39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\RoleAuthorizationMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menguatkuasakan matriks 8 peranan pada Peti Masuk, Log Akses dan tetapan tenant[39m[90m                          [39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menapis sensitiviti pada query senarai sebelum metadata dirender[39m[90m                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menapis tajuk fail sulit pada query senarai fail sebelum dirender[39m[90m                                        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grant individu membuka hanya rekod fail yang diberi akses dalam senarai[39m[90m                                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tiada route cipta atau edit untuk log append-only[39m[90m                                                        [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SearchIsolationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit carian MAM tidak memulangkan dokumen MAN (§18.3/§18.18)[39m[90m                                                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carian menyokong filter jenis rekod dan fail tanpa membuka tenant lain[39m[90m                                   [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ajk TIDAK nampak rekod sulit dalam carian (§18.18)[39m[90m                                                       [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kerani (peranan istimewa) nampak rekod sulit dalam carian[39m[90m                                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bendahari boleh mencari rekod sulit kewangan tetapi bukan rekod sulit lain[39m[90m                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit geran fail individu turut berkuat kuasa dalam carian OCR[39m[90m                                                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit allowedSensitivities mengecualikan sulit untuk peranan bukan istimewa[39m[90m                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carian fail-closed untuk pengguna yang bukan ahli tenant[39m[90m                                                 [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SearchSnippetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit snippetFor memulangkan petikan konteks sekitar padanan dalam ocr_text[39m[90m                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit snippetFor jatuh ke tajuk bila tiada dalam ocr_text[39m[90m                                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit snippetFor null bila tiada padanan langsung[39m[90m                                                              [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit highlight membalut padanan dengan [39m[90m<mark>[39m[90m dan meng-escape HTML (tiada XSS)[39m[90m                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit highlight null bila input null; escape sahaja bila query kosong[39m[90m                                          [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SecureDownloadTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit pratonton dan muat turun media menggunakan URL signed 5 minit serta log sulit[39m[90m                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak URL media tanpa signature dan pengguna tanpa akses sensitiviti[39m[90m                                   [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit viewer dokumen memerlukan signature, akses tenant dan memaparkan metadata cetakan[39m[90m                        [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit deep-link mendarat terus di halaman rekod dan menyembunyikan rekod sulit[39m[90m                                 [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyediakan invois dan sijil melalui route signed dengan authorization[39m[90m                                   [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengehadkan eksport kepada pemilik atau pegawai dibenarkan dan tarikh luput[39m[90m                              [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SensitivityPolicyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ajk tidak nampak rekod sulit (§6.3)[39m[90m                                                                      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bendahari nampak sulit fail 200/300 sahaja[39m[90m                                                               [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kerani (peranan istimewa) nampak semua sulit[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audit baca dalaman tetapi bukan sulit[39m[90m                                                                    [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit grant individu membuka satu fail sulit sahaja untuk ajk[39m[90m                                                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit superadmin lulus semua (Gate::before)[39m[90m                                                                    [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SmokeCommandTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit boleh menjalankan smoke E2E untuk lebih daripada satu tenant tanpa konflik identiti[39m[90m                      [39m [90m1.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\SuspendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ahli masjid digantung tidak boleh akses panel (§10.M)[39m[90m                                                    [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ahli masjid aktif boleh akses panel[39m[90m                                                                      [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit superadmin mengurus tenant digantung dari panel platform dan tidak memasuki panel tenant[39m[90m                 [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pengguna dinyahaktif tidak boleh akses panel (§15.1)[39m[90m                                                     [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TatacaraAlignmentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit Ruj. Kami auto-diisi = file_no(enclosure) apabila kosong (§10 Aliran D)[39m[90m                                  [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Ruj. Kami yang diisi manual TIDAK ditindih[39m[90m                                                               [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit u.p. padan ahli aktif → cadang penerima tindakan + s.k. Pengerusi (§6.5.9)[39m[90m                               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit u.p. nama luar sistem → tiada cadangan (teks kekal bebas)[39m[90m                                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit u.p. TIDAK menindih pilihan tindakan kerani yang sedia ada[39m[90m                                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit modal klasifikasi prefill Tarikh Terima = tarikh masuk Peti Masuk (carta 8.1)[39m[90m                            [39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit penerima s.k. (makluman) boleh Balas & Edarkan minit, orang luar tidak (§6.4.2)[39m[90m                          [39m [90m0.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TelegramChannelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit TestNotification mempunyai kaedah toTelegram[39m[90m                                                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hantaran Telegram berjaya menulis NotificationLog sent[39m[90m                                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kegagalan Telegram TIDAK meletup dan menulis NotificationLog failed[39m[90m                                      [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TelegramConnectTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit token cache sah menyambungkan telegram_chat_id DAN menghidupkan notify_telegram[39m[90m                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit token 48-aksara sah-bentuk tetapi tamat tempoh → bot balas mesej tamat tempoh[39m[90m                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit /start payload rawak (bukan token 48-aksara) → senyap, tiada balasan[39m[90m                                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit token cache tidak wujud → tiada perubahan[39m[90m                                                                [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit secret webhook salah → 403[39m[90m                                                                               [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit command set-webhook memanggil Telegram API[39m[90m                                                               [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit command set-webhook gagal jika token kosong[39m[90m                                                              [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TelegramPlatformSettingsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit putEncrypted/getEncrypted roundtrip; nilai bukan-cipher atau kosong → null[39m[90m                               [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hydrateRuntimeConfig menyuntik nilai DB ke atas config (DB-dahulu)[39m[90m                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hydrateRuntimeConfig mengekalkan env bila DB kosong (fallback)[39m[90m                                           [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit setWebhook memanggil Telegram API dan menyimpan status[39m[90m                                                   [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit setWebhook gagal bila token/rahsia kosong[39m[90m                                                                [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook controller menerima rahsia yang disuntik dari DB[39m[90m                                                 [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\TenantIsolationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit scopeForMosque hanya memulangkan rekod masjid berkenaan (query luar-panel §15.2)[39m[90m                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit global scope tenant Filament menyembunyikan rekod masjid lain[39m[90m                                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit deep-link /r/{ulid}: ahli MAM tidak boleh akses rekod MAN → 404[39m[90m                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit bukan ahli mana-mana masjid → 404 pada deep-link[39m[90m                                                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pengguna dwi-masjid: peranan berasingan setiap tenant, set rekod berasingan[39m[90m                              [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit superadmin boleh akses mana-mana tenant[39m[90m                                                                  [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\UserTaskServiceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mengira hanya tugasan pengguna dan tenant semasa[39m[90m                                                         [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tidak memasukkan tugasan pasukan dalam badge peribadi topbar[39m[90m                                             [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WaSessionMonitorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit widget Kesihatan Saluran papar IMAP "Dimatikan" bila IMAP_ENABLED=false (§11.3)[39m[90m                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sesi terputus → alert superadmin + admin masjid, tandakan down[39m[90m                                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cooldown menghalang alert berulang[39m[90m                                                                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sesi pulih → alert pulih sekali, tandakan up[39m[90m                                                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit IMAP gagal berterusan → alert superadmin sekali[39m[90m                                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit IMAP dimatikan → tiada alert walaupun streak lama tinggi (§11.3)[39m[90m                                         [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppIntegrationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit auto-provision tenant dengan HMAC dan menyimpan API key secara encrypted[39m[90m                                 [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengasingkan external id dan kunci API bagi dua tenant[39m[90m                                                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pair QR dan sync status hanya menggunakan kunci tenant sendiri[39m[90m                                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gateway menolak sesi tenant lain dan menghantar melalui API key tenant tepat[39m[90m                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit provisioning gagal tertutup apabila rahsia belum dikonfigurasi[39m[90m                                           [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit provisioning gagal tertutup apabila webhook tidak selamat[39m[90m                                                [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppNotificationRoutingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menyelesaikan nombor berbeza bagi pengguna sama mengikut tenant[39m[90m                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit tetapan mati atau nombor kosong pada satu tenant tidak fallback ke nombor global atau tenant lain[39m[90m        [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghantar job hanya menggunakan sesi dan nombor tenant tepat[39m[90m                                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit integrasi tenant yang mati tidak boleh menggunakan sesi tenant lain[39m[90m                                      [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kemas kini routing hanya menyentuh pivot tenant yang dibenarkan[39m[90m                                          [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pelakon tenant lain dan nombor pendua dalam tenant sama[39m[90m                                          [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppSettingsAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit hanya pemegang kebenaran tenant boleh membuka tetapan WhatsApp dan ahli[39m[90m                                  [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit admin satu tenant tidak boleh membuka halaman tenant lain[39m[90m                                                [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nilai penuh api key tidak pernah dirender pada halaman tenant[39m[90m                                            [39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppWebhookTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menolak HMAC salah dengan 401 tanpa maklumat[39m[90m                                                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fail-closed jika rahsia webhook WhatsApp belum dikonfigurasi[39m[90m                                             [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sesi tidak dikenali → 200 + tiada rekod[39m[90m                                                                  [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nombor asing tanpa kata kunci → SENYAP sepenuhnya (tiada balasan, tiada gelung §11.1)[39m[90m                    [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orang luar hantar kata kunci + dokumen → submission awam diterima (creator null)[39m[90m                         [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mod ahli-sahaja (allow_public_intake=false): orang luar + kata kunci + dokumen → SENYAP, tiada rekod[39m[90m     [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit imej daripada ahli sah → peti masuk + ack sebut nama masjid[39m[90m                                              [39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima envelope dan tandatangan webhook sebenar gateway termasuk media[39m[90m                                 [39m [90m0.53s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menyokong aliran dua langkah spdm kemudian dokumen dalam sesi tenant sama[39m[90m                                [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slot upload WhatsApp tidak boleh digunakan oleh nombor atau tenant lain[39m[90m                                  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengabaikan event lain, group, echo sendiri dan media tanpa kata kunci[39m[90m                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit message_id ulang → idempotensi, tiada rekod pendua[39m[90m                                                       [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit message_id sama pada dua sesi tenant tidak saling menyekat[39m[90m                                               [39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dokumen format tidak disokong (.zip) → tolak dengan mesej format, tiada rekod[39m[90m                            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kuota penuh → balasan tolak, tiada rekod[39m[90m                                                                 [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit intake dimatikan → balasan tolak, tiada rekod[39m[90m                                                            [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ahli MAM hantar kata kunci+dokumen ke sesi MAN → SENYAP, tiada rekod (isolasi §18.37)[39m[90m                    [39m [90m0.05s[39m  
+
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m409 passed[39;22m[90m (1804 assertions)[39m
+  [90mDuration:[39m [39m72.81s[39m
+
+EXIT=0

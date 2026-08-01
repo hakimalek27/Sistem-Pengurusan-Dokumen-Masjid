@@ -1,0 +1,86 @@
+[
+  {
+    "route": "/admin",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin",
+    "errors": [],
+    "bodyTail": " boleh digunakan\nMenunggu Kelulusan\n0\nTiada permohonan baharu\nPengguna Aktif\n12\nSemua panel\nJumlah Rekod\n6\nMerentas semua tenant\nPesanan Belum Dibayar\n0\nTiada tindakan bayaran\nStoran Digunakan\n0.00 GB\nJumlah objek dokumen\nPendaftaran Masjid — 6 Bulan"
+  },
+  {
+    "route": "/admin/bantuan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/bantuan",
+    "errors": [],
+    "bodyTail": " masuk\nMuat naik dokumen\nAntivirus\nOCR\nKuota storan\nE-mel / WhatsApp intake\nButang atau menu hilang\nKlasifikasi\nMinit\nKelulusan\nNotifikasi\nLain-lain\nRingkasan masalah\nHasil yang dijangka\nKejadian sebenar\nLampiran pilihan, maksimum 5 MB\nHantar laporan"
+  },
+  {
+    "route": "/admin/analitik-bantuan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/analitik-bantuan",
+    "errors": [],
+    "bodyTail": "t\n8\ntenant.registry-files\n8\ntenant.records\n8\ntenant.profil\n8\ntenant.pembetulan-rekod\n8\ntenant.laporan\n8\ntenant.kegemaran\n8\ntenant.carian\n8\n\nData ini agregat. Teks carian mentah dan kandungan dokumen tidak disimpan; analitik dipangkas selepas 90 hari."
+  },
+  {
+    "route": "/admin/help-announcements",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/help-announcements",
+    "errors": [],
+    "bodyTail": "uan\nOperasi\nTenant / Organisasi\nAkaun Pengguna\nPesanan Storan\nPlatform\nTetapan Platform\nWhatsApp Platform\nStatus Sambungan\nAkaun\nProfil Saya\nMakluman Bantuan\nSenarai\nMakluman Bantuan\nCipta\nCari\nTajuk\tPanel\tTenant\tMula\tTamat\tAktif\nTiada rekod dijumpai"
+  },
+  {
+    "route": "/admin/tiket-sokongan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/tiket-sokongan",
+    "errors": [],
+    "bodyTail": "nant / Organisasi\nAkaun Pengguna\nPesanan Storan\nPlatform\nTetapan Platform\nWhatsApp Platform\nStatus Sambungan\nAkaun\nProfil Saya\nTiket Sokongan\nSenarai\nTiket Sokongan\nCari\n0\nRujukan\t\nDiterima\n\tTenant\tPelapor\tKategori\tMasalah\tStatus\nTiada rekod dijumpai"
+  },
+  {
+    "route": "/admin/mosques",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/mosques",
+    "errors": [],
+    "bodyTail": "rkibkan\nGantung\nUbah Kuota\nMasuk Panel Masjid\n\n\nMasjid Al-Muttaqin Wangsa Melawati\n\t\nMAM\n\t\nmam\n\t\nAktif\n\t\n9\n\t\n0 / 30 GB\n\t\nBelum\n\t\nPaparan\nEdit\nArkibkan\nGantung\nUbah Kuota\nMasuk Panel Masjid\nMemaparkan 1 hingga 3 daripada 3 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/admin/users",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/users",
+    "errors": [],
+    "bodyTail": "n Wangsa Melawati — Juruaudit\n\t\n\t\n\t\n\t\n\t\n\t\nEdit\nNyahaktifkan\n\n\nPentadbir MAN\n\t\nadmin@man.test\n\t\n\t\n\t\n60122000001\n\t\n\t\n\t\nMasjid An-Nur Demo — Admin / Kerani\n\t\n\t\n\t\n\t\n\t\n\t\nEdit\nNyahaktifkan\nMemaparkan 1 hingga 10 daripada 12 rekod\nper halaman\n5\n10\n25\n50\n1\n2"
+  },
+  {
+    "route": "/admin/storage-orders",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/storage-orders",
+    "errors": [],
+    "bodyTail": " Platform\nStatus Sambungan\nAkaun\nProfil Saya\nPesanan Storan\nSenarai\nPesanan Storan\nCari\n0\nNo. Invois\tMasjid\tSaiz\tJumlah (RM)\tStatus\t\n\nINV-2026-0001\n\t\nMasjid Al-Muttaqin Wangsa Melawati\n\t\nGB\n\t\n0.00\n\t\nDibayar\n\t\nMemaparkan 1 rekod\nper halaman\n5\n10\n25\n50"
+  },
+  {
+    "route": "/admin/tetapan-platform",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/tetapan-platform",
+    "errors": [],
+    "bodyTail": "ve\n—\nKesihatan terakhir\n—\nRunbook Insiden (PDPA 72 jam)\n\nKesan & bendung (jam 0-4) → siasat skop (Log Audit/Akses Sulit) → maklum masjid terjejas serta-merta → notis Pesuruhjaya ≤72 jam (pengawal) → notis subjek ≤7 hari. Kontak: DPO platform di atas."
+  },
+  {
+    "route": "/admin/whatsapp-platform",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/whatsapp-platform",
+    "errors": [],
+    "bodyTail": "atform\nSesi WhatsApp Platform\n\nNombor WhatsApp khas platform untuk menghantar alert kepada superadmin (contoh: bila sesi WhatsApp sesebuah masjid terputus). Nombor ini tidak terikat mana-mana masjid.\n\nStatus\nBelum diaktifkan\nNombor\n—\nDiaktifkan\nTidak"
+  },
+  {
+    "route": "/admin/status-sambungan",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/status-sambungan",
+    "errors": [],
+    "bodyTail": "App Platform\nStatus Sambungan\nAkaun\nProfil Saya\nStatus Sambungan\nSaluran Platform\nGateway WhatsApp\nOK\nIMAP intake e-mel\nDimatikan\n\nIMAP_ENABLED=false\n\nSesi WhatsApp\nMASJID / PLATFORM\tSTATUS\tNOMBOR\tSEGERAK TERAKHIR\tRALAT\nTiada integrasi WhatsApp lagi."
+  },
+  {
+    "route": "/admin/profil-saya",
+    "status": 200,
+    "url": "http://127.0.0.1:8080/admin/profil-saya",
+    "errors": [],
+    "bodyTail": "klumat Akaun\nNama\nSuperadmin Diwan\nE-mel\nsuperadmin@diwan.test\nNo. WhatsApp\n60100000000\nTelegram\nBelum bersambung\nSaluran Notifikasi\n\nSaluran aktif untuk menerima notifikasi Diwan. Ubah melalui \"Tetapan Notifikasi\".\n\nE-mel\nON\nWhatsApp\nON\nTelegram\nOFF"
+  }
+]

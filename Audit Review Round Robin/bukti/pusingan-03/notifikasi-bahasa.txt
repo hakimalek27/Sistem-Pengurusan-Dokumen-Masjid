@@ -1,0 +1,28 @@
+Render notifikasi sebenar via toMail()->render(), salinan tempatan, APP_LOCALE=ms
+=================================================================================
+app.locale = ms | fallback = en | lang/ms wujud? TIDAK
+
+TERJEMAHAN VALIDASI:
+validation.required        => The nama field is required.
+validation.email           => The nama field must be a valid email address.
+validation.min.string      => The nama field must be at least 3 characters.
+auth.failed                => These credentials do not match our records.
+pagination.next            => Next &raquo;
+
+NOTIFIKASI (18 kelas ada toMail; 9 boleh dibina automatik):
+AutoDisposalDoneNotification    subjek="Diwan · MAM — Pelupusan automatik selesai"  EN: Hello, Regards, All rights reserved
+ConnectionAlertNotification     subjek="Diwan — ujian"                              EN: Hello, Regards, All rights reserved
+DriveBackupAlertNotification    subjek="Diwan — Mirror Google Drive gagal"          EN: Hello, Regards, All rights reserved
+GatewayDownNotification         subjek="Diwan — Gateway WhatsApp gagal dihubungi"   EN: Hello, Regards, All rights reserved
+GuidanceDigestNotification      subjek="Diwan · MAM — Ringkasan tugasan"            EN: Hello, Regards, trouble clicking, copy and paste, All rights reserved
+InboxNewItemNotification        subjek="Diwan · MAM — 1 dokumen baharu dlm Peti Masuk" EN: Hello, Regards, trouble clicking, copy and paste, All rights reserved
+MailIntakeRejectedNotification  subjek="Diwan · MAM — e-mel intake ditolak"         EN: Hello, Regards, trouble clicking, copy and paste, All rights reserved
+RetentionNoticeNotification     subjek="Diwan · MAM — Notis retensi (1 hari)"       EN: Hello, Regards, trouble clicking, copy and paste, All rights reserved
+TestNotification                subjek="Diwan — Notifikasi Ujian"                   EN: Hello, Regards, All rights reserved
+
+Tidak dapat dibina automatik (tandatangan pembina): AddonExpiring, ApprovalDecided,
+ApprovalRequested, ExportReady, MinitCompleted, MinitReminder, MinitRouted,
+NewStorageOrder, QuotaThreshold — berkongsi templat yg sama, jangkaan sama.
+
+RUMUSAN: 9/9 notifikasi yang dirender = kerangka Bahasa Inggeris.
+Kandungan pembangun = BM betul. Punca = templat lalai Laravel + tiada lang/ms/.

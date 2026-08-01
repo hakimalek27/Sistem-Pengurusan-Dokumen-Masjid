@@ -1,0 +1,9 @@
+# Skrinsyot bukti audit (~129 MB, 1081 fail) TIDAK dikomit ke git.
+# Sebabnya: ia akan melekat dalam sejarah repo selama-lamanya dan menambah
+# ~130 MB kepada setiap clone. Laporan + data JSON/TXT DIKOMIT (2.6 MB).
+# Skrinsyot kekal di cakera tempatan pemilik untuk rujukan visual.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp

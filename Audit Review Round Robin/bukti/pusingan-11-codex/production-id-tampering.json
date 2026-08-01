@@ -1,0 +1,74 @@
+[
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/records/2",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/registry-files/4",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/smoke/classification-nodes/1/edit",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad/records/2",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad/registry-files/4",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "desktop",
+    "path": "/app/mamad/classification-nodes/1/edit",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/records/2",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/registry-files/4",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/smoke/classification-nodes/1/edit",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad/records/2",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad/registry-files/4",
+    "status": 404,
+    "title": "Not Found"
+  },
+  {
+    "vp": "mobile",
+    "path": "/app/mamad/classification-nodes/1/edit",
+    "status": 404,
+    "title": "Not Found"
+  }
+]

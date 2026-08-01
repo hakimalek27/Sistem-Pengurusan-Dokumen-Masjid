@@ -1,0 +1,46 @@
+[
+  {
+    "exists": true,
+    "progress": "1 daripada 4",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetRect": {
+      "w": 1120,
+      "h": 1566
+    },
+    "title": "Semak nama masjid pada panel untuk memastikan tenant yang betul"
+  },
+  {
+    "exists": true,
+    "progress": "2 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetRect": {
+      "w": 1120,
+      "h": 1566
+    },
+    "title": "Baca kad statistik"
+  },
+  {
+    "exists": true,
+    "progress": "3 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetRect": {
+      "w": 1120,
+      "h": 1566
+    },
+    "title": "Semak senarai semak persediaan jika masih dipaparkan"
+  },
+  {
+    "exists": true,
+    "progress": "4 daripada 4",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetRect": {
+      "w": 1120,
+      "h": 1566
+    },
+    "title": "Gunakan menu kiri untuk membuka tugasan"
+  }
+]

@@ -1,0 +1,27 @@
+
+===== 2. UJIAN 6 TOUR MERENTAS KELUARGA (permintaan Codex) =====
+  [screen  ] screen.klasifikasi-peti-masuk                         ✅ sorotan khusus
+             langkah="1 daripada 11" btn="Buat pada skrin" prev="Kembali" sorot=inbox-classify (105x20)
+  [screen  ] screen.jemput-ahli                                    ⚠️ sorotan generik
+             langkah="1 daripada 5" btn="Saya sudah buat" prev="Kembali" sorot=page-content (1120x836)
+  [tenant  ] tenant.records                                        ⚠️ sorotan generik
+             langkah="1 daripada 5" btn="Buat pada skrin" prev="Kembali" sorot=page-content (1120x836)
+  [tenant  ] tenant.kelulusan                                      ⚠️ sorotan generik
+             langkah="1 daripada 6" btn="Buat pada skrin" prev="Kembali" sorot=page-content (1120x836)
+  [workflow] workflow.setiausaha.klasifikasikan-surat-masuk-dan-e  ⚠️ sorotan generik
+             langkah="1 daripada 13" btn="Seterusnya" prev="Kembali" sorot=page-content (1120x946)
+  [admin   ] admin.mosques                                         ⚠️ sorotan generik
+             langkah="1 daripada 3" btn="Seterusnya" prev="Kembali" sorot=page-content (1120x836)
+
+===== 3. AKSESIBILITI PAPAN KEKUNCI TOUR (RR-02-03) =====
+  Atribut ARIA popover: {"adaPopover":true,"role":"dialog","ariaLabel":null,"ariaLabelledby":"driver-popover-title","ariaDescribedby":"driver-popover-description","ariaModal":null,"tabindex":null,"adaAriaLive":true,"closeAria":"Tutup panduan","fokusSemasa":"BUTTON.driver-popover-close-btn","fokusDalamPopover":true}
+  Simulasi 8 Tab: 5/8 pemberhentian fokus BERADA DI LUAR popover → ⚠️ tiada fokus terperangkap (pengguna papan kekunci boleh tersasar ke halaman di belakang overlay)
+  Tekan ESC → popover=false overlay=false → ✅ ESC menutup tour
+
+===== 4. SOAK: kebocoran listener/observer selepas 20 navigasi (RR-02-02) =====
+  selepas  5 navigasi: MutationObserver=0 addEventListener=982 setInterval=0
+  selepas 10 navigasi: MutationObserver=0 addEventListener=1964 setInterval=0
+  selepas 15 navigasi: MutationObserver=0 addEventListener=2946 setInterval=0
+  selepas 20 navigasi: MutationObserver=0 addEventListener=3928 setInterval=0
+  Delta 5→20 nav: MO +0 (0.0/nav), listener +2946 (196.4/nav), interval +0
+  Penilaian: ⚠️ pertumbuhan tinggi — patut disiasat

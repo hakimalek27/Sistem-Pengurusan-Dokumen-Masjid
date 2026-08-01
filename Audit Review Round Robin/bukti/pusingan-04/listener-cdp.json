@@ -1,0 +1,2090 @@
+{
+  "before": {
+    "document": {
+      "total": 35,
+      "byType": {
+        "click": 1,
+        "error": 1,
+        "touchstart": 1,
+        "DOMContentLoaded": 3,
+        "livewire:navigated": 4,
+        "alpine:init": 7,
+        "touchmove": 1,
+        "livewire:init": 2,
+        "keypress": 2,
+        "keydown": 2,
+        "keyup": 2,
+        "alpine:navigate": 1,
+        "alpine:navigating": 2,
+        "alpine:navigated": 1,
+        "visibilitychange": 1,
+        "livewire:navigate": 3,
+        "livewire:navigating": 1
+      },
+      "listeners": [
+        {
+          "type": "click",
+          "useCapture": true,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 0,
+          "columnNumber": 57022
+        },
+        {
+          "type": "error",
+          "useCapture": true,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 1,
+          "columnNumber": 17897
+        },
+        {
+          "type": "touchstart",
+          "useCapture": true,
+          "passive": true,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 4,
+          "columnNumber": 11279
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 10166
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11156,
+          "columnNumber": 50
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 6,
+          "columnNumber": 3934
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "82",
+          "lineNumber": 88,
+          "columnNumber": 37
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10545,
+          "columnNumber": 50
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 6,
+          "columnNumber": 3934
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 7191
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 2805
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "8",
+          "lineNumber": 0,
+          "columnNumber": 5911
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "9",
+          "lineNumber": 0,
+          "columnNumber": 1287
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 17941
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "11",
+          "lineNumber": 0,
+          "columnNumber": 22639
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 8325
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 11528
+        },
+        {
+          "type": "touchmove",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 0,
+          "columnNumber": 75327
+        },
+        {
+          "type": "livewire:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 15616
+        },
+        {
+          "type": "livewire:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 9179
+        },
+        {
+          "type": "keypress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keypress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keydown",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keydown",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keyup",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keyup",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "alpine:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10372,
+          "columnNumber": 47
+        },
+        {
+          "type": "alpine:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10373,
+          "columnNumber": 49
+        },
+        {
+          "type": "alpine:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10507,
+          "columnNumber": 49
+        },
+        {
+          "type": "alpine:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10374,
+          "columnNumber": 48
+        },
+        {
+          "type": "visibilitychange",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11063,
+          "columnNumber": 48
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 7040
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 11258
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 11258
+        },
+        {
+          "type": "livewire:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": true,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 6691
+        }
+      ]
+    },
+    "window": {
+      "total": 55,
+      "byType": {
+        "online": 3,
+        "offline": 3,
+        "focusin": 1,
+        "popstate": 1,
+        "theme-changed": 1,
+        "refresh-topbar": 1,
+        "livewire-upload-start": 9,
+        "livewire-upload-finish": 9,
+        "livewire-upload-error": 9,
+        "guidanceProgress": 1,
+        "blur": 1,
+        "sync-action-modals": 3,
+        "modal-closed": 3,
+        "refresh-sidebar": 1,
+        "refresh-page": 1,
+        "form-validation-error": 2,
+        "notificationsSent": 1,
+        "notificationSent": 1,
+        "notificationClosed": 1,
+        "EchoLoaded": 1,
+        "resize": 2
+      },
+      "listeners": [
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "12",
+          "lineNumber": 0,
+          "columnNumber": 26317
+        },
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10622,
+          "columnNumber": 36
+        },
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11058,
+          "columnNumber": 36
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "12",
+          "lineNumber": 0,
+          "columnNumber": 26384
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10621,
+          "columnNumber": 37
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11057,
+          "columnNumber": 37
+        },
+        {
+          "type": "focusin",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 6503,
+          "columnNumber": 39
+        },
+        {
+          "type": "popstate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 8181,
+          "columnNumber": 40
+        },
+        {
+          "type": "theme-changed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 8619
+        },
+        {
+          "type": "refresh-topbar",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "guidanceProgress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "blur",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 4,
+          "columnNumber": 11491
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "refresh-sidebar",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "refresh-page",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "form-validation-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 3279,
+          "columnNumber": 19
+        },
+        {
+          "type": "form-validation-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 3279,
+          "columnNumber": 19
+        },
+        {
+          "type": "notificationsSent",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "notificationSent",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "notificationClosed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "EchoLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "129",
+          "lineNumber": 2,
+          "columnNumber": 69
+        },
+        {
+          "type": "resize",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 2235,
+          "columnNumber": 19
+        },
+        {
+          "type": "resize",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 2235,
+          "columnNumber": 19
+        }
+      ]
+    },
+    "runtime": 1,
+    "launcher": 1,
+    "navCount": 0
+  },
+  "after": {
+    "document": {
+      "total": 35,
+      "byType": {
+        "click": 1,
+        "error": 1,
+        "touchstart": 1,
+        "DOMContentLoaded": 3,
+        "livewire:navigated": 4,
+        "alpine:init": 7,
+        "touchmove": 1,
+        "livewire:init": 2,
+        "keypress": 2,
+        "keydown": 2,
+        "keyup": 2,
+        "alpine:navigate": 1,
+        "alpine:navigating": 2,
+        "alpine:navigated": 1,
+        "visibilitychange": 1,
+        "livewire:navigate": 3,
+        "livewire:navigating": 1
+      },
+      "listeners": [
+        {
+          "type": "click",
+          "useCapture": true,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 0,
+          "columnNumber": 57022
+        },
+        {
+          "type": "error",
+          "useCapture": true,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 1,
+          "columnNumber": 17897
+        },
+        {
+          "type": "touchstart",
+          "useCapture": true,
+          "passive": true,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 4,
+          "columnNumber": 11279
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 10166
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11156,
+          "columnNumber": 50
+        },
+        {
+          "type": "DOMContentLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 6,
+          "columnNumber": 3934
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "243",
+          "lineNumber": 88,
+          "columnNumber": 37
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10545,
+          "columnNumber": 50
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "18",
+          "lineNumber": 6,
+          "columnNumber": 3934
+        },
+        {
+          "type": "livewire:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 7191
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 2805
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "8",
+          "lineNumber": 0,
+          "columnNumber": 5911
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "9",
+          "lineNumber": 0,
+          "columnNumber": 1287
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 17941
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "11",
+          "lineNumber": 0,
+          "columnNumber": 22639
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 8325
+        },
+        {
+          "type": "alpine:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 11528
+        },
+        {
+          "type": "touchmove",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 0,
+          "columnNumber": 75327
+        },
+        {
+          "type": "livewire:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 15616
+        },
+        {
+          "type": "livewire:init",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 9179
+        },
+        {
+          "type": "keypress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keypress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keydown",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keydown",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keyup",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "keyup",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 3692
+        },
+        {
+          "type": "alpine:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10372,
+          "columnNumber": 47
+        },
+        {
+          "type": "alpine:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10373,
+          "columnNumber": 49
+        },
+        {
+          "type": "alpine:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10507,
+          "columnNumber": 49
+        },
+        {
+          "type": "alpine:navigated",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10374,
+          "columnNumber": 48
+        },
+        {
+          "type": "visibilitychange",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11063,
+          "columnNumber": 48
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 7040
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 11258
+        },
+        {
+          "type": "livewire:navigate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 24,
+          "columnNumber": 11258
+        },
+        {
+          "type": "livewire:navigating",
+          "useCapture": false,
+          "passive": false,
+          "once": true,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 6691
+        }
+      ]
+    },
+    "window": {
+      "total": 72,
+      "byType": {
+        "online": 3,
+        "offline": 3,
+        "focusin": 1,
+        "popstate": 1,
+        "theme-changed": 1,
+        "refresh-topbar": 1,
+        "livewire-upload-start": 16,
+        "livewire-upload-finish": 16,
+        "livewire-upload-error": 16,
+        "guidanceProgress": 1,
+        "blur": 1,
+        "sync-action-modals": 3,
+        "modal-closed": 3,
+        "refresh-sidebar": 1,
+        "refresh-page": 1,
+        "notificationsSent": 1,
+        "notificationSent": 1,
+        "notificationClosed": 1,
+        "EchoLoaded": 1
+      },
+      "listeners": [
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "12",
+          "lineNumber": 0,
+          "columnNumber": 26317
+        },
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10622,
+          "columnNumber": 36
+        },
+        {
+          "type": "online",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11058,
+          "columnNumber": 36
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "12",
+          "lineNumber": 0,
+          "columnNumber": 26384
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10621,
+          "columnNumber": 37
+        },
+        {
+          "type": "offline",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 11057,
+          "columnNumber": 37
+        },
+        {
+          "type": "focusin",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 6503,
+          "columnNumber": 39
+        },
+        {
+          "type": "popstate",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 8181,
+          "columnNumber": 40
+        },
+        {
+          "type": "theme-changed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "13",
+          "lineNumber": 0,
+          "columnNumber": 8619
+        },
+        {
+          "type": "refresh-topbar",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-start",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10710,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-finish",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10715,
+          "columnNumber": 60
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "livewire-upload-error",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 10720,
+          "columnNumber": 59
+        },
+        {
+          "type": "guidanceProgress",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "blur",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "10",
+          "lineNumber": 4,
+          "columnNumber": 11491
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "sync-action-modals",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 198
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "modal-closed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "7",
+          "lineNumber": 0,
+          "columnNumber": 354
+        },
+        {
+          "type": "refresh-sidebar",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "refresh-page",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "notificationsSent",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "notificationSent",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "notificationClosed",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "17",
+          "lineNumber": 9779,
+          "columnNumber": 21
+        },
+        {
+          "type": "EchoLoaded",
+          "useCapture": false,
+          "passive": false,
+          "once": false,
+          "scriptId": "129",
+          "lineNumber": 2,
+          "columnNumber": 69
+        }
+      ]
+    },
+    "runtime": 1,
+    "launcher": 1,
+    "navCount": 0
+  },
+  "snapshots": [
+    {
+      "i": 1,
+      "path": "/app/mam/peti-masuk",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 2,
+      "path": "/app/mam/records",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 3,
+      "path": "/app/mam/carian",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 4,
+      "path": "/app/mam/bantuan",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 5,
+      "path": "/app/mam/peti-masuk",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 6,
+      "path": "/app/mam/records",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 7,
+      "path": "/app/mam/carian",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 8,
+      "path": "/app/mam/bantuan",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 9,
+      "path": "/app/mam/peti-masuk",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 10,
+      "path": "/app/mam/records",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 11,
+      "path": "/app/mam/carian",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 12,
+      "path": "/app/mam/bantuan",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 13,
+      "path": "/app/mam/peti-masuk",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 14,
+      "path": "/app/mam/records",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 15,
+      "path": "/app/mam/carian",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 16,
+      "path": "/app/mam/bantuan",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 17,
+      "path": "/app/mam/peti-masuk",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 18,
+      "path": "/app/mam/records",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 19,
+      "path": "/app/mam/carian",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    },
+    {
+      "i": 20,
+      "path": "/app/mam/bantuan",
+      "runtime": 1,
+      "booted": 1,
+      "launcher": 1,
+      "popover": 0,
+      "waiting": 0,
+      "navCount": 0
+    }
+  ],
+  "errors": []
+}

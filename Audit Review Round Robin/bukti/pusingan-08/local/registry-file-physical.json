@@ -1,0 +1,21 @@
+{
+  "url": "http://127.0.0.1:8080/app/mam/registry-files/1",
+  "body": "Fail\nMAM.100-4/1\nLihat\nLihat MAM.100-4/1\nSunting\nNo. Fail\nMAM.100-4/1\nTajuk\nSurat-Menyurat Am 2026\nKlasifikasi\nSurat-Menyurat Am\nSensitiviti\nDalaman\nStatus\nterbuka\nBil. Kandungan\n2\nJilid\n1\nDibuka\n01/08/2026\nMedium\nelektronik\nRujukan Fizikal\n\n—\n\nLokasi\n\n—\n\nPenjagaan\ndalam_simpanan\nPemegang\n\n—\n\nPerlu Pulang\n\n—\n\nSejarah Pergerakan",
+  "controls": [
+    {
+      "tag": "A",
+      "text": "Fail",
+      "href": "http://127.0.0.1:8080/app/mam/registry-files"
+    },
+    {
+      "tag": "A",
+      "text": "MAM.100-4/1",
+      "href": "http://127.0.0.1:8080/app/mam/registry-files/1"
+    },
+    {
+      "tag": "A",
+      "text": "Sunting",
+      "href": "http://127.0.0.1:8080/app/mam/registry-files/1/edit"
+    }
+  ]
+}

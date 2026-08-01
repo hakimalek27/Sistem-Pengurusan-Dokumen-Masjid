@@ -1,0 +1,81 @@
+Pusingan 13 Codex - reconciliation evidence
+Tarikh: 2026-08-01
+Scope: no source change, no production write. Read-only local file checks and read-only production SQL counts only.
+
+1) Claude P12 execution status
+
+- First P12 attempt output was invalid: Claude responded as if the prompt only contained "#".
+  Artifact:
+  - bukti/pusingan-11-codex/claude-p12.stdout.txt
+  - bukti/pusingan-11-codex/claude-p12.stderr.txt
+
+- Second P12 attempt with broad prompt timed out after 604 seconds and produced empty stdout/stderr.
+  The spawned process for that attempt was PID 54864 and was stopped after confirming the command line.
+  Artifacts:
+  - bukti/pusingan-11-codex/claude-p12-rerun.stdout.txt
+  - bukti/pusingan-11-codex/claude-p12-rerun.stderr.txt
+
+- Third P12 attempt used read-only tool restrictions and a shorter prompt. It completed and wrote:
+  - PUSINGAN-12-CLAUDE.md
+  - bukti/pusingan-11-codex/CLAUDE-P12-PROMPT-SHORT.txt
+  - bukti/pusingan-11-codex/claude-p12-short.stderr.txt
+
+2) Independent recount of P11 tour JSON
+
+Source files:
+- bukti/pusingan-11-codex/production-desktop-all-tour-steps.json
+- bukti/pusingan-11-codex/production-mobile-all-tour-steps.json
+
+Desktop:
+- guides=25
+- steps=124
+- target counts: page-content=119, A=2, BUTTON=2, SPAN=1
+- button counts: Seterusnya=79, Selesai=25, Buat pada skrin=20
+- centerCovered=0
+
+Mobile:
+- guides=25
+- steps=124
+- target counts: page-content=119, A=2, BUTTON=2, SPAN=1
+- button counts: Seterusnya=79, Selesai=25, Buat pada skrin=20
+- centerCovered=6:
+  - tenant.pelupusan step 1
+  - tenant.kegemaran steps 1-5
+
+Conclusion:
+- P12 correction is accepted: RR-11-03 should say 119/124 runtime targets are generic page-content, not 124/124.
+- The issue remains high because 119/124 = 95.97% of steps still target a generic page region.
+
+3) Production token cleanup read-only verification
+
+Query scope:
+- Table: login_tokens
+- ID range: 222-241 only
+- Output excludes token hash, email, phone, intended_url, names and IP.
+
+Raw DB-time query result:
+checked_at|range_count|used_count|unused_count|active_unused_count|min_unused_expires_at|max_unused_expires_at|active_unused_ids
+2026-08-01 05:47:15.656159+00|20|6|14|14|2026-08-01 12:38:03|2026-08-01 12:38:46|{222,223,224,225,226,227,228,229,230,231,232,233,234,235}
+
+Interpretation:
+- This is misleading for app validity because DB localtimestamp is UTC while Laravel timestamps in this deployment are stored as application-local time.
+- The active-token check must use application time, not raw DB UTC time.
+
+Application-time query result, using DB localtimestamp + 8 hours, original Codex ID range 222-241:
+db_localtimestamp|app_now_guess|range_count|used_count|unused_count|active_unused_count_app_time|expired_unused_count_app_time|active_unused_ids_app_time
+2026-08-01 05:48:02.939076|2026-08-01 13:48:02.939076|20|6|14|0|14|{}
+
+Application-time query result, using corrected audit ID range 221-241:
+app_now_guess|range_count|used_count|unused_count|active_unused_count_app_time|expired_unused_count_app_time|active_unused_ids_app_time
+2026-08-01 13:52:50.422523|21|7|14|0|14|{}
+
+Non-PII metadata:
+- ID 221: same audit batch, created_at=2026-08-01 12:10:58, expires_at=2026-08-01 16:10:58, used=true at 2026-08-01 12:11:16. This was missed by the P11 222-241 range but does not create active-token risk.
+- IDs 222-235: has_user=true, has_email=true, purpose=notification, has_intended_url=true, created_at=2026-08-01 12:10:58, expires_at=2026-08-01 12:38:03 to 12:38:46, used=false.
+- IDs 236-241: has_user=true, has_email=true, purpose=notification, has_intended_url=true, created_at=2026-08-01 12:15:45 to 12:23:13, expires_at=2026-08-01 16:15:45 to 16:23:13, used=true.
+
+Conclusion:
+- P11 cleanup claim "active audit token = 0" is confirmed only when evaluated with application time.
+- P11 token count should be corrected from 20 to 21 if the used token #221 is included in the same audit batch.
+- No raw token value was queried or printed.
+- No production write was performed in P13.

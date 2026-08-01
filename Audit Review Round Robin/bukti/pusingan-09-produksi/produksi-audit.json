@@ -1,0 +1,1417 @@
+[
+  {
+    "vp": "desktop",
+    "nama": "Papan pemuka",
+    "path": "/app/smoke",
+    "st": 200,
+    "h1": "Papan pemuka",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.dashboard",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Log Akses Sulit",
+    "path": "/app/smoke/sensitive-access-logs",
+    "st": 200,
+    "h1": "Log Akses Sulit",
+    "baris": 0,
+    "lajur": [
+      "Masjid",
+      "Superadmin",
+      "Pengguna",
+      "Rekod",
+      "Tindakan",
+      "Alamat IP",
+      "Masa"
+    ],
+    "aksi": [
+      "Log Akses Sulit"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 4",
+      "tajuk": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan",
+      "huraian": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Seterusnya",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Analitik Bantuan",
+    "path": "/app/smoke/analitik-bantuan",
+    "st": 200,
+    "h1": "Analitik Bantuan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 2",
+      "tajuk": "Buka fungsi",
+      "huraian": "Semak penggunaan panduan secara agregat tanpa teks carian mentah atau pemarkahan individu.",
+      "tajukSamaHuraian": false,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1056x538",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Tiket Sokongan",
+    "path": "/app/smoke/tiket-sokongan",
+    "st": 200,
+    "h1": "Tiket Sokongan",
+    "baris": 0,
+    "lajur": [
+      "Rujukan",
+      "Diterima",
+      "Pelapor",
+      "Kategori",
+      "Masalah",
+      "Status"
+    ],
+    "aksi": [
+      "Tiket Sokongan"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 2",
+      "tajuk": "Buka fungsi",
+      "huraian": "Semak dan urus tiket masjid semasa sahaja.",
+      "tajukSamaHuraian": false,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Pusat Bantuan",
+    "path": "/app/smoke/bantuan",
+    "st": 200,
+    "h1": "Pusat Bantuan Diwan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.bantuan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fbantuan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Persediaan Berpandu",
+    "path": "/app/smoke/persediaan",
+    "st": 200,
+    "h1": "Persediaan Berpandu Masjid",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Mula Persediaan Berpandu",
+      "Langkau Buat Sementara"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Tekan Mula Persediaan Berpandu",
+      "huraian": "Tekan Mula Persediaan Berpandu.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Ahli & Peranan",
+    "path": "/app/smoke/ahli-peranan",
+    "st": 200,
+    "h1": "Ahli & Peranan",
+    "baris": 4,
+    "lajur": [
+      "NAMA",
+      "E-MEL",
+      "PERANAN",
+      "NO. WHATSAPP TENANT",
+      "NOTI WA",
+      "TINDAKAN"
+    ],
+    "aksi": [
+      "Jemput Ahli"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara",
+      "huraian": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Klasifikasi Fail",
+    "path": "/app/smoke/classification-nodes",
+    "st": 200,
+    "h1": "Klasifikasi Fail",
+    "baris": 10,
+    "lajur": [
+      "Kod",
+      "Tajuk",
+      "Peringkat",
+      "Sensitiviti",
+      "Aktif"
+    ],
+    "aksi": [
+      "Klasifikasi Fail",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu",
+      "huraian": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x899",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Pelupusan",
+    "path": "/app/smoke/pelupusan",
+    "st": 200,
+    "h1": "Pelupusan Manual",
+    "baris": 11,
+    "lajur": [
+      "Batch",
+      "Jenis",
+      "Status",
+      "Bil. Item"
+    ],
+    "aksi": [
+      "Sedia Senarai Semakan"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan ba...",
+      "huraian": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan batch.",
+      "tajukSamaHuraian": false,
+      "tajukTerpotong": true,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x955",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Peraturan Retensi",
+    "path": "/app/smoke/retensi-peraturan",
+    "st": 200,
+    "h1": "Peraturan Retensi",
+    "baris": 1,
+    "lajur": [
+      "Jenis",
+      "Prefix",
+      "Tahun",
+      "Tindakan"
+    ],
+    "aksi": [
+      "Peraturan Retensi",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Semak peraturan lalai platform sebelum membuat override masjid",
+      "huraian": "Semak peraturan lalai platform sebelum membuat override masjid.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Tetapan Masjid",
+    "path": "/app/smoke/tetapan-masjid",
+    "st": 200,
+    "h1": "Tetapan Masjid",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Edit Tetapan",
+      "Aktifkan WhatsApp"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Semak telefon rasmi dan wakil perlindungan data",
+      "huraian": "Semak telefon rasmi dan wakil perlindungan data.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Seterusnya",
+      "sorot": "page-content",
+      "saiz": "1120x1031",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Penggunaan & Storan",
+    "path": "/app/smoke/penggunaan",
+    "st": 200,
+    "h1": "Penggunaan & Storan",
+    "baris": 2,
+    "lajur": [
+      "Saiz",
+      "Mula",
+      "Luput",
+      "Status",
+      "No. Invois",
+      "Saiz",
+      "Jumlah (RM)",
+      "Status"
+    ],
+    "aksi": [
+      "Tambah Storan"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan",
+      "huraian": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Retensi & Pegangan",
+    "path": "/app/smoke/retensi",
+    "st": 200,
+    "h1": "Retensi & Pegangan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Eksport ZIP (Akan Luput ≤90 hari)"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Semak rekod yang akan luput dalam 365/90 hari",
+      "huraian": "Semak rekod yang akan luput dalam 365/90 hari.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Delegasi",
+    "path": "/app/smoke/delegasi",
+    "st": 200,
+    "h1": "Delegasi",
+    "baris": 0,
+    "lajur": [
+      "Principal",
+      "Delegate",
+      "Tugas",
+      "Mula",
+      "Tamat",
+      "Status"
+    ],
+    "aksi": [
+      "Delegasi",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Pilih Principal, iaitu pemilik tugas asal",
+      "huraian": "Pilih Principal, iaitu pemilik tugas asal.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Profil Saya",
+    "path": "/app/smoke/profil",
+    "st": 200,
+    "h1": "Profil Saya",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Tetapan Notifikasi",
+      "Hantar Notifikasi Ujian",
+      "Sambung Telegram",
+      "Tetapkan Kata Laluan"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Semak nama, e-mel dan nombor WhatsApp",
+      "huraian": "Semak nama, e-mel dan nombor WhatsApp.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Seterusnya",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Peti Masuk",
+    "path": "/app/smoke/peti-masuk",
+    "st": 200,
+    "h1": "Peti Masuk",
+    "baris": 1,
+    "lajur": [
+      "Sumber",
+      "Tajuk / Fail",
+      "Tarikh Terima",
+      "Penghantar / Sumber",
+      "Diterima",
+      "Antivirus",
+      "OCR",
+      "Duplikat"
+    ],
+    "aksi": [
+      "Peti Masuk",
+      "+ Muat Naik Dokumen"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.peti-masuk",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpeti-masuk",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Rekod",
+    "path": "/app/smoke/records",
+    "st": 200,
+    "h1": "Rekod",
+    "baris": 10,
+    "lajur": [
+      "Rujukan",
+      "Tajuk",
+      "Jenis",
+      "Fail",
+      "Tarikh",
+      "Sensitiviti",
+      "Status"
+    ],
+    "aksi": [
+      "Rekod",
+      "Rekod Baharu"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.records",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Frecords",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Fail",
+    "path": "/app/smoke/registry-files",
+    "st": 200,
+    "h1": "Fail",
+    "baris": 10,
+    "lajur": [
+      "No. Fail",
+      "Tajuk",
+      "Sensitiviti",
+      "Status",
+      "Kandungan",
+      "Medium",
+      "Lokasi",
+      "Penjagaan"
+    ],
+    "aksi": [
+      "Fail",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.registry-files",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fregistry-files",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Minit Saya",
+    "path": "/app/smoke/minit-saya",
+    "st": 200,
+    "h1": "Minit Saya",
+    "baris": 1,
+    "lajur": [
+      "Rekod",
+      "Daripada",
+      "Arahan / Catatan",
+      "Penerima",
+      "Keutamaan",
+      "Tarikh Akhir",
+      "Status"
+    ],
+    "aksi": [
+      "Minit Saya"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.minit-saya",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fminit-saya",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Kelulusan",
+    "path": "/app/smoke/kelulusan",
+    "st": 200,
+    "h1": "Kelulusan",
+    "baris": 0,
+    "lajur": [
+      "Rekod",
+      "Pemohon",
+      "Nota",
+      "Tarikh",
+      "Status",
+      "Bagi pihak"
+    ],
+    "aksi": [
+      "Kelulusan"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 6",
+      "tajuk": "Semak tajuk rekod, pemohon, nota dan status",
+      "huraian": "Semak tajuk rekod, pemohon, nota dan status.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Carian",
+    "path": "/app/smoke/carian",
+    "st": 200,
+    "h1": "Carian Rekod",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 7",
+      "tajuk": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu",
+      "huraian": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Kegemaran",
+    "path": "/app/smoke/kegemaran",
+    "st": 200,
+    "h1": "Rekod & Fail Kegemaran",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Tambah bintang dari senarai fail, butiran rekod atau hasil carian",
+      "huraian": "Tambah bintang dari senarai fail, butiran rekod atau hasil carian.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Laporan",
+    "path": "/app/smoke/laporan",
+    "st": 200,
+    "h1": "Laporan Pejabat",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Eksport CSV"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 4",
+      "tajuk": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit",
+      "huraian": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Pembetulan Rekod",
+    "path": "/app/smoke/pembetulan-rekod",
+    "st": 200,
+    "h1": "Pembetulan Rekod",
+    "baris": 0,
+    "lajur": [
+      "Rekod",
+      "Pemohon",
+      "Sebab",
+      "Perubahan",
+      "Status",
+      "Dimohon"
+    ],
+    "aksi": [
+      "Pembetulan Rekod"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Dari butiran rekod, tekan Mohon Pembetulan",
+      "huraian": "Dari butiran rekod, tekan Mohon Pembetulan.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "Log Aktiviti Masjid",
+    "path": "/app/smoke/log-aktiviti",
+    "st": 200,
+    "h1": "Log Aktiviti Masjid",
+    "baris": 0,
+    "lajur": [
+      "Tarikh & Masa",
+      "Pelaku",
+      "Aktiviti",
+      "Rekod",
+      "Fail",
+      "Sumber"
+    ],
+    "aksi": [
+      "Log Aktiviti Masjid"
+    ],
+    "overflowX": false,
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Flivewire%2Fupdate",
+    "tour": {
+      "langkah": "1 daripada 5",
+      "tajuk": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh",
+      "huraian": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.",
+      "tajukSamaHuraian": true,
+      "tajukTerpotong": false,
+      "btn": "Buat pada skrin",
+      "sorot": "page-content",
+      "saiz": "1120x836",
+      "generik": true,
+      "keluarSkrin": false
+    },
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "desktop",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad",
+    "st": 404
+  },
+  {
+    "vp": "desktop",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad/records",
+    "st": 404
+  },
+  {
+    "vp": "desktop",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad/peti-masuk",
+    "st": 404
+  },
+  {
+    "vp": "mobile",
+    "nama": "Papan pemuka",
+    "path": "/app/smoke",
+    "st": 200,
+    "h1": "Papan pemuka",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.dashboard",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Log Akses Sulit",
+    "path": "/app/smoke/sensitive-access-logs",
+    "st": 200,
+    "h1": "Log Akses Sulit",
+    "baris": 0,
+    "lajur": [
+      "Masjid",
+      "Superadmin",
+      "Pengguna",
+      "Rekod",
+      "Tindakan",
+      "Alamat IP",
+      "Masa"
+    ],
+    "aksi": [
+      "Log Akses Sulit"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.sensitive-access-logs",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fsensitive-access-logs",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Analitik Bantuan",
+    "path": "/app/smoke/analitik-bantuan",
+    "st": 200,
+    "h1": "Analitik Bantuan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.analitik-bantuan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fanalitik-bantuan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Tiket Sokongan",
+    "path": "/app/smoke/tiket-sokongan",
+    "st": 200,
+    "h1": "Tiket Sokongan",
+    "baris": 0,
+    "lajur": [
+      "Rujukan",
+      "Diterima",
+      "Pelapor",
+      "Kategori",
+      "Masalah",
+      "Status"
+    ],
+    "aksi": [
+      "Tiket Sokongan"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.tiket-sokongan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Ftiket-sokongan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Pusat Bantuan",
+    "path": "/app/smoke/bantuan",
+    "st": 200,
+    "h1": "Pusat Bantuan Diwan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.bantuan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fbantuan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Persediaan Berpandu",
+    "path": "/app/smoke/persediaan",
+    "st": 200,
+    "h1": "Persediaan Berpandu Masjid",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Mula Persediaan Berpandu",
+      "Langkau Buat Sementara"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.persediaan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpersediaan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Ahli & Peranan",
+    "path": "/app/smoke/ahli-peranan",
+    "st": 200,
+    "h1": "Ahli & Peranan",
+    "baris": 4,
+    "lajur": [
+      "NAMA",
+      "E-MEL",
+      "PERANAN",
+      "NO. WHATSAPP TENANT",
+      "NOTI WA",
+      "TINDAKAN"
+    ],
+    "aksi": [
+      "Jemput Ahli"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.ahli-peranan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fahli-peranan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Klasifikasi Fail",
+    "path": "/app/smoke/classification-nodes",
+    "st": 200,
+    "h1": "Klasifikasi Fail",
+    "baris": 10,
+    "lajur": [
+      "Kod",
+      "Tajuk",
+      "Peringkat",
+      "Sensitiviti",
+      "Aktif"
+    ],
+    "aksi": [
+      "Klasifikasi Fail",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.classification-nodes",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fclassification-nodes",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Pelupusan",
+    "path": "/app/smoke/pelupusan",
+    "st": 200,
+    "h1": "Pelupusan Manual",
+    "baris": 11,
+    "lajur": [
+      "Batch",
+      "Jenis",
+      "Status",
+      "Bil. Item"
+    ],
+    "aksi": [
+      "Sedia Senarai Semakan"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.pelupusan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpelupusan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Peraturan Retensi",
+    "path": "/app/smoke/retensi-peraturan",
+    "st": 200,
+    "h1": "Peraturan Retensi",
+    "baris": 1,
+    "lajur": [
+      "Jenis",
+      "Prefix",
+      "Tahun",
+      "Tindakan"
+    ],
+    "aksi": [
+      "Peraturan Retensi",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.retensi-peraturan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fretensi-peraturan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Tetapan Masjid",
+    "path": "/app/smoke/tetapan-masjid",
+    "st": 200,
+    "h1": "Tetapan Masjid",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Edit Tetapan",
+      "Aktifkan WhatsApp"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.tetapan-masjid",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Ftetapan-masjid",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Penggunaan & Storan",
+    "path": "/app/smoke/penggunaan",
+    "st": 200,
+    "h1": "Penggunaan & Storan",
+    "baris": 2,
+    "lajur": [
+      "Saiz",
+      "Mula",
+      "Luput",
+      "Status",
+      "No. Invois",
+      "Saiz",
+      "Jumlah (RM)",
+      "Status"
+    ],
+    "aksi": [
+      "Tambah Storan"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.penggunaan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpenggunaan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Retensi & Pegangan",
+    "path": "/app/smoke/retensi",
+    "st": 200,
+    "h1": "Retensi & Pegangan",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Eksport ZIP (Akan Luput ≤90 hari)"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.retensi",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fretensi",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Delegasi",
+    "path": "/app/smoke/delegasi",
+    "st": 200,
+    "h1": "Delegasi",
+    "baris": 0,
+    "lajur": [
+      "Principal",
+      "Delegate",
+      "Tugas",
+      "Mula",
+      "Tamat",
+      "Status"
+    ],
+    "aksi": [
+      "Delegasi",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.delegasi",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fdelegasi",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Profil Saya",
+    "path": "/app/smoke/profil",
+    "st": 200,
+    "h1": "Profil Saya",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Tetapan Notifikasi",
+      "Hantar Notifikasi Ujian",
+      "Sambung Telegram",
+      "Tetapkan Kata Laluan"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.profil",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fprofil",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Peti Masuk",
+    "path": "/app/smoke/peti-masuk",
+    "st": 200,
+    "h1": "Peti Masuk",
+    "baris": 1,
+    "lajur": [
+      "Sumber",
+      "Tajuk / Fail",
+      "Tarikh Terima",
+      "Penghantar / Sumber",
+      "Diterima",
+      "Antivirus",
+      "OCR",
+      "Duplikat"
+    ],
+    "aksi": [
+      "Peti Masuk",
+      "+ Muat Naik Dokumen"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.peti-masuk",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpeti-masuk",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Rekod",
+    "path": "/app/smoke/records",
+    "st": 200,
+    "h1": "Rekod",
+    "baris": 10,
+    "lajur": [
+      "Rujukan",
+      "Tajuk",
+      "Jenis",
+      "Fail",
+      "Tarikh",
+      "Sensitiviti",
+      "Status"
+    ],
+    "aksi": [
+      "Rekod",
+      "Rekod Baharu"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.records",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Frecords",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Fail",
+    "path": "/app/smoke/registry-files",
+    "st": 200,
+    "h1": "Fail",
+    "baris": 10,
+    "lajur": [
+      "No. Fail",
+      "Tajuk",
+      "Sensitiviti",
+      "Status",
+      "Kandungan",
+      "Medium",
+      "Lokasi",
+      "Penjagaan"
+    ],
+    "aksi": [
+      "Fail",
+      "Cipta"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.registry-files",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fregistry-files",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Minit Saya",
+    "path": "/app/smoke/minit-saya",
+    "st": 200,
+    "h1": "Minit Saya",
+    "baris": 1,
+    "lajur": [
+      "Rekod",
+      "Daripada",
+      "Arahan / Catatan",
+      "Penerima",
+      "Keutamaan",
+      "Tarikh Akhir",
+      "Status"
+    ],
+    "aksi": [
+      "Minit Saya"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.minit-saya",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fminit-saya",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Kelulusan",
+    "path": "/app/smoke/kelulusan",
+    "st": 200,
+    "h1": "Kelulusan",
+    "baris": 0,
+    "lajur": [
+      "Rekod",
+      "Pemohon",
+      "Nota",
+      "Tarikh",
+      "Status",
+      "Bagi pihak"
+    ],
+    "aksi": [
+      "Kelulusan"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.kelulusan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fkelulusan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Carian",
+    "path": "/app/smoke/carian",
+    "st": 200,
+    "h1": "Carian Rekod",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.carian",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fcarian",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Kegemaran",
+    "path": "/app/smoke/kegemaran",
+    "st": 200,
+    "h1": "Rekod & Fail Kegemaran",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [],
+    "overflowX": false,
+    "guideId": "tenant.kegemaran",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fkegemaran",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Laporan",
+    "path": "/app/smoke/laporan",
+    "st": 200,
+    "h1": "Laporan Pejabat",
+    "baris": 0,
+    "lajur": [],
+    "aksi": [
+      "Eksport CSV"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.laporan",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Flaporan",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Pembetulan Rekod",
+    "path": "/app/smoke/pembetulan-rekod",
+    "st": 200,
+    "h1": "Pembetulan Rekod",
+    "baris": 0,
+    "lajur": [
+      "Rekod",
+      "Pemohon",
+      "Sebab",
+      "Perubahan",
+      "Status",
+      "Dimohon"
+    ],
+    "aksi": [
+      "Pembetulan Rekod"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.pembetulan-rekod",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Fpembetulan-rekod",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "Log Aktiviti Masjid",
+    "path": "/app/smoke/log-aktiviti",
+    "st": 200,
+    "h1": "Log Aktiviti Masjid",
+    "baris": 0,
+    "lajur": [
+      "Tarikh & Masa",
+      "Pelaku",
+      "Aktiviti",
+      "Rekod",
+      "Fail",
+      "Sumber"
+    ],
+    "aksi": [
+      "Log Aktiviti Masjid"
+    ],
+    "overflowX": false,
+    "guideId": "tenant.log-aktiviti",
+    "autoStart": "0",
+    "helpUrl": "/app/smoke/bantuan?asal=%2Fapp%2Fsmoke%2Flog-aktiviti",
+    "tour": null,
+    "errs": [],
+    "bad": []
+  },
+  {
+    "vp": "mobile",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad",
+    "st": 404
+  },
+  {
+    "vp": "mobile",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad/records",
+    "st": 404
+  },
+  {
+    "vp": "mobile",
+    "nama": "SILANG-TENANT",
+    "path": "/app/mamad/peti-masuk",
+    "st": 404
+  }
+]

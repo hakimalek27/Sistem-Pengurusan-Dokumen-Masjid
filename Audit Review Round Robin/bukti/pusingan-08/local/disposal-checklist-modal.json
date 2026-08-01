@@ -1,0 +1,17 @@
+{
+  "modal": "Sedia Senarai Semakan AMARAN: Selepas kelulusan & pelupusan, rekod dipadam kekal dan tidak boleh dikembalikan; metadata kekal. Pastikan sandaran luar telah dibuat. Pilih Rekod Satu per Satu* Tiada pilihan yang sepadan dengan carian anda. Batal Sahkan",
+  "fields": [
+    {
+      "tag": "BUTTON",
+      "text": "Batal",
+      "id": "",
+      "type": "button"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Sahkan",
+      "id": "",
+      "type": "submit"
+    }
+  ]
+}

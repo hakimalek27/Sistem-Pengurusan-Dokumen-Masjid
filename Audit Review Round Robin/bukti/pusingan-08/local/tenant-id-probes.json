@@ -1,0 +1,65 @@
+[
+  {
+    "path": "/app/mam/records/5",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/mam/records/5",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/mam/registry-files/4",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/mam/registry-files/4",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/mam/classification-nodes/42/edit",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/mam/classification-nodes/42/edit",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/man/records",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/man/records",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/man/records/4",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/man/records/4",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/man/registry-files/1",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/man/registry-files/1",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  },
+  {
+    "path": "/app/man/classification-nodes/42/edit",
+    "status": 404,
+    "url": "http://127.0.0.1:8080/app/man/classification-nodes/42/edit",
+    "h1": [
+      "\n                        404                    "
+    ],
+    "body": "404\nNOT FOUND"
+  }
+]

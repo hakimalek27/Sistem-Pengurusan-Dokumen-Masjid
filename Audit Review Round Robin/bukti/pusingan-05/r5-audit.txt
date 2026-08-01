@@ -1,0 +1,22 @@
+===== HAPPY-PATH TULIS: Admin/Kerani klasifikasi rekod peti masuk =====
+  Prasyarat rekod #4 (av=clean, ocr=siap) — buka wizard klasifikasi.
+  --- Langkah 1: Klasifikasikan | 01 | Semak Dokumen & Sumber | 02 | Jenis & Metadata | 03 | Fail & Sensitiviti | 04 | Eda
+      butang tersedia: 01
+Semak Dokumen & Sumber, 02
+Jenis & Metadata, 03
+Fail & Sensitiviti, 04
+Edaran Minit, 05
+Semakan Akhir, Batal, Seterus — tiada butang maju
+  Selepas wizard: halaman Rekod ada 3 baris.
+
+===== PROBE SILANG-TENANT SELEPAS MUTASI =====
+  404  rekod MAN via slug sendiri     /app/mam/records/5
+  404  rekod MAN via slug MAN         /app/man/records/5
+  404  fail MAN                       /app/mam/registry-files/4
+  404  secure-file rekod MAN          /secure-file/record/5
+  404  QR deep-link rekod MAN         /r/5
+
+===== EKSPORT =====
+  CSV: laporan-rekod-mam-20260801.csv — 4 baris
+  Header: Rujukan,Tajuk,Jenis,Tarikh,Sensitiviti,Status
+  Kebocoran tenant MAN: ✅ tiada | Header Inggeris: ⚠️ YA

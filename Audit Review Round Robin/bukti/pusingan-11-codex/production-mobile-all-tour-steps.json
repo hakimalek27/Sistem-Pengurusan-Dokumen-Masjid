@@ -1,0 +1,2978 @@
+[
+  {
+    "guide": "tenant.dashboard",
+    "route": "/app/smoke",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 4",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 2781
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Semak nama masjid pada panel untuk memastikan tenant yang betul",
+    "description": "Semak nama masjid pada panel untuk memastikan tenant yang betul.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.dashboard",
+    "route": "/app/smoke",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 2781
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Baca kad statistik",
+    "description": "Baca kad statistik; nombor hanya merangkumi data yang role ini dibenarkan lihat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.dashboard",
+    "route": "/app/smoke",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 2781
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Semak senarai semak persediaan jika masih dipaparkan",
+    "description": "Semak senarai semak persediaan jika masih dipaparkan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.dashboard",
+    "route": "/app/smoke",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 4",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 2781
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Gunakan menu kiri untuk membuka tugasan",
+    "description": "Gunakan menu kiri untuk membuka tugasan; jangan gunakan URL tenant lain secara manual.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.sensitive-access-logs",
+    "route": "/app/smoke/sensitive-access-logs",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 421
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan",
+    "description": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.sensitive-access-logs",
+    "route": "/app/smoke/sensitive-access-logs",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 4",
+    "button": "Seterusnya",
+    "target": "SPAN",
+    "targetSize": {
+      "w": 58,
+      "h": 20
+    },
+    "popSize": {
+      "w": 0,
+      "h": 0,
+      "left": 0,
+      "top": 0
+    },
+    "title": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan",
+    "description": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.sensitive-access-logs",
+    "route": "/app/smoke/sensitive-access-logs",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 421
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Siasat akses luar biasa melalui rekod asal",
+    "description": "Siasat akses luar biasa melalui rekod asal; jangan padam atau ubah log.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.sensitive-access-logs",
+    "route": "/app/smoke/sensitive-access-logs",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 4",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 421
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Laporkan akses tidak dikenali kepada Admin/Kerani dan wakil perlindungan...",
+    "description": "Laporkan akses tidak dikenali kepada Admin/Kerani dan wakil perlindungan data.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.analitik-bantuan",
+    "route": "/app/smoke/analitik-bantuan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 2",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 358,
+      "h": 1133
+    },
+    "popSize": {
+      "w": 366,
+      "h": 284,
+      "left": 12,
+      "top": 370
+    },
+    "title": "Buka fungsi",
+    "description": "Semak penggunaan panduan secara agregat tanpa teks carian mentah atau pemarkahan individu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.analitik-bantuan",
+    "route": "/app/smoke/analitik-bantuan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 2",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 358,
+      "h": 1133
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 12,
+      "top": 432
+    },
+    "title": "Sahkan skop",
+    "description": "Pastikan panel, tenant dan role semasa adalah betul.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tiket-sokongan",
+    "route": "/app/smoke/tiket-sokongan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 2",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 421
+    },
+    "popSize": {
+      "w": 366,
+      "h": 263,
+      "left": 12,
+      "top": 391
+    },
+    "title": "Buka fungsi",
+    "description": "Semak dan urus tiket masjid semasa sahaja.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tiket-sokongan",
+    "route": "/app/smoke/tiket-sokongan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 2",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 421
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 12,
+      "top": 432
+    },
+    "title": "Sahkan skop",
+    "description": "Pastikan panel, tenant dan role semasa adalah betul.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.bantuan",
+    "route": "/app/smoke/bantuan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 2",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 358,
+      "h": 6750
+    },
+    "popSize": {
+      "w": 366,
+      "h": 284,
+      "left": 12,
+      "top": 370
+    },
+    "title": "Buka fungsi",
+    "description": "Cari panduan, jalankan diagnosis, ubah tetapan bantuan atau hantar tiket.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.bantuan",
+    "route": "/app/smoke/bantuan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 2",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 358,
+      "h": 6750
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 12,
+      "top": 432
+    },
+    "title": "Sahkan skop",
+    "description": "Pastikan panel, tenant dan role semasa adalah betul.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 263,
+      "left": 12,
+      "top": 391
+    },
+    "title": "Tekan Mula Persediaan Berpandu",
+    "description": "Tekan Mula Persediaan Berpandu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Isi jawatan anda dan nombor telefon rasmi masjid",
+    "description": "Isi jawatan anda dan nombor telefon rasmi masjid.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Pilih sama ada nombor sendiri digunakan sementara atau nombor khas masji...",
+    "description": "Pilih sama ada nombor sendiri digunakan sementara atau nombor khas masjid.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tambah ahli awal dengan nama, peranan, telefon dan e-mel jika ada",
+    "description": "Tambah ahli awal dengan nama, peranan, telefon dan e-mel jika ada.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Semak setiap peranan sebelum simpan",
+    "description": "Semak setiap peranan sebelum simpan; elakkan memberi Admin/Kerani tanpa keperluan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.persediaan",
+    "route": "/app/smoke/persediaan",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 585
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Jika dilangkau, kembali melalui menu Persediaan Berpandu untuk melengkap...",
+    "description": "Jika dilangkau, kembali melalui menu Persediaan Berpandu untuk melengkapkan kemudian.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara",
+    "description": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Masukkan e-mel jika tersedia dan pilih hanya satu peranan yang tepat",
+    "description": "Masukkan e-mel jika tersedia dan pilih hanya satu peranan yang tepat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Selepas jemputan, pastikan ahli muncul dalam senarai tenant ini",
+    "description": "Selepas jemputan, pastikan ahli muncul dalam senarai tenant ini.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Gunakan Hantar Semula Pautan jika ahli belum menerima pautan",
+    "description": "Gunakan Hantar Semula Pautan jika ahli belum menerima pautan; jangan cipta akaun pendua.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tetapkan semula kata laluan sementara hanya apabila identiti ahli disahk...",
+    "description": "Tetapkan semula kata laluan sementara hanya apabila identiti ahli disahkan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.ahli-peranan",
+    "route": "/app/smoke/ahli-peranan",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 637
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Untuk ubah peranan atau keluarkan ahli, semak kesan terhadap tugasan/min...",
+    "description": "Untuk ubah peranan atau keluarkan ahli, semak kesan terhadap tugasan/minit dahulu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.classification-nodes",
+    "route": "/app/smoke/classification-nodes",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1351
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu",
+    "description": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.classification-nodes",
+    "route": "/app/smoke/classification-nodes",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1351
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Pilih nod induk yang betul dan peringkat yang sepadan",
+    "description": "Pilih nod induk yang betul dan peringkat yang sepadan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.classification-nodes",
+    "route": "/app/smoke/classification-nodes",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1351
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Gunakan pola kod seperti 500, 500-1 atau 500-1/2",
+    "description": "Gunakan pola kod seperti 500, 500-1 atau 500-1/2.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.classification-nodes",
+    "route": "/app/smoke/classification-nodes",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1351
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tetapkan tajuk rasmi, sensitiviti lalai, status Aktif dan susunan",
+    "description": "Tetapkan tajuk rasmi, sensitiviti lalai, status Aktif dan susunan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.classification-nodes",
+    "route": "/app/smoke/classification-nodes",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1351
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Nod yang sudah digunakan tidak boleh diubah sesuka hati",
+    "description": "Nod yang sudah digunakan tidak boleh diubah sesuka hati; nyahaktifkan nod lama jika perlu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pelupusan",
+    "route": "/app/smoke/pelupusan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1087
+    },
+    "popSize": {
+      "w": 366,
+      "h": 327,
+      "left": 12,
+      "top": 327
+    },
+    "title": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan ba...",
+    "description": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan batch.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.pelupusan",
+    "route": "/app/smoke/pelupusan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1087
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Pengerusi menyemak senarai, pegangan undang-undang dan bukti sandaran se...",
+    "description": "Pengerusi menyemak senarai, pegangan undang-undang dan bukti sandaran sebelum meluluskan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pelupusan",
+    "route": "/app/smoke/pelupusan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1087
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Admin/Kerani hanya melaksanakan batch selepas status diluluskan",
+    "description": "Admin/Kerani hanya melaksanakan batch selepas status diluluskan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pelupusan",
+    "route": "/app/smoke/pelupusan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1087
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Jika gagal, jangan cipta batch pendua",
+    "description": "Jika gagal, jangan cipta batch pendua; baiki storan dan gunakan Cuba Semula pada batch sama.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pelupusan",
+    "route": "/app/smoke/pelupusan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1087
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Simpan sijil pelupusan",
+    "description": "Simpan sijil pelupusan; metadata audit kekal walaupun blob rekod dipadam.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi-peraturan",
+    "route": "/app/smoke/retensi-peraturan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 346
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Semak peraturan lalai platform sebelum membuat override masjid",
+    "description": "Semak peraturan lalai platform sebelum membuat override masjid.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi-peraturan",
+    "route": "/app/smoke/retensi-peraturan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 346
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Pilih jenis rekod atau isi prefix klasifikasi yang khusus",
+    "description": "Pilih jenis rekod atau isi prefix klasifikasi yang khusus.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi-peraturan",
+    "route": "/app/smoke/retensi-peraturan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 346
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Isi tahun simpanan",
+    "description": "Isi tahun simpanan; kosongkan hanya apabila tindakan kekal memang dikehendaki.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi-peraturan",
+    "route": "/app/smoke/retensi-peraturan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 346
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Pilih tindakan akhir yang sah dan tulis catatan dasar/kelulusan",
+    "description": "Pilih tindakan akhir yang sah dan tulis catatan dasar/kelulusan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi-peraturan",
+    "route": "/app/smoke/retensi-peraturan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 346
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Uji kesan pada halaman Retensi sebelum mengaktifkan pelupusan",
+    "description": "Uji kesan pada halaman Retensi sebelum mengaktifkan pelupusan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1299
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Semak telefon rasmi dan wakil perlindungan data",
+    "description": "Semak telefon rasmi dan wakil perlindungan data.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "BUTTON",
+    "targetSize": {
+      "w": 173,
+      "h": 36
+    },
+    "popSize": {
+      "w": 0,
+      "h": 0,
+      "left": 0,
+      "top": 0
+    },
+    "title": "Semak telefon rasmi dan wakil perlindungan data",
+    "description": "Semak telefon rasmi dan wakil perlindungan data.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1299
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Tetapkan kata kunci intake yang mudah tetapi khusus",
+    "description": "Tetapkan kata kunci intake yang mudah tetapi khusus.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1299
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Bagi e-mel dipercayai, masukkan alamat PENGHANTAR seperti pengimbas",
+    "description": "Bagi e-mel dipercayai, masukkan alamat PENGHANTAR seperti pengimbas; jangan masukkan alamat intake sistem.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1299
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Pasangkan WhatsApp melalui QR/kod telefon dan semak status tersambung",
+    "description": "Pasangkan WhatsApp melalui QR/kod telefon dan semak status tersambung.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.tetapan-masjid",
+    "route": "/app/smoke/tetapan-masjid",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1299
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Matikan notifikasi jika peranti hilang atau sesi tidak lagi dikawal",
+    "description": "Matikan notifikasi jika peranti hilang atau sesi tidak lagi dikawal.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.penggunaan",
+    "route": "/app/smoke/penggunaan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 749
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan",
+    "description": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.penggunaan",
+    "route": "/app/smoke/penggunaan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 749
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Semak pesanan sedia ada sebelum memohon sekali lagi",
+    "description": "Semak pesanan sedia ada sebelum memohon sekali lagi.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.penggunaan",
+    "route": "/app/smoke/penggunaan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 749
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Jika dibenarkan, tekan Tambah Storan dan pilih bilangan blok 10 GB",
+    "description": "Jika dibenarkan, tekan Tambah Storan dan pilih bilangan blok 10 GB.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.penggunaan",
+    "route": "/app/smoke/penggunaan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 749
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Catat nombor invois dan tunggu pengesahan pembayaran platform",
+    "description": "Catat nombor invois dan tunggu pengesahan pembayaran platform.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.penggunaan",
+    "route": "/app/smoke/penggunaan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 749
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Jangan anggap pesanan menunggu sebagai kuota aktif sehingga status disah...",
+    "description": "Jangan anggap pesanan menunggu sebagai kuota aktif sehingga status disahkan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi",
+    "route": "/app/smoke/retensi",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 916
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Semak rekod yang akan luput dalam 365/90 hari",
+    "description": "Semak rekod yang akan luput dalam 365/90 hari.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi",
+    "route": "/app/smoke/retensi",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 916
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Bandingkan sumber peraturan lalai dengan override masjid",
+    "description": "Bandingkan sumber peraturan lalai dengan override masjid.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi",
+    "route": "/app/smoke/retensi",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 916
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Aktifkan Legal Hold jika ada audit, siasatan, litigasi atau arahan simpa...",
+    "description": "Aktifkan Legal Hold jika ada audit, siasatan, litigasi atau arahan simpan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi",
+    "route": "/app/smoke/retensi",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 916
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tarik hold hanya dengan kebenaran dan bukti urusan selesai",
+    "description": "Tarik hold hanya dengan kebenaran dan bukti urusan selesai.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.retensi",
+    "route": "/app/smoke/retensi",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 916
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Eksport ZIP sebelum pelupusan jika perlu",
+    "description": "Eksport ZIP sebelum pelupusan jika perlu; pautan eksport mempunyai tempoh tamat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 263,
+      "left": 12,
+      "top": 391
+    },
+    "title": "Pilih Principal, iaitu pemilik tugas asal",
+    "description": "Pilih Principal, iaitu pemilik tugas asal.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Pilih Delegate, iaitu orang yang akan bertindak bagi pihak principal",
+    "description": "Pilih Delegate, iaitu orang yang akan bertindak bagi pihak principal.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Hadkan capability kepada Minit, Kelulusan atau kedua-duanya",
+    "description": "Hadkan capability kepada Minit, Kelulusan atau kedua-duanya.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Tetapkan mula/tamat dan sebab yang boleh diaudit",
+    "description": "Tetapkan mula/tamat dan sebab yang boleh diaudit.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Semak nama “bagi pihak” pada tindakan yang dibuat delegate",
+    "description": "Semak nama “bagi pihak” pada tindakan yang dibuat delegate.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.delegasi",
+    "route": "/app/smoke/delegasi",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 413
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 12,
+      "top": 432
+    },
+    "title": "Batal delegasi sebaik keperluan tamat",
+    "description": "Batal delegasi sebaik keperluan tamat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 791
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Semak nama, e-mel dan nombor WhatsApp",
+    "description": "Semak nama, e-mel dan nombor WhatsApp.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "BUTTON",
+    "targetSize": {
+      "w": 164,
+      "h": 36
+    },
+    "popSize": {
+      "w": 0,
+      "h": 0,
+      "left": 0,
+      "top": 0
+    },
+    "title": "Semak nama, e-mel dan nombor WhatsApp",
+    "description": "Semak nama, e-mel dan nombor WhatsApp.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 791
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Sambung Telegram melalui pautan rasmi dan tekan Start sebelum tamat temp...",
+    "description": "Sambung Telegram melalui pautan rasmi dan tekan Start sebelum tamat tempoh.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 791
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Gunakan Hantar Notifikasi Ujian selepas perubahan",
+    "description": "Gunakan Hantar Notifikasi Ujian selepas perubahan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 791
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tetapkan kata laluan panjang, unik dan tidak digunakan di sistem lain",
+    "description": "Tetapkan kata laluan panjang, unik dan tidak digunakan di sistem lain.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.profil",
+    "route": "/app/smoke/profil",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 791
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Putuskan Telegram atau tukar kata laluan segera jika peranti hilang",
+    "description": "Putuskan Telegram atau tukar kata laluan segera jika peranti hilang.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 454
+    },
+    "popSize": {
+      "w": 366,
+      "h": 307,
+      "left": 12,
+      "top": 347
+    },
+    "title": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, An...",
+    "description": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, Antivirus, OCR dan Duplikat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "A",
+    "targetSize": {
+      "w": 158,
+      "h": 20
+    },
+    "popSize": {
+      "w": 0,
+      "h": 0,
+      "left": 0,
+      "top": 0
+    },
+    "title": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, An...",
+    "description": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, Antivirus, OCR dan Duplikat.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 454
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Muat naik hanya format dibenarkan",
+    "description": "Muat naik hanya format dibenarkan; fail melalui semakan antivirus dan kuota.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 454
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tekan Klasifikasikan dan lengkapkan metadata serta fail destinasi",
+    "description": "Tekan Klasifikasikan dan lengkapkan metadata serta fail destinasi.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 454
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Jika spam/tidak berkaitan, gunakan Padam (Spam) dan nyatakan sebab",
+    "description": "Jika spam/tidak berkaitan, gunakan Padam (Spam) dan nyatakan sebab; jangan klasifikasikan sebagai rekod.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.peti-masuk",
+    "route": "/app/smoke/peti-masuk",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 454
+    },
+    "popSize": {
+      "w": 366,
+      "h": 307,
+      "left": 12,
+      "top": 347
+    },
+    "title": "Pastikan sumber menunjukkan e-mel pengirim, nombor WhatsApp atau penggun...",
+    "description": "Pastikan sumber menunjukkan e-mel pengirim, nombor WhatsApp atau pengguna UI serta masa upload.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.records",
+    "route": "/app/smoke/records",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Cari melalui rujukan/tajuk dan tapis Jenis, Sensitiviti atau Status",
+    "description": "Cari melalui rujukan/tajuk dan tapis Jenis, Sensitiviti atau Status.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.records",
+    "route": "/app/smoke/records",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Buka Lihat untuk memeriksa metadata dan asal dokumen",
+    "description": "Buka Lihat untuk memeriksa metadata dan asal dokumen.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.records",
+    "route": "/app/smoke/records",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Semak tab Teks OCR, Lampiran & Versi, Minit, Kelulusan dan Audit",
+    "description": "Semak tab Teks OCR, Lampiran & Versi, Minit, Kelulusan dan Audit.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.records",
+    "route": "/app/smoke/records",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Gunakan Kegemaran untuk rujukan kerap",
+    "description": "Gunakan Kegemaran untuk rujukan kerap.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.records",
+    "route": "/app/smoke/records",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Gunakan hanya tindakan yang dipaparkan oleh role",
+    "description": "Gunakan hanya tindakan yang dipaparkan oleh role; jangan cuba mengubah URL untuk mendapatkan tindakan lain.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu",
+    "description": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Seterusnya",
+    "target": "A",
+    "targetSize": {
+      "w": 76,
+      "h": 54
+    },
+    "popSize": {
+      "w": 0,
+      "h": 0,
+      "left": 0,
+      "top": 0
+    },
+    "title": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu",
+    "description": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Bagi hibrid/fizikal, semak rujukan, lokasi, pemegang dan tarikh pulang",
+    "description": "Bagi hibrid/fizikal, semak rujukan, lokasi, pemegang dan tarikh pulang.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Gunakan Keluarkan Fail, Terima Pulangan atau Pindah Lokasi untuk setiap...",
+    "description": "Gunakan Keluarkan Fail, Terima Pulangan atau Pindah Lokasi untuk setiap pergerakan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Tutup fail dengan sebab",
+    "description": "Tutup fail dengan sebab; buka jilid baharu apabila had kandungan dicapai.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.registry-files",
+    "route": "/app/smoke/registry-files",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1399
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Akses khas fail sulit hendaklah minimum, individu dan ditarik selepas se...",
+    "description": "Akses khas fail sulit hendaklah minimum, individu dan ditarik selepas selesai.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai",
+    "description": "Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Baca rekod, pengirim, arahan, penerima, keutamaan dan tarikh akhir",
+    "description": "Baca rekod, pengirim, arahan, penerima, keutamaan dan tarikh akhir.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Jika tindakan, buat kerja sebenar dahulu sebelum Tanda Selesai",
+    "description": "Jika tindakan, buat kerja sebenar dahulu sebelum Tanda Selesai.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Gunakan Balas & Edarkan untuk catatan susulan dan penerima seterusnya",
+    "description": "Gunakan Balas & Edarkan untuk catatan susulan dan penerima seterusnya.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Penerima s.k",
+    "description": "Penerima s.k. ialah makluman; penerima tindakan mempunyai tanggungjawab dan SLA.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.minit-saya",
+    "route": "/app/smoke/minit-saya",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 386
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tindakan delegate direkod sebagai “oleh X bagi pihak Y”",
+    "description": "Tindakan delegate direkod sebagai “oleh X bagi pihak Y”.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 6",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Semak tajuk rekod, pemohon, nota dan status",
+    "description": "Semak tajuk rekod, pemohon, nota dan status.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Buka rekod asal dan media sebelum membuat keputusan",
+    "description": "Buka rekod asal dan media sebelum membuat keputusan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Pelulus yang ditetapkan memilih Lulus atau Tolak",
+    "description": "Pelulus yang ditetapkan memilih Lulus atau Tolak.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Masukkan kata laluan sendiri",
+    "description": "Masukkan kata laluan sendiri; nota wajib bagi penolakan dan digalakkan bagi kelulusan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 6",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Jangan berkongsi kata laluan untuk membolehkan orang lain meluluskan",
+    "description": "Jangan berkongsi kata laluan untuk membolehkan orang lain meluluskan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kelulusan",
+    "route": "/app/smoke/kelulusan",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 6",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 405
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Semak status akhir dan rekod “bagi pihak” jika delegasi digunakan",
+    "description": "Semak status akhir dan rekod “bagi pihak” jika delegasi digunakan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 7",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu",
+    "description": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 7",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Gabungkan Jenis, Fail, Arah, Sensitiviti, Status dan Saluran",
+    "description": "Gabungkan Jenis, Fail, Arah, Sensitiviti, Status dan Saluran.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 7",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Isi pengirim, rujukan, penerima serta julat tarikh rekod/terima",
+    "description": "Isi pengirim, rujukan, penerima serta julat tarikh rekod/terima.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 7",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 12,
+      "top": 432
+    },
+    "title": "Tekan Cari dan semak jumlah hasil",
+    "description": "Tekan Cari dan semak jumlah hasil.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 7",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Isi Nama carian, tandakan Lalai jika sesuai, kemudian Simpan",
+    "description": "Isi Nama carian, tandakan Lalai jika sesuai, kemudian Simpan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 6,
+    "status": 200,
+    "exists": true,
+    "statusText": "6 daripada 7",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Pilih carian tersimpan untuk guna semula atau Padam carian apabila tidak...",
+    "description": "Pilih carian tersimpan untuk guna semula atau Padam carian apabila tidak diperlukan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.carian",
+    "route": "/app/smoke/carian",
+    "index": 7,
+    "status": 200,
+    "exists": true,
+    "statusText": "7 daripada 7",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1256
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Tekan bintang untuk menambah hasil ke Kegemaran",
+    "description": "Tekan bintang untuk menambah hasil ke Kegemaran.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.kegemaran",
+    "route": "/app/smoke/kegemaran",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 186
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 10,
+      "top": 270
+    },
+    "title": "Tambah bintang dari senarai fail, butiran rekod atau hasil carian",
+    "description": "Tambah bintang dari senarai fail, butiran rekod atau hasil carian.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.kegemaran",
+    "route": "/app/smoke/kegemaran",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 186
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 10,
+      "top": 270
+    },
+    "title": "Buka Kegemaran untuk melihat rekod/fail tersimpan",
+    "description": "Buka Kegemaran untuk melihat rekod/fail tersimpan.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.kegemaran",
+    "route": "/app/smoke/kegemaran",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 186
+    },
+    "popSize": {
+      "w": 366,
+      "h": 222,
+      "left": 10,
+      "top": 270
+    },
+    "title": "Klik item untuk membuka sumber asal",
+    "description": "Klik item untuk membuka sumber asal.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.kegemaran",
+    "route": "/app/smoke/kegemaran",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 186
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 10,
+      "top": 270
+    },
+    "title": "Tekan bintang penuh untuk membuang kegemaran",
+    "description": "Tekan bintang penuh untuk membuang kegemaran.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.kegemaran",
+    "route": "/app/smoke/kegemaran",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 186
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 10,
+      "top": 270
+    },
+    "title": "Kegemaran tidak mengatasi permission",
+    "description": "Kegemaran tidak mengatasi permission; item hilang jika akses ditarik.",
+    "overflow": false,
+    "centerCovered": true
+  },
+  {
+    "guide": "tenant.laporan",
+    "route": "/app/smoke/laporan",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 4",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1163
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit",
+    "description": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.laporan",
+    "route": "/app/smoke/laporan",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1163
+    },
+    "popSize": {
+      "w": 366,
+      "h": 244,
+      "left": 12,
+      "top": 410
+    },
+    "title": "Bandingkan pecahan Jenis, Status dan Sumber",
+    "description": "Bandingkan pecahan Jenis, Status dan Sumber.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.laporan",
+    "route": "/app/smoke/laporan",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 4",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1163
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Jika butang Eksport CSV tersedia, muat turun untuk analisis terkawal",
+    "description": "Jika butang Eksport CSV tersedia, muat turun untuk analisis terkawal.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.laporan",
+    "route": "/app/smoke/laporan",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 4",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 1163
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Buka fail CSV sebagai data",
+    "description": "Buka fail CSV sebagai data; berhati-hati dengan perkongsian luar tenant.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pembetulan-rekod",
+    "route": "/app/smoke/pembetulan-rekod",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 361
+    },
+    "popSize": {
+      "w": 366,
+      "h": 285,
+      "left": 12,
+      "top": 369
+    },
+    "title": "Dari butiran rekod, tekan Mohon Pembetulan",
+    "description": "Dari butiran rekod, tekan Mohon Pembetulan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pembetulan-rekod",
+    "route": "/app/smoke/pembetulan-rekod",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 361
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Nyatakan sebab sekurang-kurangnya 10 aksara dan ubah hanya medan yang sa...",
+    "description": "Nyatakan sebab sekurang-kurangnya 10 aksara dan ubah hanya medan yang salah.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pembetulan-rekod",
+    "route": "/app/smoke/pembetulan-rekod",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 361
+    },
+    "popSize": {
+      "w": 366,
+      "h": 243,
+      "left": 12,
+      "top": 411
+    },
+    "title": "Hantar",
+    "description": "Hantar; rekod asal kekal sehingga reviewer yang berkuasa memutuskan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pembetulan-rekod",
+    "route": "/app/smoke/pembetulan-rekod",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 361
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Reviewer membandingkan nilai asal/cadangan, kemudian Luluskan atau Tolak...",
+    "description": "Reviewer membandingkan nilai asal/cadangan, kemudian Luluskan atau Tolak dengan catatan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.pembetulan-rekod",
+    "route": "/app/smoke/pembetulan-rekod",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 361
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Pemohon menerima notifikasi keputusan dan audit menyimpan sebelum/selepa...",
+    "description": "Pemohon menerima notifikasi keputusan dan audit menyimpan sebelum/selepas.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.log-aktiviti",
+    "route": "/app/smoke/log-aktiviti",
+    "index": 1,
+    "status": 200,
+    "exists": true,
+    "statusText": "1 daripada 5",
+    "button": "Buat pada skrin",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 465
+    },
+    "popSize": {
+      "w": 366,
+      "h": 306,
+      "left": 12,
+      "top": 348
+    },
+    "title": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh",
+    "description": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.log-aktiviti",
+    "route": "/app/smoke/log-aktiviti",
+    "index": 2,
+    "status": 200,
+    "exists": true,
+    "statusText": "2 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 465
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan",
+    "description": "Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.log-aktiviti",
+    "route": "/app/smoke/log-aktiviti",
+    "index": 3,
+    "status": 200,
+    "exists": true,
+    "statusText": "3 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 465
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata p...",
+    "description": "Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.log-aktiviti",
+    "route": "/app/smoke/log-aktiviti",
+    "index": 4,
+    "status": 200,
+    "exists": true,
+    "statusText": "4 daripada 5",
+    "button": "Seterusnya",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 465
+    },
+    "popSize": {
+      "w": 366,
+      "h": 264,
+      "left": 12,
+      "top": 390
+    },
+    "title": "Bandingkan masa peristiwa secara kronologi",
+    "description": "Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.",
+    "overflow": false,
+    "centerCovered": false
+  },
+  {
+    "guide": "tenant.log-aktiviti",
+    "route": "/app/smoke/log-aktiviti",
+    "index": 5,
+    "status": 200,
+    "exists": true,
+    "statusText": "5 daripada 5",
+    "button": "Selesai",
+    "target": "page-content",
+    "targetSize": {
+      "w": 390,
+      "h": 465
+    },
+    "popSize": {
+      "w": 366,
+      "h": 286,
+      "left": 12,
+      "top": 368
+    },
+    "title": "Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan",
+    "description": "Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan.",
+    "overflow": false,
+    "centerCovered": false
+  }
+]

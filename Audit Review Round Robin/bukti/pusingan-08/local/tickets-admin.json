@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/app/mam/tiket-sokongan",
+  "body": "Tiket Sokongan\nSenarai\nTiket Sokongan\nCari\n0\nRujukan\t\nDiterima\n\tPelapor\tKategori\tMasalah\tStatus\nTiada rekod dijumpai",
+  "controls": [
+    {
+      "tag": "A",
+      "text": "Tiket Sokongan",
+      "href": "http://127.0.0.1:8080/app/mam/tiket-sokongan"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "0",
+      "href": null
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Tetapkan semula tapisan",
+      "href": null
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Gunakan tapisan",
+      "href": null
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Reset",
+      "href": null
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Apply columns",
+      "href": null
+    }
+  ]
+}

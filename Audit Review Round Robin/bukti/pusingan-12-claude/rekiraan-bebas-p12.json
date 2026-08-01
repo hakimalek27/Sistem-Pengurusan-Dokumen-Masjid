@@ -1,0 +1,56 @@
+{
+  "tarikh": "2026-08-01",
+  "ejen": "Claude Pusingan 12",
+  "kaedah": "Rekiraan bebas ke atas JSON bukti P11 (PowerShell ConvertFrom-Json) + semakan source + SELECT read-only DB produksi (tiada kolum token/email dipilih)",
+  "matriks_tour_p11": {
+    "sumber": ["production-desktop-all-tour-steps.json", "production-mobile-all-tour-steps.json"],
+    "desktop": { "langkah": 124, "guide": 25, "status_bukan_200": 0, "exists_false": 0 },
+    "mobile": { "langkah": 124, "guide": 25, "status_bukan_200": 0, "exists_false": 0 },
+    "taburan_target_runtime": { "page-content": 119, "A": 2, "BUTTON": 2, "SPAN": 1 },
+    "nota": "Dakwaan RR-11-03 '124/124 resolve ke page-content' TIDAK tepat mengikut bukti Codex sendiri: 119/124. 5 langkah resolve ke elemen sebenar melalui semanticAction() page-primary: tenant.sensitive-access-logs#2 (SPAN 131x20), tenant.tetapan-masjid#2 (BUTTON 173x36), tenant.profil#2 (BUTTON 164x36), tenant.peti-masuk#2 (A 158x20), tenant.registry-files#2 (A 76x54)."
+  },
+  "langkah_pertama_25_guide": {
+    "tajuk_sama_description": "20/25",
+    "tajuk_elipsis": ["tenant.pelupusan", "tenant.peti-masuk"],
+    "cta": { "Buat pada skrin": 20, "Seterusnya": 5 }
+  },
+  "mobile_popover_tutup_tengah": {
+    "kiraan": "6/124",
+    "senarai": ["tenant.pelupusan#1", "tenant.kegemaran#1", "tenant.kegemaran#2", "tenant.kegemaran#3", "tenant.kegemaran#4", "tenant.kegemaran#5"]
+  },
+  "katalog_guides_json": {
+    "sumber": "resources/help/guides.json",
+    "jumlah_guide": 83,
+    "guide_tenant": 25,
+    "langkah_tenant": 124,
+    "target_langkah_tenant": { "page-content": 99, "page-primary": 25 }
+  },
+  "db_produksi_read_only": {
+    "db_now_utc": "2026-08-01 05:35:54+00 (13:35 MYT)",
+    "nota_zon_masa": "Kolum timestamp disimpan dalam waktu aplikasi (MYT, naive); perbandingan mentah dengan now() UTC mengelirukan — semua tafsiran di bawah dibetulkan kepada MYT.",
+    "token_audit": {
+      "julat_codex": "222-241 (20)",
+      "julat_sebenar": "221-241 (21) — #221 dicipta 12:10:58 dalam batch sama, telah digunakan 12:11:16; terlepas daripada kiraan Codex tetapi tidak material (layanan sama dgn 6 token guna)",
+      "dicipta": "12:10:58 - 12:23:13 MYT (semua dalam tetingkap P10 Claude)",
+      "digunakan": 7,
+      "used_at_terakhir": "12:23:29 MYT",
+      "belum_guna_222_235": 14,
+      "expires_at_ditulis_semula": "12:38:03 / 12:38:46 MYT (bukan TTL asal 4 jam) = bukti force-expiry cleanup Codex",
+      "token_audit_aktif_pada_1335_myt": 0
+    },
+    "token_lain_1_ogos": {
+      "id_208_220": "13 token deep-link notifikasi, dicipta 08:00:05-08:00:10, TTL 72 jam (luput 04 Ogos) — dijana aplikasi secara sah, BUKAN artifak audit",
+      "token_notifikasi_72j_aktif_keseluruhan": 39,
+      "token_ttl_pendek_aktif": 0
+    },
+    "telemetri_1_ogos": {
+      "help_events_jam_12": { "started": 36, "completed": 1, "dismissed": 1, "jumlah": 38 },
+      "guidance_progress_jam_12": 29,
+      "padanan_dengan_rr_11_01": "TEPAT (38 dan 29)",
+      "aktiviti_luar_tetingkap_audit": "jam 08:00 (12 event pelbagai + 3 progress) dan search 09:00-11:00 — bukan daripada P10/P11",
+      "selepas_jam_13": "SIFAR event — menyokong dakwaan Codex bahawa matriks tour P11 guna route interception dan tidak menulis telemetri"
+    },
+    "tiada_token_baharu_codex": "Tiada token dicipta selepas 12:23:13 → dakwaan Codex tidak menjana kredensial baharu DISOKONG"
+  },
+  "fail_token_mentah": "magic.json/magic2.json/magic3.json tiada dalam repo (Glob **/magic*.json = 0) — pemadaman disahkan"
+}

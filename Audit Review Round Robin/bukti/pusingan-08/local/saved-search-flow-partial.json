@@ -1,0 +1,46 @@
+{
+  "indices": {
+    "name": 2,
+    "query": 4
+  },
+  "saveCount": 1,
+  "afterSave": {
+    "body": "\nFail\nTugasan\nMinit Saya\nKelulusan\nCarian\nKegemaran\nLaporan\nPembetulan Rekod\nLog Aktiviti Masjid\nCarian Rekod\nCarian tersimpan\nPilih carian\nAUDIT RR8 sementara\nNama carian\nLalai\nSimpan\nPadam carian...\nAUDIT RR8 sementara\nTeks\nJenis rekod\nSemua\nSurat Menyurat\nMemo\nE-mel\nE-mel Muat Naik\nMinit Mesyuarat\nLaporan\nKertas Kerja / Konsep\nBorang\nDokumen Tender / Sebut Harga\nPerjanjian / Kontrak / MoU\nPekeliling\nGaris Panduan\nJadual\nPoster / Hebahan\nFoto / Dokumentasi\nSijil\nRekod Kewangan (Resit/Baucar)\nAgenda Mesyuarat\nKeputusan Mesyuarat\nSurat Keputusan / Kelulusan\nPolisi\nProsedur / SOP\nPelan / Lukisan\nBajet / Anggaran\nPesanan Tempatan\nPenyata Bank\nRekod Aset / Inventori\nRekod Perolehan\nPermit / Lesen\nAduan / Maklum Balas\nPermohonan\nAudio / Video\nRekod Kehadiran\nFail\nSemua\nMAM.100-4/1 — Surat-Menyurat Am 2026\nMAM.200-2/1 — Resit & Baucar 2026\nMAM.500-1/1 — Tempahan Dewan 2019\nArah\nSemua\nMasuk\nKeluar\nDalaman\nSensitiviti\nSemua dibenarkan\nUmum\nDalaman\nSulit\nStatus\nSemua\nPeti Masuk\nDifailkan\nDiganti\nSaluran\nSemua\nMuat Naik UI\nE-mel\nWhatsApp\nImbasan\nPengirim / organisasi\nRuj. kami / tuan\nPenerima\nTarikh rekod dari\nTarikh rekod hingga\nTarikh terima dari\nTarikh terima hingga\nCari\nCarian disimpan.",
+    "selects": [
+      {
+        "wire": null,
+        "opts": [
+          {
+            "value": "",
+            "text": "Pilih carian"
+          },
+          {
+            "value": "1",
+            "text": "AUDIT RR8 sementara"
+          }
+        ]
+      },
+      {
+        "wire": null,
+        "opts": [
+          {
+            "value": "1",
+            "text": "AUDIT RR8 sementara"
+          }
+        ]
+      }
+    ],
+    "buttons": [
+      "Menu Pengguna",
+      "Log keluar",
+      "Masjid Al-Muttaqin Wangsa Melawati",
+      "Bantuan",
+      "Pentadbiran",
+      "Akaun",
+      "Registri",
+      "Tugasan",
+      "Simpan",
+      "Cari"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "before": {
+    "guideId": "tenant.peti-masuk",
+    "autoStart": "1",
+    "helpUrl": "/app/mam/bantuan?asal=%2Fapp%2Fmam%2Fpeti-masuk"
+  },
+  "after": {
+    "guideId": null,
+    "autoStart": "0",
+    "helpUrl": "/app/mam/bantuan?asal=%2Flivewire%2Fupdate"
+  },
+  "livewireResponses": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:8080/livewire/update"
+    }
+  ]
+}

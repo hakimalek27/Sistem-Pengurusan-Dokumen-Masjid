@@ -1,0 +1,46 @@
+{
+  "url": "http://127.0.0.1:8080/app/mam/registry-files/1/edit",
+  "body": "Fail\nMAM.100-4/1\nSunting\nSunting MAM.100-4/1\nPaparan\nPadam\nNod Klasifikasi (Aktiviti / Sub-Aktiviti)*\nSurat-Menyurat Am\nTajuk Fail*\nMedium Rekod*\nPilih satu pilihan\nElektronik\nHibrid\nFizikal\nRujukan Salinan Fizikal\nLokasi Fizikal\nSimpan\nBatal",
+  "fields": [
+    {
+      "tag": "BUTTON",
+      "name": null,
+      "type": "button",
+      "value": "",
+      "text": "Padam",
+      "aria": null
+    },
+    {
+      "tag": "BUTTON",
+      "name": null,
+      "type": "button",
+      "value": "",
+      "text": "Surat-Menyurat Am",
+      "aria": null
+    },
+    {
+      "tag": "SELECT",
+      "name": null,
+      "type": null,
+      "value": "elektronik",
+      "text": "Pilih satu pilihan Elektronik Hibrid Fizikal",
+      "aria": null
+    },
+    {
+      "tag": "BUTTON",
+      "name": null,
+      "type": "submit",
+      "value": "",
+      "text": "Simpan",
+      "aria": null
+    },
+    {
+      "tag": "BUTTON",
+      "name": null,
+      "type": "button",
+      "value": "",
+      "text": "Batal",
+      "aria": null
+    }
+  ]
+}

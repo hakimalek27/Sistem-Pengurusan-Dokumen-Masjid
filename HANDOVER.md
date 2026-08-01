@@ -1,5 +1,61 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## SESI — AUDIT ROUND-ROBIN MENYELURUH (1 Ogos 2026) ⭐ TERKINI
+
+**Status:** ✅ **AUDIT SELESAI selepas 14 pusingan.** Tiada kod diubah — audit & cadangan sahaja.
+📄 **Baca dahulu:** [`Audit Review Round Robin/FINAL-RUMUSAN.md`](Audit%20Review%20Round%20Robin/FINAL-RUMUSAN.md)
+
+### Apa yang dibuat
+Audit A–Z dua ejen bebas (**Claude ↔ Codex**) berselang-seli 14 pusingan atas commit `4e07a70`.
+Setiap penemuan mesti disahkan atau ditolak oleh pihak kedua dengan bukti sendiri.
+
+**Liputan produksi `bakwim.my`:** 50 muat halaman berautentikasi (25 × desktop+mobile) ·
+**248 langkah tour** dianalisis · matriks kebenaran 3 role · 18 probe silang-tenant ke masjid
+sebenar `mamad` · 300+ skrinsyot.
+**Liputan salinan tempatan** (commit sama, bundle bantuan hash identik): 274 muat halaman ×
+9 identiti · kitaran tulis penuh · katalog 83 guide / 473 langkah · suite 409 lulus.
+
+### ✅ Terbukti SIHAT — jangan buang masa audit semula
+- **Keselamatan antara masjid lulus pada KEDUA-DUA lapisan**: baca (44 probe = 404/403) dan
+  **tulis** (4/4 mutasi silang-tenant ditolak, **0 pencemaran DB**). Guard di `InboxIngestService:164`.
+- **Kebenaran role sempurna** — sifar kes "boleh akses tapi tiada dalam menu".
+- **Enjin retensi/pelupusan betul**: 11 batch auto, **11/11 ada sijil**, gate t30+t7 dihormati,
+  **0 rekod masjid sebenar terjejas**.
+- **Sync tour BERFUNGSI** (1,045 ms) — kebimbangan asal pemilik bukan pepijat.
+- Kerja pejabat berfungsi: klasifikasi → nombor rujukan auto → minit → kelulusan.
+- 50/50 halaman produksi HTTP 200 · 0 ralat JS · 0 overflow mendatar · tiada kebocoran memori.
+
+### 🔴 Perlu dibaiki (keutamaan)
+| # | Isu | Lokasi |
+|---|---|---|
+| 1 | **Konteks Pembantu Diwan hilang** pada 19/25 halaman produksi (semua 11 halaman superadmin). Tour **memusnahkan konteksnya sendiri** — setiap langkah hantar event Livewire | `HelpLauncher.php:61-65,88` + `help.js:150-153` |
+| 2 | **Tiada `lang/ms/`** → validasi + pagination + **kerangka 9/9 e-mel** Inggeris; mesej rojak `The failkan Ke field is required.`; vendor Filament guna `Seterus`/`Sebelum` | — |
+| 3 | **Auto-padam ialah tetapan LALAI** (3 default bertindan) — keputusan reka bentuk untuk pemilik | `create_mosques_table.php:24` · `RetentionRuleResource.php:59` |
+| 4 | **119/124 langkah tour** sorot kawasan generik, bukan butang | `guides.json` |
+| 5 | Tour `/log-masuk` sentiasa papar ralat palsu (layout tetamu tiada `<main>`) | `help.js:395-421` |
+| 6 | **77/124** tajuk duplikasi · **20/124** terpotong · CTA tak konsisten (20× "Buat pada skrin") | `help.js:323-333` vs `:525` |
+| 7 | axe (`landmark-unique`, `link-name`), overlay tour vs modal mobile, viewer PDF, 3 label `Edit` | — |
+
+### ⚠️ Kesan audit pada produksi (pendedahan penuh)
+Dakwaan awal "tiada mutasi" **tidak tepat** — Codex mengesannya (RR-11-01). Kesan sebenar:
+**21 token log masuk** dicipta (ID 221–241; 3 superadmin — **tidak pernah digunakan**), 53
+`help_events`, 32 baris `guidance_progress`. **Semua token kini luput (0 aktif)** — disahkan dua-hala.
+**0 rekod/fail/minit dicipta.** Masjid sebenar `mamad` **tidak disentuh**.
+
+> ⚠️ **SATU TINDAKAN PEMILIK:** padam tiket ujian **`SUP-260801-HXQ0DIOL`** di `/admin/tiket-sokongan`.
+
+### Nota teknikal untuk sesi akan datang
+- Nilai `expires_at` token terhadap **masa aplikasi (`Asia/Kuala_Lumpur`)**, bukan UTC — UTC mentah
+  beri positif palsu "token masih aktif".
+- Bezakan token audit drp token notifikasi sistem melalui **`intended_url`**, bukan `purpose`
+  (semua = `notification` secara lalai). Token ID 219–220 milik operasi normal — jangan expire.
+- Codex CLI di mesin ini: `--sandbox workspace-write` **ROSAK** (`CreateProcessAsUserW 1312`) →
+  guna `--sandbox danger-full-access`.
+- Skrinsyot bukti (~129 MB, 1081 PNG) **tidak dikomit** (lihat `bukti/.gitignore`) — kekal di
+  cakera tempatan. Laporan + data JSON/TXT dikomit.
+
+---
+
 ## SESI — Pemulihan Akses SSH + Pengesahan Live (1 Ogos 2026)
 
 **Status:** LIVE & DISAHKAN. Server `43.156.242.188` (Tencent **Lighthouse** `lhins-mmc2juw3`,

@@ -1,0 +1,28 @@
+{
+  "audit": "Pusingan 10 Claude production",
+  "productionMutationDetected": true,
+  "magicLoginTokens": {
+    "createdCount": 20,
+    "idRange": "222-241",
+    "usedCount": 6,
+    "unusedRevokedCount": 14,
+    "activeAfterCleanup": 0,
+    "unusedIdsRevoked": "222-235",
+    "usedRowsRetainedForAuditHistory": 6
+  },
+  "guidanceTelemetry": {
+    "helpEventsWindowCount": 38,
+    "byEvent": {
+      "started": 36,
+      "completed": 1,
+      "dismissed": 1
+    },
+    "guidanceProgressRowsUpdated": 29
+  },
+  "localRawTokenFilesDeleted": [
+    "magic.json",
+    "magic2.json",
+    "magic3.json"
+  ],
+  "scope": "Audit cleanup only; no application source/config change"
+}

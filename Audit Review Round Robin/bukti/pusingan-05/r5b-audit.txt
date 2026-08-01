@@ -1,0 +1,29 @@
+===== WIZARD KLASIFIKASI — klik JS =====
+  --- Langkah 1 ---
+      medan : (tiada label)
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      tekan "Seterus" → OK
+  --- Langkah 2 ---
+      medan : Jenis Rekod* | Tajuk | Arah* | Ruj. Kami | Ruj. Tuan | Tarikh Rekod* | Tarikh Terima | Nama Pengirim | Organisasi Pengirim | Nama Penerima | Jumlah Lampiran | Untuk Perhatian (u.p.)
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      tekan "Seterus" → OK
+  --- Langkah 3 ---
+      medan : Failkan Ke* | Tahap Akses Rekod*
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      tekan "Seterus" → OK
+  --- Langkah 4 ---
+      medan : Failkan Ke* | Tahap Akses Rekod*
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      RALAT : The failkan Ke field is required.
+      tekan "Seterus" → OK
+  --- Langkah 5 ---
+      medan : Failkan Ke* | Tahap Akses Rekod*
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      RALAT : The failkan Ke field is required.
+      tekan "Seterus" → OK
+  --- Langkah 6 ---
+      medan : Failkan Ke* | Tahap Akses Rekod*
+      butang: Pilih satu pilihan, Sebelum, Batal, Seterus, Klasifikasikan
+      RALAT : The failkan Ke field is required.
+      tekan "Seterus" → OK
+  Modal masih terbuka selepas selesai: true

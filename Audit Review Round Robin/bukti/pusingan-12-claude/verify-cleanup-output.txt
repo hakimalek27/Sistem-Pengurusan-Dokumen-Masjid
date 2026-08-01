@@ -1,0 +1,11 @@
+tokens_222_241_total=20
+tokens_222_241_used=6
+tokens_222_241_active=14
+tokens_222_235_expired_unused=0
+tokens_all_active_now=66
+tokens_created_20260801=34
+help_events_20260801=53
+help_events_started=39
+help_events_completed=2
+help_events_dismissed=2
+guidance_progress_updated_20260801=32

@@ -1,0 +1,31 @@
+===== A. Perangkap fokus — tekanan Tab SEBENAR =====
+  Tab  0: DALAM  popover — BUTTON "×"
+  Tab  1: DALAM  popover — A "Buka panduan penuh"
+  Tab  2: DALAM  popover — BUTTON "Buat pada skrin"
+  Tab  3: LUAR   popover — A "Mula Persediaan Berpandu"
+  Tab  4: LUAR   popover — A "Dokumen sedang diproses
+An"
+  Tab  5: LUAR   popover — A "Lengkapkan persediaan masj"
+  Tab  6: LUAR   popover — A "Peti Masuk
+1
+Belum diklasi"
+  Tab  7: LUAR   popover — A "Rekod Boleh Dilihat
+3
+Meng"
+  Tab  8: LUAR   popover — A "Minit Lewat Saya
+0
+Tiada m"
+  Tab  9: LUAR   popover — A "Akan Luput ≤90 Hari
+0
+Tiad"
+  → 7/10 pemberhentian di LUAR popover : ⚠️ fokus TIDAK diperangkap
+  Elemen berfokus di luar popover: {"elemenBerfokus":"A \"Penggunaan Storan\n0.0%\n0 GB di\"","bolehDiklikTetikus":false,"notaCatatan":"jika bolehDiklikTetikus=false tetapi elemen berfokus, ia boleh diaktifkan dgn Enter walaupun overlay menutupnya"}
+
+===== B. Kebocoran khusus Pembantu Diwan selepas 20 navigasi =====
+  nav  0: runtime=1 booted=1 launcher=1 popover=0 overlay=0 banner=0 heap=14MB
+  nav  5: runtime=1 booted=1 launcher=1 popover=0 overlay=0 banner=0 heap=12MB
+  nav 10: runtime=1 booted=1 launcher=1 popover=0 overlay=0 banner=0 heap=15MB
+  nav 15: runtime=1 booted=1 launcher=1 popover=0 overlay=0 banner=0 heap=17MB
+  nav 20: runtime=1 booted=1 launcher=1 popover=0 overlay=0 banner=0 heap=19MB
+  → nod DOM Pembantu Diwan ✅ stabil (tiada nod tertinggal)
+  → heap 14MB → 19MB (delta 5MB selepas 20 navigasi)

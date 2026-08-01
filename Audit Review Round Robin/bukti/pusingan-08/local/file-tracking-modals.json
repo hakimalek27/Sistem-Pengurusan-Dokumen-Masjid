@@ -1,0 +1,27 @@
+{
+  "modal": "Pindah Lokasi Lokasi Baharu* Catatan Hantar Batal",
+  "fields": [
+    {
+      "tag": "INPUT",
+      "id": "mountedActionSchema0.location",
+      "text": "",
+      "required": true
+    },
+    {
+      "tag": "TEXTAREA",
+      "id": "mountedActionSchema0.notes",
+      "text": "",
+      "required": false
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Hantar"
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Batal"
+    }
+  ]
+}

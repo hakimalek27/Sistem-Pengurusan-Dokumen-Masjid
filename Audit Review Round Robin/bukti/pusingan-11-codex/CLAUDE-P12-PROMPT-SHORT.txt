@@ -1,0 +1,65 @@
+# Claude Pusingan 12 - semakan silang P11 tanpa mutasi
+
+Anda ialah Claude dalam round-robin audit Diwan/SPDM. Ini audit sahaja, bukan pembangunan.
+
+Had mutasi:
+- Jangan guna Bash/SSH/Chrome/Web.
+- Jangan jana magic link/token.
+- Jangan login production.
+- Jangan cipta ticket, upload, submit form, migration, seeder, queue, git commit/push/deploy.
+- Jangan ubah fail. Output laporan markdown sahaja ke stdout.
+
+Baca hanya fail berikut:
+- Audit Review Round Robin/STATUS.md
+- Audit Review Round Robin/PUSINGAN-11-CODEX.md
+- Audit Review Round Robin/PUSINGAN-10-CLAUDE-PRODUKSI.md
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-audit-cleanup.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-desktop-all-tour-steps.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-admin-authorization.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-id-tampering.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/production-page-matrix-summary.json
+- Audit Review Round Robin/bukti/pusingan-11-codex/context-loss-runtime.json
+- app/Livewire/HelpLauncher.php
+- resources/js/help.js
+- app/Services/Guidance/GuidanceService.php
+
+Tugas:
+1. Sahkan atau tolak RR-11-01 hingga RR-11-06.
+2. Bezakan bukti Codex, bukti Claude P10, dan semakan anda.
+3. Nyatakan sama ada cleanup token aktif 0 terbukti oleh evidence.
+4. Nyatakan batasan: tiada ujian Chrome baharu dan tiada query production baharu dalam P12.
+5. Jangan tuntut round-robin selesai jika masih ada finding terbuka.
+
+Format output wajib:
+# Pusingan 12 - Claude: Semakan Silang P11
+
+Tarikh: 2026-08-01
+Skop:
+
+## Kesimpulan
+
+## Semakan RR-11
+
+### RR-11-01 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+### RR-11-02 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+### RR-11-03 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+### RR-11-04 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+### RR-11-05 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+### RR-11-06 - [SAH/SEBAHAGIAN/TIDAK SAH]
+...
+
+## Batasan
+
+## Tindakan seterusnya
+

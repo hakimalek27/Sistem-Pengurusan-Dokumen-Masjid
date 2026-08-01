@@ -1,0 +1,16 @@
+# Claude Pusingan 12 - semakan silang P11
+
+Baca dahulu:
+- Audit Review Round Robin/STATUS.md
+- Audit Review Round Robin/PUSINGAN-11-CODEX.md
+- Audit Review Round Robin/PUSINGAN-10-CLAUDE-PRODUKSI.md
+- semua JSON/text evidence di Audit Review Round Robin/bukti/pusingan-11-codex dan pusingan-09-produksi
+- source HelpLauncher, help.js, GuidanceService dan test berkaitan.
+
+Tugas anda ialah semakan silang round-robin, bukan pembangunan. Sahkan atau tolak setiap RR-11-01 hingga RR-11-06 dengan bukti yang boleh diulang. Anda boleh membaca source dan evidence, dan jika perlu gunakan Chrome/local runtime secara read-only. Jangan login ke production menggunakan magic link. Jangan jana, minta, atau simpan token baru. Jangan cipta ticket/support request, jangan upload, jangan submit form, jangan ubah progress atau event production, jangan jalankan migration/seeder/queue mutation, jangan git commit/push/deploy dan jangan ubah source aplikasi. Jika perlu SSH production, gunakan SELECT/read-only sahaja dan jangan dedahkan token atau PII dalam laporan.
+
+Sangat penting: laporan Pusingan 10 mendakwa tiada mutation production, tetapi P11 melaporkan 20 token audit, 38 help_events dan 29 progress rows. Sahkan isu integriti ini menggunakan evidence P11 dan hanya query read-only yang tidak mengeluarkan secret. Sahkan cleanup: token audit aktif 0 jika boleh; jangan cuba mencipta token untuk menguji.
+
+Gunakan Chrome hanya untuk pemeriksaan visual/local read-only jika boleh tanpa menulis telemetry. Jangan dakwa role production selain yang benar-benar anda uji. Bezakan bukti Claude lama, bukti Codex, dan pengesahan bebas anda. Jika isu sama masih terbuka, jangan baiki kod kerana round-robin ini audit sahaja.
+
+Tulis satu laporan baharu sahaja: Audit Review Round Robin/PUSINGAN-12-CLAUDE.md. Laporan mesti menyatakan: tarikh, skop, setiap RR-11 finding status (SAH/SEBAHAGIAN/TIDAK SAH), bukti dan batasan, hasil cleanup verification, perkara yang masih belum terbukti, dan cadangan. Kemas kini STATUS.md hanya untuk menyerahkan giliran kembali kepada CODEX Pusingan 13; jangan tuntut round-robin complete jika ada evidence atau coverage yang belum bebas. Simpan semua raw evidence baharu di bukti/pusingan-12-claude dan sanitise token/PII.

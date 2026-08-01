@@ -1,0 +1,104 @@
+{
+  "body": "ﺍﻟﺪﻳﻮﺍﻥ · Diwan\n\nSistem Pengurusan Dokumen Masjid\n\nUtama\nLog Masuk\nDaftar\nCari panduan\n\nTaip perkara yang hendak dibuat atau masalah yang sedang berlaku.\n\nSkop panduan: Orang Awam\nVersi 2026.07.22.2\nPanduan dalaman dipaparkan selepas log masuk.\nApa yang anda mahu lakukan?\nCari\nDaftar masjid\nLog masuk\nLapor masalah\n3 panduan disyorkan untuk Orang Awam.\nPANDUAN\nDaftar Masjid\n\nDaftar organisasi melalui tiga langkah: maklumat masjid, pentadbir dan persetujuan.\n\nBaca langkah\nMulakan panduan\nPANDUAN\nLog Masuk\n\nMinta pautan log masuk selamat menggunakan e-mel atau nombor telefon berdaftar.\n\nBaca langkah\nMulakan panduan\nPANDUAN\nPusat Bantuan Awam\n\nCari panduan pendaftaran dan log masuk atau laporkan masalah.\n\nBaca langkah\nMulakan panduan\nDiagnosis masalah\n\nPemeriksaan baca sahaja mengikut akses semasa.\n\nJenis masalah\nLog masuk\nMuat naik dokumen\nAntivirus\nOCR\nKuota storan\nE-mel / WhatsApp intake\nButang atau menu hilang\nKlasifikasi\nMinit\nKelulusan\nNotifikasi\nPeriksa\nLapor masalah\n\nID Permintaan: 5c5f1d49-301a-4543-bd58-2e1b8d68bf56\n\nKategori\nLog masuk\nMuat naik dokumen\nAntivirus\nOCR\nKuota storan\nE-mel / WhatsApp intake\nButang atau menu hilang\nKlasifikasi\nMinit\nKelulusan\nNotifikasi\nLain-lain\nRingkasan masalah\nHasil yang dijangka\nKejadian sebenar\nLampiran pilihan, maksimum 5 MB\nHantar laporan\n×\nBuka fungsi\n\nCari panduan pendaftaran dan log masuk atau laporkan masalah.\n\nTindakan anda: tekan Buat pada skrin untuk mengecilkan arahan, kemudian gunakan kawalan halaman yang disorot. Panduan akan muncul semula apabila langkah seterusnya terbuka.\n\nBuka panduan penuh\n1 daripada 2\nKembali\nBuat pada skrin",
+  "forms": [
+    {
+      "tag": "INPUT",
+      "type": "hidden",
+      "name": null,
+      "wire": "browserContextJson",
+      "text": "",
+      "accept": null,
+      "maxlength": null
+    },
+    {
+      "tag": "INPUT",
+      "type": "search",
+      "name": null,
+      "wire": "query",
+      "text": "",
+      "accept": null,
+      "maxlength": "200"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": null,
+      "wire": null,
+      "text": "Cari",
+      "accept": null,
+      "maxlength": null
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": null,
+      "wire": null,
+      "text": "Lapor masalah",
+      "accept": null,
+      "maxlength": null
+    },
+    {
+      "tag": "SELECT",
+      "type": null,
+      "name": null,
+      "wire": "diagnosisCategory",
+      "text": "Log masuk Muat naik dokumen Antivirus OCR Kuota storan E-mel / WhatsApp intake Butang atau menu hilang Klasifikasi Minit Kelulusan Notifikasi",
+      "accept": null,
+      "maxlength": null
+    },
+    {
+      "tag": "SELECT",
+      "type": null,
+      "name": null,
+      "wire": "supportCategory",
+      "text": "Log masuk Muat naik dokumen Antivirus OCR Kuota storan E-mel / WhatsApp intake Butang atau menu hilang Klasifikasi Minit Kelulusan Notifikasi Lain-lain",
+      "accept": null,
+      "maxlength": null
+    },
+    {
+      "tag": "INPUT",
+      "type": "text",
+      "name": null,
+      "wire": "supportSubject",
+      "text": "",
+      "accept": null,
+      "maxlength": "180"
+    },
+    {
+      "tag": "TEXTAREA",
+      "type": null,
+      "name": null,
+      "wire": "supportExpected",
+      "text": "",
+      "accept": null,
+      "maxlength": "5000"
+    },
+    {
+      "tag": "TEXTAREA",
+      "type": null,
+      "name": null,
+      "wire": "supportActual",
+      "text": "",
+      "accept": null,
+      "maxlength": "5000"
+    },
+    {
+      "tag": "INPUT",
+      "type": "file",
+      "name": null,
+      "wire": "supportAttachment",
+      "text": "",
+      "accept": ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png",
+      "maxlength": null
+    },
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": null,
+      "wire": null,
+      "text": "Hantar laporan",
+      "accept": null,
+      "maxlength": null
+    }
+  ]
+}

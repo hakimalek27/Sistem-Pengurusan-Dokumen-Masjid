@@ -1,0 +1,9 @@
+===== TOUR MOBILE PRODUKSI (dipaksa via ?panduan=) =====
+  tenant.dashboard                 [1 daripada 4] btn="Buat pada skrin" sorot=page-content(390x2781) pop=366x306/vp=390x664 GENERIK TAJUK=HURAIAN
+  tenant.peti-masuk                [1 daripada 6] btn="Seterusnya" sorot=page-content(390x454) pop=366x307/vp=390x664 GENERIK
+  screen.klasifikasi-peti-masuk    [1 daripada 11] btn="Buat pada skrin" sorot=inbox-classify(105x20) pop=366x284/vp=390x664 POPOVER-TUTUP-TENGAH-SKRIN
+  tenant.records                   [1 daripada 5] btn="Buat pada skrin" sorot=page-content(390x1399) pop=366x306/vp=390x664 GENERIK TAJUK=HURAIAN
+  tenant.minit-saya                [1 daripada 6] btn="Buat pada skrin" sorot=page-content(390x386) pop=366x306/vp=390x664 GENERIK TAJUK=HURAIAN
+  tenant.carian                    [1 daripada 7] btn="Buat pada skrin" sorot=page-content(390x1256) pop=366x306/vp=390x664 GENERIK TAJUK=HURAIAN
+  tenant.pelupusan                 [1 daripada 5] btn="Buat pada skrin" sorot=page-content(390x1087) pop=366x327/vp=390x664 GENERIK POPOVER-TUTUP-TENGAH-SKRIN
+  tenant.ahli-peranan              [1 daripada 6] btn="Buat pada skrin" sorot=page-content(390x637) pop=366x306/vp=390x664 GENERIK TAJUK=HURAIAN

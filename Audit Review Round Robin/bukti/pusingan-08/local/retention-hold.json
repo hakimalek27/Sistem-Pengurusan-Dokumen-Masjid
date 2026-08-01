@@ -1,0 +1,11 @@
+{
+  "url": "http://127.0.0.1:8080/app/mam/retensi",
+  "body": "Retensi & Pegangan\nEksport ZIP (Akan Luput ≤90 hari)\nStatus Pelupusan Automatik\n\nPelupusan automatik AKTIF — rekod cukup tempoh akan dipadam selepas notis 90/30/7 hari (jenis kekal & rekod berpegangan dikecualikan).\n\nJadual Retensi Efektif\n\nKeputusan sebenar selepas resolusi override masjid, jenis rekod dan prefix klasifikasi.\n\nTiada rekod dalam skop 12 bulan.\n\nAkan Cukup Tempoh (≤ 12 bulan)\n\nTiada rekod menghampiri tempoh retensi.\n\nEksport Sedia Dimuat Turun\n\nBelum ada eksport aktif.",
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "text": "Eksport ZIP (Akan Luput ≤90 hari)",
+      "href": null
+    }
+  ]
+}

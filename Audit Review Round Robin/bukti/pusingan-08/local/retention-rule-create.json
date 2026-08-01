@@ -1,0 +1,66 @@
+{
+  "body": "Peraturan Retensi\nCipta\nCipta Peraturan Retensi (Override)\nJenis Rekod (kosong = ikut prefix)\nPilih satu pilihan\nSurat Menyurat\nMemo\nE-mel\nE-mel Muat Naik\nMinit Mesyuarat\nLaporan\nKertas Kerja / Konsep\nBorang\nDokumen Tender / Sebut Harga\nPerjanjian / Kontrak / MoU\nPekeliling\nGaris Panduan\nJadual\nPoster / Hebahan\nFoto / Dokumentasi\nSijil\nRekod Kewangan (Resit/Baucar)\nAgenda Mesyuarat\nKeputusan Mesyuarat\nSurat Keputusan / Kelulusan\nPolisi\nProsedur / SOP\nPelan / Lukisan\nBajet / Anggaran\nPesanan Tempatan\nPenyata Bank\nRekod Aset / Inventori\nRekod Perolehan\nPermit / Lesen\nAduan / Maklum Balas\nPermohonan\nAudio / Video\nRekod Kehadiran\nPrefix Klasifikasi (cth 200)\nTahun Simpanan (kosong = kekal)\nTindakan*\nPilih satu pilihan\nKekal\nSemak\nAuto Padam\nAMARAN: menukar jenis kekal kepada auto_padam membenarkan pemadaman automatik.\nCatatan\nCipta\nCipta & cipta yang lain\nBatal",
+  "fields": [
+    {
+      "tag": "SELECT",
+      "id": "form.record_type",
+      "type": null,
+      "text": "Pilih satu pilihan Surat Menyurat Memo E-mel E-mel Muat Naik Minit Mesyuarat Laporan Kertas Kerja / Konsep Borang Dokumen Tender / Sebut Harga Perjanjian / Kontrak / MoU Pekeliling Garis Panduan Jadual Poster / Hebahan Foto / Dokumentasi Sijil Rekod Kewangan (Resit/Baucar) Agenda Mesyuarat Keputusan Mesyuarat Surat Keputusan / Kelulusan Polisi Prosedur / SOP Pelan / Lukisan Bajet / Anggaran Pesanan Tempatan Penyata Bank Rekod Aset / Inventori Rekod Perolehan Permit / Lesen Aduan / Maklum Balas Permohonan Audio / Video Rekod Kehadiran",
+      "value": "",
+      "required": false
+    },
+    {
+      "tag": "INPUT",
+      "id": "form.classification_prefix",
+      "type": "text",
+      "text": "",
+      "value": "",
+      "required": false
+    },
+    {
+      "tag": "INPUT",
+      "id": "form.retain_years",
+      "type": "number",
+      "text": "",
+      "value": "",
+      "required": false
+    },
+    {
+      "tag": "SELECT",
+      "id": "form.action",
+      "type": null,
+      "text": "Pilih satu pilihan Kekal Semak Auto Padam",
+      "value": "auto_padam",
+      "required": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "form.note",
+      "type": "text",
+      "text": "",
+      "value": "",
+      "required": false
+    },
+    {
+      "tag": "BUTTON",
+      "id": "key-bindings-1",
+      "type": "submit",
+      "text": "Cipta",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "key-bindings-2",
+      "type": "button",
+      "text": "Cipta & cipta yang lain",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Batal",
+      "value": ""
+    }
+  ]
+}

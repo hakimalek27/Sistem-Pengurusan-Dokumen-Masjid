@@ -1,0 +1,72 @@
+[
+  {
+    "kind": "login",
+    "role": "superadmin",
+    "viewport": "desktop",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/admin/login"
+  },
+  {
+    "kind": "login",
+    "role": "superadmin",
+    "viewport": "mobile",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/admin/login"
+  },
+  {
+    "kind": "login",
+    "role": "admin_masjid",
+    "viewport": "desktop",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "admin_masjid",
+    "viewport": "mobile",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "pengerusi",
+    "viewport": "desktop",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "pengerusi",
+    "viewport": "mobile",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "setiausaha",
+    "viewport": "desktop",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "setiausaha",
+    "viewport": "mobile",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "bendahari",
+    "viewport": "desktop",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  },
+  {
+    "kind": "login",
+    "role": "bendahari",
+    "viewport": "mobile",
+    "loginOk": false,
+    "loginUrl": "http://127.0.0.1:8080/app/login"
+  }
+]

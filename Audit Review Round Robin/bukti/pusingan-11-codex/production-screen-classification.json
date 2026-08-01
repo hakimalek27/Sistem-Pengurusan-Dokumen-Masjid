@@ -1,0 +1,44 @@
+[
+  {
+    "vp": "desktop",
+    "status": 200,
+    "target": "inbox-classify",
+    "targetText": "Klasifikasikan",
+    "targetRect": {
+      "x": 1156,
+      "y": 343,
+      "w": 105,
+      "h": 20
+    },
+    "popRect": {
+      "x": 1062,
+      "y": 378,
+      "w": 368,
+      "h": 284
+    },
+    "targetCenterCovered": false,
+    "button": "Buat pada skrin",
+    "step": "1 daripada 11"
+  },
+  {
+    "vp": "mobile",
+    "status": 200,
+    "target": "inbox-classify",
+    "targetText": "Klasifikasikan",
+    "targetRect": {
+      "x": 143,
+      "y": 363,
+      "w": 105,
+      "h": 20
+    },
+    "popRect": {
+      "x": 14,
+      "y": 59,
+      "w": 366,
+      "h": 284
+    },
+    "targetCenterCovered": false,
+    "button": "Buat pada skrin",
+    "step": "1 daripada 11"
+  }
+]

@@ -1,0 +1,87 @@
+[
+  {
+    "n": 0,
+    "url": "http://127.0.0.1:8080/app/mam?panduan=workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit&langkah=0",
+    "text": "×\nMulakan dari Papan pemuka\n\nSahkan tenant MAM/data masjid sendiri.\n\nBaca penerangan ini, kemudian tekan Seterusnya.\n\nBuka panduan penuh\n1 daripada 20\nKembali\nSeterusnya",
+    "buttons": [
+      "×",
+      "Kembali",
+      "Seterusnya"
+    ],
+    "active": [
+      {
+        "tag": "MAIN",
+        "target": "page-content",
+        "text": "Siapkan persediaan masjid anda\n\nTetapkan jawatan, nombor WhatsApp masjid, dan daftar ahli AJK dalam satu langkah berpandu.\n\nMula Persediaan "
+      }
+    ]
+  },
+  {
+    "n": 1,
+    "url": "http://127.0.0.1:8080/app/mam?panduan=workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit&langkah=0",
+    "text": "×\nMulakan dari Papan pemuka\n\nPada menu kiri, tekan Peti Masuk.\n\nBaca penerangan ini, kemudian tekan Seterusnya.\n\nBuka panduan penuh\n2 daripada 20\nKembali\nSeterusnya",
+    "buttons": [
+      "×",
+      "Kembali",
+      "Seterusnya"
+    ],
+    "active": [
+      {
+        "tag": "MAIN",
+        "target": "page-content",
+        "text": "Siapkan persediaan masjid anda\n\nTetapkan jawatan, nombor WhatsApp masjid, dan daftar ahli AJK dalam satu langkah berpandu.\n\nMula Persediaan "
+      }
+    ]
+  },
+  {
+    "n": 2,
+    "url": "http://127.0.0.1:8080/app/mam/peti-masuk?panduan=workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit&langkah=2",
+    "text": "×\nSenarai Peti Masuk\n\nSemak sumber, pengirim, tarikh dan masa diterima.\n\nBaca penerangan ini, kemudian tekan Seterusnya.\n\nBuka panduan penuh\n3 daripada 20\nKembali\nSeterusnya",
+    "buttons": [
+      "×",
+      "Kembali",
+      "Seterusnya"
+    ],
+    "active": [
+      {
+        "tag": "MAIN",
+        "target": "page-content",
+        "text": "Peti Masuk\nSenarai\nPeti Masuk\n+ Muat Naik Dokumen\nCari\nSumber\tTajuk / Fail\tTarikh Terima\tPenghantar / Sumber\t\nDiterima\n\tAntivirus\tOCR\tDuplik"
+      }
+    ]
+  },
+  {
+    "n": 3,
+    "url": "http://127.0.0.1:8080/app/mam/peti-masuk?panduan=workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit&langkah=2",
+    "text": "×\nSenarai Peti Masuk\n\nSemak Antivirus, OCR dan amaran Duplikat.\n\nBaca penerangan ini, kemudian tekan Seterusnya.\n\nBuka panduan penuh\n4 daripada 20\nKembali\nSeterusnya",
+    "buttons": [
+      "×",
+      "Kembali",
+      "Seterusnya"
+    ],
+    "active": [
+      {
+        "tag": "MAIN",
+        "target": "page-content",
+        "text": "Peti Masuk\nSenarai\nPeti Masuk\n+ Muat Naik Dokumen\nCari\nSumber\tTajuk / Fail\tTarikh Terima\tPenghantar / Sumber\t\nDiterima\n\tAntivirus\tOCR\tDuplik"
+      }
+    ]
+  },
+  {
+    "n": 4,
+    "url": "http://127.0.0.1:8080/app/mam/peti-masuk?panduan=workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit&langkah=2",
+    "text": "×\nSenarai Peti Masuk\n\nUntuk upload baharu tekan + Muat Naik Dokumen; untuk dokumen sedia ada pilih baris yang hendak diproses.\n\nTindakan anda: tekan Buat pada skrin untuk mengecilkan arahan, kemudian gunakan kawalan halaman yang disorot. Panduan akan muncul semula apabila langkah seterusnya terbuka.\n\nBuka panduan penuh\n5 daripada 20\nKembali\nBuat pada skrin",
+    "buttons": [
+      "×",
+      "Kembali",
+      "Buat pada skrin"
+    ],
+    "active": [
+      {
+        "tag": "BUTTON",
+        "target": "inbox-upload",
+        "text": "+ Muat Naik Dokumen"
+      }
+    ]
+  }
+]

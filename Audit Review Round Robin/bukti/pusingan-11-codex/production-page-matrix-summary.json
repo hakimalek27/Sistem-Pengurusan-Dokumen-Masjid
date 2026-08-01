@@ -1,0 +1,14 @@
+{
+  "desktop": {
+    "count": 25,
+    "status200": 25,
+    "overflow": 0,
+    "errors": 0
+  },
+  "mobile": {
+    "count": 25,
+    "status200": 25,
+    "overflow": 0,
+    "errors": 0
+  }
+}

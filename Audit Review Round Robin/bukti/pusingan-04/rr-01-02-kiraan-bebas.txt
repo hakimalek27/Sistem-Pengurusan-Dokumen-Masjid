@@ -1,0 +1,39 @@
+KIRAAN BEBAS CODEX RR-01-02
+Masa: 2026-08-01T09:26:37.0872998+08:00
+Baris halaman HTTP 200: 274
+GuideId hilang: 124
+GuideId hadir: 150
+Kadar hilang: 45.26%
+
+Mengikut role:
+admin_masjid: 24
+ajk: 11
+audit: 11
+bendahari: 14
+ketua_imam: 11
+nazir: 12
+pengerusi: 16
+setiausaha: 14
+superadmin: 11
+
+Contoh 20 laluan:
+desktop | superadmin | /admin/bantuan | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/analitik-bantuan | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/help-announcements | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/tiket-sokongan | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/mosques | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/users | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/storage-orders | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/tetapan-platform | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/whatsapp-platform | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/status-sambungan | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | superadmin | /admin/profil-saya | /admin/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/bantuan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/sensitive-access-logs | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/analitik-bantuan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/tiket-sokongan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/persediaan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/ahli-peranan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/classification-nodes | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/pelupusan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate
+desktop | admin_masjid | /app/mam/retensi-peraturan | /app/mam/bantuan?asal=%2Flivewire%2Fupdate

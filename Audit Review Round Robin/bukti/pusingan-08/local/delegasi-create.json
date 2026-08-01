@@ -1,0 +1,72 @@
+{
+  "url": "http://127.0.0.1:8080/app/mam/delegasi/create",
+  "body": "Delegasi\nCipta\nCipta Delegasi\nPrincipal*\nPilih satu pilihan\nDelegate*\nPilih satu pilihan\nTugas yang diwakilkan*\nPilih satu pilihan\nMula*\nTamat*\nSebab / catatan\nCipta\nCipta & cipta yang lain\nBatal",
+  "fields": [
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Pilih satu pilihan",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Pilih satu pilihan",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Pilih satu pilihan",
+      "value": ""
+    },
+    {
+      "tag": "INPUT",
+      "id": "form.starts_at",
+      "type": "datetime-local",
+      "text": "",
+      "value": "2026-08-01T11:34",
+      "required": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "form.ends_at",
+      "type": "datetime-local",
+      "text": "",
+      "value": "2026-08-08T11:34",
+      "required": true
+    },
+    {
+      "tag": "TEXTAREA",
+      "id": "form.reason",
+      "type": null,
+      "text": "",
+      "value": "",
+      "required": false
+    },
+    {
+      "tag": "BUTTON",
+      "id": "key-bindings-1",
+      "type": "submit",
+      "text": "Cipta",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "key-bindings-2",
+      "type": "button",
+      "text": "Cipta & cipta yang lain",
+      "value": ""
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Batal",
+      "value": ""
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+===== UJIAN 1: screen.klasifikasi-peti-masuk (tour bersasar khusus) =====
+  A. Keadaan awal: {"step":"1 daripada 11","title":"Buka klasifikasi","nextBtn":"Buat pada skrin","prevBtn":"Kembali","hidden":false,"waiting":null,"hl":"inbox-classify","modalVisible":false}
+  B. Selepas tekan "Buat pada skrin": {"step":"1 daripada 11","title":"Buka klasifikasi","nextBtn":"Buat pada skrin","prevBtn":"Kembali","hidden":true,"waiting":"Panduan menunggu: Buka klasifikasi | Tunjuk arahan","hl":"inbox-classify","modalVisible":false}
+  C. Butang "Klasifikasikan" diklik (klik sebenar Playwright).
+  D. Modal kelihatan pada: 1045ms
+  E. Tour maju pada     : 1045ms
+  F. Keadaan akhir: {"step":"2 daripada 11","title":"Semak dokumen dan sumber","nextBtn":"Buat pada skrin","prevBtn":"Kembali","hidden":false,"waiting":null,"hl":"inbox-classification-modal","modalVisible":true}
+
+===== UJIAN 2: tenant.dashboard (tour sasaran generik) =====
+  Langkah 1: step="1 daripada 4" btn="Buat pada skrin" sorot=page-content kawasan=320,0 1120x1566
+      tajuk: Semak nama masjid pada panel untuk memastikan tenant yang betul
+  Langkah 2: step="2 daripada 4" btn="Seterusnya" sorot=page-content kawasan=320,0 1120x1566
+      tajuk: Baca kad statistik
+  Langkah 3: step="3 daripada 4" btn="Seterusnya" sorot=page-content kawasan=320,0 1120x1566
+      tajuk: Semak senarai semak persediaan jika masih dipaparkan
+  Langkah 4: step="4 daripada 4" btn="Selesai" sorot=page-content kawasan=320,0 1120x1566
+      tajuk: Gunakan menu kiri untuk membuka tugasan
+
+===== UJIAN 3: screen.muat-naik-dokumen =====
+  Langkah 1: step="1 daripada 5" btn="Saya sudah buat" sorot=page-content tajuk="Pilih atau seret satu/lebih fail yang dibenarkan"
+  Langkah 2: step="2 daripada 5" btn="Saya sudah buat" sorot=page-content tajuk="Pastikan saiz setiap fail dalam had"
+  Langkah 3: step="3 daripada 5" btn="Saya sudah buat" sorot=page-content tajuk="Tunggu upload selesai"
+  Langkah 4: step="4 daripada 5" btn="Saya sudah buat" sorot=page-content tajuk="Sahkan toast bilangan dokumen"
+  Langkah 5: step="5 daripada 5" btn="Buat pada skrin" sorot=null tajuk="Buka Peti Masuk dan semak antivirus, OCR serta sumber UI"
+      -> selepas tekan "Buat pada skrin": {"step":"5 daripada 5","title":"Buka Peti Masuk dan semak antivirus, OCR serta sumber UI","nextBtn":"Buat pada skrin","prevBtn":"Kembali","hidden":true,"waiting":"Panduan menunggu: Buka Peti Masuk dan semak antivirus, OCR serta sumber UI | Tunjuk arahan","hl":null,"modalVisible":false}
+      -> tour kini MENUNGGU tindakan pengguna.
+
+===== UJIAN 4: Tour pada MOBILE (iPhone 13) =====
+  [mobile dashboard] step="1 daripada 4" btn="Buat pada skrin" popover={"x":12,"y":348,"w":366,"h":306,"vw":390,"vh":664,"keluarSkrin":false}
+  [mobile klasifikasi] step="1 daripada 11" btn="Buat pada skrin" popover={"x":14,"y":71,"w":366,"h":284,"vw":390,"vh":664,"keluarSkrin":false}

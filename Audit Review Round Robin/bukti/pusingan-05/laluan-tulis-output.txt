@@ -1,0 +1,23 @@
+SEBELUM: {"difailkan":5,"minit":1,"approval":1,"minit_man":0,"appr_man":0}
+
+=== 1. KLASIFIKASI (happy path) rekod #4 → fail MAM #1 ===
+  ❌ ValidationException: Rekod dan fail mesti dalam tenant sama, item Peti Masuk dan fail masih terbuka.
+  [SILANG-TENANT] failkan rekod MAM ke fail MAN #4:
+     ✅ DITOLAK: ValidationException — Rekod dan fail mesti dalam tenant sama, item Peti Masuk dan fail masih terbuka.
+
+=== 2. MINIT: admin → pengerusi ===
+  ✅ minit #2 keutamaan=segera penerima=1
+  [SILANG-TENANT] minit ke atas rekod MAN #5:
+     ✅ DITOLAK: AuthorizationException — Tiada kebenaran mengedarkan minit bagi rekod ini.
+
+=== 3. KELULUSAN: admin mohon → pengerusi putus ===
+  ✅ mohon approval #2 status=menunggu
+  ✅ putus status=lulus oleh=3
+  [SILANG-TENANT] mohon kelulusan rekod MAN #5:
+     ✅ DITOLAK: AuthorizationException — Tiada kebenaran memohon kelulusan rekod ini.
+
+=== 4. PINDAH FAIL silang-tenant (moveToFile) ===
+     ✅ DITOLAK: ValidationException — Fail sasaran mesti terbuka dalam tenant sama dan sebab wajib diisi.
+
+SELEPAS: {"difailkan":5,"minit":2,"approval":2,"minit_man":0,"appr_man":0}
+DELTA: difailkan +0 | minit +1 | approval +1 | MINIT DALAM MAN +0 | APPROVAL DALAM MAN +0

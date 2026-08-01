@@ -1,0 +1,19 @@
+{
+    "route": {
+        "\/app\/mam\/penggunaan": "expected 200 (slug in PenggunaanStoran.php)",
+        "\/app\/mam\/penggunaan-storan": "expected 404 (not the registered slug)"
+    },
+    "pdf": {
+        "certificate": {
+            "status": "PASS",
+            "text": "SIJIL PELUPUSAN\r\nMasjid: Masjid Al-Muttaqin Wangsa Melawati (MAM)\r\nBatch: #1\r\nTarikh: 01\/08\/2026 09:46\r\nBilangan rekod: 1\r\nRujukan\r\n\r\nTajuk\r\n\r\nTarikh\r\n\r\nMAM.100-4\/1(1)\r\n\r\nAUDIT-RR6 sijil pelupusan\r\n\r\n2026-08-01\r\n\r\nBlob dokumen telah dipadam kekal. Metadata rekod (batu nisan) kekal tersimpan dalam sistem. Dokumen dijana secara automatik oleh Diwan\r\n(SPDM).\r\n\r\n\f",
+            "tenant_leak": false
+        },
+        "invoice": {
+            "status": "PASS",
+            "invoice_no": "INV-2026-0001",
+            "text": "INVOIS — Diwan (Wehdah Solution)\r\nNo. Invois: INV-2026-0001\r\nTarikh: 01\/08\/2026\r\nKepada: Masjid Al-Muttaqin Wangsa Melawati (MAM)\r\nPerkara\r\n\r\nJumlah\r\n\r\nStoran tambahan 10 GB (12 bulan)\r\n\r\nRM 0.00\r\nJumlah\r\n\r\nArahan Bayaran\r\nBank: ? (belum ditetapkan)\r\nNama Akaun: —\r\nNo. Akaun: —\r\nSila nyatakan rujukan INV-2026-0001 semasa pembayaran.\r\n\r\nRM 0.00\r\n\r\n\f",
+            "tenant_leak": false
+        }
+    }
+}
