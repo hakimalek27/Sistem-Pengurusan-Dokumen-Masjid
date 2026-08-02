@@ -1,6 +1,52 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — 🚀 PELAKSANAAN F0 SIAP DIBINA (2 Ogos 2026, petang) ⭐ TERKINI
+## SESI — ✅ FASA 0 SELESAI, CI HIJAU PENUH (3 Ogos 2026) ⭐ TERKINI
+
+**`fb40ff1` · CI run 30770625567 = 7/7 job SUCCESS** (integration · 3 shard `guidance-e2e` ·
+gate agregator · 2 imej Docker). Gate agregator pada CI sebenar: **83 guide · 473 langkah ·
+229 langkah tindakan (perbandingan SET)**. Branch protection ditetapkan **TEPAT 4 check**
+(`PostgreSQL, Redis, Meili, OCR and tests` · `guidance-e2e-gate` · `Docker app image` ·
+`Docker web image`, strict=true).
+
+📄 **Laporan rasmi:** `Audit Review Round Robin/bukti/plan-f0/LAPORAN-FASA-0.md`
+📄 **Bukti penuh (§1–§22, output sebenar):** `…/bukti/plan-f0/VERIFIKASI-F0.md`
+
+### 7 pusingan CI — setiap satu punca BERBEZA, semuanya tulen
+`06277fc` 4 gagal (keadaan perawan) → `31abd74` 2 (`force` melangkau semakan enabled) →
+`8fcab15` 1 (klik koordinat diserap overlay → `dispatchEvent`) → `fd53a81` 3 (**banner tour
+menolak klik tetikus**) → `c90264c` 1 (**nilai medan BERGANDA**: `fill()` vs morph) →
+`a83625e` 1 (upload sebelum FilePond siap: 0 permintaan `/livewire/upload-file`) →
+**`fb40ff1` HIJAU**.
+
+### 🔴 TIGA BUG PRODUK ditemui gate ini → WAJIB dibaiki + ujian regresi pada F2 (§3)
+1. **Auto-advance tour boleh mati** — re-highlight (morph Livewire) memanggil
+   `watchForNextStep` semula → `clearTransitionWatch` bunuh jadual `moveNext` 120ms → guard
+   `help.js:363` halang poller baharu. Pengguna terpaksa tekan butang sendiri.
+2. **Banner "Panduan menunggu" tidak boleh diklik tetikus** — vendor `.driver-active *
+   {pointer-events:none}`; banner anak `<body>` tanpa `pointer-events:auto`. Gabungan dgn (1)
+   = pengguna tetikus **TERKANDAS** (hanya papan kekunci menyelamatkan). **DISAHKAN HIDUP DI
+   PRODUKSI** melalui GET awam sahaja (0 tulisan) — `VERIFIKASI-F0 §20`.
+3. **Nilai medan borang boleh berganda** — morph yang mendarat semasa menaip memulihkan nilai
+   lama lalu input ditambah di hujung (dibuktikan: slug berganda).
+
+### Nota operasi
+- **Server produksi TIDAK di-deploy** dan tidak sepatutnya: F0 tidak mengubah runtime.
+  Deploy pertama = **Deploy 1 (F1+F2)** ikut D7. Server git `3f94a90`, runtime imej `8342d95`.
+- `retries` Playwright kekal **0** (sengaja) — ketiadaan retry mendedahkan ketiga-tiga bug.
+- `scratchpad/f0/run-under-load.sh` (beban CPU buatan) menghasilkan kegagalan jenis-CI secara
+  tempatan — guna semula sebelum push pada fasa seterusnya.
+- Tiket `SUP-260801-HXQ0DIOL` masih menunggu pemilik padam.
+
+### ▶️ SETERUSNYA: F1 — HelpLauncher (§2 pelan)
+Fail tunggal `app/Livewire/HelpLauncher.php`: 4 sifat `#[Locked]` (`originPath`,
+`requestedGuideId`, `requestedStep`, `launchPending` one-shot) ditetapkan dlm `mount()`;
+`render()` guna sifat bukan `request()`; `guidanceProgress()` padam one-shot SEBELUM guard
+`findVisible()` + `skipRender()`. Ujian `HelpLauncherContextTest` 10 + penjaga SPA #11.
+**Baca semula §2 PELAN-PEMBAIKAN.md sebelum membina** (peraturan #1). Kemudian F2 → Deploy 1.
+
+---
+
+## SESI — 🚀 PELAKSANAAN F0 SIAP DIBINA (2 Ogos 2026, petang)
 
 **Arahan mula pemilik diterima** → pelan pelaksanaan diluluskan (plan-mode) → **FASA F0 SIAP
 DIBINA & DIKOMIT**: `7129369` (fix-audit-F0, 32 fail / 21,813 sisipan — 19 fail perkakas D11 +

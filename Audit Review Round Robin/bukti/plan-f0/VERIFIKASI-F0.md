@@ -449,3 +449,47 @@ Verifikasi lokal (DB perawan, tanpa `ocrmypdf` — carian memadan tajuk fail):
 ```
 [ci-ocr] kerani muat naik imej, OCR siap dan teks boleh dicari … 1 passed (22.7s)
 ```
+
+## 22. ✅ CI HIJAU PENUH — run 30770625567 (`fb40ff1`) + branch protection
+
+```
+$ gh run view 30770625567 --json jobs
+success   PostgreSQL, Redis, Meili, OCR and tests
+success   guidance-e2e (screen)
+success   guidance-e2e (workflow)
+success   guidance-e2e (tenant-admin-public)
+success   guidance-e2e-gate
+success   Docker app image
+success   Docker web image
+```
+
+Gate agregator pada CI sebenar (bukan tempatan):
+```
+GATE LULUS: 83 guide · 473 langkah · 229 langkah tindakan — union tiga shard sepadan
+manifest (set, bukan kiraan). Laporan: storage/app/plan-f6/coverage-gate.json
+```
+
+Branch protection ditetapkan **TEPAT 4** (senarai A; shard/step = bukti keluaran B):
+```
+$ gh api …/branches/main/protection --jq '.required_status_checks.contexts[]'
+PostgreSQL, Redis, Meili, OCR and tests
+guidance-e2e-gate
+Docker app image
+Docker web image
+   (strict: true)
+```
+
+### Perjalanan CI F0 — 7 pusingan, setiap satu punca BERBEZA
+| Run | Gagal | Punca sebenar (semua tulen, bukan gate cerewet) |
+|---|---|---|
+| `06277fc` | 4 | keadaan perawan: tour auto-resume, klik diserap overlay, ENOENT log, mail env |
+| `31abd74` | 2 | `force:true` melangkau semakan enabled → klik semasa `wire:loading` hilang |
+| `8fcab15` | 1 | klik koordinat (walau force) diserap overlay SVG → `dispatchEvent` |
+| `fd53a81` | 3 | **banner tour menolak klik tetikus** (`pointer-events:none` vendor) |
+| `c90264c` | 1 | **nilai medan BERGANDA** — `fill()` vs morph Livewire |
+| `a83625e` | 1 | upload sebelum FilePond siap → 0 permintaan `/livewire/upload-file` |
+| `fb40ff1` | **0** | ✅ HIJAU |
+
+Tiga daripadanya ialah **bug produk sebenar** (§16, §17, §18) — bukan masalah ujian — dan
+§17 disahkan hidup di produksi (§20). Retry Playwright sengaja kekal 0: ketiadaan retry
+itulah yang mendedahkannya.
