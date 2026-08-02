@@ -17,6 +17,9 @@ test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) =
 
     await page.goto('/app/mam/peti-masuk');
     await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
+    // Tunggu FilePond siap sebelum memasukkan fail — rujuk e2e/helpers/upload.js
+    // (setInputFiles sebelum JS lazy dimuat = tiada permintaan upload langsung).
+    await expect(page.locator('.filepond--root').first()).toBeVisible({ timeout: 60_000 });
     const fileInput = page.locator('input[type="file"]').last();
     await fileInput.setInputFiles(files);
     await expect(page.getByText('Upload complete')).toHaveCount(2, { timeout: 60_000 });

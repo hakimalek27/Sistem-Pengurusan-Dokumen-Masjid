@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+import { attachFile } from './helpers/upload.js';
 
 const catalog = JSON.parse(readFileSync('resources/help/guides.json', 'utf8'));
 const guideIds = catalog.guides.map((guide) => guide.id);
@@ -173,12 +174,11 @@ async function ensureInboxFixture(page) {
     const marker = Date.now();
     await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
     const dialog = page.getByRole('dialog');
-    await dialog.locator('input[type="file"]').setInputFiles({
+    await attachFile(dialog, {
         name: `Dokumen panduan E2E ${marker}.txt`,
         mimeType: 'text/plain',
         buffer: Buffer.from(`Dokumen ujian panduan ${marker}.`),
     });
-    await expect(dialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
     const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
     await expect(submit).toBeEnabled({ timeout: 60_000 });
     await submit.click();

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+import { attachFile } from './helpers/upload.js';
 
 const guideIds = JSON.parse(readFileSync('resources/help/guides.json', 'utf8')).guides.map((guide) => guide.id);
 
@@ -39,12 +40,11 @@ test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browse
     await kerani.goto('/app/mam/peti-masuk');
     await kerani.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
     const uploadDialog = kerani.getByRole('dialog');
-    await uploadDialog.locator('input[type="file"]').setInputFiles({
+    await attachFile(uploadDialog, {
         name: `${documentTitle}.txt`,
         mimeType: 'text/plain',
         buffer: Buffer.from(`Dokumen ujian aliran pejabat ${marker}.`),
     });
-    await expect(uploadDialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
     const upload = uploadDialog.getByRole('button', { name: 'Hantar', exact: true });
     await expect(upload).toBeEnabled({ timeout: 60_000 });
     await upload.click();

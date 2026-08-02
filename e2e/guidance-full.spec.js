@@ -22,6 +22,7 @@ import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test } from '@playwright/test';
+import { attachFile } from './helpers/upload.js';
 
 const MANIFEST_PATH = 'Audit Review Round Robin/bukti/plan-baseline/manifest.json';
 const manifestRaw = readFileSync(MANIFEST_PATH, 'utf8');
@@ -293,12 +294,11 @@ async function ensureInboxFixture(page) {
     const marker = Date.now();
     await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
     const dialog = page.getByRole('dialog');
-    await dialog.locator('input[type="file"]').setInputFiles({
+    await attachFile(dialog, {
         name: `Dokumen gate G3 ${marker}.txt`,
         mimeType: 'text/plain',
         buffer: Buffer.from(`Dokumen ujian gate penuh ${marker}.`),
     });
-    await expect(dialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
     const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
     await expect(submit).toBeEnabled({ timeout: 60_000 });
     await submit.click();
@@ -422,12 +422,11 @@ for (const guide of guides) {
                     await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
                     const dialog = page.getByRole('dialog');
                     await cta();
-                    await dialog.locator('input[type="file"]').setInputFiles({
+                    await attachFile(dialog, {
                         name: `Dokumen workflow ${Date.now()}.txt`,
                         mimeType: 'text/plain',
                         buffer: Buffer.from(`Dokumen workflow gate ${Date.now()}.`),
                     });
-                    await expect(dialog.getByText('Upload complete', { exact: true })).toBeVisible({ timeout: 60_000 });
                     await cta();
                     const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
                     await expect(submit).toBeEnabled({ timeout: 60_000 });

@@ -376,3 +376,29 @@ Verifikasi pantas selepas pembetulan blur (DB perawan):
 tour pendaftaran … 1 passed (5.4s)
 tour klasifikasi + registration magic link … 2 passed (1.4m)
 ```
+
+## 19. F0j — upload sebelum FilePond siap (run 30769364093)
+
+**Guidance smoke akhirnya LULUS 12/12 di CI** (§18 berkesan). Kegagalan berpindah ke
+`Domain flows` — `office-workflow` gagal pada "Upload complete" (60s). Bukti muktamad dari
+`serve-ci.log`: **0 permintaan `/livewire/upload-file` dalam SELURUH larian**. Permintaan
+tidak pernah dihantar, jadi puncanya di klien, bukan server.
+
+Punca: Filament memuat JS komponen secara LAZY (`x-load`). `setInputFiles` pada input yang
+belum dipasang FilePond hanya menetapkan fail pada DOM — tiada handler, tiada upload.
+Runner CI lebih perlahan daripada mesin dev, jadi tetingkap race itu jauh lebih lebar.
+(Nota: log CI run terdahulu TIDAK boleh dibandingkan — artifak hanya dimuat naik pada
+`failure()`, dan run sebelum ini gagal SEBELUM `ci-domain` sempat berjalan.)
+
+Fix: helper berpusat `e2e/helpers/upload.js` → `attachFile(scope, file)` yang menunggu
+`.filepond--root` (bukti skrip dimuat DAN diinisialisasi) sebelum `setInputFiles`.
+Digunakan di SEMUA laluan upload: `office-workflow`, `guidance` (ensureInboxFixture),
+`guidance-full` (ensureInboxFixture + makro upload workflow); `ocr-upload` menerima
+penantian yang sama sebaris (ia memuat 2 fail serentak).
+
+Verifikasi lokal (DB perawan):
+```
+=== ci-domain PENUH (attachFile) ===  4 passed (1.4m)
+OK [storage/app/plan-ci/ci-domain.json]: 4 ujian, 0 skipped/timedOut/interrupted/unexpected/flaky.
+PlanManifestTest: 14 passed (2866 assertions)  ← helper baharu tidak melanggar invarian
+```
