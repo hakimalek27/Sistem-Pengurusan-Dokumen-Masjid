@@ -1,5 +1,6 @@
 import { parse } from 'node:path';
 import { expect, test } from '@playwright/test';
+import { uploadComplete } from './helpers/upload.js';
 
 test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) => {
     const files = [process.env.SPDM_OCR_FIXTURE_1, process.env.SPDM_OCR_FIXTURE_2].filter(Boolean);
@@ -22,7 +23,7 @@ test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) =
     await expect(page.locator('.filepond--root').first()).toBeVisible({ timeout: 60_000 });
     const fileInput = page.locator('input[type="file"]').last();
     await fileInput.setInputFiles(files);
-    await expect(page.getByText('Upload complete')).toHaveCount(2, { timeout: 60_000 });
+    await expect(uploadComplete(page)).toHaveCount(2, { timeout: 60_000 });
     await page.waitForTimeout(3_000);
 
     const submit = page.getByRole('button', { name: 'Hantar' }).last();
@@ -32,7 +33,11 @@ test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) =
 
     for (const term of terms) {
         await page.goto('/app/mam/carian');
-        await page.locator('input[placeholder*="Cari tajuk"]').fill(term);
+        // `wire:model="query"` — BUKAN placeholder: teks sebenar ialah "Tajuk, rujukan atau
+        // kandungan OCR". Selector lama (`placeholder*="Cari tajuk"`) tidak pernah wujud;
+        // ia tidak tertangkap kerana ujian ini SENTIASA di-skip sebelum fixture OCR dikomit
+        // pada F0, jadi gate ini baru berjalan buat kali pertama (CI run 30770018483).
+        await page.locator('input[wire\\:model="query"]').fill(term);
         await page.getByRole('button', { name: /^Cari$/ }).click();
         await expect(page.getByText(/Tiada hasil ditemui/i)).not.toBeVisible({ timeout: 60_000 });
         await expect(page.locator('main a[href*="/r/"]').filter({ hasText: titlePattern }).first()).toBeVisible();

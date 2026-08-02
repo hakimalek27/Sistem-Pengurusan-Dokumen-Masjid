@@ -427,3 +427,25 @@ kemudian auto-advance gagal akan **terkandas** — popover tersembunyi dan butan
 bukan artifak ujian. Pembaikan = F2 §3 (satu baris CSS `pointer-events: auto` + ujian
 regresi klik tetikus). Aset produksi kekal `help-PP-ALO9e.css` / `help-pJkQNpPs.js` —
 sepadan baseline runtime 5A (§7), jadi tiada drift.
+
+## 21. F0k — gate OCR: kiraan aria-live + selector carian LAPUK (run 30770018483)
+
+Run `a83625e`: **Guidance smoke ✅ (2 kali berturut-turut) DAN Domain flows ✅** (fix §19
+berkesan). Kegagalan berpindah ke `OCR upload gate` — kali PERTAMA ia berjalan di CI
+(sebelum ini sentiasa gagal lebih awal; sebelum F0 pula ujian ini di-skip kerana fixture
+tiada). Dua pepijat ditemui dalam ujian yang tidak pernah dilaksanakan sepenuhnya:
+
+**(a) Kiraan status upload.** `getByText('Upload complete')` memberi **3** padanan untuk 2
+fail di CI, tetapi **2** pada mesin dev (diagnosis DOM: 2 × `span.filepond--file-status-main`).
+Elemen ketiga = region `aria-live` FilePond yang menyiarkan mesej — kemunculannya bergantung
+masa. Fix: `uploadComplete(scope)` dalam helper menyasarkan `.filepond--file-status-main`
+dengan teks tepat; guna semula oleh `attachFile`.
+
+**(b) Selector carian tidak pernah wujud.** `input[placeholder*="Cari tajuk"]` — placeholder
+sebenar ialah `"Tajuk, rujukan atau kandungan OCR"` (`cari-rekod.blade.php:28`). Kini
+`input[wire:model="query"]` (stabil terhadap perubahan teks UI).
+
+Verifikasi lokal (DB perawan, tanpa `ocrmypdf` — carian memadan tajuk fail):
+```
+[ci-ocr] kerani muat naik imej, OCR siap dan teks boleh dicari … 1 passed (22.7s)
+```
