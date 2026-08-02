@@ -402,3 +402,28 @@ Verifikasi lokal (DB perawan):
 OK [storage/app/plan-ci/ci-domain.json]: 4 ujian, 0 skipped/timedOut/interrupted/unexpected/flaky.
 PlanManifestTest: 14 passed (2866 assertions)  ← helper baharu tidak melanggar invarian
 ```
+
+## 20. Pengesahan PRODUKSI (read-only mutlak) — bug §17 memang hidup di bakwim.my
+
+Permintaan pemilik: "boleh test di production terus?" — suite e2e pada produksi DILARANG
+(pelan §0.3; ujian MENULIS: daftar masjid, muat naik dokumen, cipta minit; PDPA; audit lalu
+tercipta 21 token). Sebaliknya bug §17 disahkan dengan **GET awam sahaja — 0 tulisan,
+0 log masuk, 0 kesan pada data**:
+
+```
+$ curl -fsS https://bakwim.my/build/assets/help-PP-ALO9e.css   (14,841 bait)
+.diwan-tour-waiting{position:fixed;top:.75rem;right:.75rem;z-index:10002;display:flex;…}
+   ↑ TIADA `pointer-events` — mewarisi peraturan vendor di bawah
+.driver-active *{pointer-events:none}
+body.driver-active .diwan-help-launcher-button{visibility:hidden}
+
+$ curl -fsS https://bakwim.my/build/assets/help-pJkQNpPs.js    (32,173 bait)
+"Panduan menunggu: ${e.title}"  → banner + butang "Tunjuk arahan" memang dihantar ke pengguna
+```
+
+**Kesimpulan:** pada produksi hari ini, pengguna yang menekan "Buat pada skrin" dan
+kemudian auto-advance gagal akan **terkandas** — popover tersembunyi dan butang penyelamat
+"Tunjuk arahan" menolak klik tetikus (hanya papan kekunci berfungsi). Ini mengesahkan §17
+bukan artifak ujian. Pembaikan = F2 §3 (satu baris CSS `pointer-events: auto` + ujian
+regresi klik tetikus). Aset produksi kekal `help-PP-ALO9e.css` / `help-pJkQNpPs.js` —
+sepadan baseline runtime 5A (§7), jadi tiada drift.
