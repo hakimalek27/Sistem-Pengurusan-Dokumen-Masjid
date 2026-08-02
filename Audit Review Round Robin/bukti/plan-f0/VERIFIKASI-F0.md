@@ -338,3 +338,41 @@ Verifikasi lokal keadaan CI-perawan (muktamad F0h):
 gate screen: screen.klasifikasi-peti-masuk    1 passed (15.4s)
 gate tenant-admin-public: public.registration 1 passed (6.0s)
 ```
+
+## 18. F0i — hapuskan SELURUH kelas race `fill`-vs-morph (run 30749181924)
+
+Run `c90264c`: slug BERGANDA (`masjid-e2e-77422177masjid-e2e-77422177`) → URL tenant salah
+→ `waitForURL` 60s. Kod produk BETUL (`updatedName()` mengisi slug hanya bila kosong).
+Punca: `fill()` = clear + insertText; morph Livewire yang mendarat ANTARA keduanya
+memulihkan nilai lalu insertText menambah di hujung.
+
+**Perubahan kaedah:** setiap run CI setakat ini mendedahkan race BERBEZA (4→2→1→3→1),
+kerana mesin Windows terlalu pantas. Daripada menunggu CI satu demi satu, suite kini
+dijalankan **di bawah beban CPU buatan (6 proses)** untuk meniru runner CI — teknik ini
+berjaya menghasilkan kegagalan yang sama secara tempatan dalam satu larian.
+
+Hasil larian di bawah beban (kod lama) — 3 kegagalan, 2 memberi maklumat baharu:
+```
+registration.spec  : slug KEKAL "" (30s)  ← wire:model.blur TIDAK dihantar
+guidance tour      : slug KEKAL "" (30s)  ← punca sama
+explore.spec       : ERR_NO_BUFFER_SPACE  ← socket Windows letih (bukan isu CI)
+```
+Ini mendedahkan pembetulan pertama SALAH TEMPAT: `selectOption` tidak dijamin memfokus,
+jadi menunggu slug tanpa blur = menunggu selamanya. Kini blur dicetuskan **eksplisit**.
+
+Tiga lapisan perlindungan kelas race ini:
+1. `fillStable`/`selectStable` (`expect(...).toPass`) — ulang sehingga nilai melekat.
+2. `blur()` eksplisit + tunggu morph MENDARAT sebelum menyentuh medan seterusnya.
+3. `expectStepAdvance` + `recoverStalledTour` — pulih melalui UI bila auto-advance kalah.
+
+Diterapkan pada semua interaksi borang Livewire/Filament dlm suite CI (login tenant+
+superadmin, borang pendaftaran ×3 lokasi, wizard klasifikasi ×2 ujian, metadata/fail).
+`waitForTimeout(400/500)` dibuang — digantikan tunggu-nilai sebenar (lebih pantas DAN
+kukuh). Telefon tour ditukar unik. `retries` Playwright sengaja KEKAL 0: ketiadaan retry
+inilah yang mendedahkan tiga bug produk (§16, §17, dan kelas ini).
+
+Verifikasi pantas selepas pembetulan blur (DB perawan):
+```
+tour pendaftaran … 1 passed (5.4s)
+tour klasifikasi + registration magic link … 2 passed (1.4m)
+```

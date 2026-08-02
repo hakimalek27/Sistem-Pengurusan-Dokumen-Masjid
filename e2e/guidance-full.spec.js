@@ -197,6 +197,25 @@ async function forceClickWhenEnabled(locator) {
 }
 
 /**
+ * Isi/pilih medan borang Livewire dengan selamat terhadap morph — `fill()` = clear +
+ * insertText; morph yang mendarat di antaranya memulihkan nilai lama lalu insertText
+ * MENAMBAH di hujung (nilai berganda). Rujuk nota penuh dlm guidance.spec.js.
+ */
+async function fillStable(locator, value) {
+    await expect(async () => {
+        await locator.fill(value);
+        await expect(locator).toHaveValue(value, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+}
+
+async function selectStable(locator, value) {
+    await expect(async () => {
+        await locator.selectOption(value);
+        await expect(locator).toHaveValue(typeof value === 'string' ? value : /.+/, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+}
+
+/**
  * Pulihkan tour yang terkandas kerana auto-advance kalah race re-highlight (rujuk nota
  * penuh dlm guidance.spec.js — bug produk skop F2 §3). Laluan pengguna sebenar = DUA
  * butang: "Tunjuk arahan" pada banner menunggu (popover masih display:none daripada
@@ -228,16 +247,15 @@ async function expectStepAdvance(popover, text) {
 /** Isi metadata wizard klasifikasi (jenis + arah) — guna semula corak guidance.spec.js. */
 async function fillClassificationMetadata(page) {
     const recordType = page.locator('#mountedActionSchema0\\.record_type');
-    if (! await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
-    await page.waitForTimeout(400);
-    await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    if (! await recordType.inputValue()) await selectStable(recordType, 'surat_menyurat');
+    await selectStable(page.locator('#mountedActionSchema0\\.direction'), 'masuk');
 }
 
 async function fillClassificationFile(page, modal) {
     const fileStep = modal.locator('form.fi-active');
     await fileStep.locator('.fi-select-input-btn').first().click();
     await page.getByRole('option', { name: /MAM\./ }).first().click();
-    await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await selectStable(page.locator('#mountedActionSchema0\\.sensitivity'), 'dalaman');
 }
 
 /** G4 — kitaran ringkas: mula → tutup → ulang (resume penuh diliputi ci-guidance). */
@@ -298,15 +316,9 @@ async function followClassificationModal(page, popover, modal, plan) {
         } else if (act.do === 'next') {
             await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
         } else if (act.do === 'metadata') {
-            const recordType = page.locator('#mountedActionSchema0\\.record_type');
-            if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
-            await page.waitForTimeout(400);
-            await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+            await fillClassificationMetadata(page);
         } else if (act.do === 'file') {
-            const fileStep = modal.locator('form.fi-active');
-            await fileStep.locator('.fi-select-input-btn').first().click();
-            await page.getByRole('option', { name: /MAM\./ }).first().click();
-            await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+            await fillClassificationFile(page, modal);
         }
         // act.do === 'none' → klik popover sahaja (langkah pengesahan/minit/review)
     }
@@ -328,14 +340,19 @@ for (const guide of guides) {
                 await expect(popover).toContainText('1 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const organisation = page.locator('[data-help-target="registration-organisation"]');
-                await organisation.locator('input').nth(0).fill(`Masjid Gate ${Date.now()}`);
-                await organisation.locator('select').selectOption({ label: 'Selangor' });
-                await organisation.locator('input').nth(1).fill('Petaling');
+                await fillStable(organisation.locator('input').nth(0), `Masjid Gate ${Date.now()}`);
+                // Blur eksplisit (wire:model.blur) → auto-slug; tunggu ia mendarat sebelum
+                // medan lain (rujuk nota fillStable).
+                await organisation.locator('input').nth(0).blur();
+                await expect(organisation.locator('input').nth(3)).not.toHaveValue('');
+                await selectStable(organisation.locator('select'), { label: 'Selangor' });
+                await fillStable(organisation.locator('input').nth(1), 'Petaling');
                 // Kod akronim: 3–6 HURUF sahaja (validasi /daftar) + unik setiap larian.
-                await organisation.locator('input').nth(2).fill(
+                await fillStable(
+                    organisation.locator('input').nth(2),
                     'G'.concat(Date.now().toString().slice(-5).replace(/\d/g, (d) => 'ABCDEFGHIJ'[Number(d)])),
                 );
-                await organisation.locator('input').nth(3).fill(`gate-${Date.now()}`);
+                await fillStable(organisation.locator('input').nth(3), `gate-${Date.now()}`);
                 await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expectStepAdvance(popover, '2 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();

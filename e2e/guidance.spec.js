@@ -27,6 +27,27 @@ const superadminAccount = {
     password: process.env.E2E_PROD_SUPERADMIN_PASSWORD ?? defaultPassword,
 };
 
+/**
+ * Isi/pilih medan borang Livewire dengan selamat terhadap morph.
+ * `fill()` = clear + insertText; jika morph Livewire mendarat antara kedua-duanya, nilai
+ * lama dipulihkan lalu insertText MENAMBAH di hujung (slug berganda menumbangkan CI run
+ * c90264c; pada medan kod ia melanggar had 6 aksara dan menolak wizard secara senyap).
+ * `toPass` mengulang tindakan sehingga nilai benar-benar melekat.
+ */
+async function fillStable(locator, value) {
+    await expect(async () => {
+        await locator.fill(value);
+        await expect(locator).toHaveValue(value, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+}
+
+async function selectStable(locator, value) {
+    await expect(async () => {
+        await locator.selectOption(value);
+        await expect(locator).toHaveValue(typeof value === 'string' ? value : /.+/, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+}
+
 async function disableAutomaticGuides(context) {
     await context.addInitScript((ids) => {
         for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
@@ -41,8 +62,8 @@ async function waitForLoginSlot(page) {
 async function loginTenant(page, account) {
     await waitForLoginSlot(page);
     await page.goto('/app/login');
-    await page.locator('input[id="form.login"]').fill(account.email);
-    await page.locator('input[type="password"]').fill(account.password ?? defaultPassword);
+    await fillStable(page.locator('input[id="form.login"]'), account.email);
+    await fillStable(page.locator('input[type="password"]'), account.password ?? defaultPassword);
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === `/app/${tenantSlug}`, { timeout: 60_000 });
     lastLoginAt = Date.now();
@@ -51,8 +72,8 @@ async function loginTenant(page, account) {
 async function loginSuperadmin(page) {
     await waitForLoginSlot(page);
     await page.goto('/admin/login');
-    await page.locator('input[id="form.login"]').fill(superadminAccount.email);
-    await page.locator('input[type="password"]').fill(superadminAccount.password);
+    await fillStable(page.locator('input[id="form.login"]'), superadminAccount.email);
+    await fillStable(page.locator('input[type="password"]'), superadminAccount.password);
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(/\/admin\/?$/, { timeout: 60_000 });
     lastLoginAt = Date.now();
@@ -431,20 +452,24 @@ test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar',
     expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[data-help-target="registration-organisation"]')))).toBe(true);
 
     const organisation = page.locator('[data-help-target="registration-organisation"]');
-    await organisation.locator('input').nth(0).fill(`Masjid Tour ${Date.now()}`);
-    await organisation.locator('select').selectOption({ label: 'Selangor' });
-    await organisation.locator('input').nth(1).fill('Petaling');
-    await organisation.locator('input').nth(2).fill('TURAA');
-    await organisation.locator('input').nth(3).fill(`tour-${Date.now()}`);
+    await fillStable(organisation.locator('input').nth(0), `Masjid Tour ${Date.now()}`);
+    // Blur EKSPLISIT (wire:model.blur) → auto-slug; tunggu ia mendarat sebelum medan lain,
+    // jika tidak morph berlumba dgn fill dan menghasilkan nilai berganda (rujuk fillStable).
+    await organisation.locator('input').nth(0).blur();
+    await expect(organisation.locator('input').nth(3)).not.toHaveValue('');
+    await selectStable(organisation.locator('select'), { label: 'Selangor' });
+    await fillStable(organisation.locator('input').nth(1), 'Petaling');
+    await fillStable(organisation.locator('input').nth(2), 'TURAA');
+    await fillStable(organisation.locator('input').nth(3), `tour-${Date.now()}`);
     await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
     await expect(page.locator('[data-help-target="registration-admin"]')).toBeVisible();
     await expectStepAdvance(popover, '2 daripada 4');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
 
     const admin = page.locator('[data-help-target="registration-admin"]');
-    await admin.locator('input').nth(0).fill('Pentadbir Tour');
-    await admin.locator('input').nth(1).fill(`tour-${Date.now()}@example.test`);
-    await admin.locator('input').nth(2).fill('60123456789');
+    await fillStable(admin.locator('input').nth(0), 'Pentadbir Tour');
+    await fillStable(admin.locator('input').nth(1), `tour-${Date.now()}@example.test`);
+    await fillStable(admin.locator('input').nth(2), `6012${String(Date.now()).slice(-8)}`);
     await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
     await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
     await expectStepAdvance(popover, '3 daripada 4');
@@ -480,13 +505,12 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await expect(page.locator('[data-help-target="classification-metadata"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '3 daripada 11');
     const recordType = page.locator('#mountedActionSchema0\\.record_type');
-    if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
-    await page.waitForTimeout(400);
-    await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    if (!await recordType.inputValue()) await selectStable(recordType, 'surat_menyurat');
+    await selectStable(page.locator('#mountedActionSchema0\\.direction'), 'masuk');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
-    await expect(popover).toContainText('4 daripada 11');
+    await expectStepAdvance(popover, '4 daripada 11');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
-    await expect(popover).toContainText('5 daripada 11');
+    await expectStepAdvance(popover, '5 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
@@ -495,7 +519,7 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     const fileStep = modal.locator('form.fi-active');
     await fileStep.locator('.fi-select-input-btn').first().click();
     await page.getByRole('option', { name: new RegExp(`${filePrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.`) }).first().click();
-    await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await selectStable(page.locator('#mountedActionSchema0\\.sensitivity'), 'dalaman');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
     await expect(popover).toContainText('7 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
@@ -504,14 +528,14 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await expect(page.locator('[data-help-target="classification-minit"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '8 daripada 11');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
-    await expect(popover).toContainText('9 daripada 11');
+    await expectStepAdvance(popover, '9 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-review"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '10 daripada 11');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
-    await expect(popover).toContainText('11 daripada 11');
+    await expectStepAdvance(popover, '11 daripada 11');
     await expect(page.locator('[data-help-target="classification-submit"]:visible')).toBeVisible();
     await popover.getByRole('button', { name: 'Tutup panduan' }).click();
     await modal.getByRole('button', { name: 'Tutup' }).click();
@@ -551,22 +575,21 @@ async function verifyClassificationWizard(browser, baseURL, account, viewport) {
     await next().click();
     await expect(modal.locator('form.fi-active')).toContainText('Ruj. Kami ialah rujukan masjid');
     const recordType = page.locator('#mountedActionSchema0\\.record_type');
-    if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
-    await page.waitForTimeout(500);
-    await page.locator('#mountedActionSchema0\\.direction').selectOption('masuk');
+    if (!await recordType.inputValue()) await selectStable(recordType, 'surat_menyurat');
+    await selectStable(page.locator('#mountedActionSchema0\\.direction'), 'masuk');
     await next().click();
 
     await expect(modal.locator('form.fi-active')).toContainText('Tahap Akses Rekod');
     const fileStep = modal.locator('form.fi-active');
     await fileStep.locator('.fi-select-input-btn').first().click();
     await page.getByRole('option', { name: new RegExp(`${filePrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.`) }).first().click();
-    await page.locator('#mountedActionSchema0\\.sensitivity').selectOption('dalaman');
+    await selectStable(page.locator('#mountedActionSchema0\\.sensitivity'), 'dalaman');
     await assertModalFits();
     await next().click();
 
     await expect(modal.locator('form.fi-active')).toContainText('Untuk Tindakan (Minit)');
     await expect(modal.locator('form.fi-active')).toContainText('Untuk Makluman (s.k.)');
-    await page.locator('#mountedActionSchema0\\.minit_priority').selectOption('biasa');
+    await selectStable(page.locator('#mountedActionSchema0\\.minit_priority'), 'biasa');
     await next().click();
 
     await expect(modal.locator('form.fi-active')).toContainText('Kesan hantar');

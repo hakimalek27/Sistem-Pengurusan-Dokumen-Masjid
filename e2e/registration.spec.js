@@ -10,6 +10,14 @@ async function disableAutomaticGuides(context) {
     }, guideIds);
 }
 
+/** Isi medan Livewire kalis morph — rujuk nota penuh dlm guidance.spec.js (fillStable). */
+async function fillStable(locator, value) {
+    await expect(async () => {
+        await locator.fill(value);
+        await expect(locator).toHaveValue(value, { timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
+}
+
 function letterCode(seed) {
     let value = seed;
     let code = '';
@@ -36,16 +44,25 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     await disableAutomaticGuides(publicContext);
     const registration = await publicContext.newPage();
     await registration.goto('/daftar');
-    await registration.locator('input[wire\\:model\\.blur="name"]').fill(name);
+    const nameInput = registration.locator('input[wire\\:model\\.blur="name"]');
+    await fillStable(nameInput, name);
+    // Blur nama mencetuskan RegisterMosque::updatedName() yang mengisi slug automatik.
+    // Cetuskan blur EKSPLISIT (selectOption/fill medan lain tidak dijamin memfokus, jadi
+    // menunggu slug tanpa blur = menunggu selamanya), kemudian tunggu morph itu MENDARAT
+    // sebelum menyentuh medan lain: fill() yang berlumba dgn morph mengosongkan input,
+    // morph memulihkan nilai, insertText menambah di hujung → nilai BERGANDA (slug
+    // berganda menumbangkan CI run c90264c; pada `code` ia melanggar had 6 aksara).
+    await nameInput.blur();
+    const slugInput = registration.locator('input[wire\\:model="slug"]');
+    await expect(slugInput).toHaveValue(slug, { timeout: 30_000 });
     await registration.locator('select[wire\\:model="state"]').selectOption('Selangor');
-    await registration.locator('input[wire\\:model="district"]').fill('Gombak');
-    await registration.locator('input[wire\\:model="code"]').fill(code);
-    await registration.locator('input[wire\\:model="slug"]').fill(slug);
+    await fillStable(registration.locator('input[wire\\:model="district"]'), 'Gombak');
+    await fillStable(registration.locator('input[wire\\:model="code"]'), code);
     await registration.getByRole('button', { name: 'Seterusnya' }).click();
     await expect(registration.locator('[data-help-target="registration-admin"]')).toBeVisible();
-    await registration.locator('input[wire\\:model="admin_name"]').fill('Pentadbir E2E');
-    await registration.locator('input[wire\\:model="email"]').fill(email);
-    await registration.locator('input[wire\\:model="phone_wa"]').fill(phone);
+    await fillStable(registration.locator('input[wire\\:model="admin_name"]'), 'Pentadbir E2E');
+    await fillStable(registration.locator('input[wire\\:model="email"]'), email);
+    await fillStable(registration.locator('input[wire\\:model="phone_wa"]'), phone);
     await registration.getByRole('button', { name: 'Seterusnya' }).click();
     const review = registration.locator('.registration-review');
     await expect(review).toContainText(name);
