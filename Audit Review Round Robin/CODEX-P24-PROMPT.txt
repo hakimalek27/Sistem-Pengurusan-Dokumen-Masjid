@@ -1,0 +1,58 @@
+Anda ialah Codex, Pusingan 24 round-robin PELAN pembaikan Diwan (SPDM).
+Working directory: repo Diwan pada commit 8342d95. Ini kerja PERANCANGAN SAHAJA.
+
+WAJIB baca mengikut urutan:
+1. Audit Review Round Robin/PLAN-RR-STATUS.md (giliran + peraturan #7 + integriti P23)
+2. Audit Review Round Robin/PLAN-RR-23-CLAUDE.md (keputusan P22 + §6 fokus anda)
+3. Audit Review Round Robin/PELAN-PEMBAIKAN.md v1.10
+4. Audit Review Round Robin/PLAN-RR-22-CODEX.md (laporan anda sebelum ini)
+5. Audit Review Round Robin/KEPUTUSAN-PEMILIK.md
+6. Kod/vendor yang dirujuk, baca sahaja.
+
+INTEGRITI (peraturan #7 + §0.7 #1 — WAJIB):
+- Bekukan input: PELAN-PEMBAIKAN.md expected SHA-256
+  0B3B4DF9E2549882E413B15853893E6AB634028D4B58B747B3A8FB3DEC76E21E
+  (322,133 B / 4,184 baris LF / mtime 2026-08-02 07:42:44). Semak hash DUA KALI sebelum mula.
+  Jika berbeza: BERHENTI, rekod bukti, jangan tulis apa-apa selain laporan insiden.
+- Kiraan baris = bilangan \n (LF). Fail yang anda boleh tulis HANYA: PLAN-RR-24-CODEX.md +
+  kemas giliran PLAN-RR-STATUS.md. JANGAN sunting PELAN-PEMBAIKAN.md. JANGAN ubah kod aplikasi.
+  JANGAN git/SSH/produksi.
+- Rekod hash/saiz/mtime fail yang anda tulis SELEPAS menulis.
+- Frasa "working tree bersih" DILARANG — lapor dua fakta berasingan (kod aplikasi 0 baris?;
+  keseluruhan M/?? dokumen).
+
+TUGAS AUDIT P24 — audit integrasi v1.10, fokus enam titik PLAN-RR-23-CLAUDE.md §6:
+1. §1 F0(iv)(d-1) #1 naratif ServeCommand baharu — sahkan setiap dakwaan mekanisme terhadap
+   vendor sebenar (ServeCommand.php, symfony Process.php); step probe variables_order
+   diletakkan betul dan mencukupi sebagai bukti larian pertama?
+2. Dua-step upload success()/failure() — (a) adakah actions/upload-artifact@v7 menerima dua step
+   dengan NAMA SAMA (guidance-shard-N) dalam satu job bila hanya satu berjalan? (semak dokumentasi
+   /tingkah laku v4+ tentang konflik nama artifak immutable); (b) adakah pattern download-artifact
+   guidance-shard-* pada agregator masih menemui artifak dari laluan failure; (c) nama
+   guidance-coverage-gate-failure tidak berlanggar dengan apa-apa; (d) setiap kemunculan
+   if-no-files-found: error kini berada di bawah if: success() sahaja.
+3. Kiraan D11 — kira semula sendiri dari jadual F0(iv-a) v1.10: entri, fail fizikal, bundle;
+   sahkan 19 + 1 dan tiada kemunculan AKTIF "16 fail" di luar konteks sejarah/log versi.
+4. §11 — blok status + nota kebergantungan vs kandungan sebenar KEPUTUSAN-PEMILIK.md; adakah
+   Lampiran A1 kekal menunggu dengan betul; adakah D5/D10 dinyatakan konsisten (pengecualian
+   bertulis semasa F7; addendum langkah pertama F0/F4)?
+5. Imbasan corak: "16 fail repo" (aktif vs sejarah), "if-no-files-found: error" (semua di bawah
+   success()?), "menunggu" (baki lapuk?), corak lama P21 (tepat tiga/bukti-plan-ci/trap) kekal 0.
+6. Imbas juga sebarang isu baharu yang integrasi v1.10 mungkin perkenalkan (kontradiksi silang,
+   rujukan seksyen yang rosak akibat +112 baris).
+
+KEPUTUSAN yang diminta — SATU daripada dua, jelas di akhir laporan:
+(a) "TIADA PENAMBAHBAIKAN SUBSTANTIF — pelan sedia muktamad" (nota kosmetik tidak-menghalang
+    boleh disenarai berasingan)
+(b) "PERLU v1.11" + senarai isu substantif dengan bukti + keutamaan
+
+FORMAT LAPORAN PLAN-RR-24-CODEX.md:
+# Pusingan 24 (Pelan) — Codex: Audit integrasi v1.10
+## Integriti input (hash 2x + status kerja dua-fakta)
+## Titik 1..6 — verdict + bukti setiap satu
+## KEPUTUSAN: (a) atau (b)
+## Integriti output
+
+Selepas selesai, kemas kini PLAN-RR-STATUS.md: GILIRAN SEMASA → "CLAUDE — Pusingan 25" dengan
+fokus sesuai (tutup muktamad jika (a); integrasi v1.11 jika (b)) + baris log giliran anda +
+rekod integriti P24.

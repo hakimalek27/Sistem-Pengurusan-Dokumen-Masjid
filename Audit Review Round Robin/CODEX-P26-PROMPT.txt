@@ -1,0 +1,49 @@
+Anda ialah Codex, Pusingan 26 round-robin PELAN pembaikan Diwan (SPDM) — AUDIT PENUTUP.
+Working directory: repo Diwan pada commit 8342d95. Ini kerja PERANCANGAN SAHAJA.
+
+WAJIB baca mengikut urutan:
+1. Audit Review Round Robin/PLAN-RR-STATUS.md (giliran + integriti P25)
+2. Audit Review Round Robin/PLAN-RR-25-CLAUDE.md (integrasi isu tunggal anda + §5 fokus)
+3. Audit Review Round Robin/PELAN-PEMBAIKAN.md v1.11
+4. Audit Review Round Robin/PLAN-RR-24-CODEX.md (laporan anda)
+
+INTEGRITI (peraturan #7 + §0.7 #1 — WAJIB):
+- Bekukan input: PELAN-PEMBAIKAN.md expected SHA-256
+  FADBD7FBE45A8568903B51260893A4DC4C850EF23B354AD793DD795525BEA44A
+  (323,703 B / 4,199 baris LF / mtime 2026-08-02 08:22:39). Semak hash DUA KALI sebelum mula.
+  Jika berbeza: BERHENTI, rekod bukti, jangan tulis apa-apa selain laporan insiden.
+- Fail yang boleh ditulis HANYA: PLAN-RR-26-CODEX.md + kemas giliran PLAN-RR-STATUS.md.
+  JANGAN sunting PELAN-PEMBAIKAN.md. JANGAN ubah kod aplikasi. JANGAN git/SSH/produksi.
+- Rekod hash fail yang anda tulis selepas menulis. Frasa "working tree bersih" DILARANG —
+  dua fakta berasingan.
+
+SKOP P26 — AUDIT PENUTUP (paling sempit):
+(1) Sahkan pembetulan P24-T4: baris D11 seksyen 11 — label "bersyarat" #16 benar-benar terbatal
+    dengan penanda jelas (strikethrough + nota sejarah + "[CADANGAN SEJARAH...]"); F0(iv-a)
+    #16a typo "D10-16" dibetulkan; TIADA kemunculan aktif frasa bersyarat/16-terpulang yang
+    tidak bertanda lagi. (Nota: 3 kemunculan "D10-16" yang tinggal ialah rujukan meta kepada
+    pembetulan itu sendiri — nilai sama ada itu boleh diterima.)
+(2) Imbasan terakhir: +15 baris v1.11 (log versi, seksyen 0.5g, baris D11) — sebarang
+    kontradiksi/rujukan rosak baharu?
+(3) Imbas sekali lagi secara rawak 3-4 seksyen utama pelan (pilih sendiri) untuk keyakinan
+    penutup — ada apa-apa isu substantif yang semua pusingan terlepas?
+
+KEPUTUSAN yang diminta — SATU daripada dua, jelas di akhir:
+(a) "TIADA PENAMBAHBAIKAN SUBSTANTIF — pelan sedia muktamad"
+    — jika ini keputusan anda, ia menjadi pusingan Codex PERTAMA tanpa pindaan substantif dan
+    Claude P27 akan menutup pelan MUKTAMAD menurut syarat #6. Nota kosmetik tidak-menghalang
+    boleh disenarai berasingan.
+(b) "PERLU v1.12" + isu + bukti + keutamaan.
+
+FORMAT PLAN-RR-26-CODEX.md:
+# Pusingan 26 (Pelan) — Codex: Audit penutup v1.11
+## Integriti input (hash 2x + dua-fakta)
+## (1) Pengesahan P24-T4 — verdict + bukti
+## (2) Imbasan +15 baris — verdict
+## (3) Imbasan keyakinan rawak — seksyen dipilih + dapatan
+## KEPUTUSAN: (a) atau (b)
+## Integriti output
+
+Selepas selesai, kemas kini PLAN-RR-STATUS.md: GILIRAN SEMASA → "CLAUDE — Pusingan 27
+(tutup MUKTAMAD)" jika (a), atau "(integrasi v1.12)" jika (b) + baris log giliran anda +
+rekod integriti P26.

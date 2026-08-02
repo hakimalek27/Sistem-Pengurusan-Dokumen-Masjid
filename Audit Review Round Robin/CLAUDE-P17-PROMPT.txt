@@ -1,0 +1,79 @@
+Anda ialah Claude Pusingan 17 untuk round-robin pelan Diwan. Ini kerja PERANCANGAN SAHAJA.
+
+Keadaan yang mesti diterima secara jujur:
+- Claude P15 menulis PELAN-PEMBAIKAN.md v1.6 secara separa tetapi terhenti sebelum
+  PLAN-RR-15-CLAUDE.md/status/footer siap.
+- Cubaan sambung P15 gagal kerana monthly spend limit.
+- Codex P16 telah mengaudit keadaan separa itu. Jangan menyembunyikan interruption ini.
+
+WAJIB baca mengikut urutan:
+1. Audit Review Round Robin/PLAN-RR-STATUS.md
+2. Audit Review Round Robin/PLAN-RR-14-CODEX.md
+3. Audit Review Round Robin/PLAN-RR-16-CODEX.md
+4. Audit Review Round Robin/PELAN-PEMBAIKAN.md
+5. Audit Review Round Robin/PLAN-RR-13-CLAUDE.md
+6. Kod/config/vendor yang dirujuk P16, baca sahaja.
+
+Bekukan input sebelum sunting:
+- Expected PELAN-PEMBAIKAN.md SHA-256:
+  A1667A703FB90C57459626DAD46553F360E93097066D8A39B335B89CD44FF31E
+- Expected size: 205840 bytes; 2777 baris.
+- Jika hash/saiz berubah, BERHENTI dan lapor. Jangan timpa.
+
+Tugas P17:
+1. Rekodkan P15 sebagai serahan separa secara jujur; jangan mencipta naratif bahawa P15 selesai.
+2. Audit P16-01 hingga P16-08 satu per satu terhadap kod semasa. Terima/tolak hanya dengan
+   bukti fail:baris dan kontrak alternatif yang sekurang-kurangnya sama lengkap.
+3. Integrasikan semua keputusan sah ke PELAN-PEMBAIKAN.md sebagai v1.7. Kemas SEMUA seksyen
+   silang, bukan changelog sahaja.
+4. Tulis PLAN-RR-17-CLAUDE.md dengan keputusan setiap P16 item, bukti, lokasi integrasi,
+   denominator dan imbasan konsistensi.
+5. Kemas kini PLAN-RR-STATUS.md kepada CODEX P18.
+6. Pelan kekal BELUM MUKTAMAD; P18 yang mengaudit integrasi.
+
+Hasil teknikal minimum:
+- Ganti canary curl pseudokod dengan spec Playwright CSRF-safe bernama dan command exact;
+  assert login, redirect, reload, sesi masih sah.
+- Bekukan nama spec/project/command ketiga-tiga shard, format JSON artifak, skrip agregator,
+  YAML services/needs/matrix/upload/download dan required gate. Agregator banding set ID
+  dengan manifest, bukan count sahaja.
+- Lengkapkan D11/jadual fail dengan SEMUA artifak baharu: canary, full guidance spec/projects,
+  aggregator, manifest validator, production read-only spec, wrapper, setup/cleanup command
+  dan ujian idempotensi.
+- Namakan command setup/cleanup production, argumen, auth, inventory, rahsia private sementara,
+  try/finally serta CleanupOnly. Satukan kontrak RunUuid: caller-provided untuk reproducibility,
+  wrapper-generated hanya jika tidak diberi, dan nilai sebenar sentiasa direkod.
+- Letakkan wave/shard pada snapshot manifest dan lampirkan validator set-union exact. Jangan
+  bergantung pada PLAN-RR-15-CLAUDE.md yang tiada sebagai satu-satunya senarai ID.
+- Betulkan gate rg: assert input files >0; beza exit 1 (tiada padanan = lulus) daripada exit 2
+  (ralat = gagal). Jangan guna ! rg tanpa pemeriksaan rc.
+- role_routes: expected access datang daripada role permission/policy/spec; actual_status datang
+  daripada probe. Mismatch gagal. Bina route universe tanpa tapisan dahulu supaya negative matrix
+  tidak hilang.
+- Jadikan office-workflow, ddms-extended dan ocr-upload sebahagian gate CI relevan sebelum F8;
+  sediakan service/queue/OCR/antivirus fixture yang diperlukan.
+
+Sisa konsistensi wajib:
+- header/F0 D1-D10 -> D1-D11;
+- F6 "6 gelombang" -> 7 wave W0-W6;
+- nama gate F2/semua fasa selaras dengan ci-guidance + guidance-e2e-gate;
+- Lampiran B #11 tidak lagi melarang job guidance-e2e yang mendeklarasi services sendiri;
+- footer v1.7 / Codex P18;
+- top/changelog/status/hash sepadan;
+- tiada rujukan kepada PLAN-RR-15-CLAUDE.md sebagai fail yang wujud.
+
+Integriti dan larangan:
+- Satu penulis sahaja. Semak hash sekali lagi tepat sebelum Edit pertama.
+- Hanya ubah:
+  a. Audit Review Round Robin/PELAN-PEMBAIKAN.md
+  b. Audit Review Round Robin/PLAN-RR-17-CLAUDE.md
+  c. Audit Review Round Robin/PLAN-RR-STATUS.md
+- Jangan ubah app/, resources/, tests/, e2e/, config/, .github/, Docker, package atau kod.
+- Jangan jalankan git add/commit/push, SSH, deploy atau test mutasi.
+- Jangan tulis fail CODEX dan jangan menyamar sebagai Codex.
+
+Sebelum tamat:
+- imbas semua kontrak lapuk;
+- rekod hash/saiz/baris akhir;
+- pastikan PLAN-RR-17-CLAUDE.md dan status benar-benar wujud;
+- beri ringkasan keputusan P16-01..08 serta sebab pelan masih belum muktamad.

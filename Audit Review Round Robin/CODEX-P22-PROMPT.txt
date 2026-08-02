@@ -1,0 +1,62 @@
+Anda ialah Codex, Pusingan 22 round-robin PELAN pembaikan Diwan (SPDM).
+Working directory: repo Diwan pada commit 8342d95. Ini kerja PERANCANGAN SAHAJA.
+
+WAJIB baca mengikut urutan:
+1. Audit Review Round Robin/PLAN-RR-STATUS.md (giliran + peraturan #7 + §0.7)
+2. Audit Review Round Robin/PLAN-RR-21-CLAUDE.md (khususnya §6 — fokus anda)
+3. Audit Review Round Robin/PELAN-PEMBAIKAN.md v1.9
+4. Audit Review Round Robin/PLAN-RR-20-CODEX.md (laporan anda sebelum ini)
+5. Kod/vendor yang dirujuk, baca sahaja.
+
+INTEGRITI (peraturan #7 + §0.7 #1 — WAJIB):
+- Bekukan input: PELAN-PEMBAIKAN.md expected SHA-256
+  487EDBE64DE7EE9A3D2DB64039B0D73F317B897AAE5602A89467A976E4B05E96
+  (311,998 B / 4,072 baris LF / mtime 2026-08-02 06:15:57). Semak hash DUA KALI sebelum mula.
+  Jika berbeza: BERHENTI, rekod bukti, jangan tulis apa-apa selain laporan insiden.
+- Kiraan baris = bilangan \n (fail LF); Measure-Object -Line memberi angka rendah.
+- Fail yang anda boleh tulis HANYA: PLAN-RR-22-CODEX.md + kemas giliran PLAN-RR-STATUS.md.
+  JANGAN sunting PELAN-PEMBAIKAN.md. JANGAN ubah kod aplikasi. JANGAN git/SSH/produksi.
+- Rekod hash/saiz/mtime fail yang anda tulis SELEPAS menulis, dalam laporan anda.
+- Frasa "working tree bersih" DILARANG (§0.7 #7) — laporkan dua fakta berasingan:
+  (a) git status kod aplikasi (0 baris?), (b) git status keseluruhan (M/?? dokumen).
+
+KEMASKINI KONTEKS: pemilik telah menjawab SEMUA D1-D11 (lihat KEPUTUSAN-PEMILIK.md — D8/D9/D11
+ikut cadangan, D10 LULUS). Ini TIDAK mengubah tugas audit anda — ia hanya bermakna jadual D
+§11 pelan kini boleh dianggap dijawab; jika v1.9 masih menyebut "menunggu jawapan pemilik" di
+mana-mana yang kini lapuk, senaraikan sebagai isu konsistensi untuk P23.
+
+TUGAS AUDIT P22 — enam titik fokus dari PLAN-RR-21-CLAUDE.md §6, satu persatu dengan bukti
+fail:baris/output arahan (jalankan arahan baca-sahaja sendiri; jangan terima dakwaan P21 tanpa
+semak):
+1. §1 F0(iv)(d-1) YAML literal — sahkan setiap nilai terhadap .github/workflows/ci.yml sebenar
+   + dakwaan ServeCommand/--no-reload pada laravel/framework versi composer.lock (baca vendor
+   ServeCommand.php sebenar) + kesan $_ENV/variables_order runner ubuntu-24.04.
+2. Gate Meilisearch — grep -qF output vs $index->stats() selepas waitForTasks pada
+   meilisearch-php versi terpasang; mana deterministik untuk Meili v1.12?
+3. Assertion stats.skipped === 0 — boleh bukan-sifar pada larian sah (--grep menapis,
+   test.describe.configure, projects)? Semak tingkah laku @playwright/test versi terpasang.
+4. Jadual A/B — nama check sebenar job matriks ber-name: (Docker app image / Docker web image);
+   kaedah gh api .../check-runs betul?
+5. storage/app/plan-* — adakah kod produk/ujian/command menyentuh storage/app/ luar
+   private//public/? if-no-files-found: error mengelirukan bila step Playwright gagal awal?
+6. Kiraan D11 = 16 fail + 1 artifak — sahkan kontrak v1.9 tidak menyeludup fail repo baharu
+   (setup-node agregator? tee ke storage/logs/?).
++ Imbas corak lapuk yang P21 minta: "tepat tiga", "bukti/plan-ci", "trap '", "--no-reload",
+  "storage/app/plan-" — dan sebarang "menunggu jawapan pemilik" yang kini lapuk selepas D1-D11
+  dijawab.
+
+KEPUTUSAN yang diminta — SATU daripada dua, jelas di akhir laporan:
+(a) "TIADA PENAMBAHBAIKAN SUBSTANTIF — pelan sedia muktamad" (nota kosmetik boleh disenarai
+    berasingan sebagai tidak-menghalang)
+(b) "PERLU v1.10" + senarai isu substantif dengan bukti + keutamaan
+
+FORMAT LAPORAN PLAN-RR-22-CODEX.md:
+# Pusingan 22 (Pelan) — Codex: Audit v1.9
+## Integriti input (hash 2x + status kerja dua-fakta)
+## Titik 1..6 — verdict + bukti setiap satu
+## Imbasan corak lapuk + konsistensi selepas D1-D11 dijawab
+## KEPUTUSAN: (a) atau (b)
+## Integriti output (hash fail yang ditulis)
+
+Selepas selesai, kemas kini PLAN-RR-STATUS.md: GILIRAN SEMASA → "CLAUDE — Pusingan 23" dengan
+fokus yang sesuai + tambah baris log giliran anda + rekod integriti P22.

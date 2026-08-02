@@ -1,6 +1,116 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — AUDIT ROUND-ROBIN MENYELURUH (1 Ogos 2026) ⭐ TERKINI
+## SESI — PELAN PEMBAIKAN ROUND-ROBIN + KEPUTUSAN PEMILIK (2 Ogos 2026) ⭐ TERKINI
+
+**Status:** 🏁 **`PELAN-PEMBAIKAN.md` v1.11 MUKTAMAD** (ditutup P27, 2 Ogos 08:43 — syarat #6
+dipenuhi: **Codex P26 = pusingan Codex pertama tanpa pindaan substantif** selepas **27 pusingan ·
+11 versi**; trend penemuan 8→8→8→7→6→5→1→**0**). Hash muktamad:
+`E0E2B4069EE910FC402E5B5403B3766CC23A5AE0525BF5DB1CC9ECA311420D0B` (324,144 B / 4,204 LF).
+**Kod aplikasi: 0 baris disentuh sepanjang 27 pusingan.** Asas kod kekal `8342d95`.
+📄 Baca ikut urutan: `Audit Review Round Robin/PLAN-RR-STATUS.md` (log penuh + integriti per
+giliran) → `KEPUTUSAN-PEMILIK.md` (D1–D11 LENGKAP) → `PELAN-PEMBAIKAN.md` (MUKTAMAD) →
+`PLAN-RR-27-CLAUDE.md` (penutupan).
+
+### ▶️ SETERUSNYA: pelaksanaan menunggu SATU perkara — arahan mula pemilik
+
+1. **Pemilik beri arahan mula** (mengangkat sekatan "jangan ubah kod") — tiada keputusan
+   tertunggak; D1–D11 lengkap.
+2. Disyorkan SEBELUM pelaksanaan: **komit/snapshot folder `Audit Review Round Robin/`**
+   (§0.7 #2) supaya versi pelan yang diaudit menjadi immutable — keputusan git milik pemilik.
+3. Pelaksanaan ikut pelan MUKTAMAD: **F0** (tulis `# ADDENDUM v2.6` ke
+   `DIWAN-SPEC-ADDENDUM-2026-07.md` + 19 fail perkakas §1 F0(iv-a) + manifest baseline +
+   gate CI) → **F1–F10**, deploy **GABUNG** (D7), bukti setiap fasa, **F8 audit semula**
+   dgn metrik apple-to-apple.
+4. Lampiran A1 masih menunggu: padam tiket ujian `SUP-260801-HXQ0DIOL` di `/admin/tiket-sokongan`.
+
+### Gotcha proses Codex-di-Windows (3 insiden sesi ini — semua diselesaikan & direkod)
+
+1. **Kuota akaun** → pemilik tukar akaun; sentiasa sahkan `grep -c "succeeded in"` > 0.
+2. **"Selected model is at capacity"** (sementara) → gelung retry 90s + **lock-file PID**
+   (kerana `TaskStop` TIDAK membunuh anak bash — dua gelung pernah berlanggar; bunuh dengan
+   `taskkill //F //PID <pid> //T`); JANGAN letak `timeout` pada larian Codex (±30 min).
+3. **Codex tergantung "Reading additional input from stdin..."** → WAJIB `< /dev/null` pada
+   `codex exec` dalam skrip latar.
+   Setiap insiden: bunuh proses → **sahkan fail giliran tidak tercemar (hash)** → baru lancar semula.
+
+### Perjalanan fasa pelan (ringkas)
+
+1. **P1–P9:** Claude tulis `PELAN-PEMBAIKAN.md` v1.0 (8 fasa F0–F8, semua penemuan audit) →
+   3 pusingan semakan Codex → v1.3 → ditanda "muktamad" di P9.
+2. **⛔ P9 DIBATALKAN oleh P10/P11:** fail P6/P8 didapati **ditulis proses lain semasa giliran
+   Codex** — pengesahan tidak sah. Pengajaran: satu pusingan palsu menyembunyikan ralat fakta
+   selama 4 pusingan. → **Peraturan integriti #7** kini wajib: rekod saiz+hash+mtime fail
+   giliran sebelum & selepas menulis; berhenti jika fail berubah tanpa tindakan sendiri.
+3. **P10 (Codex audit lengkap):** 25 pindaan, **8 bloker** (konflik spec retensi D2 vs
+   `DIWAN-SPEC.md:470`; liputan katalog sebenar 83 guide/473 langkah bukan 37; kontrak trap
+   Driver.js vendor; auto-start belum one-shot; SPA belum dikunci; bukti runtime imej; Playwright
+   tiada CI; produksi perlu 20 BrowserContext) + pembetulan fakta (placeholder **258**, label
+   Edit **5**, notifikasi `toMail()` **18**).
+4. **P11–P14:** integrasi C01–C25 (v1.4: +F9 manual, +F10 housekeeping, D8–D10 baharu, W1–W6)
+   → P12 8 pindaan (v1.5: `launchPending` `#[Locked]`, urutan W diterbalikkan — 200/229 langkah
+   tindakan dlm `screen`+`workflow`, kontrak gate G1–G5, bukti imej `diwan-app` vs `diwan-web`,
+   `disabledClick()`, D5 dipecah polisi/dependensi) → P14 8 baki (CI env, shard/agregator,
+   `role_routes`, W1/W2 exact, `blocked` vs G4, lookahead rg, snapshot beku).
+5. **P15 TERPUTUS:** v1.6 ditulis separa (hash `A1667A70…FF31E`, 205,840 B / 2,777 baris),
+   sesi tamat **monthly spend limit** sebelum fail keputusan/status siap — direkod jujur.
+6. **P16 (Codex):** audit keadaan separa — integrasi P14 kekal baik, **8 baki** (P16-01…08:
+   canary CSRF, shard command literal, D11 undercount, setup/cleanup produksi tak bernama,
+   senarai ID wave, `! rg` mask exit 2, `role_routes` expected-vs-actual, suite domain luar CI).
+7. **P17 (siap):** menutup jurang P15 secara jujur (TIADA fail retroaktif bagi pihak P15) +
+   integrasi P16-01…08 → v1.7 (penemuan baharu: `step.id` katalog tidak unik global — 470/473;
+   kunci set jadi `<guide_id>#<index1>`; canary login mesti Livewire `data.login`, bukan POST
+   borang; slug `smoke` = tenant gate deploy, BUKAN fixture buang).
+8. **P18–P21:** P18 (Codex) 7 pindaan → v1.8 (P19) → P20 (Codex) 6 pindaan (YAML literal CI,
+   gate Meilisearch, check matriks Docker ×2, `storage/app/plan-*` gantikan `bukti/plan-ci`,
+   Playwright memadam `outputDir`) → v1.9 (P21, +399 baris kontrak). **Syarat penutupan belum
+   pernah dipenuhi** — setiap pusingan Codex masih menemui pindaan substantif.
+9. **P22 (Codex):** percubaan #1 terblok kuota akaun lama → **pemilik tukar akaun Codex baharu**
+   → berjaya (34 arahan): **5 isu** (3 P1 + 2 P2) — naratif `ServeCommand` terlalu mutlak
+   (`variables_order=GPCS` → `$_ENV` kosong → fallback `getenv()` Symfony mewarisi env walau
+   `.env` wujud; `--no-reload` kekal wajib TANPA syarat), semantik upload menutup diagnosis,
+   dakwaan storage salah (`manual-capture`/`backup-temp`/`tmp` wujud), D11 salah unit
+   (16 entri = **19 fail + 1 bundle**), teks D menunggu lapuk. 4 titik LULUS.
+10. **P23 (Claude):** 5/5 diterima selepas verifikasi bebas (probe `variables_order` sendiri
+    sepadan probe Codex; vendor `ServeCommand`/`Process` dibaca; grep storage) → **v1.10**
+    (+112 baris): naratif dibetulkan + step probe bukti, dua-step upload ×4 lokasi
+    (`success()`+`error` / `failure()`+`ignore`), 19+1 dinormalisasi, §11 ditanda dijawab.
+11. **P24 (Codex, 10 cubaan menembusi "at capacity"):** 5 titik LULUS + **1 isu** — label
+    "bersyarat" OCR #16 masih hidup dlm baris D11 §11 → **P25 (Claude)**: label TERBATAL
+    (strikethrough + nota sejarah + "[CADANGAN SEJARAH]"), typo "D10-16"→"D11" → **v1.11**.
+12. **P26 (Codex, audit penutup):** P24-T4 disahkan + imbasan +15 baris + imbasan keyakinan
+    rawak 4 seksyen (§1/§3/§7/§10) — semuanya bersih → keputusan rasmi **(a) "TIADA
+    PENAMBAHBAIKAN SUBSTANTIF — pelan sedia muktamad"** = pusingan Codex PERTAMA tanpa pindaan.
+    **P27 (Claude): header ditanda ✅ MUKTAMAD** (+441 B penanda sahaja, hash `E0E2B406…`).
+    (Insiden proses P26 percubaan #1: codex tergantung stdin → dibunuh, skrip dibaiki
+    `< /dev/null`, fail disahkan tidak tercemar — direkod dlm log giliran.)
+
+### ✅ Keputusan pemilik LENGKAP D1–D11 (2 Ogos — `KEPUTUSAN-PEMILIK.md`)
+
+Arahan #1: **D1 Ya · D2 Ya · D3 Kekal · D4 Ya · D5 Ya (a+b) · D6 Terima · D7 GABUNG deploy**.
+Arahan #2: **D8/D9/D11 ikut cadangan** (D8: prune 30 hari + peringatan berhenti 7 hari &
+eskalasi; D9: label OCI; D11: luluskan 16 fail + 1 artifak) · **D10 LULUS** (Addendum spec v2.6
+diluluskan → D2 dibuka; teks addendum ditulis pada permulaan pelaksanaan F0/F4, bukan fasa pelan)
+· "sambung sampai plan muktamad, teliti balik semuanya".
+
+### Nota untuk sesi seterusnya
+
+- **Sekatan "jangan ubah kod" masih berkuat kuasa** sehingga pelan MUKTAMAD + arahan mula.
+- **JANGAN tulis giliran bagi pihak Codex** (pengajaran P6/P8 → pembatalan P9). Bloker kuota =
+  tunggu / pemilik tambah kredit / pemilik pinda protokol secara eksplisit.
+- Ikut §0.7 pelan: hash 2× sebelum tulis; kiraan baris = `\n` LF (bukan `Measure-Object -Line`);
+  frasa "working tree bersih" DILARANG — lapor 2 fakta berasingan (kod aplikasi 0 baris; ??
+  dokumen perancangan).
+- Codex di mesin ini: `codex exec --sandbox danger-full-access` (workspace-write ROSAK);
+  sahkan log `grep -c "succeeded in"` > 0 sebelum percaya laporan.
+- Fail pelan semuanya **belum dikomit** (untracked; snapshot §0.7 #2 tertunggak — semua giliran
+  dilarang git; keputusan komit milik pemilik).
+- Integriti sesi ini: PLAN-RR-STATUS `b07d8a40…`→(keputusan D1–D7)→`acf9d1b6…`→(D8–D11 +
+  rekod bloker P22); KEPUTUSAN-PEMILIK.md dikemas D8–D11; TIADA sentuhan pada
+  `PELAN-PEMBAIKAN.md` (hash kekal `487EDBE6…`, disahkan 2×).
+
+---
+
+## SESI — AUDIT ROUND-ROBIN MENYELURUH (1 Ogos 2026)
 
 **Status:** ✅ **AUDIT SELESAI selepas 14 pusingan.** Tiada kod diubah — audit & cadangan sahaja.
 📄 **Baca dahulu:** [`Audit Review Round Robin/FINAL-RUMUSAN.md`](Audit%20Review%20Round%20Robin/FINAL-RUMUSAN.md)
