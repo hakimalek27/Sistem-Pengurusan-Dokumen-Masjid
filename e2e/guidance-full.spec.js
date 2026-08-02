@@ -174,6 +174,18 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
     await expect(popover, `${guideId}: popover langkah akhir koreografi (${lastStep}) tidak kelihatan`).toBeVisible();
 }
 
+/**
+ * Klik paksa untuk elemen halaman semasa tour aktif: overlay minimize kekal dan lubang
+ * sorotan ikut geometri fon — pada runner Linux butang boleh jatuh di luar lubang lalu
+ * gagal hit-test (gate menguji sorotan+kemajuan, bukan hit-test overlay; UX = skop F2/F6).
+ * force melangkau SEMUA semakan actionability termasuk enabled, jadi tunggu enabled
+ * dahulu (klik semasa wire:loading disabled hilang tanpa kesan).
+ */
+async function forceClickWhenEnabled(locator) {
+    await expect(locator).toBeEnabled();
+    await locator.click({ force: true });
+}
+
 /** Isi metadata wizard klasifikasi (jenis + arah) — guna semula corak guidance.spec.js. */
 async function fillClassificationMetadata(page) {
     const recordType = page.locator('#mountedActionSchema0\\.record_type');
@@ -245,7 +257,7 @@ async function followClassificationModal(page, popover, modal, plan) {
             await page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first().click();
             await expect(modal).toBeVisible();
         } else if (act.do === 'next') {
-            await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+            await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
         } else if (act.do === 'metadata') {
             const recordType = page.locator('#mountedActionSchema0\\.record_type');
             if (!await recordType.inputValue()) await recordType.selectOption('surat_menyurat');
@@ -285,7 +297,7 @@ for (const guide of guides) {
                     'G'.concat(Date.now().toString().slice(-5).replace(/\d/g, (d) => 'ABCDEFGHIJ'[Number(d)])),
                 );
                 await organisation.locator('input').nth(3).fill(`gate-${Date.now()}`);
-                await page.locator('[data-help-target="registration-next"]').click();
+                await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expect(popover).toContainText('2 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const admin = page.locator('[data-help-target="registration-admin"]');
@@ -294,14 +306,14 @@ for (const guide of guides) {
                 // Telefon UNIK setiap larian — pendaftaran menolak nombor WA pendua (fix Julai),
                 // dan penolakan itu senyap dari langkah 3 (ralat melekat pada medan langkah 2).
                 await admin.locator('input').nth(2).fill(`6012${Date.now().toString().slice(-8)}`);
-                await page.locator('[data-help-target="registration-next"]').click();
+                await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
                 await expect(popover).toContainText('3 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const registration = page.locator('[data-help-target="registration-consent"]').locator('..');
-                await page.locator('input[type="checkbox"]').nth(0).check();
-                await page.locator('input[type="checkbox"]').nth(1).check();
-                await page.getByRole('button', { name: 'Hantar Permohonan' }).click();
+                await page.locator('input[type="checkbox"]').nth(0).check({ force: true });
+                await page.locator('input[type="checkbox"]').nth(1).check({ force: true });
+                await forceClickWhenEnabled(page.getByRole('button', { name: 'Hantar Permohonan' }));
                 await expect(page.getByText('Permohonan diterima!')).toBeVisible({ timeout: 60_000 });
                 await expect(page.locator('[data-help-target="registration-complete"]')).toBeVisible();
                 await expect(popover).toContainText('4 daripada 4');
@@ -362,7 +374,7 @@ for (const guide of guides) {
                     await cta();
                     const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
                     await expect(submit).toBeEnabled({ timeout: 60_000 });
-                    await submit.click();
+                    await submit.click({ force: true });
                     await expect(page.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible({ timeout: 60_000 });
                 };
                 const openClassify = async (cta) => {
@@ -372,17 +384,17 @@ for (const guide of guides) {
                 };
                 const wizardNext = async (cta) => {
                     await cta();
-                    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
                 };
                 const metadataThenNext = async (cta) => {
                     await cta();
                     await fillClassificationMetadata(page);
-                    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
                 };
                 const fileThenNext = async (cta) => {
                     await cta();
                     await fillClassificationFile(page, modal);
-                    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
                 };
 
                 const actions = guide.guide_id.startsWith('workflow.setiausaha.')

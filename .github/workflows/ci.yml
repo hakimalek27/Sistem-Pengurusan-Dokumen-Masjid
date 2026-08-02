@@ -153,8 +153,17 @@ jobs:
 
       - name: Serve application on 8092           # env SERVER, bukan env langkah Playwright
         env:
+          APP_ENV: local                          # OVERRIDE (job env = testing): APP_ENV=testing
+                                                  # buat Livewire runningUnitTests() paksa disk
+                                                  # upload 'tmp-for-tests' (tak wujud) → SEMUA
+                                                  # upload UI 500. Pest kekal testing (phpunit.xml)
           APP_URL: http://127.0.0.1:8092          # OVERRIDE (job env = 8080)
           SESSION_DRIVER: file                    # OVERRIDE (job env = array)
+          MAIL_MAILER: log                        # OVERRIDE (job env = array): registration.spec
+          MAIL_LOG_CHANNEL: single                # baca magic link dari storage/logs/laravel.log
+                                                  # (LOG_CHANNEL job = stderr; mail SAHAJA ke fail)
+          PHP_CLI_SERVER_WORKERS: "4"             # server built-in selari: elak race pemuatan
+                                                  # aset lazy Filament (x-load) semasa beban e2e
         run: |
           php artisan serve --no-reload --host=127.0.0.1 --port=8092 \
             > storage/logs/serve-ci.log 2>&1 &
@@ -373,6 +382,10 @@ jobs:
           chmod -R ug+rw storage/framework
 
       - name: Serve application on 8092
+        env:
+          APP_ENV: local                    # OVERRIDE (job env = testing): elak disk Livewire
+                                            # 'tmp-for-tests' — guide workflow memuat naik UI
+          PHP_CLI_SERVER_WORKERS: "4"       # selari: elak race pemuatan aset lazy semasa beban
         run: |
           php artisan serve --no-reload --host=127.0.0.1 --port=8092 \
             > storage/logs/serve-ci.log 2>&1 &

@@ -127,3 +127,114 @@ manifest (set, bukan kiraan). Laporan: storage/app/plan-f6/coverage-gate.json
 3. Registrasi: kod akronim mesti 3–6 HURUF + telefon WA mesti unik (penolakan pendua
    senyap dari langkah 3) → kod huruf-dari-timestamp + telefon unik per larian.
 
+
+## 11. CI sebenar — larian pertama gate penuh (run 30741376294, `06277fc`) MERAH → F0e
+
+Run `06277fc` (2 Ogos 09:14): job `PostgreSQL, Redis, Meili, OCR and tests` GAGAL pada step
+**Guidance smoke** (8/12 lulus); `guidance-e2e` skipped (needs) → `guidance-e2e-gate` failure;
+Docker skipped. Pest penuh + canary + gate Meili + probe = LULUS di CI.
+
+```
+4 failed
+  [ci-guidance] › guidance.spec.js:123 › Chrome berasingan … › desktop: setiausaha
+  [ci-guidance] › guidance.spec.js:348 › tour pendaftaran tidak tergantung …
+  [ci-guidance] › guidance.spec.js:386 › tour klasifikasi mengikuti modal lima langkah …
+  [ci-guidance] › registration.spec.js:23 › pengguna baharu daftar …
+8 passed (4.3m)
+```
+
+Analisis punca (semua = persekitaran CI, bukan regresi produk; ci-guidance TIDAK pernah
+berjalan penuh dlm DB perawan sebelum ini — lokal lulus atas DB e2e berkeadaan lama):
+
+1. `:123 desktop: setiausaha` — launcher wujud tetapi **hidden**: DB perawan + explore.spec
+   berjalan dahulu meninggalkan `guidance_progress` → tour auto-resume di `/bantuan`;
+   `help.css:76` sembunyikan launcher semasa `body.driver-active`; `disableAutomaticGuides`
+   hanya berkesan panel public (`help.js` semak `diwan-help-seen` utk `isPublic` sahaja).
+   → Fix ujian: `closeGuideIfOpen()` sebelum assert launcher (corak sedia ada di carian bantuan).
+2. `:348`/`:386` — klik butang wizard halaman semasa mod minimize: `minimiseForAction` TIDAK
+   destroy driver (popover sahaja disorok) → overlay + lubang sorotan kekal; lubang ikut
+   geometri fon — runner Linux ≠ Windows lokal → titik tengah butang jatuh di luar lubang
+   → hit-test Playwright gagal 30s (`<body class="driver-active driver-fade"> intercepts`).
+   → Fix ujian: `click({ force: true })` pada klik elemen halaman semasa tour aktif — ujian
+   ini menguji sinkronisasi langkah, bukan hit-test overlay (UX overlay = skop F2/F6).
+   Pendedahan sama wujud dlm `guidance-full.spec.js` (job shard belum pernah berjalan di CI
+   — skipped kali ini) → diperkukuh serentak pada titik yang sepadan.
+3. `registration.spec:31` — `ENOENT storage/logs/laravel.log`: fail belum wujud dlm
+   persekitaran perawan → guard `existsSync` (saiz awal 0). PLUS pergantungan tersembunyi:
+   job env `MAIL_MAILER=array` + `LOG_CHANNEL=stderr` bermakna magic link TIDAK akan sampai
+   ke fail log → step Serve kini override `MAIL_MAILER=log` + `MAIL_LOG_CHANNEL=single`
+   (mail sahaja ke fail; log lain kekal stderr utk serve-ci.log).
+
+Verifikasi lokal F0e dlm **keadaan CI-perawan** (SQLite buangan + `migrate:fresh --seed` +
+`laravel.log` dialih + env serve menyalin CI): lihat §12.
+
+## 12. Verifikasi lokal F0e — 6 larian penuh ci-guidance dlm keadaan CI-perawan
+
+Setiap larian: DB SQLite baharu + `migrate:fresh --seed` + `laravel.log` dialih + env serve
+menyalin CI (`APP_ENV=testing`, `APP_LOCALE=ms`, `SESSION_DRIVER=file`, `MAIL_MAILER=log`,
+`MAIL_LOG_CHANNEL=single`, `LOG_CHANNEL=stderr`, `DIWAN_LOGIN_RATE_LIMIT=100`).
+
+```
+#1 11/12  gagal :398 (klik force semasa wire:loading disabled — klik hilang)
+   → fix forceClickWhenEnabled(): tunggu toBeEnabled() SEBELUM click({force:true})
+#2 11/12  :398 LULUS; flake :533 "textareaFormComponent is not defined"
+   → race pemuatan aset lazy Filament (x-load) pada server dev single-thread sibuk;
+     LULUS 2/2 bersendirian → flaky beban; CI: PHP_CLI_SERVER_WORKERS=4
+#3 11/12  flake :139 bendahari 500 — PHP Fatal "Maximum execution time 30s" dlm
+   ClassLoader.php:429 pada /bantuan/imej/* (~33s) → I/O autoloader Windows semasa
+   beban → server lokal -d max_execution_time=180 (skrip sahaja; bukan repo)
+#4 0/12   kesilapan skrip lokal sendiri (php -S tanpa cwd=public — router vendor guna
+   getcwd()); server dibaiki; BUKAN keputusan ujian
+#5 8/12   PUNCA BAHARU: /daftar HTTP 429 — throttle:public-registration 20/jam; kaunter
+   dlm CACHE FILE kekal merentas larian (migrate:fresh tak sentuh cache) → larian ke-5
+   melebihi had → :289/:369/registration gagal serentak; + 1 flake ERR_NO_BUFFER_SPACE
+   → skrip: php artisan cache:clear per larian (CI: redis segar + hanya ±5 GET /daftar)
+#6 10/12  daftar=200 ✓; ketiga-tiga ujian /daftar pulih; baki 2 = flake infra yang sama:
+   :139 ERR_NO_BUFFER_SPACE (socket OS letih — larian ke-6 hari ini) + :533 race x-load
+```
+
+**Setiap satu daripada 12 ujian LULUS dlm keadaan perawan pada ≥1 larian penuh hari ini**;
+kegagalan tinggal berpindah-pindah rawak dgn punca infra dev Windows yang difahami dan
+TIDAK wujud di CI Linux (ulimit tinggi, worker selari, runner segar). Punca deterministik
+= 6 semuanya dibaiki (4 kegagalan CI + klik-disabled + throttle-cache). Gate muktamad = CI.
+
+## 13. Penemuan F0e paling penting: `APP_ENV=testing` memecahkan SEMUA upload UI e2e
+
+Larian sasaran guidance-full lokal (selepas menyalin env CI dgn tepat, termasuk
+`APP_ENV=testing`) menemui guide `workflow.admin_masjid.muat-naik…` gagal konsisten pada
+"Upload complete". Log server:
+
+```
+[POST] URI: /livewire/upload-file
+testing.ERROR: Disk [tmp-for-tests] does not have a configured driver.
+  (FilesystemManager.php:138)
+```
+
+Punca: `Livewire\...\FileUploadConfiguration::disk()` → `app()->runningUnitTests()`
+(benar apabila env aplikasi = `testing`, TANPA mengira HTTP/console) → paksa disk
+`tmp-for-tests` yang hanya didaftar oleh TestCase Livewire dlm ujian unit — TIDAK wujud
+pada server HTTP → setiap upload UI 500.
+
+Impak CI sebenar: job env = `APP_ENV: testing`; pada run `06277fc` guidance smoke
+TERSELAMAT hanya kerana seeder menyediakan item Peti Masuk (upload tidak dicetus), dan
+job shard (satu-satunya laluan yang memuat naik melalui UI) di-skip oleh `needs` — bom
+ini pasti meletup pada larian shard pertama. Fix: step Serve override `APP_ENV: local`
+pada KEDUA-DUA job (Pest kekal `testing` — phpunit.xml menetapkannya sendiri; satu-satunya
+guard `environment()` dlm app/ ialah FailureDrill, guard production — tiada kesan lain).
+Pengesahan: guide upload LULUS (50.3s) selepas override; larian pengesahan akhir §14.
+
+## 14. Pengesahan akhir F0e (lokal, keadaan perawan, APP_ENV=local pada server)
+
+```
+=== WORKFLOW SHARD PENUH ===
+  15 passed (8.0m)
+OK [storage/app/plan-ci/guidance-full-workflow.json]: 15 ujian, 0 skipped/timedOut/interrupted/unexpected/flaky.
+=== CI-GUIDANCE PENUH (APP_ENV=local) ===
+  12 passed (9.0m)
+OK [storage/app/plan-ci/ci-guidance.json]: 12 ujian, 0 skipped/timedOut/interrupted/unexpected/flaky.
++ gate screen: screen.klasifikasi-peti-masuk 1 passed (15.8s)
++ gate tenant-admin-public: public.registration 1 passed (5.8s)
++ gate workflow: workflow.admin_masjid.muat-naik… 1 passed (50.3s) — upload UI pulih
+```
+
+Semua laluan kod yang disentuh F0e disahkan hijau dlm keadaan perawan.

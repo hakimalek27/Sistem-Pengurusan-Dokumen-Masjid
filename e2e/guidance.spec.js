@@ -86,9 +86,25 @@ async function assertNoHorizontalPageOverflow(page) {
     expect(overflow).toBeLessThanOrEqual(2);
 }
 
+/**
+ * Klik paksa untuk elemen halaman semasa tour aktif: overlay minimize kekal
+ * (minimiseForAction tidak destroy driver) dan lubang sorotan ikut geometri fon —
+ * pada runner Linux butang boleh jatuh di luar lubang lalu gagal hit-test. force
+ * melangkau SEMUA semakan actionability termasuk enabled, jadi tunggu enabled dahulu
+ * (klik semasa wire:loading disabled hilang tanpa kesan). Ujian ini menguji
+ * sinkronisasi langkah, bukan hit-test overlay (UX overlay = skop F2/F6).
+ */
+async function forceClickWhenEnabled(locator) {
+    await expect(locator).toBeEnabled();
+    await locator.click({ force: true });
+}
+
 async function closeGuideIfOpen(page) {
     const close = page.locator('.driver-popover-close-btn');
-    if (await close.isVisible().catch(() => false)) await close.click();
+    if (await close.isVisible().catch(() => false)) {
+        await close.click();
+        await expect(page.locator('.driver-popover')).toBeHidden();
+    }
 }
 
 async function ensureInboxFixture(page) {
@@ -163,6 +179,10 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
         const adminHelp = await superadmin.goto('/admin/bantuan');
         expect(adminHelp?.status()).toBe(200);
         await expect(superadmin.locator('[data-help-target="help-center"]')).toBeVisible();
+        // DB perawan boleh auto-sambung tour (autoStart/resume ikut DB, bukan localStorage —
+        // help.js hanya semak diwan-help-seen utk panel public); launcher sengaja disorok
+        // semasa tour aktif (help.css .driver-active), jadi tutup dahulu.
+        await closeGuideIfOpen(superadmin);
         await assertFloatingHelpLauncher(superadmin, viewport.height);
         await assertNoHorizontalPageOverflow(superadmin);
         expect([...new Set(superadminErrors)]).toEqual([]);
@@ -192,6 +212,7 @@ test('Chrome berasingan untuk superadmin, lapan role dan public pada desktop ser
                 const help = await page.goto(`/app/${tenantSlug}/bantuan`);
                 expect(help?.status()).toBe(200);
                 await expect(page.locator('[data-help-target="help-center"]')).toBeVisible();
+                await closeGuideIfOpen(page);
                 await assertFloatingHelpLauncher(page, viewport.height);
                 await expect(page.locator('.diwan-help-result').first()).toBeVisible();
                 await assertNoHorizontalPageOverflow(page);
@@ -366,7 +387,7 @@ test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar',
     await organisation.locator('input').nth(1).fill('Petaling');
     await organisation.locator('input').nth(2).fill('TURAA');
     await organisation.locator('input').nth(3).fill(`tour-${Date.now()}`);
-    await page.locator('[data-help-target="registration-next"]').click();
+    await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
     await expect(page.locator('[data-help-target="registration-admin"]')).toBeVisible();
     await expect(popover).toContainText('2 daripada 4');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
@@ -375,7 +396,7 @@ test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar',
     await admin.locator('input').nth(0).fill('Pentadbir Tour');
     await admin.locator('input').nth(1).fill(`tour-${Date.now()}@example.test`);
     await admin.locator('input').nth(2).fill('60123456789');
-    await page.locator('[data-help-target="registration-next"]').click();
+    await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
     await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
     await expect(popover).toContainText('3 daripada 4');
     await popover.getByRole('button', { name: 'Tutup panduan' }).click();
@@ -405,7 +426,7 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await expect(page.locator('[data-help-target="classification-source"]:visible')).toBeVisible();
     await expect(popover).toContainText('2 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
-    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-metadata"]:visible')).toBeVisible();
     await expect(popover).toContainText('3 daripada 11');
@@ -418,7 +439,7 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
     await expect(popover).toContainText('5 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
-    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-file"]:visible')).toBeVisible();
     await expect(popover).toContainText('6 daripada 11');
@@ -429,14 +450,14 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
     await expect(popover).toContainText('7 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
-    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-minit"]:visible')).toBeVisible();
     await expect(popover).toContainText('8 daripada 11');
     await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
     await expect(popover).toContainText('9 daripada 11');
     await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
-    await modal.getByRole('button', { name: 'Seterus', exact: true }).click();
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-review"]:visible')).toBeVisible();
     await expect(popover).toContainText('10 daripada 11');

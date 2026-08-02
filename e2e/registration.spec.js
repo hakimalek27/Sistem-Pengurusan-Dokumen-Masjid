@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 const logPath = 'storage/logs/laravel.log';
@@ -28,7 +28,9 @@ test('pengguna baharu daftar, diluluskan superadmin dan masuk melalui magic link
     const code = letterCode(seed);
     const email = `admin-${suffix}@e2e.test`;
     const phone = `6011${suffix}`;
-    const initialLogSize = readFileSync(logPath, 'utf8').length;
+    // Persekitaran perawan (CI selepas migrate:fresh) belum ada laravel.log sehingga
+    // log pertama ditulis — saiz awal 0, bukan ralat.
+    const initialLogSize = existsSync(logPath) ? readFileSync(logPath, 'utf8').length : 0;
 
     const publicContext = await browser.newContext({ baseURL });
     await disableAutomaticGuides(publicContext);
