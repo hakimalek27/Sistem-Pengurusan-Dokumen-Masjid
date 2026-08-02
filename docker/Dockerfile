@@ -49,6 +49,9 @@ COPY --from=vendor /build/vendor ./vendor
 RUN npm run build
 
 FROM runtime AS app
+# D9 (pelan pembaikan §10 5A): label revisi OCI mengikat imej → commit git.
+ARG GIT_SHA=unknown
+LABEL org.opencontainers.image.revision=$GIT_SHA
 WORKDIR /var/www/html
 COPY --chown=www-data:www-data . .
 COPY --from=vendor --chown=www-data:www-data /build/vendor ./vendor
@@ -69,5 +72,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD php artisan diwan:health --quiet || exit 1
 
 FROM nginx:1.27-alpine AS web
+# D9: label revisi OCI pada kedua-dua keluarga imej (diwan-app + diwan-web).
+ARG GIT_SHA=unknown
+LABEL org.opencontainers.image.revision=$GIT_SHA
 COPY --from=app /var/www/html/public /var/www/html/public
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf

@@ -1,9 +1,13 @@
+import { parse } from 'node:path';
 import { expect, test } from '@playwright/test';
 
 test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) => {
     const files = [process.env.SPDM_OCR_FIXTURE_1, process.env.SPDM_OCR_FIXTURE_2].filter(Boolean);
     const terms = [process.env.SPDM_OCR_TERM_1, process.env.SPDM_OCR_TERM_2].filter(Boolean);
     test.skip(files.length !== 2 || terms.length !== 2, 'Tetapkan dua fail dan dua istilah OCR.');
+    // Tajuk rekod = nama fail fixture (F0: penapis lama /WhatsApp Image/ diganti — nama fixture
+    // beku D11 #16a/b ialah sample-scan-*.png; ujian kini deterministik terhadap fail sebenar).
+    const titlePattern = new RegExp(files.map((f) => parse(f).name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
 
     await page.goto('/app/login');
     await page.locator('input[id="form.login"]').fill('admin_masjid@demo.test');
@@ -28,6 +32,6 @@ test('kerani muat naik imej, OCR siap dan teks boleh dicari', async ({ page }) =
         await page.locator('input[placeholder*="Cari tajuk"]').fill(term);
         await page.getByRole('button', { name: /^Cari$/ }).click();
         await expect(page.getByText(/Tiada hasil ditemui/i)).not.toBeVisible({ timeout: 60_000 });
-        await expect(page.locator('main a[href*="/r/"]').filter({ hasText: /WhatsApp Image/i }).first()).toBeVisible();
+        await expect(page.locator('main a[href*="/r/"]').filter({ hasText: titlePattern }).first()).toBeVisible();
     }
 });

@@ -131,6 +131,110 @@ jobs:
           php artisan migrate --force --no-interaction
           php artisan test
 
+      # ── Lapis 1 Playwright (PELAN-PEMBAIKAN §1 F0(iv)(d-1)) ────────────────────────────
+      - name: Meilisearch help index gate         # P20-02 — C20 jadi step, bukan nota
+        env:
+          SCOUT_DRIVER: meilisearch
+        run: |
+          php artisan diwan:sync-help-index --delete | tee storage/logs/help-index-ci.log
+          grep -qF '83 guide disegerakkan ke indeks diwan_help_guides.' \
+            storage/logs/help-index-ci.log
+
+      - name: Probe variables_order (bukti P22-T1)
+        run: php -r 'echo "variables_order=", ini_get("variables_order"), " env_count=", count($_ENV), PHP_EOL;'
+
+      - name: Prepare Playwright e2e
+        run: |
+          php artisan migrate:fresh --seed --force --no-interaction
+          mkdir -p storage/framework/sessions storage/app/plan-ci
+          chmod -R ug+rw storage/framework
+          npx playwright install --with-deps chrome
+
+      - name: Serve application on 8092           # env SERVER, bukan env langkah Playwright
+        env:
+          APP_URL: http://127.0.0.1:8092          # OVERRIDE (job env = 8080)
+          SESSION_DRIVER: file                    # OVERRIDE (job env = array)
+        run: |
+          php artisan serve --no-reload --host=127.0.0.1 --port=8092 \
+            > storage/logs/serve-ci.log 2>&1 &
+          echo "serve_pid=$!" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:8092/up && break
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8092/up
+
+      - name: Session canary
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8092
+          E2E_ROLE_LOGIN_DELAY_MS: "0"
+          DIWAN_PW_JSON: storage/app/plan-ci/ci-canary.json
+        run: |
+          npx playwright test --project=ci-guidance --grep @session-canary
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 1
+
+      - name: Guidance smoke
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8092
+          E2E_ROLE_LOGIN_DELAY_MS: "0"
+          DIWAN_PW_JSON: storage/app/plan-ci/ci-guidance.json
+        run: |
+          npx playwright test --project=ci-guidance
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 3
+
+      - name: Domain flows
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8092
+          E2E_ROLE_LOGIN_DELAY_MS: "0"
+          DIWAN_PW_JSON: storage/app/plan-ci/ci-domain.json
+        run: |
+          npx playwright test --project=ci-domain
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 2
+
+      - name: OCR upload gate                      # ci-ocr: fixture dikomit F0 → assert TIDAK di-skip
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8092
+          E2E_ROLE_LOGIN_DELAY_MS: "0"
+          DIWAN_PW_JSON: storage/app/plan-ci/ci-ocr.json
+        run: |
+          SPDM_OCR_FIXTURE_1=$(node -pe "require('./tests/fixtures/ocr/terms.json').files[0]") \
+          SPDM_OCR_FIXTURE_2=$(node -pe "require('./tests/fixtures/ocr/terms.json').files[1]") \
+          SPDM_OCR_TERM_1=$(node -pe "require('./tests/fixtures/ocr/terms.json').terms[0]") \
+          SPDM_OCR_TERM_2=$(node -pe "require('./tests/fixtures/ocr/terms.json').terms[1]") \
+            npx playwright test --project=ci-ocr
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 1
+
+      - name: Stop served application             # BUKAN trap: setiap `run:` shell berasingan
+        if: always()
+        run: kill "$serve_pid" 2>/dev/null || true
+
+      # DUA step upload (P22-T5): `error` HANYA bila ujian berjaya tetapi bukti hilang —
+      # pada kegagalan terdahulu, ketiadaan JSON ialah AKIBAT, bukan gate baharu.
+      - name: Upload Playwright JSON evidence
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-playwright-json
+          path: storage/app/plan-ci/*.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload Playwright JSON evidence (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-playwright-json-failure
+          path: |
+            storage/app/plan-ci/*.json
+            storage/logs/serve-ci.log
+            storage/logs/help-index-ci.log
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Runtime compatibility smoke
         env:
           QUEUE_CONNECTION: redis
@@ -155,6 +259,216 @@ jobs:
           path: storage/logs/*.log
           if-no-files-found: ignore
           retention-days: 7
+
+  # ── Lapis 2 (PELAN-PEMBAIKAN §1 F0(iv)(d)) — gate penuh G1–G5, matriks 3 shard.
+  # `name:` SENGAJA TIDAK ditetapkan (P18-01): nama check = job id, sepadan rujukan pelan.
+  guidance-e2e:
+    needs: integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [screen, workflow, tenant-admin-public]
+    services:                          # DIISYTIHAR SENDIRI — job tidak berkongsi services (P12-04)
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: diwan_test
+          POSTGRES_USER: diwan
+          POSTGRES_PASSWORD: diwan-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U diwan -d diwan_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+      meilisearch:
+        image: getmeili/meilisearch:v1.12
+        env:
+          MEILI_MASTER_KEY: ci-master-key-1234567890
+          MEILI_NO_ANALYTICS: "true"
+        ports:
+          - 7700:7700
+    env:
+      APP_ENV: testing
+      APP_DEBUG: "false"
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      APP_URL: http://127.0.0.1:8092         # OVERRIDE 1 (integration = 8080; Playwright = 8092)
+      E2E_BASE_URL: http://127.0.0.1:8092    # OVERRIDE 2 (baharu; playwright.config.js baseURL)
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: diwan_test
+      DB_USERNAME: diwan
+      DB_PASSWORD: diwan-ci-only
+      CACHE_STORE: redis
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: 127.0.0.1
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: file                   # OVERRIDE 3 (array → sesi HTTP mustahil)
+      MAIL_MAILER: array
+      SCOUT_DRIVER: collection
+      MEILISEARCH_HOST: http://127.0.0.1:7700
+      MEILISEARCH_KEY: ci-master-key-1234567890
+      DIWAN_STORAGE_DISK: local
+      BACKUP_DISK: local
+      IMAP_ENABLED: "false"
+      WHATSAPP_DRIVER: log
+      LOG_CHANNEL: stderr
+      DIWAN_LOGIN_RATE_LIMIT: "100"
+      E2E_ROLE_LOGIN_DELAY_MS: "0"           # OVERRIDE 4 (lalai 15000 ms utk produksi)
+      GUIDANCE_SHARD: ${{ matrix.shard }}    # OVERRIDE 5 (pemilih shard, F0(iv)(a))
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, intl, pdo_pgsql, redis, pcntl, posix, zip, gd, exif
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Cache Composer packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/composer/files
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci --no-audit --no-fund
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Install Chrome for Playwright
+        run: npx playwright install --with-deps chrome
+
+      - name: Migrate and seed
+        run: |
+          php artisan config:clear
+          php artisan migrate:fresh --seed --force --no-interaction
+          mkdir -p storage/framework/sessions storage/app/plan-ci storage/app/plan-f6
+          chmod -R ug+rw storage/framework
+
+      - name: Serve application on 8092
+        run: |
+          php artisan serve --no-reload --host=127.0.0.1 --port=8092 \
+            > storage/logs/serve-ci.log 2>&1 &
+          echo "serve_pid=$!" >> "$GITHUB_ENV"
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:8092/up && break
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8092/up
+
+      - name: Session canary
+        env:
+          DIWAN_PW_JSON: storage/app/plan-ci/canary-${{ matrix.shard }}.json
+        run: |
+          npx playwright test --project=ci-guidance --grep @session-canary
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 1
+
+      - name: Guidance full gate shard
+        env:
+          DIWAN_PW_JSON: storage/app/plan-ci/guidance-full-${{ matrix.shard }}.json
+        run: |
+          npx playwright test --project=guidance-full
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 1
+
+      - name: Stop served application        # BUKAN trap: setiap `run:` ialah shell berasingan
+        if: always()
+        run: kill "$serve_pid" 2>/dev/null || true
+
+      # Corak dua-step yang sama (P22-T5) — `error` hanya pada laluan success:
+      - uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          name: guidance-shard-${{ matrix.shard }}
+          path: storage/app/plan-f6/shard-${{ matrix.shard }}.json
+          if-no-files-found: error          # shard lulus + fail hilang = gate
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v7
+        if: failure()          # shard gagal: naikkan apa yang ada (agregator akan melapor
+        with:                  # "missing shard" dengan sebab — itulah diagnosisnya)
+          name: guidance-shard-${{ matrix.shard }}
+          path: storage/app/plan-f6/shard-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v7
+        if: success()          # bukti "berjalan, tidak di-skip" (P20-04)
+        with:
+          name: guidance-pw-json-${{ matrix.shard }}
+          path: storage/app/plan-ci/*-${{ matrix.shard }}.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: guidance-pw-json-${{ matrix.shard }}-failure
+          path: storage/app/plan-ci/*-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # ── Lapis 3 — agregator required check (perbandingan SET, bukan kiraan).
+  guidance-e2e-gate:
+    needs: guidance-e2e
+    if: always()              # mesti berjalan walaupun satu shard gagal, supaya ia melapor SEBAB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: guidance-shard-*
+          path: storage/app/plan-f6/artifacts
+      - run: |
+          mkdir -p storage/app/plan-f6
+          node scripts/audit/aggregate-guidance-coverage.mjs \
+            --manifest "Audit Review Round Robin/bukti/plan-baseline/manifest.json" \
+            --shards "storage/app/plan-f6/artifacts/guidance-shard-*/shard-*.json" \
+            --out storage/app/plan-f6/coverage-gate.json
+      - uses: actions/upload-artifact@v7
+        if: success()          # P22-T5: error hanya bila agregator lulus tetapi output hilang
+        with:
+          name: guidance-coverage-gate
+          path: storage/app/plan-f6/coverage-gate.json
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: guidance-coverage-gate-failure
+          path: storage/app/plan-f6/coverage-gate.json
+          if-no-files-found: ignore
+          retention-days: 14
 
   docker:
     name: Docker ${{ matrix.target }} image
@@ -184,6 +498,8 @@ jobs:
           context: .
           file: docker/Dockerfile
           target: ${{ matrix.target }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           load: true
           push: false
           tags: |

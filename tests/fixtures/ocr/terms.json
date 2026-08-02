@@ -1,0 +1,8 @@
+{
+  "description": "D11 #16c — istilah padanan ci-ocr (SPDM_OCR_TERM_1/2 dibaca dari fail ini dalam CI: deterministik & dikomit, bukan env ad-hoc). Fixture sintetik, tiada data peribadi (PDPA).",
+  "files": [
+    "tests/fixtures/ocr/sample-scan-1.png",
+    "tests/fixtures/ocr/sample-scan-2.png"
+  ],
+  "terms": ["BAKTIMURNI", "CAHAYAIKHLAS"]
+}

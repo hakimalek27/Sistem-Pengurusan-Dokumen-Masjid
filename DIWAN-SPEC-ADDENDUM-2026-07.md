@@ -431,3 +431,66 @@ Pest **326 passed / 1 skip** (1091 assertions); Pint bersih; `npm run build` OK;
 9-peranan = flake had-kadar terdokumentasi, diliputi Pest RoleAuthorizationMatrixTest). Ujian baharu:
 MagicLinkDeepLinkTest (10) + NotificationDeepLinkTest (4) + GoogleDriveConnectTest (5) + GoogleDriveMirrorTest (8)
 + GoogleDriveReconcileTest (4) + MagicLinkTest dikemas.
+
+---
+
+# ADDENDUM v2.6 — Lalai pelupusan automatik DIMATIKAN untuk masjid baharu (2 Ogos 2026)
+
+> Diluluskan pemilik: keputusan **D2 + D10** (2 Ogos 2026 —
+> `Audit Review Round Robin/KEPUTUSAN-PEMILIK.md`), susulan penemuan audit **RR-08-01/RR-09-01**
+> ("auto-padam ialah tetapan lalai — 3 lapisan bertindan") dan pelan pembaikan muktamad
+> `Audit Review Round Robin/PELAN-PEMBAIKAN.md` v1.11 §5/§5.1a. Ini **perubahan produk** yang
+> meminda `DIWAN-SPEC.md` baris 470, kesan §16.1, Aliran L dan teks §16.2.
+> Pelaksanaan: **Fasa F4 (L2)** pelan pembaikan — migrasi + teks pengakuan dalam commit yang sama.
+
+## Pindaan §2.2 / jadual `mosques` (DIWAN-SPEC.md:470)
+
+| Kolum | Nilai BAHARU | Nota |
+|---|---|---|
+| `auto_disposal_enabled` | boolean **default false** | Masjid BAHARU bermula dengan pelupusan automatik **DIMATIKAN**; masjid menghidupkannya secara sedar dalam **Tetapan Masjid** apabila bersedia |
+
+Migrasi hanya menukar **default kolum** (`->default(false)->change()`) — **data masjid sedia ada
+TIDAK disentuh** (mamad/smoke/demo kekal nilai semasa). Jika pemilik mahu menukar masjid sedia ada,
+ia arahan operasi berasingan (tinker terdokumen), bukan migrasi skema.
+
+## Pindaan kesan §16.1
+
+Jadual retensi dan tindakan `auto_padam` **KEKAL** seperti §16.1 (patuh tatacara ANM — keputusan D3:
+14 peraturan platform tidak diubah). Yang berubah hanyalah **suis per-masjid**: peraturan `auto_padam`
+berkuat kuasa untuk pelupusan automatik **hanya apabila** masjid menghidupkan `auto_disposal_enabled`.
+Selagi suis mati, rekod cukup tempoh masuk senarai calon **pelupusan MANUAL** (§16.5 / Aliran G) —
+tangga notis t90/t30/t7 dan sijil kekal tidak berubah.
+
+## Pindaan Aliran L (langkah 3)
+
+Tiada perubahan logik enjin: syarat `masjid auto_disposal_enabled` yang sedia ada dalam Aliran L
+kini bermakna aliran automatik **tidak aktif secara lalai** untuk masjid baharu sehingga suis
+dihidupkan. Pelupusan manual (Aliran G) menjadi laluan lalai.
+
+## Pindaan §16.2 — teks pengakuan onboarding (checkbox `/daftar` — WAJIB; simpan `retention_ack_*`)
+
+Teks v2.1 memberitahu masjid baharu bahawa rekod "**akan dipadam secara automatik dan tidak boleh
+dikembalikan**" — tidak lagi tepat apabila lalai suis ialah `false`. Teks pengakuan BAHARU:
+
+> "Saya memahami dokumen dalam Diwan disimpan mengikut jadual retensi (lalai 7 tahun bagi kebanyakan
+> jenis; minit mesyuarat/perjanjian/sijil/laporan kekal melainkan diubah). **Pelupusan automatik
+> dimatikan secara lalai untuk masjid baharu**; jika masjid menghidupkannya dalam Tetapan Masjid,
+> rekod yang cukup tempoh **akan dipadam secara automatik dan tidak boleh dikembalikan** selepas
+> notifikasi 90/30/7 hari, dan metadata rekod kekal. Selagi pelupusan automatik dimatikan, rekod
+> yang cukup tempoh disenaraikan untuk semakan dan pelupusan manual oleh masjid. Masjid
+> bertanggungjawab membuat sandaran luar (alat Eksport disediakan) dan mematuhi mana-mana kewajipan
+> Akta Arkib Negara 2003 / arahan Majlis Agama masing-masing sebelum sebarang pemadaman."
+
+## Skop pelaksanaan F4 (L2) — kontrak
+
+1. Migrasi `->default(false)->change()` pada `mosques.auto_disposal_enabled` + ujian rollback
+   (SQLite) + `--pretend` pgsql direkod dalam bukti fasa.
+2. Teks pengakuan `/daftar` (dan mana-mana salinannya dalam `resources/`) dikemas **serentak dalam
+   commit yang sama** dengan migrasi — ujian render `/daftar` mengasert rumusan baharu.
+3. Wizard onboarding **TIDAK** menghidupkan suis secara senyap; `MosqueProvisioningService::approve`
+   disahkan tidak menetapkan `true`.
+4. UI sedia ada kekal: toggle "Pelupusan automatik" dalam Tetapan Masjid (§9.C.12 banner status) +
+   suis superadmin (§9.C/admin) menjadi laluan opt-in rasmi.
+5. Ujian kontrak lama (`auto_disposal_enabled === true` untuk masjid baharu tanpa override)
+   **digantikan** dengan kontrak baharu (`=== false`) dalam commit yang sama, dengan rujukan
+   "ADDENDUM v2.6" dalam mesej commit (peraturan #9 dicatat).

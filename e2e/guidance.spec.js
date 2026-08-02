@@ -10,16 +10,15 @@ const filePrefix = process.env.E2E_PROD_FILE_PREFIX ?? 'MAM';
 const loginDelayMs = Number(process.env.E2E_PROD_ROLE_LOGIN_DELAY_MS ?? process.env.E2E_ROLE_LOGIN_DELAY_MS ?? 15_000);
 let lastLoginAt = 0;
 
+// F0(ii-b) gate #6 (P14-03): kiraan halaman per role dibaca daripada manifest role_routes —
+// BUKAN nombor literal — supaya hanya SATU sumber kebenaran (drift 8/8 role tamat di sini).
+const expectedPages = JSON.parse(readFileSync(
+    'Audit Review Round Robin/bukti/plan-baseline/manifest.json', 'utf8',
+)).role_routes.expected_page_counts;
+
 const localTenantRoles = [
-    { role: 'admin_masjid', email: 'admin_masjid@demo.test', pages: 25 },
-    { role: 'pengerusi', email: 'pengerusi@demo.test', pages: 17 },
-    { role: 'setiausaha', email: 'setiausaha@demo.test', pages: 15 },
-    { role: 'bendahari', email: 'bendahari@demo.test', pages: 15 },
-    { role: 'nazir', email: 'nazir@demo.test', pages: 13 },
-    { role: 'ketua_imam', email: 'ketua_imam@demo.test', pages: 13 },
-    { role: 'ajk', email: 'ajk@demo.test', pages: 13 },
-    { role: 'audit', email: 'audit@demo.test', pages: 14 },
-];
+    'admin_masjid', 'pengerusi', 'setiausaha', 'bendahari', 'nazir', 'ketua_imam', 'ajk', 'audit',
+].map((role) => ({ role, email: `${role}@demo.test`, pages: expectedPages[role] }));
 const tenantRoles = process.env.E2E_PROD_ROLE_ACCOUNTS
     ? JSON.parse(process.env.E2E_PROD_ROLE_ACCOUNTS)
     : localTenantRoles;

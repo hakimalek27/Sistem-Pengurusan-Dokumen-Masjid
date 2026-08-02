@@ -1,0 +1,22 @@
+{
+  "description": "F0(v) — baseline bukti runtime produksi PRA-pembaikan (§10 langkah 5A). Direkod read-only via SSH 2 Ogos 2026. Perbandingan selepas setiap deploy fasa dibuat terhadap nilai ini.",
+  "recorded_at": "2026-08-02",
+  "server": "ubuntu@43.156.242.188:/opt/diwan (Tencent Lighthouse, bakwim.my)",
+  "chain": {
+    "1_git_sha": "8342d957917bea92db045b3572de84e15ff46c8f",
+    "2a_image_diwan_app": "sha256:dca1f6cbcf88353c66162be6e3e76b8153f41277f875e3d05f092499b5318b22 (Created 2026-07-22T22:40:51+08:00)",
+    "2b_image_diwan_web": "sha256:292e2aa93490abe36c4a8d6ed172624a24badf401bb0832eeb9c7e693e3bb7e1 (Created 2026-07-22T22:40:54+08:00)",
+    "3a_containers_app_family": {
+      "app": "sha256:dca1f6cbcf88353c66162be6e3e76b8153f41277f875e3d05f092499b5318b22",
+      "worker": "sha256:dca1f6cbcf88353c66162be6e3e76b8153f41277f875e3d05f092499b5318b22",
+      "scheduler": "sha256:dca1f6cbcf88353c66162be6e3e76b8153f41277f875e3d05f092499b5318b22"
+    },
+    "3b_container_nginx": "sha256:292e2aa93490abe36c4a8d6ed172624a24badf401bb0832eeb9c7e693e3bb7e1",
+    "4ab_manifest_sha256_app_dan_web": "7b81a135053a2f89d0f0d7587ef67eb9f5434e351412c6fe7a68c9f9bc943a10",
+    "4c_aset_help_exact": "assets/help-pJkQNpPs.js",
+    "5a_hash_aset_dalam_app": "a5ce6367672e2982bb504ccc6dd07b024a28f55974510ee00a529b8628f7f78e",
+    "5b_hash_aset_dalam_nginx": "a5ce6367672e2982bb504ccc6dd07b024a28f55974510ee00a529b8628f7f78e",
+    "6_hash_badan_url_awam": "a5ce6367672e2982bb504ccc6dd07b024a28f55974510ee00a529b8628f7f78e"
+  },
+  "verdict": "3a=2a ✓ · 3b=2b ✓ · 4a=4b ✓ · 5a=5b=6 ✓ — kod repo = kod imej = kod yang pengguna terima. Nota: imej belum berlabel OCI (D9 dilaksana F0; label muncul pada build seterusnya)."
+}

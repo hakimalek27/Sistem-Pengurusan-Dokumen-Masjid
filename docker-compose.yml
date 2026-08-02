@@ -3,6 +3,8 @@ x-app: &app
     context: .
     dockerfile: docker/Dockerfile
     target: app
+    args:
+      GIT_SHA: ${GIT_SHA:-unknown}
   image: diwan-app:${DIWAN_IMAGE_TAG:-local}
   env_file: .env
   restart: unless-stopped
@@ -37,6 +39,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       target: web
+      args:
+        GIT_SHA: ${GIT_SHA:-unknown}
     image: diwan-web:${DIWAN_IMAGE_TAG:-local}
     restart: unless-stopped
     ports:
