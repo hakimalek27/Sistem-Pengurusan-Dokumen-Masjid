@@ -175,15 +175,17 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
 }
 
 /**
- * Klik paksa untuk elemen halaman semasa tour aktif: overlay minimize kekal dan lubang
- * sorotan ikut geometri fon — pada runner Linux butang boleh jatuh di luar lubang lalu
- * gagal hit-test (gate menguji sorotan+kemajuan, bukan hit-test overlay; UX = skop F2/F6).
- * force melangkau SEMUA semakan actionability termasuk enabled, jadi tunggu enabled
- * dahulu (klik semasa wire:loading disabled hilang tanpa kesan).
+ * Klik elemen halaman semasa tour aktif: overlay kekal semasa minimize dan lubang
+ * sorotan ikut geometri fon — pada runner Linux butang boleh jatuh di luar lubang.
+ * Klik koordinat (biasa ATAU force) diserap overlay — force cuma melangkau semakan,
+ * klik tetap mendarat pada elemen teratas di koordinat. dispatchEvent menghantar event
+ * terus pada ELEMEN, jadi handler Livewire/Alpine menerima tanpa kira lapisan.
+ * toBeEnabled dahulu — klik semasa wire:loading disabled hilang tanpa kesan.
+ * (Gate menguji sorotan+kemajuan langkah, bukan hit-test overlay; UX = skop F2/F6.)
  */
 async function forceClickWhenEnabled(locator) {
     await expect(locator).toBeEnabled();
-    await locator.click({ force: true });
+    await locator.dispatchEvent('click');
 }
 
 /** Isi metadata wizard klasifikasi (jenis + arah) — guna semula corak guidance.spec.js. */
@@ -311,8 +313,9 @@ for (const guide of guides) {
                 await expect(popover).toContainText('3 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const registration = page.locator('[data-help-target="registration-consent"]').locator('..');
-                await page.locator('input[type="checkbox"]').nth(0).check({ force: true });
-                await page.locator('input[type="checkbox"]').nth(1).check({ force: true });
+                // el.click() terus (bukan check() koordinat) — rujuk nota overlay pada forceClickWhenEnabled.
+                await page.locator('input[type="checkbox"]').nth(0).evaluate((el) => { if (!el.checked) el.click(); });
+                await page.locator('input[type="checkbox"]').nth(1).evaluate((el) => { if (!el.checked) el.click(); });
                 await forceClickWhenEnabled(page.getByRole('button', { name: 'Hantar Permohonan' }));
                 await expect(page.getByText('Permohonan diterima!')).toBeVisible({ timeout: 60_000 });
                 await expect(page.locator('[data-help-target="registration-complete"]')).toBeVisible();

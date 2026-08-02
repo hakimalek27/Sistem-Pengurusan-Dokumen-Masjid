@@ -28,19 +28,46 @@ guide workflow 20/13 langkah + auto-advance → mesin-keadaan toleran; popover M
 modal pada DESKTOP (pengesahan bebas RR-08-03); registrasi perlu kod 3–6 HURUF + telefon WA unik
 (tolak-pendua senyap).
 
-### ▶️ BAKI F0.12 (sambung selepas compact)
-1. **CI `3f94a90` sedang berjalan** (pemantau latar; semak: `gh run list --branch main --limit 1`)
-   — larian pertama yang melepasi canary; menunggu smoke+domain+OCR+3 shard `guidance-e2e`+docker.
-   Jika merah: baca `gh run view <id> --log-failed`, baiki punca (bukan gate), komit F0e dst.
+### 🔧 F0e (2 Ogos malam) — CI run pertama `06277fc` MERAH → distabilkan (komit `31abd74`)
+Run 30741376294 (`06277fc`): Guidance smoke 8/12 — 4 kegagalan, SEMUA persekitaran (bukan
+regresi produk; ci-guidance tak pernah berjalan penuh dlm DB perawan). Analisis penuh:
+VERIFIKASI-F0 §11–§14. Fix (5 fail, +178/−19):
+1. `:123` launcher hidden (DB perawan + explore → tour auto-resume; `disableAutomaticGuides`
+   hanya panel public) → `closeGuideIfOpen()` sebelum assert.
+2. `:348`/`:386` overlay minimize memintas klik (lubang ikut geometri fon Linux≠Windows) →
+   `forceClickWhenEnabled()`: tunggu `toBeEnabled()` SEBELUM `click({force:true})` (force
+   melangkau semakan enabled — klik semasa `wire:loading` disabled hilang senyap).
+   Diseragamkan guidance.spec (6 titik) + guidance-full.spec (7 titik).
+3. registration.spec ENOENT laravel.log → guard `existsSync`; + step Serve override
+   `MAIL_MAILER=log` + `MAIL_LOG_CHANNEL=single` (job env array/stderr = magic link tak
+   pernah sampai ke fail log).
+4. **PENEMUAN TERPENTING: `APP_ENV=testing` memecahkan SEMUA upload UI** — Livewire
+   `runningUnitTests()` benar pada server HTTP → paksa disk `tmp-for-tests` (tak wujud) →
+   setiap `/livewire/upload-file` 500. Run `06277fc` terselamat kerana seeder + shard
+   di-skip; pasti meletup pada larian shard pertama. Fix: step Serve override
+   `APP_ENV=local` KEDUA-DUA job (Pest kekal testing via phpunit.xml).
+5. `PHP_CLI_SERVER_WORKERS=4` kedua-dua step Serve (race aset lazy x-load semasa beban).
+Verifikasi lokal keadaan CI-perawan (7 larian; skrip `scratchpad/f0/serve-f0e.sh`):
+**ci-guidance 12/12 (9.0m) + workflow shard 15/15 (8.0m) + screen.klasifikasi ✓ +
+public.registration ✓** + assert JSON 0 flaky. 3 flake infra dev Windows dikenal pasti &
+diselesaikan utk larian lokal (max_execution_time 30s I/O autoloader; throttle /daftar
+20/jam kaunter cache FILE kekal merentas larian → `cache:clear`; `ERR_NO_BUFFER_SPACE`
+socket letih — hanya lokal, tiada di CI).
+
+### ▶️ BAKI F0.12 (status semasa)
+1. **CI `31abd74` SEDANG BERJALAN** (pemantau latar poll 60s; semak:
+   `gh run list --branch main --limit 1`). Jika merah: `gh run view <id> --log-failed`,
+   baiki punca (bukan gate), komit F0f dst.
 2. Selepas HIJAU: **branch protection 4 check** via
-   `gh api repos/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commits/$(git rev-parse HEAD)/check-runs --jq '.check_runs[].name'`
+   `gh api repos/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commits/$(git rev-parse HEAD)/check-runs --paginate --jq '.check_runs[].name'`
    kemudian PUT branch protection: `PostgreSQL, Redis, Meili, OCR and tests` · `guidance-e2e-gate`
    · `Docker app image` · `Docker web image` (senarai A — TEPAT 4; shard/step = bukti B).
-3. Laporan Fasa 0 rasmi kpd pemilik + kemas VERIFIKASI-F0 §CI.
+3. Laporan Fasa 0 rasmi kpd pemilik (VERIFIKASI-F0 §1–§14 sudah lengkap).
 4. **F1** (HelpLauncher §2 pelan — fail tunggal `app/Livewire/HelpLauncher.php`, 4 sifat #[Locked],
    one-shot sebelum guard findVisible, + ujian HelpLauncherContextTest 10+1; kemudian F2 → Deploy 1).
-- Server produksi: **disegerakkan ke `3f94a90` (git sahaja, TIADA rebuild — kod di-bake dlm imej,
-  runtime kekal imej `8342d95`)**. Deploy runtime pertama = selepas F1+F2 (Deploy 1 §10).
+   **Baca semula §2 PELAN-PEMBAIKAN.md sebelum membina (peraturan #1).**
+- Server produksi: git `3f94a90` / runtime kekal imej `8342d95` (kod di-bake; sync git ke
+  `31abd74` bila-bila — tiada kesan runtime). Deploy runtime pertama = selepas F1+F2.
 - Tiket `SUP-260801-HXQ0DIOL` masih menunggu pemilik padam.
 
 ---

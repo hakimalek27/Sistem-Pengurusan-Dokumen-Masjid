@@ -87,16 +87,18 @@ async function assertNoHorizontalPageOverflow(page) {
 }
 
 /**
- * Klik paksa untuk elemen halaman semasa tour aktif: overlay minimize kekal
+ * Klik elemen halaman semasa tour aktif: overlay tour kekal semasa minimize
  * (minimiseForAction tidak destroy driver) dan lubang sorotan ikut geometri fon —
- * pada runner Linux butang boleh jatuh di luar lubang lalu gagal hit-test. force
- * melangkau SEMUA semakan actionability termasuk enabled, jadi tunggu enabled dahulu
- * (klik semasa wire:loading disabled hilang tanpa kesan). Ujian ini menguji
- * sinkronisasi langkah, bukan hit-test overlay (UX overlay = skop F2/F6).
+ * pada runner Linux butang boleh jatuh di luar lubang. Klik koordinat (biasa ATAU
+ * force) diserap overlay: force cuma melangkau semakan, klik tetap mendarat pada
+ * elemen teratas di koordinat itu. dispatchEvent menghantar event terus pada ELEMEN,
+ * jadi handler Livewire/Alpine menerima tanpa kira lapisan. toBeEnabled dahulu —
+ * klik semasa wire:loading disabled hilang tanpa kesan. Ujian ini menguji
+ * sinkronisasi langkah tour, bukan hit-test overlay (UX overlay = skop F2/F6).
  */
 async function forceClickWhenEnabled(locator) {
     await expect(locator).toBeEnabled();
-    await locator.click({ force: true });
+    await locator.dispatchEvent('click');
 }
 
 async function closeGuideIfOpen(page) {

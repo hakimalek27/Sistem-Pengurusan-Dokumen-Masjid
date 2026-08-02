@@ -238,3 +238,28 @@ OK [storage/app/plan-ci/ci-guidance.json]: 12 ujian, 0 skipped/timedOut/interrup
 ```
 
 Semua laluan kod yang disentuh F0e disahkan hijau dlm keadaan perawan.
+
+## 15. F0f — force:true BUKAN penyelesaian overlay; dispatchEvent ganti (run 30745501530)
+
+Run `31abd74` turun 4→2 kegagalan; baki 2 mendedahkan mekanisme sebenar:
+`click({force:true})` hanya melangkau SEMAKAN actionability — event mouse tetap dihantar
+ke KOORDINAT, dan elemen teratas di koordinat itu ialah overlay SVG tour → overlay
+menyerap klik → wizard Livewire tidak maju langsung (`registration-admin` /
+`classification-minit` tidak muncul 30s). Windows lokal terselamat kerana butang
+kebetulan DALAM lubang sorotan (geometri fon); Linux tidak. `serve-ci.log` run itu:
+0 ralat server (bukan isu aplikasi).
+
+Fix: `forceClickWhenEnabled()` → `locator.dispatchEvent('click')` selepas `toBeEnabled()`
+(event terus pada ELEMEN — cara rasmi Playwright utk elemen berlapis; handler
+Livewire/Alpine menerima tanpa kira lapisan). Checkbox consent guidance-full:
+`check({force})` → `evaluate el.click()` bersyarat (idempoten).
+
+Verifikasi lokal keadaan CI-perawan (dispatchEvent):
+```
+ci-guidance 11/12 (8.4m) + :141 diulang bersendirian 1 passed (4.4m)
+  — kegagalan tunggal = ERR_NO_BUFFER_SPACE (flake socket OS Windows, berpindah-pindah;
+    kesemua 12 ujian lulus dgn dispatchEvent)
+WORKFLOW SHARD PENUH: 15 passed (8.0m) + assert JSON 0 flaky
+gate screen: screen.klasifikasi-peti-masuk 1 passed (14.3s)
+gate tenant-admin-public: public.registration 1 passed (6.0s)
+```
