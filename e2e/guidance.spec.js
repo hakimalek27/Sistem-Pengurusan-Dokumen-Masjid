@@ -103,21 +103,39 @@ async function forceClickWhenEnabled(locator) {
 
 /**
  * Tunggu popover tiba pada langkah `text` selepas tindakan halaman. Auto-advance
- * (watchForNextStep, moveNext berjadual 120ms) berlumba dgn re-highlight Driver.js
+ * (watchForNextStep → moveNext berjadual 120ms) berlumba dgn re-highlight Driver.js
  * selepas morph Livewire: re-highlight memanggil watchForNextStep semula →
  * clearTransitionWatch membunuh jadual moveNext → guard "sasaran seterusnya sudah
- * wujud" menghalang poller baharu → tour terkandas dgn butang "Saya sudah buat"
- * (jalan keluar UI pengguna sebenar — race ini skop F2 §3; help.js tidak disentuh
- * pada F0). Ujian menekan butang itu bagi pihak pengguna apabila race itu kalah.
+ * wujud" (help.js:363) menghalang poller baharu → tour terkandas. Popover pula masih
+ * `display:none` daripada minimiseForAction, jadi laluan keluar pengguna sebenar ialah
+ * DUA butang: "Tunjuk arahan" pada banner menunggu, kemudian "Saya sudah buat".
+ * Race ini bug produk skop F2 §3 — help.js TIDAK disentuh pada F0 (§0.3).
  */
+async function recoverStalledTour(popover) {
+    // "Tunjuk arahan" pada banner: dispatchEvent, BUKAN klik tetikus — vendor Driver.js
+    // menetapkan `.driver-active * { pointer-events: none }` (kecuali sasaran + popover),
+    // jadi banner menolak klik tetikus. Laluan papan kekunci pengguna masih hidup
+    // (help.js:242 memberi fokus pada butang itu) dan menghasilkan event click yang sama.
+    // Kebolehklikan tetikus banner = pembaikan produk F2 (§3), bukan skop F0.
+    const show = popover.page().locator('[data-diwan-tour-waiting] button');
+    if (await show.isVisible().catch(() => false)) await show.dispatchEvent('click').catch(() => {});
+    const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
+    if (await nudge.isVisible().catch(() => false)) await nudge.click().catch(() => {});
+}
+
 async function expectStepAdvance(popover, text) {
     try {
         await expect(popover).toContainText(text, { timeout: 5_000 });
+
+        return;
     } catch {
-        const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
-        if (await nudge.isVisible().catch(() => false)) await nudge.click();
-        await expect(popover).toContainText(text);
+        // auto-advance kalah race — pulihkan melalui UI seperti pengguna
     }
+    // Semakan kedua: elak nudge jika advance mendarat tepat selepas timeout (nudge
+    // ketika itu akan MELOMPAT satu langkah lagi).
+    if (await popover.textContent().then((t) => (t ?? '').includes(text)).catch(() => false)) return;
+    await recoverStalledTour(popover);
+    await expect(popover).toContainText(text);
 }
 
 async function closeGuideIfOpen(page) {
@@ -148,6 +166,16 @@ async function ensureInboxFixture(page) {
 
 async function assertFloatingHelpLauncher(page, viewportHeight) {
     const launcher = page.locator('[data-help-target="help-launcher"]');
+    // Auto-start/resume tour dijadualkan 450ms SELEPAS boot (help.js:585) — ia boleh
+    // muncul selepas closeGuideIfOpen pertama, dan `body.driver-active` menyembunyikan
+    // launcher (help.css:76). Gelung: tutup apa-apa popover yang menyusul, sehingga
+    // launcher benar-benar kelihatan.
+    await expect.poll(async () => {
+        const close = page.locator('.driver-popover-close-btn');
+        if (await close.isVisible().catch(() => false)) await close.click().catch(() => {});
+
+        return launcher.isVisible().catch(() => false);
+    }, { timeout: 20_000, message: 'launcher bantuan tidak kelihatan (tour aktif?)' }).toBe(true);
     await expect(launcher).toBeVisible();
     await expect(launcher).toHaveAttribute('aria-label', 'Buka Pembantu Diwan');
     expect(await launcher.evaluate((element) => getComputedStyle(element).position)).toBe('fixed');

@@ -297,3 +297,44 @@ OK [guidance-full-workflow.json]: 15 ujian, 0 skipped/…
 gate screen: screen.klasifikasi-peti-masuk    1 passed (14.8s)
 gate tenant-admin-public: public.registration 1 passed (6.1s)
 ```
+
+## 17. F0h — ⚠️ ISU PRODUK BAHARU: banner tour tolak klik tetikus (run 30747876773)
+
+Run `fd53a81` (3 gagal) membuktikan nudge F0g TIDAK berkesan. Ujian bukti khusus
+(scratchpad; CPU throttle + keadaan terkandas dipaksa) mendedahkan DUA punca:
+
+**(a) Banner "Panduan menunggu" tidak boleh diklik dengan tetikus semasa tour aktif.**
+Vendor `driver.css`: `.driver-active * { pointer-events: none }` — dikecualikan HANYA
+`.driver-active-element` dan `.driver-popover`. Banner ialah anak `<body>` → klik tetikus
+diserap overlay SVG (Playwright: `svg.driver-overlay subtree intercepts pointer events`).
+Kesan pengguna sebenar: apabila auto-advance kalah race (§16), popover kekal `display:none`
+daripada `minimiseForAction` DAN satu-satunya jalan keluar ("Tunjuk arahan") **tidak dapat
+diklik** → pengguna tetikus TERKANDAS SEPENUHNYA (perlu muat semula halaman). Hanya papan
+kekunci menyelamatkan: `help.js:242` `show.focus()` → Enter menghasilkan event click.
+
+> 🔴 **Untuk F2 (§3):** banner menunggu perlu `pointer-events: auto` (dan ujian regresi
+> klik tetikus). `help.js`/`help.css` TIDAK disentuh pada F0 (§0.3). Ujian menggunakan
+> `dispatchEvent('click')` = setara laluan papan kekunci yang masih berfungsi.
+
+**(b) Launcher flaky pada ujian 20-konteks**: auto-start/resume dijadualkan **450ms selepas
+boot** (`help.js:585`) → boleh muncul SELEPAS `closeGuideIfOpen` pertama; `body.driver-active`
+menyembunyikan launcher (`help.css:76`). Kini gelung `expect.poll` 20s yang menutup apa-apa
+popover yang menyusul sehingga launcher benar-benar kelihatan.
+
+Bukti laluan pemulihan (2 ujian sementara — LULUS, tidak dikomit):
+```
+BUKTI A LULUS: popover pulih daripada display:none melalui banner SEBENAR + handler sebenar.
+BUKTI B LULUS: keadaan terkandas dipaksa (popover tersembunyi + sasaran langkah 2 wujud)
+               → laluan pemulihan membawa tour ke "2 daripada 4".
+  2 passed (6.9s)
+```
+CPU throttle 20× TIDAK mencetuskan race lokal (kedua-dua langkah pulang `auto`) — race ini
+khusus runner CI; itulah sebab ia tidak pernah kelihatan sebelum F0.
+
+Verifikasi lokal keadaan CI-perawan (muktamad F0h):
+```
+=== CI-GUIDANCE PENUH ===    12 passed (9.0m)   OK: 12 ujian, 0 flaky
+=== WORKFLOW SHARD PENUH === 15 passed (8.0m)   OK: 15 ujian, 0 flaky
+gate screen: screen.klasifikasi-peti-masuk    1 passed (15.4s)
+gate tenant-admin-public: public.registration 1 passed (6.0s)
+```

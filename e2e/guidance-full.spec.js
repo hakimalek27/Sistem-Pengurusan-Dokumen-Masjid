@@ -172,7 +172,7 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
         try {
             await expect.poll(readNumber, { timeout: 10_000 }).toBeGreaterThan(previous);
         } catch {
-            await clickCtaIfVisible();
+            await recoverStalledTour(popover);
         }
         await expect
             .poll(readNumber, { timeout: 90_000, message: `${guideId}: langkah ${previous} tidak maju` })
@@ -197,18 +197,32 @@ async function forceClickWhenEnabled(locator) {
 }
 
 /**
- * Tunggu popover tiba pada langkah `text` selepas tindakan halaman; jika auto-advance
- * kalah race re-highlight (rujuk nota expectStepAdvance dlm guidance.spec.js — skop F2),
- * tekan "Saya sudah buat" bagi pihak pengguna (jalan keluar UI sebenar).
+ * Pulihkan tour yang terkandas kerana auto-advance kalah race re-highlight (rujuk nota
+ * penuh dlm guidance.spec.js — bug produk skop F2 §3). Laluan pengguna sebenar = DUA
+ * butang: "Tunjuk arahan" pada banner menunggu (popover masih display:none daripada
+ * minimiseForAction), kemudian "Saya sudah buat".
  */
+async function recoverStalledTour(popover) {
+    // dispatchEvent, bukan klik tetikus: `.driver-active * { pointer-events: none }`
+    // (vendor) menolak klik pada banner — rujuk nota penuh dlm guidance.spec.js.
+    const show = popover.page().locator('[data-diwan-tour-waiting] button');
+    if (await show.isVisible().catch(() => false)) await show.dispatchEvent('click').catch(() => {});
+    const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
+    if (await nudge.isVisible().catch(() => false)) await nudge.click().catch(() => {});
+}
+
 async function expectStepAdvance(popover, text) {
     try {
         await expect(popover).toContainText(text, { timeout: 5_000 });
+
+        return;
     } catch {
-        const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
-        if (await nudge.isVisible().catch(() => false)) await nudge.click();
-        await expect(popover).toContainText(text);
+        // auto-advance kalah race — pulihkan melalui UI seperti pengguna
     }
+    // Elak nudge jika advance mendarat tepat selepas timeout (akan melompat satu langkah).
+    if (await popover.textContent().then((t) => (t ?? '').includes(text)).catch(() => false)) return;
+    await recoverStalledTour(popover);
+    await expect(popover).toContainText(text);
 }
 
 /** Isi metadata wizard klasifikasi (jenis + arah) — guna semula corak guidance.spec.js. */
