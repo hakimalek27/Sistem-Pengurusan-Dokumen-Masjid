@@ -1,6 +1,51 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — PELAN PEMBAIKAN ROUND-ROBIN + KEPUTUSAN PEMILIK (2 Ogos 2026) ⭐ TERKINI
+## SESI — 🚀 PELAKSANAAN F0 SIAP DIBINA (2 Ogos 2026, petang) ⭐ TERKINI
+
+**Arahan mula pemilik diterima** → pelan pelaksanaan diluluskan (plan-mode) → **FASA F0 SIAP
+DIBINA & DIKOMIT**: `7129369` (fix-audit-F0, 32 fail / 21,813 sisipan — 19 fail perkakas D11 +
+bundle + addendum v2.6 + label OCI D9) + 3 komit susulan penemuan CI: `dfad951` (F0b — dompdf
+3.1.5→3.1.6, 6 advisori GHSA 22 Jul; transitif, composer.json TAK diubah) + `cb18de2` (F0c —
+sync-help-index `--delete` idempoten pada `index_not_found`) + `3f94a90` (F0d — `APP_LOCALE: ms`
+env CI; config lalai `en` + CI tiada .env → UI Inggeris → canary gagal).
+
+### Verifikasi F0 (SEMUA HIJAU lokal — output penuh: `Audit Review Round Robin/bukti/plan-f0/VERIFIKASI-F0.md`)
+- Suite Pest **432✓/1 skip** (409→432; +PlanManifestTest 14 termasuk **lapisan C: 410 probe HTTP
+  × 10 identiti + silang-tenant 8×404**, +AuditFixtureCommandTest 5, +InboxAntivirusFailClosedTest 4 (S7)).
+- `diwan:role-routes` 410 entri **0 mismatch A↔B**; kiraan nav **25/17/15/15/13/13/13/14**
+  (sama dgn jangkaan lama guidance.spec — kini DIJANA dari spec; drift role P14-03 TAMAT;
+  `guidance.spec.js` membaca manifest, literal dibuang — gate F0(ii-b)#6).
+- **guidance-full 3 shard LULUS + AGREGATOR GATE LULUS: 83 guide · 473 langkah · 229 tindakan
+  (perbandingan SET)** — screen 30/30 (8.9m) · workflow 15/15 (7.3m) · t-a-p 41/41 (10.5m).
+- Baseline runtime produksi direkod read-only (rantaian 5A: 3a=2a·3b=2b·4a=4b·5a=5b=6, server
+  `8342d95`, aset `help-pJkQNpPs.js`) → `bukti/plan-baseline/runtime-baseline-2026-08-02.json`.
+- Fixture OCR sintetik terbukti dibaca tesseract lokal (BAKTIMURNI/CAHAYAIKHLAS).
+- **Penemuan penting: CI main sudah MERAH sejak `4e07a70` (pra-F0!)** — 4 skrip PHP bukti audit
+  gagal `pint --test` → `pint.json` exclude arkib; + advisori dompdf (22 Jul) = punca ke-2.
+
+### 3 pepijat spec gate ditemui semasa larian penuh (bukti nilai gate; direkod VERIFIKASI §10)
+guide workflow 20/13 langkah + auto-advance → mesin-keadaan toleran; popover MEMINTAS klik butang
+modal pada DESKTOP (pengesahan bebas RR-08-03); registrasi perlu kod 3–6 HURUF + telefon WA unik
+(tolak-pendua senyap).
+
+### ▶️ BAKI F0.12 (sambung selepas compact)
+1. **CI `3f94a90` sedang berjalan** (pemantau latar; semak: `gh run list --branch main --limit 1`)
+   — larian pertama yang melepasi canary; menunggu smoke+domain+OCR+3 shard `guidance-e2e`+docker.
+   Jika merah: baca `gh run view <id> --log-failed`, baiki punca (bukan gate), komit F0e dst.
+2. Selepas HIJAU: **branch protection 4 check** via
+   `gh api repos/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commits/$(git rev-parse HEAD)/check-runs --jq '.check_runs[].name'`
+   kemudian PUT branch protection: `PostgreSQL, Redis, Meili, OCR and tests` · `guidance-e2e-gate`
+   · `Docker app image` · `Docker web image` (senarai A — TEPAT 4; shard/step = bukti B).
+3. Laporan Fasa 0 rasmi kpd pemilik + kemas VERIFIKASI-F0 §CI.
+4. **F1** (HelpLauncher §2 pelan — fail tunggal `app/Livewire/HelpLauncher.php`, 4 sifat #[Locked],
+   one-shot sebelum guard findVisible, + ujian HelpLauncherContextTest 10+1; kemudian F2 → Deploy 1).
+- Server produksi: **disegerakkan ke `3f94a90` (git sahaja, TIADA rebuild — kod di-bake dlm imej,
+  runtime kekal imej `8342d95`)**. Deploy runtime pertama = selepas F1+F2 (Deploy 1 §10).
+- Tiket `SUP-260801-HXQ0DIOL` masih menunggu pemilik padam.
+
+---
+
+## SESI — PELAN PEMBAIKAN ROUND-ROBIN + KEPUTUSAN PEMILIK (2 Ogos 2026)
 
 **Status:** 🏁 **`PELAN-PEMBAIKAN.md` v1.11 MUKTAMAD** (ditutup P27, 2 Ogos 08:43 — syarat #6
 dipenuhi: **Codex P26 = pusingan Codex pertama tanpa pindaan substantif** selepas **27 pusingan ·
