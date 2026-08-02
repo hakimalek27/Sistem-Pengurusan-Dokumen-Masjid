@@ -263,3 +263,37 @@ WORKFLOW SHARD PENUH: 15 passed (8.0m) + assert JSON 0 flaky
 gate screen: screen.klasifikasi-peti-masuk 1 passed (14.3s)
 gate tenant-admin-public: public.registration 1 passed (6.0s)
 ```
+
+## 16. F0g — race `re-highlight` vs `moveNext` mematikan auto-advance (run 30746704490)
+
+Run `8fcab15` turun 2→1. `dispatchEvent` terbukti betul (wizard Livewire maju: langkah
+consent muncul) tetapi TOUR kekal di langkah lama. Petunjuk muktamad dari teks popover
+dlm ralat: label CTA bertukar `Buat pada skrin` → `Saya sudah buat` pada langkah SAMA —
+bermakna `onHighlighted` berjalan semula tanpa nombor langkah berubah.
+
+Punca (kod dibaca, bukan tekaan):
+```
+help.js onHighlighted:494  → watchForNextStep(guideSteps, index)   ← dipanggil SETIAP re-highlight
+help.js watchForNextStep:359 → clearTransitionWatch()              ← BUNUH jadual moveNext 120ms
+help.js watchForNextStep:363 → if (… || resolveStepElement(next))  ← sasaran berikut kini WUJUD
+                               return;                             ← poller baharu TIDAK dipasang
+```
+Morph Livewire (selepas wizard maju) mencetuskan re-highlight Driver.js → jadual advance
+dibatalkan → guard menghalang pemasangan semula → auto-advance mati; pengguna terpaksa
+tekan "Saya sudah buat". Windows lokal: `moveNext` 120ms menang dahulu; runner Linux: kalah.
+
+Ini **bug produk kelas sync/konteks — skop F2** (§3 `step-advance-plan.js`); `help.js`
+TIDAK disentuh pada F0 (§0.3). Ujian meniru laluan pengguna sebenar: `expectStepAdvance()`
+menunggu auto-advance 5–10s, jika terkandas tekan "Saya sudah buat" sekali, kemudian
+assert. **Wajib jadi ujian regresi F2**: poller advance mesti kekal berfungsi walaupun
+sasaran langkah berikut sudah kelihatan semasa re-highlight.
+
+Verifikasi lokal keadaan CI-perawan (muktamad F0g):
+```
+=== CI-GUIDANCE PENUH ===       12 passed (9.0m)
+OK [ci-guidance.json]: 12 ujian, 0 skipped/timedOut/interrupted/unexpected/flaky.
+=== WORKFLOW SHARD PENUH ===    15 passed (8.0m)
+OK [guidance-full-workflow.json]: 15 ujian, 0 skipped/…
+gate screen: screen.klasifikasi-peti-masuk    1 passed (14.8s)
+gate tenant-admin-public: public.registration 1 passed (6.1s)
+```

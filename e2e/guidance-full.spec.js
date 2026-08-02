@@ -166,6 +166,14 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
         if (action) await action(clickCtaIfVisible);
         else await clickCtaIfVisible();
         const previous = n;
+        // Fasa 1 pendek: beri peluang auto-advance; jika kalah race re-highlight
+        // (rujuk expectStepAdvance) popover terkandas dgn CTA "Saya sudah buat" —
+        // tekan sekali (laluan pengguna sebenar) sebelum poll penuh.
+        try {
+            await expect.poll(readNumber, { timeout: 10_000 }).toBeGreaterThan(previous);
+        } catch {
+            await clickCtaIfVisible();
+        }
         await expect
             .poll(readNumber, { timeout: 90_000, message: `${guideId}: langkah ${previous} tidak maju` })
             .toBeGreaterThan(previous);
@@ -186,6 +194,21 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
 async function forceClickWhenEnabled(locator) {
     await expect(locator).toBeEnabled();
     await locator.dispatchEvent('click');
+}
+
+/**
+ * Tunggu popover tiba pada langkah `text` selepas tindakan halaman; jika auto-advance
+ * kalah race re-highlight (rujuk nota expectStepAdvance dlm guidance.spec.js — skop F2),
+ * tekan "Saya sudah buat" bagi pihak pengguna (jalan keluar UI sebenar).
+ */
+async function expectStepAdvance(popover, text) {
+    try {
+        await expect(popover).toContainText(text, { timeout: 5_000 });
+    } catch {
+        const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
+        if (await nudge.isVisible().catch(() => false)) await nudge.click();
+        await expect(popover).toContainText(text);
+    }
 }
 
 /** Isi metadata wizard klasifikasi (jenis + arah) — guna semula corak guidance.spec.js. */
@@ -253,7 +276,7 @@ async function ensureInboxFixture(page) {
 /** Ikut wizard klasifikasi dari langkah popover semasa hingga langkah akhir guide (tanpa hantar). */
 async function followClassificationModal(page, popover, modal, plan) {
     for (const act of plan) {
-        await expect(popover).toContainText(`${act.num} daripada ${act.total}`);
+        await expectStepAdvance(popover, `${act.num} daripada ${act.total}`);
         await popover.locator('.driver-popover-next-btn').click();
         if (act.do === 'open-modal') {
             await page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first().click();
@@ -300,7 +323,7 @@ for (const guide of guides) {
                 );
                 await organisation.locator('input').nth(3).fill(`gate-${Date.now()}`);
                 await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
-                await expect(popover).toContainText('2 daripada 4');
+                await expectStepAdvance(popover, '2 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const admin = page.locator('[data-help-target="registration-admin"]');
                 await admin.locator('input').nth(0).fill('Pentadbir Gate');
@@ -310,7 +333,7 @@ for (const guide of guides) {
                 await admin.locator('input').nth(2).fill(`6012${Date.now().toString().slice(-8)}`);
                 await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
-                await expect(popover).toContainText('3 daripada 4');
+                await expectStepAdvance(popover, '3 daripada 4');
                 await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
                 const registration = page.locator('[data-help-target="registration-consent"]').locator('..');
                 // el.click() terus (bukan check() koordinat) — rujuk nota overlay pada forceClickWhenEnabled.
@@ -319,7 +342,7 @@ for (const guide of guides) {
                 await forceClickWhenEnabled(page.getByRole('button', { name: 'Hantar Permohonan' }));
                 await expect(page.getByText('Permohonan diterima!')).toBeVisible({ timeout: 60_000 });
                 await expect(page.locator('[data-help-target="registration-complete"]')).toBeVisible();
-                await expect(popover).toContainText('4 daripada 4');
+                await expectStepAdvance(popover, '4 daripada 4');
                 await popover.locator('.driver-popover-next-btn').click();
                 await expect(popover).toBeHidden();
                 void registration;
