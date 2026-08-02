@@ -606,3 +606,91 @@ test('wizard klasifikasi lima langkah berfungsi pada desktop dan mobile tanpa me
     await verifyClassificationWizard(browser, baseURL, tenantRoles[0], { width: 1440, height: 1000 });
     await verifyClassificationWizard(browser, baseURL, tenantRoles[2], { width: 390, height: 844 });
 });
+
+// F1 (PELAN-PEMBAIKAN §2.4) — konteks Pembantu Diwan mesti kekal merentas kitaran Livewire
+// dan berubah dengan betul selepas navigasi penuh. Sebelum F1, setiap interaksi Livewire
+// (termasuk telemetri tour itu sendiri) memusnahkan konteks pada 19/25 halaman produksi.
+async function guideIdOf(page) {
+    return page.locator('[data-diwan-help-runtime]').first().getAttribute('data-guide-id');
+}
+
+test('konteks Pembantu Diwan kekal selepas interaksi Livewire dan betul selepas navigasi', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await loginTenant(page, tenantRoles[0]);
+
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
+    await expect.poll(() => guideIdOf(page)).toBe('tenant.peti-masuk');
+    const runtime = page.locator('[data-diwan-help-runtime]').first();
+    const helpUrlBefore = await runtime.getAttribute('data-help-url');
+    expect(helpUrlBefore).toContain(encodeURIComponent(`/app/${tenantSlug}/peti-masuk`));
+
+    // Interaksi Livewire sebenar pada halaman — kitaran update penuh.
+    await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1_000);
+    await expect.poll(() => guideIdOf(page)).toBe('tenant.peti-masuk');
+    expect(await runtime.getAttribute('data-help-url')).toBe(helpUrlBefore);
+
+    // Navigasi penuh melalui sidebar → mount semula → konteks halaman BAHARU.
+    // dispatchEvent: anchor sidebar Filament ada handler Alpine; klik koordinat boleh
+    // dipintas oleh tooltip/overlay pada viewport tertentu.
+    await Promise.all([
+        page.waitForURL(new RegExp(`/app/${tenantSlug}/records`), { timeout: 60_000 }),
+        page.getByRole('link', { name: 'Rekod', exact: true }).first().dispatchEvent('click'),
+    ]);
+    await expect.poll(() => guideIdOf(page)).toBe('tenant.records');
+    expect([...new Set(browserErrors)]).toEqual([]);
+    await context.close();
+
+    // Panel admin: 11 halaman superadmin paling teruk terjejas sebelum F1.
+    const adminContext = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(adminContext);
+    const admin = await adminContext.newPage();
+    const adminErrors = monitorBrowserErrors(admin);
+    await loginSuperadmin(admin);
+    await admin.goto('/admin/mosques');
+    await expect.poll(() => guideIdOf(admin)).toBe('admin.mosques');
+    await admin.getByRole('button', { name: /Cipta|Penapis/i }).first().dispatchEvent('click').catch(() => {});
+    await admin.waitForTimeout(1_500);
+    await expect.poll(() => guideIdOf(admin)).toBe('admin.mosques');
+    expect([...new Set(adminErrors)]).toEqual([]);
+    await adminContext.close();
+});
+
+test('tour yang ditutup tidak bermula semula semasa halaman terus digunakan (one-shot)', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=tenant.peti-masuk&langkah=0`);
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toBeVisible();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    await expect(popover).toBeHidden();
+
+    // Kontrak yang penting bagi pengguna: tour TIDAK muncul semula walaupun halaman
+    // terus digunakan (interaksi Livewire lain selepas tour ditutup).
+    await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1_500);
+    await expect(popover).toBeHidden();
+
+    // NOTA (disahkan e2e): `data-auto-start` dalam DOM kekal "1" sehingga muat penuh
+    // berikutnya — HelpLauncher ialah komponen Livewire BERASINGAN, jadi interaksi pada
+    // komponen lain tidak me-render semula ia, dan kitaran telemetrinya sendiri memanggil
+    // skipRender (kontrak PELAN §2.2 nota 3). Nilai SERVER sudah padam — dibuktikan
+    // HelpLauncherContextTest #5a/#5b/#5c. Selamat selagi SPA mati (penjaga #11):
+    // bootRuntime hanya berjalan pada DOMContentLoaded = muat penuh yang mount() semula.
+    // Jika SPA dihidupkan kelak, `livewire:navigated` akan membaca DOM lama — laksanakan
+    // spesifikasi beku PELAN §2.2 nota 4 dahulu.
+
+    // Muat penuh baharu dengan URL sama → tour bermula semula (kontrak (c) PELAN §2.2).
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=tenant.peti-masuk&langkah=0`);
+    await expect(popover).toBeVisible();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    await context.close();
+});

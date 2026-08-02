@@ -21,6 +21,35 @@ class HelpLauncher extends Component
     #[Locked]
     public ?int $mosqueId = null;
 
+    /**
+     * Konteks halaman SEBENAR, ditawan sekali pada mount().
+     *
+     * Semasa kitaran update Livewire, `request()` ialah `POST /livewire/update` — membaca
+     * konteks dari situ memulangkan guide `null` dan memusnahkan Pembantu Diwan pada
+     * 19/25 halaman produksi (RR-01-02). Sifat komponen kekal merentas update, dan
+     * mount() hanya berjalan pada muat halaman penuh, jadi nilai ini sentiasa halaman
+     * yang pengguna benar-benar lihat.
+     */
+    #[Locked]
+    public string $originPath = '/';
+
+    #[Locked]
+    public ?string $requestedGuideId = null;
+
+    #[Locked]
+    public int $requestedStep = 0;
+
+    /**
+     * Pencetus auto-start SEKALI-GUNA.
+     *
+     * Dahulu `?panduan=` dibaca terus dari request setiap render, jadi isyarat itu hilang
+     * sendiri pada kitaran seterusnya. Setelah ia menjadi sifat yang kekal, isyarat itu
+     * akan MELEKAT dan tour yang baru ditutup boleh bermula semula pada setiap
+     * `bootRuntime()`. Sebab itu ia dipadam apabila tour dimulakan/ditutup/selesai.
+     */
+    #[Locked]
+    public bool $launchPending = false;
+
     public bool $showButton = true;
 
     public function mount(string $panel = 'public', bool $showButton = true): void
@@ -29,6 +58,13 @@ class HelpLauncher extends Component
         $this->showButton = $showButton;
         $tenant = $this->panel === 'app' ? Filament::getTenant() : null;
         $this->mosqueId = $tenant instanceof Mosque ? $tenant->id : null;
+
+        // Root: path() = '/' → trim = '' → hasil '/' (bukan '//' seperti dahulu — RR-01-11).
+        $this->originPath = '/'.trim(request()->path(), '/');
+        $requested = request()->query('panduan');
+        $this->requestedGuideId = is_string($requested) ? $requested : null;
+        $this->requestedStep = max(0, (int) request()->query('langkah', 0));
+        $this->launchPending = filled($this->requestedGuideId);
     }
 
     #[On('guidanceProgress')]
@@ -37,6 +73,16 @@ class HelpLauncher extends Component
         if (! in_array($event, ['started', 'progressed', 'completed', 'dismissed', 'target_missing'], true)) {
             return;
         }
+
+        // Padam pencetus SEBELUM guard findVisible() di bawah: kalau guide itu tidak lagi
+        // kelihatan (kebenaran ditarik, guide dibuang katalog), guard memulangkan awal dan
+        // launchPending akan kekal true selama-lamanya. Selamat kerana perbandingannya
+        // dengan sifat #[Locked] yang ditetapkan server.
+        if ($guideId === $this->requestedGuideId
+            && in_array($event, ['started', 'dismissed', 'completed'], true)) {
+            $this->launchPending = false;
+        }
+
         $guide = app(HelpCatalog::class)->findVisible($guideId, $this->panel, Auth::user(), $this->mosque());
         if (! $guide) {
             return;
@@ -47,6 +93,11 @@ class HelpLauncher extends Component
         } else {
             session()->put("diwan_help.public.{$guideId}", ['status' => $event, 'step_index' => $stepIndex]);
         }
+
+        // Telemetri tidak mengubah HTML launcher — jangan render semula. Kesan yang
+        // diterima: badge $taskCount tidak segar pada kitaran telemetri (ia segar pada
+        // interaksi lain).
+        $this->skipRender();
     }
 
     public function render()
@@ -58,12 +109,12 @@ class HelpLauncher extends Component
         }
 
         $catalog = app(HelpCatalog::class);
-        $requestedId = request()->query('panduan');
+        $requestedId = $this->requestedGuideId;
         $guide = is_string($requestedId)
             ? $catalog->findVisible($requestedId, $this->panel, $user, $mosque)
-            : $catalog->currentGuide('/'.request()->path(), $this->panel, $user, $mosque);
-        $autoStart = filled($requestedId);
-        $resumeStep = max(0, (int) request()->query('langkah', 0));
+            : $catalog->currentGuide($this->originPath, $this->panel, $user, $mosque);
+        $autoStart = $this->launchPending;
+        $resumeStep = $this->requestedStep;
         $taskCount = 0;
         $mode = 'lengkap';
 
@@ -85,7 +136,7 @@ class HelpLauncher extends Component
             $autoStart = ! session()->has("diwan_help.public.{$guide['id']}");
         }
 
-        $origin = '/'.request()->path();
+        $origin = $this->originPath;
         $helpUrl = match ($this->panel) {
             'app' => '/app/'.$mosque->slug.'/bantuan?asal='.urlencode($origin),
             'admin' => '/admin/bantuan?asal='.urlencode($origin),
