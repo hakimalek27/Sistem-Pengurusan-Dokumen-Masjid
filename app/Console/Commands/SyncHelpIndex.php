@@ -51,7 +51,10 @@ class SyncHelpIndex extends Command
                 $deleteTask = rescue(fn () => $client->deleteIndex($uid), report: false);
                 if (is_array($deleteTask) && isset($deleteTask['taskUid'])) {
                     $deleted = $client->waitForTask($deleteTask['taskUid'], 30_000, 100);
-                    if (($deleted['status'] ?? null) === 'failed') {
+                    // `index_not_found` = indeks memang tiada (persekitaran perawan spt CI) —
+                    // matlamat --delete tercapai; HANYA ralat lain kekal fatal (F0 gate C20).
+                    if (($deleted['status'] ?? null) === 'failed'
+                        && data_get($deleted, 'error.code') !== 'index_not_found') {
                         throw new \RuntimeException('Indeks lama gagal dipadam: '.data_get($deleted, 'error.message', 'ralat tidak diketahui'));
                     }
                 }
