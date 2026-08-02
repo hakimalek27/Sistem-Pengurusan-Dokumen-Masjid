@@ -51,6 +51,7 @@ jobs:
           - 7700:7700
     env:
       APP_ENV: testing
+      APP_LOCALE: ms                         # selaras .env produksi/lokal (config lalai=en; UI BM diassert e2e)
       APP_DEBUG: "false"
       APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       APP_URL: http://127.0.0.1:8080
@@ -302,6 +303,7 @@ jobs:
           - 7700:7700
     env:
       APP_ENV: testing
+      APP_LOCALE: ms                         # selaras .env produksi/lokal (config lalai=en; UI BM diassert e2e)
       APP_DEBUG: "false"
       APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       APP_URL: http://127.0.0.1:8092         # OVERRIDE 1 (integration = 8080; Playwright = 8092)
