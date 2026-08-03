@@ -13,10 +13,10 @@
         </p>
         <form wire:submit="send">
             <label>E-mel atau No. Telefon</label>
-            <input type="text" wire:model="login">
+            <input type="text" wire:model="login" data-help-target="login-identity">
             @error('login') <div class="err">{{ $message }}</div> @enderror
             <div style="margin-top:1rem;">
-                <button type="submit" class="btn">Hantar Pautan Log Masuk</button>
+                <button type="submit" class="btn" data-help-target="login-submit">Hantar Pautan Log Masuk</button>
             </div>
         </form>
         <hr style="margin:1.25rem 0; border:none; border-top:1px solid #e5e7eb;">

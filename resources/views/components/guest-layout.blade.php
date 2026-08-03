@@ -86,8 +86,12 @@
     @vite('resources/js/help.js')
 </head>
 <body>
+    {{-- F5a (§6.1): `.wrap` KEKAL <div> — ia membungkus jenama + nav + kandungan, jadi
+         menjadikannya <main> akan menyarangkan landmark navigation dalam main dan
+         menjadikan `page-content` menyorot seluruh halaman (masalah sorotan-terlalu-besar).
+         Bentuk betul: <header> untuk jenama/nav, <main> untuk kandungan sahaja. --}}
     <div class="wrap">
-        <div class="brand">
+        <header class="brand">
             <div class="brand-mark">
                 <h1>ﺍﻟﺪﻳﻮﺍﻥ · Diwan</h1>
                 <p>Sistem Pengurusan Dokumen Masjid</p>
@@ -98,8 +102,8 @@
                 <a href="{{ url('/daftar') }}">Daftar</a>
                 <livewire:help-launcher panel="public" />
             </nav>
-        </div>
-        {{ $slot }}
+        </header>
+        <main data-help-target="page-content">{{ $slot }}</main>
     </div>
     @livewireScripts
 </body>

@@ -45,23 +45,45 @@ const roleRoutes = JSON.parse(readFileSync(args['role-routes'], 'utf8'));
 //
 // `catalog_version` direkod sahaja di sini; PlanManifestTest yang menguatkuasakan manifest
 // dijana semula setiap kali katalog berubah.
+// PERUBAHAN DENOMINATOR (prosedur README "Nota" — sebab bertulis + kemas KEDUA-DUA penjaga
+// dalam commit sama + catat dalam bukti fasa). Dikemas pada F5, 4 Ogos 2026:
+//
+//  (1) wait_for_user 229 → 228. F5 §6.2 memberi `screen.muat-naik-dokumen` sasaran spesifik.
+//      Langkah 4 ("Sahkan toast dan baris baharu") dan 5 ("Semak antivirus sebelum
+//      klasifikasi") ialah langkah PEMERHATIAN, bukan tindakan — `wait_for_user: true` pada
+//      keduanya menyebabkan butang berkata "Buat pada skrin" untuk sesuatu yang pengguna
+//      hanya perlu BACA (−2). `public.login#2` pula ialah tindakan sebenar (hantar pautan)
+//      dan mesti menunggu supaya tour tamat apabila pautan dihantar (+1). Net 229 − 2 + 1.
+//
+//  (2) W1 28/140 → 27/135 dan W3 1/11 → 2/16. `waveOf()` mengelaskan guide `screen`
+//      mengikut ADA/TIADA langkah tindakan-generik. F5 membaiki kesemua 5 langkah
+//      `screen.muat-naik-dokumen`, jadi guide itu tidak lagi mempunyai kerja W1 dan
+//      berpindah ke W3 ("screen, tiada tindakan generik"). Jumlah kekal 83/473 dan
+//      struktur shard `screen` kekal 29/151 — hanya senarai kerja yang mengecil, iaitu
+//      maksud wave itu sendiri. Jangkakan perpindahan serupa pada setiap gelombang F6.
 const FROZEN = {
     guides: 83, steps: 473, generic_declared: 443, generic_pp: 238, generic_pc: 205,
-    placeholder_titles: 258, wait_for_user: 229, action_steps_with_generic_target: 200,
+    placeholder_titles: 258, wait_for_user: 228, action_steps_with_generic_target: 200,
     unique_step_ids: 470, mobile_defects: 6, catalog_version: '2026.07.22.2',
     waves: {
         W0: { guides: 2, steps: 10, action_generic: 0, placeholder: 10, mobile_defects: 6 },
-        W1: { guides: 28, steps: 140, action_generic: 140, placeholder: 140, mobile_defects: 0 },
+        W1: { guides: 27, steps: 135, action_generic: 140, placeholder: 140, mobile_defects: 0 },
         W2: { guides: 13, steps: 145, action_generic: 60, placeholder: 0, mobile_defects: 0 },
-        W3: { guides: 1, steps: 11, action_generic: 0, placeholder: 0, mobile_defects: 0 },
+        W3: { guides: 2, steps: 16, action_generic: 0, placeholder: 0, mobile_defects: 0 },
         W4: { guides: 1, steps: 13, action_generic: 0, placeholder: 0, mobile_defects: 0 },
         W5: { guides: 35, steps: 146, action_generic: 0, placeholder: 108, mobile_defects: 0 },
         W6: { guides: 3, steps: 8, action_generic: 0, placeholder: 0, mobile_defects: 0 },
     },
     shards: {
+        //  (3) tenant-admin-public.action_steps 3 → 4. `action_steps` dibandingkan sebagai
+        //      metrik KEMAJUAN (≤), tetapi ia sebenarnya metrik KANDUNGAN: metrik kecacatan
+        //      ialah `action_steps_with_generic_target` (200 → 0). `public.login#2` menjadi
+        //      langkah tindakan BERSASAR SPESIFIK (`login-submit`) supaya tour tamat apabila
+        //      pautan benar-benar dihantar — bertambah tanpa menambah satu pun tindakan
+        //      generik. Denominator dinaikkan; arah perbandingan TIDAK diubah (di luar skop F5).
         'screen': { guides: 29, steps: 151, action_steps: 151 },
         'workflow': { guides: 14, steps: 158, action_steps: 75 },
-        'tenant-admin-public': { guides: 40, steps: 164, action_steps: 3 },
+        'tenant-admin-public': { guides: 40, steps: 164, action_steps: 4 },
     },
     // Kohort audit P11 (produksi 1 Ogos 2026) — perbandingan apple-to-apple SAHAJA, bukan gate.
     cohort_baseline: {

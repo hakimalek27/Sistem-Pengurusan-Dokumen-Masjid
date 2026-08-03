@@ -2,6 +2,7 @@ import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import '../css/help.css';
 import { ACTION_KINDS, stepAdvancePlan } from './help/step-advance-plan.js';
+import { NAV_PRIMARY, navPrimaryTarget } from './help/nav-target-plan.js';
 
 const SELECTOR = (target) => `[data-help-target="${CSS.escape(target)}"]`;
 const GENERIC_TARGETS = new Set(['page-content', 'page-primary']);
@@ -47,6 +48,24 @@ function isVisible(element) {
         && element.getClientRects().length > 0;
 }
 
+/**
+ * F5c (§6.3) — calon konkrit bagi sasaran LOGIK `nav-primary`.
+ *
+ * Ruang nama BERASINGAN (`data-help-nav`, bukan `data-help-target`) dan itu bukan kosmetik:
+ * satu elemen hanya boleh memegang SATU `data-help-target`. Percubaan pertama F5c menandakan
+ * `.fi-sidebar` sebagai `sidebar` DAN `nav-sidebar`; kedua-duanya bertelagah pada atribut yang
+ * sama, jadi `decorateTargets()` — yang dipanggil pada SETIAP `resolveStepElement()` —
+ * menulis semula atribut pada setiap panggilan. Pemerhati mutasi tour (`transitionObserver`,
+ * `automaticModalGuard`) memerhati `attributes: true` pada `documentElement`, jadi tulisan
+ * berulang itu menjadi ribut mutasi berterusan dan koreografi tour klasifikasi tersangkut.
+ * Disahkan: 3 ujian tour F2 tamat masa 180s dengan ruang nama bertindan, lulus 10–14s tanpanya.
+ */
+const NAV_SELECTORS = {
+    'nav-sidebar': '.fi-sidebar',                    // desktop >=64rem
+    'nav-menu-toggle': '.fi-topbar-open-sidebar-btn', // mobile (Filament sembunyikan >=64rem)
+    'nav-bar': '.fi-topbar',                          // penambat terakhir; sentiasa dirender
+};
+
 function decorateTargets() {
     const targets = [
         ['main', 'page-content'],
@@ -57,6 +76,44 @@ function decorateTargets() {
         const element = document.querySelector(selector);
         if (element && !document.querySelector(SELECTOR(target))) element.dataset.helpTarget = target;
     }
+
+    for (const [nav, selector] of Object.entries(NAV_SELECTORS)) {
+        const element = document.querySelector(selector);
+        // Idempoten: hanya tulis jika belum bertanda — tiada dua kunci berkongsi elemen.
+        if (element && element.dataset.helpNav !== nav) element.dataset.helpNav = nav;
+    }
+}
+
+/**
+ * Elemen bertindan dengan viewport?
+ *
+ * `isVisible()` sahaja TIDAK memadai untuk elemen off-canvas. Diukur pada iPhone 13
+ * (390×664): `.fi-sidebar` mobile ialah `display:flex`, `visibility:visible`,
+ * `getClientRects().length === 1` — tetapi `x = -320` dengan `width = 320`, iaitu tepat di
+ * luar skrin. Menyorotnya bermakna pengguna melihat sorotan pada kawasan kosong.
+ * (Andaian pertama F5c ialah Filament menyembunyikannya dengan `display:none`; ukuran
+ * sebenar menolak andaian itu.)
+ *
+ * SENGAJA tidak dimasukkan ke dalam `isVisible()` global: itu akan mengubah keputusan label
+ * bagi 473 langkah katalog sekali gus. Off-canvas sebagai isu am = kerja F6/F7.
+ */
+function intersectsViewport(element) {
+    const rect = element.getBoundingClientRect();
+    const vw = window.innerWidth || document.documentElement.clientWidth;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+
+    return rect.right > 0 && rect.bottom > 0 && rect.left < vw && rect.top < vh;
+}
+
+/** Calon navigasi (`data-help-nav`) yang kelihatan DAN berada di dalam skrin. */
+function onScreenNavElement(nav) {
+    return [...document.querySelectorAll(`[data-help-nav="${CSS.escape(nav)}"]`)]
+        .find((el) => isVisible(el) && intersectsViewport(el)) || null;
+}
+
+/** Calon navigasi yang kelihatan, walaupun di luar skrin (penambat terakhir). */
+function anyNavElement(nav) {
+    return [...document.querySelectorAll(`[data-help-nav="${CSS.escape(nav)}"]`)].find(isVisible) || null;
 }
 
 function handleHelpImageError(event) {
@@ -127,6 +184,17 @@ function resolveStepElement(step, allowGenericFallback = true) {
     if (step.target === 'page-primary') {
         const semantic = semanticAction(step);
         if (semantic) return semantic;
+    }
+
+    // F5c (§6.3): sasaran logik `nav-primary` → calon navigasi konkrit yang kelihatan.
+    // Sengaja SEBELUM cabang `exact` supaya `nav-primary` tidak pernah dicari sebagai
+    // `data-help-target` literal (ia tidak wujud dalam DOM — ia sasaran logik sahaja).
+    if (step.target === NAV_PRIMARY) {
+        // Predikat = DI DALAM SKRIN, bukan sekadar `isVisible`: sidebar mobile off-canvas
+        // lulus `isVisible` (lihat intersectsViewport) dan akan disorot pada x = -320.
+        const dipilih = navPrimaryTarget((candidate) => Boolean(onScreenNavElement(candidate)));
+
+        return onScreenNavElement(dipilih) || anyNavElement(dipilih);
     }
 
     const exact = step.target

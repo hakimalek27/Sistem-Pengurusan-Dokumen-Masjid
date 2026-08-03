@@ -71,11 +71,15 @@ test('manifest baseline mematuhi invarian partition beku', function () {
         ->and($totals['placeholder'])->toBeLessThanOrEqual(258)
         ->and($totals['mobile'])->toBeLessThanOrEqual(6);
 
+    // Denominator wave dikemas F5 (4 Ogos 2026): `screen.muat-naik-dokumen` (5 langkah)
+    // mendapat sasaran spesifik §6.2 → tiada lagi tindakan generik → `waveOf()` W1 → W3.
+    // Jumlah 83/473 dan shard `screen` 29/151 TIDAK berubah. Sebab penuh + 2 denominator
+    // lain: `Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs`.
     expect($totals['steps'])->toBe(473)
-        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 28, 'W2' => 13, 'W3' => 1, 'W4' => 1, 'W5' => 35, 'W6' => 3])
+        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 27, 'W2' => 13, 'W3' => 2, 'W4' => 1, 'W5' => 35, 'W6' => 3])
         ->and(array_sum($waveSteps))->toBe(473)
-        ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(140)
-        ->and($waveSteps['W2'])->toBe(145)->and($waveSteps['W3'])->toBe(11)
+        ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(135)
+        ->and($waveSteps['W2'])->toBe(145)->and($waveSteps['W3'])->toBe(16)
         ->and($waveSteps['W4'])->toBe(13)->and($waveSteps['W5'])->toBe(146)->and($waveSteps['W6'])->toBe(8);
 });
 

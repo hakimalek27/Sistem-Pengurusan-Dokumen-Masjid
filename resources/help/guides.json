@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.03.3",
+  "catalog_version": "2026.08.04.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -977,7 +977,7 @@
   "guides": [
     {
       "id": "tenant.dashboard",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Papan Pemuka",
       "summary": "Ringkasan kerja dan keadaan semasa tenant: jumlah rekod, peti masuk, minit, storan dan carta trend yang dibenarkan.",
@@ -1020,27 +1020,27 @@
       "steps": [
         {
           "id": "dashboard.1",
-          "title": "Langkah 1",
-          "instruction": "Semak nama masjid pada panel untuk memastikan tenant yang betul.",
-          "target": "page-content"
+          "title": "Sahkan tenant yang betul",
+          "instruction": "Semak nama masjid pada menu navigasi untuk memastikan tenant yang betul; pada skrin kecil tekan menu (tiga garis) dahulu.",
+          "target": "nav-primary"
         },
         {
           "id": "dashboard.2",
-          "title": "Langkah 2",
+          "title": "Baca kad statistik",
           "instruction": "Baca kad statistik; nombor hanya merangkumi data yang role ini dibenarkan lihat.",
           "target": "page-primary"
         },
         {
           "id": "dashboard.3",
-          "title": "Langkah 3",
+          "title": "Semak senarai semak persediaan",
           "instruction": "Semak senarai semak persediaan jika masih dipaparkan.",
           "target": "page-content"
         },
         {
           "id": "dashboard.4",
-          "title": "Langkah 4",
-          "instruction": "Gunakan menu kiri untuk membuka tugasan; jangan gunakan URL tenant lain secara manual.",
-          "target": "page-content"
+          "title": "Buka tugasan dari menu",
+          "instruction": "Gunakan menu navigasi untuk membuka tugasan; pada skrin kecil tekan menu (tiga garis) dahulu. Jangan taip URL tenant lain secara manual.",
+          "target": "nav-primary"
         }
       ],
       "troubleshooting": [
@@ -1085,25 +1085,25 @@
       "steps": [
         {
           "id": "sensitive-access-logs.1",
-          "title": "Langkah 1",
+          "title": "Cari nama, rekod atau tindakan",
           "instruction": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.",
           "target": "page-content"
         },
         {
           "id": "sensitive-access-logs.2",
-          "title": "Langkah 2",
+          "title": "Semak pengguna, IP dan masa",
           "instruction": "Semak pengguna, tindakan, alamat IP, user-agent dan masa akses.",
           "target": "page-primary"
         },
         {
           "id": "sensitive-access-logs.3",
-          "title": "Langkah 3",
+          "title": "Siasat akses luar biasa",
           "instruction": "Siasat akses luar biasa melalui rekod asal; jangan padam atau ubah log.",
           "target": "page-content"
         },
         {
           "id": "sensitive-access-logs.4",
-          "title": "Langkah 4",
+          "title": "Laporkan akses tidak dikenali",
           "instruction": "Laporkan akses tidak dikenali kepada Admin/Kerani dan wakil perlindungan data.",
           "target": "page-content"
         }
@@ -1153,31 +1153,31 @@
       "steps": [
         {
           "id": "log-aktiviti.1",
-          "title": "Langkah 1",
+          "title": "Tapis jenis, pelaku dan tarikh",
           "instruction": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.",
           "target": "page-content"
         },
         {
           "id": "log-aktiviti.2",
-          "title": "Langkah 2",
+          "title": "Cari tajuk atau rujukan",
           "instruction": "Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.",
           "target": "page-primary"
         },
         {
           "id": "log-aktiviti.3",
-          "title": "Langkah 3",
+          "title": "Buka Butiran peristiwa",
           "instruction": "Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa.",
           "target": "page-content"
         },
         {
           "id": "log-aktiviti.4",
-          "title": "Langkah 4",
+          "title": "Bandingkan masa secara kronologi",
           "instruction": "Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.",
           "target": "page-content"
         },
         {
           "id": "log-aktiviti.5",
-          "title": "Langkah 5",
+          "title": "Bendahari lihat log dibenarkan",
           "instruction": "Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan.",
           "target": "page-content"
         }
@@ -1222,37 +1222,37 @@
       "steps": [
         {
           "id": "persediaan.1",
-          "title": "Langkah 1",
+          "title": "Buka wizard persediaan",
           "instruction": "Tekan Mula Persediaan Berpandu.",
           "target": "page-content"
         },
         {
           "id": "persediaan.2",
-          "title": "Langkah 2",
+          "title": "Isi jawatan dan telefon masjid",
           "instruction": "Isi jawatan anda dan nombor telefon rasmi masjid.",
           "target": "page-primary"
         },
         {
           "id": "persediaan.3",
-          "title": "Langkah 3",
+          "title": "Pilih nombor WhatsApp digunakan",
           "instruction": "Pilih sama ada nombor sendiri digunakan sementara atau nombor khas masjid.",
           "target": "page-content"
         },
         {
           "id": "persediaan.4",
-          "title": "Langkah 4",
+          "title": "Tambah ahli awal",
           "instruction": "Tambah ahli awal dengan nama, peranan, telefon dan e-mel jika ada.",
           "target": "page-content"
         },
         {
           "id": "persediaan.5",
-          "title": "Langkah 5",
+          "title": "Semak peranan sebelum simpan",
           "instruction": "Semak setiap peranan sebelum simpan; elakkan memberi Admin/Kerani tanpa keperluan.",
           "target": "page-content"
         },
         {
           "id": "persediaan.6",
-          "title": "Langkah 6",
+          "title": "Sambung semula jika dilangkau",
           "instruction": "Jika dilangkau, kembali melalui menu Persediaan Berpandu untuk melengkapkan kemudian.",
           "target": "page-content"
         }
@@ -1297,37 +1297,37 @@
       "steps": [
         {
           "id": "ahli-peranan.1",
-          "title": "Langkah 1",
+          "title": "Tekan Jemput Ahli",
           "instruction": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara.",
           "target": "page-content"
         },
         {
           "id": "ahli-peranan.2",
-          "title": "Langkah 2",
+          "title": "Pilih satu peranan tepat",
           "instruction": "Masukkan e-mel jika tersedia dan pilih hanya satu peranan yang tepat.",
           "target": "page-primary"
         },
         {
           "id": "ahli-peranan.3",
-          "title": "Langkah 3",
+          "title": "Sahkan ahli masuk senarai",
           "instruction": "Selepas jemputan, pastikan ahli muncul dalam senarai tenant ini.",
           "target": "page-content"
         },
         {
           "id": "ahli-peranan.4",
-          "title": "Langkah 4",
+          "title": "Hantar semula pautan jemputan",
           "instruction": "Gunakan Hantar Semula Pautan jika ahli belum menerima pautan; jangan cipta akaun pendua.",
           "target": "page-content"
         },
         {
           "id": "ahli-peranan.5",
-          "title": "Langkah 5",
+          "title": "Tetapkan semula kata laluan sementara",
           "instruction": "Tetapkan semula kata laluan sementara hanya apabila identiti ahli disahkan.",
           "target": "page-content"
         },
         {
           "id": "ahli-peranan.6",
-          "title": "Langkah 6",
+          "title": "Semak kesan sebelum tukar peranan",
           "instruction": "Untuk ubah peranan atau keluarkan ahli, semak kesan terhadap tugasan/minit dahulu.",
           "target": "page-content"
         }
@@ -1385,31 +1385,31 @@
       "steps": [
         {
           "id": "classification-nodes.1",
-          "title": "Langkah 1",
+          "title": "Cari kod sedia ada dahulu",
           "instruction": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu.",
           "target": "page-content"
         },
         {
           "id": "classification-nodes.2",
-          "title": "Langkah 2",
+          "title": "Pilih nod induk dan peringkat",
           "instruction": "Pilih nod induk yang betul dan peringkat yang sepadan.",
           "target": "page-primary"
         },
         {
           "id": "classification-nodes.3",
-          "title": "Langkah 3",
+          "title": "Guna pola kod rasmi",
           "instruction": "Gunakan pola kod seperti 500, 500-1 atau 500-1/2.",
           "target": "page-content"
         },
         {
           "id": "classification-nodes.4",
-          "title": "Langkah 4",
+          "title": "Tetapkan tajuk dan sensitiviti",
           "instruction": "Tetapkan tajuk rasmi, sensitiviti lalai, status Aktif dan susunan.",
           "target": "page-content"
         },
         {
           "id": "classification-nodes.5",
-          "title": "Langkah 5",
+          "title": "Nyahaktifkan nod lama, jangan ubah",
           "instruction": "Nod yang sudah digunakan tidak boleh diubah sesuka hati; nyahaktifkan nod lama jika perlu.",
           "target": "page-content"
         }
@@ -1525,31 +1525,31 @@
       "steps": [
         {
           "id": "retensi-peraturan.1",
-          "title": "Langkah 1",
+          "title": "Semak peraturan lalai platform",
           "instruction": "Semak peraturan lalai platform sebelum membuat override masjid.",
           "target": "page-content"
         },
         {
           "id": "retensi-peraturan.2",
-          "title": "Langkah 2",
+          "title": "Pilih jenis rekod atau prefix",
           "instruction": "Pilih jenis rekod atau isi prefix klasifikasi yang khusus.",
           "target": "page-primary"
         },
         {
           "id": "retensi-peraturan.3",
-          "title": "Langkah 3",
+          "title": "Isi tahun simpanan",
           "instruction": "Isi tahun simpanan; kosongkan hanya apabila tindakan kekal memang dikehendaki.",
           "target": "page-content"
         },
         {
           "id": "retensi-peraturan.4",
-          "title": "Langkah 4",
+          "title": "Pilih tindakan akhir dan catatan",
           "instruction": "Pilih tindakan akhir yang sah dan tulis catatan dasar/kelulusan.",
           "target": "page-content"
         },
         {
           "id": "retensi-peraturan.5",
-          "title": "Langkah 5",
+          "title": "Uji kesan sebelum mengaktifkan",
           "instruction": "Uji kesan pada halaman Retensi sebelum mengaktifkan pelupusan.",
           "target": "page-content"
         }
@@ -1594,37 +1594,37 @@
       "steps": [
         {
           "id": "tetapan-masjid.1",
-          "title": "Langkah 1",
+          "title": "Semak telefon dan wakil data",
           "instruction": "Semak telefon rasmi dan wakil perlindungan data.",
           "target": "page-content"
         },
         {
           "id": "tetapan-masjid.2",
-          "title": "Langkah 2",
+          "title": "Aktifkan intake bila saluran dikawal",
           "instruction": "Aktifkan intake WhatsApp/e-mel hanya selepas saluran dikawal oleh masjid.",
           "target": "page-primary"
         },
         {
           "id": "tetapan-masjid.3",
-          "title": "Langkah 3",
+          "title": "Tetapkan kata kunci intake",
           "instruction": "Tetapkan kata kunci intake yang mudah tetapi khusus.",
           "target": "page-content"
         },
         {
           "id": "tetapan-masjid.4",
-          "title": "Langkah 4",
+          "title": "Masukkan alamat pengirim dipercayai",
           "instruction": "Bagi e-mel dipercayai, masukkan alamat PENGHANTAR seperti pengimbas; jangan masukkan alamat intake sistem.",
           "target": "page-content"
         },
         {
           "id": "tetapan-masjid.5",
-          "title": "Langkah 5",
+          "title": "Pasang WhatsApp dan semak status",
           "instruction": "Pasangkan WhatsApp melalui QR/kod telefon dan semak status tersambung.",
           "target": "page-content"
         },
         {
           "id": "tetapan-masjid.6",
-          "title": "Langkah 6",
+          "title": "Matikan notifikasi jika peranti hilang",
           "instruction": "Matikan notifikasi jika peranti hilang atau sesi tidak lagi dikawal.",
           "target": "page-content"
         }
@@ -1672,31 +1672,31 @@
       "steps": [
         {
           "id": "penggunaan.1",
-          "title": "Langkah 1",
+          "title": "Bandingkan penggunaan dengan kuota",
           "instruction": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan.",
           "target": "page-content"
         },
         {
           "id": "penggunaan.2",
-          "title": "Langkah 2",
+          "title": "Semak pesanan sedia ada",
           "instruction": "Semak pesanan sedia ada sebelum memohon sekali lagi.",
           "target": "page-primary"
         },
         {
           "id": "penggunaan.3",
-          "title": "Langkah 3",
+          "title": "Tekan Tambah Storan",
           "instruction": "Jika dibenarkan, tekan Tambah Storan dan pilih bilangan blok 10 GB.",
           "target": "page-content"
         },
         {
           "id": "penggunaan.4",
-          "title": "Langkah 4",
+          "title": "Catat invois, tunggu pengesahan",
           "instruction": "Catat nombor invois dan tunggu pengesahan pembayaran platform.",
           "target": "page-content"
         },
         {
           "id": "penggunaan.5",
-          "title": "Langkah 5",
+          "title": "Pesanan menunggu bukan kuota aktif",
           "instruction": "Jangan anggap pesanan menunggu sebagai kuota aktif sehingga status disahkan.",
           "target": "page-content"
         }
@@ -1741,31 +1741,31 @@
       "steps": [
         {
           "id": "retensi.1",
-          "title": "Langkah 1",
+          "title": "Semak rekod akan luput",
           "instruction": "Semak rekod yang akan luput dalam 365/90 hari.",
           "target": "page-content"
         },
         {
           "id": "retensi.2",
-          "title": "Langkah 2",
+          "title": "Bandingkan lalai dengan override",
           "instruction": "Bandingkan sumber peraturan lalai dengan override masjid.",
           "target": "page-primary"
         },
         {
           "id": "retensi.3",
-          "title": "Langkah 3",
+          "title": "Aktifkan Legal Hold bila perlu",
           "instruction": "Aktifkan Legal Hold jika ada audit, siasatan, litigasi atau arahan simpan.",
           "target": "page-content"
         },
         {
           "id": "retensi.4",
-          "title": "Langkah 4",
+          "title": "Tarik hold dengan kebenaran",
           "instruction": "Tarik hold hanya dengan kebenaran dan bukti urusan selesai.",
           "target": "page-content"
         },
         {
           "id": "retensi.5",
-          "title": "Langkah 5",
+          "title": "Eksport ZIP sebelum pelupusan",
           "instruction": "Eksport ZIP sebelum pelupusan jika perlu; pautan eksport mempunyai tempoh tamat.",
           "target": "page-content"
         }
@@ -1825,37 +1825,37 @@
       "steps": [
         {
           "id": "delegasi.1",
-          "title": "Langkah 1",
+          "title": "Pilih Principal pemilik tugas",
           "instruction": "Pilih Principal, iaitu pemilik tugas asal.",
           "target": "page-content"
         },
         {
           "id": "delegasi.2",
-          "title": "Langkah 2",
+          "title": "Pilih Delegate yang bertindak",
           "instruction": "Pilih Delegate, iaitu orang yang akan bertindak bagi pihak principal.",
           "target": "page-primary"
         },
         {
           "id": "delegasi.3",
-          "title": "Langkah 3",
+          "title": "Hadkan capability delegasi",
           "instruction": "Hadkan capability kepada Minit, Kelulusan atau kedua-duanya.",
           "target": "page-content"
         },
         {
           "id": "delegasi.4",
-          "title": "Langkah 4",
+          "title": "Tetapkan tempoh dan sebab",
           "instruction": "Tetapkan mula/tamat dan sebab yang boleh diaudit.",
           "target": "page-content"
         },
         {
           "id": "delegasi.5",
-          "title": "Langkah 5",
+          "title": "Semak nama bagi pihak",
           "instruction": "Semak nama “bagi pihak” pada tindakan yang dibuat delegate.",
           "target": "page-content"
         },
         {
           "id": "delegasi.6",
-          "title": "Langkah 6",
+          "title": "Batal delegasi bila tamat",
           "instruction": "Batal delegasi sebaik keperluan tamat.",
           "target": "page-content"
         }
@@ -1912,37 +1912,37 @@
       "steps": [
         {
           "id": "profil.1",
-          "title": "Langkah 1",
+          "title": "Semak nama, e-mel dan WhatsApp",
           "instruction": "Semak nama, e-mel dan nombor WhatsApp.",
           "target": "page-content"
         },
         {
           "id": "profil.2",
-          "title": "Langkah 2",
+          "title": "Hidupkan saluran yang boleh dicapai",
           "instruction": "Buka Tetapan Notifikasi dan hidupkan hanya saluran yang boleh dicapai.",
           "target": "page-primary"
         },
         {
           "id": "profil.3",
-          "title": "Langkah 3",
+          "title": "Sambung Telegram, tekan Start",
           "instruction": "Sambung Telegram melalui pautan rasmi dan tekan Start sebelum tamat tempoh.",
           "target": "page-content"
         },
         {
           "id": "profil.4",
-          "title": "Langkah 4",
+          "title": "Hantar notifikasi ujian",
           "instruction": "Gunakan Hantar Notifikasi Ujian selepas perubahan.",
           "target": "page-content"
         },
         {
           "id": "profil.5",
-          "title": "Langkah 5",
+          "title": "Tetapkan kata laluan panjang unik",
           "instruction": "Tetapkan kata laluan panjang, unik dan tidak digunakan di sistem lain.",
           "target": "page-content"
         },
         {
           "id": "profil.6",
-          "title": "Langkah 6",
+          "title": "Putuskan segera jika peranti hilang",
           "instruction": "Putuskan Telegram atau tukar kata laluan segera jika peranti hilang.",
           "target": "page-content"
         }
@@ -1995,37 +1995,37 @@
       "steps": [
         {
           "id": "peti-masuk.1",
-          "title": "Langkah 1",
+          "title": "Semak lajur sumber dan status",
           "instruction": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, Antivirus, OCR dan Duplikat.",
           "target": "page-content"
         },
         {
           "id": "peti-masuk.2",
-          "title": "Langkah 2",
+          "title": "Buka Lihat Dokumen dan OCR",
           "instruction": "Buka Lihat Dokumen/OCR dan sahkan fail boleh dibaca serta benar untuk masjid ini.",
           "target": "page-primary"
         },
         {
           "id": "peti-masuk.3",
-          "title": "Langkah 3",
+          "title": "Muat naik format dibenarkan sahaja",
           "instruction": "Muat naik hanya format dibenarkan; fail melalui semakan antivirus dan kuota.",
           "target": "page-content"
         },
         {
           "id": "peti-masuk.4",
-          "title": "Langkah 4",
+          "title": "Tekan Klasifikasikan dan lengkapkan",
           "instruction": "Tekan Klasifikasikan dan lengkapkan metadata serta fail destinasi.",
           "target": "page-content"
         },
         {
           "id": "peti-masuk.5",
-          "title": "Langkah 5",
+          "title": "Guna Padam Spam untuk spam",
           "instruction": "Jika spam/tidak berkaitan, gunakan Padam (Spam) dan nyatakan sebab; jangan klasifikasikan sebagai rekod.",
           "target": "page-content"
         },
         {
           "id": "peti-masuk.6",
-          "title": "Langkah 6",
+          "title": "Sahkan sumber dan masa upload",
           "instruction": "Pastikan sumber menunjukkan e-mel pengirim, nombor WhatsApp atau pengguna UI serta masa upload.",
           "target": "page-content"
         }
@@ -2083,31 +2083,31 @@
       "steps": [
         {
           "id": "records.1",
-          "title": "Langkah 1",
+          "title": "Cari rujukan dan tapis jenis",
           "instruction": "Cari melalui rujukan/tajuk dan tapis Jenis, Sensitiviti atau Status.",
           "target": "page-content"
         },
         {
           "id": "records.2",
-          "title": "Langkah 2",
+          "title": "Buka Lihat untuk metadata",
           "instruction": "Buka Lihat untuk memeriksa metadata dan asal dokumen.",
           "target": "page-primary"
         },
         {
           "id": "records.3",
-          "title": "Langkah 3",
+          "title": "Semak tab OCR hingga Audit",
           "instruction": "Semak tab Teks OCR, Lampiran & Versi, Minit, Kelulusan dan Audit.",
           "target": "page-content"
         },
         {
           "id": "records.4",
-          "title": "Langkah 4",
+          "title": "Tanda Kegemaran rujukan kerap",
           "instruction": "Gunakan Kegemaran untuk rujukan kerap.",
           "target": "page-content"
         },
         {
           "id": "records.5",
-          "title": "Langkah 5",
+          "title": "Guna tindakan yang dipaparkan",
           "instruction": "Gunakan hanya tindakan yang dipaparkan oleh role; jangan cuba mengubah URL untuk mendapatkan tindakan lain.",
           "target": "page-content"
         }
@@ -2171,37 +2171,37 @@
       "steps": [
         {
           "id": "registry-files.1",
-          "title": "Langkah 1",
+          "title": "Cari fail sedia ada dahulu",
           "instruction": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu.",
           "target": "page-content"
         },
         {
           "id": "registry-files.2",
-          "title": "Langkah 2",
+          "title": "Semak status dan bilangan kandungan",
           "instruction": "Semak status terbuka/tutup dan bilangan kandungan.",
           "target": "page-primary"
         },
         {
           "id": "registry-files.3",
-          "title": "Langkah 3",
+          "title": "Semak lokasi dan pemegang fizikal",
           "instruction": "Bagi hibrid/fizikal, semak rujukan, lokasi, pemegang dan tarikh pulang.",
           "target": "page-content"
         },
         {
           "id": "registry-files.4",
-          "title": "Langkah 4",
+          "title": "Rekod setiap pergerakan fail",
           "instruction": "Gunakan Keluarkan Fail, Terima Pulangan atau Pindah Lokasi untuk setiap pergerakan.",
           "target": "page-content"
         },
         {
           "id": "registry-files.5",
-          "title": "Langkah 5",
+          "title": "Tutup fail dengan sebab",
           "instruction": "Tutup fail dengan sebab; buka jilid baharu apabila had kandungan dicapai.",
           "target": "page-content"
         },
         {
           "id": "registry-files.6",
-          "title": "Langkah 6",
+          "title": "Hadkan akses khas fail sulit",
           "instruction": "Akses khas fail sulit hendaklah minimum, individu dan ditarik selepas selesai.",
           "target": "page-content"
         }
@@ -2266,37 +2266,37 @@
       "steps": [
         {
           "id": "minit-saya.1",
-          "title": "Langkah 1",
+          "title": "Tapis kategori minit",
           "instruction": "Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.",
           "target": "page-content"
         },
         {
           "id": "minit-saya.2",
-          "title": "Langkah 2",
+          "title": "Baca arahan dan tarikh akhir",
           "instruction": "Baca rekod, pengirim, arahan, penerima, keutamaan dan tarikh akhir.",
           "target": "page-primary"
         },
         {
           "id": "minit-saya.3",
-          "title": "Langkah 3",
+          "title": "Buat kerja sebelum Tanda Selesai",
           "instruction": "Jika tindakan, buat kerja sebenar dahulu sebelum Tanda Selesai.",
           "target": "page-content"
         },
         {
           "id": "minit-saya.4",
-          "title": "Langkah 4",
+          "title": "Guna Balas dan Edarkan",
           "instruction": "Gunakan Balas & Edarkan untuk catatan susulan dan penerima seterusnya.",
           "target": "page-content"
         },
         {
           "id": "minit-saya.5",
-          "title": "Langkah 5",
+          "title": "Beza penerima tindakan dan s.k.",
           "instruction": "Penerima s.k. ialah makluman; penerima tindakan mempunyai tanggungjawab dan SLA.",
           "target": "page-content"
         },
         {
           "id": "minit-saya.6",
-          "title": "Langkah 6",
+          "title": "Tindakan delegate direkod bagi pihak",
           "instruction": "Tindakan delegate direkod sebagai “oleh X bagi pihak Y”.",
           "target": "page-content"
         }
@@ -2356,37 +2356,37 @@
       "steps": [
         {
           "id": "kelulusan.1",
-          "title": "Langkah 1",
+          "title": "Semak pemohon dan nota",
           "instruction": "Semak tajuk rekod, pemohon, nota dan status.",
           "target": "page-content"
         },
         {
           "id": "kelulusan.2",
-          "title": "Langkah 2",
+          "title": "Buka rekod asal dahulu",
           "instruction": "Buka rekod asal dan media sebelum membuat keputusan.",
           "target": "page-primary"
         },
         {
           "id": "kelulusan.3",
-          "title": "Langkah 3",
+          "title": "Pilih Lulus atau Tolak",
           "instruction": "Pelulus yang ditetapkan memilih Lulus atau Tolak.",
           "target": "page-content"
         },
         {
           "id": "kelulusan.4",
-          "title": "Langkah 4",
+          "title": "Masukkan kata laluan sendiri",
           "instruction": "Masukkan kata laluan sendiri; nota wajib bagi penolakan dan digalakkan bagi kelulusan.",
           "target": "page-content"
         },
         {
           "id": "kelulusan.5",
-          "title": "Langkah 5",
+          "title": "Jangan berkongsi kata laluan",
           "instruction": "Jangan berkongsi kata laluan untuk membolehkan orang lain meluluskan.",
           "target": "page-content"
         },
         {
           "id": "kelulusan.6",
-          "title": "Langkah 6",
+          "title": "Semak status akhir dan delegasi",
           "instruction": "Semak status akhir dan rekod “bagi pihak” jika delegasi digunakan.",
           "target": "page-content"
         }
@@ -2446,43 +2446,43 @@
       "steps": [
         {
           "id": "carian.1",
-          "title": "Langkah 1",
+          "title": "Masukkan teks carian",
           "instruction": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu.",
           "target": "page-content"
         },
         {
           "id": "carian.2",
-          "title": "Langkah 2",
+          "title": "Gabungkan penapis rekod",
           "instruction": "Gabungkan Jenis, Fail, Arah, Sensitiviti, Status dan Saluran.",
           "target": "page-primary"
         },
         {
           "id": "carian.3",
-          "title": "Langkah 3",
+          "title": "Isi pengirim dan julat tarikh",
           "instruction": "Isi pengirim, rujukan, penerima serta julat tarikh rekod/terima.",
           "target": "page-content"
         },
         {
           "id": "carian.4",
-          "title": "Langkah 4",
+          "title": "Tekan Cari, semak jumlah",
           "instruction": "Tekan Cari dan semak jumlah hasil.",
           "target": "page-content"
         },
         {
           "id": "carian.5",
-          "title": "Langkah 5",
+          "title": "Simpan carian dengan nama",
           "instruction": "Isi Nama carian, tandakan Lalai jika sesuai, kemudian Simpan.",
           "target": "page-content"
         },
         {
           "id": "carian.6",
-          "title": "Langkah 6",
+          "title": "Guna semula atau padam carian",
           "instruction": "Pilih carian tersimpan untuk guna semula atau Padam carian apabila tidak diperlukan.",
           "target": "page-content"
         },
         {
           "id": "carian.7",
-          "title": "Langkah 7",
+          "title": "Tekan bintang untuk Kegemaran",
           "instruction": "Tekan bintang untuk menambah hasil ke Kegemaran.",
           "target": "page-content"
         }
@@ -2621,25 +2621,25 @@
       "steps": [
         {
           "id": "laporan.1",
-          "title": "Langkah 1",
+          "title": "Semak empat kad ringkasan",
           "instruction": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit.",
           "target": "page-content"
         },
         {
           "id": "laporan.2",
-          "title": "Langkah 2",
+          "title": "Bandingkan pecahan jenis dan status",
           "instruction": "Bandingkan pecahan Jenis, Status dan Sumber.",
           "target": "page-primary"
         },
         {
           "id": "laporan.3",
-          "title": "Langkah 3",
+          "title": "Tekan Eksport CSV jika ada",
           "instruction": "Jika butang Eksport CSV tersedia, muat turun untuk analisis terkawal.",
           "target": "page-content"
         },
         {
           "id": "laporan.4",
-          "title": "Langkah 4",
+          "title": "Kawal perkongsian fail CSV",
           "instruction": "Buka fail CSV sebagai data; berhati-hati dengan perkongsian luar tenant.",
           "target": "page-content"
         }
@@ -2697,31 +2697,31 @@
       "steps": [
         {
           "id": "pembetulan-rekod.1",
-          "title": "Langkah 1",
+          "title": "Tekan Mohon Pembetulan",
           "instruction": "Dari butiran rekod, tekan Mohon Pembetulan.",
           "target": "page-content"
         },
         {
           "id": "pembetulan-rekod.2",
-          "title": "Langkah 2",
+          "title": "Nyatakan sebab, ubah medan salah",
           "instruction": "Nyatakan sebab sekurang-kurangnya 10 aksara dan ubah hanya medan yang salah.",
           "target": "page-primary"
         },
         {
           "id": "pembetulan-rekod.3",
-          "title": "Langkah 3",
+          "title": "Hantar; rekod asal kekal",
           "instruction": "Hantar; rekod asal kekal sehingga reviewer yang berkuasa memutuskan.",
           "target": "page-content"
         },
         {
           "id": "pembetulan-rekod.4",
-          "title": "Langkah 4",
+          "title": "Reviewer luluskan atau tolak",
           "instruction": "Reviewer membandingkan nilai asal/cadangan, kemudian Luluskan atau Tolak dengan catatan.",
           "target": "page-content"
         },
         {
           "id": "pembetulan-rekod.5",
-          "title": "Langkah 5",
+          "title": "Notifikasi keputusan dan audit",
           "instruction": "Pemohon menerima notifikasi keputusan dan audit menyimpan sebelum/selepas.",
           "target": "page-content"
         }
@@ -5139,7 +5139,7 @@
     },
     {
       "id": "public.login",
-      "version": 1,
+      "version": 2,
       "panel": "public",
       "title": "Log Masuk",
       "route": "/log-masuk",
@@ -5166,14 +5166,16 @@
         {
           "id": "login.1",
           "title": "Masukkan identiti",
-          "instruction": "Masukkan e-mel atau nombor telefon berdaftar.",
-          "target": "page-content"
+          "instruction": "Masukkan e-mel atau nombor telefon berdaftar dalam medan ini.",
+          "target": "login-identity",
+          "wait_for_user": false
         },
         {
           "id": "login.2",
           "title": "Minta pautan",
-          "instruction": "Tekan Hantar Pautan Log Masuk sekali.",
-          "target": "page-primary"
+          "instruction": "Tekan Hantar Pautan Log Masuk sekali sahaja, kemudian semak e-mel atau WhatsApp anda.",
+          "target": "login-submit",
+          "wait_for_user": true
         }
       ],
       "troubleshooting": [
@@ -5522,7 +5524,7 @@
     },
     {
       "id": "screen.muat-naik-dokumen",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Muat naik dokumen",
       "summary": "Panduan skrin dan tindakan: Muat naik dokumen.",
@@ -5552,38 +5554,38 @@
       "steps": [
         {
           "id": "muat-naik-dokumen.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih atau seret satu/lebih fail yang dibenarkan.",
-          "target": "page-primary",
+          "title": "Tekan Muat Naik Dokumen",
+          "instruction": "Tekan + Muat Naik Dokumen untuk membuka borang muat naik.",
+          "target": "inbox-upload",
           "wait_for_user": true
         },
         {
           "id": "muat-naik-dokumen.2",
-          "title": "Langkah 2",
-          "instruction": "Pastikan saiz setiap fail dalam had.",
-          "target": "page-primary",
+          "title": "Pilih atau seret fail",
+          "instruction": "Pilih atau seret fail ke ruang ini; format sah dan had saiz dipapar di bawahnya.",
+          "target": "inbox-upload-dropzone",
           "wait_for_user": true
         },
         {
           "id": "muat-naik-dokumen.3",
-          "title": "Langkah 3",
-          "instruction": "Tunggu upload selesai.",
-          "target": "page-primary",
+          "title": "Tekan Hantar",
+          "instruction": "Tunggu senarai fail lengkap, kemudian tekan Hantar sekali sahaja.",
+          "target": "inbox-upload-submit",
           "wait_for_user": true
         },
         {
           "id": "muat-naik-dokumen.4",
-          "title": "Langkah 4",
-          "instruction": "Sahkan toast bilangan dokumen.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Sahkan toast dan baris baharu",
+          "instruction": "Sahkan toast bilangan dokumen dan baris baharu muncul dalam Peti Masuk.",
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "muat-naik-dokumen.5",
-          "title": "Langkah 5",
-          "instruction": "Buka Peti Masuk dan semak antivirus, OCR serta sumber UI.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Semak antivirus sebelum klasifikasi",
+          "instruction": "Semak Antivirus, OCR dan Sumber pada baris baharu sebelum menekan Klasifikasikan.",
+          "target": "inbox-classify",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -7430,13 +7432,13 @@
       "steps": [
         {
           "id": "tenant.bantuan.1",
-          "title": "Buka fungsi",
+          "title": "Cari panduan atau hantar tiket",
           "instruction": "Cari panduan, jalankan diagnosis, ubah tetapan bantuan atau hantar tiket.",
           "target": "page-content"
         },
         {
           "id": "tenant.bantuan.2",
-          "title": "Sahkan skop",
+          "title": "Sahkan panel, tenant dan role",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
           "target": "page-primary"
         }
@@ -7476,13 +7478,13 @@
       "steps": [
         {
           "id": "tenant.analitik-bantuan.1",
-          "title": "Buka fungsi",
+          "title": "Semak penggunaan panduan agregat",
           "instruction": "Semak penggunaan panduan secara agregat tanpa teks carian mentah atau pemarkahan individu.",
           "target": "page-content"
         },
         {
           "id": "tenant.analitik-bantuan.2",
-          "title": "Sahkan skop",
+          "title": "Sahkan panel, tenant dan role",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
           "target": "page-primary"
         }
@@ -7522,13 +7524,13 @@
       "steps": [
         {
           "id": "tenant.tiket-sokongan.1",
-          "title": "Buka fungsi",
+          "title": "Urus tiket masjid semasa",
           "instruction": "Semak dan urus tiket masjid semasa sahaja.",
           "target": "page-content"
         },
         {
           "id": "tenant.tiket-sokongan.2",
-          "title": "Sahkan skop",
+          "title": "Sahkan panel, tenant dan role",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
           "target": "page-primary"
         }

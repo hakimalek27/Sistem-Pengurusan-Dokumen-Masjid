@@ -28,6 +28,11 @@ class ListInbox extends ListRecords
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'records.create') ?? false)
                 ->extraAttributes(['data-help-target' => 'inbox-upload'])
                 ->extraModalWindowAttributes(['data-help-target' => 'inbox-upload-modal'])
+                // F5b (§6.2): dropzone dan butang Hantar ialah sasaran BERASINGAN. Sebelum ini
+                // langkah 2 dan 3 tour kedua-duanya menyorot `inbox-upload-modal` — objek yang
+                // sama dan sama besar — jadi sorotan tidak berubah sambil arahan bertukar.
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'inbox-upload-submit']))
                 ->schema([
                     FileUpload::make('files')
                         ->label('Dokumen (boleh berbilang)')
@@ -38,7 +43,8 @@ class ListInbox extends ListRecords
                         ->storeFileNamesIn('file_names')
                         ->acceptedFileTypes(AllowedFormats::acceptedFileTypes())
                         ->helperText('Format sah: '.AllowedFormats::label().'.')
-                        ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024),
+                        ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024)
+                        ->extraAttributes(['data-help-target' => 'inbox-upload-dropzone']),
                 ])
                 ->action(function (array $data) {
                     $mosque = Filament::getTenant();

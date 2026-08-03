@@ -268,8 +268,9 @@
       "viewport": "both",
       "state": "ada batch",
       "permission": "disposal.view",
-      "status": "active",
-      "since": "2026-08-03"
+      "status": "reserved",
+      "since": "2026-08-03",
+      "reason": "Ditambah F6-W0 sebagai penambat lajur; guide tenant.pelupusan v2 menyorot disposal-batches. Tersedia untuk gelombang W5."
     },
     {
       "id": "disposal-actions",
@@ -280,8 +281,9 @@
       "viewport": "both",
       "state": "ada batch",
       "permission": "disposal.execute",
-      "status": "active",
-      "since": "2026-08-03"
+      "status": "reserved",
+      "since": "2026-08-03",
+      "reason": "Ditambah F6-W0 sebagai penambat lajur tindakan; belum dirujuk katalog. Tersedia untuk gelombang W5."
     },
     {
       "id": "favourites-list",
@@ -316,8 +318,9 @@
       "viewport": "both",
       "state": "ada kegemaran",
       "permission": "favourites.view",
-      "status": "active",
-      "since": "2026-08-03"
+      "status": "reserved",
+      "since": "2026-08-03",
+      "reason": "Ditambah F6-W0; guide tenant.kegemaran v2 menyorot favourite-item yang membungkusnya. Tersedia untuk W5."
     },
     {
       "id": "favourite-remove",
@@ -328,8 +331,57 @@
       "viewport": "both",
       "state": "ada kegemaran",
       "permission": "favourites.view",
+      "status": "reserved",
+      "since": "2026-08-03",
+      "reason": "Ditambah F6-W0; butang buang di dalam favourite-item. Tersedia untuk W5."
+    },
+    {
+      "id": "login-identity",
+      "family": "public",
+      "route": "/log-masuk",
+      "owner_source": "resources/views/livewire/request-magic-link.blade.php:16",
+      "selector_hint": "[data-help-target=\"login-identity\"]",
+      "viewport": "both",
+      "state": "borang belum dihantar",
+      "permission": "public",
       "status": "active",
-      "since": "2026-08-03"
+      "since": "2026-08-04"
+    },
+    {
+      "id": "login-submit",
+      "family": "public",
+      "route": "/log-masuk",
+      "owner_source": "resources/views/livewire/request-magic-link.blade.php:19",
+      "selector_hint": "[data-help-target=\"login-submit\"]",
+      "viewport": "both",
+      "state": "borang belum dihantar",
+      "permission": "public",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "inbox-upload-dropzone",
+      "family": "screen|workflow",
+      "route": "/app/{tenant}/peti-masuk",
+      "owner_source": "app/Filament/App/Resources/Inbox/Pages/ListInbox.php:47",
+      "selector_hint": ".fi-fo-file-upload[data-help-target=\"inbox-upload-dropzone\"]",
+      "viewport": "both",
+      "state": "modal:muat-naik terbuka",
+      "permission": "records.create",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "inbox-upload-submit",
+      "family": "screen|workflow",
+      "route": "/app/{tenant}/peti-masuk",
+      "owner_source": "app/Filament/App/Resources/Inbox/Pages/ListInbox.php:35",
+      "selector_hint": "[data-help-target=\"inbox-upload-submit\"]",
+      "viewport": "both",
+      "state": "modal:muat-naik terbuka",
+      "permission": "records.create",
+      "status": "active",
+      "since": "2026-08-04"
     }
   ]
 }

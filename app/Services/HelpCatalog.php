@@ -203,12 +203,21 @@ class HelpCatalog
         return $guide;
     }
 
+    /**
+     * Hidratan FALLBACK untuk langkah yang tajuknya masih placeholder `Langkah N`.
+     *
+     * F5d (§6.4): penyelesaian utama ialah KANDUNGAN — tajuk eksplisit ditulis untuk kohort
+     * 25 guide tenant (124 langkah) + `screen.muat-naik-dokumen`. Fungsi ini kekal untuk baki
+     * katalog yang dijadualkan F6. Satu pembetulan sahaja: `preserveWords: true` supaya
+     * elipsis tidak lagi memotong pertengahan perkataan (RR-10-04, 20/124 tajuk terpotong).
+     * Heuristik koma/8-perkataan DIGUGURKAN (P2 — hasilnya tidak deterministik).
+     */
     protected function meaningfulStepTitle(string $instruction): string
     {
         $firstClause = trim((string) preg_split('/[.;](?:\s|$)/u', $instruction, 2)[0]);
         $title = $firstClause !== '' ? $firstClause : 'Ikuti arahan pada skrin';
 
-        return Str::limit($title, 72, '...');
+        return Str::limit($title, 72, '…', preserveWords: true);
     }
 
     protected function normalise(string $value): string

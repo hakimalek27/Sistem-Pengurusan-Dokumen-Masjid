@@ -39,6 +39,7 @@ export default defineConfig({
             testMatch: [
                 'e2e/ci-session-canary.spec.js',
                 'e2e/guidance.spec.js',
+                'e2e/guidance-f5.spec.js',
                 'e2e/registration.spec.js',
                 'e2e/explore.spec.js',
             ],
@@ -46,7 +47,7 @@ export default defineConfig({
         {
             // F2 (§3.6 C11): ujian unit fungsi tulen — tiada pelayar, tiada server.
             name: 'unit',
-            testMatch: ['e2e/step-advance-plan.spec.js'],
+            testMatch: ['e2e/step-advance-plan.spec.js', 'e2e/nav-target-plan.spec.js'],
         },
         {
             name: 'ci-domain',

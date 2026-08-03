@@ -17,9 +17,15 @@ if (!args.manifest) { console.error('FAIL: --manifest wajib'); process.exit(1); 
 const GEN = new Set(['page-primary', 'page-content']);
 const WAVES = ['W0', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'];
 const SHARDS = ['screen', 'workflow', 'tenant-admin-public'];
+// DENOMINATOR WAVE dikemas pada F5 (4 Ogos 2026) — prosedur README `tools/`:
+// `screen.muat-naik-dokumen` (5 langkah) mendapat sasaran spesifik dalam F5 §6.2, jadi ia
+// tidak lagi mempunyai langkah tindakan-generik dan `waveOf()` mengelaskannya W1 → W3.
+// Jumlah kekal 83/473; shard `screen` kekal 29/151. Sebab penuh + dua denominator lain
+// (wait_for_user 229→228, tenant-admin-public.action_steps 3→4) ada dalam
+// `tools/build-manifest.mjs` — KEDUA-DUA penjaga dikemas dalam commit yang sama.
 const EXPECT = {
-    waveGuides: { W0: 2, W1: 28, W2: 13, W3: 1, W4: 1, W5: 35, W6: 3 },
-    waveSteps: { W0: 10, W1: 140, W2: 145, W3: 11, W4: 13, W5: 146, W6: 8 },
+    waveGuides: { W0: 2, W1: 27, W2: 13, W3: 2, W4: 1, W5: 35, W6: 3 },
+    waveSteps: { W0: 10, W1: 135, W2: 145, W3: 16, W4: 13, W5: 146, W6: 8 },
     // STRUKTUR (mesti sama) vs BASELINE KEMAJUAN (mesti ≤ — pelan §7 menjangka 200→0,
     // 258→0, mobile 6→0; mengassert kesamaan akan menolak setiap pembaikan F6).
     totals: { guides: 83, steps: 473 },
