@@ -449,6 +449,35 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      # Trace + snapshot DOM + skrinsyot pada kegagalan.
+      # Jurang yang ditemui semasa F4: shard `workflow` gagal di CI dan artifak yang ada
+      # hanyalah laporan JSON — TIADA trace, jadi keadaan DOM pada saat gagal tidak boleh
+      # dilihat sama sekali dan diagnosis bertukar menjadi tekaan. Reproduce tempatan
+      # (beban CPU buatan) berkesan tetapi mahal; ini menjadikan kegagalan CI boleh
+      # disiasat terus. Hanya pada `failure()` — larian hijau tidak perlu 100+ MB trace.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: guidance-traces-${{ matrix.shard }}-failure
+          path: |
+            test-results/**/trace.zip
+            test-results/**/error-context.md
+            test-results/**/*.png
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # Log pelayan + laravel.log pada kegagalan. Job integrasi sudah memuat naik ini
+      # (langkah "Upload server logs"); shard TIDAK — jadi apabila muat naik UI gagal di
+      # shard, tiada cara mengetahui sama ada pelayan memulangkan 500, pengesahan gagal,
+      # atau permintaan tidak pernah tiba. Itu perbezaan antara diagnosis dan tekaan.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: guidance-server-logs-${{ matrix.shard }}-failure
+          path: storage/logs/*.log
+          if-no-files-found: ignore
+          retention-days: 14
+
   # ── Lapis 3 — agregator required check (perbandingan SET, bukan kiraan).
   guidance-e2e-gate:
     needs: guidance-e2e
