@@ -25,6 +25,7 @@ export default defineConfig({
         trace: 'retain-on-failure',
     },
     // F0(iv) — skop CI dibekukan sebagai project (BUKAN senarai dalam PR):
+    //   unit          fungsi tulen (stepAdvancePlan) — pantas, tiada pelayar
     //   ci-guidance   lapis 1: canary sesi + smoke panduan (20 konteks) + registrasi + explore
     //   ci-domain     lapis 1b: aliran domain hujung-ke-hujung (P16-08)
     //   ci-ocr        lapis 1c: TIDAK required sehingga fixture tests/fixtures/ocr dikomit +
@@ -41,6 +42,11 @@ export default defineConfig({
                 'e2e/registration.spec.js',
                 'e2e/explore.spec.js',
             ],
+        },
+        {
+            // F2 (§3.6 C11): ujian unit fungsi tulen — tiada pelayar, tiada server.
+            name: 'unit',
+            testMatch: ['e2e/step-advance-plan.spec.js'],
         },
         {
             name: 'ci-domain',

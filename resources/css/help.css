@@ -202,6 +202,18 @@ body.driver-active .diwan-help-launcher-button { visibility: hidden; }
     font-size: .8rem;
     font-weight: 650;
 }
+/*
+ * Banner menunggu MESTI boleh diklik semasa tour aktif.
+ *
+ * Vendor driver.css menetapkan `.driver-active * { pointer-events: none }` dan hanya
+ * mengecualikan `.driver-active-element` + `.driver-popover`. Banner ini anak <body>, jadi
+ * tanpa peraturan di bawah butang "Tunjuk arahan" menolak klik tetikus — dan kerana popover
+ * disembunyikan semasa minimize, pengguna tetikus TERKANDAS (hanya papan kekunci
+ * menyelamatkan, melalui show.focus() dalam help.js). Disahkan hidup di produksi sebelum
+ * pembaikan ini: VERIFIKASI-F0 §17/§20.
+ */
+.diwan-tour-waiting,
+.diwan-tour-waiting * { pointer-events: auto; }
 .diwan-tour-waiting span { min-width: 0; flex: 1; }
 .diwan-tour-waiting button { flex: 0 0 auto; border: 0; border-radius: .3rem; padding: .38rem .5rem; background: #047857; color: #fff; font: inherit; font-size: .75rem; font-weight: 750; cursor: pointer; }
 

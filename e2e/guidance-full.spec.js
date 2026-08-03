@@ -168,7 +168,7 @@ async function driveChoreographedRange(popover, actions, lastStep, guideId) {
         else await clickCtaIfVisible();
         const previous = n;
         // Fasa 1 pendek: beri peluang auto-advance; jika kalah race re-highlight
-        // (rujuk expectStepAdvance) popover terkandas dgn CTA "Saya sudah buat" —
+        // (rujuk expectStepAdvance) popover terkandas dgn CTA maju —
         // tekan sekali (laluan pengguna sebenar) sebelum poll penuh.
         try {
             await expect.poll(readNumber, { timeout: 10_000 }).toBeGreaterThan(previous);
@@ -220,14 +220,14 @@ async function selectStable(locator, value) {
  * Pulihkan tour yang terkandas kerana auto-advance kalah race re-highlight (rujuk nota
  * penuh dlm guidance.spec.js — bug produk skop F2 §3). Laluan pengguna sebenar = DUA
  * butang: "Tunjuk arahan" pada banner menunggu (popover masih display:none daripada
- * minimiseForAction), kemudian "Saya sudah buat".
+ * minimiseForAction), kemudian CTA maju popover.
  */
 async function recoverStalledTour(popover) {
     // dispatchEvent, bukan klik tetikus: `.driver-active * { pointer-events: none }`
     // (vendor) menolak klik pada banner — rujuk nota penuh dlm guidance.spec.js.
     const show = popover.page().locator('[data-diwan-tour-waiting] button');
     if (await show.isVisible().catch(() => false)) await show.dispatchEvent('click').catch(() => {});
-    const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
+    const nudge = popover.locator('.driver-popover-next-btn');
     if (await nudge.isVisible().catch(() => false)) await nudge.click().catch(() => {});
 }
 
@@ -338,7 +338,7 @@ for (const guide of guides) {
                 await page.goto(`/daftar?panduan=public.registration&langkah=0`);
                 const popover = page.locator('.driver-popover');
                 await expect(popover).toContainText('1 daripada 4');
-                await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+                await popover.locator('.driver-popover-next-btn').click();
                 const organisation = page.locator('[data-help-target="registration-organisation"]');
                 await fillStable(organisation.locator('input').nth(0), `Masjid Gate ${Date.now()}`);
                 // Blur eksplisit (wire:model.blur) → auto-slug; tunggu ia mendarat sebelum
@@ -355,7 +355,7 @@ for (const guide of guides) {
                 await fillStable(organisation.locator('input').nth(3), `gate-${Date.now()}`);
                 await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expectStepAdvance(popover, '2 daripada 4');
-                await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+                await popover.locator('.driver-popover-next-btn').click();
                 const admin = page.locator('[data-help-target="registration-admin"]');
                 await admin.locator('input').nth(0).fill('Pentadbir Gate');
                 await admin.locator('input').nth(1).fill(`gate-${Date.now()}@example.test`);
@@ -365,7 +365,7 @@ for (const guide of guides) {
                 await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
                 await expect(page.locator('[data-help-target="registration-consent"]')).toBeVisible();
                 await expectStepAdvance(popover, '3 daripada 4');
-                await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+                await popover.locator('.driver-popover-next-btn').click();
                 const registration = page.locator('[data-help-target="registration-consent"]').locator('..');
                 // el.click() terus (bukan check() koordinat) — rujuk nota overlay pada forceClickWhenEnabled.
                 await page.locator('input[type="checkbox"]').nth(0).evaluate((el) => { if (!el.checked) el.click(); });

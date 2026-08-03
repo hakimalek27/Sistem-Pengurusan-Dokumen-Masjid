@@ -130,7 +130,7 @@ async function forceClickWhenEnabled(locator) {
  * clearTransitionWatch membunuh jadual moveNext → guard "sasaran seterusnya sudah
  * wujud" (help.js:363) menghalang poller baharu → tour terkandas. Popover pula masih
  * `display:none` daripada minimiseForAction, jadi laluan keluar pengguna sebenar ialah
- * DUA butang: "Tunjuk arahan" pada banner menunggu, kemudian "Saya sudah buat".
+ * DUA butang: "Tunjuk arahan" pada banner menunggu, kemudian CTA maju popover.
  * Race ini bug produk skop F2 §3 — help.js TIDAK disentuh pada F0 (§0.3).
  */
 async function recoverStalledTour(popover) {
@@ -141,7 +141,7 @@ async function recoverStalledTour(popover) {
     // Kebolehklikan tetikus banner = pembaikan produk F2 (§3), bukan skop F0.
     const show = popover.page().locator('[data-diwan-tour-waiting] button');
     if (await show.isVisible().catch(() => false)) await show.dispatchEvent('click').catch(() => {});
-    const nudge = popover.getByRole('button', { name: 'Saya sudah buat' });
+    const nudge = popover.locator('.driver-popover-next-btn');
     if (await nudge.isVisible().catch(() => false)) await nudge.click().catch(() => {});
 }
 
@@ -187,16 +187,23 @@ async function ensureInboxFixture(page) {
 
 async function assertFloatingHelpLauncher(page, viewportHeight) {
     const launcher = page.locator('[data-help-target="help-launcher"]');
-    // Auto-start/resume tour dijadualkan 450ms SELEPAS boot (help.js:585) — ia boleh
-    // muncul selepas closeGuideIfOpen pertama, dan `body.driver-active` menyembunyikan
-    // launcher (help.css:76). Gelung: tutup apa-apa popover yang menyusul, sehingga
-    // launcher benar-benar kelihatan.
+    // Auto-start/resume tour dijadualkan 450ms SELEPAS boot (help.js:585) dan
+    // `body.driver-active` menyembunyikan launcher (help.css:76). Melepasi tetingkap itu
+    // dahulu, jika tidak gelung boleh lulus sebelum tour sempat bermula lalu assert
+    // berikutnya gagal (CI run 30772402289). Kemudian tutup apa-apa tour dan pastikan
+    // launcher kekal kelihatan secara STABIL, bukan seketika.
+    await page.waitForTimeout(800);
     await expect.poll(async () => {
         const close = page.locator('.driver-popover-close-btn');
-        if (await close.isVisible().catch(() => false)) await close.click().catch(() => {});
+        if (await close.isVisible().catch(() => false)) {
+            await close.click().catch(() => {});
+            await page.waitForTimeout(300);
+        }
+        if (! await launcher.isVisible().catch(() => false)) return false;
+        await page.waitForTimeout(600);   // tour lain sempat bermula dalam tempoh ini?
 
         return launcher.isVisible().catch(() => false);
-    }, { timeout: 20_000, message: 'launcher bantuan tidak kelihatan (tour aktif?)' }).toBe(true);
+    }, { timeout: 30_000, message: 'launcher bantuan tidak kekal kelihatan (tour aktif?)' }).toBe(true);
     await expect(launcher).toBeVisible();
     await expect(launcher).toHaveAttribute('aria-label', 'Buka Pembantu Diwan');
     expect(await launcher.evaluate((element) => getComputedStyle(element).position)).toBe('fixed');
@@ -445,7 +452,7 @@ test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar',
 
     const popover = page.locator('.driver-popover');
     await expect(popover).toContainText('1 daripada 4');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expect(page.locator('[data-diwan-tour-waiting]')).toContainText('Panduan menunggu');
     await expect(page.locator('[data-diwan-tour-waiting]')).toHaveAttribute('role', 'status');
     await expect(popover).toBeHidden();
@@ -464,7 +471,7 @@ test('tour pendaftaran tidak tergantung dan mengikuti langkah Livewire sebenar',
     await forceClickWhenEnabled(page.locator('[data-help-target="registration-next"]'));
     await expect(page.locator('[data-help-target="registration-admin"]')).toBeVisible();
     await expectStepAdvance(popover, '2 daripada 4');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
 
     const admin = page.locator('[data-help-target="registration-admin"]');
     await fillStable(admin.locator('input').nth(0), 'Pentadbir Tour');
@@ -492,14 +499,14 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await expect(classify, 'Fixture Peti Masuk diperlukan untuk audit tour klasifikasi').toBeVisible();
     const popover = page.locator('.driver-popover');
     await expect(popover).toContainText('1 daripada 11');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await classify.click();
 
     const modal = page.locator('.fi-modal-window:visible').last();
     await expect(modal).toBeVisible();
     await expect(page.locator('[data-help-target="classification-source"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '2 daripada 11');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-metadata"]:visible')).toBeVisible();
@@ -507,11 +514,11 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     const recordType = page.locator('#mountedActionSchema0\\.record_type');
     if (!await recordType.inputValue()) await selectStable(recordType, 'surat_menyurat');
     await selectStable(page.locator('#mountedActionSchema0\\.direction'), 'masuk');
-    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '4 daripada 11');
-    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '5 daripada 11');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-file"]:visible')).toBeVisible();
@@ -520,21 +527,21 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await fileStep.locator('.fi-select-input-btn').first().click();
     await page.getByRole('option', { name: new RegExp(`${filePrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\.`) }).first().click();
     await selectStable(page.locator('#mountedActionSchema0\\.sensitivity'), 'dalaman');
-    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expect(popover).toContainText('7 daripada 11');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-minit"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '8 daripada 11');
-    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '9 daripada 11');
-    await popover.getByRole('button', { name: 'Buat pada skrin' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-review"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '10 daripada 11');
-    await popover.getByRole('button', { name: 'Saya sudah buat' }).click();
+    await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '11 daripada 11');
     await expect(page.locator('[data-help-target="classification-submit"]:visible')).toBeVisible();
     await popover.getByRole('button', { name: 'Tutup panduan' }).click();
@@ -692,5 +699,168 @@ test('tour yang ditutup tidak bermula semula semasa halaman terus digunakan (one
     await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=tenant.peti-masuk&langkah=0`);
     await expect(popover).toBeVisible();
     await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    await context.close();
+});
+
+// ── F2 (PELAN-PEMBAIKAN §3.6) ────────────────────────────────────────────────────────
+// Label mesti 1:1 dengan kelakuan; label BM pada fallback; fokus; auto-minimize modal.
+
+test('F2a label=kelakuan: guide generik penuh tidak pernah memaparkan CTA tindakan', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await loginTenant(page, tenantRoles[0]);
+
+    // tenant.dashboard: 4 langkah, SEMUA sasaran generik (page-content/page-primary).
+    // Sebelum F2, label dikira tanpa fallback generik → "Buat pada skrin" palsu (RR-10-06).
+    await page.goto(`/app/${tenantSlug}?panduan=tenant.dashboard&langkah=0`);
+    const popover = page.locator('.driver-popover');
+    const cta = popover.locator('.driver-popover-next-btn');
+    await expect(popover).toBeVisible();
+
+    for (let langkah = 1; langkah <= 4; langkah += 1) {
+        await expect(popover).toContainText(`${langkah} daripada 4`);
+        const label = (await cta.textContent())?.trim();
+        expect(label, `langkah ${langkah}`).toBe(langkah === 4 ? 'Selesai' : 'Seterusnya');
+        expect(await popover.textContent()).not.toContain('Buat pada skrin');
+        await cta.click();
+    }
+    await expect(popover).toBeHidden();
+    expect([...new Set(browserErrors)]).toEqual([]);
+    await context.close();
+});
+
+test('F2b/F2d fallback: label BM penuh + aria-modal, popover utama TIADA aria-modal', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+
+    // Popover UTAMA: tiada aria-modal (halaman masih boleh diguna melalui minimize).
+    await page.goto(`/app/${tenantSlug}?panduan=tenant.dashboard&langkah=0`);
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toBeVisible();
+    expect(await popover.getAttribute('aria-modal')).toBeNull();
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+
+    // Fallback: guide public.login pada halaman ini tiada sasarannya → popover fallback.
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=screen.klasifikasi-peti-masuk&langkah=10`);
+    const fallback = page.locator('.driver-popover');
+    await expect(fallback).toBeVisible();
+    if (await fallback.getByText('Tindakan belum tersedia').isVisible().catch(() => false)) {
+        expect(await fallback.getAttribute('aria-modal')).toBe('true');
+        const teks = (await fallback.textContent()) ?? '';
+        expect(teks).not.toMatch(/Previous|\bNext\b|\d+ of \d+/);
+    }
+    await context.close();
+});
+
+test('F2d fokus: fokus awal masuk popover, kekal dalam kitaran vendor, pulang selepas ESC', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}?panduan=tenant.dashboard&langkah=0`);
+    await expect(page.locator('.driver-popover')).toBeVisible();
+
+    const fokusDalamTour = () => page.evaluate(() => Boolean(
+        document.activeElement?.closest('.driver-popover, .driver-active-element'),
+    ));
+    await expect.poll(fokusDalamTour, { message: 'fokus awal mesti masuk popover' }).toBe(true);
+
+    // Kitaran Tab milik vendor Driver.js — fokus tidak boleh terlepas keluar.
+    for (let i = 0; i < 6; i += 1) await page.keyboard.press('Tab');
+    expect(await fokusDalamTour()).toBe(true);
+    for (let i = 0; i < 6; i += 1) await page.keyboard.press('Shift+Tab');
+    expect(await fokusDalamTour()).toBe(true);
+
+    // ESC menutup tour DAN fokus pulang ke pencetus (tidak tersesat ke <body>).
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.driver-popover')).toBeHidden();
+    await expect.poll(() => page.evaluate(() => document.activeElement?.getAttribute?.('data-help-target')
+        ?? document.activeElement?.tagName), { timeout: 10_000 }).not.toBe('BODY');
+    await context.close();
+});
+
+test('F2c mobile: popover auto-minimize bila bertindih modal, tour kekal aktif', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 664 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
+    await ensureInboxFixture(page);
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=screen.klasifikasi-peti-masuk&langkah=0`);
+
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toBeVisible();
+    await popover.locator('.driver-popover-next-btn').click();
+    await page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first().click();
+    const modal = page.locator('.fi-modal-window:visible').last();
+    await expect(modal).toBeVisible();
+
+    // Tunggu KEADAAN (bukan masa): pil menunggu muncul = auto-minimize berlaku.
+    await expect(page.locator('[data-diwan-tour-waiting]')).toBeVisible({ timeout: 30_000 });
+    await expect(popover).toBeHidden();
+
+    // guardAutomaticGuideFromDialogs TIDAK boleh menutup guide yang langkahnya menyasar modal.
+    const masihAktif = await page.evaluate(() => document.body.classList.contains('driver-active'));
+    expect(masihAktif, 'tour ditutup oleh guard modal — regresi').toBe(true);
+    await context.close();
+});
+
+test('F2c timer bersih: ESC semasa tempoh baca tidak meninggalkan minimize tertunda', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 664 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    const browserErrors = monitorBrowserErrors(page);
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
+    await ensureInboxFixture(page);
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=screen.klasifikasi-peti-masuk&langkah=0`);
+
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toBeVisible();
+    await page.keyboard.press('Escape');           // tutup SEMASA tempoh baca
+    await expect(popover).toBeHidden();
+    await page.waitForTimeout(2_500);              // lepasi tempoh baca 1.8s
+    await expect(page.locator('[data-diwan-tour-waiting]')).toHaveCount(0);
+    await expect(popover).toBeHidden();
+
+    // Dua guide berturutan tanpa muat semula → tiada keadaan bocor.
+    await page.goto(`/app/${tenantSlug}?panduan=tenant.dashboard&langkah=0`);
+    await expect(popover).toBeVisible();
+    await expect(popover).toContainText('1 daripada 4');
+    await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+    expect([...new Set(browserErrors)]).toEqual([]);
+    await context.close();
+});
+
+test('F2 banner menunggu boleh diklik dengan TETIKUS semasa tour aktif', async ({ browser, baseURL }) => {
+    // Regresi bug yang gate F0 temui dan disahkan HIDUP DI PRODUKSI (VERIFIKASI-F0 §17/§20):
+    // vendor `.driver-active * { pointer-events: none }` mematikan banner, jadi pengguna yang
+    // menekan "Buat pada skrin" lalu perlu arahan semula TERKANDAS — popover tersembunyi dan
+    // butang penyelamat menolak klik. Ujian ini menggunakan klik tetikus SEBENAR (bukan
+    // dispatchEvent) supaya ia gagal semula jika peraturan CSS itu dibuang.
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}/peti-masuk`);
+    await ensureInboxFixture(page);
+    await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=screen.klasifikasi-peti-masuk&langkah=0`);
+
+    const popover = page.locator('.driver-popover');
+    await expect(popover).toBeVisible();
+    await popover.locator('.driver-popover-next-btn').click();     // "Buat pada skrin"
+    const banner = page.locator('[data-diwan-tour-waiting]');
+    await expect(banner).toBeVisible();
+    await expect(popover).toBeHidden();
+
+    const show = banner.getByRole('button', { name: 'Tunjuk arahan' });
+    expect(await show.evaluate((el) => getComputedStyle(el).pointerEvents)).not.toBe('none');
+    await show.click({ timeout: 10_000 });                          // klik tetikus SEBENAR
+    await expect(popover).toBeVisible();
+    await expect(banner).toHaveCount(0);
     await context.close();
 });

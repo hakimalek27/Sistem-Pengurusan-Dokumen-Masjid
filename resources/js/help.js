@@ -1,6 +1,7 @@
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import '../css/help.css';
+import { ACTION_KINDS, stepAdvancePlan } from './help/step-advance-plan.js';
 
 const SELECTOR = (target) => `[data-help-target="${CSS.escape(target)}"]`;
 const GENERIC_TARGETS = new Set(['page-content', 'page-primary']);
@@ -18,6 +19,9 @@ let transitionPoller = null;
 let waitingBanner = null;
 let finalActionCleanup = null;
 let automaticModalGuard = null;
+let autoMinimiseTimer = null;
+let autoMinimiseFrame = null;
+let tourTrigger = null;
 
 function escapeHtml(value) {
     const element = document.createElement('div');
@@ -176,6 +180,82 @@ function clearAutomaticModalGuard() {
     automaticModalGuard = null;
 }
 
+/** F2c (§3.3) — batalkan tempoh-baca auto-minimize; dipanggil pada setiap peralihan. */
+function clearAutoMinimise() {
+    if (autoMinimiseTimer) window.clearTimeout(autoMinimiseTimer);
+    autoMinimiseTimer = null;
+    if (autoMinimiseFrame) window.cancelAnimationFrame(autoMinimiseFrame);
+    autoMinimiseFrame = null;
+}
+
+/** F2d (§3.4) — fokus awal ke dalam popover; kitaran Tab kekal milik vendor Driver.js. */
+function focusPopover() {
+    const popover = document.querySelector('.driver-popover');
+    if (!(popover instanceof HTMLElement)) return;
+    const focusable = popover.querySelector(
+        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+    );
+    (focusable instanceof HTMLElement ? focusable : popover).focus({ preventScroll: true });
+    if (!(focusable instanceof HTMLElement) && !popover.hasAttribute('tabindex')) {
+        popover.setAttribute('tabindex', '-1');
+        popover.focus({ preventScroll: true });
+    }
+}
+
+/**
+ * F2d — pulangkan fokus kepada pencetus tour supaya pengguna papan kekunci tidak tersesat.
+ *
+ * Tour yang dimulakan melalui deep-link `?panduan=` tiada pencetus (fokus pada `<body>`),
+ * jadi kita pulang ke butang Pembantu Diwan — pencetus semula jadi tour. Fokus ditangguh
+ * satu frame kerana launcher disembunyikan (`body.driver-active`) sehingga Driver.js
+ * membuang kelas itu semasa memusnahkan diri.
+ */
+function clearFocusManagement() {
+    const trigger = tourTrigger;
+    tourTrigger = null;
+    window.setTimeout(() => {
+        // Jangan rampas fokus jika pengguna sudah memindahkannya sendiri.
+        if (document.activeElement && document.activeElement !== document.body) return;
+        const destination = trigger instanceof HTMLElement && document.contains(trigger)
+            ? trigger
+            : document.querySelector(SELECTOR('help-launcher'));
+        if (destination instanceof HTMLElement) destination.focus({ preventScroll: true });
+    }, 50);
+}
+
+/**
+ * F2c (§3.3) — auto-minimize HANYA apabila popover benar-benar BERTINDIH modal sasaran.
+ *
+ * Pada skrin kecil, overlay+popover Driver.js duduk di atas modal yang baru dibuka guide,
+ * jadi butang modal tidak boleh ditekan sehingga pengguna menekan "Buat pada skrin"
+ * (RR-08-03). Ukuran pertindihan sebenar dipilih berbanding timer buta: langkah yang
+ * popovernya tidak menghalang apa-apa kekal terbuka untuk dibaca.
+ */
+function scheduleAutoMinimise(step, plan) {
+    clearAutoMinimise();
+    if (!ACTION_KINDS.has(plan.kind)) return;
+
+    autoMinimiseFrame = window.requestAnimationFrame(() => {
+        autoMinimiseFrame = null;
+        const popover = document.getElementById('driver-popover-content');
+        const target = resolveStepElement(step, false);
+        const modal = target?.closest('.fi-modal-window');
+        if (!popover || !modal || !isVisible(modal)) return;
+
+        const a = popover.getBoundingClientRect();
+        const b = modal.getBoundingClientRect();
+        const bertindih = a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        if (!bertindih) return;
+
+        // Tempoh baca yang boleh dibatalkan (bukan 600ms — terlalu singkat untuk membaca
+        // dan cukup panjang untuk berlumba dengan tindakan pengguna).
+        autoMinimiseTimer = window.setTimeout(() => {
+            autoMinimiseTimer = null;
+            if (activeDriver?.isActive()) minimiseForAction(step);
+        }, 1800);
+    });
+}
+
 function guardAutomaticGuideFromDialogs(guideSteps, guide) {
     clearAutomaticModalGuard();
     automaticModalGuard = new MutationObserver(() => {
@@ -215,6 +295,7 @@ function focusActionTarget(step) {
 }
 
 function minimiseForAction(step) {
+    clearAutoMinimise();   // pengguna bertindak dahulu — jangan biar timer menembak kemudian
     const popover = document.getElementById('driver-popover-content');
     if (!popover) return;
     popover.style.display = 'none';
@@ -314,30 +395,30 @@ function helpArticleUrl(runtime, guideId) {
     return `${url.pathname}${url.search}`;
 }
 
-function isActionStep(step, nextStep) {
-    if (step.wait_for_user) return true;
-    if (!nextStep || (nextStep.route && !samePath(nextStep.route))) return false;
-    return nextStep.target !== step.target && !resolveStepElement(nextStep, false);
+/**
+ * F2a — SATU sumber keputusan untuk label DAN kelakuan (§3.1).
+ *
+ * `isVisible` menggunakan fallback generik yang SAMA seperti `onNextClick` dahulu; itulah
+ * ketidakpadanan yang menyebabkan label "Buat pada skrin" pada langkah yang sebenarnya
+ * hanya `moveNext()` (RR-01-07 / RR-10-06).
+ */
+function planFor(guideSteps, index) {
+    return stepAdvancePlan(guideSteps, index, {
+        isVisible: (step) => Boolean(resolveStepElement(step, GENERIC_TARGETS.has(step.target))),
+        samePath,
+    });
 }
 
 function nextButtonLabel(guideSteps, index) {
-    const step = guideSteps[index];
-    const next = guideSteps[index + 1];
-    if (!next) return step.wait_for_user && step.target !== 'page-content' ? 'Buat pada skrin' : 'Selesai';
-    if (!isActionStep(step, next)) return 'Seterusnya';
-    const waitsForScreen = (!next.route || samePath(next.route))
-        && next.target !== step.target
-        && !resolveStepElement(next, false);
-
-    return waitsForScreen ? 'Buat pada skrin' : 'Saya sudah buat';
+    return planFor(guideSteps, index).label;
 }
 
-function stepDescription(runtime, guide, step, actionStep, buttonLabel) {
+function stepDescription(runtime, guide, step, plan) {
+    // Hint mengikut KIND yang sama dengan label — tiada lagi teks "tindakan" pada langkah
+    // yang sebenarnya hanya maju (RR-01-07).
     let hint = 'Baca penerangan ini, kemudian tekan <strong>Seterusnya</strong>.';
-    if (actionStep && buttonLabel === 'Buat pada skrin') {
+    if (ACTION_KINDS.has(plan.kind)) {
         hint = '<strong>Tindakan anda:</strong> tekan <strong>Buat pada skrin</strong> untuk mengecilkan arahan, kemudian gunakan kawalan halaman yang disorot. Panduan akan muncul semula apabila langkah seterusnya terbuka.';
-    } else if (actionStep) {
-        hint = '<strong>Tindakan anda:</strong> lakukan arahan pada skrin. Tekan <strong>Saya sudah buat</strong> hanya selepas selesai; panduan tidak mengklik, menyimpan atau menghantar bagi pihak anda.';
     }
 
     return `
@@ -360,7 +441,9 @@ function watchForNextStep(guideSteps, index) {
     const current = guideSteps[index];
     const next = guideSteps[index + 1];
     if (!current || !next || (next.route && !samePath(next.route))) return;
-    if (!isActionStep(current, next) || resolveStepElement(next, false)) return;
+    // Predikat kini datang dari plan yang sama seperti label (F2a). Mekanisme sync di bawah
+    // (observer + poll 120ms) TIDAK diubah — ia terbukti berfungsi (§3 sempadan F2).
+    if (!ACTION_KINDS.has(planFor(guideSteps, index).kind) || resolveStepElement(next, false)) return;
 
     const advanceWhenReady = () => {
         if (!activeDriver?.isActive()) return;
@@ -396,7 +479,12 @@ function showUnavailableGuide(runtime, guide, step) {
         animate: true,
         allowClose: true,
         overlayClickBehavior: 'close',
+        // F2b (§3.2) — label vendor lalai ialah Inggeris ("Previous"/"Next"/"1 of 1").
         doneBtnText: 'Tutup',
+        prevBtnText: 'Kembali',
+        nextBtnText: 'Seterusnya',
+        progressText: '{{current}} daripada {{total}}',
+        showProgress: false,          // satu langkah — "1 daripada 1" tiada makna
         steps: [{
             element: fallback,
             popover: {
@@ -408,6 +496,11 @@ function showUnavailableGuide(runtime, guide, step) {
         onPopoverRender: (popover) => {
             popover.closeButton.setAttribute('aria-label', 'Tutup panduan');
             popover.closeButton.title = 'Tutup panduan';
+            // F2d (§3.4): fallback ialah SATU langkah tanpa interaksi halaman, jadi
+            // aria-modal jujur di sini (popover UTAMA sengaja TIADA aria-modal — halaman
+            // di sana masih boleh diguna melalui minimize/focusActionTarget).
+            popover.wrapper.setAttribute('aria-modal', 'true');
+            focusPopover();
         },
         onDestroyed: () => {
             activeDriver = null;
@@ -416,6 +509,8 @@ function showUnavailableGuide(runtime, guide, step) {
             clearWaitingBanner();
             clearFinalActionWatch();
             clearAutomaticModalGuard();
+            clearAutoMinimise();
+            clearFocusManagement();
         },
     });
     activeDriver.drive();
@@ -423,6 +518,11 @@ function showUnavailableGuide(runtime, guide, step) {
 
 async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
     if (!guide?.steps?.length || activeGuideId === guide.id) return;
+    // F2d: rujukan pencetus disimpan supaya fokus boleh pulang selepas tour ditutup.
+    // `document.body` juga HTMLElement — ia bermakna "tiada apa difokus" (cth deep-link
+    // `?panduan=`), jadi ia BUKAN pencetus; sandaran launcher digunakan sebaliknya.
+    const aktif = document.activeElement;
+    tourTrigger = aktif instanceof HTMLElement && aktif !== document.body ? aktif : null;
     activeGuideId = guide.id;
     completed = false;
     decorateTargets();
@@ -435,21 +535,21 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
     if (driverStartIndex < 0) driverStartIndex = guideSteps.length - 1;
 
     const steps = guideSteps.map((step, index) => {
-        const next = guideSteps[index + 1];
-        const actionStep = isActionStep(step, next);
-        const finalAction = !next && step.wait_for_user && step.target !== 'page-content';
-        const buttonLabel = nextButtonLabel(guideSteps, index);
+        const plan = planFor(guideSteps, index);
+        const actionStep = ACTION_KINDS.has(plan.kind);
+        const finalAction = plan.kind === 'final-action';
+        const buttonLabel = plan.label;
         return {
             element: () => resolveStepElement(step) || document.querySelector(SELECTOR('page-content')),
             popover: {
                 popoverClass: 'diwan-tour-popover',
                 title: escapeHtml(step.title),
-                description: stepDescription(runtime, guide, step, actionStep, buttonLabel),
+                description: stepDescription(runtime, guide, step, plan),
                 side: 'bottom',
                 align: 'start',
                 nextBtnText: buttonLabel,
             },
-            diwan: { ...step, actionStep, finalAction },
+            diwan: { ...step, actionStep, finalAction, kind: plan.kind },
         };
     });
 
@@ -485,58 +585,69 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             const index = options.driver.getActiveIndex() ?? 0;
             const current = guideSteps[index];
             const next = guideSteps[index + 1];
-            const buttonLabel = nextButtonLabel(guideSteps, index);
+            const plan = planFor(guideSteps, index);
             const nextButton = document.querySelector('.driver-popover-next-btn');
-            if (nextButton) nextButton.textContent = buttonLabel;
+            if (nextButton) nextButton.textContent = plan.label;
             const description = document.querySelector('.driver-popover-description');
-            if (description) description.innerHTML = stepDescription(runtime, guide, current, isActionStep(current, next), buttonLabel);
+            if (description) description.innerHTML = stepDescription(runtime, guide, current, plan);
             setTourStatus('');
             watchForNextStep(guideSteps, index);
+            clearAutoMinimise();          // batalkan baki tempoh-baca langkah sebelumnya
+            focusPopover();               // F2d: fokus awal (vendor tidak melakukannya)
+            scheduleAutoMinimise(current, plan);
             emit(index === driverStartIndex ? 'started' : 'progressed', guide.id, current.sourceIndex, current.target);
         },
-        onNextClick: (_element, driverStep, options) => {
+        // F2a: cabang dipilih oleh plan YANG SAMA dengan label — tiada lagi label yang
+        // menjanjikan tindakan sedangkan klik hanya maju (RR-01-07). Setiap cabang
+        // mengekalkan tingkah laku sedia ada yang betul.
+        onNextClick: (_element, _driverStep, options) => {
             const index = options.driver.getActiveIndex() ?? 0;
             const current = guideSteps[index];
-            if (index >= guideSteps.length - 1) {
-                if (driverStep.diwan?.finalAction && resolveStepElement(current, false)) {
-                    minimiseForAction(current);
-                    watchForActionCompletion(current, () => completeGuide(options.driver, guide, current));
-                    return;
-                }
-                completeGuide(options.driver, guide, current);
-                return;
-            }
-
             const next = guideSteps[index + 1];
-            if (next.route && !samePath(next.route)) {
-                if (current.wait_for_user && !GENERIC_TARGETS.has(current.target) && resolveStepElement(current, false)) {
-                    minimiseForAction(current);
-                    watchForActionCompletion(current, () => {
-                        emit('progressed', guide.id, next.sourceIndex, next.target);
-                        window.location.assign(`${next.route}?panduan=${encodeURIComponent(guide.id)}&langkah=${next.sourceIndex}`);
-                    });
-                    return;
-                }
+            const gotoNextRoute = () => {
                 emit('progressed', guide.id, next.sourceIndex, next.target);
                 window.location.assign(`${next.route}?panduan=${encodeURIComponent(guide.id)}&langkah=${next.sourceIndex}`);
-                return;
-            }
+            };
 
-            if (resolveStepElement(next, GENERIC_TARGETS.has(next.target))) {
-                options.driver.moveNext();
-                return;
-            }
+            switch (planFor(guideSteps, index).kind) {
+                case 'complete':
+                    completeGuide(options.driver, guide, current);
 
-            const expectedAction = driverStep.diwan?.actionStep;
-            if (expectedAction) {
-                minimiseForAction(current);
-                return;
+                    return;
+                case 'final-action':
+                    if (resolveStepElement(current, false)) {
+                        minimiseForAction(current);
+                        watchForActionCompletion(current, () => completeGuide(options.driver, guide, current));
+
+                        return;
+                    }
+                    completeGuide(options.driver, guide, current);
+
+                    return;
+                case 'action-then-navigate':
+                    minimiseForAction(current);
+                    watchForActionCompletion(current, gotoNextRoute);
+
+                    return;
+                case 'navigate':
+                    gotoNextRoute();
+
+                    return;
+                case 'advance':
+                    options.driver.moveNext();
+
+                    return;
+                case 'wait-for-action':
+                    minimiseForAction(current);
+
+                    return;
+                default: // advance-blocked
+                    setTourStatus(
+                        'Sasaran langkah seterusnya tidak ditemui. Muat semula halaman atau buka panduan penuh.',
+                        'error',
+                    );
+                    emit('target_missing', guide.id, next.sourceIndex, next.target);
             }
-            setTourStatus(
-                'Sasaran langkah seterusnya tidak ditemui. Muat semula halaman atau buka panduan penuh.',
-                'error',
-            );
-            emit('target_missing', guide.id, next.sourceIndex, next.target);
         },
         onDestroyStarted: (_element, _step, options) => {
             if (!completed) {
@@ -548,6 +659,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearWaitingBanner();
             clearFinalActionWatch();
             clearAutomaticModalGuard();
+            clearAutoMinimise();
             options.driver.destroy();
         },
         onDestroyed: () => {
@@ -557,6 +669,8 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearWaitingBanner();
             clearFinalActionWatch();
             clearAutomaticModalGuard();
+            clearAutoMinimise();
+            clearFocusManagement();       // F2d: fokus pulang ke pencetus/launcher
             if (completed) stripGuideQuery();
         },
     });
