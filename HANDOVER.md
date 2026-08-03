@@ -1,6 +1,49 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — F0→F2 LIVE + F6-W0 SIAP DIBINA (3 Ogos 2026) ⭐ TERKINI
+## SESI — ✅ DEPLOY 2 (F6-W0) LIVE (3 Ogos 2026) ⭐ TERKINI
+
+**`aae4c97` LIVE di bakwim.my** · CI run 30778509859 **7/7 HIJAU** (termasuk shard `workflow`
+yang gagal sekali sebelum ini) · 📄 `Audit Review Round Robin/bukti/deploy-2/BUKTI-DEPLOY-2.md`
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `9619509` | **`aae4c97`** |
+| `diwan-app` | `916f302c` | **`37516fd1`** |
+| `diwan-web` | `dd486028` | **`4c7dac3c`** |
+| aset help | `help-BceoIbJG.js` | sama (W0 tidak sentuh entri Vite) |
+
+Kesihatan: `/up` 200 · `diwan:health` OK · `diwan:smoke` **9/9** · `failed_jobs` 0 · 0 mutex ·
+8/8 container · `/` `/log-masuk` `/daftar` `/bantuan` 200 · `sync-help-index --delete` =
+**83 guide disegerakkan**.
+
+### 🔑 Pelajaran metodologi bukti deploy (baharu — penting untuk semua wave F6)
+1. **Nama aset Vite BUKAN bukti sejagat deploy berkuat kuasa.** W0 mengubah blade +
+   `guides.json` sahaja — tiada entri Vite tersentuh, jadi nama aset KEKAL. Itu betul, bukan
+   deploy gagal. Untuk deploy jenis ini, bukti mesti **kandungan di dalam imej**
+   (`docker compose exec app grep …`) + **imej ID berubah**. Disahkan: `catalog_version
+   2026.08.03.2`, 5+5 `data-help-target`, 10 tajuk bermakna semuanya hadir dalam imej.
+2. **Labelkan algoritma hash dalam rekod bukti.** `BUKTI-DEPLOY-1.md` merekod
+   `af79c0c5…` untuk `help-BceoIbJG.js`; hari ini `md5sum` beri `e5f44081…` untuk fail SAMA —
+   nampak seperti percanggahan. Hipotesis diuji: nilai lama ialah `sha256sum | cut -c1-32`.
+   **Disahkan tepat.** Rekod Deploy 1 sah; ia juga membuktikan aset identik bait-untuk-bait.
+3. **`steps_text` indeks bantuan = `pluck('instruction')`, bukan `title`**
+   (`SyncHelpIndex.php:71`) — jadi tajuk baharu W0 tidak mengubah teks boleh-cari. Betul dan
+   dijangka; jangan tafsir sebagai sync gagal.
+
+### Keputusan yang disahkan betul oleh CI ini
+Shard `workflow` gagal pada run 30776919686 (`39f2f33`). Saya hampir mengubah koreografi
+`guidance-full.spec.js`; larian tempatan **menolak hipotesis itu**, dan shard yang sama
+**lulus** pada run F2 dengan kod asal sementara W0 langsung tidak menyentuh guide `workflow.*`.
+Perubahan dipulihkan sepenuhnya → run 30778509859 **hijau**. **Flake disahkan.**
+Kelemahan katalog sebenar (langkah 6–7 sasar modal yang ditutup oleh langkah 5) = kerja **W2**.
+
+### ▶️ SETERUSNYA
+**F3** (bahasa `lang/ms/`, §4) → F4 (§5) → F5 (§6) → F6 **W1**→W6 (§7) → F7 (§8) → F8 (§9) →
+F9 (§9A) → F10 (§9B). **Baca semula seksyen pelan sebelum membina** (peraturan #1).
+
+---
+
+## SESI — F0→F2 LIVE + F6-W0 SIAP DIBINA (3 Ogos 2026)
 
 ### ✅ SUDAH LIVE DI PRODUKSI: `9619509` (Deploy 1 = F1+F2)
 CI run 30774069928 **7/7 HIJAU** · rantaian bukti runtime 5A **LULUS PENUH**
