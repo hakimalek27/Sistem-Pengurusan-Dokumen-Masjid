@@ -17,6 +17,15 @@
             --panel:#ffffff;
         }
         * { box-sizing:border-box; }
+        /* Reset imej — WAJIB dan mesti kekal INLINE di sini.
+           `help.css` datang sebagai <link> luaran; sementara ia dalam perjalanan, dokumen
+           masih `readyState: "loading"` tetapi imej boleh SUDAH lengkap (cache). Tanpa reset
+           ini, `<img class="diwan-help-thumb">` (1440x1000 asal) dirender `display:inline`
+           pada saiz penuhnya dan halaman menolak ~1066px melepasi viewport 390px sebelum
+           `help.css` mendarat. Panel Filament tidak terjejas — preflight Tailwind sudah
+           menetapkan reset ini; layout tetamu ditulis tangan dan terlepas. Diukur dan
+           dibuktikan: kecacatan SEDIA ADA (juga berlaku sebelum F5), bukan regresi F5. */
+        img, svg, video { max-width:100%; }
         body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--dakwat); line-height:1.5; }
         .wrap { width:min(1040px, 100%); margin:0 auto; padding:2rem 1rem; }
         .brand { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.5rem; }

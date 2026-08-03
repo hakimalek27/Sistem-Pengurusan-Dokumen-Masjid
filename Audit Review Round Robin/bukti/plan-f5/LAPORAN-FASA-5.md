@@ -330,6 +330,41 @@ menunggu 120s. Diperbaiki dengan `[data-help-target="inbox-upload-modal"]`.
 **Verifikasi:** lulus 2/2 di bawah **beban CPU buatan** (6 proses gelung ketat — teknik F0
 yang menghasilkan semula kegagalan jenis-CI secara tempatan).
 
+### 🖼️ Pusingan CI #3 (`01a0c7e`) — kecacatan SEDIA ADA didedahkan, bukan regresi F5
+
+Kali ini `guidance.spec.js:108` (`assertNoHorizontalPageOverflow`) pada `/bantuan?asal=`
+viewport 390×844: overflow **1066px**.
+
+**Diagnosis berperingkat (setiap langkah diukur, bukan diteka):**
+1. Rantaian nenek moyang dicetak semasa overflow → semua nenek moyang **358px betul**;
+   hanya `IMG.diwan-help-thumb` **1440px**, `display:inline`, dan `.diwan-help-media`
+   melaporkan `aspect-ratio: auto` / `overflow: visible` — nilai LALAI, bukan nilai `help.css`.
+2. Keadaan penuh ditangkap: `readyState: "loading"` · `styleSheets: ["inline","inline"]` —
+   `help-CrH0eDM1.css` **belum** dalam senarai · `imgComplete: true`, `naturalWidth: 1440`.
+
+**Punca:** `help.css` ialah `<link>` LUARAN. Sementara ia dalam perjalanan, imej (dari cache)
+sudah lengkap dan dirender pada saiz asalnya. Layout tetamu ditulis tangan dan **tiada reset
+imej** — panel Filament tidak terjejas kerana preflight Tailwind sudah menyediakannya.
+
+**Pembaikan:** `img, svg, video { max-width:100% }` ditambah ke blok `<style>` **inline**
+layout tetamu. Inline bermakna ia terpakai semasa parse, jadi tetingkap itu tertutup
+sepenuhnya. Ia tidak bertelagah dengan `help.css` (`max-width` ≠ `width`).
+
+⚠️ **PEMBETULAN kesimpulan saya sendiri.** Larian pra-F5 **pertama** memberi 0, jadi saya
+menulis "F5 CAUSED this". Menjalankannya **tiga kali** pada commit pra-F5 (`16c3376`) memberi
+**1066 juga** — larian pertama hanya menang perlumbaan kerana cache imej sejuk. Ini kecacatan
+**SEDIA ADA**; CI hanya kebetulan kalah perlumbaan pada `01a0c7e`. Satu larian bukan bukti
+atribusi.
+
+Selepas pembaikan: **0 overflow dalam 3/3** larian probe, dan ujian CI yang gagal itu lulus
+**3/3**.
+
+**Satu lagi assertion saya yang terlalu luas:** ujian layout e2e mengira **semua** `<header>`
+dalam dokumen dan gagal dengan `headers: 2` pada `/bantuan`. HTML pelayan hanya ada **satu**;
+yang kedua ialah chrome tour Driver.js yang disuntik JS. Kontrak §6.5 #6 ialah tentang
+**layout**, jadi kiraan diperhalus kepada `.wrap > header`. Ujian Pest kekal mengira HTML
+pelayan, di mana 1 tetap betul.
+
 ### ⭐ `risk-accepted` = 0
 
 `public.login` ialah **satu-satunya** entri risiko-diterima dalam baseline F0, dengan tarikh

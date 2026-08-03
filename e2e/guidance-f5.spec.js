@@ -87,7 +87,11 @@ test('F5a layout tetamu: satu <main>, jenama+nav di luar, tiada ralat JS', async
             const main = mains[0];
             return {
                 mains: mains.length,
-                headers: document.querySelectorAll('header').length,
+                // `.wrap > header` — banner LAYOUT sahaja. Mengira SEMUA `<header>` dalam
+                // dokumen adalah terlalu luas: tour Driver.js menyuntik chrome sendiri pada
+                // halaman yang auto-mula (cth /bantuan), dan itu bukan sebahagian kontrak
+                // layout §6.5 #6. Ujian Pest mengira HTML PELAYAN, di mana 1 tetap betul.
+                headers: document.querySelectorAll('.wrap > header').length,
                 target: main?.dataset.helpTarget ?? null,
                 h1DalamMain: main ? main.querySelectorAll('h1').length : -1,
                 navDalamMain: main ? main.querySelectorAll('nav').length : -1,
