@@ -77,11 +77,28 @@ $ php artisan migrate --pretend      (petikan)
 ```
 
 **Nota jujur tentang pemacu:** pada SQLite, `->change()` melakukan **pembinaan semula jadual**
-(`__temp__mosques`) — itu mekanisme SQLite, bukan pilihan kita. Pada PostgreSQL ia sepatutnya
-`ALTER … SET DEFAULT` ringan sahaja. Pelan menuntut ini **diuji, bukan dijanjikan**: bukti pgsql
-datang daripada job integrasi CI (yang menjalankan `migrate` pada PostgreSQL sebenar) dan
-daripada `migrate --force` semasa deploy produksi. **Kedua-duanya direkod dalam bukti deploy.**
-Ujian rollback → re-migrate lulus, dan masjid sedia ada mengekalkan nilainya.
+(`__temp__mosques`) — itu mekanisme SQLite, bukan pilihan kita. Ujian rollback → re-migrate
+lulus, dan masjid sedia ada mengekalkan nilainya.
+
+### ✅ Bukti PostgreSQL SEBENAR (§5.3 "diuji, bukan dijanjikan")
+
+Daripada job integrasi CI run 30807808377, yang menjalankan `migrate` pada PostgreSQL 16:
+
+```
+2026_08_03_000001_change_auto_disposal_default ................. 3.50ms DONE
+(dan sekali lagi pada langkah "Prepare Playwright e2e")        ... 3.08ms DONE
+```
+
+**3.50ms** = `ALTER … SET DEFAULT` ringan, **tiada rewrite jadual** — tepat seperti yang pelan
+jangkakan, dan berbeza sepenuhnya daripada laluan pembinaan-semula SQLite. Job integrasi
+(`PostgreSQL, Redis, Meili, OCR and tests`) **LULUS** pada larian itu, jadi keseluruhan suite
+500 ujian juga hijau terhadap pgsql.
+
+**Pemerhatian berasingan (bukan disebabkan F4):** output Pest di CI melabel hampir setiap ujian
+sebagai `warnings` (`Tests: 500 warnings, 1 passed`) sedangkan tempatan memberi `500 passed`.
+Ini keadaan CI yang **sudah ada sebelum** F3/F4 dan **tidak** menggagalkan build (job lulus).
+Ia mengurangkan nilai maklumat output ujian CI — layak disiasat, dicatat untuk F8 dan
+sengaja TIDAK diperbaiki di sini (skop fasa).
 
 ### Bukti penjaga menangkap regresi (5/5)
 
@@ -124,6 +141,43 @@ angka yang dipaparkan kepada pengguna, iaitu keperluan #1 (§0.6 S1).
 4. **Teks pengakuan ditemui pada langkah 3 stepper**, bukan pada GET awal `/daftar` — ujian
    memandu komponen ke langkah itu. Percubaan pertama saya mengasert HTML GET dan **gagal**;
    itu penemuan ujian yang betul, bukan alasan untuk melonggarkan assertion.
+
+## ⛔ Deploy 4 DITAHAN — shard `workflow` merah, punca belum diketahui
+
+Kod F4 lulus segala-galanya: 500 ujian, pgsql, pint. Tetapi **shard `workflow` gagal** pada
+run 30807808377 di titik yang sama seperti sebelumnya (muat naik UI tidak menghasilkan
+`1 dokumen dimuat naik ke Peti Masuk.`), dan disiplin deploy jelas: **jangan deploy atas CI
+merah**. Kegagalan itu **tiada kaitan dengan F4** — ia menyentuh guide `workflow.*` dan laluan
+muat naik, bukan retensi — tetapi ia tetap gate.
+
+### Pengakuan: diagnosis saya sebelum ini SALAH
+
+Dalam `bukti/plan-f6-w0/LAPORAN-F6-W0.md` §(g) saya menamakan puncanya: `click({force:true})`
+tidak memintas overlay tour, jadi event diserap oleh overlay. Saya menukarnya kepada
+`dispatchEvent`. **`dispatchEvent` memintas koordinat sepenuhnya, dan kegagalan tetap berulang.**
+Teori itu tidak menjelaskan apa-apa. Perubahan itu dikekalkan (ia menyelaraskan tapak tersebut
+dengan corak fail itu sendiri dan terbukti berjalan hijau sekali) tetapi ia **bukan** pembaikan.
+
+### Hipotesis yang diuji dan DITOLAK sebelum bertindak
+
+| Hipotesis | Ujian | Keputusan |
+|---|---|---|
+| Antivirus fail-closed (AV tiada di CI → 0 rekod) | `config/diwan.php:32` | **DITOLAK** — `CLAMAV_ENABLED` lalai `false` |
+| Masa / beban runner perlahan | 4 larian tempatan, beban CPU 6 pembakar | **DITOLAK** — 4/4 lulus (4.3m, 4.0m, 5.0m, 8.6m) |
+
+Gejala yang tinggal menunjuk kepada **perbezaan persekitaran CI** (PostgreSQL, Redis, Linux)
+dan bukan kepada masa. Saya sengaja **tidak** meneka lagi.
+
+### Sebab punca masih tidak diketahui: jurang alat, bukan kekurangan usaha
+
+Apabila shard gagal di CI, satu-satunya artifak ialah laporan JSON — dan ia menangkap **0 entri
+stdout**. Tiada trace, tiada snapshot DOM, tiada log pelayan. Mustahil membezakan "pelayan
+memulangkan 500", "pengesahan borang gagal", dan "permintaan upload tidak pernah tiba".
+
+Dibaiki (`08d3643`), hanya pada `failure()`: shard kini memuat naik
+`test-results/**/trace.zip` + `error-context.md` + `*.png`, **dan** `storage/logs/*.log`
+(`serve-ci.log` + `laravel.log`). Job integrasi sudah memuat naik log sejak F0; shard tidak
+pernah. Kegagalan seterusnya akan boleh didiagnosis.
 
 ## (f) Nota/risiko untuk fasa seterusnya
 

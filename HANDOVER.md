@@ -1,6 +1,54 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — ✅ DEPLOY 3 (F3 BAHASA) LIVE (3 Ogos 2026) ⭐ TERKINI
+## SESI — ✅ DEPLOY 4 (F4 LALAI RETENSI) LIVE (3 Ogos 2026) ⭐ TERKINI
+
+**`08d3643` LIVE** · CI run 30811698382 **7/7 HIJAU** ·
+📄 `bukti/deploy-4/BUKTI-DEPLOY-4.md` + `bukti/plan-f4/LAPORAN-FASA-4.md`
+
+Auto-padam **bukan lagi lalai**. Tiga lapisan: L1 borang `auto_padam`→**`semak`** + pengesahan
+sedar berkiraan impak · L2 suis masjid baharu default **`false`** (ADDENDUM v2.6) · L3 peraturan
+platform **KEKAL** (D3, patuh tatacara ANM). Masjid baharu kini perlu **memilih masuk 2 kali**.
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `cab951e` | **`08d3643`** |
+| `diwan-app` | `6789fc80` | **`3df4c706`** |
+| `diwan-web` | `daead59f` | **`efd9337d`** |
+
+### ⭐ Bukti data operasi TIDAK berubah (kriteria §5.6 paling penting)
+Cap jari sha256 setiap peraturan retensi, sebelum vs selepas:
+`c4117664eec7fe8aea374426508c612591825ba4f52506b12008a29c57b2ce09` — **IDENTIK**.
+19 peraturan / 18 platform (14 `auto_padam` + 4 `kekal`) / 1 per-masjid tidak berubah;
+mamad + smoke kekal `true`. Migrasi pgsql produksi **68.93ms** = ALTER ringan, tiada rewrite.
+Lalai baharu dibuktikan daripada `information_schema.column_default = 'false'` —
+**tanpa mencipta masjid ujian** di produksi.
+
+Kesihatan: /up 200 · health OK · **smoke 9/9** · failed_jobs 0 · 0 mutex · 8/8 container ·
+4 laluan awam 200.
+
+### ⚠️ Satu kriteria §5.6 milik pemilik
+"Buka borang cipta peraturan → default Semak; pilih Auto Padam → dialog amaran" perlukan sesi
+berautentikasi. Saya tidak pernah mencipta/menaip kredensial produksi, jadi pengesahan visual
+milik pemilik: `/app/{slug}/retention-rules` → **Cipta** → *Tindakan* patut **Semak**; tukar ke
+**Auto Padam** → **Simpan** → dialog berkiraan. Kod L1 disahkan hidup dalam imej + 11 ujian.
+
+### 🔴 BELUM SELESAI: shard `workflow` gagal berselang, punca TIDAK DIKETAHUI
+Corak F,P,F,P,F,**P** pada muat naik UI (`1 dokumen dimuat naik` tidak muncul).
+**Diagnosis saya sebelum ini SALAH** — `dispatchEvent` memintas koordinat sepenuhnya namun
+kegagalan berulang, jadi teori "overlay menyerap klik" tidak menjelaskan apa-apa.
+Dua hipotesis lain diuji & **ditolak**: antivirus fail-closed (`CLAMAV_ENABLED` lalai `false`)
+dan masa/beban (4/4 larian tempatan di bawah beban CPU **lulus**).
+**Sebabnya tidak diketahui = jurang alat:** artifak shard hanya laporan JSON (0 entri stdout).
+Dibaiki `08d3643`: shard kini memuat naik **trace + error-context + PNG + log pelayan** pada
+`failure()`. Kegagalan seterusnya akan boleh didiagnosis, bukan diteka.
+
+### ⛔ JANGAN jalankan `RetentionRuleSeeder` pada produksi (`updateOrCreate` menimpa)
+
+### ▶️ SETERUSNYA: **F5** — kandungan katalog & tour halaman awam (§6)
+
+---
+
+## SESI — ✅ DEPLOY 3 (F3 BAHASA) LIVE (3 Ogos 2026)
 
 **`cab951e` LIVE di bakwim.my** · CI run 30798675244 **7/7 HIJAU** ·
 📄 `bukti/deploy-3/BUKTI-DEPLOY-3.md` + `bukti/plan-f3/LAPORAN-FASA-3.md`
