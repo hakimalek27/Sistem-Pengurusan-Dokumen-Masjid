@@ -140,3 +140,38 @@ ditutup oleh tindakan langkah 5, jadi tour bergantung pada minimize/auto-advance
 melepasinya. Itu **kelemahan katalog**, bukan kelemahan runtime, dan tempat betul untuk
 membaikinya ialah **W2** (`workflow.*`, 13 guide/145 langkah) — bukan W0. Rekod ini supaya
 W2 tidak tersandung pada perkara yang sama.
+
+---
+
+### ⚠️ SUSULAN (3 Ogos, semasa F3) — punca sebenar DIJUMPAI; label "flake" di atas TIDAK LENGKAP
+
+Kegagalan yang sama berulang pada CI run **30779820587** — komit `128b83c`, yang mengubah
+**dokumen sahaja, sifar baris kod**. Dua daripada empat larian gagal dengan tandatangan
+**identik**:
+
+```
+guidance-full.spec.js:434
+  expect(page.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible()  → 60s, tiada
+```
+
+Itu ialah pengulangan yang saya katakan akan mewajarkan tindakan. Punca dijumpai dengan tepat:
+
+> **Baris 433 ialah SATU-SATUNYA `click({ force: true })` yang tinggal dalam fail itu.**
+> Lapan tapak lain sudah menggunakan `forceClickWhenEnabled()` (tunggu-enabled +
+> `dispatchEvent`). Corak itu diperkenalkan pada F0 justru kerana **`force: true` tidak
+> memintas overlay tour** — ia hanya melangkau semakan *actionability*; event tetap dihantar
+> ke KOORDINAT dan overlay SVG menyerapnya. Popover boleh muncul semula di atas modal antara
+> `cta()` dan klik itu, dan tetingkap tersebut melebar di bawah beban CI.
+
+Satu tapak terlepas semasa rollout F0, dan tapak itulah yang gagal ~separuh larian.
+Dibaiki dalam commit F3 dengan corak yang fail ini sendiri sudah tetapkan; disahkan tempatan:
+
+```
+$ GUIDANCE_SHARD=workflow npx playwright test --project=guidance-full --grep "muat-naik-semak"
+  1 passed (1.6m)
+```
+
+**Pembetulan kepada rekod:** "flake" ialah pemerhatian yang betul, tetapi ia bukan penjelasan.
+Menamakan sesuatu flake tanpa punca bermakna gate yang gagal 50% dibiarkan hidup — dan gate
+begitu melatih orang mengabaikan warna merah. Kelemahan katalog (langkah 6–7) **kekal** sebagai
+kerja W2; ia berasingan daripada pepijat koreografi ini.

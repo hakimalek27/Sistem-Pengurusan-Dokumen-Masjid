@@ -32,6 +32,7 @@ use App\Notifications\TestNotification;
 use Filament\Facades\Filament;
 use Filament\Schemas\Components\Wizard;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 /**
@@ -166,7 +167,10 @@ function notificationFixture(string $class): array
             'period_months' => 12,
             'status' => OrderStatus::MenungguBayaran,
             'invoice_no' => 'INV-UJIAN-1',
-            'idempotency_key' => 'ujian-'.uniqid(),
+            // `storage_orders.idempotency_key` ialah kolum uuid() sebenar. SQLite
+            // tempatan menerima sebarang teks; PostgreSQL CI menolaknya
+            // (SQLSTATE 22P02) — jadi nilai mesti UUID sah, bukan rentetan unik.
+            'idempotency_key' => (string) Str::uuid(),
         ])),
         QuotaThresholdNotification::class => new $class($mosque, 80, 16.0, 20.0),
         RetentionNoticeNotification::class => new $class($mosque, 5, 30, 7),

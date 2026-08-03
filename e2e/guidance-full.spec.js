@@ -429,8 +429,19 @@ for (const guide of guides) {
                     });
                     await cta();
                     const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
+                    // `click({force:true})` TIDAK memintas overlay tour: force hanya
+                    // melangkau semakan actionability — event tetap dihantar ke KOORDINAT
+                    // dan overlay SVG menyerapnya, jadi borang tidak pernah dihantar dan
+                    // "1 dokumen dimuat naik" tidak muncul. Popover boleh muncul semula
+                    // di atas modal antara cta() dan klik ini (tetingkap itu melebar di
+                    // bawah beban CI) → shard `workflow` gagal ~separuh larian pada kod
+                    // yang TIDAK berubah (run 30776919686 + 30779820587, tandatangan sama).
+                    // Ini satu-satunya tapak dalam fail ini yang terlepas semasa
+                    // forceClickWhenEnabled diperkenalkan pada F0 (8 tapak lain sudah guna).
+                    // Enabled ditunggu 60s berasingan: pemprosesan muat naik boleh
+                    // melumpuhkan butang lebih lama daripada lalai helper.
                     await expect(submit).toBeEnabled({ timeout: 60_000 });
-                    await submit.click({ force: true });
+                    await submit.dispatchEvent('click');
                     await expect(page.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible({ timeout: 60_000 });
                 };
                 const openClassify = async (cta) => {

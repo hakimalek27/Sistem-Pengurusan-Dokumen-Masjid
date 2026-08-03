@@ -153,6 +153,38 @@ tempatan bukan disebabkan penjaga EN-leak.
 | Pulangkan `->label('Edit')` | **merah**, menamakan fail |
 | **Pulih semula** | **36 passed** |
 
+### Pusingan CI #1 (`c1823b5`) MERAH — dua punca berasingan, kedua-duanya tulen
+
+**(i) Ujian baharu saya gagal pada PostgreSQL, lulus pada SQLite.**
+
+```
+FAILED  Tests\Feature\LocalisationTest > e-mel notifikasi…  QueryException
+SQLSTATE[22P02]: invalid input syntax for type uuid: "ujian-6a702e9cbc7e5"
+insert into "storage_orders" (… "idempotency_key" …)
+```
+
+`storage_orders.idempotency_key` ialah `$table->uuid(...)`
+(`2026_07_11_000002_harden_disposal_and_billing_state.php:28`). SQLite menyimpannya sebagai
+teks longgar dan menerima apa sahaja; PostgreSQL menguatkuasakan jenis. Fixture saya guna
+`'ujian-'.uniqid()`. Dibaiki: `(string) Str::uuid()`.
+
+Ini **persis** perangkap yang sudah direkod ("andaikan lulus lokal = lulus CI"): DB tempatan
+SQLite longgar-jenis, CI PostgreSQL ketat. Nilai fixture yang bukan jenis sebenar kolum akan
+lulus tempatan dan gagal di CI, setiap kali.
+
+**(ii) Shard `workflow` — bukan flake, ada punca yang boleh dinamakan.**
+
+Kegagalan yang sama muncul pada `128b83c` (komit **dokumen sahaja**), menjadikannya 2 daripada
+4 larian dengan tandatangan identik pada kod yang tidak berubah. Punca:
+`guidance-full.spec.js:433` ialah **satu-satunya `click({ force: true })`** yang tinggal,
+sedangkan 8 tapak lain sudah guna `forceClickWhenEnabled()` (`dispatchEvent`). `force: true`
+**tidak** memintas overlay tour — event tetap ke koordinat dan overlay menyerapnya, jadi borang
+tidak dihantar dan mesej pengesahan tidak muncul. Dibaiki dengan corak yang fail itu sendiri
+sudah tetapkan; disahkan tempatan `1 passed (1.6m)`.
+
+📄 Pembetulan penuh direkod dalam `bukti/plan-f6-w0/LAPORAN-F6-W0.md` §(g) — termasuk
+pengakuan bahawa label "flake" saya sebelum ini ialah pemerhatian, bukan penjelasan.
+
 ## (d) Kriteria Siap §4.8
 
 | Kriteria | Status |
