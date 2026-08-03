@@ -365,6 +365,30 @@ yang kedua ialah chrome tour Driver.js yang disuntik JS. Kontrak §6.5 #6 ialah 
 **layout**, jadi kiraan diperhalus kepada `.wrap > header`. Ujian Pest kekal mengira HTML
 pelayan, di mana 1 tetap betul.
 
+### 🔁 Pusingan CI #4 (`9c1d59a`) — regresi yang saya sendiri masukkan pada pembaikan #2
+
+`screen` dan `tenant-admin-public` kini **hijau** (pembaikan #1 dan #3 berkesan), tetapi
+`workflow` gagal — pada retry 120s yang baru saya tambah.
+
+**Fakta yang menutup kes:** shard `workflow` **LULUS** pada pusingan #1 dan #2 dengan kod
+asalnya. Ia gagal hanya selepas saya menyentuhnya. Dan `serve-ci.log` menunjukkan **0
+permintaan sepanjang 120 saat retry** — jadi retry itu tidak pernah menghasilkan kesan.
+
+**Punca:** semasa memfaktorkan semula, saya menukar locator butang Hantar daripada
+**berskop-dialog** (`dialog.getByRole('button', { name: 'Hantar' })`) kepada **seluruh halaman**
+(`page.locator('[data-help-target="inbox-upload-submit"]')`). Guide `workflow.*` membuka **dua**
+modal berturutan (muat naik, kemudian klasifikasi) dan Filament mengekalkan nod modal terdahulu
+dalam DOM. Locator seluruh halaman memadan butang **BASI**: ia wujud dan "enabled", tetapi
+tidak lagi terikat kepada komponen hidup — `dispatchEvent` padanya menghasilkan sifar
+permintaan, selama-lamanya (bukan tetingkap sementara).
+
+**Pembaikan:** skopkan semula ke modal yang diberi —
+`modal.locator('[data-help-target="inbox-upload-submit"]').last()`.
+
+🔑 **Pelajaran:** apabila memfaktorkan semula ujian yang HIJAU, tukar **satu** perkara. Saya
+menukar dua serentak (skop locator + logik retry) dan menukar kegagalan berselang kepada
+kegagalan kekal. "Jangan sentuh yang hijau" terpakai juga pada pemfaktoran semula.
+
 ### ⭐ `risk-accepted` = 0
 
 `public.login` ialah **satu-satunya** entri risiko-diterima dalam baseline F0, dengan tarikh

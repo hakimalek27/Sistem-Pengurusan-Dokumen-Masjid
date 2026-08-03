@@ -240,7 +240,15 @@ async function forceClickWhenEnabled(locator) {
  * sudah diterima, jadi kita hanya menunggu toast — tiada risiko menghantar dua kali.
  */
 async function submitUploadUntilToast(page, modal) {
-    const submit = page.locator('[data-help-target="inbox-upload-submit"]');
+    // ⚠️ MESTI diskop kepada modal yang DIBERI, bukan `page.locator(...)` seluruh halaman.
+    // Guide `workflow.*` membuka DUA modal berturutan (muat naik, kemudian klasifikasi) dan
+    // Filament mengekalkan nod modal terdahulu dalam DOM. Locator seluruh halaman boleh
+    // memadan butang Hantar BASI daripada render terdahulu: ia wujud dan "enabled", tetapi
+    // tiada lagi terikat kepada komponen hidup — `dispatchEvent` padanya menghasilkan SIFAR
+    // permintaan, selama-lamanya. Dibuktikan: shard `workflow` LULUS dua larian CI dengan
+    // locator berskop-dialog yang asal, lalu GAGAL sebaik saya menjadikannya seluruh halaman
+    // (serve-ci.log: 0 permintaan sepanjang 120s retry).
+    const submit = modal.locator('[data-help-target="inbox-upload-submit"]').last();
     const toast = page.getByText(/\d+ dokumen dimuat naik ke Peti Masuk/);
 
     await expect(async () => {
