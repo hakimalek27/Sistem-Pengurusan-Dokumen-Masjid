@@ -1,6 +1,39 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — F5 KANDUNGAN KATALOG & TOUR AWAM DIBINA (4 Ogos 2026) ⭐ TERKINI
+## SESI — ✅ DEPLOY 5 (F5 KATALOG & TOUR AWAM) LIVE (4 Ogos 2026) ⭐ TERKINI
+
+**`5f4247a` LIVE di bakwim.my** · CI run 30857969395 **7/7 HIJAU** ·
+📄 `bukti/deploy-5/BUKTI-DEPLOY-5.md` + `bukti/plan-f5/LAPORAN-FASA-5.md`
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `16c3376` | **`5f4247a`** |
+| `diwan-app` | `3df4c706e182` | **`2831c4c83616`** |
+| `diwan-web` | `efd9337d5799` | **`6e8e3f5a9fb4`** |
+| aset help | `help-BceoIbJG.js` | **`help-Da8KtLOe.js`** |
+| `catalog_version` | `2026.08.03.3` | **`2026.08.04.1`** |
+
+Rantaian 5A **LULUS PENUH** (`3a=2a · 3b=2b · 4a=4b · 5a=5b=6`, md5
+`fb71a2eb9e2bb6580942e997f711d246`). `sync-help-index --delete` = **83 guide**.
+Kesihatan: /up 200 · health OK · **smoke 9/9** · failed_jobs 0 · 0 mutex · 8/8 container ·
+4 laluan awam 200. **Migrasi: "Nothing to migrate" — sifar baris data disentuh.**
+
+### ✅ DISAHKAN VISUAL LIVE dalam Chrome pada bakwim.my
+Tour `/log-masuk` langkah 1 = popover **"Masukkan identiti"** menyorot **medan input**;
+langkah 2 = **"Minta pautan"** menyorot butang **"Hantar Pautan Log Masuk"**, CTA
+**"Buat pada skrin"**. **TIADA "Tindakan belum tersedia"** — RR-01-01 **MATI di produksi**.
+`/bantuan`: `page-content` kini **unik** (1, bukan 2).
+
+### ⚠️ Baki §6.6 #4 milik pemilik (perlu sesi berautentikasi)
+`/app/{slug}/peti-masuk` → **Pembantu Diwan** → panduan **Muat naik dokumen**: langkah 1 sorot
+butang **+ Muat Naik Dokumen**, langkah 2 sorot **ruang seret fail**, langkah 3 sorot butang
+**Hantar** — tiga tempat BERBEZA, bukan seluruh modal. Saya tidak pernah menaip kredensial
+produksi; yang dibuktikan ialah kod hidup dalam imej + 8 e2e + 3 Pest + gate CI yang melalui
+kelima-lima langkah dengan muat naik SEBENAR.
+
+---
+
+## SESI — F5 DIBINA (4 Ogos 2026)
 
 **Komit `142cb56`** · 📄 `Audit Review Round Robin/bukti/plan-f5/LAPORAN-FASA-5.md`
 Pest **500 → 515** · e2e `ci-guidance`+`unit` **49/49** · pint passed · build OK ·
