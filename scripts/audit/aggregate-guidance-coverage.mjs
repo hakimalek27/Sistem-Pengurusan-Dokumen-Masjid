@@ -59,10 +59,20 @@ const mSteps = new Set(manifest.catalogue.flatMap((g) => g.steps.map((s) => s.ke
 const mActions = new Set(manifest.catalogue.flatMap((g) => g.steps.filter((s) => s.wait_for_user).map((s) => s.key)));
 
 // 4) Union + duplikat dalam-shard + bertindih antara-shard, per kategori.
+// DENOMINATOR `action_step_ids` dikemas F5 (4 Ogos 2026): 229 → 228 — prosedur
+// `Audit Review Round Robin/bukti/plan-baseline/tools/README.md` ("sebab bertulis + kemas
+// SEMUA penjaga dalam commit sama"). Sebab: F5 §6.2 memberi `screen.muat-naik-dokumen`
+// sasaran spesifik; langkah 4 dan 5 ialah langkah PEMERHATIAN (baca toast; semak antivirus)
+// jadi `wait_for_user: true` pada keduanya membuat butang berkata "Buat pada skrin" untuk
+// sesuatu yang pengguna hanya perlu BACA (−2). `public.login#2` pula ialah tindakan sebenar
+// (hantar pautan) dan mesti menunggu supaya tour tamat apabila pautan benar-benar dihantar
+// (+1). Net 229 − 2 + 1 = 228. Sebab penuh + 2 denominator lain: `build-manifest.mjs`.
+// ⚠️ Ini penjaga KEEMPAT yang membekukan angka ini (selepas build-manifest.mjs,
+// validate-plan-manifest.mjs dan tests/Feature/PlanManifestTest.php) — kemas KESEMUANYA.
 const categories = [
     ['guide_ids', mGuides, 83],
     ['step_ids', mSteps, 473],
-    ['action_step_ids', mActions, 229],
+    ['action_step_ids', mActions, 228],
 ];
 const summary = {};
 for (const [field, manifestSet, exactTotal] of categories) {
@@ -116,4 +126,4 @@ if (problems.length) {
     console.error(`Laporan: ${args.out}`);
     process.exit(1);
 }
-console.log(`GATE LULUS: 83 guide · 473 langkah · 229 langkah tindakan — union tiga shard sepadan manifest (set, bukan kiraan). Laporan: ${args.out}`);
+console.log(`GATE LULUS: ${mGuides.size} guide · ${mSteps.size} langkah · ${mActions.size} langkah tindakan — union tiga shard sepadan manifest (set, bukan kiraan). Laporan: ${args.out}`);

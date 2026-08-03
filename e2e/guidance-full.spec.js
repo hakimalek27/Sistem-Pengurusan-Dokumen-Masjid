@@ -23,6 +23,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test } from '@playwright/test';
 import { attachFile } from './helpers/upload.js';
+import { NAV_CANDIDATES, NAV_PRIMARY } from '../resources/js/help/nav-target-plan.js';
 
 const MANIFEST_PATH = 'Audit Review Round Robin/bukti/plan-baseline/manifest.json';
 const manifestRaw = readFileSync(MANIFEST_PATH, 'utf8');
@@ -94,8 +95,24 @@ async function assertStepPopover(page, guide, step, total) {
         // G2 — sasaran sebenar disorot, bukan MAIN generik.
         const active = page.locator('.driver-active-element');
         await expect(active, `${step.key}: tiada elemen aktif`).toBeVisible();
-        const target = await active.getAttribute('data-help-target');
-        expect(target, `${step.key}: sasaran aktif ${target} ≠ ${step.target}`).toBe(step.target);
+
+        if (step.target === NAV_PRIMARY) {
+            // F5c: `nav-primary` ialah sasaran LOGIK — ia tidak wujud sebagai
+            // `data-help-target` dalam DOM. Runtime menyelesaikannya kepada calon konkrit
+            // dalam ruang nama BERASINGAN `data-help-nav` (ruang nama berasingan itu wajib:
+            // dua nama pada satu `data-help-target` menjadikan `decorateTargets()` menulis
+            // semula atribut pada setiap panggilan → ribut MutationObserver).
+            // Gate kekal ketat: elemen yang disorot mesti salah satu calon NAVIGASI SEBENAR.
+            const nav = await active.getAttribute('data-help-nav');
+            expect(NAV_CANDIDATES, `${step.key}: sorotan nav-primary = ${nav} (bukan calon nav)`)
+                .toContain(nav);
+            const tag = await active.evaluate((el) => el.tagName);
+            expect(['MAIN', 'BODY'], `${step.key}: nav-primary menyorot ${tag} (sorotan terlalu besar)`)
+                .not.toContain(tag);
+        } else {
+            const target = await active.getAttribute('data-help-target');
+            expect(target, `${step.key}: sasaran aktif ${target} ≠ ${step.target}`).toBe(step.target);
+        }
     }
 
     return popover;
@@ -334,6 +351,56 @@ for (const guide of guides) {
 
             if (guide.steps[0]?.status === 'risk-accepted') {
                 await assertFallbackPath(page, guide);
+            } else if (guide.guide_id === 'screen.muat-naik-dokumen') {
+                // F5b: guide ini dahulu 5× `page-primary` generik, jadi `driveGenericSteps`
+                // memadai — klik "Seterusnya" sentiasa maju. Kini langkah 1–3 menyasar
+                // butang → dropzone → Hantar, dan sasaran langkah berikut hanya WUJUD
+                // selepas tindakan sebenar. `stepAdvancePlan` betul memberi kind
+                // `wait-for-action` (CTA "Buat pada skrin" yang MEMINIMIZE, bukan maju),
+                // jadi pemandu generik tidak boleh lagi digunakan — sama seperti guide
+                // `workflow.*` muat naik. Ini akibat langsung perubahan produk (peraturan #9).
+                await page.goto(`/app/${tenantSlug}/peti-masuk`);
+                await ensureInboxFixture(page);
+                await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=${guide.guide_id}&langkah=0`);
+                const popover = page.locator('.driver-popover');
+
+                // `getByRole('dialog')` TIDAK boleh digunakan di sini: popover tour juga
+                // `role="dialog"` (ARIA yang betul), jadi ia melanggar mod ketat Playwright.
+                // Sasar tetingkap modal muat naik secara tepat melalui sasaran bantuannya.
+                const modalMuatNaik = page.locator('[data-help-target="inbox-upload-modal"]');
+
+                const bukaModal = async (cta) => {
+                    await cta();
+                    await forceClickWhenEnabled(page.locator('[data-help-target="inbox-upload"]'));
+                    await expect(modalMuatNaik).toBeVisible({ timeout: 30_000 });
+                };
+                const pilihFail = async (cta) => {
+                    await cta();
+                    await attachFile(modalMuatNaik, {
+                        name: `Dokumen skrin ${Date.now()}.txt`,
+                        mimeType: 'text/plain',
+                        buffer: Buffer.from(`Dokumen gate skrin ${Date.now()}.`),
+                    });
+                };
+                const hantar = async (cta) => {
+                    await cta();
+                    const submit = page.locator('[data-help-target="inbox-upload-submit"]');
+                    // dispatchEvent, bukan click({force:true}): force hanya melangkau semakan
+                    // actionability — event tetap ke KOORDINAT dan overlay tour menyerapnya.
+                    await expect(submit).toBeEnabled({ timeout: 60_000 });
+                    await submit.dispatchEvent('click');
+                    await expect(page.getByText(/\d+ dokumen dimuat naik ke Peti Masuk/))
+                        .toBeVisible({ timeout: 60_000 });
+                };
+
+                await driveChoreographedRange(
+                    popover,
+                    { 1: bukaModal, 2: pilihFail, 3: hantar },
+                    guide.steps.length,
+                    guide.guide_id,
+                );
+                await popover.getByRole('button', { name: 'Tutup panduan' }).click();
+                await expect(popover).toBeHidden();
             } else if (guide.guide_id === 'public.registration') {
                 await page.goto(`/daftar?panduan=public.registration&langkah=0`);
                 const popover = page.locator('.driver-popover');

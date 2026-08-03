@@ -119,9 +119,16 @@ const accessMethodOf = (fam) => (fam === 'screen' || fam === 'workflow' ? 'deepl
 
 // ── Bina set catalogue + status liputan awal ────────────────────────────────────────────
 // Status baseline (jadual §7.3):
-//   specific         — 30 langkah bersasar spesifik sedia ada (disahkan DOM oleh G2)
+//   specific         — 30 langkah bersasar spesifik sedia ada (disahkan DOM oleh G2).
+//                      Selepas F5: **48**.
 //   risk-accepted    — public.login#1–2: tour SENTIASA jatuh ke ralat palsu (RR-01-01);
-//                      fallback artikel /bantuan DIUJI oleh G4; dibaiki F5 (§6.1)
+//                      fallback artikel /bantuan DIUJI oleh G4.
+//                      ✅ DITUTUP OLEH F5 (§6.1) pada 4 Ogos 2026 — jauh sebelum tarikh
+//                      luput 2026-09-30. Kedua-dua langkah kini `specific`, jadi cabang
+//                      di bawah TIDAK LAGI tercapai. Ia sengaja DIKEKALKAN: jika satu
+//                      perubahan masa depan menjadikan semula sasaran `public.login`
+//                      generik, manifest akan melabelnya risiko-diterima dengan sebab
+//                      penuh dan bukan senyap-senyap sebagai "generic-justified".
 //   generic-justified— baki: sasaran generik sedia ada pra-F6, dijadualkan wave masing-masing
 const catalogueGuides = [];
 const stats = { steps: 0, generic: 0, pp: 0, pc: 0, placeholder: 0, wfu: 0, actGen: 0 };
