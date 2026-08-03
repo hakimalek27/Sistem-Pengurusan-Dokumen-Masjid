@@ -1,6 +1,76 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — ✅ DEPLOY 4 (F4 LALAI RETENSI) LIVE (3 Ogos 2026) ⭐ TERKINI
+## SESI — F5 KANDUNGAN KATALOG & TOUR AWAM DIBINA (4 Ogos 2026) ⭐ TERKINI
+
+**Komit `142cb56`** · 📄 `Audit Review Round Robin/bukti/plan-f5/LAPORAN-FASA-5.md`
+Pest **500 → 515** · e2e `ci-guidance`+`unit` **49/49** · pint passed · build OK ·
+manifest + validator + PlanManifestTest ketiga-tiganya hijau.
+
+### Apa yang pengguna dapat
+1. **Tour `/log-masuk` berfungsi** (RR-01-01 mati). Dahulu kedua-dua langkah jatuh ke ralat
+   palsu "Tindakan belum tersedia" kerana layout tetamu tiada `<main>`. Kini langkah 1
+   menyorot **medan input sebenar**, langkah 2 menyorot **butang Hantar Pautan Log Masuk**.
+   Disahkan visual dalam Chrome + e2e desktop 1280×800 dan mobile 390×664.
+2. **Tour muat naik menunjuk tiga tempat berbeza** — butang → dropzone → Hantar. Dahulu
+   langkah 2 dan 3 menyorot seluruh tetingkap modal (objek sama, sama besar).
+3. **Sasaran navigasi responsif** — dashboard menyorot sidebar pada desktop, butang ☰ pada
+   telefon. Dahulu `sidebar` memulangkan `null` pada mobile → ralat palsu.
+4. **Tajuk tour bermakna** — kohort 25 guide/124 langkah: duplikasi verbatim **77 → 0**,
+   tajuk terpotong tengah perkataan **20 → 0**, placeholder "Langkah N" **108 → 0**.
+
+### 🔴 Regresi yang F5 sendiri perkenalkan lalu tutup (pelajaran utama sesi ini)
+Lima ujian tour F2 **tamat masa 180s** selepas F5 dibina — 100% boleh dihasilkan semula.
+Eksperimen penentu: `git stash` F5 → kelima-limanya lulus **10–14s**; pulihkan → gagal semula.
+
+**Punca:** satu elemen hanya boleh memegang **SATU** `data-help-target`. F5c menandakan
+`.fi-sidebar` sebagai `sidebar` **dan** `nav-sidebar`; kedua-duanya berebut atribut yang sama,
+jadi `decorateTargets()` — dipanggil pada **setiap** `resolveStepElement()` — menulis semula
+atribut pada setiap panggilan. `transitionObserver`/`automaticModalGuard` memerhati
+`attributes: true` → **ribut mutasi berterusan** → koreografi tour tersangkut.
+
+**Pembaikan:** ruang nama berasingan `data-help-nav` + tulisan idempoten. Penjaga baharu
+menghitung mutasi atribut sepanjang 1 saat tour aktif dan menuntut **0**.
+
+### ⚠️ Tiga kali alat/andaian SAYA yang salah, ditangkap oleh ukuran
+1. **`.fi-sidebar` mobile bukan `display:none`** — diukur iPhone 13: `display:flex`,
+   `rects=1`, tetapi **`x = −320`** (off-canvas). `isVisible()` melaporkannya kelihatan →
+   `nav-primary` tersalah pilih. Ditambah `intersectsViewport()`, dikenakan **hanya** pada
+   calon nav (global akan mengubah 473 langkah — kerja F6/F7).
+2. **Dua penjaga saya gagal menangkap regresi sengaja** (R2, R7 daripada 9). `strpos('<h1>')`
+   mencari kemunculan **pertama**, jadi `<h1>` kedua di dalam `<main>` terlepas; fixture
+   `preserveWords` jatuh **tepat** pada sempadan perkataan sehingga potongan naif memberi
+   hasil identik. Selepas dikuatkan: **9/9 ditangkap**.
+3. **Alat metrik saya memberi 0 walaupun pada asas audit** — ia akan membenarkan dakwaan
+   palsu "77 → 0". Ditentukur terhadap data produksi sebenar
+   (`bukti/pusingan-11-codex/production-desktop-all-tour-steps.json`): definisi yang
+   menghasilkan **77 tepat** ialah `title == description` selepas buang noktah; **20** ialah
+   bilangan tajuk berakhir elipsis.
+
+### 🔧 Dua jurang gate ditemui di luar skop pelan (dibaiki)
+- **Projek Playwright `unit` TIDAK PERNAH dijalankan CI** sejak dicipta pada F2 — 10 ujian
+  yang mengunci kontrak label↔kelakuan tour tidak pernah melindungi `main`. Kini satu step
+  dalam job wajib (~1s, tiada perkhidmatan).
+- **4 entri registri `active` tidak dirujuk katalog** (drift F6-W0) → `reserved` + sebab;
+  ujian yatim dua hala kini menguatkuasakannya.
+
+### Lencongan dari pelan (dinyatakan, bukan disembunyikan)
+1. `screen.muat-naik-dokumen` **kekal 5 langkah** (§6.2 cadang 4) — invarian partition
+   **473** dibekukan F0 dan diassert sebagai STRUKTUR. Maksud C12 dipenuhi penuh dengan lima
+   sasaran berbeza; langkah ke-5 mengekalkan amaran antivirus.
+2. `tenant.dashboard#4` **tiada** `wait_for_user` — ia langkah AKHIR, jadi `final-action`
+   akan menunggu sasaran HILANG; membuka sidebar tidak menghilangkannya → tour tergantung.
+3. **Tiga denominator beku dikemas** ikut prosedur `tools/README.md`: `wait_for_user`
+   229→228 · W1 28/140→27/135 dengan W3 1/11→2/16 · `tenant-admin-public.action_steps` 3→4.
+   Jumlah 83/473 dan shard `screen` 29/151 **tidak berubah**.
+
+### ▶️ SETERUSNYA
+CI hijau untuk `142cb56` → **Deploy 5** (rebuild `app`+`nginx` — aset `help.js` berubah;
+**wajib** `diwan:sync-help-index --delete`, katalog kini `2026.08.04.1`) → rantaian bukti 5A →
+pengesahan live `/log-masuk`. Kemudian **F6 W1** (§7).
+
+---
+
+## SESI — ✅ DEPLOY 4 (F4 LALAI RETENSI) LIVE (3 Ogos 2026)
 
 **`08d3643` LIVE** · CI run 30811698382 **7/7 HIJAU** ·
 📄 `bukti/deploy-4/BUKTI-DEPLOY-4.md` + `bukti/plan-f4/LAPORAN-FASA-4.md`
