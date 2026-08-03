@@ -56,7 +56,10 @@ class RetentionRuleResource extends Resource
             TextInput::make('retain_years')->label('Tahun Simpanan (kosong = kekal)')->numeric()->nullable(),
             Select::make('action')->label('Tindakan')
                 ->options(collect(RetentionAction::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()]))
-                ->default('auto_padam')
+                // F4 §5.2 (L1): lalai ialah `semak`, bukan `auto_padam`. Medan yang sama
+                // memaparkan helperText AMARAN tentang auto_padam — memberi nilai berbahaya
+                // itu sebagai LALAI bercanggah dengan amaran itu sendiri (RR-09-01).
+                ->default('semak')
                 ->helperText('AMARAN: menukar jenis kekal kepada auto_padam membenarkan pemadaman automatik.')
                 ->required(),
             TextInput::make('note')->label('Catatan')->nullable(),

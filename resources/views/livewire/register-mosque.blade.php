@@ -73,7 +73,11 @@
 
                     <label class="check">
                         <input type="checkbox" wire:model="agree_retention">
-                        <span>Saya memahami dasar retensi: dokumen disimpan mengikut jadual (lalai 7 tahun; minit mesyuarat/perjanjian/sijil/laporan kekal). Selepas notifikasi 90/30/7 hari, rekod cukup tempoh <strong>akan dipadam automatik dan tidak boleh dikembalikan</strong>; metadata rekod kekal.</span>
+                        {{-- §16.2 seperti dipinda ADDENDUM v2.6 (F4/L2): lalai suis pelupusan
+                             automatik kini DIMATIKAN untuk masjid baharu, jadi teks pengakuan
+                             mesti menerangkan keadaan sebenar. Pengakuan yang ditandatangani
+                             tetapi tidak tepat lebih buruk daripada masalah asal. --}}
+                        <span>Saya memahami dasar retensi: dokumen disimpan mengikut jadual (lalai 7 tahun; minit mesyuarat/perjanjian/sijil/laporan kekal). <strong>Pelupusan automatik dimatikan secara lalai untuk masjid baharu</strong>; jika masjid menghidupkannya dalam Tetapan Masjid, rekod yang cukup tempoh <strong>akan dipadam secara automatik dan tidak boleh dikembalikan</strong> selepas notifikasi 90/30/7 hari, dan metadata rekod kekal. Selagi pelupusan automatik dimatikan, rekod yang cukup tempoh disenaraikan untuk semakan dan pelupusan manual oleh masjid. Masjid bertanggungjawab membuat sandaran luar (alat Eksport disediakan) dan mematuhi mana-mana kewajipan Akta Arkib Negara 2003 / arahan Majlis Agama masing-masing sebelum sebarang pemadaman.</span>
                     </label>
                     @error('agree_retention') <div class="err">{{ $message }}</div> @enderror
                 </section>

@@ -2,12 +2,16 @@
 
 namespace App\Filament\App\Resources\RetentionRules\Pages;
 
+use App\Concerns\ConfirmsAutoPadamRetention;
 use App\Filament\App\Resources\RetentionRules\RetentionRuleResource;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateRetentionRule extends CreateRecord
 {
+    use ConfirmsAutoPadamRetention;
+
     protected static string $resource = RetentionRuleResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -15,5 +19,20 @@ class CreateRetentionRule extends CreateRecord
         $data['mosque_id'] = Filament::getTenant()->id;
 
         return $data;
+    }
+
+    /**
+     * F4 §5.2 — pengesahan sedar apabila `auto_padam` dipilih. `parent::` dahulu supaya
+     * callback simpan vendor kekal terpasang (menggantikannya memutuskan fungsi simpan).
+     */
+    protected function getCreateFormAction(): Action
+    {
+        return $this->confirmAutoPadam(parent::getCreateFormAction());
+    }
+
+    /** "Cipta & tambah lagi" ialah laluan simpan KEDUA — brek yang sama diperlukan. */
+    protected function getCreateAnotherFormAction(): Action
+    {
+        return $this->confirmAutoPadam(parent::getCreateAnotherFormAction());
     }
 }
