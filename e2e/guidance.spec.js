@@ -507,7 +507,7 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await expect(page.locator('[data-help-target="classification-source"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '2 daripada 11');
     await popover.locator('.driver-popover-next-btn').click();
-    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-metadata"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '3 daripada 11');
@@ -519,7 +519,7 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '5 daripada 11');
     await popover.locator('.driver-popover-next-btn').click();
-    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-file"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '6 daripada 11');
@@ -530,14 +530,14 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await popover.locator('.driver-popover-next-btn').click();
     await expect(popover).toContainText('7 daripada 11');
     await popover.locator('.driver-popover-next-btn').click();
-    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-minit"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '8 daripada 11');
     await popover.locator('.driver-popover-next-btn').click();
     await expectStepAdvance(popover, '9 daripada 11');
     await popover.locator('.driver-popover-next-btn').click();
-    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
 
     await expect(page.locator('[data-help-target="classification-review"]:visible')).toBeVisible();
     await expectStepAdvance(popover, '10 daripada 11');
@@ -577,7 +577,7 @@ async function verifyClassificationWizard(browser, baseURL, account, viewport) {
     };
     await assertModalFits();
 
-    const next = () => modal.getByRole('button', { name: 'Seterus', exact: true });
+    const next = () => modal.getByRole('button', { name: 'Seterusnya', exact: true });
     await expect(modal.locator('form.fi-active')).toContainText('Asal dokumen');
     await next().click();
     await expect(modal.locator('form.fi-active')).toContainText('Ruj. Kami ialah rujukan masjid');

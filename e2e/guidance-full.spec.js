@@ -314,7 +314,7 @@ async function followClassificationModal(page, popover, modal, plan) {
             await page.getByRole('button', { name: 'Klasifikasikan', exact: true }).first().click();
             await expect(modal).toBeVisible();
         } else if (act.do === 'next') {
-            await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+            await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
         } else if (act.do === 'metadata') {
             await fillClassificationMetadata(page);
         } else if (act.do === 'file') {
@@ -440,17 +440,17 @@ for (const guide of guides) {
                 };
                 const wizardNext = async (cta) => {
                     await cta();
-                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
                 };
                 const metadataThenNext = async (cta) => {
                     await cta();
                     await fillClassificationMetadata(page);
-                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
                 };
                 const fileThenNext = async (cta) => {
                     await cta();
                     await fillClassificationFile(page, modal);
-                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterus', exact: true }));
+                    await forceClickWhenEnabled(modal.getByRole('button', { name: 'Seterusnya', exact: true }));
                 };
 
                 const actions = guide.guide_id.startsWith('workflow.setiausaha.')

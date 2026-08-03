@@ -11,6 +11,29 @@ const tenantRoles = [
     'audit',
 ];
 
+/**
+ * F3 §4.7 (e2e) — penjaga kebocoran Inggeris per halaman.
+ *
+ * Diuji terhadap TEKS YANG KELIHATAN (`innerText`), bukan HTML mentah: URL
+ * seperti `/admin/mosques/1/edit` dan atribut dalaman Filament bukan sesuatu
+ * yang pengguna baca, dan memasukkannya hanya menghasilkan positif palsu.
+ */
+const EN_LEAK_PATTERNS = [
+    { nama: 'label Edit Inggeris', regex: /\bEdit\b/ },
+    { nama: 'pagination Previous', regex: /\bPrevious\b/ },
+    { nama: 'pagination Next »', regex: /\bNext\s*»/ },
+    { nama: 'validasi Inggeris', regex: /\bThe .+ field\b/ },
+];
+
+async function expectNoEnglishLeak(page, konteks) {
+    const teks = await page.evaluate(() => document.body.innerText ?? '');
+
+    for (const { nama, regex } of EN_LEAK_PATTERNS) {
+        const padanan = teks.match(regex);
+        expect(padanan, `${konteks}: ${nama} — dijumpai "${padanan?.[0] ?? ''}"`).toBeNull();
+    }
+}
+
 async function summary(page) {
     return {
         url: page.url(),
@@ -50,6 +73,7 @@ test('inventori panel superadmin', async ({ page }) => {
             await expect(page.getByRole('link', { name: 'Cipta', exact: true })).toHaveCount(0);
             await expect(page.getByRole('button', { name: 'Cipta', exact: true })).toHaveCount(0);
         }
+        await expectNoEnglishLeak(page, `superadmin ${path}`);
         pages.push(await summary(page));
     }
 
@@ -91,6 +115,7 @@ test('inventori dan smoke semua peranan tenant', async ({ browser, baseURL }) =>
             const response = await page.goto(item.href);
             expect(response?.status(), `${role}: ${item.href} mesti 200`).toBe(200);
             await expect(page.locator('main')).toBeVisible();
+            await expectNoEnglishLeak(page, `${role} ${item.href}`);
             pages.push({
                 ...item,
                 status: response?.status() ?? null,

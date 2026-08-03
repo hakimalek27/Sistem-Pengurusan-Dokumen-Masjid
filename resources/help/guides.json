@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.03.2",
+  "catalog_version": "2026.08.03.3",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -2864,7 +2864,7 @@
         {
           "id": "admin_masjid.1.9a",
           "title": "Klasifikasi peti masuk",
-          "instruction": "Semak semula sumber, masa diterima, antivirus dan OCR. Tekan Seterus jika semuanya tepat untuk masjid ini.",
+          "instruction": "Semak semula sumber, masa diterima, antivirus dan OCR. Tekan Seterusnya jika semuanya tepat untuk masjid ini.",
           "target": "classification-source",
           "route": null,
           "wait_for_user": true
@@ -3771,7 +3771,7 @@
         {
           "id": "setiausaha.1.4a",
           "title": "Semak dokumen dan sumber",
-          "instruction": "Sahkan penghantar, saluran, masa diterima, antivirus dan OCR sebelum menekan Seterus.",
+          "instruction": "Sahkan penghantar, saluran, masa diterima, antivirus dan OCR sebelum menekan Seterusnya.",
           "target": "classification-source",
           "route": null,
           "wait_for_user": true
@@ -5793,7 +5793,7 @@
         {
           "id": "klasifikasi-peti-masuk.2",
           "title": "Semak dokumen dan sumber",
-          "instruction": "Pastikan penghantar, saluran, masa diterima, status antivirus dan OCR adalah betul. Hentikan jika dokumen meragukan atau salah masjid, atau tekan Seterus untuk meneruskan.",
+          "instruction": "Pastikan penghantar, saluran, masa diterima, status antivirus dan OCR adalah betul. Hentikan jika dokumen meragukan atau salah masjid, atau tekan Seterusnya untuk meneruskan.",
           "target": "classification-source",
           "wait_for_user": true
         },

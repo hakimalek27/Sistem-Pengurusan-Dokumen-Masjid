@@ -1,6 +1,49 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — ✅ DEPLOY 2 (F6-W0) LIVE (3 Ogos 2026) ⭐ TERKINI
+## SESI — F3 BAHASA SIAP DIBINA (3 Ogos 2026) ⭐ TERKINI
+
+📄 `Audit Review Round Robin/bukti/plan-f3/LAPORAN-FASA-3.md`
+
+Diwan bercakap Inggeris pada setiap permukaan framework walaupun `APP_LOCALE=ms`, kerana
+**`lang/ms/` langsung tidak wujud**. F3 menutupnya: 4 fail terjemahan **penuh** (146 kunci) +
+**109 `attributes`** dipetakan kepada label UI sebenar + `lang/ms.json` 5 kunci kerangka e-mel
+verbatim + override wizard `Seterus`→**`Seterusnya`** + 3 arahan katalog + label Edit→Sunting.
+`APP_FALLBACK_LOCALE` **kekal `en`** (fallback `ms` akan papar kunci mentah).
+
+Angka: Pest **489 lulus** (453→489, +36) · pint passed · build OK · manifest dijana semula
+(`catalog_version 2026.08.03.3`) · validator exit 0 · e2e `explore` **0 kebocoran EN** pada
+7 halaman superadmin + semua halaman 8 role tenant.
+
+### 🔎 Dua perkara yang pelan tidak jangka (kedua-dua dibetulkan dalam commit sama)
+1. **Label `Edit` ada 6 tempat, bukan 5.** Yang keenam ialah **teks arahan** dalam
+   `tetapan-masjid.blade.php:53` yang MENYEBUT butang itu. Membiarkannya = arahan menunjuk
+   butang yang tidak wujud — persis kesilapan "Seterus" dalam katalog yang §4.5 larang.
+   Penjaga diperluas: imbasan seluruh `app/` + `resources/`, bukan hanya 5 halaman.
+2. **10 selektor e2e mengklik butang wizard mengikut nama lamanya**
+   (`guidance.spec.js` 5× · `guidance-full.spec.js` 4× · `office-workflow.spec.js` 1×,
+   semuanya `name: 'Seterus', exact: true`). Dengan label baharu, `exact: true` tidak padan →
+   CI akan merah. Dikemas serentak (peraturan #9: akibat langsung perubahan produk).
+
+### 🧪 Pengesahan wizard Filament 4 — kaedah diganti dengan yang LEBIH kuat
+§4.7 #5 minta "render halaman → HTML mengandungi Seterusnya". Dalam Filament 4 kandungan
+modal dirender **pelanggan-sisi**, jadi HTML pelayan tidak pernah mengandunginya (`mountAction`
+pun tidak). Diganti: assert terus pada `Wizard::getNextAction()->getLabel()` (objek yang
+menjana butang, vendor `Wizard.php:164/194`) + ujian bahawa ketiga-tiga wizard projek masih
+guna komponen itu. Hujung-ke-hujung kekal pada e2e yang benar-benar mengklik butang.
+
+### 5 penjaga dibuktikan menangkap regresi
+Buang override wizard → **2 merah** · padam kunci JSON → merah · padam 1 kunci validation →
+merah (menamakan kunci) · pulangkan "Seterus" ke katalog → merah (menamakan langkah) ·
+pulangkan `->label('Edit')` → merah (menamakan fail) · pulih → **36 hijau**.
+
+### ▶️ SETERUSNYA
+Sahkan e2e tempatan → commit `fix-audit-F3` → CI hijau → **Deploy 3**
+(+ `diwan:sync-help-index --delete`, katalog berubah) → `diwan:staging-check --mail-to=` dan
+**baca e-mel sebenar** (satu-satunya kriteria §4.8 yang perlu produksi) → F4 (§5).
+
+---
+
+## SESI — ✅ DEPLOY 2 (F6-W0) LIVE (3 Ogos 2026)
 
 **`aae4c97` LIVE di bakwim.my** · CI run 30778509859 **7/7 HIJAU** (termasuk shard `workflow`
 yang gagal sekali sebelum ini) · 📄 `Audit Review Round Robin/bukti/deploy-2/BUKTI-DEPLOY-2.md`

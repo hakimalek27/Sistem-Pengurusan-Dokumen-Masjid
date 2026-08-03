@@ -55,7 +55,7 @@ class TetapanMasjid extends Page
 
         return [
             Action::make('edit')
-                ->label('Edit Tetapan')
+                ->label('Sunting Tetapan')
                 ->icon('heroicon-o-pencil')
                 ->authorize(fn () => Auth::user()?->canIn($mosque, 'mosque.settings') ?? false)
                 ->fillForm(fn () => [

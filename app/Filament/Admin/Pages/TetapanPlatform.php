@@ -40,7 +40,7 @@ class TetapanPlatform extends Page
     {
         return [
             Action::make('edit')
-                ->label('Edit Tetapan')
+                ->label('Sunting Tetapan')
                 ->icon('heroicon-o-pencil')
                 ->authorize(fn () => Auth::user()?->is_superadmin ?? false)
                 ->fillForm(fn () => [

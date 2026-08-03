@@ -50,7 +50,9 @@
         @if ($scanEmail)
             <p class="text-sm">Alamat unik tenant: <strong>{{ $scanEmail }}</strong></p>
             <ol class="mt-2 list-decimal space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
-                <li>Admin aktifkan fungsi dan tetapkan e-mel pengirim dibenarkan melalui “Edit Tetapan”.</li>
+                {{-- F3 §4.5/§4.6: arahan mesti menyebut label butang yang SEBENAR —
+                     label aksi ditukar kepada “Sunting Tetapan” dalam commit yang sama. --}}
+                <li>Admin aktifkan fungsi dan tetapkan e-mel pengirim dibenarkan melalui “Sunting Tetapan”.</li>
                 @if ($mosque->mailIntakeKeyword() !== '')
                     <li>Hantar e-mel daripada salah satu alamat itu dengan kata kunci <strong>{{ $mosque->mailIntakeKeyword() }}</strong> pada subjek atau isi.</li>
                 @else

@@ -47,7 +47,7 @@ class MosquesTable
             ])
             ->recordActions([
                 ViewAction::make()->label('Paparan'),
-                EditAction::make()->label('Edit'),
+                EditAction::make()->label('Sunting'),
                 DeleteAction::make()
                     ->label('Arkibkan')
                     ->modalDescription('Tenant akan dinyahaktifkan dan disembunyikan daripada penggunaan biasa. Data tidak dimusnahkan dan boleh dipulihkan.')

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by": "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs",
-  "catalog_version": "2026.08.03.2",
+  "catalog_version": "2026.08.03.3",
   "sources": {
     "catalogue": "resources/help/guides.json",
     "mobile_defects": "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json",
@@ -2971,7 +2971,7 @@
           "step_id": "admin_masjid.1.9a",
           "title": "Klasifikasi peti masuk",
           "title_placeholder": false,
-          "instruction_preview": "Semak semula sumber, masa diterima, antivirus dan OCR. Tekan Seterus jika semuan",
+          "instruction_preview": "Semak semula sumber, masa diterima, antivirus dan OCR. Tekan Seterusnya jika sem",
           "target": "classification-source",
           "generic_declared": false,
           "wait_for_user": true,

@@ -78,7 +78,7 @@ class UsersTable
                 TernaryFilter::make('is_superadmin')->label('Superadmin'),
             ])
             ->recordActions([
-                EditAction::make()->label('Edit'),
+                EditAction::make()->label('Sunting'),
                 Action::make('toggleActive')
                     ->label(fn (User $record) => $record->is_active ? 'Nyahaktifkan' : 'Aktifkan')
                     ->color(fn (User $record) => $record->is_active ? 'danger' : 'success')

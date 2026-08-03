@@ -55,7 +55,7 @@ test('klasifikasi Peti Masuk terus edarkan minit melalui modal', async ({ browse
     await inboxRow.getByRole('button', { name: 'Klasifikasikan' }).click();
 
     const dialog = kerani.getByRole('dialog');
-    const next = () => dialog.getByRole('button', { name: 'Seterus', exact: true });
+    const next = () => dialog.getByRole('button', { name: 'Seterusnya', exact: true });
     await expect(dialog).toContainText('Asal dokumen');
     await next().click();
     await kerani.locator('#mountedActionSchema0\\.record_type').selectOption('surat_menyurat');
