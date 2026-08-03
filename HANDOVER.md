@@ -1,6 +1,46 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — F3 BAHASA SIAP DIBINA (3 Ogos 2026) ⭐ TERKINI
+## SESI — ✅ DEPLOY 3 (F3 BAHASA) LIVE (3 Ogos 2026) ⭐ TERKINI
+
+**`cab951e` LIVE di bakwim.my** · CI run 30798675244 **7/7 HIJAU** ·
+📄 `bukti/deploy-3/BUKTI-DEPLOY-3.md` + `bukti/plan-f3/LAPORAN-FASA-3.md`
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `aae4c97` | **`cab951e`** |
+| `diwan-app` | `37516fd1` | **`6789fc80`** |
+| `diwan-web` | `4c7dac3c` | **`daead59f`** |
+| `lang/` dalam imej | **hanya `vendor`** | `en` `ms` `ms.json` `vendor` |
+
+Kesihatan: `/up` 200 · health OK · **smoke 9/9** · failed_jobs 0 · 0 mutex · 8/8 container ·
+4 laluan awam 200 · aset panel 200 · `sync-help-index --delete` = 83 guide.
+
+### Bukti bahasa BERKUAT KUASA (dijalankan dalam container produksi, locale ms)
+```
+Medan Failkan Ke wajib diisi.                          <- bug audit paling teruk, MATI
+Medan Kod Akronim mestilah sekurang-kurangnya 3 aksara.
+Maklumat log masuk ini tidak sepadan dengan rekod kami.
+« Sebelumnya | Seterusnya »        wizard: next=Seterusnya prev=Sebelumnya
+e-mel: "Salam sejahtera," / "Sekian," / "Hak cipta terpelihara."   bocor-EN: TIADA
+```
+Sebelum deploy, `docker compose exec app ls lang/` memulangkan **hanya `vendor`** — punca
+sebenar semua permukaan Inggeris, dibaca terus daripada imej hidup.
+
+### ⚠️ Satu kriteria §4.8 dipenuhi secara BERBEZA (dinyatakan, bukan disembunyikan)
+Pelan minta hantar e-mel ujian `--mail-to=` lalu **baca** kandungannya. **Saya tidak menghantar
+e-mel keluar**: (a) menghantar mesej bagi pihak pemilik perlukan kebenaran eksplisit sesi ini;
+(b) membaca mesej yang dihantar bermakna membuka peti masuk — dan membuka `spdmediwan@gmail.com`
+menandakan e-mel *Seen* → Diwan **melangkaunya selama-lamanya** (risiko direkod). Ganti:
+render templat di dalam container produksi = bukti sama, sifar kesan sampingan.
+**Jurang baki jujur:** rendering tidak membuktikan penghantaran SMTP Brevo mengekalkan BM
+(pengekodan). Pemilik boleh tutup bila-bila:
+`docker compose exec -e HOME=/tmp app php artisan diwan:staging-check --mail-to=<alamat>`
+
+### ▶️ SETERUSNYA: **F4** — lalai retensi selamat (§5). Kemudian F5 → F6 W1–W6 → F7–F10.
+
+---
+
+## SESI — F3 BAHASA DIBINA (3 Ogos 2026)
 
 📄 `Audit Review Round Robin/bukti/plan-f3/LAPORAN-FASA-3.md`
 
@@ -36,10 +76,31 @@ Buang override wizard → **2 merah** · padam kunci JSON → merah · padam 1 k
 merah (menamakan kunci) · pulangkan "Seterus" ke katalog → merah (menamakan langkah) ·
 pulangkan `->label('Edit')` → merah (menamakan fail) · pulih → **36 hijau**.
 
+### 🔴 Pusingan CI #1 (`c1823b5`) MERAH — dua punca tulen, dibaiki `cab951e`
+
+**(i) Ujian baharu saya lulus SQLite, gagal PostgreSQL.**
+`storage_orders.idempotency_key` ialah kolum `uuid()` **sebenar**; fixture guna
+`'ujian-'.uniqid()` → `SQLSTATE[22P02] invalid input syntax for type uuid`. SQLite menyimpannya
+sebagai teks longgar dan tidak pernah memberitahu. → `(string) Str::uuid()`.
+**Peraturan: nilai fixture mesti jenis SEBENAR kolum — semak migrasi dahulu.**
+
+**(ii) Shard `workflow` BUKAN flake — punca dijumpai.**
+Kegagalan **tandatangan identik** muncul juga pada `128b83c` = komit **dokumen sahaja, sifar
+baris kod** → 2 daripada 4 larian. Punca: `guidance-full.spec.js:433` ialah **satu-satunya
+`click({force:true})` yang tinggal**; 8 tapak lain sudah guna `forceClickWhenEnabled()`
+(`dispatchEvent`). `force:true` **tidak** memintas overlay tour — ia cuma melangkau semakan
+actionability; event tetap ke koordinat dan overlay SVG menyerapnya → borang tak dihantar.
+Satu tapak terlepas semasa rollout F0. Tempatan selepas fix: `1 passed (1.6m)`.
+
+> 🔑 **"Flake" ialah pemerhatian, bukan penjelasan.** Menahan diri daripada mengubah kod hijau
+> atas SATU kegagalan adalah betul. Selepas ia berulang dengan tandatangan sama, mencari punca
+> menjadi wajib — gate yang gagal 50% tanpa punca melatih orang mengabaikan warna merah.
+> Rekod dalam `LAPORAN-F6-W0.md` §(g) sudah dibetulkan.
+
 ### ▶️ SETERUSNYA
-Sahkan e2e tempatan → commit `fix-audit-F3` → CI hijau → **Deploy 3**
-(+ `diwan:sync-help-index --delete`, katalog berubah) → `diwan:staging-check --mail-to=` dan
-**baca e-mel sebenar** (satu-satunya kriteria §4.8 yang perlu produksi) → F4 (§5).
+CI hijau (`cab951e`) → **Deploy 3** (+ `diwan:sync-help-index --delete`, katalog berubah) →
+`diwan:staging-check --mail-to=` dan **baca e-mel sebenar** (satu-satunya kriteria §4.8 yang
+perlu produksi) → F4 (§5).
 
 ---
 
