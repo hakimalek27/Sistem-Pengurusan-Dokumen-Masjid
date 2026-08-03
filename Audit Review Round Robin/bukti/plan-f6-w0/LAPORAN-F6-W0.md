@@ -106,3 +106,37 @@ sengaja diletak pada item pertama **dan** mesej kosong.
    (W0 tiada langkah `wait_for_user`) — ia mula turun pada W1.
 4. Deploy W0 = **Deploy 2**; aset frontend berubah (blade + katalog) → rebuild `app`+`nginx`,
    dan jalankan `diwan:sync-help-index --delete` kerana katalog berubah.
+
+
+---
+
+## (g) CI run 30776919686 — shard `workflow` gagal (1 guide), disiasat & TIDAK diubah
+
+Run `39f2f33`: integration ✅ · Docker app ✅ · Docker web ✅ · shard `screen` ✅ ·
+shard `tenant-admin-public` ✅ · **shard `workflow` ❌ 13/15** pada
+`workflow.admin_masjid.muat-naik…` (upload tidak menghasilkan "1 dokumen dimuat naik").
+
+**Siasatan (penting — keputusan akhir ialah TIDAK mengubah kod):**
+
+1. Hipotesis pertama: F2a menukar makna CTA (dahulu "Buat pada skrin" = minimize; kini CTA
+   pada langkah yang sasaran berikutnya kelihatan bermaksud `moveNext()`), jadi koreografi
+   gate yang memanggil `cta()` sebagai alat kawalan akan melompat langkah. Saya membuang
+   pergantungan CTA dan menggunakan `dispatchEvent` sahaja.
+2. **Larian tempatan MENOLAK hipotesis itu:** guide yang sama gagal lebih awal (langkah 6
+   "tidak maju"), kerana langkah 6–7 menyasarkan `inbox-upload-modal` — modal yang sudah
+   DITUTUP oleh submit pada langkah 5. Tanpa `cta()` tiada apa yang memulihkan popover.
+3. **Fakta yang menentukan:** shard `workflow` **LULUS** pada CI run 30774069928 (F2, 7/7
+   hijau) dengan kod koreografi ASAL, dan komit W0 tidak menyentuh mana-mana guide
+   `workflow.*` — ia hanya mengubah dua guide `tenant.*`, blade masing-masing, dan penjaga
+   manifest. Maka kegagalan run W0 ialah **flake** pada guide 20-langkah yang berat (upload
+   sebenar + wizard 5 langkah), bukan regresi F2 mahupun W0.
+
+**Keputusan:** perubahan koreografi saya **dipulihkan sepenuhnya** (`git checkout` fail
+`guidance-full.spec.js`) — jangan ubah kod yang terbukti hijau atas dasar satu kegagalan yang
+belum terbukti berulang. Shard dijalankan semula pada CI untuk mengesahkan.
+
+**Nota jujur untuk fasa berikut:** guide ini memang rapuh — langkah 6–7 menyasarkan modal yang
+ditutup oleh tindakan langkah 5, jadi tour bergantung pada minimize/auto-advance untuk
+melepasinya. Itu **kelemahan katalog**, bukan kelemahan runtime, dan tempat betul untuk
+membaikinya ialah **W2** (`workflow.*`, 13 guide/145 langkah) — bukan W0. Rekod ini supaya
+W2 tidak tersandung pada perkara yang sama.
