@@ -245,6 +245,55 @@ tajuk yang berakhir dengan elipsis (audit mengira kesemua 20 sebagai "terpotong"
 - **Baki F6 selepas F5:** generik 425/473 dan placeholder 135/473 — kesemuanya dijadualkan
   W1–W6. Kohort tenant (W5) placeholder kini **0**.
 
+### 🔴 Pusingan CI #1 (`142cb56`) MERAH — dua andaian gate yang F5 langgar (dibaiki `f0115a6`)
+
+Check **WAJIB** `PostgreSQL, Redis, Meili, OCR and tests` **LULUS** (termasuk 8 ujian F5
+baharu + step `unit` yang saya tambah). Yang gagal: 2 daripada 3 shard `guidance-full`.
+Kedua-dua kegagalan **tulen** — gate betul, ia menuntut kemas kini bukan pengecualian.
+
+```
+success :: PostgreSQL, Redis, Meili, OCR and tests
+success :: Docker web image · Docker app image
+success :: guidance-e2e (workflow)
+failure :: guidance-e2e (screen)               ← screen.muat-naik-dokumen#1
+failure :: guidance-e2e (tenant-admin-public)  ← tenant.dashboard#1
+failure :: guidance-e2e-gate
+```
+
+**(i) `tenant.dashboard#1: sasaran aktif sidebar ≠ nav-primary`.** `assertStepPopover`
+mengassert `data-help-target` elemen yang disorot **===** `step.target`. `nav-primary` ialah
+sasaran **logik** — ia tidak wujud dalam DOM. Gate kini memahami indireksi itu **dan kekal
+ketat**: elemen yang disorot mesti salah satu `NAV_CANDIDATES` dan **bukan** `MAIN`/`BODY`.
+
+**(ii) `screen.muat-naik-dokumen#1: klik maju tidak menambah tepat satu langkah`.** Guide
+ini dahulu 5× `page-primary` generik → `driveGenericSteps` memadai. Selepas F5, sasaran
+langkah berikut hanya **wujud selepas tindakan sebenar**, jadi `stepAdvancePlan` betul
+memberi kind `wait-for-action` (CTA "Buat pada skrin" yang **meminimize**, bukan maju).
+Ditambah koreografi sendiri, sama seperti guide `workflow.*`. Gotcha: `getByRole('dialog')`
+melanggar mod ketat — popover tour **juga** `role="dialog"` (ARIA yang betul).
+
+**(iii) Penjaga KEEMPAT yang terlepas.** `aggregate-guidance-coverage.mjs` juga membekukan
+**229**. Denominator 229→228 kini dikemas dalam **keempat-empat** penjaga. Mesej "GATE LULUS"
+dijadikan **dinamik** supaya ia tidak boleh lapuk lagi.
+
+**Verifikasi tempatan PENUH sebelum push kedua** (bukan sampel — 25 min CI/pusingan terlalu
+mahal untuk meneka):
+```
+shard screen               30 passed (9.0m)
+shard tenant-admin-public  41 passed (10.9m)
+shard workflow             15 passed (7.5m)
+agregator   GATE LULUS: 83 guide · 473 langkah · 228 langkah tindakan
+```
+
+### ⭐ `risk-accepted` = 0
+
+`public.login` ialah **satu-satunya** entri risiko-diterima dalam baseline F0, dengan tarikh
+luput **2026-09-30**. F5 menutupnya pada 4 Ogos — hampir dua bulan awal. Langkah `specific`
+katalog **30 → 48**. Cabang `risk-accepted` dalam `build-manifest.mjs` kini tidak tercapai
+tetapi **dikekalkan sengaja**: jika satu perubahan masa depan menjadikan semula sasaran
+`public.login` generik, manifest akan melabelnya risiko-diterima dengan sebab penuh, bukan
+senyap-senyap sebagai `generic-justified`.
+
 ## (g) Untuk fasa seterusnya
 
 - **Deploy 5** mesti menjalankan `diwan:sync-help-index --delete` (katalog berubah ke

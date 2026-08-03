@@ -63,8 +63,27 @@ menghitung mutasi atribut sepanjang 1 saat tour aktif dan menuntut **0**.
    229→228 · W1 28/140→27/135 dengan W3 1/11→2/16 · `tenant-admin-public.action_steps` 3→4.
    Jumlah 83/473 dan shard `screen` 29/151 **tidak berubah**.
 
+### 🔴 Pusingan CI #1 (`142cb56`) MERAH — gate betul, F5 langgar dua andaiannya (fix `f0115a6`)
+Check **WAJIB** lulus; 2 shard `guidance-full` gagal.
+1. **`nav-primary` ialah sasaran LOGIK** — gate mengassert `data-help-target` === `step.target`.
+   Kini gate faham indireksi itu **dan kekal ketat**: sorotan mesti calon nav sebenar, bukan
+   `MAIN`/`BODY`.
+2. **`screen.muat-naik-dokumen` bukan lagi guide generik** — sasaran langkah berikut hanya
+   wujud selepas tindakan sebenar, jadi CTA "Buat pada skrin" **meminimize** (betul), bukan
+   maju. Diberi koreografi sendiri seperti guide `workflow.*` (peraturan #9).
+   Gotcha: `getByRole('dialog')` melanggar mod ketat — popover tour **juga** `role="dialog"`.
+3. **Penjaga KEEMPAT terlepas**: `aggregate-guidance-coverage.mjs` juga bekukan `229`.
+   Kini dikemas dalam **keempat-empat** penjaga, dan mesej "GATE LULUS" dijadikan **dinamik**.
+
+**Verifikasi tempatan PENUH sebelum push kedua** (25 min/pusingan CI terlalu mahal untuk teka):
+`screen` 30 · `tenant-admin-public` 41 · `workflow` 15 · agregator **GATE LULUS 83/473/228**.
+
+### ⭐ `risk-accepted` = 0
+`public.login` ialah **satu-satunya** entri risiko-diterima baseline F0 (luput **2026-09-30**).
+F5 menutupnya 4 Ogos — hampir dua bulan awal. Langkah `specific` **30 → 48**.
+
 ### ▶️ SETERUSNYA
-CI hijau untuk `142cb56` → **Deploy 5** (rebuild `app`+`nginx` — aset `help.js` berubah;
+CI hijau untuk `f0115a6` → **Deploy 5** (rebuild `app`+`nginx` — aset `help.js` berubah;
 **wajib** `diwan:sync-help-index --delete`, katalog kini `2026.08.04.1`) → rantaian bukti 5A →
 pengesahan live `/log-masuk`. Kemudian **F6 W1** (§7).
 
