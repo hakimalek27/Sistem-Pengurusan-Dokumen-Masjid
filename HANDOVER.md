@@ -78,6 +78,27 @@ Check **WAJIB** lulus; 2 shard `guidance-full` gagal.
 **Verifikasi tempatan PENUH sebelum push kedua** (25 min/pusingan CI terlalu mahal untuk teka):
 `screen` 30 · `tenant-admin-public` 41 · `workflow` 15 · agregator **GATE LULUS 83/473/228**.
 
+### 🎯 Pusingan CI #2 (`f0115a6`) — PUNCA flake `workflow` yang berlarutan AKHIRNYA DIBUKTIKAN
+`tenant-admin-public` + `workflow` hijau; `screen` gagal pada toast muat naik — tandatangan
+**identik** dengan flake `workflow` yang belum selesai sejak F3. Artifak diagnostik yang
+dipasang pada `08d3643` akhirnya berguna. `serve-ci.log`:
+```
+18:56:52  /livewire/upload-file      <- fail SAMPAI ke pelayan
+18:56:54  /livewire/update  500ms    <- muat naik selesai
+…62 saat SIFAR permintaan…
+18:57:56  /app/login                 <- tamat masa
+```
+**Klik "Hantar" hasilkan SIFAR permintaan** → memuktamadkan: **bukan** overlay
+(`dispatchEvent` tidak melalui koordinat) · **bukan** antivirus (permintaan tak pernah sampai)
+· **bukan** masa semata. Penjelasan konsisten: morph Livewire mengganti nod footer modal dan
+Alpine memasang semula pendengar **tak segerak** → klik dalam tetingkap itu **hilang senyap**.
+
+**Fix `submitUploadUntilToast()`** — cuba semula sehingga ada KESAN, hanya selagi modal masih
+terbuka (tiada risiko hantar dua kali). Dipakai pada **kedua-dua** tapak. Lulus **2/2 di bawah
+beban CPU buatan**. ⚠️ **Ini kelemahan produk tulen juga** — pengguna yang menekan tepat dalam
+tetingkap itu tidak nampak apa-apa. Severiti rendah; **direkod untuk F6/F7, F5 tidak mendakwa
+membaikinya.**
+
 ### ⭐ `risk-accepted` = 0
 `public.login` ialah **satu-satunya** entri risiko-diterima baseline F0 (luput **2026-09-30**).
 F5 menutupnya 4 Ogos — hampir dua bulan awal. Langkah `specific` **30 → 48**.

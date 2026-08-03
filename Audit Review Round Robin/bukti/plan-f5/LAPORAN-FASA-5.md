@@ -285,6 +285,51 @@ shard workflow             15 passed (7.5m)
 agregator   GATE LULUS: 83 guide · 473 langkah · 228 langkah tindakan
 ```
 
+### 🎯 Pusingan CI #2 (`f0115a6`) — PUNCA flake `workflow` yang berlarutan AKHIRNYA DIBUKTIKAN
+
+`tenant-admin-public` dan `workflow` hijau; hanya `screen` gagal — pada
+`\d+ dokumen dimuat naik ke Peti Masuk` yang **tidak pernah muncul**. Tandatangan **identik**
+dengan kegagalan berselang shard `workflow` yang belum selesai sejak F3 (F,P,F,P,F,P).
+
+Kali ini artifak diagnostik yang dipasang pada `08d3643` **ada**. `serve-ci.log`:
+
+```
+18:56:52  /livewire/upload-file        <- fail SAMPAI ke pelayan
+18:56:54  /livewire/update   500ms     <- muat naik selesai
+…62 saat SIFAR permintaan…
+18:57:56  /app/login                   <- ujian tamat masa, ujian seterusnya bermula
+```
+
+**Klik "Hantar" menghasilkan SIFAR permintaan.** Itu memuktamadkan tiga perkara:
+- **bukan** overlay tour — `dispatchEvent` menghantar terus pada elemen, tidak melalui koordinat;
+- **bukan** antivirus — permintaan tidak pernah sampai untuk ditapis;
+- **bukan** masa/beban semata — 60 saat menunggu, sifar aktiviti.
+
+Penjelasan yang konsisten dengan bukti: morph Livewire menggantikan nod footer modal selepas
+muat naik selesai, dan Alpine memasang semula pendengarnya **secara tak segerak**. Klik yang
+mendarat dalam tetingkap itu mengenai nod tanpa pendengar — **hilang senyap**.
+
+**Pembaikan (`submitUploadUntilToast`)**: cuba semula sehingga ada KESAN, dan hanya **selagi
+modal masih terbuka** (modal tertutup = penghantaran diterima → cuma tunggu toast, jadi tiada
+risiko hantar dua kali). Digunakan pada **kedua-dua** tapak — koreografi F5 baharu dan
+koreografi `workflow` asal, iaitu tapak flake yang asal.
+
+**Diagnosis LAMA saya di sini terbukti SALAH dan sudah direkod sedemikian:** teori
+"`force:true` diserap overlay" tidak pernah menjelaskan apa-apa, kerana `dispatchEvent`
+memintas koordinat sepenuhnya dan kegagalan tetap berulang.
+
+⚠️ **Ini juga kelemahan PRODUK yang tulen**, bukan hanya harness: pengguna yang menekan
+Hantar tepat dalam tetingkap morph itu tidak akan nampak apa-apa berlaku. Severiti rendah
+(tekan sekali lagi memulihkannya) — **direkod untuk F6/F7; F5 tidak mendakwa membaikinya.**
+
+**Kesilapan saya semasa membaiki:** percubaan pertama menghantar `getByRole('dialog')` sebagai
+locator modal. Itu melanggar mod ketat (popover tour juga `role="dialog"`), lemparan itu
+**ditelan** oleh `.catch(() => false)` saya, jadi retry tidak pernah mengklik dan hanya
+menunggu 120s. Diperbaiki dengan `[data-help-target="inbox-upload-modal"]`.
+
+**Verifikasi:** lulus 2/2 di bawah **beban CPU buatan** (6 proses gelung ketat — teknik F0
+yang menghasilkan semula kegagalan jenis-CI secara tempatan).
+
 ### ⭐ `risk-accepted` = 0
 
 `public.login` ialah **satu-satunya** entri risiko-diterima dalam baseline F0, dengan tarikh

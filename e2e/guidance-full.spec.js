@@ -215,6 +215,44 @@ async function forceClickWhenEnabled(locator) {
 }
 
 /**
+ * Hantar borang muat naik dan tunggu toast — dengan cuba semula sehingga ada KESAN.
+ *
+ * 🔎 PUNCA kegagalan berselang shard `workflow` (F,P,F,P,F,P sejak F3) akhirnya dibuktikan
+ * daripada `serve-ci.log` run 30842419416 (artifak diagnostik yang ditambah pada `08d3643`):
+ *
+ *     18:56:52  /livewire/upload-file        <- fail SAMPAI ke pelayan
+ *     18:56:54  /livewire/update   500ms     <- muat naik selesai
+ *     …62 saat SIFAR permintaan…
+ *     18:57:56  /app/login                   <- ujian tamat masa
+ *
+ * Klik "Hantar" tidak menghasilkan SATU PUN permintaan. Jadi ia bukan overlay (event tidak
+ * pernah perlu melalui koordinat — `dispatchEvent` menghantar terus pada elemen), bukan
+ * antivirus, bukan masa: **klik itu hilang senyap**. Penjelasan yang konsisten dengan bukti:
+ * morph Livewire menggantikan nod footer modal selepas muat naik selesai, dan Alpine memasang
+ * semula pendengarnya secara TAK SEGERAK — klik yang mendarat dalam tetingkap itu mengenai
+ * nod tanpa pendengar. Tiada ralat, tiada permintaan, tiada kesan.
+ *
+ * ⚠️ Ini juga bermakna PENGGUNA sebenar yang menekan Hantar tepat dalam tetingkap itu tidak
+ * akan nampak apa-apa berlaku. Kelemahan produk yang tulen (severiti rendah — tekan sekali
+ * lagi memulihkannya) dan DIREKOD untuk F6/F7; F5 tidak mendakwa membaikinya.
+ *
+ * Cuba semula hanya SELAGI modal masih terbuka: modal yang tertutup bermakna penghantaran
+ * sudah diterima, jadi kita hanya menunggu toast — tiada risiko menghantar dua kali.
+ */
+async function submitUploadUntilToast(page, modal) {
+    const submit = page.locator('[data-help-target="inbox-upload-submit"]');
+    const toast = page.getByText(/\d+ dokumen dimuat naik ke Peti Masuk/);
+
+    await expect(async () => {
+        if (await modal.isVisible().catch(() => false)) {
+            await expect(submit).toBeEnabled({ timeout: 15_000 });
+            await submit.dispatchEvent('click');
+        }
+        await expect(toast).toBeVisible({ timeout: 10_000 });
+    }).toPass({ timeout: 120_000 });
+}
+
+/**
  * Isi/pilih medan borang Livewire dengan selamat terhadap morph — `fill()` = clear +
  * insertText; morph yang mendarat di antaranya memulihkan nilai lama lalu insertText
  * MENAMBAH di hujung (nilai berganda). Rujuk nota penuh dlm guidance.spec.js.
@@ -384,13 +422,7 @@ for (const guide of guides) {
                 };
                 const hantar = async (cta) => {
                     await cta();
-                    const submit = page.locator('[data-help-target="inbox-upload-submit"]');
-                    // dispatchEvent, bukan click({force:true}): force hanya melangkau semakan
-                    // actionability — event tetap ke KOORDINAT dan overlay tour menyerapnya.
-                    await expect(submit).toBeEnabled({ timeout: 60_000 });
-                    await submit.dispatchEvent('click');
-                    await expect(page.getByText(/\d+ dokumen dimuat naik ke Peti Masuk/))
-                        .toBeVisible({ timeout: 60_000 });
+                    await submitUploadUntilToast(page, modalMuatNaik);
                 };
 
                 await driveChoreographedRange(
@@ -487,7 +519,11 @@ for (const guide of guides) {
                     // interaksi modal.
                     await cta();
                     await page.getByRole('button', { name: /Muat Naik Dokumen/i }).click();
-                    const dialog = page.getByRole('dialog');
+                    // `getByRole('dialog')` melanggar mod ketat sebaik popover tour muncul —
+                    // popover JUGA `role="dialog"` (ARIA yang betul). Sasarkan tetingkap modal
+                    // muat naik secara tepat; kalau tidak, semakan `isVisible()` melempar dan
+                    // mana-mana `.catch(() => false)` akan MENELANNYA secara senyap.
+                    const dialog = page.locator('[data-help-target="inbox-upload-modal"]');
                     await cta();
                     await attachFile(dialog, {
                         name: `Dokumen workflow ${Date.now()}.txt`,
@@ -495,21 +531,13 @@ for (const guide of guides) {
                         buffer: Buffer.from(`Dokumen workflow gate ${Date.now()}.`),
                     });
                     await cta();
-                    const submit = dialog.getByRole('button', { name: 'Hantar', exact: true });
-                    // `click({force:true})` TIDAK memintas overlay tour: force hanya
-                    // melangkau semakan actionability — event tetap dihantar ke KOORDINAT
-                    // dan overlay SVG menyerapnya, jadi borang tidak pernah dihantar dan
-                    // "1 dokumen dimuat naik" tidak muncul. Popover boleh muncul semula
-                    // di atas modal antara cta() dan klik ini (tetingkap itu melebar di
-                    // bawah beban CI) → shard `workflow` gagal ~separuh larian pada kod
-                    // yang TIDAK berubah (run 30776919686 + 30779820587, tandatangan sama).
-                    // Ini satu-satunya tapak dalam fail ini yang terlepas semasa
-                    // forceClickWhenEnabled diperkenalkan pada F0 (8 tapak lain sudah guna).
-                    // Enabled ditunggu 60s berasingan: pemprosesan muat naik boleh
-                    // melumpuhkan butang lebih lama daripada lalai helper.
-                    await expect(submit).toBeEnabled({ timeout: 60_000 });
-                    await submit.dispatchEvent('click');
-                    await expect(page.getByText('1 dokumen dimuat naik ke Peti Masuk.')).toBeVisible({ timeout: 60_000 });
+                    // ⛳ Tapak kegagalan berselang shard `workflow` sejak F3 (F,P,F,P,F,P).
+                    // Diagnosis LAMA saya ("`force:true` diserap overlay") sudah terbukti
+                    // SALAH: `dispatchEvent` memintas koordinat sepenuhnya namun kegagalan
+                    // berulang. Punca SEBENAR akhirnya dibuktikan daripada `serve-ci.log`
+                    // (run 30842419416): selepas muat naik selesai, klik Hantar menghasilkan
+                    // SIFAR permintaan selama 62 saat. Lihat `submitUploadUntilToast()`.
+                    await submitUploadUntilToast(page, dialog);
                 };
                 const openClassify = async (cta) => {
                     await cta();
