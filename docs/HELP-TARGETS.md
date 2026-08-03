@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (13) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (22) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -22,6 +22,15 @@
 | `registration-admin` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:22` | both | wizard pendaftaran langkah 2 | - |
 | `registration-consent` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:22` | both | wizard pendaftaran langkah 3 | - |
 | `registration-complete` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:9` | both | permohonan berjaya dihantar | - |
+| `disposal-warning` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:6` | both | - | disposal.view |
+| `disposal-candidates` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:14` | both | - | disposal.view |
+| `disposal-batches` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:19` | both | - | disposal.view |
+| `disposal-status` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:26` | both | ada batch | disposal.view |
+| `disposal-actions` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:28` | both | ada batch | disposal.execute |
+| `favourites-list` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:4` | both | - | favourites.view |
+| `favourite-item` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:8` | both | sentiasa (article pertama atau mesej kosong) | favourites.view |
+| `favourite-open` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:9` | both | ada kegemaran | favourites.view |
+| `favourite-remove` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:13` | both | ada kegemaran | favourites.view |
 
 ## Sasaran RIZAB (5) — wujud dlm DOM, belum dirujuk katalog
 

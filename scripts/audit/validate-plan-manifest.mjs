@@ -20,7 +20,10 @@ const SHARDS = ['screen', 'workflow', 'tenant-admin-public'];
 const EXPECT = {
     waveGuides: { W0: 2, W1: 28, W2: 13, W3: 1, W4: 1, W5: 35, W6: 3 },
     waveSteps: { W0: 10, W1: 140, W2: 145, W3: 11, W4: 13, W5: 146, W6: 8 },
-    totals: { guides: 83, steps: 473, actionGeneric: 200, placeholder: 258, mobileDefects: 6 },
+    // STRUKTUR (mesti sama) vs BASELINE KEMAJUAN (mesti ≤ — pelan §7 menjangka 200→0,
+    // 258→0, mobile 6→0; mengassert kesamaan akan menolak setiap pembaikan F6).
+    totals: { guides: 83, steps: 473 },
+    baselineProgress: { actionGeneric: 200, placeholder: 258, mobileDefects: 6 },
 };
 
 let failures = 0;
@@ -129,15 +132,24 @@ for (const w of WAVES) {
 }
 if (seenGuideIds.size !== EXPECT.totals.guides) fail(`jumlah guide ${seenGuideIds.size} ≠ ${EXPECT.totals.guides}`);
 if (seenStepKeys.size !== EXPECT.totals.steps) fail(`jumlah langkah ${seenStepKeys.size} ≠ ${EXPECT.totals.steps}`);
-if (actionGeneric !== EXPECT.totals.actionGeneric) fail(`action generic ${actionGeneric} ≠ ${EXPECT.totals.actionGeneric}`);
-if (placeholder !== EXPECT.totals.placeholder) fail(`placeholder ${placeholder} ≠ ${EXPECT.totals.placeholder}`);
-if (mobileDefects !== EXPECT.totals.mobileDefects) fail(`defect mobile ${mobileDefects} ≠ ${EXPECT.totals.mobileDefects}`);
-// Set kunci defect mobile manifest mesti SAMA dengan bukti pusingan-11 (bukan sekadar kiraan).
+// Metrik kemajuan: turun = pembaikan (dilaporkan), naik = regresi (gagal).
+const kemajuan = [];
+const takLebihTeruk = (nama, semasa, asas) => {
+    if (semasa > asas) fail(`REGRESI ${nama}: ${semasa} > baseline ${asas}`);
+    if (semasa < asas) kemajuan.push(`${nama} ${asas} → ${semasa} (−${asas - semasa})`);
+};
+takLebihTeruk('action generic', actionGeneric, EXPECT.baselineProgress.actionGeneric);
+takLebihTeruk('placeholder', placeholder, EXPECT.baselineProgress.placeholder);
+takLebihTeruk('defect mobile', mobileDefects, EXPECT.baselineProgress.mobileDefects);
+
+// Kunci defect mobile yang MASIH ditanda dalam manifest mesti subset bukti pusingan-11 —
+// defect yang sudah dibaiki hilang dari manifest (itu matlamatnya), tetapi manifest tidak
+// boleh mencipta defect yang tiada dalam bukti produksi.
 const manifestDefectKeys = new Set(manifestGuides.flatMap((g) => (g.steps ?? []).filter((s) => s.mobile_defect).map((s) => s.key)));
-const missingDefects = setDiff(defectKeys, manifestDefectKeys);
 const extraDefects = setDiff(manifestDefectKeys, defectKeys);
-if (missingDefects.length) fail('kunci defect mobile HILANG dari manifest', missingDefects);
-if (extraDefects.length) fail('kunci defect mobile LEBIHAN dalam manifest', extraDefects);
+if (extraDefects.length) fail('kunci defect mobile LEBIHAN dalam manifest (tiada dlm bukti produksi)', extraDefects);
+const fixedDefects = setDiff(defectKeys, manifestDefectKeys);
+if (fixedDefects.length) kemajuan.push(`defect mobile DIBAIKI: ${fixedDefects.join(', ')}`);
 
 // ── 4. Skema role_routes (F0(ii-b)) ────────────────────────────────────────────────────
 const rr = manifest.role_routes ?? {};
@@ -162,5 +174,9 @@ for (const [identity, count] of Object.entries(rr.expected_page_counts ?? {})) {
 if (failures > 0) {
     console.error(`\nVALIDATOR GAGAL: ${failures} kategori kegagalan.`);
     process.exit(1);
+}
+if (kemajuan.length) {
+    console.log('KEMAJUAN berbanding baseline F0:');
+    for (const baris of kemajuan) console.log(`  ${baris}`);
 }
 console.log('OK: manifest sah — partition wave/shard sepadan pengiraan bebas, set-union exact, role_routes konsisten.');

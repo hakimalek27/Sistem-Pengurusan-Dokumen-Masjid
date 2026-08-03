@@ -28,6 +28,23 @@ const mobile = JSON.parse(readFileSync(args.mobile, 'utf8'));
 const roleRoutes = JSON.parse(readFileSync(args['role-routes'], 'utf8'));
 
 // ── Invarian beku (PELAN-PEMBAIKAN.md §1 F0(ii)/(ii-a), disahkan bebas 5×) ──────────────
+//
+// DUA JENIS NILAI — dibezakan sejak F6-W0 (3 Ogos 2026):
+//
+//   STRUKTUR  — 83 guide / 473 langkah / partition wave / shard / kohort 25-124 /
+//               wait_for_user / unique_step_ids. Ini SKOP kerja; ia tidak boleh berubah
+//               tanpa keputusan sedar. Diassert SAMA (fail keras).
+//
+//   KEMAJUAN  — generic_declared, generic_pp/pc, placeholder_titles,
+//               action_steps_with_generic_target, dan medan wave action_generic/
+//               placeholder/mobile_defects. Pelan MENJANGKA nilai ini turun
+//               (§7: 200→0, 258→0, mobile 6→0). Mengassert kesamaan bermakna gate akan
+//               menolak setiap pembaikan F6 — songsang. Diassert sebagai
+//               **tidak lebih teruk daripada baseline** (monotonik menurun): kemajuan
+//               dibenarkan, regresi ditangkap, dan delta dilaporkan.
+//
+// `catalog_version` direkod sahaja di sini; PlanManifestTest yang menguatkuasakan manifest
+// dijana semula setiap kali katalog berubah.
 const FROZEN = {
     guides: 83, steps: 473, generic_declared: 443, generic_pp: 238, generic_pc: 205,
     placeholder_titles: 258, wait_for_user: 229, action_steps_with_generic_target: 200,
@@ -156,25 +173,46 @@ for (const guide of catalog.guides) {
     });
 }
 
-// ── Verifikasi kendiri terhadap invarian beku ───────────────────────────────────────────
-if (catalog.catalog_version !== FROZEN.catalog_version) fail(`catalog_version ${catalog.catalog_version} ≠ ${FROZEN.catalog_version}`);
+// ── Verifikasi kendiri ──────────────────────────────────────────────────────────────────
+// (a) STRUKTUR — mesti sama; perubahan di sini bermakna skop kerja berubah.
 if (catalogueGuides.length !== FROZEN.guides) fail(`guides ${catalogueGuides.length} ≠ ${FROZEN.guides}`);
 if (stats.steps !== FROZEN.steps) fail(`steps ${stats.steps} ≠ ${FROZEN.steps}`);
-if (stats.generic !== FROZEN.generic_declared) fail(`generic ${stats.generic} ≠ ${FROZEN.generic_declared}`);
-if (stats.pp !== FROZEN.generic_pp || stats.pc !== FROZEN.generic_pc) fail(`pp/pc ${stats.pp}/${stats.pc} ≠ ${FROZEN.generic_pp}/${FROZEN.generic_pc}`);
-if (stats.placeholder !== FROZEN.placeholder_titles) fail(`placeholder ${stats.placeholder} ≠ ${FROZEN.placeholder_titles}`);
 if (stats.wfu !== FROZEN.wait_for_user) fail(`wait_for_user ${stats.wfu} ≠ ${FROZEN.wait_for_user}`);
-if (stats.actGen !== FROZEN.action_steps_with_generic_target) fail(`action generic ${stats.actGen} ≠ ${FROZEN.action_steps_with_generic_target}`);
 if (stepIdSet.size !== FROZEN.unique_step_ids) fail(`unique step.id ${stepIdSet.size} ≠ ${FROZEN.unique_step_ids}`);
+
+// (b) KEMAJUAN — mesti ≤ baseline (turun = pembaikan; naik = regresi).
+const kemajuan = [];
+const takLebihTeruk = (nama, semasa, asas) => {
+    if (semasa > asas) fail(`REGRESI ${nama}: ${semasa} > baseline ${asas}`);
+    if (semasa < asas) kemajuan.push(`${nama} ${asas} → ${semasa} (−${asas - semasa})`);
+};
+takLebihTeruk('generic_declared', stats.generic, FROZEN.generic_declared);
+takLebihTeruk('generic_pp', stats.pp, FROZEN.generic_pp);
+takLebihTeruk('generic_pc', stats.pc, FROZEN.generic_pc);
+takLebihTeruk('placeholder_titles', stats.placeholder, FROZEN.placeholder_titles);
+takLebihTeruk('action_steps_with_generic_target', stats.actGen, FROZEN.action_steps_with_generic_target);
+
+const STRUKTUR_WAVE = ['guides', 'steps'];
 for (const [w, exp] of Object.entries(FROZEN.waves)) {
     for (const k of Object.keys(exp)) {
-        if (waveAgg[w][k] !== exp[k]) fail(`wave ${w}.${k} ${waveAgg[w][k]} ≠ ${exp[k]}`);
+        if (STRUKTUR_WAVE.includes(k)) {
+            if (waveAgg[w][k] !== exp[k]) fail(`wave ${w}.${k} ${waveAgg[w][k]} ≠ ${exp[k]}`);
+        } else {
+            takLebihTeruk(`wave ${w}.${k}`, waveAgg[w][k], exp[k]);
+        }
     }
 }
 for (const [s, exp] of Object.entries(FROZEN.shards)) {
     for (const k of Object.keys(exp)) {
-        if (shardAgg[s][k] !== exp[k]) fail(`shard ${s}.${k} ${shardAgg[s][k]} ≠ ${exp[k]}`);
+        if (k === 'action_steps') takLebihTeruk(`shard ${s}.${k}`, shardAgg[s][k], exp[k]);
+        else if (shardAgg[s][k] !== exp[k]) fail(`shard ${s}.${k} ${shardAgg[s][k]} ≠ ${exp[k]}`);
     }
+}
+if (kemajuan.length) {
+    console.error('KEMAJUAN berbanding baseline F0:');
+    for (const baris of kemajuan) console.error(`  ${baris}`);
+} else {
+    console.error(`Tiada delta — katalog masih pada baseline (catalog_version ${catalog.catalog_version}).`);
 }
 
 // ── Set cohort (family tenant = kohort audit P11) ───────────────────────────────────────

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.07.22.2",
+  "catalog_version": "2026.08.03.2",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -1421,7 +1421,7 @@
     },
     {
       "id": "tenant.pelupusan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Pelupusan",
       "summary": "Mengurus pelupusan terkawal dengan pengasingan tugas antara penyedia, pelulus dan pelaksana.",
@@ -1457,33 +1457,33 @@
       "steps": [
         {
           "id": "pelupusan.1",
-          "title": "Langkah 1",
+          "title": "Semak calon cukup tempoh",
           "instruction": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan batch.",
-          "target": "page-content"
+          "target": "disposal-candidates"
         },
         {
           "id": "pelupusan.2",
-          "title": "Langkah 2",
+          "title": "Pengerusi semak dan luluskan batch",
           "instruction": "Pengerusi menyemak senarai, pegangan undang-undang dan bukti sandaran sebelum meluluskan.",
-          "target": "page-primary"
+          "target": "disposal-batches"
         },
         {
           "id": "pelupusan.3",
-          "title": "Langkah 3",
+          "title": "Laksana hanya selepas diluluskan",
           "instruction": "Admin/Kerani hanya melaksanakan batch selepas status diluluskan.",
-          "target": "page-content"
+          "target": "disposal-batches"
         },
         {
           "id": "pelupusan.4",
-          "title": "Langkah 4",
+          "title": "Batch gagal: cuba semula, jangan pendua",
           "instruction": "Jika gagal, jangan cipta batch pendua; baiki storan dan gunakan Cuba Semula pada batch sama.",
-          "target": "page-content"
+          "target": "disposal-batches"
         },
         {
           "id": "pelupusan.5",
-          "title": "Langkah 5",
+          "title": "Sijil disimpan, metadata kekal",
           "instruction": "Simpan sijil pelupusan; metadata audit kekal walaupun blob rekod dipadam.",
-          "target": "page-content"
+          "target": "disposal-warning"
         }
       ],
       "troubleshooting": [
@@ -2494,7 +2494,7 @@
     },
     {
       "id": "tenant.kegemaran",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Kegemaran",
       "summary": "Pintasan peribadi kepada rekod dan fail yang kerap dirujuk.",
@@ -2540,33 +2540,33 @@
       "steps": [
         {
           "id": "kegemaran.1",
-          "title": "Langkah 1",
+          "title": "Senarai kegemaran anda",
           "instruction": "Tambah bintang dari senarai fail, butiran rekod atau hasil carian.",
-          "target": "page-content"
+          "target": "favourites-list"
         },
         {
           "id": "kegemaran.2",
-          "title": "Langkah 2",
+          "title": "Buka Kegemaran dari menu Tugasan",
           "instruction": "Buka Kegemaran untuk melihat rekod/fail tersimpan.",
-          "target": "page-primary"
+          "target": "favourites-list"
         },
         {
           "id": "kegemaran.3",
-          "title": "Langkah 3",
+          "title": "Klik item untuk buka sumber asal",
           "instruction": "Klik item untuk membuka sumber asal.",
-          "target": "page-content"
+          "target": "favourite-item"
         },
         {
           "id": "kegemaran.4",
-          "title": "Langkah 4",
+          "title": "Bintang penuh membuang kegemaran",
           "instruction": "Tekan bintang penuh untuk membuang kegemaran.",
-          "target": "page-content"
+          "target": "favourite-item"
         },
         {
           "id": "kegemaran.5",
-          "title": "Langkah 5",
+          "title": "Kegemaran tidak mengatasi permission",
           "instruction": "Kegemaran tidak mengatasi permission; item hilang jika akses ditarik.",
-          "target": "page-content"
+          "target": "favourites-list"
         }
       ],
       "troubleshooting": [

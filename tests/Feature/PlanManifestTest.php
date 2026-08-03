@@ -62,10 +62,16 @@ test('manifest baseline mematuhi invarian partition beku', function () {
     }
 
     ksort($waveGuides);
+
+    // STRUKTUR (skop kerja) mesti tepat; METRIK KEMAJUAN mesti ≤ baseline F0 — pelan §7
+    // menjangka 200→0, 258→0, mobile 6→0, jadi mengassert kesamaan akan menolak setiap
+    // pembaikan F6. Naik = regresi dan tetap gagal. Selaras dgn build-manifest.mjs +
+    // scripts/audit/validate-plan-manifest.mjs (tiga penjaga, satu peraturan).
+    expect($totals['actionGeneric'])->toBeLessThanOrEqual(200)
+        ->and($totals['placeholder'])->toBeLessThanOrEqual(258)
+        ->and($totals['mobile'])->toBeLessThanOrEqual(6);
+
     expect($totals['steps'])->toBe(473)
-        ->and($totals['actionGeneric'])->toBe(200)
-        ->and($totals['placeholder'])->toBe(258)
-        ->and($totals['mobile'])->toBe(6)
         ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 28, 'W2' => 13, 'W3' => 1, 'W4' => 1, 'W5' => 35, 'W6' => 3])
         ->and(array_sum($waveSteps))->toBe(473)
         ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(140)

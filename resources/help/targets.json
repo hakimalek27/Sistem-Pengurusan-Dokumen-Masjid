@@ -222,6 +222,114 @@
       "status": "reserved",
       "reason": "Widget dashboard; calon sasaran F6 W5",
       "since": "2026-08-02"
+    },
+    {
+      "id": "disposal-warning",
+      "family": "tenant",
+      "route": "/app/{tenant}/pelupusan",
+      "owner_source": "resources/views/filament/app/pages/pelupusan-manual.blade.php:6",
+      "selector_hint": "[data-help-target=\"disposal-warning\"]",
+      "viewport": "both",
+      "state": "-",
+      "permission": "disposal.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "disposal-candidates",
+      "family": "tenant",
+      "route": "/app/{tenant}/pelupusan",
+      "owner_source": "resources/views/filament/app/pages/pelupusan-manual.blade.php:14",
+      "selector_hint": "[data-help-target=\"disposal-candidates\"]",
+      "viewport": "both",
+      "state": "-",
+      "permission": "disposal.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "disposal-batches",
+      "family": "tenant",
+      "route": "/app/{tenant}/pelupusan",
+      "owner_source": "resources/views/filament/app/pages/pelupusan-manual.blade.php:19",
+      "selector_hint": "[data-help-target=\"disposal-batches\"]",
+      "viewport": "both",
+      "state": "-",
+      "permission": "disposal.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "disposal-status",
+      "family": "tenant",
+      "route": "/app/{tenant}/pelupusan",
+      "owner_source": "resources/views/filament/app/pages/pelupusan-manual.blade.php:26",
+      "selector_hint": "[data-help-target=\"disposal-status\"]",
+      "viewport": "both",
+      "state": "ada batch",
+      "permission": "disposal.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "disposal-actions",
+      "family": "tenant",
+      "route": "/app/{tenant}/pelupusan",
+      "owner_source": "resources/views/filament/app/pages/pelupusan-manual.blade.php:28",
+      "selector_hint": "[data-help-target=\"disposal-actions\"]",
+      "viewport": "both",
+      "state": "ada batch",
+      "permission": "disposal.execute",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "favourites-list",
+      "family": "tenant",
+      "route": "/app/{tenant}/kegemaran",
+      "owner_source": "resources/views/filament/app/pages/kegemaran.blade.php:4",
+      "selector_hint": "[data-help-target=\"favourites-list\"]",
+      "viewport": "both",
+      "state": "-",
+      "permission": "favourites.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "favourite-item",
+      "family": "tenant",
+      "route": "/app/{tenant}/kegemaran",
+      "owner_source": "resources/views/filament/app/pages/kegemaran.blade.php:8",
+      "selector_hint": "[data-help-target=\"favourite-item\"]",
+      "viewport": "both",
+      "state": "sentiasa (article pertama atau mesej kosong)",
+      "permission": "favourites.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "favourite-open",
+      "family": "tenant",
+      "route": "/app/{tenant}/kegemaran",
+      "owner_source": "resources/views/filament/app/pages/kegemaran.blade.php:9",
+      "selector_hint": "[data-help-target=\"favourite-open\"]",
+      "viewport": "both",
+      "state": "ada kegemaran",
+      "permission": "favourites.view",
+      "status": "active",
+      "since": "2026-08-03"
+    },
+    {
+      "id": "favourite-remove",
+      "family": "tenant",
+      "route": "/app/{tenant}/kegemaran",
+      "owner_source": "resources/views/filament/app/pages/kegemaran.blade.php:13",
+      "selector_hint": "[data-help-target=\"favourite-remove\"]",
+      "viewport": "both",
+      "state": "ada kegemaran",
+      "permission": "favourites.view",
+      "status": "active",
+      "since": "2026-08-03"
     }
   ]
 }

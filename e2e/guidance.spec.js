@@ -864,3 +864,85 @@ test('F2 banner menunggu boleh diklik dengan TETIKUS semasa tour aktif', async (
     await expect(banner).toHaveCount(0);
     await context.close();
 });
+
+// ── F6-W0 (PELAN-PEMBAIKAN §7.2) — hotfix 6 defect mobile `centerCovered` ────────────────
+// Dua guide (tenant.pelupusan 5 langkah + tenant.kegemaran 5) dahulu menyorot MAIN pada
+// setiap langkah; pada 390×664 popover menutup ruang tengah dan pengguna tidak nampak apa
+// yang dirujuk. Gate W0: keenam-enam langkah diuji desktop DAN mobile.
+const W0_GUIDES = [
+    { id: 'tenant.pelupusan', path: 'pelupusan', langkah: 5 },
+    { id: 'tenant.kegemaran', path: 'kegemaran', langkah: 5 },
+];
+
+for (const viewport of [
+    { nama: 'desktop', width: 1440, height: 1000 },
+    { nama: 'mobile', width: 390, height: 664 },
+]) {
+    for (const guide of W0_GUIDES) {
+        test(`F6-W0 ${viewport.nama}: ${guide.id} — sasaran spesifik, popover tidak menutup ruang tengah`, async ({ browser, baseURL }) => {
+            const context = await browser.newContext({
+                baseURL, viewport: { width: viewport.width, height: viewport.height },
+            });
+            await disableAutomaticGuides(context);
+            const page = await context.newPage();
+            const browserErrors = monitorBrowserErrors(page);
+            await loginTenant(page, tenantRoles[0]);
+
+            // Guide kegemaran merujuk item sebenar (klik untuk buka, bintang untuk buang),
+            // jadi keadaan pengguna yang bermakna ialah "ada sekurang-kurangnya satu
+            // kegemaran". Seeder demo tiada — jadi ujian menciptanya melalui UI sebenar.
+            if (guide.id === 'tenant.kegemaran') {
+                await page.goto(`/app/${tenantSlug}/records`);
+                const rekod = page.locator('main a[href*="/records/"]').first();
+                if (await rekod.count()) {
+                    await rekod.dispatchEvent('click');
+                    await page.waitForURL(/\/records\/\d+/, { timeout: 60_000 });
+                    const bintang = page.getByRole('button', { name: /Kegemaran/i }).first();
+                    if (await bintang.isVisible().catch(() => false)) {
+                        await bintang.dispatchEvent('click');
+                        await page.waitForTimeout(1_500);
+                    }
+                }
+            }
+
+            const popover = page.locator('.driver-popover');
+            for (let i = 0; i < guide.langkah; i += 1) {
+                await page.goto(`/app/${tenantSlug}/${guide.path}?panduan=${guide.id}&langkah=${i}`);
+                await expect(page.locator('[data-diwan-help-runtime]'))
+                    .toHaveAttribute('data-guide-id', guide.id);
+                await expect(popover, `${guide.id}#${i + 1}`).toBeVisible();
+                await expect(popover).toContainText(`${i + 1} daripada ${guide.langkah}`);
+
+                // Tajuk bermakna — bukan placeholder "Langkah N" (10/10 W0).
+                const tajuk = (await popover.locator('.driver-popover-title').textContent())?.trim();
+                expect(tajuk, `${guide.id}#${i + 1} tajuk`).not.toMatch(/^Langkah \d+$/);
+
+                // Sasaran yang disorot mesti elemen spesifik, BUKAN <main>/page-content.
+                const aktif = page.locator('.driver-active-element');
+                if (await aktif.count()) {
+                    const t = await aktif.first().getAttribute('data-help-target');
+                    expect(['page-content', 'page-primary', null], `${guide.id}#${i + 1} sorot generik`)
+                        .not.toContain(t);
+                }
+
+                // Defect asal `centerCovered` berpunca daripada sasaran generik: popover
+                // menyorot seluruh MAIN lalu duduk di tengah dan menutup segalanya. Dengan
+                // sasaran spesifik, ukuran yang bermakna ialah: popover TIDAK menutup elemen
+                // yang sedang dirujuknya — itulah yang pengguna perlu lihat.
+                if (await aktif.count()) {
+                    const bertindih = await popover.evaluate((el, sel) => {
+                        const t = document.querySelector(sel);
+                        if (!t) return false;
+                        const a = el.getBoundingClientRect();
+                        const b = t.getBoundingClientRect();
+
+                        return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+                    }, '.driver-active-element');
+                    expect(bertindih, `${guide.id}#${i + 1} popover menutup sasarannya sendiri`).toBe(false);
+                }
+            }
+            expect([...new Set(browserErrors)]).toEqual([]);
+            await context.close();
+        });
+    }
+}

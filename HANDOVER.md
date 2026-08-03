@@ -1,6 +1,76 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — 🚀 F0+F1+F2 SIAP & **DEPLOY 1 LIVE** (3 Ogos 2026) ⭐ TERKINI
+## SESI — F0→F2 LIVE + F6-W0 SIAP DIBINA (3 Ogos 2026) ⭐ TERKINI
+
+### ✅ SUDAH LIVE DI PRODUKSI: `9619509` (Deploy 1 = F1+F2)
+CI run 30774069928 **7/7 HIJAU** · rantaian bukti runtime 5A **LULUS PENUH**
+(`3a=2a · 3b=2b · 4b sama · 5a=5b=6`) · 📄 `bukti/deploy-1/BUKTI-DEPLOY-1.md`
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `3f94a90` | `9619509` |
+| `diwan-app` | `dca1f6cb…` | `916f302c…` |
+| `diwan-web` | `292e2aa9…` | `dd486028…` |
+| aset help | `help-pJkQNpPs.js` | **`help-BceoIbJG.js`** |
+
+Kesihatan pasca-deploy: `/up` 200 · `diwan:health` OK · `diwan:smoke` **9/9** ·
+`failed_jobs` 0 · 0 mutex · 8/8 container · `/` `/log-masuk` `/daftar` `/bantuan` 200.
+
+### ⏳ BELUM DEPLOY: F6-W0 (Deploy 2) — SIAP DIBINA, menunggu komit+CI
+📄 `bukti/plan-f6-w0/LAPORAN-F6-W0.md` · 4 ujian W0 lulus (desktop + mobile 390×664)
+
+### Fasa siap setakat ini
+| Fasa | Status | Laporan |
+|---|---|---|
+| **F0** perkakas + gate CI + branch protection 4 check | LIVE (dokumen) | `bukti/plan-f0/LAPORAN-FASA-0.md` + `VERIFIKASI-F0.md` §1–§22 |
+| **F1** konteks HelpLauncher | **LIVE** | `bukti/plan-f1/LAPORAN-FASA-1.md` |
+| **F2** runtime tour | **LIVE** | `bukti/plan-f2/LAPORAN-FASA-2.md` |
+| **F6-W0** hotfix mobile | siap dibina | `bukti/plan-f6-w0/LAPORAN-F6-W0.md` |
+
+### Yang pengguna dapat hari ini (F1+F2 LIVE)
+1. **Pembantu Diwan tidak lagi hilang** selepas interaksi Livewire — 19/25 halaman,
+   termasuk kesemua 11 halaman superadmin (punca #1 audit).
+2. **Label butang tour = tepat satu kelakuan** (20 CTA "Buat pada skrin" palsu tamat).
+3. Popover fallback **BM penuh** · auto-minimize bila menutup modal · fokus masuk+pulang.
+4. **Banner "Tunjuk arahan" boleh diklik** — sebelum ini pengguna tetikus TERKANDAS
+   (disahkan hidup di produksi sebelum & selepas pembaikan via GET awam).
+
+### Angka semasa
+Pest **453 lulus**/1 skip (4,794 assertions) · `unit` 10/10 · `ci-guidance` 23 ujian ·
+`ci-domain` 4/4 · gate agregator 83 guide/473 langkah/229 tindakan ·
+kemajuan F6: `placeholder 258 → 248`, `generic_declared 443 → 433`.
+
+### 🔧 Pembetulan reka bentuk perkakas F0 (penting untuk semua wave F6)
+Ketiga-tiga penjaga (`build-manifest.mjs`, `validate-plan-manifest.mjs`, `PlanManifestTest`)
+dahulu mengassert **kesamaan** untuk `placeholder_titles: 258` / `action_generic: 200` —
+sedangkan §7 menetapkan nilai itu **mesti turun ke 0**. Gate begitu akan **menolak setiap
+pembaikan F6**. Kini: **STRUKTUR** (83/473/partition/kohort) diassert sama; **KEMAJUAN**
+diassert **≤ baseline** (turun dilaporkan sebagai delta, naik = regresi gagal).
+
+### ▶️ SETERUSNYA (urutan tepat)
+1. **Komit + push F6-W0** → tunggu CI hijau → **Deploy 2**: rebuild `app`+`nginx`
+   (blade+katalog berubah) + **`diwan:sync-help-index --delete`** (katalog berubah) +
+   rantaian 5A penuh.
+2. **F3** (bahasa, §4) → F4 (§5) → F5 (§6) → **F6 W1→W6** (§7) → F7 (§8) → F8 (§9) →
+   F9 (§9A) → F10 (§9B). **Baca semula seksyen pelan sebelum membina** (peraturan #1).
+
+### Teknik/gotcha yang terbukti (guna semula)
+- **Beban CPU buatan** (`scratchpad/f0/run-under-load.sh`) menghasilkan kegagalan jenis-CI
+  secara tempatan — jauh lebih pantas drp menunggu CI ~25 min/pusingan.
+- `click({force:true})` **bukan** penyelesaian overlay (event tetap ke koordinat) →
+  `dispatchEvent('click')`. Force juga melangkau semakan *enabled*.
+- `fill()` = clear+insertText → kalis morph dgn `toPass`; `wire:model.blur` perlu blur eksplisit.
+- Filament **lazy-load** JS: tunggu `.filepond--root` sebelum `setInputFiles`; FilePond siar
+  status via `aria-live` → kira `.filepond--file-status-main`, bukan `getByText`.
+- `APP_ENV=testing` pada server HTTP memecahkan SEMUA upload UI (disk `tmp-for-tests`).
+- **Sasaran `data-help-target` mesti wujud dalam keadaan LALAI** (data kosong) — bukan hanya
+  dalam persekitaran berdata.
+- `retries` Playwright kekal **0** — ketiadaan retry mendedahkan 3 bug produk.
+- Tiket `SUP-260801-HXQ0DIOL` masih menunggu pemilik padam.
+
+---
+
+## SESI — 🚀 F0+F1+F2 SIAP & **DEPLOY 1 LIVE** (3 Ogos 2026)
 
 **`9619509` LIVE di bakwim.my** · CI run 30774069928 **7/7 HIJAU** · rantaian bukti runtime 5A
 **LULUS SEPENUHNYA** (`3a=2a · 3b=2b · 4b sama · 5a=5b=6`).
