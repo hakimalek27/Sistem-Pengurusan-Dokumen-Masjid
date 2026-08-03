@@ -239,7 +239,7 @@ async function forceClickWhenEnabled(locator) {
  * Cuba semula hanya SELAGI modal masih terbuka: modal yang tertutup bermakna penghantaran
  * sudah diterima, jadi kita hanya menunggu toast — tiada risiko menghantar dua kali.
  */
-async function submitUploadUntilToast(page, modal) {
+async function submitUploadUntilToast(page, modal, reattach) {
     // ⚠️ MESTI diskop kepada modal yang DIBERI, bukan `page.locator(...)` seluruh halaman.
     // Guide `workflow.*` membuka DUA modal berturutan (muat naik, kemudian klasifikasi) dan
     // Filament mengekalkan nod modal terdahulu dalam DOM. Locator seluruh halaman boleh
@@ -249,15 +249,37 @@ async function submitUploadUntilToast(page, modal) {
     // locator berskop-dialog yang asal, lalu GAGAL sebaik saya menjadikannya seluruh halaman
     // (serve-ci.log: 0 permintaan sepanjang 120s retry).
     const submit = modal.locator('[data-help-target="inbox-upload-submit"]').last();
+    const trigger = page.locator('[data-help-target="inbox-upload"]');
     const toast = page.getByText(/\d+ dokumen dimuat naik ke Peti Masuk/);
 
     await expect(async () => {
-        if (await modal.isVisible().catch(() => false)) {
-            await expect(submit).toBeEnabled({ timeout: 15_000 });
+        if (await toast.isVisible().catch(() => false)) return;
+
+        // Modal HILANG tanpa toast = klik menutupnya tanpa menghantar borang. Dibuktikan
+        // daripada trace CI: `dispatchEvent` berjalan SEKALI, modal lenyap, dan serve-ci.log
+        // menunjukkan 0 permintaan selama 121s. Event TAK-DIPERCAYAI mencetuskan pengendali
+        // tutup Alpine tetapi TIDAK mencetuskan penghantaran borang. Pulih: buka semula,
+        // lampir semula, cuba lagi — persis apa yang pengguna sebenar akan buat.
+        if (!(await modal.isVisible().catch(() => false))) {
+            await expect(trigger).toBeEnabled({ timeout: 15_000 });
+            await trigger.click({ timeout: 15_000 });
+            await expect(modal).toBeVisible({ timeout: 15_000 });
+            await reattach();
+        }
+
+        await expect(submit).toBeEnabled({ timeout: 15_000 });
+        // KLIK SEBENAR dahulu: hanya event DIPERCAYAI yang menjalankan tingkah laku lalai
+        // penghantaran borang. `dispatchEvent` dikekalkan sebagai sandaran untuk kes overlay
+        // memintas — dan jika ia yang berjalan, gelung ini akan mencuba semula, jadi
+        // kehilangan senyap tidak lagi menjadi kegagalan 120 saat tanpa maklumat.
+        try {
+            await submit.click({ timeout: 10_000 });
+        } catch {
             await submit.dispatchEvent('click');
         }
-        await expect(toast).toBeVisible({ timeout: 10_000 });
-    }).toPass({ timeout: 120_000 });
+
+        await expect(toast).toBeVisible({ timeout: 15_000 });
+    }).toPass({ timeout: 150_000 });
 }
 
 /**
@@ -428,9 +450,14 @@ for (const guide of guides) {
                         buffer: Buffer.from(`Dokumen gate skrin ${Date.now()}.`),
                     });
                 };
+                const lampirFail = () => attachFile(modalMuatNaik, {
+                    name: `Dokumen skrin ${Date.now()}.txt`,
+                    mimeType: 'text/plain',
+                    buffer: Buffer.from(`Dokumen gate skrin ${Date.now()}.`),
+                });
                 const hantar = async (cta) => {
                     await cta();
-                    await submitUploadUntilToast(page, modalMuatNaik);
+                    await submitUploadUntilToast(page, modalMuatNaik, lampirFail);
                 };
 
                 await driveChoreographedRange(
@@ -545,7 +572,11 @@ for (const guide of guides) {
                     // berulang. Punca SEBENAR akhirnya dibuktikan daripada `serve-ci.log`
                     // (run 30842419416): selepas muat naik selesai, klik Hantar menghasilkan
                     // SIFAR permintaan selama 62 saat. Lihat `submitUploadUntilToast()`.
-                    await submitUploadUntilToast(page, dialog);
+                    await submitUploadUntilToast(page, dialog, () => attachFile(dialog, {
+                        name: `Dokumen workflow ${Date.now()}.txt`,
+                        mimeType: 'text/plain',
+                        buffer: Buffer.from(`Dokumen workflow gate ${Date.now()}.`),
+                    }));
                 };
                 const openClassify = async (cta) => {
                     await cta();
