@@ -1,6 +1,64 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — ✅ FASA 0 SELESAI, CI HIJAU PENUH (3 Ogos 2026) ⭐ TERKINI
+## SESI — 🚀 F0+F1+F2 SIAP & **DEPLOY 1 LIVE** (3 Ogos 2026) ⭐ TERKINI
+
+**`9619509` LIVE di bakwim.my** · CI run 30774069928 **7/7 HIJAU** · rantaian bukti runtime 5A
+**LULUS SEPENUHNYA** (`3a=2a · 3b=2b · 4b sama · 5a=5b=6`).
+📄 `Audit Review Round Robin/bukti/deploy-1/BUKTI-DEPLOY-1.md`
+
+| | Sebelum | Selepas |
+|---|---|---|
+| git server | `3f94a90` | `9619509` |
+| `diwan-app` | `dca1f6cb…` | `916f302c…` |
+| `diwan-web` | `292e2aa9…` | `dd486028…` |
+| aset help | `help-pJkQNpPs.js` | **`help-BceoIbJG.js`** |
+
+Kesihatan: `/up` 200 · `diwan:health` OK · `diwan:smoke` **9/9** · `failed_jobs` 0 · 0 mutex ·
+8/8 container · `/` `/log-masuk` `/daftar` `/bantuan` semua 200.
+
+### Yang berkuat kuasa untuk pengguna HARI INI
+1. **F1** — Pembantu Diwan tidak lagi hilang selepas interaksi Livewire (**19/25 halaman**,
+   termasuk semua 11 halaman superadmin); URL bantuan root tidak lagi `//`.
+2. **F2a** — label butang tour = tepat satu kelakuan (20 CTA "Buat pada skrin" palsu tamat).
+3. **F2b** — popover fallback BM penuh · **F2c** — auto-minimize bila popover menutup modal ·
+   **F2d** — fokus masuk popover & pulang ke launcher.
+4. **Banner "Tunjuk arahan" boleh diklik** — sebelum ini pengguna tetikus TERKANDAS
+   (disahkan hidup di produksi sebelum pembaikan: VERIFIKASI-F0 §17/§20).
+
+### Fasa siap
+- **F0** — perkakas + gate CI 3 lapis + branch protection TEPAT 4 check.
+  📄 `bukti/plan-f0/LAPORAN-FASA-0.md` + `VERIFIKASI-F0.md` §1–§22 (7 pusingan CI, setiap satu
+  punca berbeza; **3 bug produk ditemui** oleh gate ini).
+- **F1** — konteks HelpLauncher (§2). 📄 `bukti/plan-f1/LAPORAN-FASA-1.md` · 21 ujian Pest;
+  **bukti penjaga: kod lama dipasang semula → 6 merah**.
+- **F2** — runtime tour (§3). 📄 `bukti/plan-f2/LAPORAN-FASA-2.md` · modul tulen
+  `step-advance-plan.js` + 10 ujian unit (435ms) + 6 e2e; **ketiga-tiga bug F0 DITUTUP**;
+  bukti penjaga CSS: buang peraturan → merah.
+
+### Angka semasa
+Pest **453 lulus**/1 skip (4,791 assertions) · `unit` 10/10 · `ci-guidance` 19/19 0 flaky ·
+`ci-domain` 4/4 · gate agregator **83 guide/473 langkah/229 tindakan**.
+
+### ▶️ SETERUSNYA: F6-W0 (hotfix mobile) — Deploy 2
+`tenant.pelupusan` (5 langkah) + `tenant.kegemaran` (5): sasaran spesifik + 10 tajuk; uji
+desktop DAN mobile 390×664; 6 defect `centerCovered` → 0. Kemudian F3 (bahasa) → F4 → F5 →
+F6 W1–W6 → F7 → F8 → F9 → F10.
+**Baca semula seksyen pelan berkenaan sebelum membina** (peraturan #1 CLAUDE.md repo).
+
+### Teknik yang terbukti (guna semula)
+- **Beban CPU buatan** (`scratchpad/f0/run-under-load.sh`) menghasilkan kegagalan jenis-CI
+  secara tempatan — jauh lebih pantas drp menunggu CI 25 min/pusingan.
+- `click({force:true})` **bukan** penyelesaian overlay (event tetap ke koordinat) →
+  `dispatchEvent('click')`. Force juga melangkau semakan *enabled*.
+- `fill()` = clear+insertText → kalis morph dgn `toPass`; `wire:model.blur` perlu blur eksplisit.
+- Filament **lazy-load** JS: tunggu `.filepond--root` sebelum `setInputFiles`.
+- `APP_ENV=testing` pada server HTTP memecahkan SEMUA upload UI (disk `tmp-for-tests`).
+- `retries` Playwright kekal **0** — ketiadaan retry mendedahkan ketiga-tiga bug produk.
+- Tiket `SUP-260801-HXQ0DIOL` masih menunggu pemilik padam.
+
+---
+
+## SESI — ✅ FASA 0 SELESAI, CI HIJAU PENUH (3 Ogos 2026)
 
 **`fb40ff1` · CI run 30770625567 = 7/7 job SUCCESS** (integration · 3 shard `guidance-e2e` ·
 gate agregator · 2 imej Docker). Gate agregator pada CI sebenar: **83 guide · 473 langkah ·
