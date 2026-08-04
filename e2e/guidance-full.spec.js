@@ -63,7 +63,7 @@ function accountFor(guide) {
     return { email: `${role}@demo.test`, login: '/app/login', home: null, role };
 }
 
-async function newContextPage(browser, baseURL) {
+async function newContextPage(browser, baseURL, sasaranGuide = []) {
     const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
     await context.addInitScript((ids) => {
         for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
@@ -75,8 +75,30 @@ async function newContextPage(browser, baseURL) {
     // `n: 4` sedangkan tour sudah `n: 5`). Merakam setiap peralihan menjadikan assertion
     // kalis-perlumbaan DAN lebih kuat: ia membuktikan langkah itu benar-benar berlaku dengan
     // sasaran yang betul, bukan hanya bahawa ia boleh dicerap pada satu ketika tertentu.
-    await context.addInitScript(() => {
+    // Setiap entri turut merakam KEADAAN SETIAP SASARAN guide ini. Tanpa itu, "sasaran tiada"
+    // dan "resolusi gagal walaupun sasaran ADA" menghasilkan jejak yang kelihatan SAMA
+    // (`4:page-content`) — dan kekaburan itu memakan pusingan CI 25 minit setiap kali. Perekam
+    // juga merakam banner (tour diminimize = CTA benar-benar diklik) dan bilangan modal
+    // (tindakan benar-benar berkuat kuasa). Ini pengamatan TULEN: tiada interaksi diubah.
+    await context.addInitScript((sasaran) => {
         window.__diwanTourLog = [];
+        const nampak = (el) => {
+            const b = el.getBoundingClientRect();
+            const s = getComputedStyle(el);
+
+            return s.display !== 'none' && s.visibility !== 'hidden' && b.width > 0 && b.height > 0;
+        };
+        const keadaanSasaran = () => {
+            const out = {};
+            for (const t of sasaran) {
+                const els = [...document.querySelectorAll(`[data-help-target="${t}"]`)];
+                if (!els.length) { out[t] = 'tiada'; continue; }
+                const n = els.filter(nampak).length;
+                out[t] = n ? (n === 1 ? 'ada' : `ada×${n}`) : `sembunyi×${els.length}`;
+            }
+
+            return out;
+        };
         const rakam = () => {
             const pop = document.querySelector('.driver-popover');
             if (!pop) return;
@@ -87,8 +109,12 @@ async function newContextPage(browser, baseURL) {
                 aktif: [...document.querySelectorAll('.driver-active-element')]
                     .map((el) => el.getAttribute('data-help-target')),
                 ralatPalsu: teks.includes('Tindakan belum tersedia'),
+                banner: Boolean(document.querySelector('[data-diwan-tour-waiting]')),
+                modal: document.querySelectorAll('.fi-modal-window').length,
+                sasaran: keadaanSasaran(),
             };
-            entri.kunci = `${entri.n}|${entri.aktif.join(',')}|${entri.ralatPalsu}`;
+            entri.kunci = `${entri.n}|${entri.aktif.join(',')}|${entri.ralatPalsu}|${entri.banner}`
+                + `|${entri.modal}|${Object.entries(entri.sasaran).map(([k, v]) => k + '=' + v).join(',')}`;
             const akhir = window.__diwanTourLog[window.__diwanTourLog.length - 1];
             if (akhir && akhir.kunci === entri.kunci) return;
             window.__diwanTourLog.push(entri);
@@ -110,7 +136,7 @@ async function newContextPage(browser, baseURL) {
         pasang();
         document.addEventListener('DOMContentLoaded', pasang, { once: true });
         document.addEventListener('readystatechange', pasang);
-    });
+    }, sasaranGuide);
 
     return { context, page: await context.newPage() };
 }
@@ -335,6 +361,13 @@ async function driveFlowGuide(page, guide, basePath) {
                 bilangan: log.length,
                 jejak: log.filter((e) => e.n !== null)
                     .map((e) => `${e.n}:${e.aktif.filter(Boolean).join('+') || '-'}`).slice(-14).join(' → '),
+                // Diagnostik penentu: keadaan sasaran yang DIJANGKA sepanjang jejak. Kalau ia
+                // `tiada` di setiap entri, produk/data tidak pernah merendernya; kalau `ada`
+                // sedangkan sorotan lain, resolusi tour itu yang gagal. Kedua-duanya kelihatan
+                // sama tanpa baris ini.
+                sasaranDijangka: log.slice(-14).map((e) => `${e.n ?? '-'}:${e.sasaran?.[sasaran] ?? '?'}`).join(' → '),
+                // Banner = CTA benar-benar diklik (tour diminimize). Modal = tindakan berkuat kuasa.
+                bannerModal: log.slice(-14).map((e) => `${e.banner ? 'B' : '-'}${e.modal ?? '?'}`).join(' '),
             };
         }, [i, step.target]);
 
@@ -347,7 +380,10 @@ async function driveFlowGuide(page, guide, basePath) {
             .catch(async () => {
                 const k = await rekod();
                 throw new Error(`${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`
-                    + ` — perekam sedia=${k.sedia}, entri=${k.bilangan}, jejak: ${k.jejak || '(kosong)'}`);
+                    + ` — perekam sedia=${k.sedia}, entri=${k.bilangan}`
+                    + `\n  jejak sorotan   : ${k.jejak || '(kosong)'}`
+                    + `\n  sasaran dijangka: ${k.sasaranDijangka || '(kosong)'}`
+                    + `\n  banner/modal    : ${k.bannerModal || '(kosong)'}`);
             });
         const keadaan = await rekod();
         expect(keadaan.ralatPalsu, `${step.key}: popover memaparkan ralat palsu "Tindakan belum tersedia" (jejak: ${keadaan.jejak})`)
@@ -722,7 +758,9 @@ for (const guide of guides) {
     test(`gate ${SHARD}: ${guide.guide_id} (${guide.steps.length} langkah)`, async ({ browser, baseURL }) => {
         test.setTimeout(300_000);
         const account = accountFor(guide);
-        const { context, page } = await newContextPage(browser, baseURL);
+        const { context, page } = await newContextPage(browser, baseURL, [
+            ...new Set(guide.steps.map((s) => s.target)),
+        ]);
         try {
             if (account) await login(page, account);
 
