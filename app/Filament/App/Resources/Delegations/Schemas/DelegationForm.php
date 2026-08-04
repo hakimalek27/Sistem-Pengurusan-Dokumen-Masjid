@@ -13,13 +13,20 @@ class DelegationForm
 {
     public static function configure(Schema $schema): Schema
     {
+        // F6-W1 (§7.2) — sasaran tour `screen.cipta-delegasi`.
         return $schema->components([
-            Select::make('principal_user_id')->label('Principal')->options(fn () => self::principalUsers())->searchable()->required(),
-            Select::make('delegate_user_id')->label('Delegate')->options(fn () => self::users())->searchable()->required(),
-            Select::make('capabilities')->label('Tugas yang diwakilkan')->multiple()->options(['minit' => 'Minit / tindakan', 'approvals' => 'Keputusan kelulusan'])->required(),
-            DateTimePicker::make('starts_at')->label('Mula')->seconds(false)->default(now())->required(),
-            DateTimePicker::make('ends_at')->label('Tamat')->seconds(false)->default(now()->addDays(7))->required(),
-            Textarea::make('reason')->label('Sebab / catatan')->maxLength(1000),
+            Select::make('principal_user_id')->label('Principal')->options(fn () => self::principalUsers())->searchable()
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-principal'])->required(),
+            Select::make('delegate_user_id')->label('Delegate')->options(fn () => self::users())->searchable()
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-delegate'])->required(),
+            Select::make('capabilities')->label('Tugas yang diwakilkan')->multiple()->options(['minit' => 'Minit / tindakan', 'approvals' => 'Keputusan kelulusan'])
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-capabilities'])->required(),
+            DateTimePicker::make('starts_at')->label('Mula')->seconds(false)->default(now())
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-starts'])->required(),
+            DateTimePicker::make('ends_at')->label('Tamat')->seconds(false)->default(now()->addDays(7))
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-ends'])->required(),
+            Textarea::make('reason')->label('Sebab / catatan')->maxLength(1000)
+                ->extraFieldWrapperAttributes(['data-help-target' => 'delegation-reason']),
         ])->columns(2);
     }
 

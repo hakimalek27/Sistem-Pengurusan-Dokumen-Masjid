@@ -53,13 +53,21 @@ class ViewRecord extends BaseViewRecord
                     Notification::make()->title($active ? 'Ditambah ke kegemaran.' : 'Dibuang daripada kegemaran.')->success()->send();
                 }),
 
+            // F6-W1 (§7.2) — tindakan rekod hidup pada halaman BUTIRAN ini, bukan senarai.
+            // `currentGuide()` memadan awalan (HelpCatalog.php:117-122), jadi guide beroute
+            // `/app/{tenant}/records` turut ditawarkan di `/records/{id}`.
             Action::make('mohonPembetulan')
                 ->label('Mohon Pembetulan')
                 ->icon('heroicon-o-pencil-square')
+                ->extraAttributes(['data-help-target' => 'record-correction'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'record-correction-submit']))
                 ->authorize(fn () => Auth::user()->can('create', RecordCorrectionRequest::class))
                 ->schema([
-                    Textarea::make('reason')->label('Sebab Rekod Salah Tawan')->required()->minLength(10),
-                    TextInput::make('title')->label('Tajuk')->default(fn () => $this->getRecord()->title),
+                    Textarea::make('reason')->label('Sebab Rekod Salah Tawan')->required()->minLength(10)
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-correction-reason']),
+                    TextInput::make('title')->label('Tajuk')->default(fn () => $this->getRecord()->title)
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-correction-title']),
                     Select::make('record_type')->label('Jenis Rekod')->options(fn () => collect(config('record_types'))->mapWithKeys(fn ($type, $key) => [$key => $type['label']])->all())->default(fn () => $this->getRecord()->record_type)->required(),
                     TextInput::make('our_ref')->label('Ruj. Kami')->default(fn () => $this->getRecord()->our_ref),
                     TextInput::make('their_ref')->label('Ruj. Tuan')->default(fn () => $this->getRecord()->their_ref),
@@ -81,13 +89,20 @@ class ViewRecord extends BaseViewRecord
             Action::make('edarkanMinit')
                 ->label('Edarkan Minit')
                 ->icon('heroicon-o-paper-airplane')
+                ->extraAttributes(['data-help-target' => 'record-minit'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'record-minit-submit']))
                 ->authorize('routeMinit')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'minit.create'))
                 ->schema([
-                    Select::make('action')->label('Penerima Tindakan')->multiple()->options(fn () => $this->memberOptions())->required(),
-                    Select::make('cc')->label('Makluman (s.k.)')->multiple()->options(fn () => $this->memberOptions()),
-                    Textarea::make('body')->label('Catatan / Arahan')->required(),
-                    Select::make('priority')->label('Keutamaan')->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])->default('biasa')->required(),
+                    Select::make('action')->label('Penerima Tindakan')->multiple()->options(fn () => $this->memberOptions())
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-minit-action'])->required(),
+                    Select::make('cc')->label('Makluman (s.k.)')->multiple()->options(fn () => $this->memberOptions())
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-minit-cc']),
+                    Textarea::make('body')->label('Catatan / Arahan')->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-minit-body']),
+                    Select::make('priority')->label('Keutamaan')->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])->default('biasa')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-minit-priority'])->required(),
                 ])
                 ->action(function (array $data) {
                     app(MinitService::class)->create($this->getRecord(), Auth::user(), $data['action'], $data['cc'] ?? [], $data['body'], MinitPriority::from($data['priority']));
@@ -98,11 +113,16 @@ class ViewRecord extends BaseViewRecord
             Action::make('mohonKelulusan')
                 ->label('Mohon Kelulusan')
                 ->icon('heroicon-o-check-badge')
+                ->extraAttributes(['data-help-target' => 'record-approval'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'record-approval-submit']))
                 ->authorize('requestApproval')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'approvals.request'))
                 ->schema([
-                    Select::make('approver_id')->label('Kepada')->options(fn () => $this->approverOptions())->required(),
-                    Textarea::make('note')->label('Nota'),
+                    Select::make('approver_id')->label('Kepada')->options(fn () => $this->approverOptions())
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-approval-approver'])->required(),
+                    Textarea::make('note')->label('Nota')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-approval-note']),
                 ])
                 ->action(function (array $data) {
                     app(ApprovalService::class)->request($this->getRecord(), Auth::user(), User::findOrFail($data['approver_id']), $data['note'] ?? null);
@@ -113,6 +133,9 @@ class ViewRecord extends BaseViewRecord
             Action::make('gantiVersi')
                 ->label('Ganti Versi')
                 ->icon('heroicon-o-arrow-path')
+                ->extraAttributes(['data-help-target' => 'record-version'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'record-version-submit']))
                 ->authorize('supersede')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.supersede'))
                 ->schema([
@@ -120,6 +143,7 @@ class ViewRecord extends BaseViewRecord
                         ->acceptedFileTypes(AllowedFormats::acceptedFileTypes())
                         ->helperText('Format sah: '.AllowedFormats::label().'.')
                         ->maxSize((int) config('diwan.max_upload_mb', 25) * 1024)
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-version-file'])
                         ->storeFileNamesIn('file_name')->required(),
                 ])
                 ->action(function (array $data) {
@@ -143,13 +167,18 @@ class ViewRecord extends BaseViewRecord
             Action::make('pindahFail')
                 ->label('Pindah Fail')
                 ->icon('heroicon-o-folder-arrow-down')
+                ->extraAttributes(['data-help-target' => 'record-move'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'record-move-submit']))
                 ->authorize('move')
                 ->visible(fn () => Auth::user()->canIn($mosque(), 'records.move') && $this->getRecord()->registry_file_id)
                 ->schema([
                     Select::make('registry_file_id')->label('Fail Baharu')
                         ->options(fn () => RegistryFile::query()->where('mosque_id', $mosque()->id)->where('status', 'terbuka')->get()->mapWithKeys(fn ($f) => [$f->id => "{$f->file_no} — {$f->title}"]))
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-move-file'])
                         ->searchable()->required(),
-                    Textarea::make('reason')->label('Sebab')->required(),
+                    Textarea::make('reason')->label('Sebab')->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'record-move-reason']),
                 ])
                 ->action(function (array $data) use ($mosque) {
                     $target = RegistryFile::query()->where('mosque_id', $mosque()->id)->findOrFail($data['registry_file_id']);

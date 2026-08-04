@@ -54,9 +54,15 @@ class TetapanMasjid extends Page
         $mosque = Filament::getTenant();
 
         return [
+            // F6-W1 (§7.2) — `screen.edit-tetapan-masjid`. Langkah 1 mesti menyasar PENCETUS,
+            // bukan medan modal: `help.js:630` mematikan tour dengan ralat palsu jika sasaran
+            // langkah pertama tidak wujud dalam 2.5s, dan modal belum dibuka ketika itu.
             Action::make('edit')
                 ->label('Sunting Tetapan')
                 ->icon('heroicon-o-pencil')
+                ->extraAttributes(['data-help-target' => 'mosque-settings-edit'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'mosque-settings-save']))
                 ->authorize(fn () => Auth::user()?->canIn($mosque, 'mosque.settings') ?? false)
                 ->fillForm(fn () => [
                     'phone' => $mosque->phone,
@@ -72,14 +78,17 @@ class TetapanMasjid extends Page
                     TextInput::make('phone')->label('Telefon Masjid')->nullable(),
                     TextInput::make('dpr_name')->label('Wakil Perlindungan Data — Nama')->nullable(),
                     TextInput::make('dpr_email')->label('Wakil Perlindungan Data — E-mel')->email()->nullable(),
-                    TextInput::make('wa_intake_keyword')->label('Kata Kunci Intake')->default('spdm'),
-                    Toggle::make('wa_intake_enabled')->label('Terima dokumen WhatsApp')->default(true),
+                    TextInput::make('wa_intake_keyword')->label('Kata Kunci Intake')->default('spdm')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'mosque-settings-keyword']),
+                    Toggle::make('wa_intake_enabled')->label('Terima dokumen WhatsApp')->default(true)
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'mosque-settings-channels']),
                     Toggle::make('mail_intake_enabled')->label('Terima dokumen melalui e-mel')->default(false),
                     TextInput::make('mail_intake_keyword')
                         ->label('Kata Kunci E-mel (pilihan)')
                         ->helperText('Kosongkan untuk terima SEMUA e-mel. Isi (cth. "spdm") jika mahu hanya e-mel dengan kata kunci itu pada subjek/isi diproses.'),
                     TagsInput::make('mail_intake_senders')
                         ->label('E-mel Pengirim Dipercayai (pilihan)')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'mosque-settings-senders'])
                         ->placeholder('admin@masjid.org')
                         ->helperText('Mana-mana pengirim boleh hantar dokumen (had '.(int) config('diwan.mail_intake.submission_cap', 10).'/jam). Alamat dalam senarai ini dipercayai (had lebih tinggi, '.(int) config('diwan.mail_intake.allowlist_cap', 100).'/jam). Masukkan alamat PENGHANTAR (cth. e-mel pengimbas), BUKAN alamat intake tenant.'),
                 ])

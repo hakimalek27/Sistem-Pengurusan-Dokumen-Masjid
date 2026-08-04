@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.04.1",
+  "catalog_version": "2026.08.04.2",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -5254,7 +5254,7 @@
     },
     {
       "id": "screen.jemput-ahli",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Jemput ahli",
       "summary": "Panduan skrin dan tindakan: Jemput ahli.",
@@ -5282,37 +5282,37 @@
       "steps": [
         {
           "id": "jemput-ahli.1",
-          "title": "Langkah 1",
-          "instruction": "Isi nama penuh.",
-          "target": "page-primary",
+          "title": "Buka borang jemputan",
+          "instruction": "Tekan Jemput Ahli, kemudian isi nama penuh ahli.",
+          "target": "members-invite",
           "wait_for_user": true
         },
         {
           "id": "jemput-ahli.2",
-          "title": "Langkah 2",
+          "title": "Nombor WhatsApp ahli",
           "instruction": "Isi nombor WhatsApp format 60...",
-          "target": "page-primary",
+          "target": "members-invite-phone",
           "wait_for_user": true
         },
         {
           "id": "jemput-ahli.3",
-          "title": "Langkah 3",
+          "title": "Masukkan e-mel",
           "instruction": "Masukkan e-mel jika tersedia.",
-          "target": "page-primary",
+          "target": "members-invite-email",
           "wait_for_user": true
         },
         {
           "id": "jemput-ahli.4",
-          "title": "Langkah 4",
+          "title": "Pilih peranan minimum",
           "instruction": "Pilih peranan minimum yang diperlukan.",
-          "target": "page-primary",
+          "target": "members-invite-role",
           "wait_for_user": true
         },
         {
           "id": "jemput-ahli.5",
-          "title": "Langkah 5",
+          "title": "Hantar jemputan",
           "instruction": "Hantar dan sahkan ahli menerima pautan log masuk.",
-          "target": "page-primary",
+          "target": "members-invite-submit",
           "wait_for_user": true
         }
       ],
@@ -5323,7 +5323,7 @@
     },
     {
       "id": "screen.sedia-senarai-pelupusan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Sedia senarai pelupusan",
       "summary": "Panduan skrin dan tindakan: Sedia senarai pelupusan.",
@@ -5351,37 +5351,37 @@
       "steps": [
         {
           "id": "sedia-senarai-pelupusan.1",
-          "title": "Langkah 1",
+          "title": "Semak rekod cukup tempoh",
           "instruction": "Semak setiap rekod sudah cukup tempoh.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "disposal-candidates",
+          "wait_for_user": false
         },
         {
           "id": "sedia-senarai-pelupusan.2",
-          "title": "Langkah 2",
+          "title": "Pastikan tiada legal hold",
           "instruction": "Pastikan rekod tidak mempunyai Legal Hold.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "disposal-warning",
+          "wait_for_user": false
         },
         {
           "id": "sedia-senarai-pelupusan.3",
-          "title": "Langkah 3",
-          "instruction": "Pilih satu per satu.",
-          "target": "page-primary",
+          "title": "Buka senarai semakan",
+          "instruction": "Tekan Sedia Senarai Semakan untuk memilih rekod satu per satu.",
+          "target": "disposal-prepare",
           "wait_for_user": true
         },
         {
           "id": "sedia-senarai-pelupusan.4",
-          "title": "Langkah 4",
-          "instruction": "Sahkan amaran pemadaman kekal.",
-          "target": "page-primary",
+          "title": "Pilih rekod satu per satu",
+          "instruction": "Pilih rekod satu per satu dan sahkan amaran pemadaman kekal.",
+          "target": "disposal-records",
           "wait_for_user": true
         },
         {
           "id": "sedia-senarai-pelupusan.5",
-          "title": "Langkah 5",
+          "title": "Serah kepada Pengerusi",
           "instruction": "Hantar batch untuk kelulusan Pengerusi.",
-          "target": "page-primary",
+          "target": "disposal-confirm",
           "wait_for_user": true
         }
       ],
@@ -5392,7 +5392,7 @@
     },
     {
       "id": "screen.edit-tetapan-masjid",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Edit tetapan masjid",
       "summary": "Panduan skrin dan tindakan: Edit tetapan masjid.",
@@ -5420,37 +5420,37 @@
       "steps": [
         {
           "id": "edit-tetapan-masjid.1",
-          "title": "Langkah 1",
-          "instruction": "Semak telefon dan wakil perlindungan data.",
-          "target": "page-primary",
+          "title": "Buka sunting tetapan",
+          "instruction": "Tekan Sunting Tetapan, kemudian semak telefon masjid dan wakil perlindungan data.",
+          "target": "mosque-settings-edit",
           "wait_for_user": true
         },
         {
           "id": "edit-tetapan-masjid.2",
-          "title": "Langkah 2",
+          "title": "Kata kunci intake",
           "instruction": "Tetapkan kata kunci intake.",
-          "target": "page-primary",
+          "target": "mosque-settings-keyword",
           "wait_for_user": true
         },
         {
           "id": "edit-tetapan-masjid.3",
-          "title": "Langkah 3",
+          "title": "Pilih saluran intake",
           "instruction": "Aktif/matikan WhatsApp atau e-mel.",
-          "target": "page-primary",
+          "target": "mosque-settings-channels",
           "wait_for_user": true
         },
         {
           "id": "edit-tetapan-masjid.4",
-          "title": "Langkah 4",
+          "title": "Isi e-mel pengirim dipercayai",
           "instruction": "Masukkan e-mel pengirim dipercayai, bukan alamat intake.",
-          "target": "page-primary",
+          "target": "mosque-settings-senders",
           "wait_for_user": true
         },
         {
           "id": "edit-tetapan-masjid.5",
-          "title": "Langkah 5",
+          "title": "Simpan tetapan",
           "instruction": "Simpan dan uji satu dokumen masuk.",
-          "target": "page-primary",
+          "target": "mosque-settings-save",
           "wait_for_user": true
         }
       ],
@@ -5461,7 +5461,7 @@
     },
     {
       "id": "screen.permohonan-storan-tambahan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Permohonan storan tambahan",
       "summary": "Panduan skrin dan tindakan: Permohonan storan tambahan.",
@@ -5490,31 +5490,31 @@
       "steps": [
         {
           "id": "permohonan-storan-tambahan.1",
-          "title": "Langkah 1",
+          "title": "Semak baki kuota",
           "instruction": "Semak baki kuota dan pesanan sedia ada.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "storage-usage",
+          "wait_for_user": false
         },
         {
           "id": "permohonan-storan-tambahan.2",
-          "title": "Langkah 2",
-          "instruction": "Masukkan bilangan blok 10 GB.",
-          "target": "page-primary",
+          "title": "Buka permohonan storan",
+          "instruction": "Tekan Tambah Storan, kemudian masukkan bilangan blok yang diperlukan.",
+          "target": "storage-add",
           "wait_for_user": true
         },
         {
           "id": "permohonan-storan-tambahan.3",
-          "title": "Langkah 3",
-          "instruction": "Sahkan jumlah/invois.",
-          "target": "page-primary",
+          "title": "Sahkan jumlah dan invois",
+          "instruction": "Sahkan jumlah dan invois sebelum menghantar pesanan.",
+          "target": "storage-submit",
           "wait_for_user": true
         },
         {
           "id": "permohonan-storan-tambahan.4",
-          "title": "Langkah 4",
+          "title": "Tunggu pengesahan bayaran",
           "instruction": "Tunggu pengesahan bayaran sebelum menganggap kuota aktif.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "storage-orders",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -5595,7 +5595,7 @@
     },
     {
       "id": "screen.tetapan-notifikasi",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Tetapan notifikasi",
       "summary": "Panduan skrin dan tindakan: Tetapan notifikasi.",
@@ -5636,31 +5636,31 @@
       "steps": [
         {
           "id": "tetapan-notifikasi.1",
-          "title": "Langkah 1",
-          "instruction": "Hidup/matikan E-mel, WhatsApp dan Telegram mengikut saluran sebenar.",
-          "target": "page-primary",
+          "title": "Buka tetapan notifikasi",
+          "instruction": "Tekan Tetapan Notifikasi, kemudian hidup/matikan E-mel, WhatsApp dan Telegram mengikut saluran sebenar.",
+          "target": "profil-notifikasi",
           "wait_for_user": true
         },
         {
           "id": "tetapan-notifikasi.2",
-          "title": "Langkah 2",
+          "title": "Simpan saluran",
           "instruction": "Simpan perubahan.",
-          "target": "page-primary",
+          "target": "profil-notifikasi-save",
           "wait_for_user": true
         },
         {
           "id": "tetapan-notifikasi.3",
-          "title": "Langkah 3",
+          "title": "Hantar notifikasi ujian",
           "instruction": "Gunakan Hantar Notifikasi Ujian.",
-          "target": "page-primary",
+          "target": "profil-ujian",
           "wait_for_user": true
         },
         {
           "id": "tetapan-notifikasi.4",
-          "title": "Langkah 4",
+          "title": "Betulkan maklumat akaun",
           "instruction": "Betulkan nombor/e-mel jika ujian tidak sampai.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "profil-akaun",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -5670,7 +5670,7 @@
     },
     {
       "id": "screen.tetapkan-kata-laluan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Tetapkan kata laluan",
       "summary": "Panduan skrin dan tindakan: Tetapkan kata laluan.",
@@ -5711,31 +5711,31 @@
       "steps": [
         {
           "id": "tetapkan-kata-laluan.1",
-          "title": "Langkah 1",
-          "instruction": "Cipta kata laluan unik yang panjang.",
-          "target": "page-primary",
+          "title": "Buka tetapan kata laluan",
+          "instruction": "Tekan Tetapkan Kata Laluan, kemudian cipta kata laluan unik yang panjang.",
+          "target": "profil-kata-laluan",
           "wait_for_user": true
         },
         {
           "id": "tetapkan-kata-laluan.2",
-          "title": "Langkah 2",
+          "title": "Sahkan kata laluan",
           "instruction": "Masukkan semula nilai sama.",
-          "target": "page-primary",
+          "target": "profil-password-confirm",
           "wait_for_user": true
         },
         {
           "id": "tetapkan-kata-laluan.3",
-          "title": "Langkah 3",
+          "title": "Simpan kata laluan",
           "instruction": "Simpan.",
-          "target": "page-primary",
+          "target": "profil-password-save",
           "wait_for_user": true
         },
         {
           "id": "tetapkan-kata-laluan.4",
-          "title": "Langkah 4",
+          "title": "Uji pada sesi baharu",
           "instruction": "Uji pada sesi baharu; jangan kongsi kata laluan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "page-content",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -5870,7 +5870,7 @@
     },
     {
       "id": "screen.cipta-nod-klasifikasi",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Cipta nod klasifikasi",
       "summary": "Panduan skrin dan tindakan: Cipta nod klasifikasi.",
@@ -5899,45 +5899,51 @@
       "steps": [
         {
           "id": "cipta-nod-klasifikasi.1",
-          "title": "Langkah 1",
+          "title": "Pilih nod induk",
           "instruction": "Pilih Nod Induk jika Aktiviti/Sub-Aktiviti.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-parent",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         },
         {
           "id": "cipta-nod-klasifikasi.2",
-          "title": "Langkah 2",
+          "title": "Peringkat hierarki",
           "instruction": "Pilih Peringkat.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-level",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         },
         {
           "id": "cipta-nod-klasifikasi.3",
-          "title": "Langkah 3",
+          "title": "Masukkan kod",
           "instruction": "Masukkan Kod mengikut hierarki.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-code",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         },
         {
           "id": "cipta-nod-klasifikasi.4",
-          "title": "Langkah 4",
+          "title": "Tajuk rasmi nod",
           "instruction": "Isi Tajuk rasmi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-title",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         },
         {
           "id": "cipta-nod-klasifikasi.5",
-          "title": "Langkah 5",
+          "title": "Tetapkan sensitiviti lalai",
           "instruction": "Tetapkan Sensitiviti Lalai, Aktif dan Susunan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-sensitivity",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         },
         {
           "id": "cipta-nod-klasifikasi.6",
-          "title": "Langkah 6",
+          "title": "Cipta nod",
           "instruction": "Cipta dan semak nod pada senarai.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "classnode-submit",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/classification-nodes/create"
         }
       ],
       "troubleshooting": [
@@ -5947,7 +5953,7 @@
     },
     {
       "id": "screen.buka-fail-baharu",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Buka fail baharu",
       "summary": "Panduan skrin dan tindakan: Buka fail baharu.",
@@ -5975,38 +5981,43 @@
       "steps": [
         {
           "id": "buka-fail-baharu.1",
-          "title": "Langkah 1",
+          "title": "Pilih nod klasifikasi",
           "instruction": "Pilih Nod Klasifikasi Aktiviti/Sub-Aktiviti.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "regfile-node",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/registry-files/create"
         },
         {
           "id": "buka-fail-baharu.2",
-          "title": "Langkah 2",
+          "title": "Tajuk fail",
           "instruction": "Isi Tajuk Fail khusus.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "regfile-title",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/registry-files/create"
         },
         {
           "id": "buka-fail-baharu.3",
-          "title": "Langkah 3",
+          "title": "Pilih medium rekod",
           "instruction": "Pilih Medium Elektronik/Hibrid/Fizikal.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "regfile-medium",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/registry-files/create"
         },
         {
           "id": "buka-fail-baharu.4",
-          "title": "Langkah 4",
+          "title": "Isi rujukan salinan fizikal",
           "instruction": "Bagi hibrid/fizikal, isi Rujukan Salinan Fizikal dan Lokasi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "regfile-physical",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/registry-files/create"
         },
         {
           "id": "buka-fail-baharu.5",
-          "title": "Langkah 5",
+          "title": "Cipta fail",
           "instruction": "Cipta dan semak nombor fail automatik.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "regfile-submit",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/registry-files/create"
         }
       ],
       "troubleshooting": [
@@ -6016,7 +6027,7 @@
     },
     {
       "id": "screen.cipta-peraturan-retensi",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Cipta peraturan retensi",
       "summary": "Panduan skrin dan tindakan: Cipta peraturan retensi.",
@@ -6044,38 +6055,43 @@
       "steps": [
         {
           "id": "cipta-peraturan-retensi.1",
-          "title": "Langkah 1",
+          "title": "Skop peraturan",
           "instruction": "Pilih Jenis Rekod atau Prefix Klasifikasi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "retention-record-type",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/retensi-peraturan/create"
         },
         {
           "id": "cipta-peraturan-retensi.2",
-          "title": "Langkah 2",
+          "title": "Tempoh simpanan",
           "instruction": "Isi Tahun Simpanan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "retention-years",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/retensi-peraturan/create"
         },
         {
           "id": "cipta-peraturan-retensi.3",
-          "title": "Langkah 3",
+          "title": "Pilih tindakan retensi",
           "instruction": "Pilih Tindakan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "retention-action",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/retensi-peraturan/create"
         },
         {
           "id": "cipta-peraturan-retensi.4",
-          "title": "Langkah 4",
+          "title": "Catatan dasar",
           "instruction": "Tambah Catatan dasar.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "retention-note",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/retensi-peraturan/create"
         },
         {
           "id": "cipta-peraturan-retensi.5",
-          "title": "Langkah 5",
+          "title": "Cipta peraturan",
           "instruction": "Cipta dan semak kesan pada halaman Retensi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "retention-submit",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/retensi-peraturan/create"
         }
       ],
       "troubleshooting": [
@@ -6085,7 +6101,7 @@
     },
     {
       "id": "screen.cipta-delegasi",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Cipta delegasi",
       "summary": "Panduan skrin dan tindakan: Cipta delegasi.",
@@ -6114,45 +6130,51 @@
       "steps": [
         {
           "id": "cipta-delegasi.1",
-          "title": "Langkah 1",
+          "title": "Pemberi kuasa",
           "instruction": "Pilih Principal.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-principal",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         },
         {
           "id": "cipta-delegasi.2",
-          "title": "Langkah 2",
+          "title": "Penerima kuasa",
           "instruction": "Pilih Delegate.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-delegate",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         },
         {
           "id": "cipta-delegasi.3",
-          "title": "Langkah 3",
+          "title": "Pilih tugas diwakilkan",
           "instruction": "Pilih tugas Minit/Kelulusan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-capabilities",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         },
         {
           "id": "cipta-delegasi.4",
-          "title": "Langkah 4",
+          "title": "Tetapkan tarikh mula",
           "instruction": "Tetapkan mula dan tamat.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-starts",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         },
         {
           "id": "cipta-delegasi.5",
-          "title": "Langkah 5",
+          "title": "Sebab delegasi",
           "instruction": "Nyatakan sebab.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-reason",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         },
         {
           "id": "cipta-delegasi.6",
-          "title": "Langkah 6",
+          "title": "Cipta delegasi",
           "instruction": "Cipta dan semak status Aktif.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "delegation-submit",
+          "wait_for_user": true,
+          "route": "/app/{tenant}/delegasi/create"
         }
       ],
       "troubleshooting": [
@@ -6253,7 +6275,7 @@
     },
     {
       "id": "screen.mohon-pembetulan-rekod",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Mohon pembetulan rekod",
       "summary": "Panduan skrin dan tindakan: Mohon pembetulan rekod.",
@@ -6295,38 +6317,39 @@
       "steps": [
         {
           "id": "mohon-pembetulan-rekod.1",
-          "title": "Langkah 1",
-          "instruction": "Nyatakan sebab salah tawan.",
-          "target": "page-primary",
+          "title": "Buka permohonan pembetulan",
+          "instruction": "Tekan Mohon Pembetulan pada rekod yang salah tawan.",
+          "target": "record-correction",
           "wait_for_user": true
         },
         {
           "id": "mohon-pembetulan-rekod.2",
-          "title": "Langkah 2",
+          "title": "Nyatakan sebab salah tawan",
           "instruction": "Semak semua nilai sedia ada.",
-          "target": "page-primary",
+          "target": "record-correction-reason",
           "wait_for_user": true
         },
         {
           "id": "mohon-pembetulan-rekod.3",
-          "title": "Langkah 3",
-          "instruction": "Ubah sekurang-kurangnya satu medan sebenar.",
-          "target": "page-primary",
+          "title": "Semak dan ubah nilai",
+          "instruction": "Semak semua nilai sedia ada dan ubah sekurang-kurangnya satu medan sebenar.",
+          "target": "record-correction-title",
           "wait_for_user": true
         },
         {
           "id": "mohon-pembetulan-rekod.4",
-          "title": "Langkah 4",
+          "title": "Hantar permohonan",
           "instruction": "Hantar untuk semakan.",
-          "target": "page-primary",
+          "target": "record-correction-submit",
           "wait_for_user": true
         },
         {
           "id": "mohon-pembetulan-rekod.5",
-          "title": "Langkah 5",
-          "instruction": "Pantau keputusan di Pembetulan Rekod.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Pantau keputusan",
+          "instruction": "Pantau keputusan permohonan di halaman Pembetulan Rekod.",
+          "target": "page-content",
+          "wait_for_user": false,
+          "route": "/app/{tenant}/pembetulan-rekod"
         }
       ],
       "troubleshooting": [
@@ -7309,7 +7332,7 @@
     },
     {
       "id": "screen.hasil-carian-lanjutan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Hasil carian lanjutan",
       "summary": "Panduan skrin dan tindakan: Hasil carian lanjutan.",
@@ -7351,37 +7374,37 @@
       "steps": [
         {
           "id": "hasil-carian-lanjutan.1",
-          "title": "Langkah 1",
+          "title": "Jumlah hasil",
           "instruction": "Semak jumlah hasil.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "search-results",
+          "wait_for_user": false
         },
         {
           "id": "hasil-carian-lanjutan.2",
-          "title": "Langkah 2",
+          "title": "Semak metadata hasil",
           "instruction": "Pastikan metadata hasil sepadan dengan kriteria.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "search-result-item",
+          "wait_for_user": false
         },
         {
           "id": "hasil-carian-lanjutan.3",
-          "title": "Langkah 3",
+          "title": "Buka rekod",
           "instruction": "Buka rekod untuk pengesahan.",
-          "target": "page-primary",
+          "target": "search-result-open",
           "wait_for_user": true
         },
         {
           "id": "hasil-carian-lanjutan.4",
-          "title": "Langkah 4",
+          "title": "Tambah ke kegemaran",
           "instruction": "Tambah bintang jika kerap dirujuk.",
-          "target": "page-primary",
+          "target": "search-favourite",
           "wait_for_user": true
         },
         {
           "id": "hasil-carian-lanjutan.5",
-          "title": "Langkah 5",
+          "title": "Ubah kriteria carian",
           "instruction": "Ubah kriteria jika hasil terlalu luas.",
-          "target": "page-primary",
+          "target": "search-filters",
           "wait_for_user": true
         }
       ],

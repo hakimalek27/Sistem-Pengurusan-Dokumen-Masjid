@@ -44,15 +44,20 @@ class PenggunaanStoran extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W1 (§7.2) — `screen.permohonan-storan-tambahan`.
             Action::make('tambahStoran')
                 ->label('Tambah Storan')
                 ->icon('heroicon-o-plus')
+                ->extraAttributes(['data-help-target' => 'storage-add'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'storage-submit']))
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'storage.order') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'storage.order'))
                 ->schema([
                     Hidden::make('idempotency_key')->default(fn () => (string) Str::uuid()),
                     TextInput::make('blocks')
                         ->label('Bilangan Blok ('.app(BillingService::class)->blockGb().' GB setiap satu)')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'storage-blocks'])
                         ->numeric()->minValue(1)->default(1)->required(),
                 ])
                 ->action(function (array $data) {

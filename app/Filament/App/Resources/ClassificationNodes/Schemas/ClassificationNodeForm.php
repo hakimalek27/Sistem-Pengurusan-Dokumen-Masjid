@@ -20,11 +20,16 @@ class ClassificationNodeForm
                 // Nota Filament v4: skop query MESTI dihantar sebagai argumen ke-3
                 // relationship() (modifyQueryUsing) — TIADA method berantai ->modifyQueryUsing()
                 // pada Select (BadMethodCallException). Global scope BelongsToMosque juga aktif.
+                // F6-W1 (§7.2) — sasaran tour spesifik. Prefix `classnode-` SENGAJA bukan
+                // `classification-`: `help.js:204` memaksa mana-mana sasaran `classification-*`
+                // naik ke `.fi-modal-window` terdekat (peraturan wizard peti masuk), yang salah
+                // untuk borang halaman penuh ini.
                 Select::make('parent_id')
                     ->label('Nod Induk')
                     ->relationship('parent', 'title', fn ($query) => $query->where('mosque_id', Filament::getTenant()?->id))
                     ->searchable()
                     ->disabled(fn (?ClassificationNode $record) => $record?->isUsed() ?? false)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'classnode-parent'])
                     ->nullable(),
                 Select::make('level')
                     ->label('Peringkat')
@@ -34,19 +39,23 @@ class ClassificationNodeForm
                         'sub_aktiviti' => 'Sub-Aktiviti',
                     ])
                     ->disabled(fn (?ClassificationNode $record) => $record?->isUsed() ?? false)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'classnode-level'])
                     ->required(),
                 TextInput::make('code')
                     ->label('Kod')
                     ->helperText('cth 500 (fungsi), 500-1 (aktiviti), 500-1/2 (sub)')
                     ->disabled(fn (?ClassificationNode $record) => $record?->isUsed() ?? false)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'classnode-code'])
                     ->required(),
                 TextInput::make('title')
                     ->label('Tajuk')
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'classnode-title'])
                     ->required(),
                 Select::make('default_sensitivity')
                     ->label('Sensitiviti Lalai')
                     ->options(collect(Sensitivity::cases())->mapWithKeys(fn (Sensitivity $c) => [$c->value => $c->getLabel()]))
                     ->default('dalaman')
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'classnode-sensitivity'])
                     ->required(),
                 Toggle::make('is_active')
                     ->label('Aktif')

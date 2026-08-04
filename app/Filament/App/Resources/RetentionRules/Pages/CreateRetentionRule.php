@@ -27,7 +27,10 @@ class CreateRetentionRule extends CreateRecord
      */
     protected function getCreateFormAction(): Action
     {
-        return $this->confirmAutoPadam(parent::getCreateFormAction());
+        // F6-W1 — sasaran langkah akhir `screen.cipta-peraturan-retensi`. Dihias SELEPAS
+        // confirmAutoPadam supaya brek F4 kekal utuh.
+        return $this->confirmAutoPadam(parent::getCreateFormAction())
+            ->extraAttributes(['data-help-target' => 'retention-submit']);
     }
 
     /** "Cipta & tambah lagi" ialah laluan simpan KEDUA — brek yang sama diperlukan. */

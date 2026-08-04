@@ -1,7 +1,9 @@
 <x-filament-panels::page>
     @php($barColor = $percent >= 100 ? 'bg-red-500' : ($percent >= 90 ? 'bg-orange-500' : ($percent >= 80 ? 'bg-yellow-500' : 'bg-emerald-500')))
 
-    <x-filament::section>
+    {{-- F6-W1 (§7.2) — sasaran tour `screen.permohonan-storan-tambahan`. Seksyen ini
+         sentiasa dirender (juga bila tiada data), jadi sasaran wujud dalam keadaan LALAI. --}}
+    <x-filament::section data-help-target="storage-usage">
         <x-slot name="heading">Tolok Storan</x-slot>
         <div class="flex items-center justify-between mb-2">
             <span class="text-sm text-gray-500">{{ $usedGb }} GB / {{ $quotaGb }} GB</span>
@@ -38,7 +40,7 @@
         @endif
     </x-filament::section>
 
-    <x-filament::section>
+    <x-filament::section data-help-target="storage-orders">
         <x-slot name="heading">Sejarah Pesanan & Invois</x-slot>
         @if ($orders->isEmpty())
             <p class="text-gray-500">Tiada pesanan storan.</p>

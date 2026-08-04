@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W1 (§7.2) — sasaran tour: panel ini memaparkan e-mel/WhatsApp yang perlu
+         dibetulkan jika notifikasi ujian tidak sampai. Sentiasa dirender. --}}
+    <x-filament::section data-help-target="profil-akaun">
         <x-slot name="heading">Maklumat Akaun</x-slot>
 
         <dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">

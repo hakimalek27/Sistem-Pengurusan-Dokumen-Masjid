@@ -23,7 +23,8 @@
         @endif
     </div>
 
-    <form wire:submit="search" class="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+    {{-- F6-W1 (§7.2) — sasaran tour `screen.hasil-carian-lanjutan`. --}}
+    <form wire:submit="search" class="grid gap-3 md:grid-cols-2 xl:grid-cols-4" data-help-target="search-filters">
         <label class="text-sm font-medium md:col-span-2 xl:col-span-4">Teks
             <input type="search" wire:model="query" placeholder="Tajuk, rujukan atau kandungan OCR" class="fi-input mt-1 block w-full">
         </label>
@@ -56,24 +57,31 @@
         <div class="md:col-span-2 xl:col-span-4"><x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Cari</x-filament::button></div>
     </form>
 
-    @if ($searched)
-        <div>
-            <p class="mb-2 text-sm text-gray-500">{{ count($results) }} hasil ditemui.</p>
-            <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 dark:divide-white/10 dark:border-white/10">
-                @forelse ($results as $r)
-                    <article class="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-white/5">
-                        <a href="{{ url('/r/'.$r['ulid']) }}" class="min-w-0 flex-1">
-                            <div class="font-medium">{{ $r['title'] }}</div>
-                            <div class="text-sm text-gray-500">{{ $r['ref'] }} · {{ $r['type'] }} · {{ $r['sensitivity'] }} · {{ $r['date'] }}</div>
-                            <div class="text-sm text-gray-500">{{ $r['sender'] }} · {{ $r['source'] }}</div>
-                            @if (! empty($r['snippet']))<div class="mt-1 text-sm text-gray-600 dark:text-gray-300">{!! $r['snippet'] !!}</div>@endif
-                        </a>
-                        <button type="button" wire:click="toggleFavourite({{ $r['id'] }})" class="h-9 w-9 shrink-0" title="{{ $r['favourite'] ? 'Buang kegemaran' : 'Tambah kegemaran' }}" aria-label="{{ $r['favourite'] ? 'Buang kegemaran' : 'Tambah kegemaran' }}">{{ $r['favourite'] ? '★' : '☆' }}</button>
-                    </article>
-                @empty
-                    <p class="p-3 text-gray-500">Tiada rekod sepadan.</p>
-                @endforelse
-            </div>
+    {{-- Bekas hasil dirender TANPA SYARAT (dahulu `@if ($searched)`): sasaran tour mesti
+         wujud dalam keadaan LALAI halaman, jika tidak tour jatuh ke ralat palsu pada
+         langkah 1 (help.js:630). Corak sama seperti F6-W0 pada halaman Kegemaran: item
+         pertama DAN mesej kosong membawa sasaran. --}}
+    <div data-help-target="search-results">
+        <p class="mb-2 text-sm text-gray-500">
+            {{ $searched ? count($results).' hasil ditemui.' : 'Jalankan carian untuk melihat hasil.' }}
+        </p>
+        <div class="divide-y divide-gray-100 rounded-lg border border-gray-200 dark:divide-white/10 dark:border-white/10">
+            @forelse ($results as $r)
+                <article class="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-white/5" @if ($loop->first) data-help-target="search-result-item" @endif>
+                    <a href="{{ url('/r/'.$r['ulid']) }}" class="min-w-0 flex-1" @if ($loop->first) data-help-target="search-result-open" @endif>
+                        <div class="font-medium">{{ $r['title'] }}</div>
+                        <div class="text-sm text-gray-500">{{ $r['ref'] }} · {{ $r['type'] }} · {{ $r['sensitivity'] }} · {{ $r['date'] }}</div>
+                        <div class="text-sm text-gray-500">{{ $r['sender'] }} · {{ $r['source'] }}</div>
+                        @if (! empty($r['snippet']))<div class="mt-1 text-sm text-gray-600 dark:text-gray-300">{!! $r['snippet'] !!}</div>@endif
+                    </a>
+                    <button type="button" wire:click="toggleFavourite({{ $r['id'] }})" class="h-9 w-9 shrink-0" title="{{ $r['favourite'] ? 'Buang kegemaran' : 'Tambah kegemaran' }}" aria-label="{{ $r['favourite'] ? 'Buang kegemaran' : 'Tambah kegemaran' }}" @if ($loop->first) data-help-target="search-favourite" @endif>{{ $r['favourite'] ? '★' : '☆' }}</button>
+                </article>
+            @empty
+                <article class="p-3 text-sm text-gray-500" data-help-target="search-result-item">
+                    <span data-help-target="search-result-open">{{ $searched ? 'Tiada rekod sepadan — longgarkan kriteria di atas.' : 'Setiap hasil memaparkan tajuk, rujukan, jenis, sensitiviti dan tarikh.' }}</span>
+                    <span data-help-target="search-favourite" class="ms-1">Bintang (★) pada setiap hasil menyimpannya ke Kegemaran.</span>
+                </article>
+            @endforelse
         </div>
-    @endif
+    </div>
 </x-filament-panels::page>

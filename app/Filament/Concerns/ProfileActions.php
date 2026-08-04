@@ -23,9 +23,15 @@ trait ProfileActions
     protected function profileActions(): array
     {
         return [
+            // F6-W1 (§7.2) — sasaran tour `screen.tetapan-notifikasi` dan
+            // `screen.tetapkan-kata-laluan`. Trait ini dikongsi panel app + admin; sasaran
+            // kekal UNIK kerana hanya satu panel dirender pada satu-satu halaman.
             Action::make('notifikasi')
                 ->label('Tetapan Notifikasi')
                 ->icon('heroicon-o-bell')
+                ->extraAttributes(['data-help-target' => 'profil-notifikasi'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'profil-notifikasi-save']))
                 ->authorize(fn () => Auth::check())
                 ->fillForm(fn () => Auth::user()->only(['notify_email', 'notify_whatsapp', 'notify_telegram']))
                 ->schema([
@@ -41,6 +47,7 @@ trait ProfileActions
             Action::make('ujian')
                 ->label('Hantar Notifikasi Ujian')
                 ->icon('heroicon-o-paper-airplane')
+                ->extraAttributes(['data-help-target' => 'profil-ujian'])
                 ->authorize(fn () => Auth::check())
                 ->action(function () {
                     Auth::user()->notify(new TestNotification);
@@ -85,6 +92,9 @@ trait ProfileActions
             Action::make('kata_laluan')
                 ->label('Tetapkan Kata Laluan')
                 ->icon('heroicon-o-key')
+                ->extraAttributes(['data-help-target' => 'profil-kata-laluan'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'profil-password-save']))
                 ->authorize(fn () => Auth::check())
                 ->modalDescription('Tetapkan kata laluan untuk log masuk tanpa pautan e-mel. Pautan log masuk tetap boleh digunakan.')
                 ->schema([
@@ -94,12 +104,14 @@ trait ProfileActions
                         ->revealable()
                         ->required()
                         ->rule(Password::default())
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'profil-password'])
                         ->same('password_confirmation'),
                     TextInput::make('password_confirmation')
                         ->label('Sahkan Kata Laluan')
                         ->password()
                         ->revealable()
                         ->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'profil-password-confirm'])
                         ->dehydrated(false),
                 ])
                 ->action(function (array $data) {

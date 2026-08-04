@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources\RegistryFiles\Pages;
 use App\Filament\App\Resources\RegistryFiles\RegistryFileResource;
 use App\Models\ClassificationNode;
 use App\Services\RecordNumberingService;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Auth;
 class CreateRegistryFile extends CreateRecord
 {
     protected static string $resource = RegistryFileResource::class;
+
+    /** F6-W1 — sasaran langkah akhir `screen.buka-fail-baharu`; `parent::` dikekalkan. */
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()
+            ->extraAttributes(['data-help-target' => 'regfile-submit']);
+    }
 
     /** Buka fail menggunakan RecordNumberingService (§5.15) — jana file_no & transaction_no. */
     protected function handleRecordCreation(array $data): Model

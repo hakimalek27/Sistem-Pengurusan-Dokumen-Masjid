@@ -351,5 +351,5 @@ test('§6.5 #6 layout tetamu: tepat satu <main>, jenama & nav di LUAR <main>', f
 test('§6.5 #5 catalog_version dibumbung bila kandungan katalog berubah', function () {
     // Indeks carian bantuan disegerakkan mengikut versi; kandungan berubah tanpa bump
     // bermakna `diwan:sync-help-index` boleh melangkau perubahan.
-    expect(helpCatalog()['catalog_version'])->toBeGreaterThanOrEqual('2026.08.04.1');
+    expect(helpCatalog()['catalog_version'])->toBeGreaterThanOrEqual('2026.08.04.2');
 });

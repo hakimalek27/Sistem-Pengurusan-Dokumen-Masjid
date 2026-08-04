@@ -131,17 +131,25 @@ class AhliPeranan extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W1 (§7.2) — `screen.jemput-ahli`.
             Action::make('jemput')
                 ->label('Jemput Ahli')
                 ->icon('heroicon-o-user-plus')
+                ->extraAttributes(['data-help-target' => 'members-invite'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'members-invite-submit']))
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'users.manage') ?? false)
                 ->schema([
-                    TextInput::make('name')->label('Nama')->required(),
+                    TextInput::make('name')->label('Nama')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'members-invite-name'])->required(),
                     TextInput::make('phone_wa')->label('No. Telefon (WhatsApp)')->tel()->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'members-invite-phone'])
                         ->helperText('Ahli log masuk & terima notifikasi dengan nombor ini.'),
                     TextInput::make('email')->label('E-mel (pilihan)')->email()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'members-invite-email'])
                         ->helperText('Pilihan — untuk notifikasi & pautan log masuk e-mel.'),
-                    Select::make('role')->label('Peranan')->options(Roles::options())->required(),
+                    Select::make('role')->label('Peranan')->options(Roles::options())
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'members-invite-role'])->required(),
                 ])
                 ->action(function (array $data) {
                     try {

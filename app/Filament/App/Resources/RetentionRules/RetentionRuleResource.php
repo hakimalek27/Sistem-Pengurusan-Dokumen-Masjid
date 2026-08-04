@@ -48,13 +48,18 @@ class RetentionRuleResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
+            // F6-W1 (§7.2) — sasaran tour `screen.cipta-peraturan-retensi`.
             Select::make('record_type')
                 ->label('Jenis Rekod (kosong = ikut prefix)')
                 ->options(collect(config('record_types'))->mapWithKeys(fn ($t, $k) => [$k => $t['label']]))
+                ->extraFieldWrapperAttributes(['data-help-target' => 'retention-record-type'])
                 ->nullable(),
-            TextInput::make('classification_prefix')->label('Prefix Klasifikasi (cth 200)')->nullable(),
-            TextInput::make('retain_years')->label('Tahun Simpanan (kosong = kekal)')->numeric()->nullable(),
+            TextInput::make('classification_prefix')->label('Prefix Klasifikasi (cth 200)')
+                ->extraFieldWrapperAttributes(['data-help-target' => 'retention-prefix'])->nullable(),
+            TextInput::make('retain_years')->label('Tahun Simpanan (kosong = kekal)')->numeric()
+                ->extraFieldWrapperAttributes(['data-help-target' => 'retention-years'])->nullable(),
             Select::make('action')->label('Tindakan')
+                ->extraFieldWrapperAttributes(['data-help-target' => 'retention-action'])
                 ->options(collect(RetentionAction::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()]))
                 // F4 §5.2 (L1): lalai ialah `semak`, bukan `auto_padam`. Medan yang sama
                 // memaparkan helperText AMARAN tentang auto_padam — memberi nilai berbahaya
@@ -62,7 +67,8 @@ class RetentionRuleResource extends Resource
                 ->default('semak')
                 ->helperText('AMARAN: menukar jenis kekal kepada auto_padam membenarkan pemadaman automatik.')
                 ->required(),
-            TextInput::make('note')->label('Catatan')->nullable(),
+            TextInput::make('note')->label('Catatan')
+                ->extraFieldWrapperAttributes(['data-help-target' => 'retention-note'])->nullable(),
         ]);
     }
 

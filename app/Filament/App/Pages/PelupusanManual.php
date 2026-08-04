@@ -87,9 +87,13 @@ class PelupusanManual extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W1 (§7.2) — `screen.sedia-senarai-pelupusan`.
             Action::make('sediaBatch')
                 ->label('Sedia Senarai Semakan')
                 ->icon('heroicon-o-clipboard-document-check')
+                ->extraAttributes(['data-help-target' => 'disposal-prepare'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'disposal-confirm']))
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'disposal.prepare') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'disposal.prepare'))
                 ->requiresConfirmation()
@@ -97,6 +101,7 @@ class PelupusanManual extends Page
                 ->schema([
                     CheckboxList::make('record_ids')
                         ->label('Pilih Rekod Satu per Satu')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'disposal-records'])
                         ->options(fn () => $this->candidates()->mapWithKeys(fn ($record) => [
                             $record->id => ($record->registryFile?->file_no ?? '—').'('.$record->enclosure_no.') — '.$record->title,
                         ]))

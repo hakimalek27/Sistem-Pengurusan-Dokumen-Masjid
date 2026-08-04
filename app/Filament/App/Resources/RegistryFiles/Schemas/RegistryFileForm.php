@@ -27,14 +27,21 @@ class RegistryFileForm
                         ->toArray())
                     ->getOptionLabelUsing(fn ($value) => optional(ClassificationNode::find($value))->title)
                     ->searchable()
+                    // F6-W1 (§7.2) — sasaran tour `screen.buka-fail-baharu`.
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'regfile-node'])
                     ->required(),
                 TextInput::make('title')
                     ->label('Tajuk Fail')
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'regfile-title'])
                     ->required()
                     ->maxLength(255),
-                Select::make('medium')->label('Medium Rekod')->options(['elektronik' => 'Elektronik', 'hibrid' => 'Hibrid', 'fizikal' => 'Fizikal'])->default('elektronik')->required(),
-                TextInput::make('physical_reference')->label('Rujukan Salinan Fizikal')->maxLength(255),
-                TextInput::make('physical_location')->label('Lokasi Fizikal')->maxLength(255),
+                Select::make('medium')->label('Medium Rekod')->options(['elektronik' => 'Elektronik', 'hibrid' => 'Hibrid', 'fizikal' => 'Fizikal'])->default('elektronik')
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'regfile-medium'])
+                    ->required(),
+                TextInput::make('physical_reference')->label('Rujukan Salinan Fizikal')->maxLength(255)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'regfile-physical']),
+                TextInput::make('physical_location')->label('Lokasi Fizikal')->maxLength(255)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'regfile-location']),
             ]);
     }
 }
