@@ -10,15 +10,51 @@ Deploy 6 disekat: CI run **30924969914** masih berjalan semasa sesi ditutup.
 `794fc6d` → **`2f7bbbb`** (tutup gate: 2 kecacatan harness) → **`f64fb1c`** (G3 pada urutan
 DIREKOD) → **`4f364c9`** (kecacatan produk: sorotan fallback tidak lagi melekat).
 
-### ⚠️ SATU-SATUNYA PERKARA TERTUNGGAK
-Sahkan CI `30924969914` (atau larian terbaru bagi `4f364c9`) **7/7 hijau**, kemudian **Deploy 6**.
-```
-gh run list --branch main --limit 1 --json databaseId,headSha,status,conclusion
-```
-Jika merah: baca `gh run view <id> --log-failed`, dan **muat turun artifak** —
-`guidance-server-logs-screen-failure` + `guidance-traces-screen-failure`. Mesej kegagalan gate
-kini melaporkan `perekam sedia=`, bilangan entri, dan **jejak langkah penuh** (cth
-`3:page-content → 4:page-content`) — itu memberi punca dalam satu larian.
+### 🔴 PERKARA TERTUNGGAK — 3 guide `screen` gagal di CI (TEMPATAN SEMUA HIJAU)
+
+**CI run `30925942728` (`abaeaa2`) = failure.** 3 daripada 4 check WAJIB hijau:
+`PostgreSQL, Redis, Meili, OCR and tests` ✔ · `Docker app image` ✔ · `Docker web image` ✔ ·
+`guidance-e2e (workflow)` ✔ · `guidance-e2e (tenant-admin-public)` ✔ ·
+**`guidance-e2e (screen)` ✘ (4 failed / 26 passed, 10.2m) → `guidance-e2e-gate` ✘.**
+
+⚠️ **CI run `30924969914` (`4f364c9`) = `cancelled`, BUKAN failure** — saya push komit dokumen
+`abaeaa2` semasa ia berjalan dan concurrency group membatalkannya. **Jangan push dokumen semasa
+CI kod berjalan.**
+
+**TEMPATAN semuanya hijau pada kod SAMA** (jadi ini kegagalan khusus-CI):
+shard `screen` **30/30** bersih + **30/30 bawah beban CPU** · `workflow` **15/15** ·
+`tenant-admin-public` **41/41** · **AGREGATOR: GATE LULUS 83/473/190 (SET)** exit 0.
+
+**Tiga kegagalan CI dengan jejak yang DIREKOD (mula dari sini, jangan siasat semula):**
+| Guide | Bukti |
+|---|---|
+| `persediaan-berpandu#4` | `perekam sedia=true, entri=8`, jejak: `1:onboarding-start → 1:onboarding-phone → 2:onboarding-phone → 2:onboarding-wa-source → 3:onboarding-wa-source → 3:- → 3:page-content → 4:page-content` |
+| `mohon-pembetulan-rekod#2` | `entri=1`, jejak: `1:record-correction` — tour TIDAK pernah tinggalkan langkah 1 |
+| `ganti-versi-rekod#2` | `entri=1`, jejak: `1:record-version` — sama |
+
+**Yang sudah DIUKUR dan boleh dipercayai (jangan ulang kerja ini):**
+- Pagar ulangan **BETUL**: `jangkaModal=true` untuk kedua-dua guide modal (state registri
+  mengandungi `modal:`).
+- **Hipotesis "`modalTerbuka()` memadan modal tertutup" DITOLAK oleh ukuran**: pada
+  `/app/mam/records/3`, sebelum modal dibuka `jumlahModalWindow=0` / `isVisible()=false`;
+  selepas dibuka `1` / `true`. Jadi ulangan TIDAK disekat oleh pagar itu.
+- Maka klik itu hilang **BERULANG** di CI (asal + 2 ulangan), bukan sekali — bukan perlumbaan
+  ringkas.
+- `persediaan-berpandu#4`: pembaikan produk `rehighlightWhenTargetArrives` **tidak** menyorot
+  semula di sini; jejak kekal `4:page-content`. Belum diketahui sama ada `waitForStep` gagal
+  (sasaran benar-benar tiada) atau `refresh()` menyelesaikan kembali kepada fallback.
+
+**Langkah seterusnya yang dicadangkan (instrumentasi dahulu, JANGAN teka):**
+1. Luaskan perekam supaya setiap entri turut merakam **kewujudan + keterlihatan sasaran langkah
+   itu** (`document.querySelector('[data-help-target=X]')` + rect). Itu membezakan "sasaran
+   tiada" daripada "resolusi gagal walaupun sasaran ada" dalam SATU larian CI.
+2. Untuk dua guide modal: rakam bilangan elemen padanan `[data-help-target=record-correction]`
+   dan sama ada ia `disabled`/tertanggal semasa klik dihantar. `entri=1` bermakna popover tidak
+   pernah berubah — periksa juga sama ada CTA benar-benar diklik (tour minimize berlaku?).
+3. Muat turun `guidance-traces-screen-failure` untuk melihat turutan tindakan sebenar
+   (guna trace untuk TURUTAN, bukan identiti kegagalan).
+
+**Deploy 6 kekal DISEKAT** sehingga `guidance-e2e-gate` hijau. Jangan deploy atas gate merah.
 
 ### Bukti sedia ada (semua exit 0)
 | Ujian | Keputusan |
