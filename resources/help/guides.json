@@ -6184,7 +6184,7 @@
     },
     {
       "id": "screen.butiran-rekod-dan-tindakan-mengikut-kebenaran",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Butiran rekod dan tindakan mengikut kebenaran",
       "summary": "Panduan skrin dan tindakan: Butiran rekod dan tindakan mengikut kebenaran.",
@@ -6227,45 +6227,45 @@
       "steps": [
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.1",
-          "title": "Langkah 1",
+          "title": "Tab Maklumat",
           "instruction": "Semak tab Maklumat dan asal dokumen.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "record-tab-info",
+          "wait_for_user": false
         },
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.2",
-          "title": "Langkah 2",
+          "title": "Tab Teks OCR",
           "instruction": "Semak Teks OCR.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "record-tab-ocr",
+          "wait_for_user": false
         },
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.3",
-          "title": "Langkah 3",
+          "title": "Tab Lampiran & Versi",
           "instruction": "Buka Lampiran & Versi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "record-tab-attachments",
+          "wait_for_user": false
         },
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.4",
-          "title": "Langkah 4",
-          "instruction": "Semak Minit dan Kelulusan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Tab Minit dan Kelulusan",
+          "instruction": "Semak tab Minit dan tab Kelulusan untuk edaran serta keputusan berkaitan rekod ini.",
+          "target": "record-tab-minit",
+          "wait_for_user": false
         },
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.5",
-          "title": "Langkah 5",
+          "title": "Tab Audit",
           "instruction": "Semak Audit.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "record-tab-audit",
+          "wait_for_user": false
         },
         {
           "id": "butiran-rekod-dan-tindakan-mengikut-kebenaran.6",
-          "title": "Langkah 6",
-          "instruction": "Gunakan hanya butang yang role anda paparkan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Butang mengikut peranan",
+          "instruction": "Gunakan hanya butang yang dipaparkan untuk peranan anda; butang lain memang tidak dirender.",
+          "target": "page-actions",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -6359,11 +6359,11 @@
     },
     {
       "id": "screen.edarkan-minit",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Edarkan minit",
       "summary": "Panduan skrin dan tindakan: Edarkan minit.",
-      "route": "/app/{tenant}/minit-saya",
+      "route": "/app/{tenant}/records",
       "roles": [
         "admin_masjid",
         "pengerusi",
@@ -6399,37 +6399,37 @@
       "steps": [
         {
           "id": "edarkan-minit.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih sekurang-kurangnya seorang Penerima Tindakan.",
-          "target": "page-primary",
+          "title": "Buka edaran minit",
+          "instruction": "Tekan Edarkan Minit dan pilih sekurang-kurangnya seorang Penerima Tindakan.",
+          "target": "record-minit",
           "wait_for_user": true
         },
         {
           "id": "edarkan-minit.2",
-          "title": "Langkah 2",
+          "title": "Penerima makluman",
           "instruction": "Tambah s.k. jika hanya perlu makluman.",
-          "target": "page-primary",
+          "target": "record-minit-cc",
           "wait_for_user": true
         },
         {
           "id": "edarkan-minit.3",
-          "title": "Langkah 3",
+          "title": "Arahan minit",
           "instruction": "Tulis arahan yang boleh dilaksanakan.",
-          "target": "page-primary",
+          "target": "record-minit-body",
           "wait_for_user": true
         },
         {
           "id": "edarkan-minit.4",
-          "title": "Langkah 4",
+          "title": "Keutamaan",
           "instruction": "Pilih Biasa/Segera/Kritikal.",
-          "target": "page-primary",
+          "target": "record-minit-priority",
           "wait_for_user": true
         },
         {
           "id": "edarkan-minit.5",
-          "title": "Langkah 5",
+          "title": "Hantar edaran",
           "instruction": "Hantar dan semak penerima muncul pada tab Minit.",
-          "target": "page-primary",
+          "target": "record-minit-submit",
           "wait_for_user": true
         }
       ],
@@ -6440,11 +6440,11 @@
     },
     {
       "id": "screen.mohon-kelulusan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Mohon kelulusan",
       "summary": "Panduan skrin dan tindakan: Mohon kelulusan.",
-      "route": "/app/{tenant}/kelulusan",
+      "route": "/app/{tenant}/records",
       "roles": [
         "admin_masjid",
         "setiausaha",
@@ -6472,38 +6472,38 @@
       "steps": [
         {
           "id": "mohon-kelulusan.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih pelulus yang dipaparkan.",
-          "target": "page-primary",
+          "title": "Buka permohonan kelulusan",
+          "instruction": "Tekan Mohon Kelulusan pada rekod ini.",
+          "target": "record-approval",
           "wait_for_user": true
         },
         {
           "id": "mohon-kelulusan.2",
-          "title": "Langkah 2",
-          "instruction": "Tulis nota konteks.",
-          "target": "page-primary",
+          "title": "Pelulus",
+          "instruction": "Pilih pelulus yang dipaparkan.",
+          "target": "record-approval-approver",
           "wait_for_user": true
         },
         {
           "id": "mohon-kelulusan.3",
-          "title": "Langkah 3",
-          "instruction": "Hantar.",
-          "target": "page-primary",
+          "title": "Nota konteks",
+          "instruction": "Tulis nota konteks untuk membantu keputusan.",
+          "target": "record-approval-note",
           "wait_for_user": true
         },
         {
           "id": "mohon-kelulusan.4",
-          "title": "Langkah 4",
-          "instruction": "Pantau status pada tab Kelulusan.",
-          "target": "page-primary",
+          "title": "Serah untuk keputusan",
+          "instruction": "Hantar permohonan kelulusan.",
+          "target": "record-approval-submit",
           "wait_for_user": true
         },
         {
           "id": "mohon-kelulusan.5",
-          "title": "Langkah 5",
-          "instruction": "Jangan hantar permohonan pendua.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Status kelulusan",
+          "instruction": "Pantau status pada tab Kelulusan; jangan hantar permohonan pendua.",
+          "target": "record-tab-approval",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -6513,7 +6513,7 @@
     },
     {
       "id": "screen.ganti-versi-rekod",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Ganti versi rekod",
       "summary": "Panduan skrin dan tindakan: Ganti versi rekod.",
@@ -6542,31 +6542,31 @@
       "steps": [
         {
           "id": "ganti-versi-rekod.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih fail versi baharu yang sah.",
-          "target": "page-primary",
+          "title": "Buka ganti versi",
+          "instruction": "Tekan Ganti Versi, kemudian pilih fail versi baharu yang sah.",
+          "target": "record-version",
           "wait_for_user": true
         },
         {
           "id": "ganti-versi-rekod.2",
-          "title": "Langkah 2",
-          "instruction": "Semak nama dan format.",
-          "target": "page-primary",
+          "title": "Fail versi baharu",
+          "instruction": "Semak nama dan format fail sebelum menghantar.",
+          "target": "record-version-file",
           "wait_for_user": true
         },
         {
           "id": "ganti-versi-rekod.3",
-          "title": "Langkah 3",
-          "instruction": "Simpan.",
-          "target": "page-primary",
+          "title": "Simpan versi",
+          "instruction": "Simpan untuk mencipta versi baharu.",
+          "target": "record-version-submit",
           "wait_for_user": true
         },
         {
           "id": "ganti-versi-rekod.4",
-          "title": "Langkah 4",
+          "title": "Jejak versi",
           "instruction": "Sahkan rekod baharu menjadi versi aktif dan versi lama kekal dalam jejak.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "record-tab-attachments",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -6576,7 +6576,7 @@
     },
     {
       "id": "screen.pindah-rekod-ke-fail-lain",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Pindah rekod ke fail lain",
       "summary": "Panduan skrin dan tindakan: Pindah rekod ke fail lain.",
@@ -6604,38 +6604,38 @@
       "steps": [
         {
           "id": "pindah-rekod-ke-fail-lain.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih Fail Baharu dalam tenant sama.",
-          "target": "page-primary",
+          "title": "Buka pindah fail",
+          "instruction": "Tekan Pindah Fail pada rekod yang hendak dipindahkan.",
+          "target": "record-move",
           "wait_for_user": true
         },
         {
           "id": "pindah-rekod-ke-fail-lain.2",
-          "title": "Langkah 2",
-          "instruction": "Semak sensitiviti fail sasaran.",
-          "target": "page-primary",
+          "title": "Fail sasaran",
+          "instruction": "Pilih Fail Baharu dalam tenant sama dan semak sensitiviti fail sasaran.",
+          "target": "record-move-file",
           "wait_for_user": true
         },
         {
           "id": "pindah-rekod-ke-fail-lain.3",
-          "title": "Langkah 3",
-          "instruction": "Nyatakan sebab.",
-          "target": "page-primary",
+          "title": "Sebab pindah",
+          "instruction": "Nyatakan sebab pemindahan untuk jejak audit.",
+          "target": "record-move-reason",
           "wait_for_user": true
         },
         {
           "id": "pindah-rekod-ke-fail-lain.4",
-          "title": "Langkah 4",
+          "title": "Sahkan pemindahan",
           "instruction": "Sahkan pindah.",
-          "target": "page-primary",
+          "target": "record-move-submit",
           "wait_for_user": true
         },
         {
           "id": "pindah-rekod-ke-fail-lain.5",
-          "title": "Langkah 5",
-          "instruction": "Semak nombor kandungan dan audit.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Nombor kandungan dan audit",
+          "instruction": "Semak nombor kandungan baharu dan catatan audit selepas pemindahan.",
+          "target": "record-tab-audit",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [

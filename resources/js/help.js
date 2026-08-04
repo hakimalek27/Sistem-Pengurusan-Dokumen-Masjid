@@ -70,6 +70,10 @@ function decorateTargets() {
     const targets = [
         ['main', 'page-content'],
         ['.fi-sidebar', 'sidebar'],
+        // F6-W1 (§7.2 langkah 2) — kumpulan butang tindakan header ialah elemen VENDOR
+        // tanpa cangkuk PHP untuk atribut (Filament merender bekasnya sendiri), jadi
+        // pemetaan JS ialah mekanisme yang pelan benarkan. Satu sasaran, satu elemen.
+        ['.fi-header-actions-ctn', 'page-actions'],
     ];
 
     for (const [selector, target] of targets) {

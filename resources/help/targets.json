@@ -740,6 +740,18 @@
       "since": "2026-08-04"
     },
     {
+      "id": "page-actions",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "resources/js/help.js:decorateTargets",
+      "selector_hint": ".fi-header-actions-ctn[data-help-target=\"page-actions\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "-",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
       "id": "record-approval",
       "family": "screen",
       "route": "/app/{tenant}/records",
@@ -748,7 +760,7 @@
       "viewport": "both",
       "state": "detail:records",
       "permission": "approvals.request",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -760,7 +772,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Mohon Kelulusan terbuka",
       "permission": "approvals.request",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -772,7 +784,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Mohon Kelulusan terbuka",
       "permission": "approvals.request",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -784,7 +796,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Mohon Kelulusan terbuka",
       "permission": "approvals.request",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -844,7 +856,7 @@
       "viewport": "both",
       "state": "detail:records",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -868,7 +880,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Edarkan Minit terbuka",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -880,7 +892,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Edarkan Minit terbuka",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -892,7 +904,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Edarkan Minit terbuka",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -904,7 +916,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Edarkan Minit terbuka",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -916,7 +928,7 @@
       "viewport": "both",
       "state": "detail:records",
       "permission": "records.move",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -928,7 +940,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Pindah Fail terbuka",
       "permission": "records.move",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -940,7 +952,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Pindah Fail terbuka",
       "permission": "records.move",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -952,7 +964,79 @@
       "viewport": "both",
       "state": "detail:records + modal:Pindah Fail terbuka",
       "permission": "records.move",
-      "status": "reserved",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-approval",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:93",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-approval\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-attachments",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:57",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-attachments\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-audit",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:112",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-audit\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-info",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:25",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-info\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-minit",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:65",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-minit\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
+      "since": "2026-08-04"
+    },
+    {
+      "id": "record-tab-ocr",
+      "family": "screen",
+      "route": "/app/{tenant}/records",
+      "owner_source": "app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:49",
+      "selector_hint": "button.fi-tabs-item[data-help-target=\"record-tab-ocr\"]",
+      "viewport": "both",
+      "state": "detail:records",
+      "permission": "records.view",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -964,7 +1048,7 @@
       "viewport": "both",
       "state": "detail:records",
       "permission": "records.supersede",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -976,7 +1060,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Ganti Versi terbuka",
       "permission": "records.supersede",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -988,7 +1072,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Ganti Versi terbuka",
       "permission": "records.supersede",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {

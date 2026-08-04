@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (77) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (100) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -61,10 +61,33 @@
 | `profil-password-confirm` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:114` | both | modal:Tetapkan Kata Laluan terbuka | - |
 | `profil-password-save` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:97` | both | modal:Tetapkan Kata Laluan terbuka | - |
 | `profil-ujian` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:50` | both | - | - |
+| `page-actions` | screen | `/app/{tenant}/records` | `resources/js/help.js:decorateTargets` | both | detail:records | - |
+| `record-approval` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:116` | both | detail:records | approvals.request |
+| `record-approval-approver` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:123` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
+| `record-approval-note` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:125` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
+| `record-approval-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:118` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
 | `record-correction` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:62` | both | detail:records - halaman butiran rekod dibuka | records.view |
 | `record-correction-reason` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:68` | both | detail:records + modal:Mohon Pembetulan terbuka | records.view |
 | `record-correction-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:64` | both | detail:records + modal:Mohon Pembetulan terbuka | records.view |
 | `record-correction-title` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:70` | both | detail:records + modal:Mohon Pembetulan terbuka | records.view |
+| `record-minit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:92` | both | detail:records | minit.create |
+| `record-minit-body` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:103` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
+| `record-minit-cc` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:101` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
+| `record-minit-priority` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:105` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
+| `record-minit-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:94` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
+| `record-move` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:170` | both | detail:records | records.move |
+| `record-move-file` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:178` | both | detail:records + modal:Pindah Fail terbuka | records.move |
+| `record-move-reason` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:181` | both | detail:records + modal:Pindah Fail terbuka | records.move |
+| `record-move-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:172` | both | detail:records + modal:Pindah Fail terbuka | records.move |
+| `record-tab-approval` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:93` | both | detail:records | records.view |
+| `record-tab-attachments` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:57` | both | detail:records | records.view |
+| `record-tab-audit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:112` | both | detail:records | records.view |
+| `record-tab-info` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:25` | both | detail:records | records.view |
+| `record-tab-minit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:65` | both | detail:records | records.view |
+| `record-tab-ocr` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Schemas/RecordInfolist.php:49` | both | detail:records | records.view |
+| `record-version` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:136` | both | detail:records | records.supersede |
+| `record-version-file` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:146` | both | detail:records + modal:Ganti Versi terbuka | records.supersede |
+| `record-version-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:138` | both | detail:records + modal:Ganti Versi terbuka | records.supersede |
 | `regfile-medium` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:39` | both | - | files.manage |
 | `regfile-node` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:31` | both | - | files.manage |
 | `regfile-physical` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:42` | both | - | files.manage |
@@ -87,7 +110,7 @@
 | `login-identity` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:16` | both | borang belum dihantar | public |
 | `login-submit` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:19` | both | borang belum dihantar | public |
 
-## Sasaran RIZAB (32) — wujud dlm DOM, belum dirujuk katalog
+## Sasaran RIZAB (16) — wujud dlm DOM, belum dirujuk katalog
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -100,23 +123,7 @@
 | `storage-blocks` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:60` | both | modal:Tambah Storan terbuka | storage.order |
 | `inbox-classification-modal` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:87` | both | modal:klasifikasi terbuka | inbox.classify |
 | `profil-password` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:107` | both | modal:Tetapkan Kata Laluan terbuka | - |
-| `record-approval` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:116` | both | detail:records | approvals.request |
-| `record-approval-approver` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:123` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
-| `record-approval-note` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:125` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
-| `record-approval-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:118` | both | detail:records + modal:Mohon Kelulusan terbuka | approvals.request |
-| `record-minit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:92` | both | detail:records | minit.create |
 | `record-minit-action` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:99` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `record-minit-body` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:103` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `record-minit-cc` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:101` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `record-minit-priority` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:105` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `record-minit-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:94` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `record-move` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:170` | both | detail:records | records.move |
-| `record-move-file` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:178` | both | detail:records + modal:Pindah Fail terbuka | records.move |
-| `record-move-reason` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:181` | both | detail:records + modal:Pindah Fail terbuka | records.move |
-| `record-move-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:172` | both | detail:records + modal:Pindah Fail terbuka | records.move |
-| `record-version` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:136` | both | detail:records | records.supersede |
-| `record-version-file` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:146` | both | detail:records + modal:Ganti Versi terbuka | records.supersede |
-| `record-version-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:138` | both | detail:records + modal:Ganti Versi terbuka | records.supersede |
 | `regfile-location` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:44` | both | - | files.manage |
 | `retention-prefix` | screen | `/app/{tenant}/retensi-peraturan/create` | `app/Filament/App/Resources/RetentionRules/RetentionRuleResource.php:58` | both | - | retention.manage |
 | `what-next` | tenant|admin | `/app/{tenant}|/admin` | `resources/views/filament/widgets/what-next.blade.php:2` | both | - | - |
@@ -133,23 +140,7 @@
 - `storage-blocks`: - (sejak 2026-08-04)
 - `inbox-classification-modal`: Wujud dlm DOM; sasaran rizab langkah orientasi (C12 — jangan guna dua kali berturut) (sejak 2026-08-02)
 - `profil-password`: - (sejak 2026-08-04)
-- `record-approval`: - (sejak 2026-08-04)
-- `record-approval-approver`: - (sejak 2026-08-04)
-- `record-approval-note`: - (sejak 2026-08-04)
-- `record-approval-submit`: - (sejak 2026-08-04)
-- `record-minit`: - (sejak 2026-08-04)
 - `record-minit-action`: - (sejak 2026-08-04)
-- `record-minit-body`: - (sejak 2026-08-04)
-- `record-minit-cc`: - (sejak 2026-08-04)
-- `record-minit-priority`: - (sejak 2026-08-04)
-- `record-minit-submit`: - (sejak 2026-08-04)
-- `record-move`: - (sejak 2026-08-04)
-- `record-move-file`: - (sejak 2026-08-04)
-- `record-move-reason`: - (sejak 2026-08-04)
-- `record-move-submit`: - (sejak 2026-08-04)
-- `record-version`: - (sejak 2026-08-04)
-- `record-version-file`: - (sejak 2026-08-04)
-- `record-version-submit`: - (sejak 2026-08-04)
 - `regfile-location`: - (sejak 2026-08-04)
 - `retention-prefix`: - (sejak 2026-08-04)
 - `what-next`: Widget dashboard; calon sasaran F6 W5 (sejak 2026-08-02)

@@ -22,6 +22,7 @@ class RecordInfolist
                     ->columnSpanFull()
                     ->tabs([
                         Tab::make('Maklumat')
+                            ->extraAttributes(['data-help-target' => 'record-tab-info'])
                             ->schema([
                                 TextEntry::make('title')->label('Tajuk'),
                                 TextEntry::make('record_type')->label('Jenis')
@@ -45,6 +46,7 @@ class RecordInfolist
                             ])
                             ->columns(2),
                         Tab::make('Teks OCR')
+                            ->extraAttributes(['data-help-target' => 'record-tab-ocr'])
                             ->schema([
                                 TextEntry::make('ocr_status')->label('Status OCR')->badge(),
                                 TextEntry::make('ocr_text')->label('Teks Diekstrak')
@@ -52,6 +54,7 @@ class RecordInfolist
                                     ->columnSpanFull(),
                             ]),
                         Tab::make('Lampiran & Versi')
+                            ->extraAttributes(['data-help-target' => 'record-tab-attachments'])
                             ->schema([
                                 TextEntry::make('_lampiran')->hiddenLabel()
                                     ->state(fn (Record $record) => self::mediaLinks($record))
@@ -59,6 +62,7 @@ class RecordInfolist
                                     ->columnSpanFull(),
                             ]),
                         Tab::make('Minit')
+                            ->extraAttributes(['data-help-target' => 'record-tab-minit'])
                             ->schema([
                                 RepeatableEntry::make('minits')
                                     ->hiddenLabel()
@@ -86,6 +90,7 @@ class RecordInfolist
                                     ->columns(3),
                             ]),
                         Tab::make('Kelulusan')
+                            ->extraAttributes(['data-help-target' => 'record-tab-approval'])
                             ->schema([
                                 RepeatableEntry::make('approvals')
                                     ->hiddenLabel()
@@ -104,6 +109,7 @@ class RecordInfolist
                                     ->columns(3),
                             ]),
                         Tab::make('Audit')
+                            ->extraAttributes(['data-help-target' => 'record-tab-audit'])
                             ->schema([
                                 RepeatableEntry::make('activities')
                                     ->hiddenLabel()
