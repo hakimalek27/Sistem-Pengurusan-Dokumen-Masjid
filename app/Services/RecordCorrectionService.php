@@ -151,6 +151,15 @@ class RecordCorrectionService
             return $value->format('Y-m-d');
         }
 
+        // BUG-B: `Record::direction` dan `sensitivity` di-cast kepada enum, jadi nilai SEMASA
+        // rekod tiba di sini sebagai objek. `(string) $enum` ialah Error maut — punca sebenar
+        // 500 pada produksi (log 2026-07-22 23:55, 3 kali). Nilai borang datang sebagai
+        // 'masuk'/'sulit', jadi `->value` ialah SATU-SATUNYA perbandingan yang betul: apa-apa
+        // lain (cth nama kelas) akan menjadikan setiap permohonan "perubahan" palsu.
+        if ($value instanceof \BackedEnum) {
+            return (string) $value->value;
+        }
+
         return is_array($value) ? json_encode($value, JSON_UNESCAPED_SLASHES) : (string) $value;
     }
 }
