@@ -83,6 +83,28 @@ manifest (set, bukan kiraan). Laporan: storage/app/plan-f6/coverage-gate.json
 EXIT_AGREGATOR=0
 ```
 
+### Bukti pembaikan kecacatan produk — pada keadaan yang MENGHASILKANnya
+
+```
+$ (14 pembakar CPU) GUIDANCE_SHARD=screen npx playwright test … --project=guidance-full
+  SEBELUM pembaikan (`f64fb1c`):  5 failed, 25 passed   — ujian 15/17/22/24/25
+  SELEPAS  pembaikan (`4f364c9`): 30 passed (31.6m)  EXIT_LOAD2=0
+  Sifar `Maximum execution time` dalam log pelayan.
+
+$ GUIDANCE_SHARD=screen … (bersih, `4f364c9`)
+  30 passed (12.3m)  EXIT=0
+  shard-screen.json → 29 guide / 151 langkah / 111 tindakan · blocked 0 · complete true
+
+$ npx playwright test --project=unit          (penjaga F1/F2)
+  17 passed (2.3s)   EXIT_UNIT=0
+```
+
+⚠️ `explore.spec.js` (crawl 9-peranan) gagal **TEMPATAN** dengan tamat masa ujian 180s.
+**Diuji dengan `git stash`** — gagal SAMA dengan DAN tanpa pembaikan produk (3.3m kedua-duanya),
+jadi ia **sudah ada** dan bukan disebabkan perubahan ini; ia hijau di CI untuk `f64fb1c`. Punca:
+pelayan dev Windows satu-benang pada crawl terpanjang suite. Tanpa eksperimen stash itu, saya
+mungkin menyalahkan perubahan sendiri dan membuang satu pusingan lagi.
+
 ### Suite, lint, build
 
 ```

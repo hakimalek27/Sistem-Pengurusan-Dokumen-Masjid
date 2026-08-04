@@ -1,6 +1,119 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — F6-W1 PENUTUPAN GATE (4 Ogos 2026, petang) ⭐ TERKINI
+## SESI — F6-W1 GATE + KECACATAN PRODUK DIBAIKI (4 Ogos 2026, malam) ⭐ TERKINI
+
+**`local = origin = 4f364c9`. PRODUKSI KEKAL `bc7cccc` (Deploy 5) — BELUM DEPLOY.**
+Deploy 6 disekat: CI run **30924969914** masih berjalan semasa sesi ditutup.
+📄 `Audit Review Round Robin/bukti/plan-f6-w1/LAPORAN-FASA-6-W1.md` (laporan penuh).
+
+### Rantaian komit sesi ini
+`794fc6d` → **`2f7bbbb`** (tutup gate: 2 kecacatan harness) → **`f64fb1c`** (G3 pada urutan
+DIREKOD) → **`4f364c9`** (kecacatan produk: sorotan fallback tidak lagi melekat).
+
+### ⚠️ SATU-SATUNYA PERKARA TERTUNGGAK
+Sahkan CI `30924969914` (atau larian terbaru bagi `4f364c9`) **7/7 hijau**, kemudian **Deploy 6**.
+```
+gh run list --branch main --limit 1 --json databaseId,headSha,status,conclusion
+```
+Jika merah: baca `gh run view <id> --log-failed`, dan **muat turun artifak** —
+`guidance-server-logs-screen-failure` + `guidance-traces-screen-failure`. Mesej kegagalan gate
+kini melaporkan `perekam sedia=`, bilangan entri, dan **jejak langkah penuh** (cth
+`3:page-content → 4:page-content`) — itu memberi punca dalam satu larian.
+
+### Bukti sedia ada (semua exit 0)
+| Ujian | Keputusan |
+|---|---|
+| Shard `screen` bersih | **30/30** (12.3m) → 29 guide/151 langkah/111 tindakan, blocked 0, complete true |
+| Shard `screen` **bawah beban CPU** | **30/30** (31.6m) — sebelum pembaikan produk: **5 GAGAL** |
+| Shard `workflow` (kod lama) | 15/15 → 14/158/75 · di CI `f64fb1c`: **lulus** |
+| Shard `tenant-admin-public` (kod lama) | 41/41 → 40/164/4 · di CI `f64fb1c`: **lulus** |
+| Agregator (kod lama) | **GATE LULUS 83/473/190** (perbandingan SET) |
+| Penjaga F1/F2 `unit` | 17/17 |
+| Pest | **515 lulus / 1 skip** · pint passed · build OK |
+
+⚠️ Shard `workflow`/`t-a-p` tempatan masih daripada kod SEBELUM `4f364c9`; larian tempatan
+untuknya belum tamat. CI `4f364c9` ialah pengesahan berkuasa.
+
+### KECACATAN PRODUK DIBAIKI (`4f364c9`) — lencongan F7 ditarik ke hadapan, dinyatakan
+`element: () => resolveStepElement(step) || page-content` dipanggil Driver.js **sekali** per
+peralihan. Jika morph Livewire / langkah wizard belum dirender menjadikan sasaran tiada pada saat
+itu, tour menyorot **seluruh halaman** dan **tidak pernah** menyelesaikan semula. Diukur dua
+kali: bawah beban tempatan (5 guide) dan **secara TETAP di CI** (jejak
+`3:onboarding-wa-source → 3:- → 3:page-content → 4:page-content`).
+Fix `rehighlightWhenTargetArrives()` dalam `resources/js/help.js`: tunggu sasaran diisytiharkan
+(bounded 4s via `waitForStep`) → sorot semula; **sekali per indeks** (elak gelung `refresh()`);
+`rehighlightIndex` direset dalam KEDUA-DUA `onDestroyed`. **Sync F2 (§0.3) tidak disentuh.**
+
+### DUA kecacatan harness (`2f7bbbb`)
+1. **`filter({hasText: <RegExp>})` menguji teks MENTAH** — whitespace tidak dinormalisasi.
+   `/^Seterusnya$/` → **count=0** pada butang Blade. Diukur pada DOM aplikasi DAN sintetik.
+   Fix: `getByRole(..., {exact:true})`.
+2. **`dispatchEvent` sebagai sandaran `.catch()` = bom masa 30s** — banner lenyap kerana tour
+   BERJAYA maju; klik gagal 5.1s, `dispatchEvent` melempar 30s kemudian. Fix: tempoh pendek +
+   ditelan (ketiadaan banner = KEJAYAAN). Menyelesaikan **7** kegagalan sekali gus.
+
+### PUNCA CI dan pembaikannya (`f64fb1c`)
+- **Bentuk A** wizard terlanjur maju (`n` betul, `sasaranAktif` false) → had **SATU** kemajuan
+  wizard per peralihan (invarian struktur: 1 langkah guide = 1 langkah wizard). Masa tidak diubah.
+- **Bentuk B** klik tindakan HILANG (4 guide) → bukti `serve-ci.log`: **sifar permintaan selama
+  94 saat**. Fix: ulang `dispatchEvent` SAMA sehingga ada kesan, dipagar `state` `modal:` registri,
+  dan SABAR ~4s (ulangan terlalu awal me-`mountAction` dua kali).
+- **Punca mendasari:** gate mengundi keadaan **SEKETIKA** (`n === i`). Sync F2 memang memaju
+  sebaik sasaran muncul → tour boleh melintasi langkah dalam milisaat (diukur: harness tunggu
+  `n:4`, tour sudah `n:5`). Kini **perekam dalam halaman** merakam setiap peralihan dan assertion
+  bertanya "adakah langkah *i* PERNAH berlaku dengan sasaran betul" — kalis-perlumbaan dan
+  **lebih kuat**, bukan lebih longgar. Harness juga tidak menekan CTA jika tour sudah melintasi.
+
+### ⛔ EMPAT pendekatan DIUJI dan DITOLAK (semua memerahkan guide hijau) — jangan ulang
+| Cubaan | Kesan | Sebab |
+|---|---|---|
+| Klik sebenar ganti `dispatchEvent` | 3 guide merah | `help.js:663-664` `overlayClickBehavior:'close'` → klik koordinat **menutup tour** (pelajaran F0 yang saya langgar) |
+| `waitFor(8s)` ganti tidur 1500ms | 2 guide merah | kesan diukur; mekanisme tidak dituntut terbukti; kod DIBUANG |
+| Ulang tindakan setiap lelaran | 1 guide merah | `mountAction` dua kali / tutup modal yang sedang dibuka |
+| Tangguh kecacatan produk ke F7 | 1 pusingan CI terbuang | "beban saya tidak realistik" — SALAH; CI membuktikan kecacatan sama secara tetap |
+
+🔑 **Pola:** empat cubaan pertama melaras **cara** harness berinteraksi → semuanya gagal. Yang
+berjaya mengubah **apa yang diperhatikan** (perekam) atau **apa yang dianggap benar tentang
+struktur** (had 1 kemajuan wizard). Dalam sistem dengan koreografi terbukti, laras **pengamatan**,
+bukan interaksi.
+
+### Gotcha alat baharu (kekal berguna)
+- **`php -d … artisan serve` TIDAK hantar `-d` kepada anak.** Disahkan pada vendor:
+  `ServeCommand::serverCommand()` = `[php_binary(),'-S',host:port,server.php]`, cwd=`public_path()`.
+  Anak kekal had php.ini 30s → `PHP Fatal error: Maximum execution time … ClassLoader.php:429` →
+  `page.goto` tunggu `load` yang tak datang → tamat masa 60s. **Lancar TERUS:**
+  `cd public && php -d max_execution_time=0 -S 127.0.0.1:8092 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php`
+- **`addInitScript` berjalan SEBELUM DOM** → `observe(document.documentElement,…)` boleh melempar
+  dan memusnahkan pemasangan **senyap** (log wujud tapi kosong, kelihatan seperti "langkah tidak
+  berlaku"). Pasang observer selepas DOM sedia + **laporkan status perekam dalam mesej kegagalan**.
+- **`failures: []` dalam shard JSON BUKAN "tiada kegagalan"** — Playwright mulakan semula worker
+  selepas ujian gagal → keadaan modul direset. Baca **`complete`**.
+- **`explore.spec.js` (crawl 9-peranan) gagal TEMPATAN** dengan tamat masa 180s. Diuji `git stash`:
+  gagal **sama** dengan/tanpa perubahan (3.3m) = **sudah ada**, hijau di CI. Pelayan dev Windows
+  satu-benang. Jangan salahkan perubahan sendiri tanpa eksperimen stash.
+- **Jangan salurkan larian ujian melalui `tail`** — `EXIT=0` jadi milik `tail`.
+- **Jangan diagnosis daripada `trace.zip` bila laporan reporter ada** — penghurai sendiri memberi
+  saya mesej ralat **guide yang salah** dan saya memburu punca yang tidak wujud.
+
+### Deploy 6 — sedia jalan, baseline 5A sudah dirakam
+| Bukti | Nilai produksi sekarang |
+|---|---|
+| #1 git | `bc7cccc` |
+| #2a `diwan-app` | `2831c4c83616…` |
+| #2b `diwan-web` | `6e8e3f5a9fb4…` |
+| #4a aset | `assets/help-Da8KtLOe.js` + `assets/help-CrH0eDM1.css` |
+| #4b manifest sha256 | `4aa3b2e5…` (app = nginx ✔) |
+
+**Ramalan yang boleh gagal:** selepas deploy, #4a mesti jadi **`assets/help-Dyf0E2-J.js`** dengan
+**`help-CrH0eDM1.css` TIDAK berubah** (hanya `help.js` disentuh). Aset berubah → **rebuild
+`app` DAN `nginx`** (jangan ulang kesilapan UI pecah). Selepas deploy:
+`diwan:sync-help-index --delete` (catalog_version `2026.08.04.2`), `diwan:smoke` 9/9,
+pengesahan visual Chrome. **Tiada migrasi baharu** sejak `bc7cccc`.
+⛔ `DemoSeeder` berubah — **jangan** jalankan seeder di produksi.
+
+---
+
+## SESI — F6-W1 penutupan gate: pusingan awal (4 Ogos 2026, petang)
 
 **Produksi kekal `bc7cccc` (Deploy 5).** Kerja produk W1 tidak berubah sejak `d29399f`;
 sesi ini menutup **gate**, yang sebelum ini 28/29.
