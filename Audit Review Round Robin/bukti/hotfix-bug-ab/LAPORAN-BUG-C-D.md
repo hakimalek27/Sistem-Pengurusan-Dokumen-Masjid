@@ -16,6 +16,18 @@ Berada di : https://bakwim.my/app/mamad     (Papan pemuka - Diwan)
 href logo : https://bakwim.my/app/smoke     ← tenant BERBEZA
 ```
 
+**Pengukuran KAWALAN — mengapa tiada siapa menyedarinya:**
+
+| Berada di | href logo | Keputusan |
+|---|---|---|
+| `/app/smoke` (tenant **lalai** platform) | `/app/smoke` | nampak betul — pepijat **halimunan** |
+| `/app/mamad` | `/app/smoke` | tenant salah |
+| `/app/mamad/peti-masuk` | `/app/smoke` | tenant salah, walaupun sedang bekerja dalam halaman |
+
+Kawalan ini penting: ia membuktikan puncanya "tenant lalai", bukan "logo rosak". Sesiapa yang
+menguji pada masjid pertama platform akan melihat kelakuan yang betul dan menyimpulkan tiada
+masalah.
+
 ### Punca
 
 Logo topbar dan sidebar merender `filament()->getHomeUrl()`
@@ -73,25 +85,41 @@ daripada tidak memaparkannya.
 ## Output verifikasi SEBENAR
 
 ```
-Tests:    6 passed (14 assertions)      tests/Feature/PanelNavigationTest.php
+Tests:    8 passed (19 assertions)      tests/Feature/PanelNavigationTest.php
 ```
+
+Ujian **#7/#8** mengassert pada **laluan RENDER**, bukan objek config: HTML `/app/mam` yang
+dihantar pelayan MENGANDUNGI "Panel Pentadbir" + `href` `/admin` untuk superadmin, dan **TIDAK**
+mengandunginya untuk ahli masjid. (Sebab tambahan: pertanyaan DOM pertama saya pada produksi
+memulangkan senarai kosong untuk menu pengguna — nama kelas Filament 4 berbeza daripada tekaan
+saya, bukan kerana item dirender pelanggan-sisi. Ujian render ini menutup jurang itu.)
 
 ### Bukti PENJAGA — ujian menangkap kelakuan lama
 
-`git stash` pada `AppPanelProvider.php` sahaja:
+`AppPanelProvider.php` sahaja dipulihkan kepada `aaf381a` (kod yang SEDANG berjalan di produksi):
 
 ```
-⨯ #1 BUG-C: home panel masjid ikut tenant SEMASA, bukan tenant lalai
-    Failed asserting that two strings are identical.
-    -'/app/man'
-    +'http://127.0.0.1:8080/app/mam'          ← tenant LALAI, sedangkan semasa ialah `man`
-⨯ #2, ⨯ #3   (bentuk URL vendor)
-⨯ #5 BUG-D: item "Panel Pentadbir" tiada
+Tests:    4 failed, 4 passed (14 assertions)
+
+⨯ #1 home panel masjid ikut tenant SEMASA          ← PEPIJAT: dapat …/app/mam, semasa `man`
+⨯ #3 tiada tenant → pemilih tenant                 ← vendor tetap memilih tenant lalai
+⨯ #5 item "Panel Pentadbir" (objek menu)
+⨯ #7 item "Panel Pentadbir" (HTML dirender)
+✓ #2 ahli satu masjid mendapat masjidnya sendiri
 ✓ #4 panel /admin tidak terjejas
-✓ #6 ahli masjid tidak nampak item itu
+✓ #6 / ✓ #8 ahli masjid tidak nampak item itu
 ```
 
-Baris `+'…/app/mam'` **ialah** pepijat itu, dirakam hitam-putih.
+⭐ **#2 LULUS dengan kod lama, dan itu BETUL** — untuk ahli satu-masjid, tenant lalai **ialah**
+tenant semasa, jadi vendor berkelakuan betul untuk mereka. Bukti penjaga ini dengan sendirinya
+menunjukkan mengapa pepijat itu halimunan selama ini, dan mengesahkan pembaikan **tidak**
+mengubah kelakuan bagi majoriti pengguna — hanya bagi superadmin dan ahli berbilang-masjid.
+
+⚠️ Versi PERTAMA ujian ini mengassert kesamaan rentetan penuh (`toBe('/app/mam')`), jadi #2/#3
+gagal atas **bentuk URL** vendor (mutlak vs relatif) — bunyi yang menyembunyikan isyarat. Selepas
+assertion ditukar kepada `toEndWith` (bebas-hos) dan `homeUrl()` memakai `url()`, kegagalan yang
+tinggal semuanya bermakna. Penjaga yang gagal atas sebab yang salah tetap merah — tetapi ia tidak
+membuktikan apa-apa.
 
 ## Nota
 

@@ -113,3 +113,26 @@ it('#6 BUG-D: ahli masjid TIDAK nampak item itu (ia 403 untuk mereka)', function
     expect($ahli->canAccessPanel(Filament::getPanel('admin')))->toBeFalse()
         ->and(Filament::getPanel('app')->getUserMenuItems())->not->toHaveKey('panelPentadbir');
 });
+
+it('#7 BUG-D pada laluan RENDER: item muncul dalam HTML panel masjid', function () {
+    $mam = makeMosque('MAM', 'mam');
+    $mam->update(['settings' => array_merge($mam->settings ?? [], ['onboarding_done' => now()->toDateTimeString()])]);
+    $super = bugCSuperadmin();
+
+    // Pelajaran ujian #4: objek config boleh betul sedangkan render salah. Assert HTML.
+    $html = $this->actingAs($super)->get('/app/mam')->assertOk()->getContent();
+
+    expect(str_contains($html, 'Panel Pentadbir'))->toBeTrue('item menu pengguna tidak dirender')
+        ->and(str_contains($html, 'href="/admin"') || str_contains($html, 'href="'.url('/admin').'"'))
+        ->toBeTrue('pautan /admin tidak dirender');
+});
+
+it('#8 BUG-D: ahli masjid tidak dapat item itu dalam HTML', function () {
+    $mam = makeMosque('MAM', 'mam');
+    $mam->update(['settings' => array_merge($mam->settings ?? [], ['onboarding_done' => now()->toDateTimeString()])]);
+    $ahli = makeMember($mam, 'admin_masjid', 'am-render@ujian.test');
+
+    $html = $this->actingAs($ahli)->get('/app/mam')->assertOk()->getContent();
+
+    expect(str_contains($html, 'Panel Pentadbir'))->toBeFalse('ahli masjid tidak sepatutnya nampak pautan /admin');
+});

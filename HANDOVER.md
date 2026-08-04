@@ -1,6 +1,108 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ✅ DEPLOY 6 (F6-W1) LIVE — `cc9f0c7` (5 Ogos 2026) ⭐ TERKINI
+## 🔧 HOTFIX BUG-A..D — laporan pemilik + 3 pepijat ditemui sendiri (5 Ogos 2026) ⭐ TERKINI
+
+**Komit `4fd64cf`** (5 komit: `4cd973e` BUG-A · `b5e846b` BUG-B · `8c72e2f` BUG-C+D ·
+`8a9f6cb` docs · `4fd64cf` BUG-A2+bukti deploy). CI run **30958629599**.
+📄 `Audit Review Round Robin/bukti/hotfix-bug-ab/` — LAPORAN-BUG-A · -B · -C-D ·
+TRIAGE-LOG-PRODUKSI · BUKTI-DEPLOY-7.
+
+**Pemilik melaporkan 2 gejala; siasatan menemui 4 pepijat.**
+
+| | Pepijat | Punca | Bukti punca |
+|---|---|---|---|
+| **A** | Selepas log masuk mendarat dalam masjid tenant, bukan `/admin` | pautan "Log masuk dengan kata laluan" → `/app/login`, dan LoginResponse lalai Filament mendarat pada panel SEMASA (tenant lalai = masjid PERTAMA platform untuk superadmin) | log nginx 24j: **1× GET /app/login, 0× GET /admin/login** |
+| **A** | "taip bakwim.my → nampak halaman log masuk" | halaman awam tidak pernah menyemak sesi | diukur pada sesi pemilik yang hidup: `adaSesi: false` |
+| **B** | **500 HIDUP** pada "Mohon Pembetulan" rekod | `comparable()` buat `(string) $enum`; `direction`/`sensitivity` di-cast enum | log produksi 22 Jul **3× userId 1** |
+| **C** | Logo panel masjid melompat ke masjid LAIN | Filament `getUrl()` guna tenant **LALAI**, bukan SEMASA | di `/app/mamad` → href `/app/smoke`; kawalan: di `/app/smoke` nampak betul = pepijat halimunan |
+| **D** | Superadmin tiada jalan balik ke `/admin` | tiada pautan | `/app/mamad` = **0/38** pautan ke `/admin` |
+
+**PEMBAIKAN:** `PanelLandingResolver` = satu sumber kebenaran pendaratan §9.A dipakai magic link
+DAN kata laluan (`intended()` dikekalkan) · nav/kad awam tawar "Ke Panel" (kecuali akaun tanpa
+kata laluan — elak lantunan `EnsurePasswordIsSet`) · `BackedEnum` dalam `comparable()` ·
+`homeUrl()` ikat tenant semasa · item menu pengguna "Panel Pentadbir" (superadmin sahaja).
+
+**DINYATAKAN BUKAN PUNCA (diukur):** panel admin **tidak** memaut ke log masuk (19 anchor, 0
+padanan; logo topbar & sidebar = `/admin`); `GET /` = 200 (tiada pengalihan).
+
+**KEPUTUSAN YANG DIJUSTIFIKASIKAN:** (1) `/log-masuk` **tidak** dialih walau sesi aktif —
+manifest `role_routes` beku menetapkannya `allow/200` untuk KESEPULUH identiti, dan pengalihan
+juga menghalang tukar akaun; (2) jurang `withOnboarding` sengaja — lonjakan wizard §10 kekal
+untuk magic link sahaja, kalau tidak destinasi log masuk SETIAP admin masjid yang belum selesai
+persediaan berpindah dan 6 spec e2e pecah; (3) menu pengguna dipilih (bukan item navigasi)
+supaya `in_navigation` manifest tidak terusik; (4) tiada ciri baharu — `/admin/mosques` sudah
+memaut ke setiap tenant.
+
+**VERIFIKASI:** Pest **546 lulus / 1 skip** (515 → 546: +19 A, +6 B, +6 C/D) · pint · build
+(nama aset help **KEKAL** — ramalan) · e2e `ci-guidance` **34 lulus / 1 gagal**.
+**Setiap pepijat ada BUKTI PENJAGA** (kod lama dipasang semula → ujian bertukar merah): A = tepat
+5 merah · B = 5 merah dengan mesej **serupa log produksi** · C/D = `+'…/app/mam'` sedangkan
+tenant semasa `man`.
+🔴 Satu kegagalan e2e (`explore.spec.js:83`) **DIBUKTIKAN sedia ada**: 3 larian, termasuk
+`git checkout aaf381a --` (kod yang SEDANG BERJALAN di produksi) → gagal serupa 3.0m. Tindakan
+tergendala **berubah** antara larian = bajet 180s habis (8 peranan × ~10 halaman, `php -S`
+Windows satu-benang), bukan halaman rosak. Hijau di CI (Linux, 4 worker).
+
+**TRIAGE LOG PRODUKSI (62 baris ERROR):** 23 = bunyi diagnostik saya sendiri (tinker/psysh) ·
+36 = insiden 18–22 Julai yang sudah ditutup · **3 = BUG-B, satu-satunya yang masih hidup**.
+**Backup disahkan POSITIF:** `backup:list` → `cos_backup` reachable ✅ healthy ✅, **23 backup,
+terbaharu 4 jam, 428.22 MB**. (`backup:monitor` sengaja tidak dijalankan — boleh hantar e-mel.)
+
+**PEMBETULAN PROSEDUR DEPLOY (2):** (a) label `org.opencontainers.image.revision` berbunyi
+**`unknown`** pada kedua-dua imej sejak Deploy 1 — `ARG GIT_SHA` ada tetapi tidak pernah
+dihantar; Deploy 7 menghantarnya. (b) `storage` ialah volume **BERKEKALAN** dengan **223 view
+Blade terkompil** → `view:clear` ditambah pada urutan deploy.
+**Pra-deploy:** cakera 83% (4.8G baki) → `docker builder prune --filter until=48h` tuntut
+2.707GB → **74% (7.4G baki)**; imej/container/volume tidak disentuh.
+
+## ✅ DEPLOY 7 LIVE — `local = origin = server = 4fd64cf`
+
+CI run **30958629599 = 7/7 HIJAU**. 📄 `bukti/hotfix-bug-ab/BUKTI-DEPLOY-7.md`
+
+| Bukti 5A | Sebelum (Deploy 6) | Selepas (Deploy 7) |
+|---|---|---|
+| git | `aaf381a` | **`4fd64cf`** |
+| `diwan-app` | `2d00c92e3cac` | **`35774700bd58`** |
+| `diwan-web` | `4824bd182d3a` | **`96b969b4b925`** |
+| aset help | `help-D0185fq1.js` + `help-CrH0eDM1.css` | **IDENTIK** (tiada JS/CSS disentuh) |
+| manifest sha256 | `1aa1b3f4…` | **`1aa1b3f4…`** (app = nginx) |
+| label `image.revision` | `unknown` | **`4fd64cf`** kedua-dua imej |
+
+`#3a=#2a` · `#3b=#2b≠#2a` · `#5a=#5b=#6` kedua-dua aset.
+⭐ **Setiap ramalan pra-deploy tepat** (aset kekal, KEDUA-DUA ImageID berubah — sebab `LABEL
+…$GIT_SHA` datang sebelum `COPY --from=app`). Kes **terbalik** Deploy 6 → 5A diuji dua arah.
+🔑 **Percanggahan hash diselesaikan dengan ujian:** md5 hari ini ≠ rekod Deploy 6 untuk fail
+SAMA; `sha256sum|cut -c1-32` memberi **`753f7e26…`/`f2406b31…`** = sama sebiji dgn Deploy 6 →
+aset identik bait-untuk-bait. Kedua-dua algoritma kini direkod.
+
+Kesihatan: `Nothing to migrate` · `config:cache` · **`view:clear`** (223 view basi) ·
+83 guide disegerakkan · `diwan:health` OK · `/up` 200 (8080, 80, **HTTPS awam**) ·
+**smoke 9/9** · `queue:failed` kosong · **8/8 container**.
+
+🔴 **INSIDEN DEPLOY (direkod supaya tidak berulang):** `ssh 'bash -s' < deploy.sh` +
+`docker compose exec -T` = arahan itu **memakan baki skrip sebagai stdin** → deploy berhenti
+SENYAP selepas `migrate` dengan **exit 0**. Dikesan dengan membaca output, bukan mempercayai kod
+keluar. Baki langkah dijalankan semula dengan `< /dev/null` pada setiap `exec`.
+**Untuk deploy akan datang: `scp` skrip ke pelayan dan jalankan sebagai FAIL.**
+
+**DISAHKAN LIVE dalam Chrome** (sesi pemilik, tiada kredensial ditaip) — pasangan sebelum→selepas:
+`/` nav `Log Masuk` → **`Ke Panel`** · CTA **"Teruskan ke Panel" → `/admin`** · notis "Anda sudah
+log masuk sebagai Superadmin" · `/log-masuk` notis + panel (borang KEKAL untuk tukar akaun) ·
+`/app/mamad` href logo `/app/smoke` → **`/app/mamad`** · `/app/mamad/peti-masuk` → **`/app/mamad`** ·
+**"Panel Pentadbir" ada** (`href=/admin`) · `/admin` kekal betul.
+⚠️ Gejala 1 (pendaratan log masuk) tidak boleh saya sahkan live — perlu sesi log masuk BAHARU dan
+saya tidak menaip kata laluan. Dibuktikan 19 Pest + 3 Chromium. **Pemilik: log keluar →
+/log-masuk → "Log masuk dengan kata laluan" → mesti mendarat `/admin`.**
+
+⚠️ **Tiket `SUP-260801-HXQ0DIOL`:** pemilik menukar statusnya kepada **selesai** kerana UI tiada
+butang padam. Tindakan ini **DITUTUP**. (Tiada butang padam untuk tiket = wajar; tiket ialah
+rekod sokongan, jejak audit lebih penting daripada pemadaman.)
+
+**▶️ SETERUSNYA:** F6 W2 (`workflow`, 60 langkah tindakan bersasar generik) → W3–W6 → F7–F10.
+
+---
+
+## ✅ DEPLOY 6 (F6-W1) LIVE — `cc9f0c7` (5 Ogos 2026)
 
 **`local = origin = server = cc9f0c7`.** CI run 30946820894 **7/7 HIJAU** (keempat-empat check
 wajib). 📄 `Audit Review Round Robin/bukti/deploy-6/BUKTI-DEPLOY-6.md`

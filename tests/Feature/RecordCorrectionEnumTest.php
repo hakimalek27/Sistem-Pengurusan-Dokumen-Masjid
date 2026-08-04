@@ -106,3 +106,21 @@ it('#5 kelulusan mengenakan perubahan enum pada rekod', function () {
     expect($this->record->fresh()->direction)->toBe(RecordDirection::Keluar)
         ->and($request->fresh()->status)->toBe('diluluskan');
 });
+
+it('#7 CERITA PENGGUNA: betulkan TAJUK sahaja — borang tetap hantar sensitivity+direction', function () {
+    // ViewRecord.php:66-81 — borang "Mohon Pembetulan" menghantar KESEMUA 12 medan dengan
+    // nilai lalai daripada rekod, dan `sensitivity` WAJIB (sentiasa bernilai). Jadi setiap
+    // penghantaran menyentuh laluan enum walaupun pengguna hanya menukar tajuk. Inilah sebab
+    // ciri ini 500 untuk SEMUA pengguna, bukan hanya mereka yang menukar Arah.
+    $request = app(RecordCorrectionService::class)->request(
+        $this->record, $this->pemohon, 'Tajuk tersalah taip semasa klasifikasi.',
+        [
+            'title' => 'Surat Dibetulkan',
+            'record_type' => 'surat_menyurat',
+            'direction' => 'masuk',      // tidak berubah — nilai lalai borang
+            'sensitivity' => 'dalaman',  // tidak berubah — nilai lalai borang, WAJIB
+        ],
+    );
+
+    expect($request->proposed_changes)->toBe(['title' => 'Surat Dibetulkan']);
+});

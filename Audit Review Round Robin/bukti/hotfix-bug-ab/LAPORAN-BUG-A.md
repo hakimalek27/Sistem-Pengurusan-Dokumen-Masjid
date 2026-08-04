@@ -113,20 +113,22 @@ GET https://bakwim.my/admin   → 200 "Papan pemuka - Diwan · Pentadbir Platfor
 ### Pest — ujian baharu
 
 ```
-Tests:    18 passed (58 assertions)
+Tests:    19 passed (63 assertions)      tests/Feature/Auth/PanelLandingTest.php
 ```
 
 ### Bukti PENJAGA: ujian menangkap kelakuan LAMA
 
-Pendawaian ditanggalkan (`git stash` pada `Login.php` + 3 blade; kelas penyelesai dikekalkan):
+Pendawaian ditanggalkan (`git checkout aaf381a --` pada `Login.php` + 3 blade; kelas penyelesai
+dikekalkan kerana ia kod BAHARU, bukan pendawaian):
 
 ```
-Tests:    5 failed, 10 passed (44 assertions)
+Tests:    5 failed, 14 passed (54 assertions)
 ```
 
 Lima yang gagal = **#6, #10, #12, #13, #15** — tepat setiap ujian yang mengunci kelakuan
-baharu. Sepuluh yang lulus termasuk penyelesai (#1–#5) dan magic link (#11), membuktikan
-laluan magic link TIDAK berubah.
+baharu. Empat belas yang lulus termasuk penyelesai (#1–#5), magic link (#7c, #11) dan #16,
+membuktikan laluan magic link TIDAK berubah. (#16 lulus kerana ia menguji penyelesai, bukan
+pendawaian — pembahagian yang betul: setiap ujian menyebut satu lapisan.)
 
 ### Suite penuh + pint + build
 
