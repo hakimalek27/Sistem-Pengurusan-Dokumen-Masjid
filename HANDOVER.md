@@ -1,5 +1,40 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## ✅ DEPLOY 6 (F6-W1) LIVE — `cc9f0c7` (5 Ogos 2026) ⭐ TERKINI
+
+**`local = origin = server = cc9f0c7`.** CI run 30946820894 **7/7 HIJAU** (keempat-empat check
+wajib). 📄 `Audit Review Round Robin/bukti/deploy-6/BUKTI-DEPLOY-6.md`
+
+| Bukti 5A | Sebelum | Selepas |
+|---|---|---|
+| git | `bc7cccc` | **`cc9f0c7`** |
+| `diwan-app` | `2831c4c83616` | **`2d00c92e3cac`** |
+| `diwan-web` | `6e8e3f5a9fb4` | **`4824bd182d3a`** |
+| aset help | `help-Da8KtLOe.js` | **`help-D0185fq1.js`** (CSS `help-CrH0eDM1.css` KEKAL) |
+| manifest sha256 | `4aa3b2e5…` | **`1aa1b3f4…`** (app = nginx ✅) |
+
+`#3a=#2a` · `#3b=#2b≠#2a` · `#4b` sama · **`#5a=#5b=#6` untuk KEDUA-DUA aset**.
+⭐ Ramalan dibuat SEBELUM deploy: JS berubah, CSS kekal (hanya `help.js` disentuh) — **tepat**.
+
+Kesihatan: `Nothing to migrate` (0 baris data) · `sync-help-index --delete` **83 guide** ·
+`/up` 200 · **smoke 9/9** · `failed_jobs` 0 · **8/8 container** · 4 laluan awam 200.
+
+**Disahkan LIVE dalam Chrome (laluan awam, tiada kredensial ditaip):** tour `public.login`
+langkah **1/2** sorot `login-identity`, langkah **2/2** "Minta pautan" sorot `login-submit`,
+CTA betul, **tiada ralat palsu**. Aset yang dihidang kepada pelayar = `help-D0185fq1.js`.
+⚠️ Butang langkah 2 sengaja TIDAK ditekan (ia hantar e-mel pautan log masuk sebenar).
+
+**Yang pengguna dapat:** 27 guide `screen` menyorot kawalan SEBENAR (placeholder katalog
+258→0, tindakan-generik 200→60, defect mobile 6→0) · **bug produk #1 F0 ditutup betul-betul**
+(auto-advance tour boleh MATI — hidup di produksi sejak Deploy 1) · sorotan fallback tidak
+lagi melekat.
+
+**▶️ SETERUSNYA: F6 W2** (`workflow`, 60 langkah tindakan bersasar generik) → W3–W6 → F7–F10.
+Menunggu pemilik: padam tiket `SUP-260801-HXQ0DIOL` · OAuth Google Drive (consent PUBLISHED) ·
+pengesahan visual tour dalam panel berautentikasi.
+
+---
+
 ## SESI — F6-W1 GATE + KECACATAN PRODUK DIBAIKI (4 Ogos 2026, malam) ⭐ TERKINI
 
 **`local = origin = 4f364c9`. PRODUKSI KEKAL `bc7cccc` (Deploy 5) — BELUM DEPLOY.**
