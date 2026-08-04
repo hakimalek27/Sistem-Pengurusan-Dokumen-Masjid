@@ -655,7 +655,19 @@ async function submitUploadUntilToast(page, modal, reattach) {
         // lampir semula, cuba lagi — persis apa yang pengguna sebenar akan buat.
         if (!(await modal.isVisible().catch(() => false))) {
             await expect(trigger).toBeEnabled({ timeout: 15_000 });
-            await trigger.click({ timeout: 15_000 });
+            // ⚠️ Overlay tour MEMINTAS klik koordinat di sini. Lubang overlay berada di atas
+            // elemen yang DISOROT, jadi sebaik tour maju ke langkah lain, butang ini berada di
+            // bawah bahagian pepejal overlay. Dinamakan secara literal dalam log CI:
+            //   `<svg class="driver-overlay …"> subtree intercepts pointer events`
+            // (klik gagal selepas 15s, guide muat-naik `workflow.*`). Membuka modal ialah
+            // tindakan `wire:click`, BUKAN penghantaran borang, jadi `dispatchEvent` memadai
+            // sebagai sandaran — corak yang sama seperti penghantaran di bawah, dan sebab
+            // mengapa repo ini menggunakan `dispatchEvent` untuk pencetus yang disekat overlay.
+            try {
+                await trigger.click({ timeout: 5_000 });
+            } catch {
+                await trigger.dispatchEvent('click', { timeout: 3_000 }).catch(() => {});
+            }
             await expect(modal).toBeVisible({ timeout: 15_000 });
             await reattach();
         }

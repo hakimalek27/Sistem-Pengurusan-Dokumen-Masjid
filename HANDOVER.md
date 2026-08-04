@@ -10,6 +10,27 @@ Deploy 6 disekat: CI run **30924969914** masih berjalan semasa sesi ditutup.
 `794fc6d` → **`2f7bbbb`** (tutup gate: 2 kecacatan harness) → **`f64fb1c`** (G3 pada urutan
 DIREKOD) → **`4f364c9`** (kecacatan produk: sorotan fallback tidak lagi melekat).
 
+### 📈 KEMAJUAN CI (instrumentasi memandu setiap pusingan)
+| Larian | shard `screen` | Nota |
+|---|---|---|
+| `2f7bbbb` · `f64fb1c` | 5 gagal | sebelum perekam |
+| `abaeaa2` | 3 gagal | perekam dipasang |
+| `cf6995c` | 1 gagal | fix auto-advance mati |
+| `99d6a55` | **0 — HIJAU** | fix maju-wizard-dua-kali; **tetapi `workflow` gagal** |
+| `<seterusnya>` | — | fix overlay memintas klik pencetus muat naik |
+
+**`workflow` gagal pada `99d6a55` DISEBABKAN perubahan produk saya** — log CI menamakan
+pemintasnya secara literal: `<svg class="driver-overlay …"> subtree intercepts pointer events`
+pada `[data-help-target="inbox-upload"]`. Lubang overlay berada di atas elemen yang DISOROT;
+sebaik tour maju lebih awal, butang itu berada di bawah bahagian pepejal overlay dan klik
+SEBENAR tidak lagi mendarat. Fix: `try click → catch dispatchEvent` (membuka modal ialah
+`wire:click`, bukan penghantaran borang). ⚠️ Tempatan `workflow` LULUS 15/15 walaupun tanpa fix
+ini, jadi buktinya datang daripada log CI, bukan larian tempatan.
+
+⚠️ **Jurang proses saya:** selepas perubahan PRODUK, saya sahkan `unit` + shard `screen` +
+`guidance.spec.js` + Pest tetapi **bukan** shard `workflow`/`tenant-admin-public`. Perubahan
+runtime tour menyentuh SETIAP shard. CI menangkap apa yang saya langkau.
+
 ### 🎯 PUNCA MUKTAMAD DITEMUI & DIBAIKI — auto-advance tour boleh MATI (bug produk #1 F0)
 
 Instrumentasi perekam membolehkan jejak **LULUS tempatan** dibanding terus dengan jejak
