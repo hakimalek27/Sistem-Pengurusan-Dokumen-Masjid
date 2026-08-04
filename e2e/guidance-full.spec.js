@@ -112,9 +112,21 @@ async function newContextPage(browser, baseURL, sasaranGuide = []) {
                 banner: Boolean(document.querySelector('[data-diwan-tour-waiting]')),
                 modal: document.querySelectorAll('.fi-modal-window').length,
                 sasaran: keadaanSasaran(),
+                // Langkah WIZARD Filament yang sedang aktif. Tanpa ini, "sasaran hilang" tidak
+                // dapat dibezakan daripada "wizard sudah melangkaui langkah itu" — dan itulah
+                // kekaburan yang tinggal pada `persediaan-berpandu` (`3:ada → 3:sembunyi`).
+                wizard: (() => {
+                    const btn = [...document.querySelectorAll('.fi-sc-wizard-header-step-btn')];
+                    if (!btn.length) return null;
+                    const aktif = btn.findIndex((b) => b.getAttribute('aria-current') === 'step'
+                        || b.dataset.active === 'true' || b.className.includes('fi-active'));
+
+                    return aktif >= 0 ? aktif + 1 : `?${btn.length}`;
+                })(),
             };
             entri.kunci = `${entri.n}|${entri.aktif.join(',')}|${entri.ralatPalsu}|${entri.banner}`
-                + `|${entri.modal}|${Object.entries(entri.sasaran).map(([k, v]) => k + '=' + v).join(',')}`;
+                + `|${entri.modal}|${entri.wizard}`
+                + `|${Object.entries(entri.sasaran).map(([k, v]) => k + '=' + v).join(',')}`;
             const akhir = window.__diwanTourLog[window.__diwanTourLog.length - 1];
             if (akhir && akhir.kunci === entri.kunci) return;
             window.__diwanTourLog.push(entri);
@@ -386,8 +398,11 @@ async function driveFlowGuide(page, guide, basePath) {
                 // sedangkan sorotan lain, resolusi tour itu yang gagal. Kedua-duanya kelihatan
                 // sama tanpa baris ini.
                 sasaranDijangka: log.slice(-14).map((e) => `${e.n ?? '-'}:${e.sasaran?.[sasaran] ?? '?'}`).join(' → '),
-                // Banner = CTA benar-benar diklik (tour diminimize). Modal = tindakan berkuat kuasa.
-                bannerModal: log.slice(-14).map((e) => `${e.banner ? 'B' : '-'}${e.modal ?? '?'}`).join(' '),
+                // Banner = CTA benar-benar diklik (tour diminimize). Modal = tindakan berkuat
+                // kuasa. W = langkah wizard Filament aktif (membezakan "sasaran hilang"
+                // daripada "wizard sudah melangkaui langkah itu").
+                bannerModal: log.slice(-14)
+                    .map((e) => `${e.banner ? 'B' : '-'}${e.modal ?? '?'}W${e.wizard ?? '-'}`).join(' '),
             };
         }, [i, step.target]);
 
@@ -443,6 +458,7 @@ async function driveFlowGuide(page, guide, basePath) {
         // naik F5. Runner CI lebih perlahan daripada mesin dev, jadi klik boleh mendahului
         // pemasangan pendengar (Filament memuat JS komponen secara lazy).
         let ulangTindakan = null;
+        let majuAwal = false;
         if (khusus) {
             await khusus(page);
         } else if (label === 'Buat pada skrin') {
@@ -461,7 +477,10 @@ async function driveFlowGuide(page, guide, basePath) {
                 ulangTindakan = () => sasaran.dispatchEvent('click', { timeout: 5_000 }).catch(() => {});
                 await ulangTindakan();
             } else {
-                await advanceWizard(page);
+                // Sasaran bukan butang (cth. pembalut medan Radio) → tindakan langkah ini
+                // ialah memajukan wizard. Ini DIKIRA sebagai kemajuan wizard bagi peralihan
+                // ini; jika tidak, gelung di bawah akan memajukannya SEKALI LAGI.
+                majuAwal = await advanceWizard(page);
             }
         }
 
@@ -482,7 +501,12 @@ async function driveFlowGuide(page, guide, basePath) {
         // tempatan (dua `dispatchEvent` pada "Seterusnya" dalam tetingkap 100ms yang sama).
         // Selepas satu kemajuan, gelung hanya MENUNGGU; ia tidak memaju lagi. Itu menjadikan
         // gelung ini selamat pada runner perlahan tanpa mengubah masa yang terbukti hijau.
-        let sudahMaju = false;
+        // ⚠️ Bermula `true` jika cabang tindakan SUDAH memajukan wizard. Inilah punca tepat
+        // kegagalan CI `persediaan-berpandu`: pada mesin pantas gelung nampak sasaran sudah
+        // muncul lalu berhenti, tetapi pada runner CI yang perlahan ia memeriksa SEBELUM wizard
+        // siap dirender dan memaju SEKALI LAGI — wizard melangkaui langkah yang guide sasarkan
+        // dan sasaran itu hilang selama-lamanya (jejak: `3:ada → 3:sembunyi … 4:sembunyi`).
+        let sudahMaju = majuAwal;
         for (let cuba = 0; cuba < 12; cuba += 1) {
             if (await sasaranSeterusnya.isVisible().catch(() => false)) break;
             if (!sudahMaju && await advanceWizard(page)) {
