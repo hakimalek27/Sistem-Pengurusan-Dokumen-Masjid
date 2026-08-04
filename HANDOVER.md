@@ -1,6 +1,59 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## SESI — F6-W1 KERJA PRODUK SELESAI, GATE 28/29 (4 Ogos 2026) ⭐ TERKINI
+## SESI — F6-W1 PENUTUPAN GATE (4 Ogos 2026, petang) ⭐ TERKINI
+
+**Produksi kekal `bc7cccc` (Deploy 5).** Kerja produk W1 tidak berubah sejak `d29399f`;
+sesi ini menutup **gate**, yang sebelum ini 28/29.
+
+### Keputusan gate (benih segar sebelum setiap shard, satu pelayan sahaja)
+| Shard | Jangkaan manifest | Keputusan |
+|---|---|---|
+| `screen` | 29 guide / 151 langkah / 111 tindakan | **30/30 LULUS** (13.2m) · JSON sepadan tepat · `blocked` 0 |
+| `workflow` | 14 / 158 / 75 | **15/15 LULUS** (10.9m) · JSON sepadan tepat · `blocked` 0 |
+| `tenant-admin-public` | 40 / 164 / 4 | 39/41 — **1 guide** (`tenant.records`, W5) tumbang pada stall pelayan tempatan; perlu larian bersih semula |
+
+### Dua kecacatan HARNESS ditemui — punca diukur, bukan diteka
+1. **`filter({hasText: <RegExp>})` menguji teks MENTAH** (whitespace tidak dinormalisasi).
+   `/^Seterusnya$/` → **count=0** pada butang Blade yang jelas kelihatan. Diukur pada DOM
+   aplikasi DAN DOM sintetik. Punca `screen.persediaan-berpandu`. Fix: `getByRole(exact)`.
+2. **`dispatchEvent` sebagai sandaran `.catch()` = bom masa 30s** — banner "Panduan menunggu"
+   lenyap kerana tour **berjaya** maju sendiri; klik gagal 5.1s, `dispatchEvent` melempar 30s
+   kemudian. Fix: tempoh pendek + ditelan (ketiadaan banner = KEJAYAAN).
+   **Satu pembaikan ini menyelesaikan KESEMUA tujuh kegagalan baki shard `screen`.**
+
+### Punca stall pelayan tempatan (bukan produk, bukan gate)
+`php -d max_execution_time=0 artisan serve` **tidak** menghantar `-d` kepada pelayan web anak —
+disahkan pada kod vendor (`ServeCommand::serverCommand()` = `[php_binary(),'-S',host:port,server.php]`).
+Anak kekal pada had php.ini 30s → `PHP Fatal error: Maximum execution time of 30 seconds
+exceeded … ClassLoader.php:429` → `page.goto` tunggu `load` yang tak datang → tamat masa 60s.
+**Lancar terus:** `cd public && php -d max_execution_time=0 -S 127.0.0.1:8092 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php`.
+`PHP_CLI_SERVER_WORKERS` tidak disokong Windows. Isu tempatan sahaja — CI (Linux) tidak terjejas.
+
+### Perkara yang perlu diketahui tentang gate
+- **`failures: []` dalam shard JSON BUKAN "tiada kegagalan"** — Playwright mulakan semula worker
+  selepas ujian gagal → keadaan modul direset. `complete` (dikira drp `doneGuides.size`) tetap
+  menangkapnya, jadi gate gagal-tertutup. Baca `complete`, bukan `failures`.
+- `guide_ids`/`step_ids` dalam shard JSON datang drp MANIFEST, bukan keputusan larian.
+
+### Dua hipotesis SAYA yang salah (dihapuskan oleh ukuran, direkod supaya tidak diulang)
+Pelayan hantu (**dua** `artisan serve` pada :8092 — dibunuh, kegagalan berulang serupa) ·
+mutasi data silang-guide (snapshot DB: **sifar** perubahan data perniagaan).
+
+### Dua kesilapan proses saya
+Mendiagnosis drp `trace.zip` dengan penghurai sendiri → mesej ralat guide **yang salah**,
+memburu punca yang tidak wujud. Guna `--reporter=list` penuh ke fail. ·
+Menyalurkan larian ujian melalui `tail` → `EXIT=0` milik `tail` (ulangan pelajaran `gh run watch`).
+
+### Baseline 5A untuk Deploy 6 (dirakam drp pelayan hidup)
+git `bc7cccc` · app `2831c4c83616…` · web `6e8e3f5a9fb4…` · aset `assets/help-Da8KtLOe.js` +
+`assets/help-CrH0eDM1.css` · manifest sha256 `4aa3b2e5…` (app = nginx ✔). Binaan tempatan
+memberi `help-BFhO_EWt.js` dengan **CSS tidak berubah** — ramalan khusus untuk disahkan.
+Tiada migrasi baharu sejak `bc7cccc`. Selepas deploy: `diwan:sync-help-index --delete`
+(catalog_version `2026.08.04.2`). ⛔ `DemoSeeder` berubah — **jangan** jalankan seeder di produksi.
+
+---
+
+## SESI — F6-W1 KERJA PRODUK SELESAI, GATE 28/29 (4 Ogos 2026)
 
 **`d29399f` dipush · TIDAK DIDEPLOY** (gate `guidance-e2e-gate` belum hijau penuh).
 Produksi kekal `bc7cccc` / Deploy 5. 4 komit: `a5a792e` → `d3d2ac9` → `c1fabc2` → `d29399f`.

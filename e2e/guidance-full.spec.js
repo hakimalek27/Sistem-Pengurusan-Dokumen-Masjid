@@ -233,9 +233,23 @@ async function resolveDetailPath(page, guide) {
  */
 const AKSI_LANGKAH = {};
 
-/** Wizard Filament memaparkan satu langkah sekali; majukan bila sasaran berikut tersembunyi. */
+/**
+ * Wizard Filament memaparkan satu langkah sekali; majukan bila sasaran berikut tersembunyi.
+ *
+ * ⚠️ `filter({ hasText: <RegExp> })` menguji regex terhadap teks MENTAH elemen — whitespace
+ * TIDAK dinormalisasi (berbeza daripada `hasText: <string>` dan daripada nama boleh-akses).
+ * Butang Filament dirender Blade dengan baris baharu + indentasi di sekeliling labelnya, jadi
+ * `/^Seterusnya$/` memberi **count=0** sedangkan butangnya jelas ada di skrin. Diukur pada DOM
+ * sebenar halaman ini DAN pada DOM sintetik minimum:
+ *   /^Seterusnya$/ → 0 · /Seterusnya/ → 1 · /^\s*Seterusnya\s*$/ → 1 · 'Seterusnya' → 1 ·
+ *   getByRole(exact) → 1.
+ * Nama boleh-akses dinormalisasi, jadi `getByRole(..., { exact: true })` memberi ketepatan
+ * yang sauh regex itu SANGKA ia beri. Skop `.fi-modal-window` kekal penting: CTA popover tour
+ * juga berlabel "Seterusnya" (dan popover itu `role="dialog"` — jangan sasarkannya dgn peranan).
+ */
 async function advanceWizard(page) {
-    const next = page.locator('.fi-modal-window button').filter({ hasText: /^Seterusnya$/ }).first();
+    const next = page.locator('.fi-modal-window')
+        .getByRole('button', { name: 'Seterusnya', exact: true }).first();
     if (await next.isVisible().catch(() => false)) {
         await next.dispatchEvent('click');
 
@@ -316,9 +330,20 @@ async function driveFlowGuide(page, guide, basePath) {
 
         // Laluan pengguna sebenar: bila panduan diminimize, tekan "Tunjuk arahan" supaya
         // popover pulih. Tanpa ini keadaan tour dibaca daripada popover yang tersembunyi.
+        //
+        // ⚠️ Banner yang LENYAP di tengah-tengah ialah KEJAYAAN, bukan kegagalan: ia bermakna
+        // sasaran langkah berikut muncul dan tour maju sendiri (mekanisme sync F2), yang
+        // memanggil `clearWaitingBanner()`. Ini perlumbaan check-then-act — `isVisible()`
+        // hanyalah snapshot — jadi setiap percubaan mesti boleh gagal dengan senyap:
+        //   1. `click()` tamat masa apabila elemen tertanggal semasa menunggu;
+        //   2. `dispatchEvent` LALAI menunggu 30s untuk elemen yang tidak akan kembali, lalu
+        //      MELEMPAR — itulah yang menjatuhkan guide yang laluan penggunanya betul-betul
+        //      berjaya (diukur: klik gagal pada 5.1s, dispatchEvent melempar 30s kemudian).
         const tunjuk = page.locator('[data-diwan-tour-waiting] button');
         if (await tunjuk.isVisible().catch(() => false)) {
-            await tunjuk.click({ timeout: 5_000 }).catch(() => tunjuk.dispatchEvent('click'));
+            await tunjuk.click({ timeout: 3_000 })
+                .catch(() => tunjuk.dispatchEvent('click', { timeout: 2_000 }))
+                .catch(() => {});
             await page.waitForTimeout(500);
         }
     }
