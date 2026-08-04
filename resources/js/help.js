@@ -23,6 +23,7 @@ let automaticModalGuard = null;
 let autoMinimiseTimer = null;
 let autoMinimiseFrame = null;
 let tourTrigger = null;
+let rehighlightIndex = null;
 
 function escapeHtml(value) {
     const element = document.createElement('div');
@@ -348,6 +349,40 @@ function scheduleAutoMinimise(step, plan) {
     });
 }
 
+/**
+ * Sorotan fallback BUKAN keadaan akhir.
+ *
+ * Setiap langkah dibina dengan `element: () => resolveStepElement(step) || page-content`, dan
+ * Driver.js memanggil callback itu **sekali** per peralihan langkah. Jika morph Livewire, atau
+ * langkah wizard yang belum dirender, menjadikan sasaran tiada pada saat tepat itu, tour
+ * menyorot SELURUH halaman dan tidak pernah menyelesaikan semula — walaupun kawalan sebenar
+ * muncul sepersekian saat kemudian. Pengguna nampak sorotan tanpa makna tanpa jalan pulih
+ * selain memulakan panduan semula.
+ *
+ * Diukur dua kali sebelum dibaiki: bawah beban CPU tempatan (5 guide gagal dengan bentuk
+ * identik) dan secara TETAP pada CI, di mana jejak yang direkod menunjukkan sorotan melekat:
+ * `3:onboarding-wa-source → 3:- → 3:page-content → 4:page-content`.
+ *
+ * Pembaikan menunggu sasaran yang DIISYTIHARKAN muncul (bounded), kemudian menyorot semula.
+ * Ia sengaja SEKALI sahaja per indeks langkah supaya `refresh()` tidak boleh menjadi gelung,
+ * dan ia TIDAK menyentuh mekanisme sync (§0.3) — `watchForNextStep` kekal seperti sedia ada.
+ */
+function rehighlightWhenTargetArrives(driverApi, step, index) {
+    if (!step?.target || GENERIC_TARGETS.has(step.target)) return;
+    if (rehighlightIndex === index) return;
+    const disorot = document.querySelector('.driver-active-element');
+    if (disorot?.getAttribute('data-help-target') === step.target) return;
+
+    waitForStep(step, 4000).then((element) => {
+        if (!element || !driverApi?.isActive?.()) return;
+        if ((driverApi.getActiveIndex() ?? -1) !== index) return;
+        const semasa = document.querySelector('.driver-active-element');
+        if (semasa?.getAttribute('data-help-target') === step.target) return;
+        rehighlightIndex = index;
+        driverApi.refresh();
+    });
+}
+
 function guardAutomaticGuideFromDialogs(guideSteps, guide) {
     clearAutomaticModalGuard();
     automaticModalGuard = new MutationObserver(() => {
@@ -603,6 +638,7 @@ function showUnavailableGuide(runtime, guide, step) {
             clearAutomaticModalGuard();
             clearAutoMinimise();
             clearFocusManagement();
+            rehighlightIndex = null;
         },
     });
     activeDriver.drive();
@@ -687,6 +723,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearAutoMinimise();          // batalkan baki tempoh-baca langkah sebelumnya
             focusPopover();               // F2d: fokus awal (vendor tidak melakukannya)
             scheduleAutoMinimise(current, plan);
+            rehighlightWhenTargetArrives(options.driver, current, index);
             emit(index === driverStartIndex ? 'started' : 'progressed', guide.id, current.sourceIndex, current.target);
         },
         // F2a: cabang dipilih oleh plan YANG SAMA dengan label — tiada lagi label yang
@@ -763,6 +800,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearAutomaticModalGuard();
             clearAutoMinimise();
             clearFocusManagement();       // F2d: fokus pulang ke pencetus/launcher
+            rehighlightIndex = null;
             if (completed) stripGuideQuery();
         },
     });

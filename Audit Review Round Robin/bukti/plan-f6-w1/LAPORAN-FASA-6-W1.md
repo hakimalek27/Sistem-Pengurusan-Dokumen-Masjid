@@ -277,7 +277,31 @@ interaksi.
 
 Sifar fatal dalam `serve-ci.log` — jadi ini bukan masalah pelayan CI.
 
-### ⚠️ KECACATAN PRODUK BAHARU DIUKUR → F7: **sorotan fallback bersifat MELEKAT**
+### ✅ KECACATAN PRODUK: **sorotan fallback bersifat MELEKAT** — DIBAIKI DALAM W1 (lencongan dinyatakan)
+
+**Lencongan daripada pelan:** ini item F7 §8 yang DITARIK KE HADAPAN. Sebab: W1 tidak boleh
+ditutup hijau tanpanya. Gate BETUL menolaknya, dan melonggarkan assertion untuk menghijaukan
+gate akan menyembunyikan kecacatan yang benar-benar mengandaskan pengguna — bertentangan dengan
+tujuan W1 itu sendiri (memastikan sasaran spesifik benar-benar DISOROT). Kecacatan ini bermula
+sebagai penemuan bawah beban (di bawah) dan kemudian muncul **secara TETAP di CI**, jadi ia
+menjadi penyekat W1, bukan lagi risiko yang boleh ditangguh.
+
+**Bukti CI (jejak yang direkod, `f64fb1c`):**
+`1:onboarding-start → 1:onboarding-phone → 2:onboarding-phone → 2:onboarding-wa-source →`
+`3:onboarding-wa-source → 3:- → 3:page-content → 4:page-content`
+Sorotan jatuh ke `page-content` pada langkah 3 dan **kekal di sana** untuk langkah 4.
+
+**Pembaikan** (`resources/js/help.js`, fungsi `rehighlightWhenTargetArrives`): tunggu sasaran
+yang DIISYTIHARKAN muncul (bounded 4s) melalui `waitForStep` yang sudah ada, kemudian sorot
+semula. **Sekali sahaja per indeks langkah** supaya `refresh()` tidak boleh menjadi gelung;
+dipanggil dari `onHighlighted` selepas kerja sedia ada; `rehighlightIndex` direset dalam
+KEDUA-DUA `onDestroyed`. **Mekanisme sync F2 (§0.3) TIDAK disentuh** — `watchForNextStep` kekal
+sebagaimana adanya.
+
+**Bukti pembaikan** mesti datang daripada keadaan yang MENGHASILKAN kecacatan itu, jadi shard
+`screen` dijalankan semula di bawah beban CPU buatan yang sama (asas: 5 gagal). Lihat §(c).
+
+### ⚠️ Bagaimana kecacatan ini pertama kali ditemui: **ujian beban**
 
 Untuk menguji pembaikan di atas tanpa menunggu pusingan CI 25 minit, shard `screen` dijalankan
 di bawah **beban CPU buatan** (teknik F0: 14 proses gelung ketat pada mesin 20-teras).
@@ -297,14 +321,16 @@ tour menyorot **seluruh halaman** dan **tidak pernah menyelesaikan semula**, wal
 sebenar muncul sepersekian saat kemudian. Pengguna nampak sorotan yang tidak bermakna tanpa
 jalan pulih selain memulakan panduan semula.
 
-**Ini kelemahan PRODUK, bukan harness** — dan gate BETUL untuk menangkapnya, jadi ia sengaja
-TIDAK ditutup dengan melonggarkan assertion. Pembaikan yang dicadangkan (F7 §8, sepasukan dengan
-kecacatan popover-luar-viewport): jadikan fallback **tidak melekat** — dalam `onHighlighted`,
-jika elemen yang disorot ialah fallback sedangkan sasaran sebenar kini wujud, sorot semula.
+**Ini kelemahan PRODUK, bukan harness** — dan gate BETUL untuk menangkapnya, jadi ia TIDAK
+ditutup dengan melonggarkan assertion. Ia kemudiannya muncul secara TETAP di CI dan dibaiki
+dalam W1 (lihat seksyen di atas).
 
-**Titik operasi:** kelima-lima guide ini **LULUS di CI** (kegagalan CI ialah set yang BERBEZA),
-jadi beban 14-pembakar melebihi keadaan CI. Ia berguna sebagai penguji tekanan, bukan sebagai
-definisi hijau. Larian bersih + CI kekal sebagai gate berkuasa.
+⚠️ **Penilaian saya pada masa itu SALAH dan direkod sebagai salah.** Saya menulis bahawa beban
+14-pembakar "melebihi titik operasi CI" kerana kelima-lima guide itu lulus di CI, lalu
+menangguhkan pembaikan ke F7. Pusingan CI berikutnya membuktikan kecacatan yang SAMA menyekat
+`persediaan-berpandu` secara tetap. **Ujian tekanan yang mendedahkan kecacatan tulen tidak boleh
+diketepikan atas alasan "titik operasinya tidak realistik"** — ia mendedahkan kecacatan lebih
+awal, itu sahaja. Yang berbeza hanyalah guide MANA yang terkena dahulu.
 
 ### ⚠️ Dua hipotesis SAYA yang salah — dihapuskan oleh ukuran
 
