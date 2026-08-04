@@ -5185,7 +5185,7 @@
     },
     {
       "id": "screen.persediaan-berpandu",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Persediaan berpandu",
       "summary": "Panduan skrin dan tindakan: Persediaan berpandu.",
@@ -5213,37 +5213,37 @@
       "steps": [
         {
           "id": "persediaan-berpandu.1",
-          "title": "Langkah 1",
-          "instruction": "Isi jawatan pengguna.",
-          "target": "page-primary",
+          "title": "Mula persediaan",
+          "instruction": "Tekan Mula Persediaan Berpandu, kemudian isi jawatan anda.",
+          "target": "onboarding-start",
           "wait_for_user": true
         },
         {
           "id": "persediaan-berpandu.2",
-          "title": "Langkah 2",
-          "instruction": "Isi telefon rasmi masjid.",
-          "target": "page-primary",
+          "title": "Telefon rasmi masjid",
+          "instruction": "Isi nombor telefon rasmi masjid.",
+          "target": "onboarding-phone",
           "wait_for_user": true
         },
         {
           "id": "persediaan-berpandu.3",
-          "title": "Langkah 3",
-          "instruction": "Pilih sumber nombor WhatsApp notifikasi.",
-          "target": "page-primary",
+          "title": "Sumber nombor WhatsApp",
+          "instruction": "Pilih sumber nombor WhatsApp untuk notifikasi.",
+          "target": "onboarding-wa-source",
           "wait_for_user": true
         },
         {
           "id": "persediaan-berpandu.4",
-          "title": "Langkah 4",
-          "instruction": "Tambah ahli awal dan semak peranannya.",
-          "target": "page-primary",
+          "title": "Ahli awal",
+          "instruction": "Tambah ahli awal dan semak peranan masing-masing.",
+          "target": "onboarding-members",
           "wait_for_user": true
         },
         {
           "id": "persediaan-berpandu.5",
-          "title": "Langkah 5",
-          "instruction": "Simpan hanya selepas maklumat lengkap.",
-          "target": "page-primary",
+          "title": "Simpan persediaan",
+          "instruction": "Simpan hanya selepas semua maklumat lengkap.",
+          "target": "onboarding-submit",
           "wait_for_user": true
         }
       ],
@@ -6645,7 +6645,7 @@
     },
     {
       "id": "screen.viewer-dokumen",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Viewer dokumen",
       "summary": "Panduan skrin dan tindakan: Viewer dokumen.",
@@ -6688,45 +6688,45 @@
       "steps": [
         {
           "id": "viewer-dokumen.1",
-          "title": "Langkah 1",
-          "instruction": "Gunakan anak panah untuk halaman sebelum/seterusnya.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Navigasi halaman",
+          "instruction": "Dalam viewer dokumen, gunakan anak panah untuk halaman sebelum dan seterusnya.",
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "viewer-dokumen.2",
-          "title": "Langkah 2",
-          "instruction": "Ubah nombor halaman secara terus.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Lompat ke halaman",
+          "instruction": "Ubah nombor halaman secara terus pada kotak nombor viewer.",
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "viewer-dokumen.3",
-          "title": "Langkah 3",
-          "instruction": "Zum keluar/masuk tanpa mengubah fail.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Kawalan zum",
+          "instruction": "Zum keluar atau masuk tanpa mengubah fail asal.",
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "viewer-dokumen.4",
-          "title": "Langkah 4",
+          "title": "Carian teks dokumen",
           "instruction": "Cari teks jika PDF mempunyai lapisan teks.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "viewer-dokumen.5",
-          "title": "Langkah 5",
-          "instruction": "Cetak Metadata untuk bukti konteks.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Cetak metadata",
+          "instruction": "Gunakan Cetak Metadata untuk bukti konteks.",
+          "target": "page-content",
+          "wait_for_user": false
         },
         {
           "id": "viewer-dokumen.6",
-          "title": "Langkah 6",
-          "instruction": "Muat Turun hanya jika dibenarkan dan simpan secara terkawal.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Muat turun terkawal",
+          "instruction": "Muat turun hanya jika dibenarkan dan simpan secara terkawal.",
+          "target": "page-content",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -6736,7 +6736,7 @@
     },
     {
       "id": "screen.butiran-fail-elektronik-fizikal-atau-hibrid",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Butiran fail elektronik, fizikal atau hibrid",
       "summary": "Panduan skrin dan tindakan: Butiran fail elektronik, fizikal atau hibrid.",
@@ -6778,38 +6778,38 @@
       "steps": [
         {
           "id": "butiran-fail-elektronik-fizikal-atau-hibrid.1",
-          "title": "Langkah 1",
-          "instruction": "Semak nombor, tajuk dan klasifikasi.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Nombor dan tajuk fail",
+          "instruction": "Semak nombor, tajuk dan klasifikasi fail.",
+          "target": "file-identity",
+          "wait_for_user": false
         },
         {
           "id": "butiran-fail-elektronik-fizikal-atau-hibrid.2",
-          "title": "Langkah 2",
-          "instruction": "Semak medium serta rujukan fizikal.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Medium rekod",
+          "instruction": "Semak medium serta rujukan salinan fizikal.",
+          "target": "file-medium",
+          "wait_for_user": false
         },
         {
           "id": "butiran-fail-elektronik-fizikal-atau-hibrid.3",
-          "title": "Langkah 3",
-          "instruction": "Semak lokasi, status penjagaan dan pemegang.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Status penjagaan",
+          "instruction": "Semak lokasi, status penjagaan dan pemegang semasa.",
+          "target": "file-custody",
+          "wait_for_user": false
         },
         {
           "id": "butiran-fail-elektronik-fizikal-atau-hibrid.4",
-          "title": "Langkah 4",
-          "instruction": "Semak sejarah pergerakan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Sejarah pergerakan",
+          "instruction": "Semak sejarah pergerakan fail fizikal.",
+          "target": "file-movements",
+          "wait_for_user": false
         },
         {
           "id": "butiran-fail-elektronik-fizikal-atau-hibrid.5",
-          "title": "Langkah 5",
-          "instruction": "Semak Akses Khas bagi fail sulit jika role dibenarkan.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Panel akses khas",
+          "instruction": "Semak Akses Khas bagi fail sulit jika role anda dibenarkan.",
+          "target": "file-access-grant",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -6819,7 +6819,7 @@
     },
     {
       "id": "screen.keluarkan-fail-fizikal",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Keluarkan fail fizikal",
       "summary": "Panduan skrin dan tindakan: Keluarkan fail fizikal.",
@@ -6847,37 +6847,37 @@
       "steps": [
         {
           "id": "keluarkan-fail-fizikal.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih Pemegang Ahli atau isi pemegang luar.",
-          "target": "page-primary",
+          "title": "Buka rekod pengeluaran",
+          "instruction": "Tekan Keluarkan Fail, kemudian pilih Pemegang Ahli atau isi pemegang luar.",
+          "target": "file-checkout",
           "wait_for_user": true
         },
         {
           "id": "keluarkan-fail-fizikal.2",
-          "title": "Langkah 2",
-          "instruction": "Isi lokasi tujuan.",
-          "target": "page-primary",
+          "title": "Lokasi tujuan",
+          "instruction": "Isi lokasi tujuan fail.",
+          "target": "file-checkout-location",
           "wait_for_user": true
         },
         {
           "id": "keluarkan-fail-fizikal.3",
-          "title": "Langkah 3",
-          "instruction": "Tetapkan tarikh perlu pulang.",
-          "target": "page-primary",
+          "title": "Tarikh perlu pulang",
+          "instruction": "Tetapkan tarikh fail perlu dipulangkan.",
+          "target": "file-checkout-due",
           "wait_for_user": true
         },
         {
           "id": "keluarkan-fail-fizikal.4",
-          "title": "Langkah 4",
-          "instruction": "Tulis catatan tujuan.",
-          "target": "page-primary",
+          "title": "Catatan tujuan",
+          "instruction": "Tulis catatan tujuan pengeluaran.",
+          "target": "file-checkout-notes",
           "wait_for_user": true
         },
         {
           "id": "keluarkan-fail-fizikal.5",
-          "title": "Langkah 5",
+          "title": "Rekod pergerakan",
           "instruction": "Simpan dan serahkan fail hanya selepas rekod pergerakan berjaya.",
-          "target": "page-primary",
+          "target": "file-checkout-submit",
           "wait_for_user": true
         }
       ],
@@ -6888,7 +6888,7 @@
     },
     {
       "id": "screen.pindah-lokasi-fizikal",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Pindah lokasi fizikal",
       "summary": "Panduan skrin dan tindakan: Pindah lokasi fizikal.",
@@ -6915,30 +6915,30 @@
       "steps": [
         {
           "id": "pindah-lokasi-fizikal.1",
-          "title": "Langkah 1",
-          "instruction": "Masukkan lokasi baharu yang tepat hingga rak/kotak.",
-          "target": "page-primary",
+          "title": "Buka pindah lokasi",
+          "instruction": "Tekan Pindah Lokasi pada fail fizikal atau hibrid.",
+          "target": "file-relocate",
           "wait_for_user": true
         },
         {
           "id": "pindah-lokasi-fizikal.2",
-          "title": "Langkah 2",
-          "instruction": "Tulis sebab/catatan.",
-          "target": "page-primary",
+          "title": "Lokasi baharu",
+          "instruction": "Masukkan lokasi baharu yang tepat hingga rak atau kotak.",
+          "target": "file-relocate-location",
           "wait_for_user": true
         },
         {
           "id": "pindah-lokasi-fizikal.3",
-          "title": "Langkah 3",
-          "instruction": "Simpan.",
-          "target": "page-primary",
+          "title": "Sebab pemindahan",
+          "instruction": "Tulis sebab atau catatan pemindahan.",
+          "target": "file-relocate-notes",
           "wait_for_user": true
         },
         {
           "id": "pindah-lokasi-fizikal.4",
-          "title": "Langkah 4",
-          "instruction": "Pastikan label fizikal turut dikemas kini.",
-          "target": "page-primary",
+          "title": "Simpan lokasi",
+          "instruction": "Simpan, kemudian pastikan label fizikal turut dikemas kini.",
+          "target": "file-relocate-submit",
           "wait_for_user": true
         }
       ],
@@ -6949,7 +6949,7 @@
     },
     {
       "id": "screen.beri-akses-khas-fail-sulit",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Beri akses khas fail sulit",
       "summary": "Panduan skrin dan tindakan: Beri akses khas fail sulit.",
@@ -6980,30 +6980,30 @@
       "steps": [
         {
           "id": "beri-akses-khas-fail-sulit.1",
-          "title": "Langkah 1",
-          "instruction": "Pilih ahli masjid yang perlu akses.",
-          "target": "page-primary",
+          "title": "Buka pemberian akses",
+          "instruction": "Tekan Beri Akses pada panel Akses Khas fail sulit.",
+          "target": "file-access-grant",
           "wait_for_user": true
         },
         {
           "id": "beri-akses-khas-fail-sulit.2",
-          "title": "Langkah 2",
-          "instruction": "Beri akses.",
-          "target": "page-primary",
+          "title": "Ahli penerima akses",
+          "instruction": "Pilih ahli masjid yang perlu akses.",
+          "target": "file-access-member",
           "wait_for_user": true
         },
         {
           "id": "beri-akses-khas-fail-sulit.3",
-          "title": "Langkah 3",
-          "instruction": "Sahkan ahli boleh melihat fail tetapi tenant lain tidak.",
-          "target": "page-primary",
+          "title": "Sahkan pemberian",
+          "instruction": "Beri akses, kemudian sahkan ahli boleh melihat fail tetapi tenant lain tidak.",
+          "target": "file-access-submit",
           "wait_for_user": true
         },
         {
           "id": "beri-akses-khas-fail-sulit.4",
-          "title": "Langkah 4",
+          "title": "Tarik balik akses",
           "instruction": "Tarik balik apabila tugasan selesai.",
-          "target": "page-primary",
+          "target": "file-access-revoke",
           "wait_for_user": true
         }
       ],
@@ -7014,7 +7014,7 @@
     },
     {
       "id": "screen.balas-dan-edarkan-minit",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Balas dan edarkan minit",
       "summary": "Panduan skrin dan tindakan: Balas dan edarkan minit.",
@@ -7053,44 +7053,44 @@
       "steps": [
         {
           "id": "balas-dan-edarkan-minit.1",
-          "title": "Langkah 1",
-          "instruction": "Baca arahan asal dan rekod.",
-          "target": "page-primary",
+          "title": "Buka balasan minit",
+          "instruction": "Baca arahan asal dan rekod, kemudian tekan Balas & Edarkan.",
+          "target": "minit-reply",
           "wait_for_user": true
         },
         {
           "id": "balas-dan-edarkan-minit.2",
-          "title": "Langkah 2",
+          "title": "Penerima tindakan susulan",
           "instruction": "Pilih penerima tindakan susulan.",
-          "target": "page-primary",
+          "target": "minit-reply-action",
           "wait_for_user": true
         },
         {
           "id": "balas-dan-edarkan-minit.3",
-          "title": "Langkah 3",
+          "title": "Penerima makluman",
           "instruction": "Tambah penerima s.k. jika perlu.",
-          "target": "page-primary",
+          "target": "minit-reply-cc",
           "wait_for_user": true
         },
         {
           "id": "balas-dan-edarkan-minit.4",
-          "title": "Langkah 4",
+          "title": "Catatan jawapan",
           "instruction": "Tulis catatan jawapan.",
-          "target": "page-primary",
+          "target": "minit-reply-body",
           "wait_for_user": true
         },
         {
           "id": "balas-dan-edarkan-minit.5",
-          "title": "Langkah 5",
-          "instruction": "Pilih keutamaan dan hantar.",
-          "target": "page-primary",
+          "title": "Keutamaan balasan",
+          "instruction": "Pilih keutamaan sebelum menghantar.",
+          "target": "minit-reply-priority",
           "wait_for_user": true
         },
         {
           "id": "balas-dan-edarkan-minit.6",
-          "title": "Langkah 6",
-          "instruction": "Tanda minit asal selesai hanya selepas tindakan sendiri selesai.",
-          "target": "page-primary",
+          "title": "Hantar balasan",
+          "instruction": "Hantar; tanda minit asal selesai hanya selepas tindakan sendiri selesai.",
+          "target": "minit-reply-submit",
           "wait_for_user": true
         }
       ],
@@ -7101,7 +7101,7 @@
     },
     {
       "id": "screen.tanda-tindakan-minit-selesai",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Tanda tindakan minit selesai",
       "summary": "Panduan skrin dan tindakan: Tanda tindakan minit selesai.",
@@ -7137,38 +7137,38 @@
       "steps": [
         {
           "id": "tanda-tindakan-minit-selesai.1",
-          "title": "Langkah 1",
-          "instruction": "Pastikan kerja sebenar selesai.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Semak tugasan minit",
+          "instruction": "Pastikan kerja sebenar bagi minit ini benar-benar selesai.",
+          "target": "minit-reply",
+          "wait_for_user": false
         },
         {
           "id": "tanda-tindakan-minit-selesai.2",
-          "title": "Langkah 2",
-          "instruction": "Tekan Tanda Selesai.",
-          "target": "page-primary",
+          "title": "Butang tanda selesai",
+          "instruction": "Tekan Tanda Selesai pada minit berkenaan.",
+          "target": "minit-complete",
           "wait_for_user": true
         },
         {
           "id": "tanda-tindakan-minit-selesai.3",
-          "title": "Langkah 3",
-          "instruction": "Baca pengesahan.",
-          "target": "page-primary",
+          "title": "Baca pengesahan",
+          "instruction": "Baca pengesahan sebelum meneruskan.",
+          "target": "minit-complete-confirm",
           "wait_for_user": true
         },
         {
           "id": "tanda-tindakan-minit-selesai.4",
-          "title": "Langkah 4",
-          "instruction": "Sahkan status penerima/ minit berubah.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Status penerima",
+          "instruction": "Sahkan status penerima atau minit berubah.",
+          "target": "minit-status",
+          "wait_for_user": false
         },
         {
           "id": "tanda-tindakan-minit-selesai.5",
-          "title": "Langkah 5",
+          "title": "Makluman pengirim",
           "instruction": "Pengirim dimaklumkan apabila semua penerima tindakan selesai.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "page-content",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -7178,7 +7178,7 @@
     },
     {
       "id": "screen.buat-keputusan-kelulusan",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Buat keputusan kelulusan",
       "summary": "Panduan skrin dan tindakan: Buat keputusan kelulusan.",
@@ -7209,45 +7209,45 @@
       "steps": [
         {
           "id": "buat-keputusan-kelulusan.1",
-          "title": "Langkah 1",
-          "instruction": "Buka dan semak rekod asal.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Rekod dalam permohonan",
+          "instruction": "Buka dan semak rekod asal sebelum memutuskan.",
+          "target": "approval-record",
+          "wait_for_user": false
         },
         {
           "id": "buat-keputusan-kelulusan.2",
-          "title": "Langkah 2",
-          "instruction": "Pilih Lulus atau Tolak.",
-          "target": "page-primary",
+          "title": "Butang Lulus",
+          "instruction": "Pilih Lulus, atau tekan Tolak jika permohonan tidak wajar.",
+          "target": "approval-lulus",
           "wait_for_user": true
         },
         {
           "id": "buat-keputusan-kelulusan.3",
-          "title": "Langkah 3",
-          "instruction": "Masukkan kata laluan sendiri.",
-          "target": "page-primary",
+          "title": "Sahkan kata laluan",
+          "instruction": "Masukkan kata laluan sendiri untuk mengesahkan identiti.",
+          "target": "approval-password",
           "wait_for_user": true
         },
         {
           "id": "buat-keputusan-kelulusan.4",
-          "title": "Langkah 4",
+          "title": "Nota keputusan",
           "instruction": "Isi nota; nota wajib untuk Tolak.",
-          "target": "page-primary",
+          "target": "approval-note",
           "wait_for_user": true
         },
         {
           "id": "buat-keputusan-kelulusan.5",
-          "title": "Langkah 5",
+          "title": "Rekod keputusan",
           "instruction": "Sahkan sekali sahaja.",
-          "target": "page-primary",
+          "target": "approval-submit",
           "wait_for_user": true
         },
         {
           "id": "buat-keputusan-kelulusan.6",
-          "title": "Langkah 6",
-          "instruction": "Semak masa, IP dan pihak yang bertindak.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Jejak keputusan",
+          "instruction": "Semak masa, IP dan pihak yang bertindak dalam jejak audit.",
+          "target": "approval-status",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -7257,11 +7257,11 @@
     },
     {
       "id": "screen.butiran-log-aktiviti",
-      "version": 1,
+      "version": 2,
       "panel": "app",
       "title": "Butiran log aktiviti",
       "summary": "Panduan skrin dan tindakan: Butiran log aktiviti.",
-      "route": "/app/{tenant}/records",
+      "route": "/app/{tenant}/log-aktiviti",
       "roles": [
         "admin_masjid",
         "pengerusi",
@@ -7291,38 +7291,38 @@
       "steps": [
         {
           "id": "butiran-log-aktiviti.1",
-          "title": "Langkah 1",
-          "instruction": "Semak tarikh dan masa tepat.",
-          "target": "page-primary",
+          "title": "Buka butiran log",
+          "instruction": "Tekan Butiran pada entri log, kemudian semak tarikh dan masa tepat.",
+          "target": "log-detail",
           "wait_for_user": true
         },
         {
           "id": "butiran-log-aktiviti.2",
-          "title": "Langkah 2",
+          "title": "Pelaku dan peranan",
           "instruction": "Sahkan pelaku dan role ketika aktiviti berlaku.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "log-actor",
+          "wait_for_user": false
         },
         {
           "id": "butiran-log-aktiviti.3",
-          "title": "Langkah 3",
-          "instruction": "Bandingkan tajuk/rujukan rekod serta nombor fail.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "title": "Rekod dan fail",
+          "instruction": "Bandingkan tajuk atau rujukan rekod serta nombor fail.",
+          "target": "log-record",
+          "wait_for_user": false
         },
         {
           "id": "butiran-log-aktiviti.4",
-          "title": "Langkah 4",
+          "title": "Sumber dan alamat IP",
           "instruction": "Semak saluran, identiti pengirim dan IP jika tersedia.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "log-source",
+          "wait_for_user": false
         },
         {
           "id": "butiran-log-aktiviti.5",
-          "title": "Langkah 5",
+          "title": "Metadata peristiwa",
           "instruction": "Baca metadata peristiwa tanpa mengubah log.",
-          "target": "page-primary",
-          "wait_for_user": true
+          "target": "log-metadata",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [

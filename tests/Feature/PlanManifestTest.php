@@ -61,6 +61,11 @@ test('manifest baseline mematuhi invarian partition beku', function () {
         }
     }
 
+    // Wave yang KOSONG ialah keadaan sah sejak F6-W1 (semua kerjanya selesai), jadi setiap
+    // kunci mesti wujud dengan nilai 0 — jika tidak, "wave siap" kelihatan seperti "wave
+    // hilang" dan perbandingan struktur gagal atas sebab yang salah.
+    $waveGuides += array_fill_keys(['W0', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'], 0);
+    $waveSteps += array_fill_keys(['W0', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'], 0);
     ksort($waveGuides);
 
     // STRUKTUR (skop kerja) mesti tepat; METRIK KEMAJUAN mesti ≤ baseline F0 — pelan §7
@@ -75,11 +80,14 @@ test('manifest baseline mematuhi invarian partition beku', function () {
     // mendapat sasaran spesifik §6.2 → tiada lagi tindakan generik → `waveOf()` W1 → W3.
     // Jumlah 83/473 dan shard `screen` 29/151 TIDAK berubah. Sebab penuh + 2 denominator
     // lain: `Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs`.
+    // DIKEMAS SEMULA F6-W1 (4 Ogos 2026): kesemua 27 guide `screen` yang berbaki mendapat
+    // sasaran spesifik → `waveOf()` memindahkan SEMUANYA W1 → W3. W1 = 0/0 bermakna senarai
+    // kerja wave itu KOSONG, iaitu definisi wave itu siap; W3 kini seluruh shard `screen`.
     expect($totals['steps'])->toBe(473)
-        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 27, 'W2' => 13, 'W3' => 2, 'W4' => 1, 'W5' => 35, 'W6' => 3])
+        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 0, 'W2' => 13, 'W3' => 29, 'W4' => 1, 'W5' => 35, 'W6' => 3])
         ->and(array_sum($waveSteps))->toBe(473)
-        ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(135)
-        ->and($waveSteps['W2'])->toBe(145)->and($waveSteps['W3'])->toBe(16)
+        ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(0)
+        ->and($waveSteps['W2'])->toBe(145)->and($waveSteps['W3'])->toBe(151)
         ->and($waveSteps['W4'])->toBe(13)->and($waveSteps['W5'])->toBe(146)->and($waveSteps['W6'])->toBe(8);
 });
 

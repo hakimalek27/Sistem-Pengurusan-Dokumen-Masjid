@@ -34,7 +34,8 @@ class MinitsTable
                 TextColumn::make('priority')->label('Keutamaan')->badge(),
                 TextColumn::make('due_at')->label('Tarikh Akhir')->date('d/m/Y')
                     ->color(fn ($record) => $record->due_at && $record->due_at->isPast() && $record->status->value === 'terbuka' ? 'danger' : null),
-                TextColumn::make('status')->label('Status')->badge(),
+                TextColumn::make('status')->label('Status')->badge()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'minit-status')),
             ])
             ->filters([
                 // Ganti "tab" §9.C.5 (Filament 4 tenant-tabs bermasalah) — filter kategori.
@@ -62,10 +63,15 @@ class MinitsTable
                     }),
             ])
             ->recordActions([
+                // F6-W1 (§7.2) — aksi BARIS: sasaran dipasang pada baris PERTAMA sahaja
+                // supaya ia unik (corak sama seperti F6-W0 pada halaman Kegemaran).
                 Action::make('selesai')
                     ->label('Tanda Selesai')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'minit-complete'))
+                    ->modalSubmitAction(fn (Action $action): Action => $action
+                        ->extraAttributes(['data-help-target' => 'minit-complete-confirm']))
                     ->authorize('complete')
                     ->visible(fn ($record) => ($recipient = app(DelegationService::class)->recipientFor($record, Auth::user()))
                         && $recipient->jenis === 'tindakan' && $recipient->status !== 'selesai')
@@ -77,16 +83,23 @@ class MinitsTable
                 Action::make('balas')
                     ->label('Balas & Edarkan')
                     ->icon('heroicon-o-arrow-uturn-left')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'minit-reply'))
+                    ->modalSubmitAction(fn (Action $action): Action => $action
+                        ->extraAttributes(['data-help-target' => 'minit-reply-submit']))
                     ->authorize('reply')
                     ->visible(fn ($record) => app(DelegationService::class)->recipientFor($record, Auth::user()) !== null)
                     ->schema([
                         Select::make('action')->label('Penerima Tindakan')->multiple()
-                            ->options(fn ($record) => self::eligibleRecipients($record))->required(),
+                            ->options(fn ($record) => self::eligibleRecipients($record))
+                            ->extraFieldWrapperAttributes(['data-help-target' => 'minit-reply-action'])->required(),
                         Select::make('cc')->label('Makluman (s.k.)')->multiple()
-                            ->options(fn ($record) => self::eligibleRecipients($record)),
-                        Textarea::make('body')->label('Catatan')->required(),
+                            ->options(fn ($record) => self::eligibleRecipients($record))
+                            ->extraFieldWrapperAttributes(['data-help-target' => 'minit-reply-cc']),
+                        Textarea::make('body')->label('Catatan')->required()
+                            ->extraFieldWrapperAttributes(['data-help-target' => 'minit-reply-body']),
                         Select::make('priority')->label('Keutamaan')
-                            ->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])->default('biasa')->required(),
+                            ->options(['biasa' => 'Biasa', 'segera' => 'Segera', 'kritikal' => 'Kritikal'])->default('biasa')
+                            ->extraFieldWrapperAttributes(['data-help-target' => 'minit-reply-priority'])->required(),
                     ])
                     ->action(function ($record, array $data) {
                         app(MinitService::class)->replyAndRoute(
@@ -95,6 +108,25 @@ class MinitsTable
                         Notification::make()->title('Balasan minit diedarkan.')->success()->send();
                     }),
             ]);
+    }
+
+    /**
+     * F6-W1 — sasaran tour hanya pada baris PERTAMA yang dirender.
+     *
+     * Aksi baris wujud sekali per baris; menandakan semuanya bermakna satu sasaran
+     * memadan N elemen dan melanggar syarat keunikan G2. Memo statik ini hidup selama
+     * satu permintaan sahaja (jadual dirender semula setiap permintaan), jadi ia sentiasa
+     * merujuk baris pertama dalam susunan query semasa.
+     */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
     }
 
     protected static function eligibleRecipients($minit): array

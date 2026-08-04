@@ -2,15 +2,22 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MinitPriority;
 use App\Enums\MosqueStatus;
 use App\Enums\OcrStatus;
 use App\Enums\RecordStatus;
 use App\Enums\SourceChannel;
+use App\Models\Approval;
 use App\Models\ClassificationNode;
+use App\Models\FileAccessGrant;
+use App\Models\Minit;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RegistryFile;
 use App\Models\User;
+use App\Services\ApprovalService;
+use App\Services\FileTrackingService;
+use App\Services\MinitService;
 use App\Support\Roles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -109,6 +116,69 @@ class DemoSeeder extends Seeder
         if (! $man->registryFiles()->exists()) {
             $f = $this->makeFile($man, '900-1', 'Surat Majlis Agama Selangor', $manAdmin);
             $this->makeRecord($man, $f, 'surat_menyurat', 'Surat pekeliling MAIS 2026', $manAdmin);
+        }
+
+        $this->seedTugasanDemo($mam);
+    }
+
+    /**
+     * F6-W1 — tugasan demo supaya skrin Minit, Kelulusan, Log Aktiviti dan fail FIZIKAL
+     * tidak kosong.
+     *
+     * Sebab: tenant demo sepatutnya mewakili sistem sebenar, tetapi ia tidak pernah
+     * mempunyai satu pun minit, kelulusan, entri log atau fail bermedium fizikal — jadi
+     * empat skrin itu memaparkan "Tiada rekod dijumpai" dan panduan tour bagi skrin
+     * tersebut tidak mempunyai satu pun kawalan untuk disorot. Data ini juga menjadikan
+     * gate G2/G3 bermakna, bukan hijau pada halaman kosong.
+     *
+     * Idempotent: setiap blok hanya berjalan bila jenis datanya belum wujud.
+     */
+    protected function seedTugasanDemo(Mosque $mam): void
+    {
+        $kerani = User::query()->where('email', 'admin_masjid@demo.test')->first();
+        $pengerusi = User::query()->where('email', 'pengerusi@demo.test')->first();
+        $record = Record::query()->where('mosque_id', $mam->id)->where('status', RecordStatus::Difailkan)->first();
+
+        if (! $kerani || ! $pengerusi || ! $record) {
+            return;
+        }
+
+        // Fail bermedium HIBRID — tanpanya aksi "Keluarkan Fail" dan "Pindah Lokasi"
+        // tidak pernah dirender (kedua-duanya ->visible() pada medium fizikal/hibrid).
+        if (! $mam->registryFiles()->where('medium', 'hibrid')->exists()) {
+            $hibrid = $this->makeFile($mam, '100-4', 'Fail Fizikal Surat Rasmi 2026', $kerani);
+            $hibrid->update([
+                'medium' => 'hibrid',
+                'physical_reference' => 'KOTAK-A/2026',
+                'physical_location' => 'Rak 2, Bilik Fail',
+                'custody_status' => 'dalam_simpanan',
+            ]);
+
+            // Satu pergerakan supaya panel "Sejarah Pergerakan" tidak setinggi 0px —
+            // sorotan tour pada bekas kosong tidak menunjuk apa-apa kepada pengguna.
+            app(FileTrackingService::class)->relocate($hibrid->refresh(), $kerani, 'Rak 3, Bilik Fail', 'Susun semula rak arkib.');
+
+            // Satu geran akses supaya aksi "Tarik Balik" wujud dalam keadaan lalai.
+            FileAccessGrant::query()->create([
+                'registry_file_id' => $hibrid->id,
+                'user_id' => $pengerusi->id,
+                'granted_by' => $kerani->id,
+            ]);
+        }
+
+        if (! Minit::query()->where('mosque_id', $mam->id)->exists()) {
+            app(MinitService::class)->create(
+                $record,
+                $kerani,
+                [$pengerusi->id],
+                [],
+                'Mohon semak dan beri maklum balas sebelum mesyuarat AJK akan datang.',
+                MinitPriority::Biasa,
+            );
+        }
+
+        if (! Approval::query()->where('mosque_id', $mam->id)->exists()) {
+            app(ApprovalService::class)->request($record, $kerani, $pengerusi, 'Mohon kelulusan untuk tindakan susulan rekod ini.');
         }
     }
 

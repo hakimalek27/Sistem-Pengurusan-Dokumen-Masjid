@@ -23,9 +23,15 @@ const SHARDS = ['screen', 'workflow', 'tenant-admin-public'];
 // Jumlah kekal 83/473; shard `screen` kekal 29/151. Sebab penuh + dua denominator lain
 // (wait_for_user 229→228, tenant-admin-public.action_steps 3→4) ada dalam
 // `tools/build-manifest.mjs` — KEDUA-DUA penjaga dikemas dalam commit yang sama.
+//
+// DIKEMAS SEMULA F6-W1 (4 Ogos 2026): kesemua 27 guide `screen` yang berbaki mendapat
+// sasaran spesifik, jadi `waveOf()` memindahkan SEMUANYA W1 → W3. W1 = 0/0 (senarai kerja
+// wave itu kosong = wave siap) dan W3 = seluruh shard `screen` 29/151. Jumlah 83/473 dan
+// struktur shard TIDAK berubah. Sebab penuh (termasuk wait_for_user 228 → 190) ada dalam
+// `tools/build-manifest.mjs` nota (4); KEEMPAT-EMPAT penjaga dikemas dalam commit sama.
 const EXPECT = {
-    waveGuides: { W0: 2, W1: 27, W2: 13, W3: 2, W4: 1, W5: 35, W6: 3 },
-    waveSteps: { W0: 10, W1: 135, W2: 145, W3: 16, W4: 13, W5: 146, W6: 8 },
+    waveGuides: { W0: 2, W1: 0, W2: 13, W3: 29, W4: 1, W5: 35, W6: 3 },
+    waveSteps: { W0: 10, W1: 0, W2: 145, W3: 151, W4: 13, W5: 146, W6: 8 },
     // STRUKTUR (mesti sama) vs BASELINE KEMAJUAN (mesti ≤ — pelan §7 menjangka 200→0,
     // 258→0, mobile 6→0; mengassert kesamaan akan menolak setiap pembaikan F6).
     totals: { guides: 83, steps: 473 },

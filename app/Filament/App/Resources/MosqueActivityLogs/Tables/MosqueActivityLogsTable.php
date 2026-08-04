@@ -103,9 +103,11 @@ class MosqueActivityLogsTable
                         ->when($data['hingga'] ?? null, fn (Builder $q, $date) => $q->whereDate('created_at', '<=', $date))),
             ])
             ->recordActions([
+                // F6-W1 (§7.2) — `screen.butiran-log-aktiviti`; baris pertama sahaja (keunikan G2).
                 Action::make('butiran')
                     ->label('Butiran')
                     ->icon('heroicon-o-eye')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'log-detail'))
                     ->modalHeading('Butiran Log Aktiviti')
                     ->modalContent(fn (MosqueActivityLog $record) => view('filament.app.activity-log-details', ['log' => $record]))
                     ->modalSubmitAction(false)
@@ -114,5 +116,17 @@ class MosqueActivityLogsTable
             ->toolbarActions([])
             ->emptyStateHeading('Belum ada aktiviti direkodkan')
             ->emptyStateDescription('Aktiviti baharu masjid akan muncul di sini secara kronologi.');
+    }
+
+    /** F6-W1 — sasaran hanya pada baris pertama (rujuk MinitsTable::baris1). */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
     }
 }

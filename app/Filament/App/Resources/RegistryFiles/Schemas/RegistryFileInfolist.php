@@ -12,7 +12,7 @@ class RegistryFileInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('file_no')->label('No. Fail'),
+                TextEntry::make('file_no')->label('No. Fail')->extraAttributes(['data-help-target' => 'file-identity']),
                 TextEntry::make('title')->label('Tajuk'),
                 TextEntry::make('classificationNode.title')->label('Klasifikasi')->placeholder('—'),
                 TextEntry::make('sensitivity')->label('Sensitiviti')->badge(),
@@ -20,13 +20,13 @@ class RegistryFileInfolist
                 TextEntry::make('enclosure_count')->label('Bil. Kandungan'),
                 TextEntry::make('volume')->label('Jilid'),
                 TextEntry::make('opened_at')->label('Dibuka')->dateTime('d/m/Y')->placeholder('—'),
-                TextEntry::make('medium')->label('Medium')->badge(),
+                TextEntry::make('medium')->label('Medium')->badge()->extraAttributes(['data-help-target' => 'file-medium']),
                 TextEntry::make('physical_reference')->label('Rujukan Fizikal')->placeholder('—'),
                 TextEntry::make('physical_location')->label('Lokasi')->placeholder('—'),
-                TextEntry::make('custody_status')->label('Penjagaan')->badge(),
+                TextEntry::make('custody_status')->label('Penjagaan')->badge()->extraAttributes(['data-help-target' => 'file-custody']),
                 TextEntry::make('currentHolder.name')->label('Pemegang')->placeholder(fn ($record) => $record->current_holder_name ?: '—'),
                 TextEntry::make('custody_due_at')->label('Perlu Pulang')->dateTime('d/m/Y H:i')->placeholder('—'),
-                RepeatableEntry::make('movements')->label('Sejarah Pergerakan')->schema([
+                RepeatableEntry::make('movements')->label('Sejarah Pergerakan')->extraAttributes(['data-help-target' => 'file-movements'])->schema([
                     TextEntry::make('action')->label('Tindakan')->badge(),
                     TextEntry::make('from_location')->label('Dari')->placeholder('—'),
                     TextEntry::make('to_location')->label('Ke')->placeholder('—'),

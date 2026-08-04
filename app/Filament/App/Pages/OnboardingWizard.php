@@ -51,9 +51,15 @@ class OnboardingWizard extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W1 (§7.2) — `screen.persediaan-berpandu`. Wizard memaparkan satu langkah
+            // pada satu masa, jadi sasaran muncul secara berperingkat; itulah corak
+            // `wait-for-action` yang stepAdvancePlan memang sedia kendalikan.
             Action::make('mula')
                 ->label('Mula Persediaan Berpandu')
                 ->icon('heroicon-o-rocket-launch')
+                ->extraAttributes(['data-help-target' => 'onboarding-start'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'onboarding-submit']))
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'mosque.settings') ?? false)
                 ->modalWidth('3xl')
                 ->steps([
@@ -66,6 +72,7 @@ class OnboardingWizard extends Page
                             TextInput::make('jawatan')
                                 ->label('Jawatan Anda')
                                 ->default(fn () => Auth::user()->jawatan)
+                                ->extraFieldWrapperAttributes(['data-help-target' => 'onboarding-jawatan'])
                                 ->maxLength(255),
                         ]),
                     Step::make('WhatsApp Masjid')
@@ -78,9 +85,11 @@ class OnboardingWizard extends Page
                                 ->label('Nombor Telefon Masjid')
                                 ->tel()
                                 ->placeholder('60123456789')
+                                ->extraFieldWrapperAttributes(['data-help-target' => 'onboarding-phone'])
                                 ->default(fn () => Filament::getTenant()->phone),
                             Radio::make('wa_choice')
                                 ->label('Nombor WhatsApp untuk notifikasi')
+                                ->extraFieldWrapperAttributes(['data-help-target' => 'onboarding-wa-source'])
                                 ->options([
                                     'own' => 'Guna nombor saya sendiri buat sementara',
                                     'dedicated' => 'Guna nombor khas masjid (saya akan sediakan telefon)',
@@ -95,6 +104,7 @@ class OnboardingWizard extends Page
                                 ->content('Daftarkan ahli dengan nombor telefon (wajib) — mereka akan terima pautan log masuk melalui WhatsApp/e-mel dan tetapkan kata laluan sendiri semasa masuk kali pertama. E-mel adalah pilihan.'),
                             Repeater::make('members')
                                 ->label('Ahli untuk didaftarkan')
+                                ->extraFieldWrapperAttributes(['data-help-target' => 'onboarding-members'])
                                 ->schema([
                                     TextInput::make('name')->label('Nama')->required(),
                                     Select::make('role')->label('Peranan')->options(Roles::options())->required(),

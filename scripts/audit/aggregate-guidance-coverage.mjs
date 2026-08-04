@@ -72,7 +72,11 @@ const mActions = new Set(manifest.catalogue.flatMap((g) => g.steps.filter((s) =>
 const categories = [
     ['guide_ids', mGuides, 83],
     ['step_ids', mSteps, 473],
-    ['action_step_ids', mActions, 228],
+    // F6-W1 (4 Ogos 2026): 228 → 190. 38 langkah PEMERHATIAN dalam family `screen` yang
+    // tersalah label `wait_for_user: true` dibetulkan kepada `false` (§7.2 langkah 3) —
+    // label salah itulah yang membuat CTA berkata "Buat pada skrin" untuk langkah yang
+    // pengguna hanya perlu BACA. Sebab penuh: `tools/build-manifest.mjs` nota (4).
+    ['action_step_ids', mActions, 190],
 ];
 const summary = {};
 for (const [field, manifestSet, exactTotal] of categories) {

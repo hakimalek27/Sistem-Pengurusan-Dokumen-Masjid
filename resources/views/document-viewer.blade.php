@@ -29,23 +29,26 @@
 </head>
 <body>
 <main data-document-viewer data-url="{{ $mediaUrl }}" data-mime="{{ $media->mime_type }}">
+    {{-- F6-W1: sasaran dipasang untuk kerja masa depan. Halaman ini TIDAK memuatkan runtime
+         bantuan (tiada Livewire/help.js), jadi tour tidak boleh berjalan di sini; entri
+         registri kekal `reserved` sehingga runtime ditambah (dicadangkan F7). --}}
     <nav class="viewer-toolbar" aria-label="Kawalan viewer dokumen">
         <button type="button" onclick="history.back()" title="Kembali" aria-label="Kembali">&#8592;</button>
         <div class="viewer-title">{{ $record->title ?: $media->file_name }}</div>
         @if ($media->mime_type === 'application/pdf')
-            <button type="button" data-prev title="Halaman sebelumnya" aria-label="Halaman sebelumnya">&#9664;</button>
-            <label>Halaman <input type="number" min="1" value="1" data-page-input aria-label="Nombor halaman"> / <span data-page-count>?</span></label>
+            <button type="button" data-prev data-help-target="viewer-page-prev" title="Halaman sebelumnya" aria-label="Halaman sebelumnya">&#9664;</button>
+            <label>Halaman <input type="number" min="1" value="1" data-page-input data-help-target="viewer-page-input" aria-label="Nombor halaman"> / <span data-page-count>?</span></label>
             <button type="button" data-next title="Halaman seterusnya" aria-label="Halaman seterusnya">&#9654;</button>
         @endif
         <button type="button" data-zoom-out title="Zum keluar" aria-label="Zum keluar">&#8722;</button>
         <span data-zoom-label>125%</span>
-        <button type="button" data-zoom-in title="Zum masuk" aria-label="Zum masuk">&#43;</button>
+        <button type="button" data-zoom-in data-help-target="viewer-zoom-in" title="Zum masuk" aria-label="Zum masuk">&#43;</button>
         @if ($media->mime_type === 'application/pdf')
-            <input type="search" data-find-input placeholder="Cari teks" aria-label="Cari teks dalam dokumen">
+            <input type="search" data-find-input data-help-target="viewer-find" placeholder="Cari teks" aria-label="Cari teks dalam dokumen">
             <button type="button" data-find>Cari</button>
         @endif
-        <button type="button" data-print title="Cetak metadata">Cetak Metadata</button>
-        <a href="{{ $downloadUrl }}">Muat Turun</a>
+        <button type="button" data-print data-help-target="viewer-print" title="Cetak metadata">Cetak Metadata</button>
+        <a href="{{ $downloadUrl }}" data-help-target="viewer-download">Muat Turun</a>
     </nav>
     <div class="viewer-status" data-status role="status">Bersedia.</div>
     <section class="viewer-stage">

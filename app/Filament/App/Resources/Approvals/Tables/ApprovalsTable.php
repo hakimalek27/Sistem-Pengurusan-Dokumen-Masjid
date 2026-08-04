@@ -22,11 +22,13 @@ class ApprovalsTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('record.title')->label('Rekod')->wrap()->limit(50),
+                TextColumn::make('record.title')->label('Rekod')->wrap()->limit(50)
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'approval-record')),
                 TextColumn::make('requestedBy.name')->label('Pemohon'),
                 TextColumn::make('request_note')->label('Nota')->wrap()->limit(40)->placeholder('—'),
                 TextColumn::make('created_at')->label('Tarikh')->date('d/m/Y'),
-                TextColumn::make('status')->label('Status')->badge(),
+                TextColumn::make('status')->label('Status')->badge()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'approval-status')),
                 TextColumn::make('onBehalfOf.name')->label('Bagi pihak')->placeholder('—')->toggleable(),
             ])
             ->recordActions([
@@ -35,18 +37,36 @@ class ApprovalsTable
             ]);
     }
 
+    /** F6-W1 — sasaran hanya pada baris pertama yang dirender (rujuk MinitsTable::baris1). */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
+    }
+
     protected static function decideAction(string $name, string $label, string $color, ApprovalStatus $decision, bool $noteRequired): Action
     {
+        // F6-W1 (§7.2) — sasaran tour pada baris PERTAMA sahaja (keunikan G2).
         return Action::make($name)
             ->label($label)
             ->color($color)
             ->icon($decision === ApprovalStatus::Lulus ? 'heroicon-o-check' : 'heroicon-o-x-mark')
+            ->extraAttributes(fn ($record): array => self::baris1($record, "approval-{$name}"))
+            ->modalSubmitAction(fn (Action $action): Action => $action
+                ->extraAttributes(['data-help-target' => 'approval-submit']))
             ->authorize('decide')
             ->visible(fn ($record) => $record->status === ApprovalStatus::Menunggu
                 && app(DelegationService::class)->canActFor(Auth::user(), $record->approver, $record->mosque, 'approvals'))
             ->schema([
-                TextInput::make('password')->label('Sahkan Kata Laluan')->password()->required(),
-                Textarea::make('note')->label('Nota')->required($noteRequired),
+                TextInput::make('password')->label('Sahkan Kata Laluan')->password()->required()
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'approval-password']),
+                Textarea::make('note')->label('Nota')->required($noteRequired)
+                    ->extraFieldWrapperAttributes(['data-help-target' => 'approval-note']),
             ])
             ->action(function ($record, array $data) use ($decision) {
                 if (! Auth::user()->password || ! Hash::check($data['password'], Auth::user()->password)) {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Resources\RegistryFiles\RelationManagers;
 
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Facades\Filament;
@@ -26,8 +27,22 @@ class AccessGrantsRelationManager extends RelationManager
                 ->label('Ahli Masjid')
                 ->options(fn () => Filament::getTenant()->users()->pluck('name', 'users.id'))
                 ->searchable()
+                // F6-W1 (§7.2) — `screen.beri-akses-khas-fail-sulit`.
+                ->extraFieldWrapperAttributes(['data-help-target' => 'file-access-member'])
                 ->required(),
         ]);
+    }
+
+    /** F6-W1 — sasaran hanya pada baris pertama (rujuk MinitsTable::baris1). */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
     }
 
     public function table(Table $table): Table
@@ -42,6 +57,9 @@ class AccessGrantsRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()
                     ->label('Beri Akses')
+                    ->extraAttributes(['data-help-target' => 'file-access-grant'])
+                    ->modalSubmitAction(fn (Action $action): Action => $action
+                        ->extraAttributes(['data-help-target' => 'file-access-submit']))
                     ->authorize('create')
                     ->mutateDataUsing(function (array $data) {
                         $data['granted_by'] = Auth::id();
@@ -50,7 +68,9 @@ class AccessGrantsRelationManager extends RelationManager
                     }),
             ])
             ->recordActions([
-                DeleteAction::make()->label('Tarik Balik')->authorize('delete'),
+                DeleteAction::make()->label('Tarik Balik')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'file-access-revoke'))
+                    ->authorize('delete'),
             ]);
     }
 }

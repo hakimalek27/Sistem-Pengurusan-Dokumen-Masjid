@@ -4,7 +4,7 @@
             <dt class="font-medium text-gray-500 dark:text-gray-400">Tarikh dan masa</dt>
             <dd class="mt-1 text-gray-950 dark:text-white">{{ $log->created_at?->format('d/m/Y h:i:s A') ?? '—' }}</dd>
         </div>
-        <div>
+        <div data-help-target="log-actor">
             <dt class="font-medium text-gray-500 dark:text-gray-400">Pelaku</dt>
             <dd class="mt-1 text-gray-950 dark:text-white">
                 {{ $log->actor_name ?: 'Sistem / penghantar luar' }}
@@ -17,7 +17,7 @@
             <dt class="font-medium text-gray-500 dark:text-gray-400">Aktiviti</dt>
             <dd class="mt-1 text-gray-950 dark:text-white">{{ $log->description }}</dd>
         </div>
-        <div>
+        <div data-help-target="log-record">
             <dt class="font-medium text-gray-500 dark:text-gray-400">Rekod</dt>
             <dd class="mt-1 text-gray-950 dark:text-white">{{ $log->record_title ?: '—' }}</dd>
             @if ($log->record_reference)
@@ -31,7 +31,7 @@
                 <dd class="text-gray-500">{{ $log->file_title }}</dd>
             @endif
         </div>
-        <div>
+        <div data-help-target="log-source">
             <dt class="font-medium text-gray-500 dark:text-gray-400">Sumber / pengirim</dt>
             <dd class="mt-1 text-gray-950 dark:text-white">
                 {{ match ($log->source_channel) {
@@ -49,10 +49,14 @@
         </div>
     </dl>
 
-    @if ($log->metadata)
-        <div>
-            <h3 class="font-medium text-gray-500 dark:text-gray-400">Metadata peristiwa</h3>
+    {{-- F6-W1: dirender TANPA SYARAT — sasaran tour mesti wujud walaupun peristiwa itu
+         tiada metadata, jika tidak langkah terakhir jatuh ke ralat palsu. --}}
+    <div data-help-target="log-metadata">
+        <h3 class="font-medium text-gray-500 dark:text-gray-400">Metadata peristiwa</h3>
+        @if ($log->metadata)
             <pre class="mt-2 max-h-72 overflow-auto whitespace-pre-wrap rounded-md bg-gray-50 p-3 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-200">{{ json_encode($log->metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}</pre>
-        </div>
-    @endif
+        @else
+            <p class="mt-2 text-gray-500">Tiada metadata tambahan bagi peristiwa ini.</p>
+        @endif
+    </div>
 </div>

@@ -22,14 +22,24 @@ class ViewRegistryFile extends ViewRecord
     {
         return [
             EditAction::make(),
+            // F6-W1 (§7.2) — `screen.keluarkan-fail-fizikal` / `screen.pindah-lokasi-fizikal`.
+            // Kedua-dua aksi hanya dirender untuk fail bermedium fizikal/hibrid; tenant demo
+            // kini mempunyai satu fail hibrid supaya sasaran ini benar-benar wujud.
             Action::make('keluarFizikal')->label('Keluarkan Fail')->icon('heroicon-o-arrow-up-tray')->authorize('track')
+                ->extraAttributes(['data-help-target' => 'file-checkout'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'file-checkout-submit']))
                 ->visible(fn () => in_array($this->getRecord()->medium, ['fizikal', 'hibrid'], true) && $this->getRecord()->custody_status !== 'dipinjam')
                 ->schema([
-                    Select::make('holder_user_id')->label('Pemegang Ahli')->options(fn () => $this->getRecord()->mosque->users()->where('users.is_active', true)->pluck('name', 'users.id'))->searchable(),
+                    Select::make('holder_user_id')->label('Pemegang Ahli')->options(fn () => $this->getRecord()->mosque->users()->where('users.is_active', true)->pluck('name', 'users.id'))->searchable()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-checkout-holder']),
                     TextInput::make('holder_name')->label('Nama Pemegang Luar / Tambahan'),
-                    TextInput::make('to_location')->label('Lokasi Tujuan'),
-                    DateTimePicker::make('due_at')->label('Perlu Dipulangkan')->seconds(false),
-                    Textarea::make('notes')->label('Catatan')->required(),
+                    TextInput::make('to_location')->label('Lokasi Tujuan')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-checkout-location']),
+                    DateTimePicker::make('due_at')->label('Perlu Dipulangkan')->seconds(false)
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-checkout-due']),
+                    Textarea::make('notes')->label('Catatan')->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-checkout-notes']),
                 ])->action(function (array $data): void {
                     app(FileTrackingService::class)->checkout($this->getRecord(), Auth::user(), $data);
                     Notification::make()->title('Pergerakan keluar direkodkan.')->success()->send();
@@ -42,8 +52,16 @@ class ViewRegistryFile extends ViewRecord
                     Notification::make()->title('Pulangan fail direkodkan.')->success()->send();
                 }),
             Action::make('pindahFizikal')->label('Pindah Lokasi')->icon('heroicon-o-map-pin')->authorize('track')
+                ->extraAttributes(['data-help-target' => 'file-relocate'])
+                ->modalSubmitAction(fn (Action $action): Action => $action
+                    ->extraAttributes(['data-help-target' => 'file-relocate-submit']))
                 ->visible(fn () => in_array($this->getRecord()->medium, ['fizikal', 'hibrid'], true))
-                ->schema([TextInput::make('location')->label('Lokasi Baharu')->required(), Textarea::make('notes')->label('Catatan')])
+                ->schema([
+                    TextInput::make('location')->label('Lokasi Baharu')->required()
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-relocate-location']),
+                    Textarea::make('notes')->label('Catatan')
+                        ->extraFieldWrapperAttributes(['data-help-target' => 'file-relocate-notes']),
+                ])
                 ->action(function (array $data): void {
                     app(FileTrackingService::class)->relocate($this->getRecord(), Auth::user(), $data['location'], $data['notes'] ?? null);
                     Notification::make()->title('Lokasi fail dikemaskini.')->success()->send();
