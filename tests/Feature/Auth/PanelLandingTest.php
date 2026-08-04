@@ -237,6 +237,28 @@ it('#14 penjaga layout: sesi aktif tidak menambah <main>/<header> kedua', functi
     }
 });
 
+it('#16 akaun tanpa kata laluan TIDAK ditawar panel (elak lantunan EnsurePasswordIsSet)', function () {
+    $mam = makeMosque('MAM', 'mam');
+    $mam->update(['settings' => array_merge($mam->settings ?? [], ['onboarding_done' => now()->toDateTimeString()])]);
+    $baru = makeMember($mam, 'ajk', 'baru-buga@ujian.test', ['password' => null]);
+
+    // Pengguna ini SUDAH log masuk (magic link) tetapi panel akan melantunkannya balik ke
+    // /tetapkan-kata-laluan — halaman yang JUGA memakai layout tetamu. Menawarkan "Ke Panel"
+    // di sana = menjemput lantunan.
+    expect(PanelLandingResolver::urlForCurrentUser())->toBeNull(); // tetamu
+
+    $this->actingAs($baru);
+    expect(PanelLandingResolver::urlForCurrentUser())->toBeNull();
+
+    $html = $this->get('/tetapkan-kata-laluan')->assertOk()->getContent();
+    expect($html)->not->toContain('>Ke Panel<');
+
+    // Sebaik kata laluan ditetapkan, tawaran itu muncul.
+    $baru->forceFill(['password' => bcrypt('kata-laluan-ujian')])->save();
+    $this->actingAs($baru->fresh());
+    expect(PanelLandingResolver::urlForCurrentUser())->toBe('/app/mam');
+});
+
 it('#15 nav tetamu papar "Ke Panel" hanya apabila log masuk', function () {
     $super = bugASuperadmin();
 

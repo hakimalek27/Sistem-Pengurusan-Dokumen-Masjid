@@ -65,7 +65,19 @@ class PanelLandingResolver
     {
         $user = auth()->user();
 
+        if (! $user instanceof User) {
+            return null;
+        }
+
+        // Akaun magic-link yang belum menetapkan kata laluan TIDAK boleh masuk panel:
+        // EnsurePasswordIsSet melantunkannya balik ke /tetapkan-kata-laluan (dan halaman
+        // itu sendiri memakai layout tetamu). Menawarkan "Ke Panel" di sana bermakna
+        // menjemput lantunan. Syarat dicerminkan TEPAT daripada middleware itu.
+        if ($user->password === null) {
+            return null;
+        }
+
         // Navigasi, bukan log masuk → tiada lonjakan wizard (sama seperti log masuk kata laluan).
-        return $user instanceof User ? app(static::class)->urlFor($user, withOnboarding: false) : null;
+        return app(static::class)->urlFor($user, withOnboarding: false);
     }
 }
