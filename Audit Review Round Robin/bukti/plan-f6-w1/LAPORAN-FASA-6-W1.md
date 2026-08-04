@@ -354,6 +354,51 @@ menangguhkan pembaikan ke F7. Pusingan CI berikutnya membuktikan kecacatan yang 
 diketepikan atas alasan "titik operasinya tidak realistik"** — ia mendedahkan kecacatan lebih
 awal, itu sahaja. Yang berbeza hanyalah guide MANA yang terkena dahulu.
 
+### 🎯 PUNCA MUKTAMAD: **auto-advance tour boleh MATI** — bug produk #1 F0, penutupan F2 tidak lengkap
+
+Instrumentasi perekam (setiap entri merakam keadaan SETIAP sasaran + banner + bilangan modal)
+membolehkan jejak larian **LULUS tempatan** dibandingkan terus dengan jejak larian **GAGAL CI**
+bagi guide yang sama. Perbandingan itu memberi punca tanpa tekaan:
+
+```
+tempatan (LULUS)  1:record-version (B, modal 1, sasaran ada) → 1:record-version-file (−) → 2:…
+CI       (GAGAL)  1:record-version (B, modal 1, sasaran ada) → 1:record-version (−, sasaran ada) …
+```
+
+Kedua-duanya sampai ke keadaan yang SAMA — modal terbuka, sasaran `ada`, banner hilang. Bezanya
+hanya **apa yang menghilangkan banner**: tempatan, jadual 120ms menembak dahulu lalu memaju;
+di CI, harness menekan "Tunjuk arahan" dahulu.
+
+**Mekanisme:** butang itu memanggil `activeDriver.refresh()` → `onHighlighted` →
+`watchForNextStep(index)` → `clearTransitionWatch()` **MEMBUNUH jadual `moveNext` 120ms yang
+sedang menunggu**. Guard seterusnya (`… || resolveStepElement(next, false)`) kemudian menolak
+pemasangan poller baharu **kerana sasaran sudah wujud**. Tour terkandas KEKAL pada langkah lama.
+
+Ini **bug produk #1 yang direkod pada F0** ("auto-advance tour boleh mati:
+`onHighlighted`→`watchForNextStep` dipanggil semula pada setiap re-highlight →
+`clearTransitionWatch` bunuh jadual `moveNext` 120ms → guard halang poller baharu"). F2
+dilaporkan menutup ketiga-tiga bug F0; **penutupan itu tidak meliputi laluan ini**. Morph
+Livewire mencetuskannya tanpa sebarang tindakan pengguna, jadi ia bukan kes tepi harness:
+pengguna melakukan tindakan yang diminta, kawalan seterusnya muncul, dan panduan **tidak pernah
+kembali** walaupun UI menjanjikannya.
+
+**Pembaikan** (`watchForNextStep`): jika sasaran berikut SUDAH sedia **dan**
+`menungguTindakanIndex === index` (pengguna memang sedang menunggu pada langkah itu), maju
+sekarang melalui jadual 120ms yang sama, kemudian `return`. Laluan ini **saling eksklusif**
+dengan observer+poller sedia ada (yang hanya dipasang apabila sasaran BELUM sedia), jadi
+mekanisme sync asal kekal utuh. `menungguTindakanIndex` ditanda dalam `minimiseForAction`
+(melindungi kedua-dua laluan: klik CTA dan auto-minimize), dikosongkan apabila tour benar-benar
+berpindah langkah, dan direset dalam KEDUA-DUA `onDestroyed`.
+
+**Kesan sampingan yang segera muncul:** tour kini maju lebih awal, jadi butang wizard tertanggal
+lebih cepat — dan itu menyalakan **bom `dispatchEvent` 30 saat** yang masih tinggal dalam
+`advanceWizard` dan pada sandaran CTA. Kedua-duanya kini bertempoh (3s) dan ditelan;
+`advanceWizard` memulangkan sama ada klik BENAR-BENAR dihantar supaya pemanggil tidak tersilap
+menganggap wizard sudah dimajukan.
+
+**Bukti tempatan (semua exit 0):** `unit` **17** · shard `screen` **30/30** (11.1m) ·
+`guidance.spec.js` (penjaga tour F2) **20** (18.0m) · Pest **515 lulus / 1 skip**.
+
 ### ⚠️ Dua hipotesis SAYA yang salah — dihapuskan oleh ukuran
 
 1. **Pelayan hantu.** `netstat` mendedahkan **dua** proses `artisan serve` mengikat :8092

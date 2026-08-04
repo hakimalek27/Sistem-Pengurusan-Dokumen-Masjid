@@ -319,13 +319,33 @@ const AKSI_LANGKAH = {};
 async function advanceWizard(page) {
     const next = page.locator('.fi-modal-window')
         .getByRole('button', { name: 'Seterusnya', exact: true }).first();
-    if (await next.isVisible().catch(() => false)) {
-        await next.dispatchEvent('click');
+    if (!(await next.isVisible().catch(() => false))) return false;
 
-        return true;
+    // ⚠️ Perlumbaan check-then-act: butang boleh TERTANGGAL antara semakan dan tindakan
+    // (wizard maju sendiri, atau modal dirender semula oleh morph). `dispatchEvent` tiada
+    // tempoh sendiri → mewarisi actionTimeout 30s → MELEMPAR pada laluan yang sebenarnya
+    // berjaya. Corak yang sama pernah menjatuhkan pemulihan banner; ia menyala di sini
+    // sebaik pembaikan produk memajukan tour lebih awal. Pulangkan sama ada klik BENAR-BENAR
+    // dihantar supaya pemanggil tidak tersilap menganggap wizard sudah dimajukan.
+    return next.dispatchEvent('click', { timeout: 3_000 }).then(() => true).catch(() => false);
+}
+
+/**
+ * Cetak jejak perekam bagi larian yang LULUS (env `DIWAN_DUMP_TRAIL=1`).
+ *
+ * Tanpa ini, jejak hanya kelihatan apabila ujian GAGAL — jadi mustahil membandingkan larian
+ * CI yang merah dengan larian tempatan yang hijau, dan perbandingan itulah yang menunjukkan
+ * di mana kedua-duanya bercapah. Diagnostik mesti tersedia pada kedua-dua belah.
+ */
+async function dumpTrail(page, guideId) {
+    if (!process.env.DIWAN_DUMP_TRAIL) return;
+    const log = await page.evaluate(() => window.__diwanTourLog ?? []);
+    console.log(`\n[JEJAK] ${guideId} (${log.length} entri)`);
+    for (const e of log) {
+        const sasaran = Object.entries(e.sasaran ?? {}).map(([k, v]) => `${k}=${v}`).join(' ');
+        console.log(`  n=${e.n ?? '-'} aktif=[${(e.aktif ?? []).filter(Boolean).join('+') || '-'}]`
+            + ` banner=${e.banner ? 'Y' : 'n'} modal=${e.modal} | ${sasaran}`);
     }
-
-    return false;
 }
 
 /**
@@ -404,7 +424,11 @@ async function driveFlowGuide(page, guide, basePath) {
         // di luar viewport ditolak oleh klik sebenar Playwright.
         await page.locator(`[data-help-target="${step.target}"]`).first()
             .evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'nearest' })).catch(() => {});
-        await cta.click({ timeout: 10_000 }).catch(() => cta.dispatchEvent('click'));
+        // Sandaran `dispatchEvent` mesti BERTEMPOH: tanpa `timeout` ia mewarisi actionTimeout
+        // 30s dan MELEMPAR apabila CTA lenyap kerana tour maju sendiri (kejayaan, bukan ralat).
+        await cta.click({ timeout: 10_000 })
+            .catch(() => cta.dispatchEvent('click', { timeout: 3_000 }))
+            .catch(() => {});
 
         if (i === total) {
             await expect(popover, `${step.key}: langkah akhir tidak menutup/meminimize popover`).toBeHidden();
@@ -962,6 +986,7 @@ for (const guide of guides) {
                     ? await resolveDetailPath(page, guide)
                     : hydrate(guide.steps[0].route);
                 await driveFlowGuide(page, guide, basePath);
+                await dumpTrail(page, guide.guide_id);
                 await cycleGuide(page, guide, basePath);
             } else {
                 await driveGenericGuide(page, guide);

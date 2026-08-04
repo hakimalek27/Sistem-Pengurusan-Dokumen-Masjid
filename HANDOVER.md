@@ -10,7 +10,35 @@ Deploy 6 disekat: CI run **30924969914** masih berjalan semasa sesi ditutup.
 `794fc6d` → **`2f7bbbb`** (tutup gate: 2 kecacatan harness) → **`f64fb1c`** (G3 pada urutan
 DIREKOD) → **`4f364c9`** (kecacatan produk: sorotan fallback tidak lagi melekat).
 
-### 🔴 PERKARA TERTUNGGAK — 3 guide `screen` gagal di CI (TEMPATAN SEMUA HIJAU)
+### 🎯 PUNCA MUKTAMAD DITEMUI & DIBAIKI — auto-advance tour boleh MATI (bug produk #1 F0)
+
+Instrumentasi perekam membolehkan jejak **LULUS tempatan** dibanding terus dengan jejak
+**GAGAL CI** bagi guide yang sama. Kedua-duanya sampai ke keadaan IDENTIK (modal terbuka,
+sasaran `ada`, banner hilang); bezanya hanya **apa yang menghilangkan banner**:
+```
+tempatan  1:record-version (B,modal1,sasaran ada) → 1:record-version-file (−) → 2:…
+CI        1:record-version (B,modal1,sasaran ada) → 1:record-version (−,sasaran ada) …
+```
+Di CI, harness menekan "Tunjuk arahan" dahulu → `activeDriver.refresh()` → `onHighlighted` →
+`watchForNextStep()` → **`clearTransitionWatch()` membunuh jadual `moveNext` 120ms**, dan guard
+`… || resolveStepElement(next,false)` menolak poller baharu kerana sasaran SUDAH wujud →
+tour terkandas KEKAL. **Morph Livewire mencetuskannya tanpa tindakan pengguna** — jadi ini
+kecacatan pengguna sebenar, bukan kes tepi harness. F2 dilaporkan menutup bug ini; penutupan
+itu **tidak meliputi laluan ini**.
+
+**Fix:** `watchForNextStep` — jika sasaran sudah sedia DAN `menungguTindakanIndex === index`,
+maju melalui jadual 120ms yang sama lalu `return`. Saling eksklusif dengan observer+poller
+sedia ada (yang hanya dipasang bila sasaran BELUM sedia) → sync asal utuh.
+`menungguTindakanIndex` ditanda dalam `minimiseForAction`, dikosongkan bila tour berpindah
+langkah, direset dalam kedua-dua `onDestroyed`.
+**Kesan sampingan yang segera muncul:** tour maju lebih awal → butang wizard tertanggal lebih
+cepat → menyalakan bom `dispatchEvent` 30s yang tinggal dalam `advanceWizard` + sandaran CTA;
+kedua-duanya kini bertempoh 3s dan ditelan.
+
+**Bukti tempatan (semua exit 0):** `unit` **17** · shard `screen` **30/30** (11.1m) ·
+`guidance.spec.js` penjaga tour F2 **20** (18.0m) · Pest **515✓/1 skip**.
+
+### 🔴 SEJARAH: 3 guide `screen` gagal di CI sebelum pembaikan di atas
 
 **CI run `30925942728` (`abaeaa2`) = failure.** 3 daripada 4 check WAJIB hijau:
 `PostgreSQL, Redis, Meili, OCR and tests` ✔ · `Docker app image` ✔ · `Docker web image` ✔ ·

@@ -24,6 +24,8 @@ let autoMinimiseTimer = null;
 let autoMinimiseFrame = null;
 let tourTrigger = null;
 let rehighlightIndex = null;
+// Indeks langkah yang pengguna sudah tekan "Buat pada skrin" — tour sedang menunggu tindakan.
+let menungguTindakanIndex = null;
 
 function escapeHtml(value) {
     const element = document.createElement('div');
@@ -423,6 +425,9 @@ function focusActionTarget(step) {
 
 function minimiseForAction(step) {
     clearAutoMinimise();   // pengguna bertindak dahulu — jangan biar timer menembak kemudian
+    // Ditanda di SINI supaya setiap laluan minimize (klik CTA dan auto-minimize) dilindungi
+    // oleh pemulihan-terkandas dalam `watchForNextStep`.
+    menungguTindakanIndex = activeDriver?.getActiveIndex?.() ?? null;
     const popover = document.getElementById('driver-popover-content');
     if (!popover) return;
     popover.style.display = 'none';
@@ -568,9 +573,38 @@ function watchForNextStep(guideSteps, index) {
     const current = guideSteps[index];
     const next = guideSteps[index + 1];
     if (!current || !next || (next.route && !samePath(next.route))) return;
+    const sasaranSedia = Boolean(resolveStepElement(next, false));
+
+    // 🔴 PEMULIHAN TERKANDAS (bug produk #1 F0 — penutupan F2 tidak meliputi laluan ini).
+    //
+    // Apabila pengguna sudah menekan "Buat pada skrin" bagi langkah INI, tour diminimize dan
+    // menunggu sasaran berikut muncul. Tetapi mana-mana RE-HIGHLIGHT sebelum jadual 120ms
+    // menembak — `activeDriver.refresh()` daripada butang "Tunjuk arahan", atau morph Livewire
+    // — memanggil semula fungsi ini, dan `clearTransitionWatch()` di atas MEMBUNUH jadual itu.
+    // Guard di bawah kemudian menolak pemasangan poller baharu kerana sasaran SUDAH wujud.
+    // Hasilnya tour terkandas kekal pada langkah lama walaupun kawalan seterusnya sudah ada.
+    //
+    // Dibuktikan dengan membandingkan jejak perekam gate: tempatan (lulus) menunjukkan sorotan
+    // berpindah sebaik sasaran menjadi `ada`; CI (gagal) menunjukkan banner hilang kerana
+    // harness menekan "Tunjuk arahan" dahulu, dan selepas itu sorotan TIDAK PERNAH berpindah:
+    //   CI      1:record-version (B1, sasaran ada) → 1:record-version (-1, sasaran ada) …
+    //   tempatan 1:record-version (B1, sasaran ada) → 1:record-version-file (-1) → 2:…
+    if (sasaranSedia && menungguTindakanIndex === index) {
+        window.setTimeout(() => {
+            if (!activeDriver?.isActive()) return;
+            const semasa = activeDriver.getActiveIndex();
+            if (semasa !== undefined && semasa !== index) return;
+            if (!resolveStepElement(next, false)) return;
+            clearWaitingBanner();
+            activeDriver.moveNext();
+        }, 120);
+
+        return;
+    }
+
     // Predikat kini datang dari plan yang sama seperti label (F2a). Mekanisme sync di bawah
     // (observer + poll 120ms) TIDAK diubah — ia terbukti berfungsi (§3 sempadan F2).
-    if (!ACTION_KINDS.has(planFor(guideSteps, index).kind) || resolveStepElement(next, false)) return;
+    if (!ACTION_KINDS.has(planFor(guideSteps, index).kind) || sasaranSedia) return;
 
     const advanceWhenReady = () => {
         if (!activeDriver?.isActive()) return;
@@ -639,6 +673,7 @@ function showUnavailableGuide(runtime, guide, step) {
             clearAutoMinimise();
             clearFocusManagement();
             rehighlightIndex = null;
+            menungguTindakanIndex = null;
         },
     });
     activeDriver.drive();
@@ -711,6 +746,10 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
         },
         onHighlighted: (_element, _step, options) => {
             const index = options.driver.getActiveIndex() ?? 0;
+            // Tour benar-benar berpindah langkah → penantian tindakan langkah lama tamat.
+            if (menungguTindakanIndex !== null && menungguTindakanIndex !== index) {
+                menungguTindakanIndex = null;
+            }
             const current = guideSteps[index];
             const next = guideSteps[index + 1];
             const plan = planFor(guideSteps, index);
@@ -801,6 +840,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearAutoMinimise();
             clearFocusManagement();       // F2d: fokus pulang ke pencetus/launcher
             rehighlightIndex = null;
+            menungguTindakanIndex = null;
             if (completed) stripGuideQuery();
         },
     });
