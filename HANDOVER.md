@@ -1,5 +1,60 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## SESI — F6-W1 KERJA PRODUK SELESAI, GATE 28/29 (4 Ogos 2026) ⭐ TERKINI
+
+**`d29399f` dipush · TIDAK DIDEPLOY** (gate `guidance-e2e-gate` belum hijau penuh).
+Produksi kekal `bc7cccc` / Deploy 5. 4 komit: `a5a792e` → `d3d2ac9` → `c1fabc2` → `d29399f`.
+📄 `Audit Review Round Robin/bukti/plan-f6-w1/LAPORAN-FASA-6-W1.md`
+
+### Hasil pada denominator PENUH (§7.4)
+| Metrik | Asas audit | Sekarang |
+|---|---|---|
+| Placeholder "Langkah N" | 258 | **0** |
+| Langkah tindakan bersasar generik | 200 | **60** (semua baki dalam W2 `workflow`) |
+| Sasaran generik diisytihar | 443 | **299** |
+| Defect popover mobile | 6 | **0** |
+| W1 senarai kerja | 27 guide / 135 langkah | **0 / 0** (wave siap) |
+
+Suite **515 lulus / 1 skip** · pint passed · validator manifest exit 0 · registri 167 sasaran
+(142 aktif + 25 rizab). Denominator beku dikemas dalam **KEEMPAT-EMPAT** penjaga.
+
+### 🔴 SATU BAKI SEBELUM DEPLOY 6
+`screen.persediaan-berpandu` tidak boleh dipandu gate (tersekat langkah 1) walaupun **produk
+terbukti betul** — probe langsung menunjukkan `dispatchEvent` pada butang "Seterusnya" wizard
+memajukan wizard dan `onboarding-phone` bertukar `tersembunyi` → `VISIBLE`. **Jurang harness,
+bukan produk.** Tiga pendekatan dicuba; peraturan #9 dipatuhi (berhenti, rekod).
+**Langkah seterusnya:** baca `trace.zip` larian itu untuk melihat sama ada klik wizard
+benar-benar berlaku dalam konteks tour, kemudian jalankan 3 shard + agregator, CI, Deploy 6.
+
+### ⚠️ KECACATAN PRODUK DIUKUR, BELUM DIBAIKI → F7 §8
+Sasaran di bawah lipatan dalam modal boleh-skrol menolak popover `position: fixed` — dan
+**lubang overlaynya** — ke luar viewport, jadi overlay pepejal **menyerap setiap klik**.
+Pengguna terkandas (keluarga sama dengan bug banner F0). Diukur 1440×1000: sasaran y=1168,
+popover y=789 h=263, CTA y=1004, lubang `M291,1158`. `scrollIntoView` berfungsi dipanggil
+sendiri (scrollTop 0→244) tetapi TIDAK melekat dalam kitaran tour — 4 pendekatan gagal, kod
+tidak terbukti DIBUANG, ukuran penuh dalam `resources/js/help.js`.
+
+### ⚠️ Viewer dokumen tidak boleh menjalankan tour
+`/viewer/{media}` = halaman berasingan (URL bertandatangan 30 min) TANPA Livewire/`help.js`.
+Sasaran dipasang + `reserved`; perlu runtime bantuan di sana → F7.
+
+### Data benih demo DIPERLUAS (sebab: empat skrin tiada data langsung)
+`DemoSeeder::seedTugasanDemo` — 1 fail hibrid (+1 pergerakan supaya panel sejarah bukan 0px,
++1 geran akses), 1 minit kepada Pengerusi, 1 permohonan kelulusan. Log aktiviti terisi
+sendiri (3 entri). Idempotent. `office-workflow.spec.js` menapis baris ikut teks penanda
+unik — disemak, selamat.
+
+### 4 penemuan harness (bukti, bukan tekaan)
+1. `.driver-active-element` boleh KEKAL pada elemen langkah sebelumnya → `querySelector`
+   memulangkan elemen SALAH; gate kini periksa keahlian semua elemen aktif.
+2. Resolver halaman butiran mesti sahkan SEMUA sasaran peringkat-halaman ("Beri Akses" ada
+   pada setiap fail → memilih fail tanpa geran).
+3. `isVisible()` = snapshot tanpa menunggu → negatif palsu pada relation manager/infolist.
+4. `Tab::extraAttributes()` Filament menerapkan atribut pada BUTANG **dan** panel
+   (vendor `tabs.blade.php:127/165/304`); resolusi memilih butang — disahkan desktop+mobile.
+
+---
+
 ## SESI — ✅ DEPLOY 5 (F5 KATALOG & TOUR AWAM) LIVE (4 Ogos 2026) ⭐ TERKINI
 
 **`5f4247a` LIVE di bakwim.my** · CI run 30857969395 **7/7 HIJAU** ·
