@@ -40,6 +40,7 @@ export default defineConfig({
                 'e2e/ci-session-canary.spec.js',
                 'e2e/guidance.spec.js',
                 'e2e/guidance-f5.spec.js',
+                'e2e/panel-landing.spec.js',
                 'e2e/registration.spec.js',
                 'e2e/explore.spec.js',
             ],

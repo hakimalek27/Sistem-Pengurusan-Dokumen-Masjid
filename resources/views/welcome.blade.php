@@ -12,13 +12,23 @@
         </div>
 
         <div class="home-panel">
+            @php($panelUrl = \App\Services\PanelLandingResolver::urlForCurrentUser())
             <div class="quick-card">
                 <h2>Akses Sistem</h2>
-                <p>Masuk ke panel masjid atau hantar permohonan tenant baharu.</p>
-                <div style="display:grid; gap:.65rem; margin-top:1rem;">
-                    <a href="{{ url('/log-masuk') }}" class="btn">Log Masuk</a>
-                    <a href="{{ url('/daftar') }}" class="btn btn-ghost">Daftar Masjid</a>
-                </div>
+                @if ($panelUrl)
+                    {{-- BUG-A: sesi masih aktif — teruskan ke panel, jangan minta log masuk semula. --}}
+                    <p>Anda sudah log masuk sebagai <strong>{{ auth()->user()->name }}</strong>.</p>
+                    <div style="display:grid; gap:.65rem; margin-top:1rem;">
+                        <a href="{{ url($panelUrl) }}" class="btn">Teruskan ke Panel</a>
+                        <a href="{{ url('/daftar') }}" class="btn btn-ghost">Daftar Masjid</a>
+                    </div>
+                @else
+                    <p>Masuk ke panel masjid atau hantar permohonan tenant baharu.</p>
+                    <div style="display:grid; gap:.65rem; margin-top:1rem;">
+                        <a href="{{ url('/log-masuk') }}" class="btn">Log Masuk</a>
+                        <a href="{{ url('/daftar') }}" class="btn btn-ghost">Daftar Masjid</a>
+                    </div>
+                @endif
             </div>
 
             <div class="metric-grid" aria-label="Kawalan utama">

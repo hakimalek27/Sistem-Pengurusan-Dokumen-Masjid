@@ -2,8 +2,12 @@
 
 namespace App\Filament\Auth;
 
+use App\Models\User;
+use App\Services\PanelLandingResolver;
 use App\Services\WhatsAppRecipientResolver;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Auth\Pages\Login as BaseLogin;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Illuminate\Validation\ValidationException;
@@ -16,6 +20,44 @@ use Illuminate\Validation\ValidationException;
  */
 class Login extends BaseLogin
 {
+    /**
+     * Pengguna yang SUDAH log masuk tidak sepatutnya melihat borang log masuk.
+     * Lalai vendor menghantar mereka ke panel SEMASA (tenant lalai); kami guna
+     * pendaratan ikut peranan supaya superadmin sampai ke /admin. Kod status kekal
+     * 302 seperti sebelum ini — hanya destinasi berubah.
+     */
+    public function mount(): void
+    {
+        if (Filament::auth()->check()) {
+            redirect()->intended($this->landingUrl());
+
+            return;
+        }
+
+        parent::mount();
+    }
+
+    /**
+     * Vendor memulangkan `app(LoginResponse::class)` yang mendarat pada panel semasa.
+     * Kami tukar HANYA responsnya (pengesahan kelayakan, had kadar, MFA dan semakan
+     * canAccessPanel vendor kekal utuh). `null` = had kadar / cabaran MFA.
+     */
+    public function authenticate(): ?LoginResponse
+    {
+        $response = parent::authenticate();
+
+        return $response === null ? null : new PanelLandingLoginResponse;
+    }
+
+    protected function landingUrl(): string
+    {
+        $user = Filament::auth()->user();
+
+        return $user instanceof User
+            ? app(PanelLandingResolver::class)->urlFor($user, withOnboarding: false)
+            : Filament::getUrl();
+    }
+
     protected function getEmailFormComponent(): Component
     {
         return TextInput::make('login')

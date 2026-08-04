@@ -1,4 +1,16 @@
 <div class="card">
+    {{-- BUG-A: halaman ini kekal 200 untuk semua identiti (kontrak role_routes beku),
+         jadi sesi aktif diberitahu di sini dan bukan dengan pengalihan — sekali gus
+         mengekalkan keupayaan menukar akaun. --}}
+    @php($panelUrl = \App\Services\PanelLandingResolver::urlForCurrentUser())
+    @if ($panelUrl)
+        <div class="ok" style="margin-bottom:1rem;">
+            Anda sudah log masuk sebagai <strong>{{ auth()->user()->name }}</strong>.
+            <a href="{{ url($panelUrl) }}">Ke Panel</a>. Borang di bawah hanya perlu jika
+            anda mahu masuk sebagai akaun lain.
+        </div>
+    @endif
+
     @if ($sent)
         <div class="ok">
             Jika <strong>{{ $login }}</strong> berdaftar &amp; aktif, pautan log masuk telah

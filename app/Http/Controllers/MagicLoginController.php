@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\MagicLinkService;
+use App\Services\PanelLandingResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -92,28 +93,12 @@ class MagicLoginController extends Controller
         return null;
     }
 
-    /** Pendaratan §9.A: superadmin → /admin; 1 masjid → /app/{slug}; >1 → pemilih tenant. */
+    /**
+     * Pendaratan §9.A. Logik dipusatkan dalam PanelLandingResolver supaya log masuk
+     * kata laluan (Filament) mendarat SAMA seperti magic link — dahulu ia berbeza.
+     */
     protected function landingUrl(User $user): string
     {
-        if ($user->is_superadmin) {
-            return '/admin';
-        }
-
-        $mosques = $user->mosques()->where('status', 'aktif')->get();
-
-        if ($mosques->count() === 1) {
-            $mosque = $mosques->first();
-
-            // §10 Aliran I — admin masjid yang belum selesai persediaan dibawa
-            // terus ke wizard onboarding (auto-buka melalui ?mula=1).
-            if (blank(data_get($mosque->settings, 'onboarding_done'))
-                && $user->canIn($mosque, 'mosque.settings')) {
-                return '/app/'.$mosque->slug.'/persediaan?mula=1';
-            }
-
-            return '/app/'.$mosque->slug;
-        }
-
-        return '/app';
+        return app(PanelLandingResolver::class)->urlFor($user);
     }
 }

@@ -105,9 +105,17 @@
                 <h1>ﺍﻟﺪﻳﻮﺍﻥ · Diwan</h1>
                 <p>Sistem Pengurusan Dokumen Masjid</p>
             </div>
+            {{-- BUG-A: halaman awam mesti mengenal sesi aktif. Tanpa ini, pengguna yang
+                 sudah log masuk hanya nampak "Log Masuk" di setiap halaman awam dan
+                 disangka telah dilog keluar. --}}
+            @php($panelUrl = \App\Services\PanelLandingResolver::urlForCurrentUser())
             <nav class="brand-actions" aria-label="Navigasi utama">
                 <a href="{{ url('/') }}">Utama</a>
-                <a href="{{ url('/log-masuk') }}">Log Masuk</a>
+                @if ($panelUrl)
+                    <a href="{{ url($panelUrl) }}">Ke Panel</a>
+                @else
+                    <a href="{{ url('/log-masuk') }}">Log Masuk</a>
+                @endif
                 <a href="{{ url('/daftar') }}">Daftar</a>
                 <livewire:help-launcher panel="public" />
             </nav>
