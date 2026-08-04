@@ -8297,20 +8297,18 @@
           "key": "screen.mohon-pembetulan-rekod#5",
           "index": 5,
           "step_id": "mohon-pembetulan-rekod.5",
-          "title": "Pantau keputusan",
+          "title": "Jejak dan keputusan",
           "title_placeholder": false,
-          "instruction_preview": "Pantau keputusan permohonan di halaman Pembetulan Rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "instruction_preview": "Permohonan direkodkan dalam jejak audit rekod; pantau keputusannya di halaman Pe",
+          "target": "record-tab-audit",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/pembetulan-rekod",
+          "route": "/app/{tenant}/records",
           "wave": "W3",
           "shard": "screen",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },

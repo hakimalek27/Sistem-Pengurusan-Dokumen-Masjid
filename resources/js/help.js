@@ -109,6 +109,26 @@ function intersectsViewport(element) {
     return rect.right > 0 && rect.bottom > 0 && rect.left < vw && rect.top < vh;
 }
 
+// ⚠️ KECACATAN DIUKUR, BELUM DIBAIKI (F6-W1 → dibawa ke F7 §8).
+//
+// Sasaran di dalam bekas boleh-skrol (modal panjang) boleh berada di BAWAH lipatan.
+// Driver.js menggulung HALAMAN, bukan `div.fi-modal-window-ctn` (overflow-y:auto,
+// scrollHeight 1244 vs clientHeight 1000). Kerana popover `position: fixed`, ia mendarat
+// separa di luar skrin dan butang CTAnya SEPENUHNYA di luar viewport — pengguna tidak
+// dapat menekannya dan menatal halaman tidak membantu.
+//
+// Diukur pada viewport 1440×1000, `screen.mohon-pembetulan-rekod` langkah 4:
+//   sasaran (butang Hantar) y=1168 · popover y=789 tinggi 263 (hujung 1052) · CTA y=1004
+//
+// `element.scrollIntoView({block:'center'})` TERBUKTI berfungsi apabila dipanggil sendiri
+// (scrollTop 0 → 244, sasaran y 1168 → 924), tetapi TIDAK melekat dalam kitaran tour.
+// Empat pendekatan dicuba, kesemuanya berakhir dengan scrollTop kembali 0:
+//   (1) onHighlighted + driver.refresh()   (2) dalam callback `element` sebelum penentuan
+//   (3) onHighlighted tanpa refresh        (4) menyelesaikan semula `.driver-active-element`
+// Sesuatu menetapkan semula gulungan bekas SELEPAS hook — kemungkinan besar perangkap fokus
+// modal Filament. Peraturan #9 repo (berhenti selepas 3 cubaan pada masalah sama) dipatuhi:
+// tiada tekaan lanjut dalam runtime tour. Direkod dengan ukuran penuh untuk F7.
+
 /** Calon navigasi (`data-help-nav`) yang kelihatan DAN berada di dalam skrin. */
 function onScreenNavElement(nav) {
     return [...document.querySelectorAll(`[data-help-nav="${CSS.escape(nav)}"]`)]

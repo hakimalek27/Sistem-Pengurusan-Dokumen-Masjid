@@ -153,6 +153,177 @@ async function driveGenericGuide(page, guide) {
     await driveGenericSteps(page, guide, guide.steps);
 }
 
+// ── F6-W1: pemandu ALIRAN untuk guide `screen` bersasar spesifik ───────────────────────
+//
+// `driveGenericSteps` memasuki SETIAP langkah melalui deep-link berasingan, jadi ia hanya
+// sah apabila setiap sasaran wujud dalam keadaan LALAI halaman. Selepas W1 itu tidak lagi
+// benar: sasaran hidup di dalam modal, pada halaman BUTIRAN sesuatu baris, atau pada
+// langkah wizard yang belum dibuka. Registri (`resources/help/targets.json`, medan `state`
+// — §7.2 langkah 4) ialah SUMBER KEBENARAN untuk prasyarat itu, jadi pemilihan pemandu
+// dibuat daripada data, bukan senarai yang ditaip semula dalam spec ini.
+const registryRaw = readFileSync('resources/help/targets.json', 'utf8');
+const targetState = new Map(JSON.parse(registryRaw).targets.map((t) => [t.id, String(t.state ?? '-')]));
+const stateOf = (target) => targetState.get(target) ?? '-';
+const needsFlow = (guide) => guide.steps.some((s) => /^(detail:|modal:|wizard )/.test(stateOf(s.target)))
+    || guide.steps.some((s) => stateOf(s.target).includes('modal:') || stateOf(s.target).includes('jadual tidak kosong'));
+const needsDetail = (guide) => guide.steps.some((s) => stateOf(s.target).startsWith('detail:'));
+
+/** Baca kedudukan langkah DAN elemen yang disorot dalam SATU penilaian (elak perlumbaan). */
+function tourState(page) {
+    return page.evaluate(() => {
+        const popover = document.querySelector('.driver-popover');
+        const aktif = [...document.querySelectorAll('.driver-active-element')];
+        const teks = popover ? popover.innerText : '';
+
+        return {
+            n: Number((teks.match(/(\d+)\s+daripada\s+\d+/) || [null, 0])[1]) || null,
+            // Driver.js boleh MENINGGALKAN kelas pada elemen langkah sebelumnya; kelas
+            // yang paling akhir dalam susunan DOM bukan semestinya yang terbaharu, jadi
+            // kumpulkan SEMUA dan biar pemanggil memeriksa keahlian.
+            aktif: aktif.map((el) => el.getAttribute('data-help-target')),
+            ralatPalsu: teks.includes('Tindakan belum tersedia'),
+        };
+    });
+}
+
+/**
+ * Cari halaman butiran yang benar-benar memaparkan sasaran langkah 1 guide ini.
+ *
+ * Baris pertama TIDAK semestinya betul: `keluarkan-fail-fizikal` hanya wujud pada fail
+ * bermedium fizikal/hibrid. Mengimbas baris sehingga sasaran muncul menjadikan gate
+ * deterministik tanpa mengunci ID baris benih.
+ */
+async function resolveDetailPath(page, guide) {
+    const listPath = hydrate(guide.steps[0].route);
+    await page.goto(listPath);
+    const hrefs = await page.locator('.fi-ta-row a[href]').evaluateAll(
+        (anchors) => [...new Set(anchors.map((a) => a.getAttribute('href')).filter(Boolean))],
+    );
+    // Sahkan SEMUA sasaran peringkat-halaman guide ini, bukan hanya langkah 1: sasaran
+    // langkah 1 selalunya wujud pada setiap baris (cth. butang "Beri Akses" ada pada semua
+    // fail), jadi memeriksanya sahaja memilih baris pertama yang salah — fail tanpa geran
+    // akses, tanpa medium fizikal, dsb.
+    const wajib = guide.steps
+        .filter((s) => stateOf(s.target).startsWith('detail:') && !stateOf(s.target).includes('modal:'))
+        .map((s) => s.target);
+    for (const href of hrefs) {
+        await page.goto(href);
+        let semua = true;
+        for (const t of wajib.length ? wajib : [guide.steps[0].target]) {
+            // `isVisible()` ialah SNAPSHOT tanpa menunggu — relation manager & infolist
+            // Filament dirender selepas muatan awal, jadi snapshot memberi negatif palsu.
+            const ada = await page.locator(`[data-help-target="${t}"]`).first()
+                .waitFor({ state: 'visible', timeout: 10_000 }).then(() => true).catch(() => false);
+            if (!ada) { semua = false; break; }
+        }
+        if (semua) return new URL(href, 'http://x').pathname;
+    }
+
+    throw new Error(`${guide.guide_id}: tiada baris yang memaparkan sasaran ${guide.steps[0].target}`);
+}
+
+/**
+ * Tindakan khusus per-langkah (kosong selepas F6-W1).
+ *
+ * Dikekalkan sebagai titik lanjutan: jika satu guide `screen` kelak benar-benar memerlukan
+ * PENGHANTARAN BORANG di tengah, ia mesti menggunakan klik SEBENAR — `dispatchEvent` ialah
+ * event tak-dipercayai yang tidak menghantar borang (punca muktamad flake muat naik F5).
+ * `screen.mohon-pembetulan-rekod` dahulunya begitu (langkah 5 pada halaman lain); ia kini
+ * kekal pada SATU skrin, selaras definisi family `screen`, jadi tiada penghantaran mid-guide.
+ */
+const AKSI_LANGKAH = {};
+
+/** Wizard Filament memaparkan satu langkah sekali; majukan bila sasaran berikut tersembunyi. */
+async function advanceWizard(page) {
+    const next = page.locator('.fi-modal-window button').filter({ hasText: /^Seterusnya$/ }).first();
+    if (await next.isVisible().catch(() => false)) {
+        await next.dispatchEvent('click');
+
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Pandu guide sebagai ALIRAN sebenar: deep-link langkah 1, kemudian ikut tour seperti
+ * pengguna — tekan CTA, dan apabila CTA menjanjikan tindakan, lakukan tindakan itu pada
+ * elemen YANG DISOROT. Elemen bukan-butang (pembalut medan) tidak diklik: pengguna MENAIP
+ * di situ, dan tour maju sendiri sebaik sasaran berikut kelihatan.
+ */
+async function driveFlowGuide(page, guide, basePath) {
+    const total = guide.steps.length;
+    const popover = page.locator('.driver-popover');
+    await page.goto(`${basePath}?panduan=${guide.guide_id}&langkah=0`);
+
+    const runtime = page.locator('[data-diwan-help-runtime]');
+    await expect(runtime, `${guide.guide_id}: deep-link mesti memilih guide yang diminta`)
+        .toHaveAttribute('data-guide-id', guide.guide_id);
+
+    for (let i = 1; i <= total; i += 1) {
+        const step = guide.steps[i - 1];
+        // Tunggu KEDUA-DUA nombor langkah dan kelas sorotan: Driver.js mengemas popover
+        // sebelum memindahkan `.driver-active-element` (animasi), jadi membaca sebaik
+        // nombor bertukar memberi elemen LAMA.
+        await expect
+            .poll(async () => {
+                const s = await tourState(page);
+
+                return { n: s.n, sasaranAktif: s.aktif.includes(step.target), ralatPalsu: s.ralatPalsu };
+            }, {
+                timeout: 90_000,
+                message: `${step.key}: tour tidak sampai ke langkah ${i} dengan sasaran ${step.target}`,
+            })
+            .toEqual({ n: i, sasaranAktif: true, ralatPalsu: false });
+
+        const cta = popover.locator('.driver-popover-next-btn');
+        await expect(cta, `${step.key}: CTA tiada`).toBeVisible();
+        const label = (await cta.innerText()).trim();
+        // Sasaran di bawah lipatan dalam modal boleh menolak popover (position: fixed) —
+        // dan CTAnya — ke luar viewport. Itu kecacatan produk yang DIREKOD dalam help.js
+        // (dibawa ke F7); di sini gate menggulung supaya ia menguji TOUR, bukan tersekat
+        // pada kecacatan itu. Klik CTA guna dispatchEvent sebagai sandaran kerana butang
+        // di luar viewport ditolak oleh klik sebenar Playwright.
+        await page.locator(`[data-help-target="${step.target}"]`).first()
+            .evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'nearest' })).catch(() => {});
+        await cta.click({ timeout: 10_000 }).catch(() => cta.dispatchEvent('click'));
+
+        if (i === total) {
+            await expect(popover, `${step.key}: langkah akhir tidak menutup/meminimize popover`).toBeHidden();
+            break;
+        }
+
+        const khusus = AKSI_LANGKAH[guide.guide_id]?.[i];
+        if (khusus) {
+            await khusus(page);
+        } else if (label === 'Buat pada skrin') {
+            const sasaran = page.locator(`[data-help-target="${step.target}"]`).first();
+            const tag = await sasaran.evaluate((el) => el.tagName).catch(() => null);
+            if (tag === 'BUTTON' || tag === 'A') await sasaran.dispatchEvent('click');
+            else await advanceWizard(page);
+        }
+
+        // Sasaran berikut boleh berada pada langkah WIZARD seterusnya. Modal mengambil masa
+        // untuk terbuka, jadi ini mesti GELUNG yang menunggu — semakan sekali sahaja
+        // berlaku sebelum modal wujud dan tidak pernah menemui butang wizard.
+        const seterusnya = guide.steps[i];
+        const sasaranSeterusnya = page.locator(`[data-help-target="${seterusnya.target}"]`).first();
+        for (let cuba = 0; cuba < 12; cuba += 1) {
+            if (await sasaranSeterusnya.isVisible().catch(() => false)) break;
+            if (!(await advanceWizard(page))) await page.waitForTimeout(1000);
+            else await page.waitForTimeout(1500);
+        }
+
+        // Laluan pengguna sebenar: bila panduan diminimize, tekan "Tunjuk arahan" supaya
+        // popover pulih. Tanpa ini keadaan tour dibaca daripada popover yang tersembunyi.
+        const tunjuk = page.locator('[data-diwan-tour-waiting] button');
+        if (await tunjuk.isVisible().catch(() => false)) {
+            await tunjuk.click({ timeout: 5_000 }).catch(() => tunjuk.dispatchEvent('click'));
+            await page.waitForTimeout(500);
+        }
+    }
+}
+
 /**
  * Mesin-keadaan koreografi wizard klasifikasi/muat-naik untuk 2 guide `workflow.*` —
  * TOLERAN terhadap auto-advance sync (watchForActionCompletion melompat serta-merta apabila
@@ -345,9 +516,9 @@ async function fillClassificationFile(page, modal) {
 }
 
 /** G4 — kitaran ringkas: mula → tutup → ulang (resume penuh diliputi ci-guidance). */
-async function cycleGuide(page, guide) {
+async function cycleGuide(page, guide, basePath = null) {
     const first = guide.steps[0];
-    const url = `${hydrate(first.route)}?panduan=${guide.guide_id}&langkah=0`;
+    const url = `${basePath ?? hydrate(first.route)}?panduan=${guide.guide_id}&langkah=0`;
     const popover = page.locator('.driver-popover');
     await page.goto(url);
     await expect(popover, `${guide.guide_id}: kitaran mula gagal`).toBeVisible();
@@ -608,6 +779,14 @@ for (const guide of guides) {
                 await expect(popover).toBeHidden();
 
                 await driveGenericSteps(page, guide, guide.steps.filter((s) => s.index > lastSpecific.index));
+            } else if (needsFlow(guide)) {
+                // F6-W1: sasaran hidup dalam modal / halaman butiran / langkah wizard —
+                // deep-link per langkah tidak lagi sah (rujuk nota driveFlowGuide).
+                const basePath = needsDetail(guide)
+                    ? await resolveDetailPath(page, guide)
+                    : hydrate(guide.steps[0].route);
+                await driveFlowGuide(page, guide, basePath);
+                await cycleGuide(page, guide, basePath);
             } else {
                 await driveGenericGuide(page, guide);
                 await cycleGuide(page, guide);

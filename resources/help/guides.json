@@ -6345,11 +6345,10 @@
         },
         {
           "id": "mohon-pembetulan-rekod.5",
-          "title": "Pantau keputusan",
-          "instruction": "Pantau keputusan permohonan di halaman Pembetulan Rekod.",
-          "target": "page-content",
-          "wait_for_user": false,
-          "route": "/app/{tenant}/pembetulan-rekod"
+          "title": "Jejak dan keputusan",
+          "instruction": "Permohonan direkodkan dalam jejak audit rekod; pantau keputusannya di halaman Pembetulan Rekod.",
+          "target": "record-tab-audit",
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
