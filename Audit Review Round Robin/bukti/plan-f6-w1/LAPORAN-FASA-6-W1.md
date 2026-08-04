@@ -185,6 +185,127 @@ Nota kedua: `e2e/helpers/upload.js:29` masih guna regex bersauh `/^Upload comple
 kerana FilePond menetapkan teks itu melalui JS tanpa whitespace sekeliling — landasan ranjau,
 bukan pepijat semasa.
 
+### 🔴 PUSINGAN CI #1 (`2f7bbbb`, run 30906909355) MERAH — dua kecacatan harness LAGI
+
+Ketiga-tiga shard hijau TEMPATAN, tetapi CI memerahkan shard `screen` (5 guide + penulis JSON).
+`workflow` dan `tenant-admin-public` **lulus di CI**. Ini larian CI **pertama** bagi gate W1
+(larian `794fc6d` sebelumnya merah kerana gate 28/29), jadi ia pendedahan pertama, bukan regresi.
+
+**Bentuk A — wizard TERLANJUR maju.** `screen.persediaan-berpandu#4`: `n` **betul 4** tetapi
+`sasaranAktif: false`. Gelung tunggu menggunakan `waitForTimeout(1500)` tetap selepas mengklik
+"Seterusnya"; pada CI render wizard mengambil lebih lama, jadi lelaran berikut mengklik
+"Seterusnya" **KEDUA** → wizard melangkaui langkah yang guide ini sasarkan → `onboarding-members`
+hilang selama-lamanya → Driver.js menyorot fallback `page-content`.
+**Pembaikan:** tunggu **KESAN** (`sasaranSeterusnya.waitFor({state:'visible'})`), bukan tempoh
+tetap.
+
+**Bentuk B — klik tindakan HILANG (4 guide).** `edit-tetapan-masjid#2` ·
+`ganti-versi-rekod#2` · `pindah-rekod-ke-fail-lain#2` · `keluarkan-fail-fizikal#2`: semuanya
+`n: 1` (tersekat langkah 1). Keempat-empatnya mempunyai langkah 1 = butang Action Filament dan
+langkah 2 = medan di dalam modal.
+**Bukti keras daripada `serve-ci.log`** (artifak diagnostik yang dipasang pada F4 — akhirnya
+berguna):
+```
+12:12:43  /app/mam/tetapan-masjid    ← halaman dimuat
+12:12:44  /livewire/update  ×2
+          … 94 SAAT SIFAR PERMINTAAN …
+12:14:18  /app/login                 ← ujian seterusnya
+```
+Klik itu menghasilkan **sifar** permintaan pelayan — tandatangan yang IDENTIK dengan flake muat
+naik F5. Modal tidak pernah terbuka.
+**Pembaikan:** **pulih-sendiri** — ulang `dispatchEvent` yang SAMA sehingga ada KESAN. Ulangan
+dipagar oleh `state` yang DIISYTIHARKAN dalam registri (`modal:`) supaya tindakan bersifat
+toggle tidak membatalkan kesannya sendiri.
+
+### ⛔ DUA pendekatan pembaikan DIUJI dan DITOLAK (kedua-duanya memerahkan guide hijau)
+
+Kedua-dua penolakan ini direkod kerana kedua-duanya kelihatan betul di atas kertas.
+
+**Ditolak #1 — tukar `dispatchEvent` → klik sebenar.** Memerahkan **TIGA** guide yang sebelumnya
+hijau (`jemput-ahli`, `sedia-senarai-pelupusan`, `tetapkan-kata-laluan`), setiap satu tamat masa
+~1.7m. Sebabnya `resources/js/help.js:663-664` menetapkan **`overlayClickBehavior: 'close'`** →
+klik berasaskan KOORDINAT yang mendarat pada overlay tour **MENUTUP TOUR**, bukan menekan butang.
+Ini pelajaran F0 yang SUDAH direkod ("overlay menyerap klik koordinat → guna `dispatchEvent`") —
+dibaca, dikutip dalam komen sendiri, lalu dilanggar. **Bila klik hilang, ulang event yang SAMA;
+jangan tukar jenis event.** (Nuans: klik sebenar memang betul untuk penghantaran borang dalam
+modal TANPA overlay tour aktif — konteks fix F5. Konteks berbeza, bukan bercanggah.)
+
+**Ditolak #2 — ganti tidur tetap 1500ms dengan `waitFor(sasaran, 8s)`.** Memerahkan
+`persediaan-berpandu` dan `permohonan-storan-tambahan` yang sebelumnya hijau. Kesannya diukur;
+mekanismenya TIDAK dituntut terbukti (`waitFor` nampaknya boleh selesai atas sebab yang salah
+semasa wizard masih beralih, lalu gelung memaju lagi). Kod tidak terbukti DIBUANG.
+
+**Ditolak #3 — ulang tindakan pada SETIAP lelaran gelung.** Ulangan berlaku ~0ms selepas klik
+asal, semasa modal masih dalam peralihan; mengklik pencetus Filament dua kali me-`mountAction`
+dua kali atau menutup modal yang sedang dibuka. Memerahkan `edit-tetapan-masjid`.
+**Dibetulkan, bukan dibuang:** beri modal ~4 saat, kemudian cuba paling banyak dua kali dalam
+bajet 12 lelaran.
+
+**Diterima #1 — hadkan kemajuan wizard kepada SATU per peralihan langkah.** Invarian ini datang
+daripada struktur guide, bukan daripada masa: satu langkah guide bersamaan paling banyak satu
+langkah wizard. Masa 1500/1000ms **tidak diubah** (ia sudah terbukti 30/30 tempatan), dan gelung
+masih ada 12 lelaran kesabaran untuk runner perlahan.
+
+**Diterima #2 (yang menutup punca sebenar) — G3 diassert terhadap URUTAN YANG DIREKOD.**
+Gate dahulu mengundi keadaan **seketika** dan menuntut `n === i` pada saat ia membaca. Tetapi
+mekanisme sync F2 memang direka untuk memajukan tour sebaik sasaran langkah berikut muncul,
+jadi tour boleh melintasi satu langkah dalam beberapa milisaat. Bukti muktamad: harness menunggu
+`n: 4` sedangkan tour sudah **`n: 5`** — ia menunggu 90s untuk nombor yang tidak akan kembali.
+Itu **mengassert pada keadaan sementara**, iaitu kecacatan reka bentuk dalam alat, bukan masalah
+masa.
+
+Pembaikan: satu perekam dalam halaman (`addInitScript`) merakam setiap peralihan
+`(n, sasaran aktif, ralatPalsu)`, dan assertion bertanya "adakah langkah *i* PERNAH berlaku
+dengan sasaran yang betul". Ia kalis-perlumbaan dan **lebih kuat** daripada sebelumnya, bukan
+lebih longgar. Harness juga tidak lagi menekan CTA jika tour sudah melintasi langkah itu — CTA
+itu kini milik langkah lain dan menekannya memaju tour dua kali.
+
+⚠️ **Perekam itu sendiri gagal SENYAP pada percubaan pertama.** `addInitScript` berjalan SEBELUM
+mana-mana skrip halaman, jadi `document.documentElement` boleh masih `null` dan
+`observe(null, …)` melempar — memusnahkan pemasangan sementara `window.__diwanTourLog = []` pada
+baris pertama sudah berjaya. Akibatnya "log kosong", yang kelihatan **serupa** dengan "langkah
+tidak berlaku" dan memerahkan langkah 1 dengan mesej yang mengelirukan. Dua pembetulan: pasang
+observer selepas DOM sedia (interval selamat dipasang segera kerana ia hanya menyentuh DOM
+apabila dipanggil), dan **laporkan `perekam sedia=` + bilangan entri + jejak dalam mesej
+kegagalan** supaya dua keadaan itu tidak boleh disamakan lagi.
+
+🔑 **Pola yang muncul daripada lima percubaan:** empat percubaan pertama melaras **cara** harness
+berinteraksi (jenis event, tempoh, kekerapan) dan setiap satu memerahkan guide yang hijau. Yang
+berjaya ialah dua yang mengubah **apa yang diperhatikan** atau **apa yang dianggap benar tentang
+struktur**. Dalam sistem dengan koreografi yang sudah terbukti, laraskan pengamatan — bukan
+interaksi.
+
+Sifar fatal dalam `serve-ci.log` — jadi ini bukan masalah pelayan CI.
+
+### ⚠️ KECACATAN PRODUK BAHARU DIUKUR → F7: **sorotan fallback bersifat MELEKAT**
+
+Untuk menguji pembaikan di atas tanpa menunggu pusingan CI 25 minit, shard `screen` dijalankan
+di bawah **beban CPU buatan** (teknik F0: 14 proses gelung ketat pada mesin 20-teras).
+Keputusan:
+
+- Keempat-empat guide yang gagal di CI **LULUS** → pembaikan berkesan.
+- **Lima guide LAIN gagal**, semuanya dengan bentuk yang IDENTIK: `n` **betul** (tour sampai ke
+  langkah yang betul) tetapi `sasaranAktif: false`. Sasarannya:
+  `record-correction-submit` · `record-approval-note` · `file-checkout-submit` ·
+  `file-access-submit` · `minit-reply-body` — **kesemuanya di dalam modal**.
+
+Mekanisme: `startGuide` membina setiap langkah dengan
+`element: () => resolveStepElement(step) || document.querySelector(SELECTOR('page-content'))`.
+Driver.js memanggil callback itu **sekali** semasa peralihan langkah. Jika morph Livewire
+menjadikan sasaran tiada pada saat itu — tetingkap yang jauh lebih lebar di bawah beban —
+tour menyorot **seluruh halaman** dan **tidak pernah menyelesaikan semula**, walaupun kawalan
+sebenar muncul sepersekian saat kemudian. Pengguna nampak sorotan yang tidak bermakna tanpa
+jalan pulih selain memulakan panduan semula.
+
+**Ini kelemahan PRODUK, bukan harness** — dan gate BETUL untuk menangkapnya, jadi ia sengaja
+TIDAK ditutup dengan melonggarkan assertion. Pembaikan yang dicadangkan (F7 §8, sepasukan dengan
+kecacatan popover-luar-viewport): jadikan fallback **tidak melekat** — dalam `onHighlighted`,
+jika elemen yang disorot ialah fallback sedangkan sasaran sebenar kini wujud, sorot semula.
+
+**Titik operasi:** kelima-lima guide ini **LULUS di CI** (kegagalan CI ialah set yang BERBEZA),
+jadi beban 14-pembakar melebihi keadaan CI. Ia berguna sebagai penguji tekanan, bukan sebagai
+definisi hijau. Larian bersih + CI kekal sebagai gate berkuasa.
+
 ### ⚠️ Dua hipotesis SAYA yang salah — dihapuskan oleh ukuran
 
 1. **Pelayan hantu.** `netstat` mendedahkan **dua** proses `artisan serve` mengikat :8092

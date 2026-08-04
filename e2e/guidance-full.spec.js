@@ -68,6 +68,49 @@ async function newContextPage(browser, baseURL) {
     await context.addInitScript((ids) => {
         for (const id of ids) localStorage.setItem(`diwan-help-seen:${id}`, '1');
     }, guideIds);
+    // PEREKAM keadaan tour (G3). Mengundi keadaan SEKETIKA tidak boleh dipercayai: mekanisme
+    // sync F2 memang memajukan tour sebaik sasaran langkah berikut muncul, jadi tour boleh
+    // melintasi satu langkah dalam beberapa milisaat dan pengundi terlepas pandang — kemudian
+    // menunggu 90s untuk nombor langkah yang TIDAK akan kembali (diukur: harness menunggu
+    // `n: 4` sedangkan tour sudah `n: 5`). Merakam setiap peralihan menjadikan assertion
+    // kalis-perlumbaan DAN lebih kuat: ia membuktikan langkah itu benar-benar berlaku dengan
+    // sasaran yang betul, bukan hanya bahawa ia boleh dicerap pada satu ketika tertentu.
+    await context.addInitScript(() => {
+        window.__diwanTourLog = [];
+        const rakam = () => {
+            const pop = document.querySelector('.driver-popover');
+            if (!pop) return;
+            const teks = pop.innerText || '';
+            const padan = teks.match(/(\d+)\s+daripada\s+\d+/);
+            const entri = {
+                n: padan ? Number(padan[1]) : null,
+                aktif: [...document.querySelectorAll('.driver-active-element')]
+                    .map((el) => el.getAttribute('data-help-target')),
+                ralatPalsu: teks.includes('Tindakan belum tersedia'),
+            };
+            entri.kunci = `${entri.n}|${entri.aktif.join(',')}|${entri.ralatPalsu}`;
+            const akhir = window.__diwanTourLog[window.__diwanTourLog.length - 1];
+            if (akhir && akhir.kunci === entri.kunci) return;
+            window.__diwanTourLog.push(entri);
+        };
+        // ⚠️ Skrip init berjalan SEBELUM mana-mana skrip halaman — `document.documentElement`
+        // boleh MASIH null pada ketika itu, dan `observe(null, …)` melempar lalu memusnahkan
+        // pemasangan secara SENYAP (log tetap wujud tetapi kekal kosong; itu memerahkan
+        // langkah 1 dengan mesej yang mengelirukan). Interval selamat dipasang segera kerana
+        // `rakam` hanya menyentuh DOM apabila ia dipanggil.
+        window.setInterval(rakam, 100);
+        window.__diwanTourLogSedia = false;
+        const pasang = () => {
+            if (!document.documentElement || window.__diwanTourLogSedia) return;
+            new MutationObserver(rakam).observe(document.documentElement, {
+                childList: true, subtree: true, attributes: true,
+            });
+            window.__diwanTourLogSedia = true;
+        };
+        pasang();
+        document.addEventListener('DOMContentLoaded', pasang, { once: true });
+        document.addEventListener('readystatechange', pasang);
+    });
 
     return { context, page: await context.newPage() };
 }
@@ -276,19 +319,44 @@ async function driveFlowGuide(page, guide, basePath) {
 
     for (let i = 1; i <= total; i += 1) {
         const step = guide.steps[i - 1];
-        // Tunggu KEDUA-DUA nombor langkah dan kelas sorotan: Driver.js mengemas popover
-        // sebelum memindahkan `.driver-active-element` (animasi), jadi membaca sebaik
-        // nombor bertukar memberi elemen LAMA.
-        await expect
-            .poll(async () => {
-                const s = await tourState(page);
+        // G3 diassert terhadap URUTAN YANG DIREKOD, bukan keadaan seketika. Driver.js mengemas
+        // popover sebelum memindahkan `.driver-active-element` (animasi), dan sync F2 boleh
+        // memajukan tour melintasi satu langkah dalam beberapa milisaat — pengundi seketika
+        // terlepas pandang, lalu menunggu 90s untuk nombor yang tidak akan kembali.
+        const rekod = () => page.evaluate(([idx, sasaran]) => {
+            const log = window.__diwanTourLog ?? [];
 
-                return { n: s.n, sasaranAktif: s.aktif.includes(step.target), ralatPalsu: s.ralatPalsu };
-            }, {
+            return {
+                jumpa: log.some((e) => e.n === idx && e.aktif.includes(sasaran) && !e.ralatPalsu),
+                ralatPalsu: log.some((e) => e.ralatPalsu),
+                // Perekam yang tidak terpasang mesti kelihatan dalam mesej kegagalan —
+                // "log kosong" dan "langkah tidak berlaku" tidak boleh kelihatan sama.
+                sedia: window.__diwanTourLogSedia === true,
+                bilangan: log.length,
+                jejak: log.filter((e) => e.n !== null)
+                    .map((e) => `${e.n}:${e.aktif.filter(Boolean).join('+') || '-'}`).slice(-14).join(' → '),
+            };
+        }, [i, step.target]);
+
+        await expect
+            .poll(async () => (await rekod()).jumpa, {
                 timeout: 90_000,
-                message: `${step.key}: tour tidak sampai ke langkah ${i} dengan sasaran ${step.target}`,
+                message: `${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`,
             })
-            .toEqual({ n: i, sasaranAktif: true, ralatPalsu: false });
+            .toBe(true)
+            .catch(async () => {
+                const k = await rekod();
+                throw new Error(`${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`
+                    + ` — perekam sedia=${k.sedia}, entri=${k.bilangan}, jejak: ${k.jejak || '(kosong)'}`);
+            });
+        const keadaan = await rekod();
+        expect(keadaan.ralatPalsu, `${step.key}: popover memaparkan ralat palsu "Tindakan belum tersedia" (jejak: ${keadaan.jejak})`)
+            .toBe(false);
+
+        // Jika tour SUDAH melintasi langkah ini, jangan tekan CTAnya — CTA itu kini milik
+        // langkah lain dan menekannya akan memaju tour dua kali.
+        const semasa = (await tourState(page)).n;
+        if (semasa !== null && semasa > i) continue;
 
         const cta = popover.locator('.driver-popover-next-btn');
         await expect(cta, `${step.key}: CTA tiada`).toBeVisible();
@@ -308,13 +376,33 @@ async function driveFlowGuide(page, guide, basePath) {
         }
 
         const khusus = AKSI_LANGKAH[guide.guide_id]?.[i];
+        // Tindakan langkah ini disimpan supaya ia boleh DIULANG. Bukti CI (run 30906909355,
+        // `serve-ci.log`): selepas `/app/mam/tetapan-masjid` dimuat dan dua `/livewire/update`
+        // selesai, klik tindakan menghasilkan **SIFAR permintaan selama 94 saat** — modal tidak
+        // pernah terbuka dan tour kekal di langkah 1. Tandatangan yang sama seperti flake muat
+        // naik F5. Runner CI lebih perlahan daripada mesin dev, jadi klik boleh mendahului
+        // pemasangan pendengar (Filament memuat JS komponen secara lazy).
+        let ulangTindakan = null;
         if (khusus) {
             await khusus(page);
         } else if (label === 'Buat pada skrin') {
             const sasaran = page.locator(`[data-help-target="${step.target}"]`).first();
             const tag = await sasaran.evaluate((el) => el.tagName).catch(() => null);
-            if (tag === 'BUTTON' || tag === 'A') await sasaran.dispatchEvent('click');
-            else await advanceWizard(page);
+            if (tag === 'BUTTON' || tag === 'A') {
+                // `dispatchEvent`, BUKAN klik sebenar. Diuji dan DITOLAK: menukar ini kepada
+                // `sasaran.click()` memerahkan TIGA guide yang sebelumnya hijau
+                // (`jemput-ahli`, `sedia-senarai-pelupusan`, `tetapkan-kata-laluan`), setiap
+                // satu tamat masa pada ~1.7m. Sebabnya `help.js:663-664` menetapkan
+                // `overlayClickBehavior: 'close'`, jadi klik berasaskan KOORDINAT yang
+                // mendarat pada overlay tour MENUTUP tour dan bukan menekan butang — pelajaran
+                // F0 yang sudah direkod ("overlay menyerap klik koordinat"). Pembaikan yang
+                // BETUL untuk klik yang hilang di CI ialah MENGULANG event ini sehingga ada
+                // kesan, bukan menukar jenis event.
+                ulangTindakan = () => sasaran.dispatchEvent('click', { timeout: 5_000 }).catch(() => {});
+                await ulangTindakan();
+            } else {
+                await advanceWizard(page);
+            }
         }
 
         // Sasaran berikut boleh berada pada langkah WIZARD seterusnya. Modal mengambil masa
@@ -322,10 +410,35 @@ async function driveFlowGuide(page, guide, basePath) {
         // berlaku sebelum modal wujud dan tidak pernah menemui butang wizard.
         const seterusnya = guide.steps[i];
         const sasaranSeterusnya = page.locator(`[data-help-target="${seterusnya.target}"]`).first();
+        // Pulih-sendiri hanya bila registri MENGISYTIHARKAN modal dijangka terbuka. Mengikat
+        // ulangan kepada `state` yang diisytihar (bukan tekaan) menghalang ulangan tindakan
+        // yang bersifat TOGGLE daripada membatalkan kesannya sendiri.
+        const jangkaModal = stateOf(seterusnya.target).includes('modal:');
+        const modalTerbuka = () => page.locator('.fi-modal-window').first().isVisible().catch(() => false);
+        // ⚠️ SATU langkah guide = paling banyak SATU kemajuan wizard. Mengklik "Seterusnya"
+        // dua kali untuk satu peralihan menjadikan wizard MELANGKAUI langkah yang guide ini
+        // sasarkan; sasaran itu hilang selama-lamanya dan Driver.js menyorot fallback
+        // `page-content` — diukur di CI (`n` betul 4, `sasaranAktif` false) DAN dalam trace
+        // tempatan (dua `dispatchEvent` pada "Seterusnya" dalam tetingkap 100ms yang sama).
+        // Selepas satu kemajuan, gelung hanya MENUNGGU; ia tidak memaju lagi. Itu menjadikan
+        // gelung ini selamat pada runner perlahan tanpa mengubah masa yang terbukti hijau.
+        let sudahMaju = false;
         for (let cuba = 0; cuba < 12; cuba += 1) {
             if (await sasaranSeterusnya.isVisible().catch(() => false)) break;
-            if (!(await advanceWizard(page))) await page.waitForTimeout(1000);
-            else await page.waitForTimeout(1500);
+            if (!sudahMaju && await advanceWizard(page)) {
+                sudahMaju = true;
+                await page.waitForTimeout(1500);
+                continue;
+            }
+            // Pulih-sendiri untuk klik yang HILANG (CI: sifar permintaan selama 94 saat).
+            // ⚠️ Mesti SABAR: mengulang pencetus Filament terlalu awal akan mount aksi itu
+            // dua kali atau menutup modal yang sedang dibuka — diukur, ia memerahkan
+            // `edit-tetapan-masjid` yang sebelumnya hijau. Beri modal ~4 saat untuk muncul
+            // dahulu, kemudian cuba semula paling banyak dua kali dalam bajet 12 lelaran.
+            if (ulangTindakan && jangkaModal && cuba >= 4 && cuba % 4 === 0 && !(await modalTerbuka())) {
+                await ulangTindakan();
+            }
+            await page.waitForTimeout(1000);
         }
 
         // Laluan pengguna sebenar: bila panduan diminimize, tekan "Tunjuk arahan" supaya
