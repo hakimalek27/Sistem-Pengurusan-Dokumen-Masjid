@@ -8,6 +8,7 @@ use App\Http\Middleware\EnsureMosqueActive;
 use App\Http\Middleware\EnsurePasswordIsSet;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Models\Mosque;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -37,6 +38,26 @@ class AppPanelProvider extends PanelProvider
             ->brandName('Diwan')
             ->brandLogo(fn () => view('filament.brand-logo'))
             ->brandLogoHeight('2rem')
+            // BUG-C: logo topbar/sidebar memakai `filament()->getHomeUrl()`, dan lalai Filament
+            // (`HasRoutes::getUrl()`) menyelesaikannya kepada tenant **LALAI** pengguna, BUKAN
+            // tenant SEMASA. Untuk superadmin `getTenants()` memulangkan SEMUA masjid, jadi
+            // menekan logo semasa bekerja dalam masjid A melompat ke masjid pertama platform.
+            // Diukur pada produksi: berada di /app/mamad, logo menuju /app/smoke.
+            // `url()` (bukan laluan relatif) supaya bentuk URL kekal SAMA seperti vendor —
+            // satu-satunya perbezaan ialah tenant yang dipilih.
+            ->homeUrl(fn (): string => Filament::getTenant() instanceof Mosque
+                ? url('/app/'.Filament::getTenant()->slug)
+                : url('/app'))
+            // BUG-D: superadmin yang masuk ke panel masjid tiada jalan balik — diukur pada
+            // produksi: 0 daripada 38 pautan menuju /admin. Item menu pengguna (bukan item
+            // navigasi) supaya `in_navigation` manifest role_routes tidak terusik.
+            ->userMenuItems([
+                Action::make('panelPentadbir')
+                    ->label('Panel Pentadbir')
+                    ->icon('heroicon-o-building-library')
+                    ->url('/admin')
+                    ->visible(fn (): bool => (bool) Auth::user()?->is_superadmin),
+            ])
             ->favicon(asset('favicon.svg'))
             ->viteTheme('resources/css/filament/theme.css')
             ->login(Login::class)
