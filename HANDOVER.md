@@ -80,6 +80,48 @@ senyap". Had tegas: kelonggaran itu TIDAK terpakai kepada langkah tindakan (suda
   `both`; diukur pada iPhone 13 ia di LUAR viewport lalai (x=621). Dibetulkan kepada
   `desktop`. **Tiada ujian membaca medan itu** — cadangan penjaga F8.
 
+### 🔧 Arahan boleh-jalan (gate tempatan + deploy) — dibina semula setiap sesi, jadi disimpan di sini
+
+**Gate tempatan 3 shard.** DB SEGAR antara shard (koreografi mengubah fixture), pelayan
+dilancar TERUS (`artisan serve` tidak menghantar `-d` kepada anak), output ke FAIL (jangan
+`tail` — exit code jadi milik penapis):
+
+```bash
+export APP_ENV=local APP_LOCALE=ms APP_URL=http://127.0.0.1:8092 E2E_BASE_URL=http://127.0.0.1:8092        SESSION_DRIVER=file MAIL_MAILER=log MAIL_LOG_CHANNEL=single SCOUT_DRIVER=collection        QUEUE_CONNECTION=sync DIWAN_STORAGE_DISK=local BACKUP_DISK=local IMAP_ENABLED=false        WHATSAPP_DRIVER=log DIWAN_LOGIN_RATE_LIMIT=100 E2E_ROLE_LOGIN_DELAY_MS=0
+for SHARD in screen workflow tenant-admin-public; do
+  php artisan config:clear; php artisan cache:clear
+  php artisan migrate:fresh --seed --force --no-interaction       # DB SEGAR setiap shard
+  ( cd public && php -d max_execution_time=0 -S 127.0.0.1:8092       ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > /dev/null 2>&1 & )
+  GUIDANCE_SHARD=$SHARD DIWAN_PW_JSON="storage/app/plan-ci/guidance-full-$SHARD.json"     npx playwright test --project=guidance-full --reporter=list > "shard-$SHARD.txt" 2>&1
+  echo "$SHARD EXIT=$?"
+  for pid in $(netstat -ano | grep ':8092' | grep LISTENING | awk '{print $NF}' | sort -u); do
+    taskkill //F //PID "$pid" //T; done
+done
+# agregator: salin setiap shard-*.json ke storage/app/plan-f6/artifacts/guidance-shard-<S>/ dahulu
+node scripts/audit/aggregate-guidance-coverage.mjs   --manifest "Audit Review Round Robin/bukti/plan-baseline/manifest.json"   --shards "storage/app/plan-f6/artifacts/guidance-shard-*/shard-*.json"   --out storage/app/plan-f6/coverage-gate.json
+```
+
+**Jana semula manifest** (selepas katalog / allowlist berubah) — `tools/README.md` ada versi penuh:
+
+```bash
+DB_CONNECTION=sqlite DB_DATABASE=<tmp>.sqlite php artisan migrate:fresh --seed --force
+DB_CONNECTION=sqlite DB_DATABASE=<tmp>.sqlite php artisan diwan:role-routes --json=<tmp>/role-routes.json
+node "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs"   --catalog resources/help/guides.json   --mobile "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json"   --role-routes <tmp>/role-routes.json   --justifications resources/help/step-justifications.json   --out "Audit Review Round Robin/bukti/plan-baseline/manifest.json"
+node scripts/audit/validate-plan-manifest.mjs --manifest "Audit Review Round Robin/bukti/plan-baseline/manifest.json"
+node "Audit Review Round Robin/bukti/plan-baseline/tools/generate-help-targets-doc.mjs"
+```
+
+⚠️ Edit `guides.json` MESTI `JSON.stringify(d, null, 2) + "
+"` (round-trip disahkan identik;
+`json_encode` PHP memecahkan seluruh fail). Python pada Windows: `io.open(..., newline='')`.
+
+**Deploy.** `scp` skrip ke pelayan dan jalankan sebagai FAIL (JANGAN `ssh 'bash -s' <` — `docker
+compose exec` menelan baki skrip); `< /dev/null` pada setiap `exec`; `set -euo pipefail`;
+`sudo env GIT_SHA=$SHA docker compose build app nginx`; prune build cache dahulu bila cakera
+>80%; `view:clear` (volume `storage` berkekalan); `sync-help-index --delete` bila
+`catalog_version` berubah. **JANGAN jalankan git dengan `sudo` di `/opt/diwan`.**
+Selepasnya selaraskan git pelayan dengan `git merge --ff-only origin/main` (bukan `reset --hard`).
+
 ### Jurang produk DIUKUR, tidak dibaiki (F7)
 
 - Tour tidak menggulung bekas boleh-skrol **dalaman** — disahkan sekali lagi pada paksi
