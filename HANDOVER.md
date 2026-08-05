@@ -1,49 +1,60 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W2, langkah 1 SIAP, langkah 2 belum dimulakan (5 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W2 SIAP DIBINA, menunggu CI + Deploy 8 (5 Ogos)
 
-**Keadaan repo:** `local = origin = 22d854e` · tree bersih · Pest **549✓/1 skip** ·
-produksi = imej dibina drp **`4fd64cf`** (Deploy 7, label revisi membuktikannya).
-**Tiada kod W2 ditulis** — jadi tiada apa-apa untuk di-deploy melebihi Deploy 7.
+**Keadaan repo:** `local = origin = 0dfd201` · produksi masih imej `4fd64cf` (Deploy 7).
+**CI run `30972196342`** dilancarkan pada `0dfd201` — semak keputusannya SEBELUM deploy.
 
-📄 Baca dahulu: `Audit Review Round Robin/bukti/plan-f6-w2/INVENTORI-W2.md` (inventori + 4 fakta
-perkakas + prosedur batch). Ia menjawab hampir setiap soalan persediaan.
+📄 Bukti penuh: `Audit Review Round Robin/bukti/plan-f6-w2/LAPORAN-F6-W2.md`
 
-### Apa yang SUDAH siap
-- **Inventori disahkan dua sumber:** 13 guide · 145 langkah · **60 langkah `wait_for_user`
-  bersasar generik** (manifest beku wave W2 = katalog hidup).
-- **Taburan kerja:** `minit-saya` **24** · `records` 14 · `registry-files` 8 · `carian` 4 ·
-  `retensi` 3 · `kelulusan` 3 · `penggunaan` 3 · dashboard 1.
-- **Sasaran sudah ada:** registri W1 meliputi hampir semua kawalan yang W2 perlukan; prasyarat
-  setiap satu disahkan daripada medan `state` registri (bukan andaian).
-- **Pemetaan calon 60 langkah** ditulis dalam INVENTORI-W2.md.
+### Apa yang siap
+**Metrik utama F6 DITUTUP SEPENUHNYA:** `action_steps_with_generic_target` **200 → 0**
+(W1 menutup 140, W2 menutup baki 60). Wave W2 13/145 → 0/0, W4 1/13 → 14/158, jumlah 83/473
+kekal. `wait_for_user` 190 → 172 (18 langkah PEMERHATIAN dibetulkan, disenaraikan satu per satu
+dalam laporan §(b)). `catalog_version 2026.08.05.1`.
 
-### Apa yang BELUM — dan saiz sebenarnya (diukur, bukan dianggar)
-1. **Edit katalog (satu batch).** Guna **`JSON.stringify(d,null,2)+"\n"` (Node)** — round-trip
-   identik bait-untuk-bait; `json_encode` PHP memecahkan seluruh fail (366KB vs 300KB).
-2. **Wave beku mesti dikemas SEKALI di hujung batch** dalam KEEMPAT-EMPAT penjaga
-   (`build-manifest.mjs` · `validate-plan-manifest.mjs` · `PlanManifestTest.php` ·
-   `aggregate-guidance-coverage.mjs`): dijangka **W2 13→0 guide**, **W4 1→14** (steps 13→158);
-   jumlah 83/473 tidak berubah. **Dibuktikan dengan mencuba:** membaiki satu guide sahaja memberi
-   `FAIL: wave W2.guides 12 ≠ 13` (wave DIKIRA daripada katalog). Edit percubaan itu dipulihkan.
-3. **Kerja gate paling berat:** 10 daripada 13 guide W2 jatuh ke `driveFlowGuide`
-   (`guidance-full.spec.js:1024`) dan langkah barunya berada **dalam modal** — Mohon Pembetulan,
-   Edarkan Minit, Keluarkan Fail, Lulus/Tolak, Tambah Storan. Beberapa memerlukan medan **wajib**
-   (`approval-password`) dan pemilih **Choices.js** (penerima minit). Jangkakan koreografi baharu,
-   bukan sekadar sasaran baharu.
-4. Jana semula `HELP-TARGETS.md`; flip `reserved`→`active` (`record-minit-action`,
-   `file-checkout-holder`) dalam commit yang SAMA (ujian yatim dua hala).
-5. Gate penuh 3 shard + agregator **tempatan** (katalog berubah → wajib, ~45 min), kemudian CI
-   (~45 min), kemudian deploy + 5A + Chrome.
+**Gate tempatan HIJAU PENUH:** workflow 15/15 · screen 30/30 · tenant-admin-public 41/41
+(setiap satu pada DB SEGAR) · agregator **GATE LULUS 83/473/172** · Pest **553** · unit 17/17 ·
+pint passed · build OK.
+
+### ⭐ Dua kecacatan produk ditutup (ditemui oleh gate, bukan oleh mata)
+Kedua-duanya KEGAGALAN SENYAP dengan punca sama: perkhidmatan menolak dengan
+`ValidationException` berkunci nama yang **bukan medan borang**, jadi Filament tiada tempat
+merendernya — modal kekal terbuka, tiada toast, tiada ralat medan.
+- **Mohon Pembetulan Rekod** (kunci `changes`) — hantar tanpa mengubah medan = senyap
+- **Keluarkan Fail fizikal** (kunci `holder`) — hantar tanpa pemegang = senyap
+Kedua-duanya kini memberitahu pengguna. Penjaga Pest dibuktikan MERAH pada kod lama.
+
+### Langkah seterusnya (turutan)
+1. Sahkan CI `30972196342` **7/7 hijau** (`gh run view 30972196342 --json jobs`).
+2. **Deploy 8** ikut §10 + `spdm-deploy-lessons`:
+   - Aset **TIDAK** berubah (`help-D0185fq1.js` kekal — tiada JS produk disentuh). Bukti deploy
+     mesti bergantung pada **kandungan dalam imej + ImageID**, bukan nama aset (pelajaran D2).
+   - `sync-help-index --delete` WAJIB — `catalog_version` berubah.
+   - `Nothing to migrate` dijangka (tiada migrasi baharu).
+   - `scp` skrip deploy, JANGAN `ssh 'bash -s' <` (pelajaran Deploy 7).
+3. Pengesahan LIVE Chrome: tour `workflow` pada `/app/mam/records` + mesej "Tiada perubahan
+   dikesan" pada borang Mohon Pembetulan.
+4. Kemudian **F6-W3** (1 guide / 11 langkah — kecil).
 
 ### Perangkap yang sudah dibayar harganya (jangan ulang)
-- **"Generik" = DUA sasaran sahaja** (`page-primary`, `page-content`). `page-actions` ialah
-  sasaran **spesifik** yang sah untuk langkah amaran — tanpa menyentuh kiraan `wait_for_user` beku.
-- **Tajuk tidak boleh menyalin arahan verbatim** — penjaga F5 `HelpCatalogQualityTest §6.5 #2`
-  menangkapnya (ia menangkap saya).
-- **Langkah boleh mengisytiharkan `route` sendiri**; langkah butiran yang mewarisi route kekal betul.
-- **Data demo mencukupi** (1 minit, 1 kelulusan, 1 fail hibrid daripada W1) tetapi **sahkan dengan
-  kiraan DB** sebelum mempercayai gate hijau — skrin tanpa data memberi gate hijau palsu.
+- **JANGAN jalankan tiga shard pada SATU DB tempatan.** Koreografi W2 benar-benar mengeluarkan
+  fail hibrid (`custody_status=dipinjam`), jadi tiga guide `screen` gagal selepasnya. CI selamat
+  (matriks job berasingan, `services:` sendiri — `ci.yml:291-295`). Semai semula ANTARA shard.
+- **JANGAN ubah fail sumber semasa larian gate berjalan** — `artisan serve` membaca semula PHP
+  setiap permintaan.
+- **JANGAN `tail` output gate** — diagnostik hilang; simpan penuh, tapis kemudian.
+- `explore.spec.js` gagal tempatan = **had masa 180s sahaja** (dibuktikan: lulus 4.6m dengan
+  `--timeout=900000`). Bukan regresi.
+- Filament 4 **tidak** guna Choices.js — komponen sendiri (`.fi-select-input-btn` +
+  `li.fi-select-input-option`). Guna `pilihPilihanPertama()`.
+
+### Jurang produk DIUKUR tetapi TIDAK dibaiki (calon F7)
+**Tour tidak bertahan merentas navigasi yang dimulakan PENGGUNA.** Bila pengguna membuka rekod
+daripada senarai, `autoStart` = false kerana progres wujud → tour tidak muncul semula sendiri;
+pengguna mesti menekan pelancar Pembantu (barulah `resumeStep()` memulihkan kedudukan). Gate
+melangkauinya dengan deep-link deterministik yang DIDOKUMEN — ia mengesahkan sasaran, dan
+**tidak** mendakwa menguji kesinambungan itu.
 
 ---
 

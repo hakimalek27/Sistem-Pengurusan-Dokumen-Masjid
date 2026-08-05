@@ -302,7 +302,9 @@ function tourState(page) {
             aktif: aktif.map((el) => el.getAttribute('data-help-target')),
             ralatPalsu: teks.includes('Tindakan belum tersedia'),
         };
-    });
+    // Sama seperti `rekod()`: penilaian yang mendarat semasa navigasi melempar. Pemanggil
+    // hanya perlu tahu "belum diketahui", bukan menerima pengecualian.
+    }).catch(() => ({ n: null, aktif: [], ralatPalsu: false }));
 }
 
 /**
@@ -626,7 +628,22 @@ async function driveFlowGuide(page, guide, basePath, detailPath = null) {
                 bannerModal: log.slice(-14)
                     .map((e) => `${e.banner ? 'B' : '-'}${e.modal ?? '?'}W${e.wizard ?? '-'}`).join(' '),
             };
-        }, [i, step.target]);
+        }, [i, step.target])
+            // ⚠️ `expect.poll` TIDAK mencuba semula apabila callbacknya MELEMPAR — ia gagal
+            // serta-merta. `page.evaluate` melempar "Execution context was destroyed" apabila
+            // ia dinilai TEPAT semasa navigasi, dan F6-W2 memperkenalkan navigasi yang
+            // dimulakan RUNTIME di tengah guide (langkah silang-route selepas penghantaran
+            // borang). Hasilnya: kegagalan **8 saat** yang menyamar sebagai tamat masa 90s.
+            // Diukur di CI (run 30972196342): 13/14 guide lulus, satu gagal dalam 8s dengan
+            // `readyState=loading, rangkaian: tiada` — potret halaman yang sedang menavigasi,
+            // bukan halaman yang tersangkut. Kembalikan bentuk "belum sedia" supaya pengundi
+            // MENCUBA SEMULA merentas navigasi, seperti yang sepatutnya.
+            .catch(() => ({
+                jumpa: false, ralatPalsu: false, sedia: false, bilangan: 0,
+                url: '(sedang menavigasi)', dokumen: '?', sedia_dom: 'navigating',
+                popover: false, guideAktif: '(sedang menavigasi)',
+                jejak: '', sasaranDijangka: '', bannerModal: '',
+            }));
 
         // Pemulihan dokumen TERGANTUNG (sekali per langkah).
         //
