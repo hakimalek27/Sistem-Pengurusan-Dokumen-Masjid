@@ -261,13 +261,20 @@ class DemoSeeder extends Seeder
         // batch (`pelupusan-manual.blade.php:24,26`) di dalam cabang `@else` bagi
         // `$batches->isEmpty()` — satu batch (apa-apa status) sudah cukup merendernya.
         // Status `menunggu_kelulusan` dipilih supaya butang Lulus guide Pengerusi turut ada.
+        // DUA batch diperlukan, bukan satu — disahkan VISUAL pada gate W4:
+        //   · `menunggu_kelulusan` → butang **Lulus** untuk guide Pengerusi (disposal.approve)
+        //   · `lulus`              → butang **Laksana** untuk guide Admin (disposal.execute)
+        // Dengan satu batch sahaja, langkah "Tekan Laksana sekali" menyorot lajur tindakan
+        // yang KOSONG: gate hijau, pengguna melihat sorotan tanpa makna.
         if (! DisposalBatch::query()->where('mosque_id', $mam->id)->exists()) {
-            DisposalBatch::query()->create([
-                'mosque_id' => $mam->id,
-                'kind' => 'manual',
-                'created_by' => $kerani->id,
-                'status' => 'menunggu_kelulusan',
-            ]);
+            foreach (['menunggu_kelulusan', 'lulus'] as $status) {
+                DisposalBatch::query()->create([
+                    'mosque_id' => $mam->id,
+                    'kind' => 'manual',
+                    'created_by' => $kerani->id,
+                    'status' => $status,
+                ]);
+            }
         }
 
         // Permohonan pembetulan: guide `betulkan-rekod` langkah 8-10 menyorot lajur

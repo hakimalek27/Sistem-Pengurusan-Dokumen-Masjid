@@ -23,7 +23,12 @@
                         <th class="py-1">Batch</th><th>Jenis</th>
                         <th data-help-target="disposal-status">Status</th>
                         <th>Bil. Item</th>
-                        <th data-help-target="disposal-actions"></th>
+                        {{-- F6-W4: lajur ini DAHULU tanpa label, jadi sasaran `disposal-actions`
+                             menyorot jalur KOSONG di hujung kanan — disahkan visual pada langkah
+                             10 guide pelupusan. Gate lulus (sasaran wujud) tetapi pengguna tidak
+                             nampak apa-apa bermakna. Label juga menutup lajur tindakan tanpa
+                             nama yang §8 (F7) mahu dibetulkan pada semua jadual. --}}
+                        <th data-help-target="disposal-actions">Tindakan</th>
                     </tr></thead>
                     <tbody>
                         @foreach ($batches as $b)

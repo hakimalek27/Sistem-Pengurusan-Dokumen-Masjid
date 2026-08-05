@@ -1320,10 +1320,18 @@ for (const guide of guides) {
                 // julat yang dahulunya hijau (muat-naik 5–14, setiausaha 4–9), jadi ia
                 // MEMULIHKAN koreografi dan bukan mengubahnya.
                 const laluanKoreografi = `/app/${tenantSlug}/peti-masuk`;
+                // ⚠️ Dalam MANIFEST, langkah tanpa `route` sendiri diisi dengan route GUIDE —
+                // ia tidak pernah `null` di sini, tidak seperti dalam `guides.json` mentah.
+                // Versi pertama menyemak `r === null` dan gelung berhenti pada langkah pertama
+                // (tamat=5), lalu menghantar langkah 6 ke `driveGenericSteps` → "kedudukan
+                // langkah salah" di CI. Kerana gelung bermula pada `mulaKoreografi`, memadankan
+                // route GUIDE adalah selamat: langkah papan pemuka (1–2) yang berkongsi route
+                // itu berada SEBELUM julat dan sudah dikecualikan.
+                const laluanGuide = hydrate(guide.route);
                 const padaHalamanKoreografi = (s) => {
-                    const r = s.route ? hydrate(s.route) : null;
+                    const r = s.route ? hydrate(s.route) : laluanGuide;
 
-                    return r === null || r === laluanKoreografi;
+                    return r === laluanKoreografi || r === laluanGuide;
                 };
                 const mulaKoreografi = Math.min(...AKSI_KOREOGRAFI[guide.guide_id]);
                 let tamatKoreografi = mulaKoreografi;

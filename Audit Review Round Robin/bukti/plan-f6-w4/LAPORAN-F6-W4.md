@@ -350,7 +350,62 @@ gate terus berjalan dan memulakan shard ke-3 **selepas** saya mengubah sumber, m
 keputusannya tidak sah. Dibunuh dengan betul melalui `Win32_Process` + padanan baris arahan
 (`playwright|gate-w4|8092|guidance-full`), 12 proses. Pusingan 2 dijalankan bersih dari awal.
 
-*(keputusan pusingan 2 diisi selepas larian selesai)*
+### c.12 Pusingan 2 (CI run 31036770642, komit `9abb066`) — 11/15, dua punca BAHARU
+
+```
+success  PostgreSQL, Redis, Meili, OCR and tests
+success  guidance-e2e (screen)                    · tempatan: 30 passed (24.6m)
+success  guidance-e2e (tenant-admin-public)
+failure  guidance-e2e (workflow)                  → 11 passed, 4 failed (8.9m)
+success  Docker app image · success  Docker web image
+```
+
+Kedua-dua pembaikan pusingan 1 **berkesan**: bilangan guide `workflow` yang lulus naik
+**2 → 11**, dan tiada kegagalan `log-filters`/`minit-filters` atau "langkah N tidak maju"
+yang tinggal. Empat kegagalan baki mempunyai DUA punca baharu:
+
+**(a) `assertTrailTargets` mengassert langkah SEBELUM julat koreografi** — 2 guide.
+
+```
+Error: workflow.admin_masjid.muat-naik-…#1: langkah tidak pernah dirakam perekam
+       (jejak: 5:inbox-upload)
+Error: workflow.setiausaha.klasifikasikan-…#1: langkah tidak pernah dirakam perekam
+       (jejak: 4:inbox-classify)
+```
+
+Perekam tour **direset oleh navigasi**, jadi jejak halaman koreografi hanya mengandungi
+langkah yang dipandu DI SANA. Sebelum W4 had bawah tidak diperlukan: langkah 1–4 generik dan
+dilangkau oleh semakan `status !== 'specific'`. W4 menjadikannya spesifik dan
+`driveGenericSteps` memandunya pada halaman LAIN. Jejak dalam mesej ralat (`5:inbox-upload`,
+`4:inbox-classify`) mengesahkan julat koreografi kini BETUL — ia bermula tepat pada 5 dan 4.
+**Fix:** parameter `daripadaIndex`, dipanggil dengan `mulaKoreografi`.
+
+**(b) `/kelulusan` sentiasa KOSONG untuk setiausaha** — 1 guide (2 langkah).
+
+```
+Error: workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#7: … sasaran approval-status
+  halaman: /app/mam/kelulusan?…&langkah=6 (readyState=complete, popover=true)
+  sasaran dijangka: -:tiada
+```
+
+DIUKUR daripada kod: `ApprovalResource::getEloquentQuery()` menapis
+`whereIn('approver_id', …)` sahaja — setiausaha **tidak pernah** menjadi pelulus, jadi
+halaman itu tiada satu pun baris untuk peranan ini. Tiada sasaran baris yang boleh wujud.
+Kedua-dua langkah kini `generic-justified` dengan sebab yang diukur.
+
+⭐ **Penemuan KANDUNGAN yang ikut serta:** guide menyuruh setiausaha "Semak status permohonan"
+pada halaman yang, mengikut reka bentuk, tidak menunjukkan apa-apa kepada mereka. Destinasi
+yang betul bagi PEMOHON ialah tab Kelulusan pada rekod (`record-tab-approval`). Direkod
+sebagai `followup` dalam allowlist dan dicadangkan untuk F9 (Manual) — ia perubahan
+kandungan/route, di luar skop pemetaan sasaran W4.
+
+`approval-status` kekal `active` (masih dirujuk `nazir#9` dan
+`screen.buat-keputusan-kelulusan#6`) → tiada entri yatim.
+
+Justifikasi **11 → 13**. Manifest dijana semula, validator bebas exit 0, `PlanManifestTest`
+liputan wave tertutup **69 assertion** lulus.
+
+*(keputusan pusingan 3 — CI run 31038869313, komit `e7c0fa6` — diisi selepas selesai)*
 
 ## (d) Kriteria Siap W4
 
