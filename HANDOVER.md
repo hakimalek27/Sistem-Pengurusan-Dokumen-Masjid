@@ -1,5 +1,52 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## ▶️ SAMBUNG DI SINI — F6-W2, langkah 1 SIAP, langkah 2 belum dimulakan (5 Ogos)
+
+**Keadaan repo:** `local = origin = 22d854e` · tree bersih · Pest **549✓/1 skip** ·
+produksi = imej dibina drp **`4fd64cf`** (Deploy 7, label revisi membuktikannya).
+**Tiada kod W2 ditulis** — jadi tiada apa-apa untuk di-deploy melebihi Deploy 7.
+
+📄 Baca dahulu: `Audit Review Round Robin/bukti/plan-f6-w2/INVENTORI-W2.md` (inventori + 4 fakta
+perkakas + prosedur batch). Ia menjawab hampir setiap soalan persediaan.
+
+### Apa yang SUDAH siap
+- **Inventori disahkan dua sumber:** 13 guide · 145 langkah · **60 langkah `wait_for_user`
+  bersasar generik** (manifest beku wave W2 = katalog hidup).
+- **Taburan kerja:** `minit-saya` **24** · `records` 14 · `registry-files` 8 · `carian` 4 ·
+  `retensi` 3 · `kelulusan` 3 · `penggunaan` 3 · dashboard 1.
+- **Sasaran sudah ada:** registri W1 meliputi hampir semua kawalan yang W2 perlukan; prasyarat
+  setiap satu disahkan daripada medan `state` registri (bukan andaian).
+- **Pemetaan calon 60 langkah** ditulis dalam INVENTORI-W2.md.
+
+### Apa yang BELUM — dan saiz sebenarnya (diukur, bukan dianggar)
+1. **Edit katalog (satu batch).** Guna **`JSON.stringify(d,null,2)+"\n"` (Node)** — round-trip
+   identik bait-untuk-bait; `json_encode` PHP memecahkan seluruh fail (366KB vs 300KB).
+2. **Wave beku mesti dikemas SEKALI di hujung batch** dalam KEEMPAT-EMPAT penjaga
+   (`build-manifest.mjs` · `validate-plan-manifest.mjs` · `PlanManifestTest.php` ·
+   `aggregate-guidance-coverage.mjs`): dijangka **W2 13→0 guide**, **W4 1→14** (steps 13→158);
+   jumlah 83/473 tidak berubah. **Dibuktikan dengan mencuba:** membaiki satu guide sahaja memberi
+   `FAIL: wave W2.guides 12 ≠ 13` (wave DIKIRA daripada katalog). Edit percubaan itu dipulihkan.
+3. **Kerja gate paling berat:** 10 daripada 13 guide W2 jatuh ke `driveFlowGuide`
+   (`guidance-full.spec.js:1024`) dan langkah barunya berada **dalam modal** — Mohon Pembetulan,
+   Edarkan Minit, Keluarkan Fail, Lulus/Tolak, Tambah Storan. Beberapa memerlukan medan **wajib**
+   (`approval-password`) dan pemilih **Choices.js** (penerima minit). Jangkakan koreografi baharu,
+   bukan sekadar sasaran baharu.
+4. Jana semula `HELP-TARGETS.md`; flip `reserved`→`active` (`record-minit-action`,
+   `file-checkout-holder`) dalam commit yang SAMA (ujian yatim dua hala).
+5. Gate penuh 3 shard + agregator **tempatan** (katalog berubah → wajib, ~45 min), kemudian CI
+   (~45 min), kemudian deploy + 5A + Chrome.
+
+### Perangkap yang sudah dibayar harganya (jangan ulang)
+- **"Generik" = DUA sasaran sahaja** (`page-primary`, `page-content`). `page-actions` ialah
+  sasaran **spesifik** yang sah untuk langkah amaran — tanpa menyentuh kiraan `wait_for_user` beku.
+- **Tajuk tidak boleh menyalin arahan verbatim** — penjaga F5 `HelpCatalogQualityTest §6.5 #2`
+  menangkapnya (ia menangkap saya).
+- **Langkah boleh mengisytiharkan `route` sendiri**; langkah butiran yang mewarisi route kekal betul.
+- **Data demo mencukupi** (1 minit, 1 kelulusan, 1 fail hibrid daripada W1) tetapi **sahkan dengan
+  kiraan DB** sebelum mempercayai gate hijau — skrin tanpa data memberi gate hijau palsu.
+
+---
+
 ## 🔧 HOTFIX BUG-A..D — laporan pemilik + 3 pepijat ditemui sendiri (5 Ogos 2026) ⭐ TERKINI
 
 **Komit `4fd64cf`** (5 komit: `4cd973e` BUG-A · `b5e846b` BUG-B · `8c72e2f` BUG-C+D ·
