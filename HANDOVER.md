@@ -1,6 +1,76 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W3 LIVE (Deploy 9), seterusnya F6-W4 (5 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W4 SEPARUH SIAP (6 Ogos)
+
+**local = origin = `5dbfda4`** · **produksi kekal imej `2cd7ab8` (Deploy 9)** — W4 belum
+di-deploy dan **belum boleh** di-deploy: katalog belum disunting, jadi tiada apa yang berubah
+untuk pengguna. 📄 `Audit Review Round Robin/bukti/plan-f6-w4/INVENTORI-W4.md`
+
+### Skop W4 yang DIUKUR (jadual beku pelan salah, seperti W3)
+
+| | Guide | Langkah | Generik |
+|---|---|---|---|
+| Jadual beku pelan | 1 | 13 | — |
+| **Diukur** | **14** | **158** | **82** |
+
+Kesemua 82 `wait_for_user: false`, `target page-content`, `viewport desktop`.
+
+**⭐ Penemuan yang mengubah pendekatan:** kesemua 82 langkah **sudah mengisytiharkan `route`
+sendiri** dan runtime memang menavigasi ke sana (`HelpCatalog.php:168,193` +
+`step-advance-plan.js:48` + `help.js:775-777`). Jadi ia BUKAN "tidak boleh dicapai" — majoriti
+layak DINAIKKAN kepada sasaran sebenar, bukan dijustifikasikan. Tekaan handover W3
+("35 naik / 47 justifikasi") **dibatalkan** — ia dikira daripada route GUIDE, bukan route LANGKAH.
+14/14 route disahkan wujud (`route:list`) → tiada langkah menghantar pengguna ke 404.
+
+### ✅ SIAP (komit `5dbfda4`) — langkah 1 + 2
+
+- **Inventori** penuh + jadual keputusan per kumpulan langkah + beban per route.
+- **17 sasaran DOM baharu** dipasang & diuji, kesemuanya `reserved` dalam registri
+  (187 entri: 148 aktif + 39 rizab). `reserved` kerana katalog belum merujuknya — gate (d)
+  menolak entri `active` yatim.
+- **Mekanisme baharu: `resources/js/help/page-target-plan.js`** — pemetaan sasaran vendor
+  **PER HALAMAN** (medan carian jadual + pencetus tapisan; Filament tidak dedahkan cangkuk
+  atribut). MESTI per halaman: satu elemen = satu `data-help-target`.
+  Didaftarkan dalam projek Playwright `unit`.
+- Bukti: unit **25/25** · `W4TargetRenderTest` **7/7** (25 assertion) ·
+  HelpCatalogQuality+PlanManifest **36/36** (3024 assertion) · pint · build OK.
+
+### 🔜 BAKI W4 — mesti SATU batch (wave dikira daripada katalog)
+
+1. **Sunting `guides.json`**: 82 langkah → sasaran (peta ada dalam INVENTORI-W4.md §4) +
+   naikkan `catalog_version` → `2026.08.06.1`. Guna `JSON.stringify(d,null,2)+"\n"`.
+2. **Tukar 17 entri registri + `disposal-actions` + `disposal-status`** kepada `active`.
+   Kedua-dua yang `reserved` itu **DOMnya sudah ada** (`pelupusan-manual.blade.php:26,28`).
+3. **`step-justifications.json`** untuk langkah yang benar-benar tiada rujukan DOM
+   (calon disenaraikan INVENTORI §4.3) + tambah **`W4`** kepada `justified_waves` dalam
+   **TIGA** tempat: `build-manifest.mjs` FROZEN · `validate-plan-manifest.mjs` JUSTIFIED_WAVES ·
+   `PlanManifestTest.php`.
+4. **Benih demo**: DIUKUR kosong → `DisposalBatch` 0 · `SensitiveAccessLog` 0 ·
+   `RecordCorrectionRequest` 0 · `Record.retention_due_at` 0 · `legal_hold` 0.
+   Sasaran baris pada halaman itu perlu benih, jika tidak gate hijau PALSU (pelajaran W1).
+   ⚠️ Perubahan benih memecahkan `MinitService` pada W3 — jalankan suite PENUH.
+5. Jana semula manifest + `HELP-TARGETS.md`, kemudian gate 3 shard + agregator.
+
+### ⚠️ Ramalan saya yang SUDAH terbukti SALAH (jangan ulang)
+
+- Inventori meramalkan nama aset Vite KEKAL. **Salah**: `help-D0185fq1.js` →
+  **`help-DaHF3IsK.js`** (css `help-CrH0eDM1.css` KEKAL). Deploy W4 **mesti** rebuild
+  `app` DAN `nginx`.
+- Ujian penjaga memo statik LULUS dua kali walaupun regresi dipasang, atas dua sebab berbeza
+  daripada jangkaan saya. Punca akhir: **bilangan tidak dapat menangkapnya — yang berubah
+  ialah KEDUDUKAN.** Assertion kini menguji urutan dalam aliran HTML. Bukti dua arah direkod.
+
+### ⚠️ MENUNGGU PEMILIK (tertunggak dari W2/W3, masih sah)
+
+Sesi pelayar luput; saya tidak pernah menaip kredensial produksi. Log masuk sebagai admin
+masjid/setiausaha, kemudian:
+1. `/app/<slug>/peti-masuk?panduan=screen.muat-naik-dokumen&langkah=3` → langkah 4 mesti sorot
+   **sel tajuk baris pertama**.
+2. `/app/<slug>/records?panduan=workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah&langkah=3`
+   → langkah 4 mesti sorot **Mohon Pembetulan**; Hantar tanpa ubah medan → merah
+   "Tiada perubahan dikesan".
+
+## 📌 SEBELUM INI — F6-W3 LIVE (Deploy 9, 5 Ogos)
 
 **local = origin = server = `2cd7ab8`** · imej produksi dibina daripada `2cd7ab8`
 (label revisi membuktikannya) · CI run **31002906128 = 7/7 HIJAU**.
