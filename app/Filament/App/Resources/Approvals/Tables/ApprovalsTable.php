@@ -19,6 +19,8 @@ class ApprovalsTable
 {
     public static function configure(Table $table): Table
     {
+        self::$barisPertamaId = null;
+
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([

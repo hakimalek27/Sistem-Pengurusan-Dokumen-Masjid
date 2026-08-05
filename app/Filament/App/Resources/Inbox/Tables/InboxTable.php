@@ -37,6 +37,8 @@ class InboxTable
 {
     public static function configure(Table $table): Table
     {
+        self::$barisPertamaId = null;
+
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
@@ -89,7 +91,10 @@ class InboxTable
      *
      * Corak sama seperti `MinitsTable::baris1()` / `ApprovalsTable::baris1()`: sel wujud
      * sekali per baris, jadi menandakan semuanya bermakna satu sasaran memadan N elemen dan
-     * melanggar syarat keunikan G2. Memo statik hidup satu permintaan sahaja.
+     * melanggar syarat keunikan G2.
+     *
+     * ⚠️ Memo statik = hayat PROSES, bukan hayat permintaan — diset semula dalam
+     * `configure()`. Punca penuh: `MinitsTable::baris1()`.
      */
     protected static ?int $barisPertamaId = null;
 

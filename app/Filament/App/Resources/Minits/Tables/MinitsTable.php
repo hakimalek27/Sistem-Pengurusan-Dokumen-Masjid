@@ -19,6 +19,8 @@ class MinitsTable
 {
     public static function configure(Table $table): Table
     {
+        self::$barisPertamaId = null;
+
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
@@ -118,9 +120,17 @@ class MinitsTable
      * F6-W1 — sasaran tour hanya pada baris PERTAMA yang dirender.
      *
      * Aksi baris wujud sekali per baris; menandakan semuanya bermakna satu sasaran
-     * memadan N elemen dan melanggar syarat keunikan G2. Memo statik ini hidup selama
-     * satu permintaan sahaja (jadual dirender semula setiap permintaan), jadi ia sentiasa
-     * merujuk baris pertama dalam susunan query semasa.
+     * memadan N elemen dan melanggar syarat keunikan G2.
+     *
+     * ⚠️ DIBETULKAN F6-W3: memo ini ialah sifat STATIK, jadi hayatnya ialah hayat PROSES,
+     * bukan hayat permintaan. Andaian lama ("hidup satu permintaan sahaja") kebetulan benar
+     * di bawah php-fpm, tetapi PALSU dalam proses ujian, di bawah `artisan serve`/`php -S`,
+     * dan di bawah Octane — di situ memo memegang ID daripada render TERDAHULU, `??=` tidak
+     * pernah menetapkannya semula, dan sasaran hilang sepenuhnya (`substr_count === 0`) atau
+     * melekat pada baris lama. Ditemui oleh CI: lulus pada SQLite (jujukan dirollback bersama
+     * transaksi `RefreshDatabase`, jadi ID kebetulan sepadan) tetapi GAGAL pada PostgreSQL
+     * (jujukan tidak dirollback, jadi ID terus menaik). Kini diset semula dalam `configure()`,
+     * yang dipanggil sekali setiap render jadual.
      */
     protected static ?int $barisPertamaId = null;
 
