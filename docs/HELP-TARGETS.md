@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (147) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (148) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -76,8 +76,9 @@
 | `classification-review` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:193` | both | modal:klasifikasi terbuka (wizard langkah 5) | inbox.classify |
 | `classification-source` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:106` | both | modal:klasifikasi terbuka (wizard langkah 1) | inbox.classify |
 | `classification-submit` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:92` | both | modal:klasifikasi terbuka (wizard langkah 5) | inbox.classify |
-| `inbox-classify` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:85` | both | jadual Peti Masuk mempunyai item belum diklasifikasi | inbox.classify |
-| `inbox-scan-status` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:63` | both | jadual Peti Masuk tidak kosong (sel baris pertama) | inbox.view |
+| `inbox-classify` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:112` | both | jadual Peti Masuk mempunyai item belum diklasifikasi | inbox.classify |
+| `inbox-record` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:56` | both | jadual Peti Masuk tidak kosong (sel tajuk baris pertama) | inbox.view |
+| `inbox-scan-status` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:70` | desktop | jadual Peti Masuk tidak kosong (sel baris pertama); pada mobile lajur Antivirus berada di LUAR viewport lalai — diukur iPhone 13 (390px): x=621, w=107, tiada persilangan viewport (F6-W3, 5 Ogos 2026). Jadual boleh diskrol mendatar, jadi ia boleh dicapai pengguna tetapi tour tidak menggulung bekas dalaman (kecacatan diukur → F7) | inbox.view |
 | `inbox-upload` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:29` | both | - | inbox.view |
 | `inbox-upload-dropzone` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:47` | both | modal:muat-naik terbuka | records.create |
 | `inbox-upload-modal` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:30` | both | modal:muat-naik terbuka | inbox.view |

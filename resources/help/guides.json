@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.05.1",
+  "catalog_version": "2026.08.05.2",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -5577,7 +5577,7 @@
           "id": "muat-naik-dokumen.4",
           "title": "Sahkan toast dan baris baharu",
           "instruction": "Sahkan toast bilangan dokumen dan baris baharu muncul dalam Peti Masuk.",
-          "target": "page-content",
+          "target": "inbox-record",
           "wait_for_user": false
         },
         {

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by": "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs",
-  "catalog_version": "2026.08.05.1",
+  "catalog_version": "2026.08.05.2",
   "sources": {
     "catalogue": "resources/help/guides.json",
     "mobile_defects": "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json",
@@ -87,6 +87,12 @@
         "action_steps": 4
       }
     },
+    "justified_waves": [
+      "W0",
+      "W1",
+      "W2",
+      "W3"
+    ],
     "cohort_baseline": {
       "resolved_to_generic": "119/124",
       "title_equals_instruction": "77/124",
@@ -7109,17 +7115,15 @@
           "title": "Sahkan toast dan baris baharu",
           "title_placeholder": false,
           "instruction_preview": "Sahkan toast bilangan dokumen dan baris baharu muncul dalam Peti Masuk.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W3",
           "shard": "screen",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "screen.muat-naik-dokumen#5",
@@ -7316,9 +7320,9 @@
           "shard": "screen",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Tindakan yang diminta berlaku DI LUAR skrin semasa (log keluar lalu log masuk semula dalam sesi baharu). Kesemua sasaran `active` pada /app/{tenant}/profil disemak satu per satu — profil-akaun, profil-kata-laluan, profil-notifikasi, profil-notifikasi-save, profil-password-confirm, profil-password-save, profil-ujian — dan tiada satu pun mewakilinya (`profil-ujian` ialah butang 'Hantar Notifikasi Ujian', ProfileActions.php:47-50). Menyasarkan butang log keluar DITOLAK secara sedar: ia menggalakkan pengguna memusnahkan sesinya sendiri di tengah tour. Langkah akhir dan wait_for_user=false, jadi kitaran guide tetap tamat (G4).",
+          "since": "2026-08-05"
         }
       ]
     },
@@ -8618,8 +8622,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan butang halaman sebelum/seterusnya viewer. Sasaran DOM `viewer-page-prev` sudah dipasang (document-viewer.blade.php:39) tetapi berada pada halaman kendiri /viewer/{media} yang memuatkan hanya app.css + document-viewer.js — tiada Livewire, tiada help.js — jadi runtime tour tidak wujud di sana dan guide ini berjalan pada senarai rekod. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — memasang runtime bantuan pada /viewer/{media} memerlukan Livewire + entri Vite + route baharu dalam manifest role_routes beku; pelan §8.4 hanya menugaskan butang viewer disabled + pageInput.max, jadi kerja runtime dicadangkan, bukan diandaikan."
         },
         {
           "key": "screen.viewer-dokumen#2",
@@ -8637,8 +8642,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan kotak nombor halaman viewer. Sasaran DOM `viewer-page-input` sudah dipasang (document-viewer.blade.php:40) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — lihat screen.viewer-dokumen#1."
         },
         {
           "key": "screen.viewer-dokumen#3",
@@ -8656,8 +8662,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan kawalan zum viewer. Sasaran DOM `viewer-zoom-in` sudah dipasang (document-viewer.blade.php:45) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — lihat screen.viewer-dokumen#1."
         },
         {
           "key": "screen.viewer-dokumen#4",
@@ -8675,8 +8682,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan carian teks dalam dokumen. Sasaran DOM `viewer-find` sudah dipasang (document-viewer.blade.php:47) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — lihat screen.viewer-dokumen#1."
         },
         {
           "key": "screen.viewer-dokumen#5",
@@ -8694,8 +8702,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan butang Cetak Metadata. Sasaran DOM `viewer-print` sudah dipasang (document-viewer.blade.php:50) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — lihat screen.viewer-dokumen#1."
         },
         {
           "key": "screen.viewer-dokumen#6",
@@ -8713,8 +8722,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "reason": "Menerangkan pautan muat turun terkawal. Sasaran DOM `viewer-download` sudah dipasang (document-viewer.blade.php:51) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+          "since": "2026-08-05",
+          "followup": "F7 — lihat screen.viewer-dokumen#1."
         }
       ]
     },
@@ -9314,9 +9324,9 @@
           "shard": "screen",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W3 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Langkah ini menyatakan kesan sistem kepada pengguna LAIN — pengirim minit menerima notifikasi apabila semua penerima tindakan selesai. Tiada elemen pada /app/{tenant}/minit-saya yang mewakilinya bagi penerima; notifikasi itu dihantar ke saluran pengirim. Langkah 4 sudah menyasar `minit-status` untuk perubahan yang penerima BOLEH lihat, jadi menyasarkan elemen sama sekali lagi hanya mengulang sorotan yang sama. Langkah akhir dan wait_for_user=false, jadi kitaran guide tetap tamat (G4).",
+          "since": "2026-08-05"
         }
       ]
     },

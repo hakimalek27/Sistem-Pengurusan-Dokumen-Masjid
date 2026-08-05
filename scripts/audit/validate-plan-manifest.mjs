@@ -35,6 +35,18 @@ const SHARDS = ['screen', 'workflow', 'tenant-admin-public'];
 // W4 = seluruh shard `workflow` 14/158. Jumlah 83/473 dan struktur shard TIDAK berubah.
 // Sebab penuh (termasuk wait_for_user 190 → 172) ada dalam `tools/build-manifest.mjs`
 // nota (5); KEEMPAT-EMPAT penjaga dikemas dalam commit sama.
+//
+// F6-W3 (5 Ogos 2026): W3 mengekalkan 29/151 (guide asalnya, `screen.klasifikasi-peti-masuk`,
+// sememangnya sudah 11/11 spesifik). Kerja W3 ialah 9 langkah generik yang tinggal dalam shard
+// `screen`: satu dinaikkan kepada `specific` (`screen.muat-naik-dokumen#4` → `inbox-record`)
+// dan lapan lagi menerima justifikasi EKSPLISIT bertarikh dalam
+// `resources/help/step-justifications.json`. `waveOf()` tidak memindahkan apa-apa guide kerana
+// langkah berkenaan `wait_for_user: false` (W1/W3 dibezakan oleh langkah TINDAKAN generik).
+const JUSTIFICATIONS = 'resources/help/step-justifications.json';
+// Wave yang kerjanya SUDAH DITUTUP — setiap langkah generik di dalamnya mesti membawa
+// justifikasi eksplisit. Mesti kekal SAMA dengan `FROZEN.justified_waves` dalam
+// `tools/build-manifest.mjs` (disemak eksplisit di bawah supaya dua senarai tidak boleh hanyut).
+const JUSTIFIED_WAVES = ['W0', 'W1', 'W2', 'W3'];
 const EXPECT = {
     waveGuides: { W0: 2, W1: 0, W2: 0, W3: 29, W4: 14, W5: 35, W6: 3 },
     waveSteps: { W0: 10, W1: 0, W2: 0, W3: 151, W4: 158, W5: 146, W6: 8 },
@@ -129,6 +141,57 @@ const missingSteps = setDiff(catalogStepKeys, seenStepKeys);
 const extraSteps = setDiff(seenStepKeys, catalogStepKeys);
 if (missingSteps.length) fail('kunci langkah HILANG dari manifest', missingSteps);
 if (extraSteps.length) fail('kunci langkah LEBIHAN dalam manifest', extraSteps);
+
+// ── Allowlist justifikasi per-langkah (F6-W3, §7.2 gate registri (f), §7.3 G5) ──────────
+// Dikira SEMULA daripada katalog — bukan dibaca daripada manifest — supaya ia benar-benar
+// pelaksanaan bebas kedua, sama seperti partition wave di atas.
+{
+    const senaraiManifest = manifest.invariants?.justified_waves ?? [];
+    if (senaraiManifest.join(',') !== JUSTIFIED_WAVES.join(',')) {
+        fail(`justified_waves manifest [${senaraiManifest}] ≠ jangkaan validator [${JUSTIFIED_WAVES}]`);
+    }
+
+    let allow;
+    try {
+        allow = JSON.parse(readFileSync(JUSTIFICATIONS, 'utf8'));
+    } catch (e) {
+        fail(`allowlist justifikasi tidak boleh dibaca (${JUSTIFICATIONS}): ${e.message}`);
+        allow = { justifications: [] };
+    }
+    const kunciAllow = new Set();
+    for (const j of allow.justifications ?? []) {
+        if (kunciAllow.has(j.key)) fail(`allowlist: kunci berganda ${j.key}`);
+        kunciAllow.add(j.key);
+        if (!['generic-justified', 'not-applicable'].includes(j.status)) {
+            fail(`allowlist ${j.key}: status ${j.status} tidak sah`);
+        }
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(j.since ?? '')) fail(`allowlist ${j.key}: since bukan tarikh`);
+        if ((j.reason ?? '').length < 40) fail(`allowlist ${j.key}: sebab terlalu pendek`);
+    }
+
+    // Dikira daripada KATALOG: langkah generik dalam wave yang sudah ditutup.
+    const perluJustifikasi = new Set();
+    for (const g of catalog.guides) {
+        // `expected` dibina pada langkah 1 daripada katalog + bukti mobile — pengiraan wave
+        // yang BEBAS daripada manifest.
+        if (!JUSTIFIED_WAVES.includes(expected.get(g.id).wave)) continue;
+        g.steps.forEach((st, i) => { if (GEN.has(st.target)) perluJustifikasi.add(`${g.id}#${i + 1}`); });
+    }
+    const tiadaJustifikasi = setDiff(perluJustifikasi, kunciAllow);
+    const justifikasiYatim = setDiff(kunciAllow, perluJustifikasi);
+    if (tiadaJustifikasi.length) fail(`langkah generik dalam wave TERTUTUP tanpa justifikasi eksplisit`, tiadaJustifikasi);
+    if (justifikasiYatim.length) fail(`entri allowlist YATIM/BASI (langkah tidak generik atau tiada dalam wave tertutup)`, justifikasiYatim);
+
+    // Manifest mesti benar-benar MEMBAWA sebab eksplisit itu — bukan sebab baseline automatik.
+    const sebabBaseline = [];
+    for (const g of manifest.catalogue ?? []) {
+        for (const s of g.steps ?? []) {
+            if (!perluJustifikasi.has(s.key)) continue;
+            if (String(s.reason ?? '').startsWith('Baseline pra-F6')) sebabBaseline.push(s.key);
+        }
+    }
+    if (sebabBaseline.length) fail('manifest masih membawa sebab BASELINE untuk langkah wave tertutup', sebabBaseline);
+}
 
 // Persilangan pasangan wave mesti kosong (dijamin oleh keunikan guide+wave tunggal, tetapi
 // diassert eksplisit — dua partition bebas ke atas semesta sama).

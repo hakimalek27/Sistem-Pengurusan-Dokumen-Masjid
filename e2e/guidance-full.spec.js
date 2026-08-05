@@ -225,6 +225,71 @@ async function assertStepPopover(page, guide, step, total) {
     return popover;
 }
 
+/**
+ * G2 untuk guide yang dipandu KOREOGRAFI (F6-W3).
+ *
+ * `assertStepPopover()` menguatkuasakan "elemen aktif = sasaran langkah", tetapi ia hanya
+ * dipanggil oleh `driveGenericSteps()` dan `driveFlowGuide()`. `driveChoreographedRange()`
+ * hanya mengundi NOMBOR langkah — jadi guide berkoreografi boleh mendakwa status `specific`
+ * tanpa satu pun bukti bahawa sasarannya benar-benar disorot. Menaikkan sesuatu langkah
+ * kepada `specific` tanpa menutup jurang ini bermakna menambah ujian yang tidak boleh gagal.
+ *
+ * Perekam dalam halaman sudah merakam `aktif: [data-help-target…]` pada setiap peralihan,
+ * jadi buktinya sudah dikumpul; yang tiada hanyalah assertion ke atasnya. Assertion bertanya
+ * "adakah langkah *i* PERNAH berlaku dengan sasaran betul" — kalis-perlumbaan, sama seperti
+ * pendekatan yang F6-W1 buktikan perlu.
+ *
+ * ── Satu pengecualian yang DIUKUR, bukan diandaikan ──────────────────────────────────────
+ * Sasaran wizard klasifikasi DILUASKAN kepada modalnya oleh runtime — `help.js:231`:
+ *
+ *     if (step.target.startsWith('classification-') && step.target !== 'classification-submit')
+ *         return exact.closest('.fi-modal-window') || exact;
+ *
+ * Sebabnya kekal sah: menyorot SATU medan di dalam modal boleh-skrol menolak popover (dan
+ * lubang overlaynya) ke luar viewport — kecacatan yang sudah diukur dan dibawa ke F7. Jadi
+ * `inbox-classification-modal` ialah jawapan yang BETUL untuk langkah-langkah itu, bukan
+ * kegagalan. `classification-submit` ialah pengecualian dalam kod, dan kelakuannya sepadan
+ * (diukur: `13:classification-submit` disorot terus).
+ *
+ * Corak sama seperti sasaran LOGIK `nav-primary` yang `assertStepPopover` sudah kendalikan.
+ */
+const CLASSIFICATION_MODAL = 'inbox-classification-modal';
+const diluaskanKeModal = (t) => t.startsWith('classification-') && t !== 'classification-submit';
+
+async function assertTrailTargets(page, guide, sehinggaIndex = Infinity) {
+    const jejak = await page.evaluate(() => (window.__diwanTourLog ?? [])
+        .filter((e) => e.n !== null)
+        .map((e) => ({ n: e.n, aktif: e.aktif, sasaran: e.sasaran })));
+    if (!jejak.length) throw new Error(`${guide.guide_id}: perekam tour KOSONG — G2 tidak boleh disahkan`);
+
+    const ringkas = jejak.map((e) => `${e.n}:${(e.aktif ?? []).filter(Boolean).join('+') || '-'}`).join(' → ');
+    for (const step of guide.steps) {
+        if (step.status !== 'specific' || step.index > sehinggaIndex) continue;
+        const dilihat = jejak.filter((e) => e.n === step.index);
+        // Langkah yang tidak pernah dicerap = kelemahan perekaman, bukan kegagalan sasaran;
+        // laporkan berasingan supaya dua keadaan itu tidak boleh dikelirukan.
+        if (!dilihat.length) {
+            throw new Error(`${step.key}: langkah tidak pernah dirakam perekam (jejak: ${ringkas})`);
+        }
+        // Peluasan modal TIDAK melonggarkan gate: ia menuntut DUA fakta serentak — modal yang
+        // betul disorot, DAN medan yang diisytihar benar-benar hadir lagi kelihatan pada saat
+        // itu. Menerima "modal sahaja" akan membenarkan wizard berada pada langkah yang salah.
+        const kena = dilihat.some((e) => {
+            const aktif = e.aktif ?? [];
+            if (aktif.includes(step.target)) return true;
+            if (!diluaskanKeModal(step.target)) return false;
+
+            return aktif.includes(CLASSIFICATION_MODAL)
+                && String(e.sasaran?.[step.target] ?? '').startsWith('ada');
+        });
+        if (!kena) {
+            const keadaan = dilihat.map((e) => e.sasaran?.[step.target] ?? '?').join('/');
+            throw new Error(`${step.key}: sasaran "${step.target}" tidak pernah disorot`
+                + ` (keadaan sasaran pada langkah itu: ${keadaan}; jejak: ${ringkas})`);
+        }
+    }
+}
+
 /** Baca nombor langkah semasa daripada popover ("X daripada Y"). */
 async function currentStepNumber(popover) {
     const text = await popover.locator('.driver-popover-progress-text, .driver-popover').first().innerText();
@@ -1149,6 +1214,11 @@ for (const guide of guides) {
                     guide.steps.length,
                     guide.guide_id,
                 );
+                // F6-W3: langkah 4 ("Sahkan toast dan baris baharu") kini menyasar
+                // `inbox-record` — sel tajuk baris pertama, iaitu dokumen yang baru dimuat
+                // naik. Tanpa assertion ini, `specific` bagi guide berkoreografi tidak
+                // pernah diuji (rujuk assertTrailTargets).
+                await assertTrailTargets(page, guide);
                 await popover.getByRole('button', { name: 'Tutup panduan' }).click();
                 await expect(popover).toBeHidden();
             } else if (guide.guide_id === 'public.registration') {
@@ -1286,6 +1356,10 @@ for (const guide of guides) {
                     : { 5: upload, 9: openClassify, 10: wizardNext, 11: metadataThenNext, 12: fileThenNext, 13: wizardNext };
 
                 await driveChoreographedRange(popover, actions, lastSpecific.index, guide.guide_id);
+                // F6-W3: G2 untuk laluan berkoreografi (rujuk assertTrailTargets). Hanya
+                // sehingga `lastSpecific` — langkah selepasnya dipandu `driveGenericSteps`,
+                // yang sudah memanggil `assertStepPopover` sendiri.
+                await assertTrailTargets(page, guide, lastSpecific.index);
                 await popover.getByRole('button', { name: 'Tutup panduan' }).click();
                 await modal.getByRole('button', { name: 'Tutup' }).click().catch(() => {});
                 await expect(popover).toBeHidden();

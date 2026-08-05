@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "description": "Allowlist justifikasi per-langkah bagi sasaran bukan-spesifik (§7.2 gate registri (f), §7.3 G5). Setiap entri dikunci oleh `<guide_id>#<index1>` — status aras-guide TIDAK diterima. `build-manifest.mjs` membaca fail ini dan menggantikan sebab baseline automatik; entri yatim (kunci tiada dalam katalog) atau basi (langkah sudah bersasar spesifik) menggagalkan penjanaan manifest.",
+  "statuses_allowed": [
+    "generic-justified",
+    "not-applicable"
+  ],
+  "justifications": [
+    {
+      "key": "screen.tanda-tindakan-minit-selesai#5",
+      "status": "not-applicable",
+      "wave": "W3",
+      "reason": "Langkah ini menyatakan kesan sistem kepada pengguna LAIN — pengirim minit menerima notifikasi apabila semua penerima tindakan selesai. Tiada elemen pada /app/{tenant}/minit-saya yang mewakilinya bagi penerima; notifikasi itu dihantar ke saluran pengirim. Langkah 4 sudah menyasar `minit-status` untuk perubahan yang penerima BOLEH lihat, jadi menyasarkan elemen sama sekali lagi hanya mengulang sorotan yang sama. Langkah akhir dan wait_for_user=false, jadi kitaran guide tetap tamat (G4).",
+      "since": "2026-08-05"
+    },
+    {
+      "key": "screen.tetapkan-kata-laluan#4",
+      "status": "not-applicable",
+      "wave": "W3",
+      "reason": "Tindakan yang diminta berlaku DI LUAR skrin semasa (log keluar lalu log masuk semula dalam sesi baharu). Kesemua sasaran `active` pada /app/{tenant}/profil disemak satu per satu — profil-akaun, profil-kata-laluan, profil-notifikasi, profil-notifikasi-save, profil-password-confirm, profil-password-save, profil-ujian — dan tiada satu pun mewakilinya (`profil-ujian` ialah butang 'Hantar Notifikasi Ujian', ProfileActions.php:47-50). Menyasarkan butang log keluar DITOLAK secara sedar: ia menggalakkan pengguna memusnahkan sesinya sendiri di tengah tour. Langkah akhir dan wait_for_user=false, jadi kitaran guide tetap tamat (G4).",
+      "since": "2026-08-05"
+    },
+    {
+      "key": "screen.viewer-dokumen#1",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan butang halaman sebelum/seterusnya viewer. Sasaran DOM `viewer-page-prev` sudah dipasang (document-viewer.blade.php:39) tetapi berada pada halaman kendiri /viewer/{media} yang memuatkan hanya app.css + document-viewer.js — tiada Livewire, tiada help.js — jadi runtime tour tidak wujud di sana dan guide ini berjalan pada senarai rekod. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — memasang runtime bantuan pada /viewer/{media} memerlukan Livewire + entri Vite + route baharu dalam manifest role_routes beku; pelan §8.4 hanya menugaskan butang viewer disabled + pageInput.max, jadi kerja runtime dicadangkan, bukan diandaikan."
+    },
+    {
+      "key": "screen.viewer-dokumen#2",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan kotak nombor halaman viewer. Sasaran DOM `viewer-page-input` sudah dipasang (document-viewer.blade.php:40) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — lihat screen.viewer-dokumen#1."
+    },
+    {
+      "key": "screen.viewer-dokumen#3",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan kawalan zum viewer. Sasaran DOM `viewer-zoom-in` sudah dipasang (document-viewer.blade.php:45) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — lihat screen.viewer-dokumen#1."
+    },
+    {
+      "key": "screen.viewer-dokumen#4",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan carian teks dalam dokumen. Sasaran DOM `viewer-find` sudah dipasang (document-viewer.blade.php:47) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — lihat screen.viewer-dokumen#1."
+    },
+    {
+      "key": "screen.viewer-dokumen#5",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan butang Cetak Metadata. Sasaran DOM `viewer-print` sudah dipasang (document-viewer.blade.php:50) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — lihat screen.viewer-dokumen#1."
+    },
+    {
+      "key": "screen.viewer-dokumen#6",
+      "status": "generic-justified",
+      "wave": "W3",
+      "reason": "Menerangkan pautan muat turun terkawal. Sasaran DOM `viewer-download` sudah dipasang (document-viewer.blade.php:51) pada halaman kendiri /viewer/{media} yang tiada runtime bantuan. Langkah penerangan, wait_for_user=false.",
+      "since": "2026-08-05",
+      "followup": "F7 — lihat screen.viewer-dokumen#1."
+    }
+  ]
+}

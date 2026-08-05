@@ -923,7 +923,7 @@
       "id": "inbox-classify",
       "family": "screen|workflow",
       "route": "/app/{tenant}/peti-masuk",
-      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:85",
+      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:112",
       "selector_hint": "[data-help-target=\"inbox-classify\"]",
       "viewport": "both",
       "state": "jadual Peti Masuk mempunyai item belum diklasifikasi",
@@ -932,13 +932,25 @@
       "since": "2026-08-02"
     },
     {
+      "id": "inbox-record",
+      "family": "screen",
+      "route": "/app/{tenant}/peti-masuk",
+      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:56",
+      "selector_hint": "[data-help-target=\"inbox-record\"]",
+      "viewport": "both",
+      "state": "jadual Peti Masuk tidak kosong (sel tajuk baris pertama)",
+      "permission": "inbox.view",
+      "status": "active",
+      "since": "2026-08-05"
+    },
+    {
       "id": "inbox-scan-status",
       "family": "workflow",
       "route": "/app/{tenant}/peti-masuk",
-      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:63",
+      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:70",
       "selector_hint": "[data-help-target=\"inbox-scan-status\"]",
-      "viewport": "both",
-      "state": "jadual Peti Masuk tidak kosong (sel baris pertama)",
+      "viewport": "desktop",
+      "state": "jadual Peti Masuk tidak kosong (sel baris pertama); pada mobile lajur Antivirus berada di LUAR viewport lalai — diukur iPhone 13 (390px): x=621, w=107, tiada persilangan viewport (F6-W3, 5 Ogos 2026). Jadual boleh diskrol mendatar, jadi ia boleh dicapai pengguna tetapi tour tidak menggulung bekas dalaman (kecacatan diukur → F7)",
       "permission": "inbox.view",
       "status": "active",
       "since": "2026-08-05"

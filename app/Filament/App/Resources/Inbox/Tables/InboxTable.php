@@ -44,11 +44,16 @@ class InboxTable
                     ->label('Sumber')
                     ->formatStateUsing(fn ($state) => $state instanceof SourceChannel ? $state->badge() : $state)
                     ->badge(),
+                // F6-W3 (§7.2) — langkah "Sahkan toast dan baris baharu" guide muat naik
+                // merujuk BARIS BAHARU dalam Peti Masuk. Jadual disusun `created_at desc`
+                // (lihat `defaultSort` di atas), jadi baris pertama ialah dokumen yang baru
+                // dimuat naik. Baris pertama sahaja (keunikan G2).
                 TextColumn::make('title')
                     ->label('Tajuk / Fail')
                     ->searchable()
                     ->wrap()
-                    ->limit(50),
+                    ->limit(50)
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'inbox-record')),
                 TextColumn::make('received_date')
                     ->label('Tarikh Terima')
                     ->date('d/m/Y')

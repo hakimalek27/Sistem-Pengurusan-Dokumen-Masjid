@@ -126,6 +126,16 @@ jobs:
           SCOUT_DRIVER: collection
         run: php artisan diwan:sync-help-index
 
+      # F6-W3 — validator manifest BEBAS (D11 #8). Ia direka sebagai "dua pelaksanaan bebas
+      # saling menjaga" berbanding `build-manifest.mjs`, tetapi sehingga kini ia TIDAK PERNAH
+      # dijalankan oleh CI — hanya dirujuk dalam komen dan dokumen. Penjaga yang tidak pernah
+      # berjalan tidak menjaga apa-apa (keluarga sama: projek Playwright `unit` yang tidak
+      # pernah dijalankan CI sejak F2, ditemui pada F5). Kos ~1 saat.
+      - name: Validate plan manifest (pelaksanaan bebas)
+        run: |
+          node scripts/audit/validate-plan-manifest.mjs \
+            --manifest "Audit Review Round Robin/bukti/plan-baseline/manifest.json"
+
       - name: Migrate PostgreSQL and run full suite
         run: |
           php artisan config:clear

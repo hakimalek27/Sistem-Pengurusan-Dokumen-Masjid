@@ -107,6 +107,14 @@ const FROZEN = {
         'workflow': { guides: 14, steps: 158, action_steps: 75 },
         'tenant-admin-public': { guides: 40, steps: 164, action_steps: 4 },
     },
+    //  (6) F6-W3 — 5 Ogos 2026. Wave yang KERJANYA SUDAH DITUTUP. Setiap langkah generik
+    //      dalam wave ini mesti membawa justifikasi EKSPLISIT daripada
+    //      `resources/help/step-justifications.json`; sebab baseline automatik
+    //      ("penambahbaikan dijadualkan Wn") tidak lagi diterima di sini. Tambah wave ke
+    //      senarai ini HANYA apabila wave itu benar-benar ditutup — ia mengunci wave supaya
+    //      langkah generik baharu tidak boleh diselitkan tanpa sebab bertulis dan bertarikh.
+    //      W0/W1/W2 sudah 0 langkah generik, jadi liputan mereka kosong secara sah.
+    justified_waves: ['W0', 'W1', 'W2', 'W3'],
     // Kohort audit P11 (produksi 1 Ogos 2026) — perbandingan apple-to-apple SAHAJA, bukan gate.
     cohort_baseline: {
         resolved_to_generic: '119/124',
@@ -120,6 +128,28 @@ const FROZEN = {
 
 const fail = (msg) => { console.error(`FAIL: ${msg}`); process.exit(1); };
 const familyOf = (id) => id.split('.')[0];
+
+// ── Allowlist justifikasi per-langkah (F6-W3, §7.2 gate registri (f)) ───────────────────
+// Sebelum ini SETIAP langkah generik menerima satu sebab yang dijana automatik
+// ("penambahbaikan dijadualkan Wn"). Sebaik wave itu ditutup, ayat itu bercanggah dengan
+// dirinya sendiri dan gate tidak dapat membezakan "dijustifikasikan" daripada "belum dibuat".
+// Fail ini menjadikan justifikasi EKSPLISIT, per-langkah, dan bertarikh (§7.3 G5:
+// "disenaraikan sebagai ID guide + indeks langkah, bukan pada aras guide").
+// `--justifications` opsyenal supaya alat kekal boleh dijalankan atas checkout lama.
+const JUSTIFY_STATUSES = new Set(['generic-justified', 'not-applicable']);
+const justifications = new Map();
+if (args.justifications) {
+    const raw = JSON.parse(readFileSync(args.justifications, 'utf8'));
+    for (const j of raw.justifications ?? []) {
+        if (!j.key) fail('entri justifikasi tanpa `key`');
+        if (justifications.has(j.key)) fail(`justifikasi berganda untuk ${j.key}`);
+        if (!JUSTIFY_STATUSES.has(j.status)) fail(`justifikasi ${j.key}: status tidak sah ${j.status}`);
+        if (!j.reason || j.reason.length < 40) fail(`justifikasi ${j.key}: sebab terlalu pendek/kosong`);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(j.since ?? '')) fail(`justifikasi ${j.key}: \`since\` mesti tarikh YYYY-MM-DD`);
+        justifications.set(j.key, j);
+    }
+}
+const justificationsUsed = new Set();
 
 // ── W0 daripada bukti produksi (deterministik, bukan pilihan rasa) ──────────────────────
 const mobileRows = Array.isArray(mobile) ? mobile : (mobile.steps ?? []);
@@ -198,6 +228,16 @@ for (const guide of catalog.guides) {
                 since: '2026-08-02',
                 expires: '2026-09-30',
             };
+        } else if (justifications.has(key)) {
+            // F6-W3: justifikasi EKSPLISIT mengatasi sebab baseline automatik.
+            const j = justifications.get(key);
+            justificationsUsed.add(key);
+            status = {
+                status: j.status,
+                reason: j.reason,
+                since: j.since,
+                ...(j.followup ? { followup: j.followup } : {}),
+            };
         } else {
             status = {
                 status: 'generic-justified',
@@ -265,6 +305,31 @@ if (kemajuan.length) {
 } else {
     console.error(`Tiada delta — katalog masih pada baseline (catalog_version ${catalog.catalog_version}).`);
 }
+
+// (c) ALLOWLIST JUSTIFIKASI (F6-W3) — dua arah, supaya ia tidak boleh lapuk secara senyap.
+//
+//   (i)  Tiada entri YATIM/BASI: setiap kunci dalam allowlist mesti benar-benar dipakai.
+//        Entri yang kuncinya tidak wujud dalam katalog, atau yang langkahnya sudah dinaikkan
+//        kepada `specific`, akan gagal di sini — jadi justifikasi lapuk tidak boleh menumpuk.
+//   (ii) LIPUTAN PENUH bagi wave yang sudah ditutup: setiap langkah generik dalam wave itu
+//        mesti mempunyai justifikasi eksplisit. Tanpa semakan ini, sebuah wave boleh
+//        diisytihar "siap" sedangkan setiap langkahnya masih berkata "dijadualkan wave ini".
+const justifikasiYatim = [...justifications.keys()].filter((k) => !justificationsUsed.has(k));
+if (justifikasiYatim.length) {
+    fail(`justifikasi YATIM/BASI (kunci tiada dalam katalog atau langkah sudah specific): ${justifikasiYatim.join(', ')}`);
+}
+const generikTanpaJustifikasi = [];
+for (const g of catalogueGuides) {
+    for (const s of g.steps) {
+        if (!s.generic_declared) continue;
+        if (!FROZEN.justified_waves.includes(s.wave)) continue;
+        if (!justifications.has(s.key)) generikTanpaJustifikasi.push(s.key);
+    }
+}
+if (generikTanpaJustifikasi.length) {
+    fail(`wave TERTUTUP (${FROZEN.justified_waves.join(', ')}) masih ada langkah generik tanpa justifikasi eksplisit: ${generikTanpaJustifikasi.join(', ')}`);
+}
+console.error(`Justifikasi eksplisit: ${justificationsUsed.size} langkah; wave tertutup ${FROZEN.justified_waves.join(', ')} liputan PENUH.`);
 
 // ── Set cohort (family tenant = kohort audit P11) ───────────────────────────────────────
 const cohortGuides = catalogueGuides.filter((g) => g.family === 'tenant').map((g) => g.guide_id);

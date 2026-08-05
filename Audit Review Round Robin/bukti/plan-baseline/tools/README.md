@@ -16,6 +16,7 @@ node "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs" \
   --catalog resources/help/guides.json \
   --mobile "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json" \
   --role-routes /tmp/role-routes.json \
+  --justifications resources/help/step-justifications.json \
   --out "Audit Review Round Robin/bukti/plan-baseline/manifest.json"
 
 # 3. Validator BEBAS (pelaksanaan berasingan — dua penjaga saling menjaga):
@@ -31,6 +32,15 @@ node "Audit Review Round Robin/bukti/plan-baseline/tools/generate-help-targets-d
 - Perubahan wave selepas freeze memerlukan sebab bertulis + diff denominator + kelulusan
   (§1 F0(ii-a)) — kemas jadual `FROZEN` dalam `build-manifest.mjs` DAN `EXPECT` dalam
   `scripts/audit/validate-plan-manifest.mjs` serentak, dan catat dalam bukti fasa.
+- **`--justifications` (F6-W3, §7.2 gate registri (f)):** allowlist justifikasi per-langkah
+  `resources/help/step-justifications.json`. Setiap langkah generik dalam wave yang
+  tersenarai `FROZEN.justified_waves` **mesti** ada di dalamnya dengan sebab bermakna +
+  `since` bertarikh; entri yatim (kunci tiada dalam katalog) atau basi (langkah sudah
+  `specific`) menggagalkan penjanaan. Menutup wave baharu = tambah wave itu ke
+  `justified_waves` dalam `build-manifest.mjs` **DAN** `JUSTIFIED_WAVES` dalam
+  `validate-plan-manifest.mjs` **DAN** senarai dalam `tests/Feature/PlanManifestTest.php`
+  — ketiga-tiganya dalam commit yang sama (pelajaran F5: satu angka beku boleh hidup dalam
+  lebih banyak penjaga daripada yang anda ingat).
 - Lapisan C (probe HTTP) dikuatkuasakan `tests/Feature/PlanManifestTest.php` pada SETIAP
   larian suite + runner produksi F8 — bukan semasa penjanaan.
 - Angka beku disahkan bebas 5× (P10/P11 → P13 → P15 → P17 → F0): 83 guide · 473 langkah ·

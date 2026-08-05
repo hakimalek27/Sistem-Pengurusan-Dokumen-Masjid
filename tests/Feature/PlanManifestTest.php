@@ -111,6 +111,60 @@ test('manifest sepadan katalog semasa (guide & langkah — set penuh, bukan kira
     expect($manifestKeys)->toBe($catalogKeys, 'set kunci langkah manifest ≠ katalog — jana semula manifest');
 });
 
+/**
+ * F6-W3 — allowlist justifikasi per-langkah (§7.2 gate registri (f), §7.3 G5).
+ *
+ * Sebelum W3, SETIAP langkah generik menerima sebab yang dijana automatik ("penambahbaikan
+ * dijadualkan Wn"). Sebaik wave itu ditutup, ayat itu bercanggah dengan dirinya sendiri dan
+ * tiada penjaga dapat membezakan "dijustifikasikan" daripada "belum dibuat". Ujian ini
+ * mengunci perbezaan itu daripada sisi PHP juga, supaya ia dijalankan pada SETIAP larian
+ * suite dan bukan hanya semasa manifest dijana semula.
+ */
+test('setiap langkah generik dalam wave TERTUTUP membawa justifikasi eksplisit bertarikh', function () {
+    $m = planManifest();
+    $tertutup = $m['invariants']['justified_waves'] ?? null;
+    expect($tertutup)->toBeArray('manifest tiada `justified_waves` — jana semula manifest')
+        ->and($tertutup)->toBe(['W0', 'W1', 'W2', 'W3']);
+
+    $allow = json_decode((string) file_get_contents(resource_path('help/step-justifications.json')), true, flags: JSON_THROW_ON_ERROR);
+    $kunciAllow = collect($allow['justifications'])->pluck('key');
+    expect($kunciAllow->duplicates())->toBeEmpty('allowlist mengandungi kunci berganda');
+
+    $perlu = [];
+    foreach ($m['catalogue'] as $guide) {
+        foreach ($guide['steps'] as $step) {
+            if (! $step['generic_declared'] || ! in_array($step['wave'], $tertutup, true)) {
+                continue;
+            }
+            $perlu[] = $step['key'];
+
+            // Status aras-guide tidak diterima: setiap satu mesti dinamakan sendiri.
+            expect($step['status'])->toBeIn(['generic-justified', 'not-applicable'],
+                "{$step['key']}: langkah generik dalam wave tertutup mesti dijustifikasikan");
+            expect($step['reason'] ?? '')->not->toStartWith('Baseline pra-F6',
+                "{$step['key']}: masih membawa sebab BASELINE automatik, bukan justifikasi sebenar");
+            expect(strlen((string) ($step['reason'] ?? '')))->toBeGreaterThanOrEqual(40,
+                "{$step['key']}: sebab terlalu pendek untuk bermakna");
+            expect($step['since'] ?? '')->toMatch('/^\d{4}-\d{2}-\d{2}$/',
+                "{$step['key']}: `since` mesti tarikh YYYY-MM-DD");
+        }
+    }
+
+    // Dua arah — allowlist tidak boleh mengumpul entri yatim/basi secara senyap.
+    sort($perlu);
+    $kunci = $kunciAllow->sort()->values()->all();
+    expect($kunci)->toBe($perlu, 'set kunci allowlist ≠ set langkah generik dalam wave tertutup');
+
+    // Langkah `wait_for_user` DILARANG `generic-justified` (§7.3) — ia mesti `risk-accepted`.
+    foreach ($m['catalogue'] as $guide) {
+        foreach ($guide['steps'] as $step) {
+            if ($step['status'] === 'generic-justified' && $step['wait_for_user']) {
+                throw new RuntimeException("{$step['key']}: langkah tindakan tidak boleh `generic-justified` (§7.3)");
+            }
+        }
+    }
+})->group('plan-manifest');
+
 test('setiap spec e2e tersenarai dalam project CI atau allowlist bersebab', function () {
     // Allowlist "sengaja di luar CI" — mesti ada sebab bertulis + tarikh semakan semula (F0(iv)).
     $allowlist = [
