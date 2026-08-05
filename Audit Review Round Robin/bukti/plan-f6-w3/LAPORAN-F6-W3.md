@@ -319,17 +319,70 @@ membuang andaian yang tidak dijamin — tetapi ia **tidak** patut dilaporkan seb
 yang pengguna alami. Direkod di sini kerana mesej komit sudah dipush dengan dakwaan berlebihan
 itu.
 
+### c.10 ⭐ CI pusingan #2 MERAH — punca KEDUA, juga bukan dalam kod W3
+
+Selepas pembaikan memo, ujian W3 lulus di CI. Kegagalan seterusnya **berbeza**:
+
+```
+FAILED  Tests\Feature\PlanManifestTest > role_routes…  ValidationException
+  Semua penerima mesti ahli aktif tenant dan dibenarkan melihat rekod.
+  at app/Services/MinitService.php:51
+  at database/seeders/DemoSeeder.php:181
+Tests: 1 failed, 556 warnings, 1 passed
+```
+
+**Punca:** `DemoSeeder` memilih rekod untuk minit demo dengan `->first()` **tanpa `ORDER BY`**.
+SQLite memulangkan rowid terendah secara konsisten; PostgreSQL tidak menjamin apa-apa susunan.
+F6-W2 memperluas penerima minit daripada **satu** (pengerusi) kepada **empat** peranan termasuk
+`ketua_imam` dan `ajk` — dan `MinitService` menolak **seluruh** minit jika mana-mana penerima
+tidak boleh melihat rekodnya (§6.3, sensitiviti efektif = max(rekod, fail)).
+
+**Perangkap itu DIUKUR, bukan diteorikan** — tiga rekod `difailkan` MAM dalam benih demo:
+
+```
+id=1  dalaman/dalaman   ajk boleh lihat: true
+id=2  sulit  /sulit     ajk boleh lihat: FALSE     <- perangkap
+id=3  dalaman/dalaman   ajk boleh lihat: true
+```
+
+Hasilnya bergantung sepenuhnya kepada baris mana yang DB pulangkan dahulu. Itulah sebab ia
+lulus 100% pada mesin pembangunan dan gagal berselang di CI.
+
+**Pembaikan:** `DemoSeeder::rekodDemoUntukMinit()` — tapis `sulit` pada rekod **dan** fail,
+kemudian `orderBy('id')`. Dijadikan `public static` supaya invarian boleh diuji terus dengan
+dataset terkawal, bukan bergantung nasib susunan.
+
+**Bukti penjaga — dan apa yang ia dedahkan tentang kebolehlihatan pepijat:**
+
+| Ujian | Kod lama | Kod baharu |
+|---|---|---|
+| 1. dataset TERKAWAL (rekod sulit ber-id lebih RENDAH) | **GAGAL** (EXIT=1, SQLite juga) | lulus |
+| 2. minit demo sebenar boleh dilihat 4 penerima | lulus | lulus |
+| 3. benih demo memang mengandungi rekod sulit | lulus | lulus |
+
+Ujian 2 dan 3 **lulus pada kod lama** — itu sendiri mengesahkan mengapa pepijat asal halimunan
+secara tempatan: hanya fixture terkawal mendedahkannya. Ujian 3 ialah penjaga anti-fixture-lemah
+(jika benih demo tidak lagi mengandungi rekod sulit, ujian 1 kehilangan maknanya secara senyap).
+
+### c.11 Kerapuhan ujian saya sendiri yang dibetulkan sebelum ia menggigit
+
+Versi pertama ujian render memotong tetingkap **2000 aksara TETAP**, dikalibrasi pada HTML
+mesin pembangunan (jarak diukur: 1004 aksara). Itu bergantung pada indentasi Blade dan panjang
+URL — kerapuhan lokal-lawan-CI yang sama seperti dua punca di atas. Digantikan dengan
+`selInboxRecord()` yang memotong daripada atribut hingga `</td>` berikutnya: ia mengungkapkan
+niat sebenar ("teks tajuk berada dalam sel YANG SAMA") dan tidak boleh hanyut.
+
 ### c.8 Suite Pest penuh + pint + validator (selepas SEMUA perubahan)
 
 ```
 {"tool":"pint","result":"passed"}
-Tests:    1 skipped, 557 passed (5375 assertions)
-Duration: 169.12s          PEST EXIT=0
+Tests:    1 skipped, 560 passed (5392 assertions)
+Duration: 169.48s          PEST EXIT=0
 VALIDATOR EXIT=0
 ```
 
-553 → **557** (+4): dua ujian render `inbox-record`, satu ujian allowlist manifest, satu ujian
-regresi memo statik.
+553 → **560** (+7): dua ujian render `inbox-record` · satu ujian allowlist manifest · satu
+ujian regresi memo statik · tiga ujian invarian benih demo.
 
 ## (d) Kriteria Siap §7.4 per gelombang
 
@@ -343,6 +396,18 @@ regresi memo statik.
 | Metrik pada denominator PENUH | ✔ | `generic_declared` **443 → 236**; W3 generik **9 → 8**, kesemuanya dijustifikasikan |
 | **`blocked` = 0** dalam skop W3 | ✔ | agregator `blocked=0`; `PlanManifestTest` melarang `blocked` dalam baseline |
 | Denominator W3 sepadan exact jadual beku | ✔ | W3 29/151 tidak berubah; jumlah 83/473 tidak berubah |
+
+### Deploy 9 — LIVE
+
+CI run **31002906128 = 7/7 hijau** pada `2cd7ab8`; `local = origin = server = 2cd7ab8`.
+📄 `bukti/deploy-9/BUKTI-DEPLOY-9.md`. **5/5 ramalan pra-deploy tepat.** Rantaian 5A lulus penuh
+(app `2c43512f9004`, web `8e02a4b00223`, label revisi `2cd7ab8` kedua-duanya, aset **kekal**
+dengan hash identik Deploy 6–8). `Nothing to migrate` · `sync-help-index` 83 guide ·
+`diwan:smoke` **9/9** · 8/8 container · `queue:failed` kosong.
+
+Disahkan **dalam imej produksi hidup**: `catalog_version 2026.08.05.2` ·
+`action_steps_with_generic_target` **0** · `generic_declared` **236** · `wait_for_user` **172** ·
+`muat-naik#4 → inbox-record` · 8 justifikasi.
 
 ## (e) Lencongan dari spec
 

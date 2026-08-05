@@ -1,77 +1,91 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W2 LIVE (Deploy 8), seterusnya F6-W3 (5 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W3 LIVE (Deploy 9), seterusnya F6-W4 (5 Ogos)
 
-**local = origin = server = `81b526f`** · imej produksi dibina daripada `81b526f`
-(label revisi membuktikannya) · CI run **30973519119 = 7/7 HIJAU**.
+**local = origin = server = `2cd7ab8`** · imej produksi dibina daripada `2cd7ab8`
+(label revisi membuktikannya) · CI run **31002906128 = 7/7 HIJAU**.
 
-📄 `Audit Review Round Robin/bukti/plan-f6-w2/LAPORAN-F6-W2.md` (fasa)
-📄 `Audit Review Round Robin/bukti/deploy-8/BUKTI-DEPLOY-8.md` (deploy + 5A)
+📄 `Audit Review Round Robin/bukti/plan-f6-w3/LAPORAN-F6-W3.md` (fasa) + `INVENTORI-W3.md`
+📄 `Audit Review Round Robin/bukti/deploy-9/BUKTI-DEPLOY-9.md` (deploy + 5A)
 
 ### Apa yang LIVE
 
-🎯 **Metrik utama F6 DITUTUP SEPENUHNYA — disahkan DALAM IMEJ PRODUKSI HIDUP:**
+Disahkan **dalam imej produksi hidup**:
 
 ```
-catalog_version: 2026.08.05.1
-action_steps_with_generic_target: 0 (workflow: 0)      <- 200 -> 0
-wait_for_user global: 172                              <- 190 -> 172
+catalog_version 2026.08.05.2 · generic_declared 236 (asas audit 443)
+action_steps_with_generic_target 0 · placeholder 0 · wait_for_user 172
+muat-naik#4 -> inbox-record (wfu=false) · 8 justifikasi eksplisit
 ```
 
-Wave W2 13/145 -> 0/0, W4 1/13 -> 14/158; jumlah 83/473 kekal. Gate CI 7/7; gate tempatan
-workflow 15/15 · screen 30/30 · t-a-p 41/41 (setiap satu DB SEGAR) · agregator 83/473/172 ·
-Pest 553 · unit 17/17.
+W3 menutup sembilan langkah generik terakhir shard `screen`: satu dinaikkan kepada sasaran
+sebenar (`inbox-record` = sel tajuk baris TERBAHARU Peti Masuk), lapan menerima justifikasi
+eksplisit bertarikh (6 viewer + 2 konsep).
 
-**Dua kecacatan produk ditutup dan LIVE** — kedua-duanya KEGAGALAN SENYAP dengan punca
-identik: perkhidmatan menolak dengan `ValidationException::withMessages([<kunci>])` di mana
-`<kunci>` bukan nama medan borang, jadi Filament tiada tempat merendernya.
-- Mohon Pembetulan Rekod (kunci `changes`) -> kini "Tiada perubahan dikesan"
-- Keluarkan Fail fizikal (kunci `holder`)  -> kini "Pergerakan tidak dapat direkodkan"
+### 🆕 Tiga mekanisme baharu yang W4–W6 akan guna semula
 
-### ⚠️ MENUNGGU PEMILIK — pengesahan visual (2 langkah, perlu sesi peranan tenant)
+1. **Allowlist justifikasi per-langkah** — `resources/help/step-justifications.json`.
+   §7.2 gate registri (f) menuntutnya sejak F0 tetapi mekanismenya tidak pernah wujud: setiap
+   langkah generik menerima ayat automatik "penambahbaikan DIJADUALKAN Wn", yang bercanggah
+   dengan dirinya sendiri sebaik wave ditutup.
+   **Menutup wave baharu = tambah wave itu ke `justified_waves` dalam TIGA tempat**
+   (`build-manifest.mjs`, `validate-plan-manifest.mjs`, `PlanManifestTest.php`) DAN beri setiap
+   langkah generiknya sebab >=40 aksara + `since` bertarikh. 5 regresi diuji, 5/5 ditangkap.
+2. **`assertTrailTargets()`** — G2 untuk guide berkoreografi. Ia sudah faham peluasan modal
+   runtime (`help.js:231`). Guna semula terus.
+3. **Validator manifest bebas kini DIJALANKAN CI** — sebelum ini hanya wujud dalam komen.
 
-Saya tidak mencipta/menaip kredensial produksi. Sesi pelayar yang ada ialah superadmin, yang
-TIDAK memegang peranan tenant, jadi `findVisible()` dengan betul tidak menawarkan guide
-`workflow.*` (diukur: runtime dirender, `data-guide-id` kosong).
+### ⚠️ MENUNGGU PEMILIK — satu langkah pengesahan visual
 
-1. Log masuk sebagai admin masjid, buka
-   `/app/<slug>/records?panduan=workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah&langkah=3`
-   — langkah 4 mesti menyorot butang **Mohon Pembetulan**, bukan seluruh halaman.
-2. Buka Mohon Pembetulan, tekan **Hantar** tanpa mengubah satu pun medan — mesej merah
-   **"Tiada perubahan dikesan"** mesti muncul (dahulu: senyap sepenuhnya).
+Sesi pelayar yang ada sudah **luput** (kedua-dua tab dialih ke `/app/login`); saya tidak pernah
+menaip kredensial produksi. Log masuk sebagai admin masjid / setiausaha, kemudian buka:
 
-### Seterusnya: F6-W3 (1 guide / 11 langkah — kecil)
+`/app/<slug>/peti-masuk?panduan=screen.muat-naik-dokumen&langkah=3`
 
-`screen.klasifikasi-peti-masuk` — 11 langkah, 11 `wait_for_user`, **0** bersasar generik. Guide
-ini CHOREOGRAPHED dalam gate, jadi jangkakan kerja tajuk/penghalusan, bukan pemetaan sasaran.
+Langkah 4 mesti menyorot **sel tajuk baris pertama** Peti Masuk (dokumen terbaharu), bukan
+seluruh halaman.
 
-### Perangkap yang sudah dibayar harganya (jangan ulang)
+*(Tertunggak dari W2 — masih sah: tour `betulkan-rekod` langkah 4 mesti sorot butang Mohon
+Pembetulan; Hantar tanpa ubah medan mesti beri mesej merah "Tiada perubahan dikesan".)*
 
-- ⚠️ **JANGAN jalankan arahan git di `/opt/diwan` dengan `sudo`.** Deploy 7 melakukannya dan
-  itu **menyekat Deploy 8 dua kali** (3 direktori objek + 95 fail + 22 laluan pokok kerja milik
-  root). Checkout kini sepenuhnya milik `ubuntu`. `set -euo pipefail` menyelamatkan keadaan:
-  kedua-dua kali berhenti SEBELUM sebarang imej dibina.
-- **JANGAN jalankan tiga shard pada SATU DB tempatan** — koreografi W2 benar-benar mengeluarkan
-  fail hibrid. Semai semula ANTARA shard. CI selamat (matriks job berasingan, `ci.yml:291-295`).
-- **JANGAN ubah fail sumber semasa larian gate berjalan** (`artisan serve` baca semula PHP).
-- **JANGAN `tail` output gate** — diagnostik hilang.
-- **"gagal 8s dengan had 90s" ialah MAKLUMAT** — `expect.poll` tidak mencuba semula bila
-  callback melempar. Bandingkan tempoh dengan had SEBELUM mempercayai mesej tamat masa.
-- `explore.spec.js` gagal tempatan = had masa (lulus 4.6m dengan `--timeout=900000`).
-- Filament 4 **bukan** Choices.js — guna `.fi-select-input-btn` + `li.fi-select-input-option`
-  (helper `pilihPilihanPertama()`).
-- Tulisan Python `io.open(...,'w')` pada Windows = seluruh fail jadi CRLF. Guna `newline=''`.
+### Seterusnya: F6-W4 — 82 langkah generik / 14 guide `workflow`
 
-### Jurang produk DIUKUR tetapi TIDAK dibaiki (calon F7)
+Kesemuanya `wait_for_user: false` (langkah PENERANGAN); metrik kecacatan utama sudah 0.
+Inventori awal sudah diukur — taburan penuh dalam laporan F6-W3 §(f). Pecahan kasar:
+**35** pada route yang JUGA ada sasaran spesifik lain (calon dinaikkan) · **47** pada route
+tanpa sasaran spesifik (calon justifikasi). Angka kasar — belum ambil kira prasyarat
+`detail:`/`modal:`.
 
-**Tour tidak bertahan merentas navigasi yang dimulakan PENGGUNA.** Buka rekod dari senarai ->
-`autoStart` false kerana progres wujud -> tour tidak muncul semula; pengguna mesti tekan
-pelancar Pembantu (barulah `resumeStep()` memulihkan kedudukan). Gate melangkauinya dengan
-deep-link deterministik yang DIDOKUMEN — ia sahkan sasaran, tidak mendakwa menguji
-kesinambungan itu.
+⚠️ Pelan §7.2 secara EKSPLISIT membenarkan langkah penerangan `workflow` dikelaskan
+`generic-justified`/`not-applicable` — "keputusan sedar yang direkod, bukan pengecualian
+senyap". Had tegas: kelonggaran itu TIDAK terpakai kepada langkah tindakan (sudah 0).
 
-**Corak untuk diaudit menyeluruh pada F8:** setiap `ValidationException::withMessages` yang
-kuncinya bukan medan borangnya = kegagalan senyap. Dua ditemui dalam W2 sahaja.
+### 🔴 Perangkap yang W3 bayar harganya (3 pusingan CI, 2 punca — kedua-duanya kod W2)
+
+- **Sifat statik = hayat PROSES, bukan permintaan.** `baris1()` memoi baris pertama dan
+  komennya mendakwa hayat permintaan. Lulus SQLite (kaunter AUTOINCREMENT dirollback bersama
+  transaksi -> ID kebetulan sepadan), gagal PostgreSQL (jujukan tidak dirollback).
+  Kini diset semula dalam `configure()` bagi KETIGA-TIGA jadual.
+  ⚠️ Diuji: statik TIDAK kekal merentas permintaan pada `php -S` mahupun php-fpm — jadi ini
+  kecacatan ketepatan-UJIAN, bukan pepijat hidup di produksi. Mesej komit `9bfbf74`
+  melebih-lebihkannya; pembetulan ada dalam laporan fasa §c.9.
+- **`->first()` tanpa `ORDER BY` dalam seeder.** `DemoSeeder` memilih rekod minit demo secara
+  tidak deterministik. W2 memperluas penerima kepada 4 peranan termasuk `ajk`, dan
+  `MinitService` menolak SELURUH minit jika satu penerima tidak boleh lihat rekodnya.
+  Benih demo MEMANG mengandungi rekod `sulit` (id=2) — diukur.
+  Kini `DemoSeeder::rekodDemoUntukMinit()`: tapis sulit (rekod DAN fail) + `orderBy('id')`.
+- **Jangan kalibrasi ujian pada tetingkap bait tetap.** Versi pertama ujian render memotong
+  2000 aksara berdasarkan HTML mesin saya. Diganti dengan skop sel `</td>` sebenar.
+- **Pengisytiharan `viewport` registri boleh berbohong.** `inbox-scan-status` diisytihar
+  `both`; diukur pada iPhone 13 ia di LUAR viewport lalai (x=621). Dibetulkan kepada
+  `desktop`. **Tiada ujian membaca medan itu** — cadangan penjaga F8.
+
+### Jurang produk DIUKUR, tidak dibaiki (F7)
+
+- Tour tidak menggulung bekas boleh-skrol **dalaman** — disahkan sekali lagi pada paksi
+  MENDATAR oleh W3.
+- `/viewer/{media}` tiada runtime bantuan; 6 sasaran DOM dipasang + `reserved`.
+- Tour tidak bertahan merentas navigasi yang dimulakan PENGGUNA (dibawa dari W2).
 
 ---
 
