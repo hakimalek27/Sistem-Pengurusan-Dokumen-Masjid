@@ -581,6 +581,18 @@
       "since": "2026-08-04"
     },
     {
+      "id": "minit-record",
+      "family": "workflow",
+      "route": "/app/{tenant}/minit-saya",
+      "owner_source": "app/Filament/App/Resources/Minits/Tables/MinitsTable.php:48",
+      "selector_hint": "[data-help-target=\"minit-record\"]",
+      "viewport": "both",
+      "state": "jadual tidak kosong (sel baris pertama)",
+      "permission": "minit.view",
+      "status": "active",
+      "since": "2026-08-05"
+    },
+    {
       "id": "minit-status",
       "family": "screen",
       "route": "/app/{tenant}/minit-saya",
@@ -711,7 +723,7 @@
       "viewport": "both",
       "state": "modal:Tambah Storan terbuka",
       "permission": "storage.order",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -918,6 +930,18 @@
       "permission": "inbox.classify",
       "status": "active",
       "since": "2026-08-02"
+    },
+    {
+      "id": "inbox-scan-status",
+      "family": "workflow",
+      "route": "/app/{tenant}/peti-masuk",
+      "owner_source": "app/Filament/App/Resources/Inbox/Tables/InboxTable.php:63",
+      "selector_hint": "[data-help-target=\"inbox-scan-status\"]",
+      "viewport": "both",
+      "state": "jadual Peti Masuk tidak kosong (sel baris pertama)",
+      "permission": "inbox.view",
+      "status": "active",
+      "since": "2026-08-05"
     },
     {
       "id": "inbox-upload",
@@ -1192,7 +1216,7 @@
       "viewport": "both",
       "state": "detail:records + modal:Edarkan Minit terbuka",
       "permission": "minit.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {
@@ -1480,7 +1504,7 @@
       "viewport": "both",
       "state": "modal:Keluarkan Fail terbuka",
       "permission": "files.track",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-04"
     },
     {

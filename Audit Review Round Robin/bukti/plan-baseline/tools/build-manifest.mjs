@@ -71,16 +71,28 @@ const roleRoutes = JSON.parse(readFileSync(args['role-routes'], 'utf8'));
 //      dibetulkan kepada `false` seperti diarahkan §7.2 langkah 3 — nilai salah itulah punca
 //      CTA "Buat pada skrin" pada langkah yang pengguna hanya perlu BACA.
 //      Shard `screen.action_steps` 151 → 111 mengikut pembetulan yang sama.
+//  (5) F6-W2 — 5 Ogos 2026. Kesemua 13 guide `workflow` yang berbaki diberi sasaran
+//      spesifik, jadi `waveOf()` memindahkan SEMUANYA W2 → W4 (definisi wave: "workflow yang
+//      MASIH ada langkah tindakan-generik"). W2 kini 0/0 dan W4 memuatkan seluruh shard
+//      `workflow` 14/158. Jumlah 83/473 TIDAK berubah — hanya senarai kerja yang kosong.
+//      `wait_for_user` 190 → 172 (−18): 18 langkah PEMERHATIAN yang tersalah label sebagai
+//      tindakan dibetulkan kepada `false` seperti diarahkan §7.2 langkah 3. Setiap satu
+//      ialah arahan BACA ("Semak jumlah hasil", "Sahkan status penerima berubah",
+//      "Semak media dan metadata kewangan") atau kerja DI LUAR sistem ("Kemas kini label
+//      fizikal yang sebenar", "Selesaikan kerja sebenar") — pada kedua-duanya CTA
+//      "Buat pada skrin" menunggu tindakan UI yang tidak pernah wujud, iaitu punca tepat
+//      aduan pemilik. Senarai penuh 18 langkah: bukti/plan-f6-w2/LAPORAN-F6-W2.md §(b).
+//      Shard `workflow.action_steps` 75 → 57 mengikut pembetulan yang sama (metrik KEMAJUAN).
 const FROZEN = {
     guides: 83, steps: 473, generic_declared: 443, generic_pp: 238, generic_pc: 205,
-    placeholder_titles: 258, wait_for_user: 190, action_steps_with_generic_target: 200,
+    placeholder_titles: 258, wait_for_user: 172, action_steps_with_generic_target: 200,
     unique_step_ids: 470, mobile_defects: 6, catalog_version: '2026.07.22.2',
     waves: {
         W0: { guides: 2, steps: 10, action_generic: 0, placeholder: 10, mobile_defects: 6 },
         W1: { guides: 0, steps: 0, action_generic: 140, placeholder: 140, mobile_defects: 0 },
-        W2: { guides: 13, steps: 145, action_generic: 60, placeholder: 0, mobile_defects: 0 },
+        W2: { guides: 0, steps: 0, action_generic: 60, placeholder: 0, mobile_defects: 0 },
         W3: { guides: 29, steps: 151, action_generic: 0, placeholder: 0, mobile_defects: 0 },
-        W4: { guides: 1, steps: 13, action_generic: 0, placeholder: 0, mobile_defects: 0 },
+        W4: { guides: 14, steps: 158, action_generic: 0, placeholder: 0, mobile_defects: 0 },
         W5: { guides: 35, steps: 146, action_generic: 0, placeholder: 108, mobile_defects: 0 },
         W6: { guides: 3, steps: 8, action_generic: 0, placeholder: 0, mobile_defects: 0 },
     },

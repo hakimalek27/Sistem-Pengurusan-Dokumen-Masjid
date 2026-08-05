@@ -83,12 +83,15 @@ test('manifest baseline mematuhi invarian partition beku', function () {
     // DIKEMAS SEMULA F6-W1 (4 Ogos 2026): kesemua 27 guide `screen` yang berbaki mendapat
     // sasaran spesifik → `waveOf()` memindahkan SEMUANYA W1 → W3. W1 = 0/0 bermakna senarai
     // kerja wave itu KOSONG, iaitu definisi wave itu siap; W3 kini seluruh shard `screen`.
+    // DIKEMAS SEMULA F6-W2 (5 Ogos 2026): kesemua 13 guide `workflow` yang berbaki mendapat
+    // sasaran spesifik → `waveOf()` memindahkan SEMUANYA W2 → W4. W2 = 0/0 (wave siap) dan
+    // W4 = seluruh shard `workflow` 14/158. `wait_for_user` global 190 → 172 (nota (5)).
     expect($totals['steps'])->toBe(473)
-        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 0, 'W2' => 13, 'W3' => 29, 'W4' => 1, 'W5' => 35, 'W6' => 3])
+        ->and($waveGuides)->toBe(['W0' => 2, 'W1' => 0, 'W2' => 0, 'W3' => 29, 'W4' => 14, 'W5' => 35, 'W6' => 3])
         ->and(array_sum($waveSteps))->toBe(473)
         ->and($waveSteps['W0'])->toBe(10)->and($waveSteps['W1'])->toBe(0)
-        ->and($waveSteps['W2'])->toBe(145)->and($waveSteps['W3'])->toBe(151)
-        ->and($waveSteps['W4'])->toBe(13)->and($waveSteps['W5'])->toBe(146)->and($waveSteps['W6'])->toBe(8);
+        ->and($waveSteps['W2'])->toBe(0)->and($waveSteps['W3'])->toBe(151)
+        ->and($waveSteps['W4'])->toBe(158)->and($waveSteps['W5'])->toBe(146)->and($waveSteps['W6'])->toBe(8);
 });
 
 test('manifest sepadan katalog semasa (guide & langkah — set penuh, bukan kiraan)', function () {

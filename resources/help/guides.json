@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.04.2",
+  "catalog_version": "2026.08.05.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -2847,9 +2847,9 @@
         },
         {
           "id": "admin_masjid.1.8",
-          "title": "Muat naik dokumen",
+          "title": "Semak imbasan sebelum klasifikasi",
           "instruction": "Kembali ke Peti Masuk; jangan klasifikasikan sebelum antivirus/OCR dan sumber disemak.",
-          "target": "page-content",
+          "target": "inbox-scan-status",
           "route": null,
           "wait_for_user": true
         },
@@ -3019,17 +3019,17 @@
         },
         {
           "id": "admin_masjid.2.3",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Semak butiran dan jejak audit",
           "instruction": "Semak dokumen asal, metadata, OCR dan tab Audit.",
-          "target": "page-primary",
+          "target": "record-tab-audit",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "admin_masjid.2.4",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Buka Mohon Pembetulan",
           "instruction": "Tekan Mohon Pembetulan hanya jika salah tawan disahkan.",
-          "target": "page-primary",
+          "target": "record-correction",
           "route": null,
           "wait_for_user": true
         },
@@ -3037,7 +3037,7 @@
           "id": "admin_masjid.2.5",
           "title": "Mohon pembetulan rekod",
           "instruction": "Nyatakan sebab khusus.",
-          "target": "page-primary",
+          "target": "record-correction-reason",
           "route": null,
           "wait_for_user": true
         },
@@ -3045,7 +3045,7 @@
           "id": "admin_masjid.2.6",
           "title": "Mohon pembetulan rekod",
           "instruction": "Ubah hanya medan yang salah.",
-          "target": "page-primary",
+          "target": "record-correction-title",
           "route": null,
           "wait_for_user": true
         },
@@ -3053,7 +3053,7 @@
           "id": "admin_masjid.2.7",
           "title": "Mohon pembetulan rekod",
           "instruction": "Hantar dan jangan ubah rekod melalui jalan lain.",
-          "target": "page-primary",
+          "target": "record-correction-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -3183,17 +3183,17 @@
         },
         {
           "id": "admin_masjid.3.4",
-          "title": "Butiran fail elektronik, fizikal atau hibrid",
+          "title": "Sahkan identiti dan penjagaan fail",
           "instruction": "Sahkan nombor, tajuk, lokasi dan status penjagaan.",
-          "target": "page-primary",
+          "target": "file-identity",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "admin_masjid.3.5",
-          "title": "Butiran fail elektronik, fizikal atau hibrid",
+          "title": "Buka Keluarkan Fail",
           "instruction": "Tekan Keluarkan Fail apabila serahan fizikal berlaku.",
-          "target": "page-primary",
+          "target": "file-checkout",
           "route": null,
           "wait_for_user": true
         },
@@ -3201,7 +3201,7 @@
           "id": "admin_masjid.3.6",
           "title": "Keluarkan fail fizikal",
           "instruction": "Pilih pemegang ahli atau isi nama luar.",
-          "target": "page-primary",
+          "target": "file-checkout-holder",
           "route": null,
           "wait_for_user": true
         },
@@ -3209,7 +3209,7 @@
           "id": "admin_masjid.3.7",
           "title": "Keluarkan fail fizikal",
           "instruction": "Isi lokasi tujuan, tarikh pulang dan catatan.",
-          "target": "page-primary",
+          "target": "file-checkout-location",
           "route": null,
           "wait_for_user": true
         },
@@ -3217,15 +3217,15 @@
           "id": "admin_masjid.3.8",
           "title": "Keluarkan fail fizikal",
           "instruction": "Simpan sebelum fail diserahkan.",
-          "target": "page-primary",
+          "target": "file-checkout-submit",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "admin_masjid.3.9",
-          "title": "Pindah lokasi fizikal",
+          "title": "Buka Pindah Lokasi",
           "instruction": "Masukkan lokasi rak/kotak baharu.",
-          "target": "page-primary",
+          "target": "file-relocate",
           "route": null,
           "wait_for_user": true
         },
@@ -3233,17 +3233,17 @@
           "id": "admin_masjid.3.10",
           "title": "Pindah lokasi fizikal",
           "instruction": "Tambah catatan dan simpan.",
-          "target": "page-primary",
+          "target": "file-relocate-submit",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "admin_masjid.3.11",
-          "title": "Pindah lokasi fizikal",
+          "title": "Selaraskan label fizikal dengan log",
           "instruction": "Kemas kini label fizikal yang sebenar.",
-          "target": "page-primary",
+          "target": "file-movements",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "admin_masjid.3.12",
@@ -3354,25 +3354,25 @@
         },
         {
           "id": "admin_masjid.4.6",
-          "title": "Sedia senarai pelupusan",
+          "title": "Buka Sedia Senarai Semakan",
           "instruction": "Pilih rekod satu per satu.",
-          "target": "page-primary",
+          "target": "disposal-prepare",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "admin_masjid.4.7",
-          "title": "Sedia senarai pelupusan",
+          "title": "Amaran dan senarai rekod",
           "instruction": "Baca amaran pemadaman kekal.",
-          "target": "page-primary",
+          "target": "disposal-records",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "admin_masjid.4.8",
-          "title": "Sedia senarai pelupusan",
+          "title": "Hantar batch untuk kelulusan",
           "instruction": "Hantar untuk kelulusan Pengerusi.",
-          "target": "page-primary",
+          "target": "disposal-confirm",
           "route": null,
           "wait_for_user": true
         },
@@ -3493,25 +3493,25 @@
         },
         {
           "id": "pengerusi.1.4",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Semak rekod berkaitan",
           "instruction": "Sahkan kandungan, metadata, sumber dan sensitiviti.",
-          "target": "page-primary",
+          "target": "minit-record",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "pengerusi.1.5",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Kembali ke senarai minit",
           "instruction": "Kembali ke Minit Saya selepas semakan.",
-          "target": "page-primary",
+          "target": "minit-status",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "pengerusi.1.6",
-          "title": "Balas dan edarkan minit",
+          "title": "Buka Balas & Edarkan",
           "instruction": "Pilih penerima susulan.",
-          "target": "page-primary",
+          "target": "minit-reply",
           "route": null,
           "wait_for_user": true
         },
@@ -3519,7 +3519,7 @@
           "id": "pengerusi.1.7",
           "title": "Balas dan edarkan minit",
           "instruction": "Tulis jawapan atau arahan baharu.",
-          "target": "page-primary",
+          "target": "minit-reply-body",
           "route": null,
           "wait_for_user": true
         },
@@ -3527,7 +3527,7 @@
           "id": "pengerusi.1.8",
           "title": "Balas dan edarkan minit",
           "instruction": "Hantar dan semak bebenang.",
-          "target": "page-primary",
+          "target": "minit-reply-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -3535,17 +3535,17 @@
           "id": "pengerusi.1.9",
           "title": "Tanda tindakan minit selesai",
           "instruction": "Tanda selesai hanya selepas tindakan sebenar lengkap.",
-          "target": "page-primary",
+          "target": "minit-complete",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "pengerusi.1.10",
-          "title": "Tanda tindakan minit selesai",
+          "title": "Status penerima selepas ditanda",
           "instruction": "Sahkan status penerima berubah.",
-          "target": "page-primary",
+          "target": "minit-status",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "pengerusi.1.11",
@@ -3629,7 +3629,7 @@
           "id": "pengerusi.2.3",
           "title": "Buat keputusan kelulusan",
           "instruction": "Pilih Lulus atau Tolak.",
-          "target": "page-primary",
+          "target": "approval-lulus",
           "route": null,
           "wait_for_user": true
         },
@@ -3637,7 +3637,7 @@
           "id": "pengerusi.2.4",
           "title": "Buat keputusan kelulusan",
           "instruction": "Masukkan kata laluan sendiri dan nota keputusan.",
-          "target": "page-primary",
+          "target": "approval-password",
           "route": null,
           "wait_for_user": true
         },
@@ -3645,7 +3645,7 @@
           "id": "pengerusi.2.5",
           "title": "Buat keputusan kelulusan",
           "instruction": "Sahkan sekali sahaja.",
-          "target": "page-primary",
+          "target": "approval-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -3907,9 +3907,9 @@
         },
         {
           "id": "setiausaha.2.3",
-          "title": "Mohon kelulusan",
+          "title": "Buka Mohon Kelulusan",
           "instruction": "Pilih Pengerusi/Nazir yang dibenarkan.",
-          "target": "page-primary",
+          "target": "record-approval",
           "route": null,
           "wait_for_user": true
         },
@@ -3917,15 +3917,15 @@
           "id": "setiausaha.2.4",
           "title": "Mohon kelulusan",
           "instruction": "Tulis nota konteks dan hantar.",
-          "target": "page-primary",
+          "target": "record-approval-submit",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "setiausaha.2.5",
-          "title": "Mohon pembetulan rekod",
+          "title": "Buka Mohon Pembetulan",
           "instruction": "Nyatakan salah tawan.",
-          "target": "page-primary",
+          "target": "record-correction",
           "route": null,
           "wait_for_user": true
         },
@@ -3933,7 +3933,7 @@
           "id": "setiausaha.2.6",
           "title": "Mohon pembetulan rekod",
           "instruction": "Ubah hanya medan yang salah dan hantar.",
-          "target": "page-primary",
+          "target": "record-correction-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -4034,17 +4034,17 @@
         },
         {
           "id": "bendahari.1.3",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Tab maklumat rekod",
           "instruction": "Semak media dan metadata kewangan.",
-          "target": "page-primary",
+          "target": "record-tab-info",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "bendahari.1.4",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Buka Edarkan Minit",
           "instruction": "Pilih Edarkan Minit atau Mohon Kelulusan jika diperlukan.",
-          "target": "page-primary",
+          "target": "record-minit",
           "route": null,
           "wait_for_user": true
         },
@@ -4052,7 +4052,7 @@
           "id": "bendahari.1.5",
           "title": "Edarkan minit",
           "instruction": "Pilih penerima tindakan.",
-          "target": "page-primary",
+          "target": "record-minit-action",
           "route": null,
           "wait_for_user": true
         },
@@ -4060,7 +4060,7 @@
           "id": "bendahari.1.6",
           "title": "Edarkan minit",
           "instruction": "Tulis arahan dan keutamaan.",
-          "target": "page-primary",
+          "target": "record-minit-body",
           "route": null,
           "wait_for_user": true
         },
@@ -4068,7 +4068,7 @@
           "id": "bendahari.1.7",
           "title": "Edarkan minit",
           "instruction": "Hantar dan pantau di Minit Saya.",
-          "target": "page-primary",
+          "target": "record-minit-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -4158,9 +4158,9 @@
         },
         {
           "id": "bendahari.2.3",
-          "title": "Semak penggunaan dan pesanan",
+          "title": "Buka Tambah Storan",
           "instruction": "Tekan Tambah Storan.",
-          "target": "page-content",
+          "target": "storage-add",
           "route": "/app/{tenant}/penggunaan",
           "wait_for_user": false
         },
@@ -4168,23 +4168,23 @@
           "id": "bendahari.2.4",
           "title": "Permohonan storan tambahan",
           "instruction": "Pilih bilangan blok.",
-          "target": "page-primary",
+          "target": "storage-blocks",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "bendahari.2.5",
-          "title": "Permohonan storan tambahan",
+          "title": "Jumlah dan pesanan storan",
           "instruction": "Semak jumlah dan invois.",
-          "target": "page-primary",
+          "target": "storage-orders",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "bendahari.2.6",
           "title": "Permohonan storan tambahan",
           "instruction": "Hantar sekali dan catat nombor invois.",
-          "target": "page-primary",
+          "target": "storage-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -4276,9 +4276,9 @@
         },
         {
           "id": "nazir.1.3",
-          "title": "Balas dan edarkan minit",
+          "title": "Buka Balas & Edarkan",
           "instruction": "Tulis balasan.",
-          "target": "page-primary",
+          "target": "minit-reply",
           "route": null,
           "wait_for_user": true
         },
@@ -4286,7 +4286,7 @@
           "id": "nazir.1.4",
           "title": "Balas dan edarkan minit",
           "instruction": "Pilih penerima susulan dan hantar.",
-          "target": "page-primary",
+          "target": "minit-reply-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -4310,7 +4310,7 @@
           "id": "nazir.1.7",
           "title": "Buat keputusan kelulusan",
           "instruction": "Pilih keputusan.",
-          "target": "page-primary",
+          "target": "approval-lulus",
           "route": null,
           "wait_for_user": true
         },
@@ -4318,17 +4318,17 @@
           "id": "nazir.1.8",
           "title": "Buat keputusan kelulusan",
           "instruction": "Sahkan kata laluan dan nota.",
-          "target": "page-primary",
+          "target": "approval-password",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "nazir.1.9",
-          "title": "Buat keputusan kelulusan",
+          "title": "Status akhir kelulusan",
           "instruction": "Semak status akhir.",
-          "target": "page-primary",
+          "target": "approval-status",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -4393,25 +4393,25 @@
         },
         {
           "id": "ketua_imam.1.3",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Rekod dan lampiran berkaitan",
           "instruction": "Semak rekod dan lampiran.",
-          "target": "page-primary",
+          "target": "minit-record",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "ketua_imam.1.4",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Had muat turun dokumen",
           "instruction": "Jangan muat turun jika tidak diperlukan.",
-          "target": "page-primary",
+          "target": "minit-record",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "ketua_imam.1.5",
-          "title": "Balas dan edarkan minit",
+          "title": "Buka Balas & Edarkan",
           "instruction": "Edarkan susulan jika perlu.",
-          "target": "page-primary",
+          "target": "minit-reply",
           "route": null,
           "wait_for_user": true
         },
@@ -4419,23 +4419,23 @@
           "id": "ketua_imam.1.6",
           "title": "Balas dan edarkan minit",
           "instruction": "Tulis catatan yang jelas.",
-          "target": "page-primary",
+          "target": "minit-reply-body",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "ketua_imam.1.7",
-          "title": "Tanda tindakan minit selesai",
+          "title": "Laksanakan kerja sebenar dahulu",
           "instruction": "Selesaikan kerja sebenar.",
-          "target": "page-primary",
+          "target": "minit-status",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "ketua_imam.1.8",
           "title": "Tanda tindakan minit selesai",
           "instruction": "Tanda selesai dan semak status.",
-          "target": "page-primary",
+          "target": "minit-complete",
           "route": null,
           "wait_for_user": true
         }
@@ -4500,25 +4500,25 @@
         },
         {
           "id": "ajk.1.3",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Kandungan yang dibenarkan",
           "instruction": "Semak kandungan yang dibenarkan.",
-          "target": "page-primary",
+          "target": "minit-record",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "ajk.1.4",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Jika akses ditolak",
           "instruction": "Jika akses ditolak, minta akses melalui Admin/Kerani; jangan ubah URL.",
-          "target": "page-primary",
+          "target": "minit-record",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "ajk.1.5",
-          "title": "Balas dan edarkan minit",
+          "title": "Buka Balas & Edarkan",
           "instruction": "Catat tindakan atau susulan.",
-          "target": "page-primary",
+          "target": "minit-reply",
           "route": null,
           "wait_for_user": true
         },
@@ -4526,7 +4526,7 @@
           "id": "ajk.1.6",
           "title": "Balas dan edarkan minit",
           "instruction": "Hantar kepada ahli berkaitan jika perlu.",
-          "target": "page-primary",
+          "target": "minit-reply-submit",
           "route": null,
           "wait_for_user": true
         },
@@ -4534,17 +4534,17 @@
           "id": "ajk.1.7",
           "title": "Tanda tindakan minit selesai",
           "instruction": "Tanda selesai hanya selepas kerja lengkap.",
-          "target": "page-primary",
+          "target": "minit-complete",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "ajk.1.8",
-          "title": "Tanda tindakan minit selesai",
+          "title": "Status tugasan selepas selesai",
           "instruction": "Sahkan status berubah.",
-          "target": "page-primary",
+          "target": "minit-status",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         }
       ],
       "troubleshooting": [
@@ -4622,35 +4622,35 @@
         },
         {
           "id": "audit.1.4",
-          "title": "Hasil carian lanjutan",
+          "title": "Jumlah hasil carian",
           "instruction": "Semak jumlah hasil.",
-          "target": "page-primary",
+          "target": "search-results",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "audit.1.5",
           "title": "Hasil carian lanjutan",
           "instruction": "Pilih sampel dan buka rekod.",
-          "target": "page-primary",
+          "target": "search-result-open",
           "route": null,
           "wait_for_user": true
         },
         {
           "id": "audit.1.6",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Butiran sampel dalam hasil",
           "instruction": "Semak metadata, OCR, versi, minit, kelulusan dan audit.",
-          "target": "page-primary",
+          "target": "search-result-item",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "audit.1.7",
-          "title": "Butiran rekod dan tindakan mengikut kebenaran",
+          "title": "Semakan kekal baca-sahaja",
           "instruction": "Jangan gunakan sebarang kaedah untuk mengubah rekod.",
-          "target": "page-primary",
+          "target": "search-results",
           "route": null,
-          "wait_for_user": true
+          "wait_for_user": false
         },
         {
           "id": "audit.1.8",

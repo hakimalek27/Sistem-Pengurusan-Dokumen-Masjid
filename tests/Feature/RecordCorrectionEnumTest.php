@@ -2,9 +2,14 @@
 
 use App\Enums\RecordDirection;
 use App\Enums\Sensitivity;
+use App\Filament\App\Resources\Records\Pages\ViewRecord;
+use App\Models\RecordCorrectionRequest;
 use App\Services\RecordCorrectionService;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Livewire\Features\SupportTesting\Testable;
+use Livewire\Livewire;
 
 /**
  * BUG-B — ditemui daripada LOG PRODUKSI, bukan daripada ujian.
@@ -32,6 +37,19 @@ beforeEach(function () {
         'direction' => RecordDirection::Masuk,
     ]);
 });
+
+/** Halaman butiran rekod dalam konteks tenant + pengguna berautentikasi. */
+function halamanRekod(): Testable
+{
+    test()->actingAs(test()->pemohon);
+    Filament::setCurrentPanel('app');
+    Filament::setTenant(test()->mam, isQuiet: true);
+
+    return Livewire::test(ViewRecord::class, [
+        'tenant' => test()->mam,
+        'record' => test()->record->getKey(),
+    ]);
+}
 
 it('#1 memohon pembetulan `direction` tidak lagi melemparkan Error (punca 500 produksi)', function () {
     expect($this->record->direction)->toBeInstanceOf(RecordDirection::class);
@@ -123,4 +141,62 @@ it('#7 CERITA PENGGUNA: betulkan TAJUK sahaja — borang tetap hantar sensitivit
     );
 
     expect($request->proposed_changes)->toBe(['title' => 'Surat Dibetulkan']);
+});
+
+/**
+ * F6-W2 — KEGAGALAN SENYAP, ditemui oleh gate panduan (bukan oleh mata).
+ *
+ * `RecordCorrectionService::request()` melemparkan ValidationException berkunci **`changes`**
+ * apabila tiada satu pun medan benar-benar berubah. Borang "Mohon Pembetulan" tidak mempunyai
+ * medan bernama `changes`, jadi Filament tiada tempat untuk merender mesej itu: modal hanya
+ * kekal terbuka, tiada toast, tiada ralat medan.
+ *
+ * Diukur pada larian gate sebelum pembaikan: 5 permintaan `/livewire/update` (jadi klik SAMPAI
+ * ke pelayan), `(tiada mesej ralat dirender)`, dan tangkapan skrin memperlihatkan borang penuh
+ * dengan butang Hantar yang kelihatan tidak melakukan apa-apa. Ini keluarga yang sama seperti
+ * BUG-B: borang pembetulan gagal tanpa memberitahu pengguna.
+ */
+it('#8 hantar tanpa perubahan → pengguna DIBERITAHU (dahulu senyap sepenuhnya)', function () {
+    $halaman = halamanRekod();
+
+    $sebelum = RecordCorrectionRequest::query()->withoutGlobalScope('mosque')->count();
+
+    // Hanya `reason` diisi; setiap medan lain kekal pada nilai SEMASA rekod.
+    $halaman->callAction('mohonPembetulan', [
+        'reason' => 'Saya rasa ada yang tidak kena dengan rekod ini.',
+        'title' => $this->record->title,
+        'record_type' => $this->record->record_type,
+        'sensitivity' => $this->record->sensitivity->value,
+        'direction' => $this->record->direction->value,
+    ])->assertNotified('Tiada perubahan dikesan');
+
+    expect(RecordCorrectionRequest::query()->withoutGlobalScope('mosque')->count())
+        ->toBe($sebelum, 'permohonan kosong tidak sepatutnya dicipta');
+});
+
+it('#9 hantar DENGAN satu perubahan sebenar masih berjaya (penjaga tidak menyekat laluan sah)', function () {
+    $halaman = halamanRekod();
+
+    // ⚠️ Render SEMULA halaman selepas kejayaan melemparkan ViewException dalam ujian unit
+    // Livewire (`tabs/tab.blade.php`: htmlspecialchars menerima array) — artifak harness,
+    // BUKAN pepijat produk: laluan HTTP sebenar merender halaman yang sama dengan jayanya
+    // (`FilamentResourcesTest` + `W2TargetRenderTest`). Yang diuji di sini ialah KESAN
+    // tindakan, jadi pengecualian render dibiarkan dan keadaan pangkalan data yang diassert.
+    try {
+        $halaman->callAction('mohonPembetulan', [
+            'reason' => 'Tajuk tersalah taip semasa tawanan asal.',
+            'title' => 'Surat Asal (dibetulkan)',
+            'record_type' => $this->record->record_type,
+            'sensitivity' => $this->record->sensitivity->value,
+            'direction' => $this->record->direction->value,
+        ]);
+    } catch (Throwable) {
+        // diabaikan dengan sengaja — lihat nota di atas
+    }
+
+    $permohonan = RecordCorrectionRequest::query()->withoutGlobalScope('mosque')->latest('id')->first();
+
+    expect($permohonan)->not->toBeNull('perubahan sebenar sepatutnya mencipta permohonan')
+        ->and($permohonan->proposed_changes)->toHaveKey('title')
+        ->and($permohonan->proposed_changes['title'])->toBe('Surat Asal (dibetulkan)');
 });

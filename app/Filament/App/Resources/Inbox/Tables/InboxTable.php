@@ -58,7 +58,11 @@ class InboxTable
                     ->state(fn (Record $record) => self::provenance($record))
                     ->wrap()->limit(80),
                 TextColumn::make('created_at')->label('Diterima')->dateTime('d/m/Y H:i')->sortable(),
+                // F6-W2 (§7.2) — langkah amaran guide muat naik ("jangan klasifikasikan
+                // sebelum antivirus/OCR dan sumber disemak") merujuk lajur imbasan INI,
+                // bukan butang Klasifikasikan. Baris pertama sahaja (keunikan G2).
                 TextColumn::make('virus_scan_status')->label('Antivirus')->badge()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'inbox-scan-status'))
                     ->color(fn ($state) => $state === 'clean' ? 'success' : ($state === 'infected' ? 'danger' : 'warning')),
                 TextColumn::make('ocr_status')
                     ->label('OCR')
@@ -73,6 +77,24 @@ class InboxTable
                 self::classifyAction(),
                 self::deleteSpamAction(),
             ]);
+    }
+
+    /**
+     * F6-W2 — sasaran tour hanya pada baris PERTAMA yang dirender.
+     *
+     * Corak sama seperti `MinitsTable::baris1()` / `ApprovalsTable::baris1()`: sel wujud
+     * sekali per baris, jadi menandakan semuanya bermakna satu sasaran memadan N elemen dan
+     * melanggar syarat keunikan G2. Memo statik hidup satu permintaan sahaja.
+     */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
     }
 
     protected static function classifyAction(): Action

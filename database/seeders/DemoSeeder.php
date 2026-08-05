@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ApprovalStatus;
 use App\Enums\MinitPriority;
 use App\Enums\MosqueStatus;
 use App\Enums\OcrStatus;
@@ -166,19 +167,43 @@ class DemoSeeder extends Seeder
             ]);
         }
 
+        // F6-W2 — SEMUA empat peranan penerima minit mesti mempunyai baris, bukan pengerusi
+        // sahaja. Guide `workflow.nazir/ketua_imam/ajk` kini menyorot kawalan BARIS
+        // (`minit-record`, `minit-reply`, `minit-complete`, `minit-status`); dengan satu
+        // penerima sahaja, tiga daripada empat skrin itu kosong dan gate akan hijau PALSU.
+        // Satu minit dengan empat penerima tindakan memadai: `MinitResource` berskop kepada
+        // pengguna yang log masuk, jadi setiap peranan melihat tepat satu baris.
+        $penerima = User::query()
+            ->whereIn('email', ['pengerusi@demo.test', 'nazir@demo.test', 'ketua_imam@demo.test', 'ajk@demo.test'])
+            ->pluck('id')->all();
+
         if (! Minit::query()->where('mosque_id', $mam->id)->exists()) {
             app(MinitService::class)->create(
                 $record,
                 $kerani,
-                [$pengerusi->id],
+                $penerima ?: [$pengerusi->id],
                 [],
                 'Mohon semak dan beri maklum balas sebelum mesyuarat AJK akan datang.',
                 MinitPriority::Biasa,
             );
         }
 
-        if (! Approval::query()->where('mosque_id', $mam->id)->exists()) {
-            app(ApprovalService::class)->request($record, $kerani, $pengerusi, 'Mohon kelulusan untuk tindakan susulan rekod ini.');
+        // Kelulusan: satu untuk Pengerusi DAN satu untuk Nazir. `ApprovalResource` menapis
+        // `approver_id = saya`, jadi tanpa baris milik Nazir, guide `workflow.nazir` tidak
+        // mempunyai satu pun butang Lulus untuk disorot. Ia juga memisahkan kesan sampingan:
+        // guide Pengerusi benar-benar MELULUSKAN barisnya (gate menghantar borang sebenar),
+        // dan itu tidak boleh menghapuskan baris yang guide Nazir perlukan.
+        $nazir = User::query()->where('email', 'nazir@demo.test')->first();
+        foreach (array_filter([$pengerusi, $nazir]) as $pelulus) {
+            $adaTertunggu = Approval::query()
+                ->where('mosque_id', $mam->id)
+                ->where('approver_id', $pelulus->id)
+                ->where('status', ApprovalStatus::Menunggu)
+                ->exists();
+
+            if (! $adaTertunggu) {
+                app(ApprovalService::class)->request($record, $kerani, $pelulus, 'Mohon kelulusan untuk tindakan susulan rekod ini.');
+            }
         }
     }
 

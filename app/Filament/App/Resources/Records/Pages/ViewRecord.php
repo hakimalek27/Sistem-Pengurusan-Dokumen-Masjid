@@ -24,8 +24,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord as BaseViewRecord;
+use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class ViewRecord extends BaseViewRecord
 {
@@ -82,7 +84,24 @@ class ViewRecord extends BaseViewRecord
                 ->action(function (array $data): void {
                     $reason = $data['reason'];
                     unset($data['reason']);
-                    app(RecordCorrectionService::class)->request($this->getRecord(), Auth::user(), $reason, $data);
+
+                    // F6-W2 — KEGAGALAN SENYAP yang ditemui oleh gate: `RecordCorrectionService`
+                    // membuang ValidationException berkunci `changes` apabila tiada satu pun
+                    // medan benar-benar berubah. Borang ini TIDAK mempunyai medan bernama
+                    // `changes`, jadi Filament tiada tempat untuk merender mesej itu — modal
+                    // hanya kekal terbuka tanpa sebarang maklum balas. Diukur: 5 permintaan
+                    // Livewire, 0 mesej ralat dirender, disahkan pada tangkapan skrin.
+                    try {
+                        app(RecordCorrectionService::class)->request($this->getRecord(), Auth::user(), $reason, $data);
+                    } catch (ValidationException) {
+                        Notification::make()
+                            ->title('Tiada perubahan dikesan')
+                            ->body('Ubah sekurang-kurangnya satu medan yang salah sebelum menghantar permohonan.')
+                            ->danger()->send();
+
+                        throw new Halt;
+                    }
+
                     Notification::make()->title('Permohonan pembetulan dihantar untuk semakan.')->success()->send();
                 }),
 

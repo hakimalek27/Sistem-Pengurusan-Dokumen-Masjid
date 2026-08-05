@@ -76,7 +76,12 @@ const categories = [
     // tersalah label `wait_for_user: true` dibetulkan kepada `false` (§7.2 langkah 3) —
     // label salah itulah yang membuat CTA berkata "Buat pada skrin" untuk langkah yang
     // pengguna hanya perlu BACA. Sebab penuh: `tools/build-manifest.mjs` nota (4).
-    ['action_step_ids', mActions, 190],
+    // F6-W2 (5 Ogos 2026): 190 → 172. 18 langkah PEMERHATIAN dalam family `workflow` yang
+    // tersalah label `wait_for_user: true` dibetulkan kepada `false` (§7.2 langkah 3) —
+    // termasuk lima arahan kerja DI LUAR sistem ("Kemas kini label fizikal yang sebenar",
+    // "Selesaikan kerja sebenar") yang CTA "Buat pada skrin" menunggu selama-lamanya.
+    // Sebab penuh: `tools/build-manifest.mjs` nota (5).
+    ['action_step_ids', mActions, 172],
 ];
 const summary = {};
 for (const [field, manifestSet, exactTotal] of categories) {

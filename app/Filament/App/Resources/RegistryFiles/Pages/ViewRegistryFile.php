@@ -12,7 +12,9 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ViewRegistryFile extends ViewRecord
 {
@@ -41,7 +43,23 @@ class ViewRegistryFile extends ViewRecord
                     Textarea::make('notes')->label('Catatan')->required()
                         ->extraFieldWrapperAttributes(['data-help-target' => 'file-checkout-notes']),
                 ])->action(function (array $data): void {
-                    app(FileTrackingService::class)->checkout($this->getRecord(), Auth::user(), $data);
+                    // F6-W2 — KEGAGALAN SENYAP (keluarga sama seperti Mohon Pembetulan).
+                    // `FileTrackingService::checkout()` menolak dengan ValidationException
+                    // berkunci `holder`/`file` — kunci itu BUKAN medan borang ini
+                    // (`holder_user_id`, `holder_name`), jadi Filament tiada tempat untuk
+                    // merender mesejnya: modal kekal terbuka tanpa sebarang maklum balas.
+                    // Diukur pada gate: 4 permintaan `/livewire/update`, 0 mesej ralat.
+                    try {
+                        app(FileTrackingService::class)->checkout($this->getRecord(), Auth::user(), $data);
+                    } catch (ValidationException $e) {
+                        Notification::make()
+                            ->title('Pergerakan tidak dapat direkodkan')
+                            ->body(collect($e->errors())->flatten()->first() ?? 'Semak medan pemegang fail.')
+                            ->danger()->send();
+
+                        throw new Halt;
+                    }
+
                     Notification::make()->title('Pergerakan keluar direkodkan.')->success()->send();
                 }),
             Action::make('masukFizikal')->label('Terima Pulangan')->icon('heroicon-o-arrow-down-tray')->authorize('track')

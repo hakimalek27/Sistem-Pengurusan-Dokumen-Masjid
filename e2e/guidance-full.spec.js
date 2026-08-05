@@ -82,6 +82,15 @@ async function newContextPage(browser, baseURL, sasaranGuide = []) {
     // (tindakan benar-benar berkuat kuasa). Ini pengamatan TULEN: tiada interaksi diubah.
     await context.addInitScript((sasaran) => {
         window.__diwanTourLog = [];
+        // F6-W2: kaunter dokumen. `__diwanTourLog` diset semula pada SETIAP muatan, jadi
+        // "log kosong" tidak dapat membezakan halaman yang tidak pernah memulakan tour
+        // daripada halaman yang dimuat semula berulang kali (gelung pengalihan). Kaunter ini
+        // hidup dalam sessionStorage, jadi ia SELAMAT daripada set semula itu.
+        try {
+            const n = Number(sessionStorage.getItem('__diwanNav') || 0) + 1;
+            sessionStorage.setItem('__diwanNav', String(n));
+            sessionStorage.setItem('__diwanNavAkhir', location.pathname + location.search);
+        } catch { /* konteks tanpa storage */ }
         const nampak = (el) => {
             const b = el.getBoundingClientRect();
             const s = getComputedStyle(el);
@@ -150,7 +159,24 @@ async function newContextPage(browser, baseURL, sasaranGuide = []) {
         document.addEventListener('readystatechange', pasang);
     }, sasaranGuide);
 
-    return { context, page: await context.newPage() };
+    const page = await context.newPage();
+    // F6-W2: jejak permintaan yang BELUM selesai. `readyState=loading` yang berpanjangan
+    // hanya boleh dijelaskan oleh subsumber yang tergantung, dan tanpa senarai ini "halaman
+    // lambat" tidak dapat dibezakan daripada "pelayan tersekat". Pengamatan tulen.
+    page.__belumSelesai = new Map();
+    page.on('request', (r) => page.__belumSelesai.set(r, r.url()));
+    page.on('requestfinished', (r) => page.__belumSelesai.delete(r));
+    page.on('requestfailed', (r) => page.__belumSelesai.delete(r));
+
+    return { context, page };
+}
+
+/** Ringkasan permintaan yang masih tergantung (maksimum 6, laluan sahaja). */
+function permintaanTergantung(page) {
+    const senarai = [...(page.__belumSelesai?.values() ?? [])]
+        .map((u) => { try { return new URL(u).pathname; } catch { return u; } });
+
+    return senarai.length ? `${senarai.length} tergantung: ${senarai.slice(0, 6).join(', ')}` : 'tiada';
 }
 
 async function login(page, account) {
@@ -247,7 +273,19 @@ const targetState = new Map(JSON.parse(registryRaw).targets.map((t) => [t.id, St
 const stateOf = (target) => targetState.get(target) ?? '-';
 const needsFlow = (guide) => guide.steps.some((s) => /^(detail:|modal:|wizard )/.test(stateOf(s.target)))
     || guide.steps.some((s) => stateOf(s.target).includes('modal:') || stateOf(s.target).includes('jadual tidak kosong'));
-const needsDetail = (guide) => guide.steps.some((s) => stateOf(s.target).startsWith('detail:'));
+// Guide mempunyai langkah pada halaman BUTIRAN di mana-mana kedudukan.
+const hasDetailStep = (guide) => guide.steps.some((s) => stateOf(s.target).startsWith('detail:'));
+// Guide BERMULA pada halaman butiran. Ini soalan yang BERBEZA, dan membezakannya penting:
+//
+// F6-W1 hanya mempunyai guide `screen` yang keseluruhannya hidup pada satu halaman butiran,
+// jadi "ada langkah butiran" dan "bermula pada butiran" sentiasa sama. F6-W2 memecahkan
+// andaian itu: guide `workflow` bermula pada SENARAI ("Cari rekod", "Buka Lihat") dan hanya
+// kemudian masuk ke butiran. Melancarkannya pada URL butiran menyebabkan runtime melihat
+// `route` langkah 1 (senarai) ≠ laluan semasa lalu memanggil `location.assign` — halaman yang
+// dialih itu DIUKUR tersangkut pada `readyState=loading` selama 90s tanpa runtime bantuan
+// (dokumen ke-6, popover=false). Kawalan: `screen.mohon-pembetulan-rekod` yang menggunakan
+// laluan kod SAMA lulus 20.1s, jadi ia bukan kekangan pelayan tempatan.
+const startsOnDetail = (guide) => stateOf(guide.steps[0].target).startsWith('detail:');
 
 /** Baca kedudukan langkah DAN elemen yang disorot dalam SATU penilaian (elak perlumbaan). */
 function tourState(page) {
@@ -304,15 +342,191 @@ async function resolveDetailPath(page, guide) {
 }
 
 /**
- * Tindakan khusus per-langkah (kosong selepas F6-W1).
+ * Pilih pilihan PERTAMA dalam medan Select berbilang.
  *
- * Dikekalkan sebagai titik lanjutan: jika satu guide `screen` kelak benar-benar memerlukan
- * PENGHANTARAN BORANG di tengah, ia mesti menggunakan klik SEBENAR — `dispatchEvent` ialah
- * event tak-dipercayai yang tidak menghantar borang (punca muktamad flake muat naik F5).
- * `screen.mohon-pembetulan-rekod` dahulunya begitu (langkah 5 pada halaman lain); ia kini
- * kekal pada SATU skrin, selaras definisi family `screen`, jadi tiada penghantaran mid-guide.
+ * ⚠️ DIUKUR, bukan diandaikan: Filament 4 TIDAK menggunakan Choices.js. Ia merender komponen
+ * selectnya sendiri — `.fi-select-input-btn` (pencetus) + `<li class="fi-select-input-option">`
+ * (pilihan). Percubaan pertama saya menyasarkan `.choices` dan gagal dengan "tidak dirender";
+ * diagnostik yang mendedahkan struktur sebenar ditambah dalam commit yang sama supaya kesilapan
+ * andaian yang sama tidak memakan pusingan lain.
+ *
+ * Klik KOORDINAT tidak boleh dipercayai di sini (overlay tour kekal semasa minimize), jadi
+ * `dispatchEvent` digunakan — ia memadai untuk pencetus Alpine; hanya PENGHANTARAN BORANG yang
+ * memerlukan event dipercayai (pelajaran F5).
  */
-const AKSI_LANGKAH = {};
+async function pilihPilihanPertama(page, targetId) {
+    const pembalut = page.locator(`[data-help-target="${targetId}"]`).first();
+    const butang = pembalut.locator('.fi-select-input-btn').first();
+    const ada = await butang.waitFor({ state: 'visible', timeout: 15_000 }).then(() => true).catch(() => false);
+    if (!ada) {
+        const struktur = await pembalut.evaluate((el) => [...el.querySelectorAll('*')]
+            .filter((e) => ['SELECT', 'INPUT', 'BUTTON', 'LI'].includes(e.tagName))
+            .map((e) => `${e.tagName}.${String(e.className).split(' ').slice(0, 3).join('.')}`)
+            .slice(0, 12).join('  ||  ')).catch(() => '(pembalut tidak dijumpai)');
+        throw new Error(`${targetId}: pencetus select tidak dirender.
+  DOM sebenar: ${struktur}`);
+    }
+
+    await butang.dispatchEvent('click');
+    const pilihan = pembalut.locator('.fi-select-input-option').first();
+    await expect(pilihan, `${targetId}: senarai pilihan kosong`).toBeVisible({ timeout: 10_000 });
+    await pilihan.dispatchEvent('click');
+    // Tutup dropdown supaya ia tidak menutupi medan seterusnya.
+    await butang.dispatchEvent('click').catch(() => {});
+}
+
+/**
+ * Isi medan wajib lalu hantar modal SEHINGGA ia benar-benar tertutup.
+ *
+ * Kenapa penghantaran SEBENAR diperlukan (dan bukan sekadar menekan CTA): apabila langkah
+ * BERIKUT mengisytiharkan `route` lain, `stepAdvancePlan` memulangkan `action-then-navigate`
+ * dan `watchForActionCompletion()` (help.js) hanya memanggil `gotoNextRoute()` selepas
+ * elemen sasaran HILANG. Borang yang gagal pengesahan mengekalkan modal → tour tidak pernah
+ * berpindah halaman → langkah seterusnya tidak pernah direkod. Jadi gate mesti melengkapkan
+ * borang itu seperti pengguna sebenar.
+ *
+ * Klik diULANG selagi modal masih terbuka — pelajaran `submitUploadUntilToast`: morph
+ * Livewire boleh menggantikan nod footer dan menelan satu klik tanpa sebarang kesan.
+ */
+async function isiDanHantarModal(page, submitTarget, isiBorang = null, kesan = null) {
+    // Diskop kepada modal yang KELIHATAN: Filament mengekalkan nod modal terdahulu dalam DOM,
+    // dan locator seluruh halaman boleh memadan butang Hantar BASI yang tidak lagi terikat
+    // kepada komponen hidup (pelajaran `submitUploadUntilToast`).
+    const modal = page.locator('.fi-modal-window:visible').last();
+    const submit = modal.locator(`[data-help-target="${submitTarget}"]`).last();
+    await expect(submit, `${submitTarget}: butang hantar tidak dirender`).toBeVisible({ timeout: 15_000 });
+    if (isiBorang) await isiBorang();
+
+    // Kaunter permintaan Livewire. "Klik hilang" dan "borang ditolak" menghasilkan gejala
+    // yang SAMA (modal kekal terbuka) tetapi puncanya bertentangan — hanya bilangan
+    // permintaan membezakannya. Inilah bukti yang meleraikan flake muat naik F5.
+    let permintaan = 0;
+    const kira = (req) => { if (req.url().includes('/livewire/')) permintaan += 1; };
+    page.on('request', kira);
+
+    const toast = kesan ? page.getByText(kesan).first() : null;
+    const berkesan = () => (toast ? toast.isVisible().catch(() => false) : Promise.resolve(false));
+
+    // ⚠️ DUA percubaan sahaja, dan setiap satu MENUNGGU KESAN. Versi pertama saya mencuba
+    // EMPAT kali sambil hanya menunggu butang hilang: pada pelayan dev satu-benang itu
+    // membanjiri baris gilir dengan POST `/livewire/update` yang belum dijawab dan
+    // MENGHABISKAN keenam-enam sambungan Chrome — dokumen seterusnya kemudian tersangkut pada
+    // `readyState=loading` dengan 17 permintaan tergantung (5 daripadanya `/livewire/update`).
+    // Klik ulangan itu MENCIPTA kegagalan yang saya sangka ia sedang pulihkan.
+    for (let cuba = 0; cuba < 2; cuba += 1) {
+        if (await berkesan()) { page.off('request', kira); return; }
+        if (!(await submit.isVisible().catch(() => false))) { page.off('request', kira); return; }
+        await expect(submit).toBeEnabled({ timeout: 15_000 });
+        await submit.scrollIntoViewIfNeeded().catch(() => {});
+        // ⚠️ KLIK SEBENAR dahulu — hanya event DIPERCAYAI menjalankan penghantaran borang.
+        // `dispatchEvent` mencetuskan pengendali Alpine tetapi BUKAN penghantaran; itulah
+        // punca muktamad flake muat naik F5 (0 permintaan selama 121s). Lubang overlay tour
+        // berada tepat di atas elemen yang DISOROT, dan pada langkah ini elemen itu ialah
+        // butang Hantar — jadi klik koordinat memang mendarat padanya.
+        try {
+            await submit.click({ timeout: 10_000 });
+        } catch {
+            await submit.dispatchEvent('click').catch(() => {});
+        }
+        // Tunggu KESAN yang boleh diperhatikan (toast kejayaan) apabila pemanggil menyatakannya
+        // — "butang hilang" boleh bermakna modal ditutup TANPA menghantar (pelajaran F5).
+        const berjaya = toast
+            ? await toast.waitFor({ state: 'visible', timeout: 30_000 }).then(() => true).catch(() => false)
+            : await submit.waitFor({ state: 'hidden', timeout: 30_000 }).then(() => true).catch(() => false);
+        if (berjaya) { page.off('request', kira); return; }
+    }
+    page.off('request', kira);
+
+    // Jangan hanya lapor "masih terbuka": tanpa mesej pengesahan SEBENAR, punca "medan wajib
+    // mana?" hanya boleh diteka. Filament merender ralat medan dalam `.fi-fo-field-wrp-error-message`.
+    const ralat = await page.locator('.fi-fo-field-wrp-error-message, .fi-in-error, [data-validation-error]')
+        .allInnerTexts().catch(() => []);
+    const medan = await page.locator('.fi-modal-window label').allInnerTexts().catch(() => []);
+    const nilai = await modal.locator('textarea, input:not([type="hidden"]), select')
+        .evaluateAll((els) => els.map((el) => `${el.name || el.id || el.tagName}="${String(el.value).slice(0, 20)}"`))
+        .catch(() => []);
+    throw new Error(`${submitTarget}: modal masih terbuka selepas 4 percubaan hantar.`
+        + `\n  permintaan livewire: ${permintaan}  (0 = klik HILANG · >0 = borang DITOLAK)`
+        + `\n  nilai borang     : ${nilai.join(' · ') || '(tiada)'}`
+        + `\n  ralat pengesahan : ${ralat.length ? ralat.join(' | ') : '(tiada mesej ralat dirender)'}`
+        + `\n  medan dalam modal: ${medan.join(' · ') || '(tiada)'}`);
+}
+
+/**
+ * Isi borang Mohon Pembetulan: sebab + SATU perubahan medan sebenar.
+ *
+ * ⚠️ Sebab sahaja TIDAK memadai. `RecordCorrectionService::request()` menolak permohonan yang
+ * tidak mengubah satu pun medan (`ValidationException` berkunci `changes`) — betul dari segi
+ * domain, dan ia juga tepat apa yang langkah 6 guide arahkan: "Ubah hanya medan yang salah".
+ * Gate mesti melakukan perkara yang guide suruh, bukan menyingkat.
+ */
+async function isiPembetulan(page, sebab) {
+    await fillStable(page.locator('[data-help-target="record-correction-reason"] textarea').first(), sebab);
+    const tajuk = page.locator('[data-help-target="record-correction-title"] input').first();
+    await fillStable(tajuk, `${(await tajuk.inputValue()).slice(0, 40)} (dibetulkan)`);
+}
+
+/**
+ * Tindakan khusus per-langkah.
+ *
+ * Kosong selepas F6-W1; F6-W2 mengisinya kerana enam guide `workflow` menyeberang halaman
+ * TEPAT selepas satu penghantaran borang (lihat `isiDanHantarModal`). Setiap entri di sini
+ * melengkapkan borang yang langkah itu suruh pengguna lengkapkan — tiada pintasan, tiada
+ * pembatalan modal untuk "menghilangkan" sasaran.
+ */
+const AKSI_LANGKAH = {
+    'workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah': {
+        7: (page) => isiDanHantarModal(page, 'record-correction-submit', () => isiPembetulan(page,
+            'Salah tawan tarikh rekod semasa klasifikasi awal.'), /Permohonan pembetulan dihantar/),
+    },
+    'workflow.admin_masjid.urus-fail-fizikal-atau-hibrid-dan-jejak-penjagaan': {
+        // Langkah 8 = "Simpan sebelum fail diserahkan". Ia MESTI benar-benar disimpan: langkah
+        // 9 menekan "Pindah Lokasi" pada bar tindakan halaman, dan Filament tidak akan melekap
+        // aksi kedua semasa modal pertama masih terbuka. Diukur pada jejak gate: modal kekal
+        // 1 dan `file-relocate-submit` tidak pernah muncul sepanjang 90s
+        // (`9:file-relocate+file-identity` berulang). `notes` ialah medan WAJIB modal ini.
+        8: (page) => isiDanHantarModal(page, 'file-checkout-submit', async () => {
+            // Langkah 6 guide: "Pilih pemegang ahli atau isi nama luar" — dan perkhidmatan
+            // MEMANG menolak tanpa pemegang. Gate melakukan apa yang guide suruh.
+            await pilihPilihanPertama(page, 'file-checkout-holder');
+            await fillStable(page.locator('[data-help-target="file-checkout-notes"] textarea').first(),
+                'Diserahkan untuk semakan mesyuarat AJK.');
+        }, /Pergerakan keluar direkodkan/),
+    },
+    'workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod': {
+        4: (page) => isiDanHantarModal(page, 'record-approval-submit', async () => {
+            // `approver_id` = Select TUNGGAL bukan-searchable → `<select>` natif.
+            const select = page.locator('[data-help-target="record-approval-approver"] select').first();
+            const nilai = await select.locator('option').nth(1).getAttribute('value');
+            await selectStable(select, nilai);
+        }, /Permohonan kelulusan dihantar/),
+        6: (page) => isiDanHantarModal(page, 'record-correction-submit', () => isiPembetulan(page,
+            'Nama pengirim tersalah taip pada tawanan asal.'), /Permohonan pembetulan dihantar/),
+    },
+    'workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan': {
+        5: (page) => isiDanHantarModal(page, 'approval-submit', () => fillStable(
+            page.locator('[data-help-target="approval-password"] input').first(), defaultPassword,
+        ), /Keputusan kelulusan direkodkan/),
+    },
+    'workflow.bendahari.urus-rekod-kewangan-dan-minit': {
+        7: (page) => isiDanHantarModal(page, 'record-minit-submit', async () => {
+            await pilihPilihanPertama(page, 'record-minit-action');
+            await fillStable(page.locator('[data-help-target="record-minit-body"] textarea').first(),
+                'Sila semak dan sahkan butiran kewangan rekod ini.');
+        }, /Minit diedarkan/),
+    },
+    'workflow.bendahari.mohon-storan-tambahan': {
+        // `blocks` mempunyai `->default(1)` — tiada medan kosong untuk diisi.
+        6: (page) => isiDanHantarModal(page, 'storage-submit', null, /Pesanan dijana/),
+    },
+    'workflow.nazir.proses-minit-dan-keputusan-kelulusan': {
+        4: (page) => isiDanHantarModal(page, 'minit-reply-submit', async () => {
+            await pilihPilihanPertama(page, 'minit-reply-action');
+            await fillStable(page.locator('[data-help-target="minit-reply-body"] textarea').first(),
+                'Balasan Nazir: tindakan susulan diambil.');
+        }, /Balasan minit diedarkan/),
+    },
+};
 
 /**
  * Wizard Filament memaparkan satu langkah sekali; majukan bila sasaran berikut tersembunyi.
@@ -366,7 +580,7 @@ async function dumpTrail(page, guideId) {
  * elemen YANG DISOROT. Elemen bukan-butang (pembalut medan) tidak diklik: pengguna MENAIP
  * di situ, dan tour maju sendiri sebaik sasaran berikut kelihatan.
  */
-async function driveFlowGuide(page, guide, basePath) {
+async function driveFlowGuide(page, guide, basePath, detailPath = null) {
     const total = guide.steps.length;
     const popover = page.locator('.driver-popover');
     await page.goto(`${basePath}?panduan=${guide.guide_id}&langkah=0`);
@@ -391,6 +605,14 @@ async function driveFlowGuide(page, guide, basePath) {
                 // "log kosong" dan "langkah tidak berlaku" tidak boleh kelihatan sama.
                 sedia: window.__diwanTourLogSedia === true,
                 bilangan: log.length,
+                // F6-W2: "perekam tiada" dan "tour di halaman lain" menghasilkan jejak yang
+                // kelihatan SAMA (kedua-duanya kosong). URL + readyState membezakannya
+                // dalam satu baris, tanpa perlu membuka trace.
+                url: location.pathname + location.search,
+                dokumen: sessionStorage.getItem('__diwanNav') ?? '?',
+                sedia_dom: document.readyState,
+                popover: Boolean(document.querySelector('.driver-popover')),
+                guideAktif: document.querySelector('[data-diwan-help-runtime]')?.dataset.guideId ?? '(tiada runtime)',
                 jejak: log.filter((e) => e.n !== null)
                     .map((e) => `${e.n}:${e.aktif.filter(Boolean).join('+') || '-'}`).slice(-14).join(' → '),
                 // Diagnostik penentu: keadaan sasaran yang DIJANGKA sepanjang jejak. Kalau ia
@@ -406,8 +628,29 @@ async function driveFlowGuide(page, guide, basePath) {
             };
         }, [i, step.target]);
 
+        // Pemulihan dokumen TERGANTUNG (sekali per langkah).
+        //
+        // Navigasi yang dimulakan runtime (`location.assign` bagi langkah silang-route)
+        // kadangkala meninggalkan dokumen pada `readyState=loading` dengan belasan aset yang
+        // tidak pernah selesai. DIUKUR bahawa ini BUKAN kecacatan produk dan bukan pelayan
+        // tersekat: sepanjang 140s gantung, `curl /up` dijawab 200 dalam ~0.6s setiap 10s.
+        // Ia kehabisan sambungan pelanggan pada pelayan dev PHP yang tidak boleh fork
+        // (`forking is not supported on this platform` — Windows; CI Linux guna
+        // PHP_CLI_SERVER_WORKERS=4). Muat semula membuka sambungan baharu pada URL yang SAMA
+        // (`?panduan=…&langkah=…` kekal), jadi tour disambung pada langkah yang sama dan
+        // assertion di bawah tetap penuh — pengamatan dilaras, interaksi TIDAK.
+        let dipulihkan = false;
         await expect
-            .poll(async () => (await rekod()).jumpa, {
+            .poll(async () => {
+                const k = await rekod();
+                if (k.jumpa) return true;
+                if (!dipulihkan && !k.sedia && k.sedia_dom === 'loading') {
+                    dipulihkan = true;
+                    await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => {});
+                }
+
+                return false;
+            }, {
                 timeout: 90_000,
                 message: `${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`,
             })
@@ -416,6 +659,8 @@ async function driveFlowGuide(page, guide, basePath) {
                 const k = await rekod();
                 throw new Error(`${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`
                     + ` — perekam sedia=${k.sedia}, entri=${k.bilangan}`
+                    + `\n  halaman         : ${k.url} (dokumen ke-${k.dokumen}, readyState=${k.sedia_dom}, popover=${k.popover}, guide=${k.guideAktif})`
+                    + `\n  rangkaian       : ${permintaanTergantung(page)}`
                     + `\n  jejak sorotan   : ${k.jejak || '(kosong)'}`
                     + `\n  sasaran dijangka: ${k.sasaranDijangka || '(kosong)'}`
                     + `\n  banner/modal    : ${k.bannerModal || '(kosong)'}`);
@@ -448,6 +693,20 @@ async function driveFlowGuide(page, guide, basePath) {
         if (i === total) {
             await expect(popover, `${step.key}: langkah akhir tidak menutup/meminimize popover`).toBeHidden();
             break;
+        }
+
+        // Peralihan SENARAI → BUTIRAN. Runtime tidak boleh melakukannya sendiri: URL butiran
+        // bersifat dinamik (`/records/{id}`), jadi katalog tidak boleh mengisytiharkannya
+        // sebagai `route` langkah dan `gotoNextRoute()` tiada apa-apa untuk dituju. Pengguna
+        // sebenar menekan baris; gate melakukan perkara setara secara deterministik melalui
+        // deep-link ke langkah yang sama. Ini menguji SASARAN langkah butiran, dan tidak
+        // berpura-pura menguji kesinambungan tour merentas navigasi pengguna — jurang produk
+        // itu direkod dalam laporan fasa, bukan disembunyikan di sini.
+        const seterusnyaAwal = guide.steps[i];
+        if (detailPath && seterusnyaAwal && stateOf(seterusnyaAwal.target).startsWith('detail:')
+            && new URL(page.url()).pathname !== detailPath) {
+            await page.goto(`${detailPath}?panduan=${guide.guide_id}&langkah=${seterusnyaAwal.index - 1}`);
+            continue;
         }
 
         const khusus = AKSI_LANGKAH[guide.guide_id]?.[i];
@@ -1018,10 +1277,11 @@ for (const guide of guides) {
             } else if (needsFlow(guide)) {
                 // F6-W1: sasaran hidup dalam modal / halaman butiran / langkah wizard —
                 // deep-link per langkah tidak lagi sah (rujuk nota driveFlowGuide).
-                const basePath = needsDetail(guide)
-                    ? await resolveDetailPath(page, guide)
+                const detailPath = hasDetailStep(guide) ? await resolveDetailPath(page, guide) : null;
+                const basePath = (detailPath && startsOnDetail(guide))
+                    ? detailPath
                     : hydrate(guide.steps[0].route);
-                await driveFlowGuide(page, guide, basePath);
+                await driveFlowGuide(page, guide, basePath, detailPath);
                 await dumpTrail(page, guide.guide_id);
                 await cycleGuide(page, guide, basePath);
             } else {

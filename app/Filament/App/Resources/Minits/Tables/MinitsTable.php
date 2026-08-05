@@ -22,7 +22,11 @@ class MinitsTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('record.title')->label('Rekod')->wrap()->limit(50),
+                // F6-W2 (§7.2) — guide `workflow.*` pada Minit Saya merujuk REKOD yang diminitkan
+                // ("Semak rekod dan lampiran", "Sahkan kandungan, metadata, sumber dan
+                // sensitiviti"). Sel inilah satu-satunya wakil rekod itu pada skrin ini.
+                TextColumn::make('record.title')->label('Rekod')->wrap()->limit(50)
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'minit-record')),
                 TextColumn::make('fromUser.name')->label('Daripada'),
                 TextColumn::make('body')->label('Arahan / Catatan')->wrap()->limit(120)->tooltip(fn ($state) => $state),
                 TextColumn::make('recipient_summary')->label('Penerima')

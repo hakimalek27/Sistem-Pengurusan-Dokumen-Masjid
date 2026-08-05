@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (142) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (147) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -52,6 +52,7 @@
 | `minit-reply-cc` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:97` | both | modal:Balas & Edarkan terbuka | minit.view |
 | `minit-reply-priority` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:102` | both | modal:Balas & Edarkan terbuka | minit.view |
 | `minit-reply-submit` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:88` | both | modal:Balas & Edarkan terbuka | minit.view |
+| `minit-record` | workflow | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:48` | both | jadual tidak kosong (sel baris pertama) | minit.view |
 | `minit-status` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:38` | both | jadual tidak kosong (sel baris pertama) | minit.view |
 | `disposal-batches` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:19` | both | - | disposal.view |
 | `disposal-candidates` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:14` | both | - | disposal.view |
@@ -60,6 +61,7 @@
 | `disposal-records` | screen | `/app/{tenant}/pelupusan` | `app/Filament/App/Pages/PelupusanManual.php:104` | both | modal:Sedia Senarai Semakan terbuka | disposal.prepare |
 | `disposal-warning` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:6` | both | - | disposal.view |
 | `storage-add` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:51` | both | - | storage.order |
+| `storage-blocks` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:60` | both | modal:Tambah Storan terbuka | storage.order |
 | `storage-orders` | screen | `/app/{tenant}/penggunaan` | `resources/views/filament/app/pages/penggunaan-storan.blade.php:43` | both | - | - |
 | `storage-submit` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:53` | both | modal:Tambah Storan terbuka | storage.order |
 | `storage-usage` | screen | `/app/{tenant}/penggunaan` | `resources/views/filament/app/pages/penggunaan-storan.blade.php:6` | both | - | - |
@@ -75,6 +77,7 @@
 | `classification-source` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:106` | both | modal:klasifikasi terbuka (wizard langkah 1) | inbox.classify |
 | `classification-submit` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:92` | both | modal:klasifikasi terbuka (wizard langkah 5) | inbox.classify |
 | `inbox-classify` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:85` | both | jadual Peti Masuk mempunyai item belum diklasifikasi | inbox.classify |
+| `inbox-scan-status` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:63` | both | jadual Peti Masuk tidak kosong (sel baris pertama) | inbox.view |
 | `inbox-upload` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:29` | both | - | inbox.view |
 | `inbox-upload-dropzone` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:47` | both | modal:muat-naik terbuka | records.create |
 | `inbox-upload-modal` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Pages/ListInbox.php:30` | both | modal:muat-naik terbuka | inbox.view |
@@ -96,6 +99,7 @@
 | `record-correction-submit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:64` | both | detail:records + modal:Mohon Pembetulan terbuka | records.view |
 | `record-correction-title` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:70` | both | detail:records + modal:Mohon Pembetulan terbuka | records.view |
 | `record-minit` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:92` | both | detail:records | minit.create |
+| `record-minit-action` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:99` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
 | `record-minit-body` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:103` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
 | `record-minit-cc` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:101` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
 | `record-minit-priority` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:105` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
@@ -119,6 +123,7 @@
 | `file-access-submit` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/RelationManagers/AccessGrantsRelationManager.php:62` | both | modal:Beri Akses terbuka | files.manage |
 | `file-checkout` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:29` | both | detail:registry-files + medium fizikal/hibrid | files.track |
 | `file-checkout-due` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:40` | both | modal:Keluarkan Fail terbuka | files.track |
+| `file-checkout-holder` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:35` | both | modal:Keluarkan Fail terbuka | files.track |
 | `file-checkout-location` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:38` | both | modal:Keluarkan Fail terbuka | files.track |
 | `file-checkout-notes` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:42` | both | modal:Keluarkan Fail terbuka | files.track |
 | `file-checkout-submit` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:31` | both | modal:Keluarkan Fail terbuka | files.track |
@@ -152,7 +157,7 @@
 | `login-identity` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:16` | both | borang belum dihantar | public |
 | `login-submit` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:19` | both | borang belum dihantar | public |
 
-## Sasaran RIZAB (25) — wujud dlm DOM, belum dirujuk katalog
+## Sasaran RIZAB (22) — wujud dlm DOM, belum dirujuk katalog
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -163,12 +168,9 @@
 | `approval-tolak` | screen | `/app/{tenant}/kelulusan` | `app/Filament/App/Resources/Approvals/Tables/ApprovalsTable.php:59` | both | jadual tidak kosong (baris pertama, status menunggu) | approvals.decide |
 | `disposal-actions` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:28` | both | ada batch | disposal.execute |
 | `disposal-status` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:26` | both | ada batch | disposal.view |
-| `storage-blocks` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:60` | both | modal:Tambah Storan terbuka | storage.order |
 | `onboarding-jawatan` | screen | `/app/{tenant}/persediaan` | `app/Filament/App/Pages/OnboardingWizard.php:75` | both | wizard langkah 1 | mosque.settings |
 | `inbox-classification-modal` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:87` | both | modal:klasifikasi terbuka | inbox.classify |
 | `profil-password` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:107` | both | modal:Tetapkan Kata Laluan terbuka | - |
-| `record-minit-action` | screen | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Pages/ViewRecord.php:99` | both | detail:records + modal:Edarkan Minit terbuka | minit.create |
-| `file-checkout-holder` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:35` | both | modal:Keluarkan Fail terbuka | files.track |
 | `regfile-location` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:44` | both | - | files.manage |
 | `retention-prefix` | screen | `/app/{tenant}/retensi-peraturan/create` | `app/Filament/App/Resources/RetentionRules/RetentionRuleResource.php:58` | both | - | retention.manage |
 | `what-next` | tenant|admin | `/app/{tenant}|/admin` | `resources/views/filament/widgets/what-next.blade.php:2` | both | - | - |
@@ -189,12 +191,9 @@
 - `approval-tolak`: - (sejak 2026-08-04)
 - `disposal-actions`: Ditambah F6-W0 sebagai penambat lajur tindakan; belum dirujuk katalog. Tersedia untuk gelombang W5. (sejak 2026-08-03)
 - `disposal-status`: Ditambah F6-W0 sebagai penambat lajur; guide tenant.pelupusan v2 menyorot disposal-batches. Tersedia untuk gelombang W5. (sejak 2026-08-03)
-- `storage-blocks`: - (sejak 2026-08-04)
 - `onboarding-jawatan`: - (sejak 2026-08-04)
 - `inbox-classification-modal`: Wujud dlm DOM; sasaran rizab langkah orientasi (C12 — jangan guna dua kali berturut) (sejak 2026-08-02)
 - `profil-password`: - (sejak 2026-08-04)
-- `record-minit-action`: - (sejak 2026-08-04)
-- `file-checkout-holder`: - (sejak 2026-08-04)
 - `regfile-location`: - (sejak 2026-08-04)
 - `retention-prefix`: - (sejak 2026-08-04)
 - `what-next`: Widget dashboard; calon sasaran F6 W5 (sejak 2026-08-02)
