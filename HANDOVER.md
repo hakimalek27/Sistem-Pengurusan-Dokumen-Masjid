@@ -1,60 +1,77 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W2 SIAP DIBINA, menunggu CI + Deploy 8 (5 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W2 LIVE (Deploy 8), seterusnya F6-W3 (5 Ogos)
 
-**Keadaan repo:** `local = origin = 0dfd201` · produksi masih imej `4fd64cf` (Deploy 7).
-**CI run `30972196342`** dilancarkan pada `0dfd201` — semak keputusannya SEBELUM deploy.
+**local = origin = server = `81b526f`** · imej produksi dibina daripada `81b526f`
+(label revisi membuktikannya) · CI run **30973519119 = 7/7 HIJAU**.
 
-📄 Bukti penuh: `Audit Review Round Robin/bukti/plan-f6-w2/LAPORAN-F6-W2.md`
+📄 `Audit Review Round Robin/bukti/plan-f6-w2/LAPORAN-F6-W2.md` (fasa)
+📄 `Audit Review Round Robin/bukti/deploy-8/BUKTI-DEPLOY-8.md` (deploy + 5A)
 
-### Apa yang siap
-**Metrik utama F6 DITUTUP SEPENUHNYA:** `action_steps_with_generic_target` **200 → 0**
-(W1 menutup 140, W2 menutup baki 60). Wave W2 13/145 → 0/0, W4 1/13 → 14/158, jumlah 83/473
-kekal. `wait_for_user` 190 → 172 (18 langkah PEMERHATIAN dibetulkan, disenaraikan satu per satu
-dalam laporan §(b)). `catalog_version 2026.08.05.1`.
+### Apa yang LIVE
 
-**Gate tempatan HIJAU PENUH:** workflow 15/15 · screen 30/30 · tenant-admin-public 41/41
-(setiap satu pada DB SEGAR) · agregator **GATE LULUS 83/473/172** · Pest **553** · unit 17/17 ·
-pint passed · build OK.
+🎯 **Metrik utama F6 DITUTUP SEPENUHNYA — disahkan DALAM IMEJ PRODUKSI HIDUP:**
 
-### ⭐ Dua kecacatan produk ditutup (ditemui oleh gate, bukan oleh mata)
-Kedua-duanya KEGAGALAN SENYAP dengan punca sama: perkhidmatan menolak dengan
-`ValidationException` berkunci nama yang **bukan medan borang**, jadi Filament tiada tempat
-merendernya — modal kekal terbuka, tiada toast, tiada ralat medan.
-- **Mohon Pembetulan Rekod** (kunci `changes`) — hantar tanpa mengubah medan = senyap
-- **Keluarkan Fail fizikal** (kunci `holder`) — hantar tanpa pemegang = senyap
-Kedua-duanya kini memberitahu pengguna. Penjaga Pest dibuktikan MERAH pada kod lama.
+```
+catalog_version: 2026.08.05.1
+action_steps_with_generic_target: 0 (workflow: 0)      <- 200 -> 0
+wait_for_user global: 172                              <- 190 -> 172
+```
 
-### Langkah seterusnya (turutan)
-1. Sahkan CI `30972196342` **7/7 hijau** (`gh run view 30972196342 --json jobs`).
-2. **Deploy 8** ikut §10 + `spdm-deploy-lessons`:
-   - Aset **TIDAK** berubah (`help-D0185fq1.js` kekal — tiada JS produk disentuh). Bukti deploy
-     mesti bergantung pada **kandungan dalam imej + ImageID**, bukan nama aset (pelajaran D2).
-   - `sync-help-index --delete` WAJIB — `catalog_version` berubah.
-   - `Nothing to migrate` dijangka (tiada migrasi baharu).
-   - `scp` skrip deploy, JANGAN `ssh 'bash -s' <` (pelajaran Deploy 7).
-3. Pengesahan LIVE Chrome: tour `workflow` pada `/app/mam/records` + mesej "Tiada perubahan
-   dikesan" pada borang Mohon Pembetulan.
-4. Kemudian **F6-W3** (1 guide / 11 langkah — kecil).
+Wave W2 13/145 -> 0/0, W4 1/13 -> 14/158; jumlah 83/473 kekal. Gate CI 7/7; gate tempatan
+workflow 15/15 · screen 30/30 · t-a-p 41/41 (setiap satu DB SEGAR) · agregator 83/473/172 ·
+Pest 553 · unit 17/17.
+
+**Dua kecacatan produk ditutup dan LIVE** — kedua-duanya KEGAGALAN SENYAP dengan punca
+identik: perkhidmatan menolak dengan `ValidationException::withMessages([<kunci>])` di mana
+`<kunci>` bukan nama medan borang, jadi Filament tiada tempat merendernya.
+- Mohon Pembetulan Rekod (kunci `changes`) -> kini "Tiada perubahan dikesan"
+- Keluarkan Fail fizikal (kunci `holder`)  -> kini "Pergerakan tidak dapat direkodkan"
+
+### ⚠️ MENUNGGU PEMILIK — pengesahan visual (2 langkah, perlu sesi peranan tenant)
+
+Saya tidak mencipta/menaip kredensial produksi. Sesi pelayar yang ada ialah superadmin, yang
+TIDAK memegang peranan tenant, jadi `findVisible()` dengan betul tidak menawarkan guide
+`workflow.*` (diukur: runtime dirender, `data-guide-id` kosong).
+
+1. Log masuk sebagai admin masjid, buka
+   `/app/<slug>/records?panduan=workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah&langkah=3`
+   — langkah 4 mesti menyorot butang **Mohon Pembetulan**, bukan seluruh halaman.
+2. Buka Mohon Pembetulan, tekan **Hantar** tanpa mengubah satu pun medan — mesej merah
+   **"Tiada perubahan dikesan"** mesti muncul (dahulu: senyap sepenuhnya).
+
+### Seterusnya: F6-W3 (1 guide / 11 langkah — kecil)
+
+`screen.klasifikasi-peti-masuk` — 11 langkah, 11 `wait_for_user`, **0** bersasar generik. Guide
+ini CHOREOGRAPHED dalam gate, jadi jangkakan kerja tajuk/penghalusan, bukan pemetaan sasaran.
 
 ### Perangkap yang sudah dibayar harganya (jangan ulang)
-- **JANGAN jalankan tiga shard pada SATU DB tempatan.** Koreografi W2 benar-benar mengeluarkan
-  fail hibrid (`custody_status=dipinjam`), jadi tiga guide `screen` gagal selepasnya. CI selamat
-  (matriks job berasingan, `services:` sendiri — `ci.yml:291-295`). Semai semula ANTARA shard.
-- **JANGAN ubah fail sumber semasa larian gate berjalan** — `artisan serve` membaca semula PHP
-  setiap permintaan.
-- **JANGAN `tail` output gate** — diagnostik hilang; simpan penuh, tapis kemudian.
-- `explore.spec.js` gagal tempatan = **had masa 180s sahaja** (dibuktikan: lulus 4.6m dengan
-  `--timeout=900000`). Bukan regresi.
-- Filament 4 **tidak** guna Choices.js — komponen sendiri (`.fi-select-input-btn` +
-  `li.fi-select-input-option`). Guna `pilihPilihanPertama()`.
+
+- ⚠️ **JANGAN jalankan arahan git di `/opt/diwan` dengan `sudo`.** Deploy 7 melakukannya dan
+  itu **menyekat Deploy 8 dua kali** (3 direktori objek + 95 fail + 22 laluan pokok kerja milik
+  root). Checkout kini sepenuhnya milik `ubuntu`. `set -euo pipefail` menyelamatkan keadaan:
+  kedua-dua kali berhenti SEBELUM sebarang imej dibina.
+- **JANGAN jalankan tiga shard pada SATU DB tempatan** — koreografi W2 benar-benar mengeluarkan
+  fail hibrid. Semai semula ANTARA shard. CI selamat (matriks job berasingan, `ci.yml:291-295`).
+- **JANGAN ubah fail sumber semasa larian gate berjalan** (`artisan serve` baca semula PHP).
+- **JANGAN `tail` output gate** — diagnostik hilang.
+- **"gagal 8s dengan had 90s" ialah MAKLUMAT** — `expect.poll` tidak mencuba semula bila
+  callback melempar. Bandingkan tempoh dengan had SEBELUM mempercayai mesej tamat masa.
+- `explore.spec.js` gagal tempatan = had masa (lulus 4.6m dengan `--timeout=900000`).
+- Filament 4 **bukan** Choices.js — guna `.fi-select-input-btn` + `li.fi-select-input-option`
+  (helper `pilihPilihanPertama()`).
+- Tulisan Python `io.open(...,'w')` pada Windows = seluruh fail jadi CRLF. Guna `newline=''`.
 
 ### Jurang produk DIUKUR tetapi TIDAK dibaiki (calon F7)
-**Tour tidak bertahan merentas navigasi yang dimulakan PENGGUNA.** Bila pengguna membuka rekod
-daripada senarai, `autoStart` = false kerana progres wujud → tour tidak muncul semula sendiri;
-pengguna mesti menekan pelancar Pembantu (barulah `resumeStep()` memulihkan kedudukan). Gate
-melangkauinya dengan deep-link deterministik yang DIDOKUMEN — ia mengesahkan sasaran, dan
-**tidak** mendakwa menguji kesinambungan itu.
+
+**Tour tidak bertahan merentas navigasi yang dimulakan PENGGUNA.** Buka rekod dari senarai ->
+`autoStart` false kerana progres wujud -> tour tidak muncul semula; pengguna mesti tekan
+pelancar Pembantu (barulah `resumeStep()` memulihkan kedudukan). Gate melangkauinya dengan
+deep-link deterministik yang DIDOKUMEN — ia sahkan sasaran, tidak mendakwa menguji
+kesinambungan itu.
+
+**Corak untuk diaudit menyeluruh pada F8:** setiap `ValidationException::withMessages` yang
+kuncinya bukan medan borangnya = kegagalan senyap. Dua ditemui dalam W2 sahaja.
 
 ---
 

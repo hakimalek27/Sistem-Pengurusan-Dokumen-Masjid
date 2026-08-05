@@ -359,3 +359,52 @@ menyemai semula ANTARA shard — itu kini prosedur, bukan pilihan.
    dan menghabiskan keenam-enam sambungan Chrome; dokumen berikutnya kemudian tersangkut pada
    `readyState=loading` dengan 17 permintaan tergantung. Menunggu **kesan yang boleh
    diperhatikan** (toast) dan mengehadkan kepada 2 percubaan menyelesaikannya.
+
+---
+
+## Lampiran B — pusingan CI #1 MERAH, dan kenapa ia bukan masalah produk
+
+**Run 30972196342 (`0dfd201`): 13/14 guide `workflow` HIJAU, satu merah** — sedangkan
+kesemua 14 hijau tempatan dan shard `screen`/`tenant-admin-public` hijau di CI.
+
+Yang menyelesaikannya ialah **MASA, bukan mesej**: ujian gagal dalam **8 saat** walaupun had
+pengundi ialah `90_000` ms. Tamat masa mustahil menghasilkan 8 saat. Jadi callback pengundi
+mesti telah **MELEMPAR** — dan `expect.poll` tidak mencuba semula apabila callbacknya melempar;
+ia gagal serta-merta.
+
+Apa yang melempar: `page.evaluate` mengembalikan *"Execution context was destroyed"* apabila ia
+dinilai TEPAT semasa navigasi. **F6-W2 ialah wave PERTAMA yang memperkenalkan navigasi
+dimulakan-RUNTIME di tengah guide** (langkah silang-route selepas penghantaran borang), jadi
+pendedahan ini tidak pernah wujud sebelum ini.
+
+Potret kegagalan konsisten sepenuhnya dengan penjelasan itu — dan **tidak** konsisten dengan
+halaman tersangkut:
+
+```
+halaman  : /app/mam/pelupusan?panduan=…&langkah=5
+           (dokumen ke-4, readyState=loading, popover=false, guide=<BETUL>)
+rangkaian: tiada        <- SIFAR permintaan tergantung; tiada apa-apa yang menggantung
+```
+
+Log pelayan CI membuktikan navigasi itu **BERJAYA**, iaitu tingkah laku produk yang dikehendaki:
+
+```
+2026-08-05 03:41:58  /app/mam/kelulusan   ~500ms
+2026-08-05 03:42:04  /app/mam/pelupusan   ~500ms      <- tour berpindah selepas kelulusan dihantar
+```
+
+**Bukti visual muktamad** (artifak CI `guidance-traces-workflow-failure/.../test-failed-1.png`):
+tangkapan skrin memperlihatkan `/app/mam/pelupusan` **dirender dengan sempurna** — tajuk
+"Pelupusan Manual", amaran §16.2, kad "Calon Pelupusan" (0 rekod), kad "Batch Pelupusan",
+sidebar penuh, dan pelancar Pembantu di penjuru. **Tiada apa-apa yang rosak pada halaman.**
+Popover tour belum muncul pada saat itu sahaja — persis apa yang dijangka daripada potret yang
+diambil semasa navigasi baru sahaja selesai.
+
+**Pembaikan (`81b526f`) melaras PENGAMATAN, bukan interaksi:** `rekod()` dan `tourState()`
+memulangkan bentuk "belum sedia" (`sedia_dom: 'navigating'`) apabila evaluate melempar, jadi
+pengundi mencuba semula merentas navigasi. **Tiada assertion dilonggarkan** — langkah masih
+mesti direkod dengan sasaran yang betul. Guide berkenaan lulus **53.6s** tempatan selepas itu.
+
+🔑 Pelajaran yang boleh dipindah: **"gagal dalam 8s dengan had 90s" ialah maklumat, bukan
+gangguan.** Bandingkan tempoh kegagalan dengan had tamat masa SEBELUM mempercayai mesejnya —
+mesej itu ditulis oleh pengendali tamat masa walaupun puncanya bukan tamat masa.
