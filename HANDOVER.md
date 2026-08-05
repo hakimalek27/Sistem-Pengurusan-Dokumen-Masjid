@@ -1,20 +1,67 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W4 KOD SIAP, gate pusingan 2 berjalan (6 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W4 KOD SIAP, CI pusingan 4 berjalan (6 Ogos)
 
-**local = origin = `9abb066`** · **produksi kekal imej `2cd7ab8` (Deploy 9)**.
+**local = origin = `6f1a249`** · **produksi kekal imej `2cd7ab8` (Deploy 9)**.
 📄 `bukti/plan-f6-w4/INVENTORI-W4.md` + `LAPORAN-F6-W4.md`
 
-**Keadaan tepat:** kesemua kod W4 siap dan dikomit. Yang belum ada ialah **gate e2e hijau**.
-Pusingan 1 mendedahkan DUA punca (kedua-duanya sudah dibaiki dalam `9abb066`); pusingan 2
-sedang berjalan di CI (`gh run view 31036770642`) DAN secara tempatan.
+**Keadaan tepat:** kesemua kod W4 siap dan dikomit. Yang belum ada ialah **shard `workflow`
+hijau**. Semua yang lain SUDAH hijau berulang kali: `integration`, `screen`,
+`tenant-admin-public`, kedua-dua Docker, Pest **573**, unit 25, sauh selektor 6.
 
-**Jika gate hijau:** Deploy 10 (skrip siap di scratchpad; **mesti rebuild `app` DAN `nginx`**
-kerana `help.js` berubah → aset kini `help-B9tTj0Zg.js`, css `help-CrH0eDM1.css` KEKAL;
-`catalog_version` berubah → `sync-help-index --delete`).
+### Kemajuan shard `workflow` merentas pusingan (setiap punca BERBEZA)
 
-**Jika gate merah:** baca `LAPORAN-F6-W4.md` §c.10 — ia menyenaraikan kedua-dua punca yang
-sudah ditutup, jadi kegagalan baharu bermakna punca KETIGA. Jangan andaikan ia sama.
+| Pusingan | Komit | Hasil | Punca ditutup |
+|---|---|---|---|
+| 1 | `9abb066` | 2/15 | sempadan koreografi guna proksi `status==='specific'` · selektor tapisan salah |
+| 2 | `9abb066` | **11**/15 | `assertTrailTargets` tiada had bawah · `/kelulusan` kosong utk setiausaha |
+| 3 | `e7c0fa6` | **12**/15 | `route===null` — manifest ISI route guide, bukan null |
+| 4 | `6f1a249` | **13**/15 | `route===null` ditutup; baki: G3 pada langkah ekor pertama |
+
+### 🔜 SATU kegagalan tinggal — `setiausaha.klasifikasikan#10`
+
+```
+Error: workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#10:
+       klik maju tidak menambah tepat satu langkah
+       expect(locator).toContainText(expected) failed
+   2 failed · 13 passed (8.2m)      ← CI 31040898498
+```
+
+Langkah 10 ialah langkah EKOR pertama (julat koreografi tamat pada 9), pada `/minit-saya`.
+`driveGenericSteps` melihat langkah 11 berkongsi route yang sama, jadi ia klik "Seterusnya"
+dan mengassert kaunter jadi `11 daripada 13`.
+
+**Hipotesis (belum disahkan):** sasaran langkah 11 (`minit-status`) sudah KELIHATAN sebaik
+langkah 10 dipaparkan, jadi **sync F2 memajukan tour sendiri** — klik manual menjadi kemajuan
+KEDUA. Ini keluarga masalah yang sama seperti G3 yang sudah diselesaikan di tempat lain dengan
+mengassert **urutan yang DIREKOD** (`window.__diwanTourLog`) dan bukan kaunter seketika.
+Rujuk `assertTrailTargets` dan komen G3 dalam `driveFlowGuide` sebagai corak.
+
+⚠️ **Sahkan hipotesis ini dahulu** (baca `trace.zip` / `__diwanTourLog` artifak kegagalan);
+empat kali dalam W4 punca sebenar berbeza daripada tekaan pertama saya.
+
+Formula sempadan pusingan 4 **disahkan terhadap manifest sebelum push**: mula/tamat =
+**5/14** (muat-naik) dan **4/9** (setiausaha), awal 1–4 / 1–3, akhir 15–20 / 10–13.
+
+**Jika hijau:** Deploy 10. Skrip siap di scratchpad (`deploy-10.sh`), prasyarat pelayan
+sudah disemak: cakera **82%** → prune (11.5GB cache, 9.84GB boleh dituntut), `/opt/diwan`
+bersih, git pelayan `e8bfd75`. **Mesti rebuild `app` DAN `nginx`** — `help.js` berubah;
+aset kini `help-B9tTj0Zg.js` (css `help-CrH0eDM1.css` KEKAL). `catalog_version` berubah →
+`sync-help-index --delete`.
+
+**Jika merah:** itu punca KELIMA. Baca `LAPORAN-F6-W4.md` §c.10–c.12 dahulu — empat punca
+sudah ditutup, jangan andaikan ia berulang.
+
+### ⚠️ Dua kecacatan yang GATE tidak dapat lihat (ditemui pengesahan visual)
+
+Gate hanya membuktikan sasaran **disorot**, bukan bahawa sorotan itu **bermakna**:
+
+1. `disposal-actions` ialah `<th>` KOSONG → sorotan hanya jalur nipis. Kini berlabel
+   "Tindakan" (turut menutup lajur tanpa nama yang §8/F7 mahu betulkan).
+2. Benih hanya ada batch `menunggu_kelulusan` → butang **Laksana** yang langkah 10 rujuk
+   tidak wujud. Kini DUA batch (`menunggu_kelulusan` + `lulus`).
+
+**Pelajaran: jalankan pengesahan visual walaupun gate hijau.**
 
 ⚠️ **Jangan `TaskStop` gate dan terus menyunting** — TaskStop tidak membunuh cucu; skrip
 terus berjalan dan memulakan shard seterusnya dengan sumber yang sudah berubah. Bunuh ikut
