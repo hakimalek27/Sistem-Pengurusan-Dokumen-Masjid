@@ -250,14 +250,86 @@ Jadual boleh diskrol mendatar, jadi pengguna masih boleh mencapainya; yang tidak
 ialah **tour menggulung bekas dalaman** — kecacatan yang sama seperti popover-dalam-modal,
 dan ia direkod untuk F7.
 
+### c.9 ⭐ CI pusingan #1 MERAH — dan ia mendedahkan kecacatan produk W2
+
+CI run `31001021747` gagal pada `PostgreSQL, Redis, Meili, OCR and tests`. Kegagalannya ialah
+**dua ujian W3 saya sendiri**, yang lulus tempatan:
+
+```
+⨯ sasaran inbox-record wujud TEPAT SEKALI dalam /peti-masuk yang dirender    0.28s
+⨯ inbox-record menandakan baris TERBAHARU, bukan sebarang baris             0.29s
+
+sasaran inbox-record tidak wujud (atau tidak unik) dalam /peti-masuk
+Failed asserting that 0 is identical to 1.
+```
+
+*(Amaran `[OCR] gagal record N … pdftotext` dalam log yang sama ialah `testing.WARNING` sedia
+ada, bukan puncanya. Begitu juga "554 warnings, 1 passed" — pelabelan Pest di CI yang sudah
+direkod sejak F4; isyarat sebenar ialah "2 failed".)*
+
+**Puncanya bukan ujian.** `baris1()` memoi baris pertama dalam sifat **statik**, dan komennya
+mendakwa memo itu "hidup satu permintaan sahaja". Dakwaan itu salah: sifat statik hidup selama
+hayat **proses**. Dalam proses ujian, `??=` tidak pernah menetapkannya semula, jadi memo
+memegang ID daripada ujian terdahulu.
+
+**Mengapa lulus tempatan, gagal di CI:** SQLite mengembalikan kaunter AUTOINCREMENT apabila
+transaksi `RefreshDatabase` dirollback, jadi ID rekod bermula semula pada 1 setiap ujian dan
+kebetulan sepadan memo. Jujukan PostgreSQL **tidak** dirollback, jadi ID terus menaik → tiada
+baris padan → `substr_count(...) === 0`. Keluarga sama seperti perangkap `idempotency_key`
+uuid (F3): **DB tempatan yang longgar-jenis tidak akan memberitahu anda.**
+
+**Pembaikan:** `self::$barisPertamaId = null;` pada permulaan `configure()` — dipanggil sekali
+setiap render jadual — dalam **ketiga-tiga** jadual (`InboxTable`, `MinitsTable`,
+`ApprovalsTable`), plus komen yang salah dibetulkan supaya andaian itu tidak diulang.
+
+**Bukti penjaga (bebas enjin DB):** ujian baharu merender **dua kali dalam satu proses** dengan
+baris pertama yang berbeza.
+
+```
+kod LAMA : EXIT=1 — "render kedua masih menandakan baris LAMA — memo statik tidak diset semula"
+kod BAHARU: 5 passed (W2 + W3)
+```
+
+#### ⚠️ PEMBETULAN kepada mesej komit `9bfbf74`
+
+Mesej komit itu menulis *"Pada mana-mana pelayan PHP yang kekal hidup, tour boleh menyorot
+baris LAMA selepas muat naik"* dan melabelnya **KESAN PENGGUNA**. Saya kemudian **menguji**
+dakwaan itu dan ia **SALAH**:
+
+```
+php -S, tiga permintaan berturutan pada satu pelayan:
+  memo=9556 pid=46264
+  memo=5808 pid=46264      <- PID SAMA, nilai BERUBAH
+  memo=7115 pid=46264
+```
+
+PHP menetapkan semula sifat statik pada setiap kitaran permintaan walaupun proses dikekalkan
+(model shared-nothing). Jadi skop kesan sebenar ialah:
+
+| Persekitaran | Terjejas? |
+|---|---|
+| Produksi php-fpm | **TIDAK** |
+| `php artisan serve` / `php -S` (gate e2e) | **TIDAK** |
+| Proses ujian (Pest — kernel HTTP dipanggil dalam proses, tiada shutdown permintaan) | **YA** — di sinilah ia menggigit |
+| Octane/Swoole/RoadRunner (aplikasi kekal hidup) | YA — projek ini tidak menggunakannya |
+
+Jadi ini kecacatan **ketepatan-ujian + andaian palsu dalam kod**, bukan pepijat hidup di
+produksi. Pembaikan tetap betul dan tetap bernilai — ia menjadikan penjaga bermakna dan
+membuang andaian yang tidak dijamin — tetapi ia **tidak** patut dilaporkan sebagai kerosakan
+yang pengguna alami. Direkod di sini kerana mesej komit sudah dipush dengan dakwaan berlebihan
+itu.
+
 ### c.8 Suite Pest penuh + pint + validator (selepas SEMUA perubahan)
 
 ```
 {"tool":"pint","result":"passed"}
-Tests:    1 skipped, 556 passed (5369 assertions)
-Duration: 168.82s          PEST EXIT=0
+Tests:    1 skipped, 557 passed (5375 assertions)
+Duration: 169.12s          PEST EXIT=0
 VALIDATOR EXIT=0
 ```
+
+553 → **557** (+4): dua ujian render `inbox-record`, satu ujian allowlist manifest, satu ujian
+regresi memo statik.
 
 ## (d) Kriteria Siap §7.4 per gelombang
 

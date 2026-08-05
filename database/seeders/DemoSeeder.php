@@ -7,6 +7,7 @@ use App\Enums\MinitPriority;
 use App\Enums\MosqueStatus;
 use App\Enums\OcrStatus;
 use App\Enums\RecordStatus;
+use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
 use App\Models\Approval;
 use App\Models\ClassificationNode;
@@ -134,11 +135,39 @@ class DemoSeeder extends Seeder
      *
      * Idempotent: setiap blok hanya berjalan bila jenis datanya belum wujud.
      */
+    /**
+     * Rekod yang minit demo digantung padanya — DETERMINISTIK dan SELAMAT-KEBENARAN.
+     *
+     * 🔴 Punca CI merah (run 31001766297). Versi W2 memanggil `->first()` TANPA `ORDER BY`.
+     * SQLite memulangkan rowid terendah secara konsisten, tetapi PostgreSQL tidak menjamin
+     * apa-apa susunan — jadi seeder kadang-kadang memilih rekod bersensitiviti `sulit`, yang
+     * `ketua_imam` dan `ajk` TIDAK dibenarkan lihat (§6.3 `ChecksSensitivity`). `MinitService`
+     * kemudian menolak SELURUH minit ("Semua penerima mesti ahli aktif tenant…") dan seeder
+     * melempar. Lulus setiap kali pada mesin pembangunan; gagal BERSELANG di CI.
+     *
+     * Data demo memang mengandungi perangkap itu — diukur: antara tiga rekod `difailkan` MAM,
+     * id=2 ("Resit derma jariah") ialah `sulit` pada rekod DAN failnya, dan `ajk->can('view')`
+     * memberi `false` untuknya.
+     *
+     * Sensitiviti efektif = max(rekod, fail), jadi kedua-duanya ditapis. Public supaya
+     * invarian ini boleh diuji terus dengan dataset terkawal, bukan bergantung nasib susunan.
+     */
+    public static function rekodDemoUntukMinit(Mosque $mam): ?Record
+    {
+        return Record::query()
+            ->where('mosque_id', $mam->id)
+            ->where('status', RecordStatus::Difailkan)
+            ->where(fn ($q) => $q->whereNull('sensitivity')->orWhere('sensitivity', '!=', Sensitivity::Sulit->value))
+            ->whereDoesntHave('registryFile', fn ($q) => $q->where('sensitivity', Sensitivity::Sulit->value))
+            ->orderBy('id')
+            ->first();
+    }
+
     protected function seedTugasanDemo(Mosque $mam): void
     {
         $kerani = User::query()->where('email', 'admin_masjid@demo.test')->first();
         $pengerusi = User::query()->where('email', 'pengerusi@demo.test')->first();
-        $record = Record::query()->where('mosque_id', $mam->id)->where('status', RecordStatus::Difailkan)->first();
+        $record = self::rekodDemoUntukMinit($mam);
 
         if (! $kerani || ! $pengerusi || ! $record) {
             return;

@@ -17,6 +17,25 @@ beforeEach(function () {
     $this->admin = makeMember($this->mam, 'admin_masjid', 'admin@mam.test');
 });
 
+/**
+ * Kandungan SEL yang membawa `inbox-record` — daripada atribut hingga `</td>` berikutnya.
+ *
+ * Versi pertama ujian ini memotong tetingkap 2000 aksara TETAP, dikalibrasi pada HTML mesin
+ * pembangunan (jarak diukur: 1004 aksara). Itu andaian yang bergantung pada indentasi Blade
+ * dan panjang URL — iaitu tepat jenis kerapuhan lokal-lawan-CI yang fasa ini sudah dibayar
+ * harganya sekali. Skop sel mengungkapkan niat sebenar dan tidak boleh hanyut.
+ */
+function selInboxRecord(string $html): string
+{
+    $pos = strpos($html, 'data-help-target="inbox-record"');
+    expect($pos)->not->toBeFalse('sasaran inbox-record tidak dijumpai');
+
+    $tamat = strpos($html, '</td>', $pos);
+    expect($tamat)->not->toBeFalse('sel inbox-record tidak ditutup — struktur HTML berubah?');
+
+    return substr($html, $pos, $tamat - $pos);
+}
+
 test('sasaran inbox-record wujud TEPAT SEKALI dalam /peti-masuk yang dirender', function () {
     // `registry_file_id` null → status PetiMasuk (rujuk makeRecord), iaitu syarat
     // `InboxResource::getEloquentQuery()`. Dua baris membuktikan keunikan (G2).
@@ -39,21 +58,15 @@ test('inbox-record menandakan baris TERBAHARU, bukan sebarang baris', function (
 
     $html = $this->actingAs($this->admin)->get('/app/mam/peti-masuk')->assertOk()->getContent();
 
-    // Potong HTML pada kedudukan sasaran, kemudian cari tajuk mana yang paling hampir
-    // SELEPASNYA — sel tajuk membawa atribut, jadi teksnya berada dalam sel yang sama.
-    $pos = strpos($html, 'data-help-target="inbox-record"');
-    expect($pos)->not->toBeFalse('sasaran inbox-record tidak dijumpai');
-
-    // Sel tajuk MEMBAWA atribut, jadi teks tajuk berada dalam sel yang sama — diukur pada
-    // HTML sebenar: atribut pada offset X, tajuk terbaharu pada X+1004.
+    // Sel tajuk MEMBAWA atribut, jadi teks tajuk berada dalam sel YANG SAMA.
     // ⚠️ `toContain()` Pest menerima needle BERVARIADIK — memberi "mesej" sebagai argumen
     // kedua menjadikannya rentetan KEDUA yang mesti dijumpai, dan ujian gagal atas sebab
     // yang salah. Guna `str_contains()` + `toBeTrue($mesej)` apabila mesej diperlukan.
-    $selepasSasaran = substr($html, $pos, 2000);
-    expect(str_contains($selepasSasaran, 'Dokumen paling baharu'))->toBeTrue(
+    $sel = selInboxRecord($html);
+    expect(str_contains($sel, 'Dokumen paling baharu'))->toBeTrue(
         'inbox-record tidak menandakan baris terbaharu — tour akan menunjuk dokumen yang salah selepas muat naik',
     );
-    expect(str_contains($selepasSasaran, 'Dokumen lama sekali'))->toBeFalse(
+    expect(str_contains($sel, 'Dokumen lama sekali'))->toBeFalse(
         'inbox-record menandakan baris yang salah (dokumen lama)',
     );
 });
@@ -81,7 +94,7 @@ test('inbox-record ikut baris pertama SETIAP render, bukan render pertama proses
 
     $html1 = $this->actingAs($this->admin)->get('/app/mam/peti-masuk')->assertOk()->getContent();
     expect(substr_count($html1, 'data-help-target="inbox-record"'))->toBe(1, 'render pertama');
-    expect(str_contains(substr($html1, strpos($html1, 'data-help-target="inbox-record"'), 2000), 'Render pertama'))
+    expect(str_contains(selInboxRecord($html1), 'Render pertama'))
         ->toBeTrue('render pertama tidak menandakan baris yang betul');
 
     // Dokumen BAHARU tiba (persis apa yang berlaku selepas muat naik) → baris pertama berubah.
@@ -91,6 +104,6 @@ test('inbox-record ikut baris pertama SETIAP render, bukan render pertama proses
     $html2 = $this->actingAs($this->admin)->get('/app/mam/peti-masuk')->assertOk()->getContent();
     expect(substr_count($html2, 'data-help-target="inbox-record"'))->toBe(1,
         'render kedua kehilangan sasaran — memo statik memegang ID render pertama');
-    expect(str_contains(substr($html2, strpos($html2, 'data-help-target="inbox-record"'), 2000), 'Render kedua lebih baharu'))
+    expect(str_contains(selInboxRecord($html2), 'Render kedua lebih baharu'))
         ->toBeTrue('render kedua masih menandakan baris LAMA — memo statik tidak diset semula');
 });
