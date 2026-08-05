@@ -171,9 +171,15 @@ Setiap satu mesti masuk `resources/help/step-justifications.json` dengan sebab �
    W5/W6 masih generik, jadi ramalan betul ialah **236 → 236 − 82 + (justifikasi W4)**
    iaitu **≈154–160**. Angka tepat direkod dalam laporan fasa.
 4. `action_generic` kekal **0** pada setiap wave.
-5. Nama aset Vite **KEKAL** (`help-D0185fq1.js` / `help-CrH0eDM1.css`) kerana W4 tidak
-   menyentuh `resources/js/help*` — hanya Blade/PHP/katalog. Bukti utama deploy = kandungan
-   dalam imej + ImageID + label revisi (pelajaran Deploy 2/8/9).
+5. ~~Nama aset Vite **KEKAL** (`help-D0185fq1.js` / `help-CrH0eDM1.css`) kerana W4 tidak
+   menyentuh `resources/js/help*` — hanya Blade/PHP/katalog.~~
+   **❌ RAMALAN INI SALAH — dibatalkan 6 Ogos.** Reka bentuk yang diukur menuntut pemetaan
+   sasaran vendor PER HALAMAN, dan itu ialah kod JS (`help/page-target-plan.js` + satu import
+   dalam `help.js`). Diukur selepas `npm run build`:
+   **`help-D0185fq1.js` → `help-DaHF3IsK.js`**, manakala **`help-CrH0eDM1.css` KEKAL**
+   (hanya JS disentuh). Deploy W4 MESTI membina semula `app` DAN `nginx`.
+   Punca ramalan salah: saya menganggap skop W4 = katalog sahaja sebelum mengukur bahawa
+   Filament tidak mendedahkan cangkuk atribut untuk medan carian jadual.
 6. `catalog_version` akan dinaikkan → `2026.08.06.1`; deploy perlu `sync-help-index --delete`.
 7. Risiko terbesar: **sasaran mesti wujud dalam keadaan LALAI** (pelajaran W1) — jadual
    `/log-aktiviti`, `/pembetulan-rekod`, `/sensitive-access-logs`, `/pelupusan` mesti ADA

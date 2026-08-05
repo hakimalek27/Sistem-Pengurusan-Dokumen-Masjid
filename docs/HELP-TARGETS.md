@@ -158,7 +158,7 @@
 | `login-identity` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:16` | both | borang belum dihantar | public |
 | `login-submit` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:19` | both | borang belum dihantar | public |
 
-## Sasaran RIZAB (22) — wujud dlm DOM, belum dirujuk katalog
+## Sasaran RIZAB (39) — wujud dlm DOM, belum dirujuk katalog
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -184,6 +184,23 @@
 | `viewer-page-prev` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:39` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
 | `viewer-print` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:50` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
 | `viewer-zoom-in` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:45` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `records-search` | workflow | `/app/{tenant}/records` | `js:decorateTargets (resources/js/help.js:92)` | both | - | records.view |
+| `regfiles-search` | workflow | `/app/{tenant}/registry-files` | `js:decorateTargets (resources/js/help.js:110)` | both | - | files.view |
+| `log-search` | workflow | `/app/{tenant}/log-aktiviti` | `js:decorateTargets (resources/js/help.js:98)` | both | - | audit.view |
+| `log-filters` | workflow | `/app/{tenant}/log-aktiviti` | `js:decorateTargets (resources/js/help.js:99)` | both | - | audit.view |
+| `minit-filters` | workflow | `/app/{tenant}/minit-saya` | `js:decorateTargets (resources/js/help.js:105)` | both | MinitsTable TIADA searchable(); kategori ialah SelectFilter (MinitsTable.php:48) | minit.view |
+| `records-view` | workflow | `/app/{tenant}/records` | `app/Filament/App/Resources/Records/Tables/RecordsTable.php:65` | both | jadual tidak kosong | records.view |
+| `regfiles-view` | workflow | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Tables/RegistryFilesTable.php:64` | both | jadual tidak kosong | files.view |
+| `regfiles-medium` | workflow | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Tables/RegistryFilesTable.php:54` | both | jadual tidak kosong (sel Medium baris pertama) | files.view |
+| `correction-diff` | workflow | `/app/{tenant}/pembetulan-rekod` | `app/Filament/App/Resources/RecordCorrections/Tables/RecordCorrectionsTable.php:41` | both | jadual tidak kosong (sel Perubahan baris pertama) | records.update |
+| `correction-status` | workflow | `/app/{tenant}/pembetulan-rekod` | `app/Filament/App/Resources/RecordCorrections/Tables/RecordCorrectionsTable.php:44` | both | jadual tidak kosong (sel Status baris pertama) | records.update |
+| `correction-decision` | workflow | `/app/{tenant}/pembetulan-rekod` | `app/Filament/App/Resources/RecordCorrections/Tables/RecordCorrectionsTable.php:51` | both | ada permohonan status `menunggu` DAN kebenaran review | records.update |
+| `retention-schedule` | workflow | `/app/{tenant}/retensi` | `resources/views/filament/app/pages/retensi-pegangan.blade.php:19` | both | - | retention.hold |
+| `retention-hold` | workflow | `/app/{tenant}/retensi` | `resources/views/filament/app/pages/retensi-pegangan.blade.php:44` | both | - | retention.hold |
+| `retention-export` | workflow | `/app/{tenant}/retensi` | `app/Filament/App/Pages/RetensiPegangan.php:79` | both | kebenaran export.create (butang disembunyikan tanpanya) | export.create |
+| `sensitive-log-record` | workflow | `/app/{tenant}/sensitive-access-logs` | `app/Filament/App/Resources/SensitiveAccessLogs/Tables/SensitiveAccessLogsTable.php:34` | both | jadual tidak kosong (baris pertama) | audit.view |
+| `report-summary` | workflow | `/app/{tenant}/laporan` | `resources/views/filament/app/pages/laporan.blade.php:5` | both | - | records.view |
+| `report-export` | workflow | `/app/{tenant}/laporan` | `app/Filament/App/Pages/Laporan.php:48` | both | kebenaran export.create | export.create |
 
 - `members-invite-name`: - (sejak 2026-08-04)
 - `delegation-ends`: - (sejak 2026-08-04)
@@ -207,6 +224,23 @@
 - `viewer-page-prev`: - (sejak 2026-08-04)
 - `viewer-print`: - (sejak 2026-08-04)
 - `viewer-zoom-in`: - (sejak 2026-08-04)
+- `records-search`: - (sejak 2026-08-06)
+- `regfiles-search`: - (sejak 2026-08-06)
+- `log-search`: - (sejak 2026-08-06)
+- `log-filters`: - (sejak 2026-08-06)
+- `minit-filters`: - (sejak 2026-08-06)
+- `records-view`: - (sejak 2026-08-06)
+- `regfiles-view`: - (sejak 2026-08-06)
+- `regfiles-medium`: - (sejak 2026-08-06)
+- `correction-diff`: - (sejak 2026-08-06)
+- `correction-status`: - (sejak 2026-08-06)
+- `correction-decision`: - (sejak 2026-08-06)
+- `retention-schedule`: - (sejak 2026-08-06)
+- `retention-hold`: - (sejak 2026-08-06)
+- `retention-export`: - (sejak 2026-08-06)
+- `sensitive-log-record`: - (sejak 2026-08-06)
+- `report-summary`: - (sejak 2026-08-06)
+- `report-export`: - (sejak 2026-08-06)
 
 ## Peraturan (gate registry §7.2)
 

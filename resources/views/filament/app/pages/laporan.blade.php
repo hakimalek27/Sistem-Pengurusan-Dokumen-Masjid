@@ -1,5 +1,8 @@
 <x-filament-panels::page>
-    <div class="grid gap-4 md:grid-cols-4">
+    {{-- F6-W4: guide `workflow.audit` langkah 10 ("Bandingkan jumlah rekod, retensi dan minit
+         lewat") merujuk KESELURUHAN baris kad ringkasan, bukan satu kad. Atribut diletak pada
+         grid — ia dirender tanpa syarat, jadi sasaran wujud walaupun tenant tiada data. --}}
+    <div data-help-target="report-summary" class="grid gap-4 md:grid-cols-4">
         <x-filament::section><div class="text-sm text-gray-500">Jumlah Rekod</div><div class="text-3xl font-semibold">{{ $total }}</div></x-filament::section>
         <x-filament::section><div class="text-sm text-gray-500">Akan Luput ≤90 Hari</div><div class="text-3xl font-semibold">{{ $expiring90 }}</div></x-filament::section>
         <x-filament::section><div class="text-sm text-gray-500">Minit Lewat</div><div class="text-3xl font-semibold">{{ $overdueMinits }}</div></x-filament::section>

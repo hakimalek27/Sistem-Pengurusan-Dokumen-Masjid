@@ -57,7 +57,12 @@ class RecordsTable
                     ->options(collect(RecordStatus::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()])),
             ])
             ->recordActions([
-                ViewAction::make(),
+                // F6-W4: tiga guide `workflow` bermula dengan "Buka Lihat pada rekod yang
+                // tepat" / "Buka rekod yang dibenarkan sahaja" pada SENARAI. `page-actions`
+                // sedia ada ialah bekas tindakan header BUTIRAN (`state: detail:records`),
+                // jadi ia bukan sasaran yang betul untuk langkah senarai ini.
+                ViewAction::make()
+                    ->extraAttributes(['data-help-target' => 'records-view']),
             ]);
     }
 }

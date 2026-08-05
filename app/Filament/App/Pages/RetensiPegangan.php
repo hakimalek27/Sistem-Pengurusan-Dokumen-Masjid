@@ -71,8 +71,12 @@ class RetensiPegangan extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W4: langkah 3 ("Sediakan eksport luar jika diperlukan") menyasar butang ini.
+            // Atribut pada BUTANG, bukan bekas header — bekas itu sudah dipegang `page-actions`
+            // melalui `decorateTargets()`, dan satu elemen hanya boleh memegang satu sasaran.
             Action::make('eksportAkanLuput')
                 ->label('Eksport ZIP (Akan Luput ≤90 hari)')
+                ->extraAttributes(['data-help-target' => 'retention-export'])
                 ->icon('heroicon-o-arrow-down-tray')
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'export.create') ?? false)
                 ->visible(fn () => Auth::user()->canIn(Filament::getTenant(), 'export.create'))

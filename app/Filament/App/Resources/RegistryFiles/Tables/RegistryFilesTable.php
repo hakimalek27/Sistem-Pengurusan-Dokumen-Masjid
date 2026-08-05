@@ -15,8 +15,28 @@ use Illuminate\Support\Facades\Auth;
 
 class RegistryFilesTable
 {
+    /**
+     * Baris pertama render SEMASA — sasaran bantuan baris mesti UNIK (gate G2).
+     *
+     * ⚠️ Sifat statik hidup selama PROSES, bukan permintaan (punca CI W3, run 31001766297):
+     * dalam satu proses ujian ia mengekalkan ID daripada render TERDAHULU. Kerana itu ia
+     * DISET SEMULA pada permulaan `configure()`.
+     */
+    protected static ?int $barisPertamaId = null;
+
+    protected static function baris1($record, string $target): array
+    {
+        self::$barisPertamaId ??= (int) $record->getKey();
+
+        return self::$barisPertamaId === (int) $record->getKey()
+            ? ['data-help-target' => $target]
+            : [];
+    }
+
     public static function configure(Table $table): Table
     {
+        self::$barisPertamaId = null;
+
         return $table
             ->defaultSort('file_no')
             ->columns([
@@ -26,12 +46,22 @@ class RegistryFilesTable
                 TextColumn::make('status')->label('Status')->badge()
                     ->color(fn ($state) => $state === 'terbuka' ? 'success' : 'gray'),
                 TextColumn::make('enclosure_count')->label('Kandungan')->badge(),
-                TextColumn::make('medium')->label('Medium')->badge(),
+                // F6-W4: guide `urus-fail-fizikal` langkah 2 ("Semak Medium dan Status")
+                // membaca lajur Medium pada baris SENARAI. `file-medium` sedia ada ialah
+                // infolist BUTIRAN (`state: detail:registry-files`), jadi ia tidak boleh
+                // dipakai di sini — sasaran senarai berasingan diperlukan.
+                TextColumn::make('medium')->label('Medium')->badge()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'regfiles-medium')),
                 TextColumn::make('physical_location')->label('Lokasi')->placeholder('—')->toggleable(),
                 TextColumn::make('custody_status')->label('Penjagaan')->badge()->toggleable(),
             ])
             ->recordActions([
-                ViewAction::make(),
+                // F6-W4: langkah 3 ("Buka Lihat"). Atribut STATIK seperti `inbox-classify`
+                // (corak terbukti W2) — bukan `baris1()`: tindakan jadual Filament tidak
+                // menyuntik `$record` ke dalam `extraAttributes()`, dan gate menyelesaikan
+                // sasaran dengan `.first()` jadi butang Lihat baris pertama yang dipakai.
+                ViewAction::make()
+                    ->extraAttributes(['data-help-target' => 'regfiles-view']),
                 // §10.F — Buka jilid baharu bila enclosure ≥ 100.
                 Action::make('bukaJilid')
                     ->label('Buka Jld. Baharu')

@@ -41,8 +41,11 @@ class Laporan extends Page
     protected function getHeaderActions(): array
     {
         return [
+            // F6-W4: guide `workflow.audit` langkah 11 ("Eksport hanya jika dibenarkan dan
+            // simpan secara terkawal"). Atribut pada BUTANG (lihat nota RetensiPegangan).
             Action::make('eksportCsv')
                 ->label('Eksport CSV')
+                ->extraAttributes(['data-help-target' => 'report-export'])
                 ->icon('heroicon-o-arrow-down-tray')
                 ->authorize(fn () => Auth::user()?->canIn(Filament::getTenant(), 'export.create') ?? false)
                 ->action(fn (): StreamedResponse => response()->streamDownload(function (): void {

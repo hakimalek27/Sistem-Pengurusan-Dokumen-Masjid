@@ -3,6 +3,7 @@ import 'driver.js/dist/driver.css';
 import '../css/help.css';
 import { ACTION_KINDS, stepAdvancePlan } from './help/step-advance-plan.js';
 import { NAV_PRIMARY, navPrimaryTarget } from './help/nav-target-plan.js';
+import { pageTargetsFor } from './help/page-target-plan.js';
 
 const SELECTOR = (target) => `[data-help-target="${CSS.escape(target)}"]`;
 const GENERIC_TARGETS = new Set(['page-content', 'page-primary']);
@@ -77,6 +78,10 @@ function decorateTargets() {
         // tanpa cangkuk PHP untuk atribut (Filament merender bekasnya sendiri), jadi
         // pemetaan JS ialah mekanisme yang pelan benarkan. Satu sasaran, satu elemen.
         ['.fi-header-actions-ctn', 'page-actions'],
+        // F6-W4 (§7.2 langkah 2) — medan carian jadual dan pencetus tapisan juga elemen
+        // vendor tanpa cangkuk PHP, tetapi pemetaannya PER HALAMAN. Sebab penuh dan ukuran
+        // per-jadual ada dalam `help/page-target-plan.js`.
+        ...pageTargetsFor(window.location.pathname),
     ];
 
     for (const [selector, target] of targets) {

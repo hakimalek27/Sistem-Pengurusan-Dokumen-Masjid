@@ -12,7 +12,11 @@
 
     <x-filament::section>
         <x-slot name="heading">Jadual Retensi Efektif</x-slot>
-        <p class="mb-3 text-sm text-gray-500">Keputusan sebenar selepas resolusi override masjid, jenis rekod dan prefix klasifikasi.</p>
+        {{-- F6-W4: guide `sediakan-dan-laksanakan-pelupusan-terkawal` langkah 1 ("Semak tarikh
+             cukup tempoh dan peraturan"). Diletak pada perenggan penerangan kerana jadual di
+             bawahnya dilindungi `@if isEmpty` — sasaran mesti wujud dalam keadaan LALAI juga
+             (pelajaran W1: sasaran yang hanya muncul bila berdata = gate hijau palsu). --}}
+        <p data-help-target="retention-schedule" class="mb-3 text-sm text-gray-500">Keputusan sebenar selepas resolusi override masjid, jenis rekod dan prefix klasifikasi.</p>
         @if ($effectiveRetention->isEmpty())
             <p class="text-gray-500">Tiada rekod dalam skop 12 bulan.</p>
         @else
@@ -34,6 +38,10 @@
 
     <x-filament::section>
         <x-slot name="heading">Akan Cukup Tempoh (≤ 12 bulan)</x-slot>
+        {{-- F6-W4 langkah 2 ("Pastikan Legal Hold tidak aktif") — pembalut, bukan sel, kerana
+             lajur Pegangan dan butang Legal Hold hanya wujud bila ada baris. Corak sama
+             seperti `disposal-batches` (`pelupusan-manual.blade.php:17`). --}}
+        <div data-help-target="retention-hold">
         @if ($records->isEmpty())
             <p class="text-gray-500">Tiada rekod menghampiri tempoh retensi.</p>
         @else
@@ -60,6 +68,7 @@
                 </tbody>
             </table>
         @endif
+        </div>
     </x-filament::section>
 
     <x-filament::section>
