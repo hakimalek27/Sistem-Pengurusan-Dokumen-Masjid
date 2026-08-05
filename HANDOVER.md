@@ -1,10 +1,32 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W4 SEPARUH SIAP (6 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W4 KOD SIAP, gate pusingan 2 berjalan (6 Ogos)
 
-**local = origin = `5dbfda4`** · **produksi kekal imej `2cd7ab8` (Deploy 9)** — W4 belum
-di-deploy dan **belum boleh** di-deploy: katalog belum disunting, jadi tiada apa yang berubah
-untuk pengguna. 📄 `Audit Review Round Robin/bukti/plan-f6-w4/INVENTORI-W4.md`
+**local = origin = `9abb066`** · **produksi kekal imej `2cd7ab8` (Deploy 9)**.
+📄 `bukti/plan-f6-w4/INVENTORI-W4.md` + `LAPORAN-F6-W4.md`
+
+**Keadaan tepat:** kesemua kod W4 siap dan dikomit. Yang belum ada ialah **gate e2e hijau**.
+Pusingan 1 mendedahkan DUA punca (kedua-duanya sudah dibaiki dalam `9abb066`); pusingan 2
+sedang berjalan di CI (`gh run view 31036770642`) DAN secara tempatan.
+
+**Jika gate hijau:** Deploy 10 (skrip siap di scratchpad; **mesti rebuild `app` DAN `nginx`**
+kerana `help.js` berubah → aset kini `help-B9tTj0Zg.js`, css `help-CrH0eDM1.css` KEKAL;
+`catalog_version` berubah → `sync-help-index --delete`).
+
+**Jika gate merah:** baca `LAPORAN-F6-W4.md` §c.10 — ia menyenaraikan kedua-dua punca yang
+sudah ditutup, jadi kegagalan baharu bermakna punca KETIGA. Jangan andaikan ia sama.
+
+⚠️ **Jangan `TaskStop` gate dan terus menyunting** — TaskStop tidak membunuh cucu; skrip
+terus berjalan dan memulakan shard seterusnya dengan sumber yang sudah berubah. Bunuh ikut
+baris arahan (`playwright|gate-w4|8092|guidance-full`) dan sahkan port 8092 kosong DAHULU.
+
+### Metrik selepas W4 (disahkan)
+
+```
+generic_declared 236 → 157 · specific 237 → 316 · action_generic 0 · placeholder 0
+catalog_version 2026.08.06.1 · registri 187 (166 aktif + 21 rizab) · 0 yatim
+Pest 567 lulus / 1 skip (5436 assertion) · unit 25/25 · validator manifest exit 0
+```
 
 ### Skop W4 yang DIUKUR (jadual beku pelan salah, seperti W3)
 

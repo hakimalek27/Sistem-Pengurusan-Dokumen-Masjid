@@ -3941,7 +3941,7 @@
           "id": "setiausaha.2.7",
           "title": "Pantau keputusan",
           "instruction": "Semak status permohonan.",
-          "target": "approval-status",
+          "target": "page-content",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -3949,7 +3949,7 @@
           "id": "setiausaha.2.8",
           "title": "Pantau keputusan",
           "instruction": "Jangan hantar pendua.",
-          "target": "approval-status",
+          "target": "page-content",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },

@@ -273,7 +273,7 @@ async function assertStepPopover(page, guide, step, total) {
 const CLASSIFICATION_MODAL = 'inbox-classification-modal';
 const diluaskanKeModal = (t) => t.startsWith('classification-') && t !== 'classification-submit';
 
-async function assertTrailTargets(page, guide, sehinggaIndex = Infinity) {
+async function assertTrailTargets(page, guide, sehinggaIndex = Infinity, daripadaIndex = 0) {
     const jejak = await page.evaluate(() => (window.__diwanTourLog ?? [])
         .filter((e) => e.n !== null)
         .map((e) => ({ n: e.n, aktif: e.aktif, sasaran: e.sasaran })));
@@ -281,7 +281,13 @@ async function assertTrailTargets(page, guide, sehinggaIndex = Infinity) {
 
     const ringkas = jejak.map((e) => `${e.n}:${(e.aktif ?? []).filter(Boolean).join('+') || '-'}`).join(' → ');
     for (const step of guide.steps) {
-        if (step.status !== 'specific' || step.index > sehinggaIndex) continue;
+        // F6-W4: perekam DIRESET oleh navigasi, jadi jejak halaman koreografi hanya
+        // mengandungi langkah yang dipandu DI SANA. Sebelum W4 had bawah tidak diperlukan
+        // kerana langkah sebelum julat semuanya generik dan dilangkau oleh semakan status;
+        // kini ia spesifik dan dipandu `driveGenericSteps` pada halaman LAIN, jadi mencarinya
+        // dalam jejak ini akan gagal atas sebab yang salah (diukur di CI: "langkah tidak
+        // pernah dirakam perekam (jejak: 5:inbox-upload)").
+        if (step.status !== 'specific' || step.index > sehinggaIndex || step.index < daripadaIndex) continue;
         const dilihat = jejak.filter((e) => e.n === step.index);
         // Langkah yang tidak pernah dicerap = kelemahan perekaman, bukan kegagalan sasaran;
         // laporkan berasingan supaya dua keadaan itu tidak boleh dikelirukan.
@@ -1396,7 +1402,7 @@ for (const guide of guides) {
                 // F6-W3: G2 untuk laluan berkoreografi (rujuk assertTrailTargets). Hanya
                 // sehingga hujung julat koreografi — langkah selepasnya dipandu
                 // `driveGenericSteps`, yang sudah memanggil `assertStepPopover` sendiri.
-                await assertTrailTargets(page, guide, tamatKoreografi);
+                await assertTrailTargets(page, guide, tamatKoreografi, mulaKoreografi);
                 await popover.getByRole('button', { name: 'Tutup panduan' }).click();
                 await modal.getByRole('button', { name: 'Tutup' }).click().catch(() => {});
                 await expect(popover).toBeHidden();

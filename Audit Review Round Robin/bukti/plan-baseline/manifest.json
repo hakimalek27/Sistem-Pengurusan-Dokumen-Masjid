@@ -4600,15 +4600,18 @@
           "title": "Pantau keputusan",
           "title_placeholder": false,
           "instruction_preview": "Semak status permohonan.",
-          "target": "approval-status",
-          "generic_declared": false,
+          "target": "page-content",
+          "generic_declared": true,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "specific"
+          "status": "generic-justified",
+          "reason": "Senarai /kelulusan DIUKUR berskop kepada pelulus sahaja (ApprovalResource::getEloquentQuery whereIn approver_id), dan setiausaha tidak pernah menjadi pelulus — jadi halaman itu sentiasa KOSONG untuk peranan ini dan tiada sasaran baris yang boleh wujud.",
+          "since": "2026-08-06",
+          "followup": "Kandungan (F9): destinasi yang betul bagi PEMOHON menyemak status ialah tab Kelulusan pada rekod (record-tab-approval), bukan /kelulusan."
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#8",
@@ -4617,15 +4620,18 @@
           "title": "Pantau keputusan",
           "title_placeholder": false,
           "instruction_preview": "Jangan hantar pendua.",
-          "target": "approval-status",
-          "generic_declared": false,
+          "target": "page-content",
+          "generic_declared": true,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "specific"
+          "status": "generic-justified",
+          "reason": "Halaman dan sebab yang sama seperti langkah 7: /kelulusan kosong untuk setiausaha. Langkah ini juga amaran prosedur (jangan hantar pendua), bukan rujukan kepada kawalan tertentu pada skrin.",
+          "since": "2026-08-06",
+          "followup": "Lihat langkah 7 — cadangan kandungan F9 yang sama."
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#9",
