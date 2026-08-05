@@ -55,6 +55,23 @@ const CHOREOGRAPHED = new Set([
     'public.registration',
 ]);
 
+/**
+ * F6-W4 — indeks langkah yang mesin-keadaan koreografi benar-benar pandu, per guide.
+ *
+ * Dahulu sempadan julat disimpulkan daripada `status === 'specific'`. Proksi itu sah hanya
+ * selagi langkah AWAL dan PENGHUJUNG guide masih generik. W4 memberi kesemua langkah sasaran
+ * spesifik, jadi `lastSpecific` melompat 14 → 20: mesin-keadaan — yang hanya memahami SATU
+ * halaman dan modalnya — cuba memandu merentas peti-masuk → minit-saya → log-aktiviti dan
+ * tersekat pada peralihan silang-halaman ("langkah 14 tidak maju", 90s).
+ *
+ * Nilai di bawah ialah kunci peta `actions` guide berkenaan; ia diassert sepadan pada masa
+ * larian supaya kedua-duanya tidak boleh hanyut secara senyap.
+ */
+const AKSI_KOREOGRAFI = {
+    'workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit': [5, 9, 10, 11, 12, 13],
+    'workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit': [4, 5, 6, 7, 8],
+};
+
 function accountFor(guide) {
     if (guide.panel === 'public') return null;
     if (guide.panel === 'admin') return { email: 'superadmin@diwan.test', login: '/admin/login', home: /\/admin\/?$/ };
@@ -1291,14 +1308,28 @@ for (const guide of guides) {
                 // Dua guide workflow klasifikasi (13/20 langkah): langkah generik AWAL dipandu
                 // per-langkah; julat modal (spesifik) diikuti mesin-keadaan toleran; langkah
                 // generik PENGHUJUNG (minit-saya/log-aktiviti) dipandu per-langkah semula.
-                const specificSteps = guide.steps.filter((s) => s.status === 'specific');
-                const firstSpecific = specificSteps[0];
-                const lastSpecific = specificSteps[specificSteps.length - 1];
-                await driveGenericSteps(page, guide, guide.steps.filter((s) => s.index < firstSpecific.index));
+                // F6-W4: sempadan julat DIKIRA daripada halaman koreografi, bukan daripada
+                // `status === 'specific'` (lihat AKSI_KOREOGRAFI). Julat = blok langkah pada
+                // `/peti-masuk` yang bermula pada aksi pertama. Formula ini menghasilkan tepat
+                // julat yang dahulunya hijau (muat-naik 5–14, setiausaha 4–9), jadi ia
+                // MEMULIHKAN koreografi dan bukan mengubahnya.
+                const laluanKoreografi = `/app/${tenantSlug}/peti-masuk`;
+                const padaHalamanKoreografi = (s) => {
+                    const r = s.route ? hydrate(s.route) : null;
+
+                    return r === null || r === laluanKoreografi;
+                };
+                const mulaKoreografi = Math.min(...AKSI_KOREOGRAFI[guide.guide_id]);
+                let tamatKoreografi = mulaKoreografi;
+                // `guide.steps` 0-asas manakala `.index` 1-asas → steps[n] ialah langkah n+1.
+                while (guide.steps[tamatKoreografi] && padaHalamanKoreografi(guide.steps[tamatKoreografi])) {
+                    tamatKoreografi += 1;
+                }
+                await driveGenericSteps(page, guide, guide.steps.filter((s) => s.index < mulaKoreografi));
 
                 await page.goto(`/app/${tenantSlug}/peti-masuk`);
                 await ensureInboxFixture(page);
-                await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=${guide.guide_id}&langkah=${firstSpecific.index - 1}`);
+                await page.goto(`/app/${tenantSlug}/peti-masuk?panduan=${guide.guide_id}&langkah=${mulaKoreografi - 1}`);
                 const popover = page.locator('.driver-popover');
                 const modal = page.locator('.fi-modal-window:visible').last();
                 const upload = async (cta) => {
@@ -1355,16 +1386,22 @@ for (const guide of guides) {
                     ? { 4: openClassify, 5: wizardNext, 6: metadataThenNext, 7: fileThenNext, 8: wizardNext }
                     : { 5: upload, 9: openClassify, 10: wizardNext, 11: metadataThenNext, 12: fileThenNext, 13: wizardNext };
 
-                await driveChoreographedRange(popover, actions, lastSpecific.index, guide.guide_id);
+                // Penjaga hanyut: AKSI_KOREOGRAFI mesti sepadan peta `actions` sebenar,
+                // kalau tidak sempadan julat dikira daripada senarai yang lapuk.
+                expect(Object.keys(actions).map(Number).sort((a, b) => a - b),
+                    `${guide.guide_id}: AKSI_KOREOGRAFI tidak sepadan kunci peta actions`)
+                    .toEqual(AKSI_KOREOGRAFI[guide.guide_id]);
+
+                await driveChoreographedRange(popover, actions, tamatKoreografi, guide.guide_id);
                 // F6-W3: G2 untuk laluan berkoreografi (rujuk assertTrailTargets). Hanya
-                // sehingga `lastSpecific` — langkah selepasnya dipandu `driveGenericSteps`,
-                // yang sudah memanggil `assertStepPopover` sendiri.
-                await assertTrailTargets(page, guide, lastSpecific.index);
+                // sehingga hujung julat koreografi — langkah selepasnya dipandu
+                // `driveGenericSteps`, yang sudah memanggil `assertStepPopover` sendiri.
+                await assertTrailTargets(page, guide, tamatKoreografi);
                 await popover.getByRole('button', { name: 'Tutup panduan' }).click();
                 await modal.getByRole('button', { name: 'Tutup' }).click().catch(() => {});
                 await expect(popover).toBeHidden();
 
-                await driveGenericSteps(page, guide, guide.steps.filter((s) => s.index > lastSpecific.index));
+                await driveGenericSteps(page, guide, guide.steps.filter((s) => s.index > tamatKoreografi));
             } else if (needsFlow(guide)) {
                 // F6-W1: sasaran hidup dalam modal / halaman butiran / langkah wizard —
                 // deep-link per langkah tidak lagi sah (rujuk nota driveFlowGuide).

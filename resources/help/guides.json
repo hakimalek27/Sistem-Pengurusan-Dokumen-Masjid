@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.05.2",
+  "catalog_version": "2026.08.06.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -2793,7 +2793,7 @@
           "id": "admin_masjid.1.1",
           "title": "Mulakan dari Papan pemuka",
           "instruction": "Sahkan tenant MAM/data masjid sendiri.",
-          "target": "page-content",
+          "target": "nav-primary",
           "route": "/app/{tenant}",
           "wait_for_user": false
         },
@@ -2801,7 +2801,7 @@
           "id": "admin_masjid.1.2",
           "title": "Mulakan dari Papan pemuka",
           "instruction": "Pada menu kiri, tekan Peti Masuk.",
-          "target": "page-content",
+          "target": "nav-primary",
           "route": "/app/{tenant}",
           "wait_for_user": false
         },
@@ -2809,7 +2809,7 @@
           "id": "admin_masjid.1.3",
           "title": "Senarai Peti Masuk",
           "instruction": "Semak sumber, pengirim, tarikh dan masa diterima.",
-          "target": "page-content",
+          "target": "inbox-record",
           "route": "/app/{tenant}/peti-masuk",
           "wait_for_user": false
         },
@@ -2817,7 +2817,7 @@
           "id": "admin_masjid.1.4",
           "title": "Senarai Peti Masuk",
           "instruction": "Semak Antivirus, OCR dan amaran Duplikat.",
-          "target": "page-content",
+          "target": "inbox-scan-status",
           "route": "/app/{tenant}/peti-masuk",
           "wait_for_user": false
         },
@@ -2905,7 +2905,7 @@
           "id": "admin_masjid.1.14",
           "title": "Sahkan minit diedarkan",
           "instruction": "Buka Minit Saya.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -2913,7 +2913,7 @@
           "id": "admin_masjid.1.15",
           "title": "Sahkan minit diedarkan",
           "instruction": "Pilih kategori Saya Hantar.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -2921,7 +2921,7 @@
           "id": "admin_masjid.1.16",
           "title": "Sahkan minit diedarkan",
           "instruction": "Sahkan rekod, penerima, arahan, keutamaan dan tarikh akhir sepadan.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -2929,7 +2929,7 @@
           "id": "admin_masjid.1.17",
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "instruction": "Buka Log Aktiviti Masjid.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -2937,7 +2937,7 @@
           "id": "admin_masjid.1.18",
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "instruction": "Cari tajuk rekod.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -2945,7 +2945,7 @@
           "id": "admin_masjid.1.19",
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "instruction": "Sahkan urutan record_uploaded, record_classified dan minit_created dengan pelaku serta masa yang betul.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3005,7 +3005,7 @@
           "id": "admin_masjid.2.1",
           "title": "Cari rekod",
           "instruction": "Cari tajuk atau nombor rujukan.",
-          "target": "page-content",
+          "target": "records-search",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -3013,7 +3013,7 @@
           "id": "admin_masjid.2.2",
           "title": "Cari rekod",
           "instruction": "Buka Lihat pada rekod yang tepat.",
-          "target": "page-content",
+          "target": "records-view",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -3061,7 +3061,7 @@
           "id": "admin_masjid.2.8",
           "title": "Pantau atau semak permohonan",
           "instruction": "Bandingkan nilai asal dengan cadangan.",
-          "target": "page-content",
+          "target": "correction-diff",
           "route": "/app/{tenant}/pembetulan-rekod",
           "wait_for_user": false
         },
@@ -3069,7 +3069,7 @@
           "id": "admin_masjid.2.9",
           "title": "Pantau atau semak permohonan",
           "instruction": "Reviewer berkuasa memilih Luluskan atau Tolak.",
-          "target": "page-content",
+          "target": "correction-decision",
           "route": "/app/{tenant}/pembetulan-rekod",
           "wait_for_user": false
         },
@@ -3077,7 +3077,7 @@
           "id": "admin_masjid.2.10",
           "title": "Pantau atau semak permohonan",
           "instruction": "Sahkan status dan catatan semakan.",
-          "target": "page-content",
+          "target": "correction-status",
           "route": "/app/{tenant}/pembetulan-rekod",
           "wait_for_user": false
         },
@@ -3085,7 +3085,7 @@
           "id": "admin_masjid.2.11",
           "title": "Semak jejak pembetulan",
           "instruction": "Cari tajuk rekod.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3093,7 +3093,7 @@
           "id": "admin_masjid.2.12",
           "title": "Semak jejak pembetulan",
           "instruction": "Sahkan pemohon, reviewer, keputusan dan masa.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3101,7 +3101,7 @@
           "id": "admin_masjid.2.13",
           "title": "Semak jejak pembetulan",
           "instruction": "Pastikan tiada perubahan senyap tanpa log.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3161,7 +3161,7 @@
           "id": "admin_masjid.3.1",
           "title": "Pilih fail",
           "instruction": "Cari nombor fail.",
-          "target": "page-content",
+          "target": "regfiles-search",
           "route": "/app/{tenant}/registry-files",
           "wait_for_user": false
         },
@@ -3169,7 +3169,7 @@
           "id": "admin_masjid.3.2",
           "title": "Pilih fail",
           "instruction": "Semak Medium dan Status.",
-          "target": "page-content",
+          "target": "regfiles-medium",
           "route": "/app/{tenant}/registry-files",
           "wait_for_user": false
         },
@@ -3177,7 +3177,7 @@
           "id": "admin_masjid.3.3",
           "title": "Pilih fail",
           "instruction": "Buka Lihat.",
-          "target": "page-content",
+          "target": "regfiles-view",
           "route": "/app/{tenant}/registry-files",
           "wait_for_user": false
         },
@@ -3249,7 +3249,7 @@
           "id": "admin_masjid.3.12",
           "title": "Semak log pergerakan",
           "instruction": "Tapis jenis aktiviti fail fizikal.",
-          "target": "page-content",
+          "target": "log-filters",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3257,7 +3257,7 @@
           "id": "admin_masjid.3.13",
           "title": "Semak log pergerakan",
           "instruction": "Sahkan pemegang, lokasi asal/tujuan, pelaku dan masa.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3316,7 +3316,7 @@
           "id": "admin_masjid.4.1",
           "title": "Semak kelayakan retensi",
           "instruction": "Semak tarikh cukup tempoh dan peraturan.",
-          "target": "page-content",
+          "target": "retention-schedule",
           "route": "/app/{tenant}/retensi",
           "wait_for_user": false
         },
@@ -3324,7 +3324,7 @@
           "id": "admin_masjid.4.2",
           "title": "Semak kelayakan retensi",
           "instruction": "Pastikan Legal Hold tidak aktif.",
-          "target": "page-content",
+          "target": "retention-hold",
           "route": "/app/{tenant}/retensi",
           "wait_for_user": false
         },
@@ -3332,7 +3332,7 @@
           "id": "admin_masjid.4.3",
           "title": "Semak kelayakan retensi",
           "instruction": "Sediakan eksport luar jika diperlukan.",
-          "target": "page-content",
+          "target": "retention-export",
           "route": "/app/{tenant}/retensi",
           "wait_for_user": false
         },
@@ -3340,7 +3340,7 @@
           "id": "admin_masjid.4.4",
           "title": "Buka Pelupusan",
           "instruction": "Semak calon dan batch sedia ada.",
-          "target": "page-content",
+          "target": "disposal-candidates",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3348,7 +3348,7 @@
           "id": "admin_masjid.4.5",
           "title": "Buka Pelupusan",
           "instruction": "Jangan cipta batch pendua.",
-          "target": "page-content",
+          "target": "disposal-batches",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3380,7 +3380,7 @@
           "id": "admin_masjid.4.9",
           "title": "Laksana selepas diluluskan",
           "instruction": "Tunggu status Lulus.",
-          "target": "page-content",
+          "target": "disposal-status",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3388,7 +3388,7 @@
           "id": "admin_masjid.4.10",
           "title": "Laksana selepas diluluskan",
           "instruction": "Tekan Laksana sekali.",
-          "target": "page-content",
+          "target": "disposal-actions",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3396,7 +3396,7 @@
           "id": "admin_masjid.4.11",
           "title": "Laksana selepas diluluskan",
           "instruction": "Muat turun sijil apabila status Selesai.",
-          "target": "page-content",
+          "target": "disposal-actions",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3404,7 +3404,7 @@
           "id": "admin_masjid.4.12",
           "title": "Sahkan pemisahan tugas",
           "instruction": "Sahkan penyedia, pelulus dan pelaksana ialah peristiwa berasingan.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3412,7 +3412,7 @@
           "id": "admin_masjid.4.13",
           "title": "Sahkan pemisahan tugas",
           "instruction": "Semak tajuk rekod, batch dan masa setiap tindakan.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3471,7 +3471,7 @@
           "id": "pengerusi.1.1",
           "title": "Pilih minit tindakan",
           "instruction": "Tapis Perlu Tindakan.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -3479,7 +3479,7 @@
           "id": "pengerusi.1.2",
           "title": "Pilih minit tindakan",
           "instruction": "Baca pengirim, arahan, keutamaan dan tarikh akhir.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -3487,7 +3487,7 @@
           "id": "pengerusi.1.3",
           "title": "Pilih minit tindakan",
           "instruction": "Buka rekod berkaitan.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -3551,7 +3551,7 @@
           "id": "pengerusi.1.11",
           "title": "Sahkan timeline minit",
           "instruction": "Cari tajuk rekod.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3559,7 +3559,7 @@
           "id": "pengerusi.1.12",
           "title": "Sahkan timeline minit",
           "instruction": "Sahkan baca, balas dan selesai direkod atas nama pelaku yang betul.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3613,7 +3613,7 @@
           "id": "pengerusi.2.1",
           "title": "Pilih permohonan kelulusan",
           "instruction": "Pilih item Menunggu yang ditujukan kepada anda.",
-          "target": "page-content",
+          "target": "approval-record",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -3621,7 +3621,7 @@
           "id": "pengerusi.2.2",
           "title": "Pilih permohonan kelulusan",
           "instruction": "Buka rekod asal sebelum memutuskan.",
-          "target": "page-content",
+          "target": "approval-record",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -3653,7 +3653,7 @@
           "id": "pengerusi.2.6",
           "title": "Semak batch pelupusan",
           "instruction": "Semak setiap rekod, retensi, hold dan sandaran.",
-          "target": "page-content",
+          "target": "disposal-batches",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3661,7 +3661,7 @@
           "id": "pengerusi.2.7",
           "title": "Semak batch pelupusan",
           "instruction": "Tekan Lulus hanya jika penyedia bukan diri sendiri dan semua bukti lengkap.",
-          "target": "page-content",
+          "target": "disposal-actions",
           "route": "/app/{tenant}/pelupusan",
           "wait_for_user": false
         },
@@ -3669,7 +3669,7 @@
           "id": "pengerusi.2.8",
           "title": "Audit keputusan",
           "instruction": "Tapis kelulusan/pelupusan.",
-          "target": "page-content",
+          "target": "log-filters",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3677,7 +3677,7 @@
           "id": "pengerusi.2.9",
           "title": "Audit keputusan",
           "instruction": "Sahkan pelaku, tajuk, keputusan, IP jika tersedia dan masa.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3740,7 +3740,7 @@
           "id": "setiausaha.1.1",
           "title": "Mulakan dari Papan pemuka",
           "instruction": "Sahkan tenant.",
-          "target": "page-content",
+          "target": "nav-primary",
           "route": "/app/{tenant}",
           "wait_for_user": false
         },
@@ -3748,7 +3748,7 @@
           "id": "setiausaha.1.2",
           "title": "Mulakan dari Papan pemuka",
           "instruction": "Tekan Peti Masuk.",
-          "target": "page-content",
+          "target": "nav-primary",
           "route": "/app/{tenant}",
           "wait_for_user": false
         },
@@ -3756,7 +3756,7 @@
           "id": "setiausaha.1.3",
           "title": "Pilih dokumen",
           "instruction": "Semak sumber, pengirim, masa, antivirus, OCR dan duplikat.",
-          "target": "page-content",
+          "target": "inbox-record",
           "route": "/app/{tenant}/peti-masuk",
           "wait_for_user": false
         },
@@ -3812,7 +3812,7 @@
           "id": "setiausaha.1.9",
           "title": "Pantau minit dihantar",
           "instruction": "Tapis Saya Hantar.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -3820,7 +3820,7 @@
           "id": "setiausaha.1.10",
           "title": "Pantau minit dihantar",
           "instruction": "Sahkan penerima dan status.",
-          "target": "page-content",
+          "target": "minit-status",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -3828,7 +3828,7 @@
           "id": "setiausaha.1.11",
           "title": "Semak urutan aktiviti",
           "instruction": "Cari tajuk surat.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3836,7 +3836,7 @@
           "id": "setiausaha.1.12",
           "title": "Semak urutan aktiviti",
           "instruction": "Sahkan klasifikasi dan minit direkod dalam tenant ini sahaja.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -3893,7 +3893,7 @@
           "id": "setiausaha.2.1",
           "title": "Pilih rekod",
           "instruction": "Cari rekod.",
-          "target": "page-content",
+          "target": "records-search",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -3901,7 +3901,7 @@
           "id": "setiausaha.2.2",
           "title": "Pilih rekod",
           "instruction": "Buka Lihat dan semak media serta metadata.",
-          "target": "page-content",
+          "target": "records-view",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -3941,7 +3941,7 @@
           "id": "setiausaha.2.7",
           "title": "Pantau keputusan",
           "instruction": "Semak status permohonan.",
-          "target": "page-content",
+          "target": "approval-status",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -3949,7 +3949,7 @@
           "id": "setiausaha.2.8",
           "title": "Pantau keputusan",
           "instruction": "Jangan hantar pendua.",
-          "target": "page-content",
+          "target": "approval-status",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -3957,7 +3957,7 @@
           "id": "setiausaha.2.9",
           "title": "Sahkan jejak keputusan",
           "instruction": "Cari tajuk.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -3965,7 +3965,7 @@
           "id": "setiausaha.2.10",
           "title": "Sahkan jejak keputusan",
           "instruction": "Sahkan pemohon, penerima dan keputusan.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -4020,7 +4020,7 @@
           "id": "bendahari.1.1",
           "title": "Cari rekod kewangan",
           "instruction": "Cari tajuk/rujukan dan semak fail kod 200/300.",
-          "target": "page-content",
+          "target": "records-search",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -4028,7 +4028,7 @@
           "id": "bendahari.1.2",
           "title": "Cari rekod kewangan",
           "instruction": "Buka rekod yang dibenarkan sahaja.",
-          "target": "page-content",
+          "target": "records-view",
           "route": "/app/{tenant}/records",
           "wait_for_user": false
         },
@@ -4076,7 +4076,7 @@
           "id": "bendahari.1.8",
           "title": "Semak log yang dibenarkan",
           "instruction": "Cari rekod kewangan.",
-          "target": "page-content",
+          "target": "log-search",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -4084,7 +4084,7 @@
           "id": "bendahari.1.9",
           "title": "Semak log yang dibenarkan",
           "instruction": "Sahkan aktiviti dan masa.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -4144,7 +4144,7 @@
           "id": "bendahari.2.1",
           "title": "Semak penggunaan dan pesanan",
           "instruction": "Semak kuota efektif dan baki.",
-          "target": "page-content",
+          "target": "storage-usage",
           "route": "/app/{tenant}/penggunaan",
           "wait_for_user": false
         },
@@ -4152,7 +4152,7 @@
           "id": "bendahari.2.2",
           "title": "Semak penggunaan dan pesanan",
           "instruction": "Pastikan tiada pesanan menunggu yang sama.",
-          "target": "page-content",
+          "target": "storage-orders",
           "route": "/app/{tenant}/penggunaan",
           "wait_for_user": false
         },
@@ -4192,7 +4192,7 @@
           "id": "bendahari.2.7",
           "title": "Jejak permohonan storan",
           "instruction": "Tapis storage_order_created.",
-          "target": "page-content",
+          "target": "log-filters",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -4200,7 +4200,7 @@
           "id": "bendahari.2.8",
           "title": "Jejak permohonan storan",
           "instruction": "Sahkan pemohon, GB, invois dan masa.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         },
@@ -4208,7 +4208,7 @@
           "id": "bendahari.2.9",
           "title": "Jejak permohonan storan",
           "instruction": "Tunggu storage_order_paid sebelum menganggap kuota bertambah.",
-          "target": "page-content",
+          "target": "log-detail",
           "route": "/app/{tenant}/log-aktiviti",
           "wait_for_user": false
         }
@@ -4262,7 +4262,7 @@
           "id": "nazir.1.1",
           "title": "Semak minit",
           "instruction": "Tapis Perlu Tindakan.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4270,7 +4270,7 @@
           "id": "nazir.1.2",
           "title": "Semak minit",
           "instruction": "Baca arahan dan buka rekod.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4294,7 +4294,7 @@
           "id": "nazir.1.5",
           "title": "Semak kelulusan",
           "instruction": "Pilih permohonan yang ditujukan kepada Nazir.",
-          "target": "page-content",
+          "target": "approval-record",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -4302,7 +4302,7 @@
           "id": "nazir.1.6",
           "title": "Semak kelulusan",
           "instruction": "Buka rekod asal.",
-          "target": "page-content",
+          "target": "approval-record",
           "route": "/app/{tenant}/kelulusan",
           "wait_for_user": false
         },
@@ -4379,7 +4379,7 @@
           "id": "ketua_imam.1.1",
           "title": "Pilih arahan",
           "instruction": "Tapis Perlu Tindakan.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4387,7 +4387,7 @@
           "id": "ketua_imam.1.2",
           "title": "Pilih arahan",
           "instruction": "Baca arahan, keutamaan dan tarikh akhir.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4486,7 +4486,7 @@
           "id": "ajk.1.1",
           "title": "Pilih tugasan",
           "instruction": "Tapis Perlu Tindakan.",
-          "target": "page-content",
+          "target": "minit-filters",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4494,7 +4494,7 @@
           "id": "ajk.1.2",
           "title": "Pilih tugasan",
           "instruction": "Baca arahan dan tarikh akhir.",
-          "target": "page-content",
+          "target": "minit-record",
           "route": "/app/{tenant}/minit-saya",
           "wait_for_user": false
         },
@@ -4600,7 +4600,7 @@
           "id": "audit.1.1",
           "title": "Cari sampel audit",
           "instruction": "Gunakan metadata dan julat tarikh.",
-          "target": "page-content",
+          "target": "search-filters",
           "route": "/app/{tenant}/carian",
           "wait_for_user": false
         },
@@ -4608,7 +4608,7 @@
           "id": "audit.1.2",
           "title": "Cari sampel audit",
           "instruction": "Simpan carian jika perlu.",
-          "target": "page-content",
+          "target": "search-favourite",
           "route": "/app/{tenant}/carian",
           "wait_for_user": false
         },
@@ -4616,7 +4616,7 @@
           "id": "audit.1.3",
           "title": "Cari sampel audit",
           "instruction": "Buka hanya hasil yang dibenarkan.",
-          "target": "page-content",
+          "target": "search-result-open",
           "route": "/app/{tenant}/carian",
           "wait_for_user": false
         },
@@ -4656,7 +4656,7 @@
           "id": "audit.1.8",
           "title": "Semak akses sensitif",
           "instruction": "Semak pengguna, tindakan, IP dan masa.",
-          "target": "page-content",
+          "target": "sensitive-log-record",
           "route": "/app/{tenant}/sensitive-access-logs",
           "wait_for_user": false
         },
@@ -4672,7 +4672,7 @@
           "id": "audit.1.10",
           "title": "Semak ringkasan",
           "instruction": "Bandingkan jumlah rekod, retensi dan minit lewat.",
-          "target": "page-content",
+          "target": "report-summary",
           "route": "/app/{tenant}/laporan",
           "wait_for_user": false
         },

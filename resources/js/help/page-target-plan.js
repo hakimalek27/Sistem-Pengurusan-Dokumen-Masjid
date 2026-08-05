@@ -21,6 +21,17 @@
 //   RegistryFilesTable        searchable ✔  filters ✘
 // Sebab itu `minit-saya` tiada entri carian dan `registry-files` tiada entri tapisan —
 // entri yang tidak akan pernah dipadankan ialah dokumentasi palsu.
+//
+// ⚠️ SELEKTOR MESTI DIUKUR PADA HTML SEBENAR, bukan dibaca daripada blade vendor.
+// Versi pertama modul ini menyasar `.fi-ta-filters-trigger-action-ctn` kerana kelas itu
+// kelihatan dalam `vendor/filament/tables/.../index.blade.php` — tetapi ia dirender HANYA
+// `@if ($hasCollapsibleFilters)`, bukan pada susun atur tapisan LALAI. Akibatnya `log-filters`
+// dan `minit-filters` tidak pernah wujud dan lima guide `workflow` gagal pada gate W4
+// pusingan 1 dengan `sasaran dijangka: -:tiada`. Susun atur lalai merender
+// `<x-filament::dropdown class="fi-ta-filters-dropdown">`. Kelas yang dipakai di bawah kini
+// dikunci oleh `tests/Feature/Help/PageTargetSelectorTest.php`, yang mengassert setiap sauh
+// vendor benar-benar hadir dalam HTML halamannya — dan yang akan merah SEBELUM shard e2e
+// yang panjang itu merah jika Filament menukar nama kelasnya.
 
 /**
  * Pemetaan `[selector, target]` mengikut laluan halaman panel tenant.
@@ -40,13 +51,13 @@ export const PAGE_TARGETS = [
         padanan: /^\/app\/[^/]+\/log-aktiviti\/?$/,
         peta: [
             ['.fi-ta-search-field', 'log-search'],
-            ['.fi-ta-filters-trigger-action-ctn', 'log-filters'],
+            ['.fi-ta-filters-dropdown', 'log-filters'],
         ],
     },
     {
         route: '/app/{tenant}/minit-saya',
         padanan: /^\/app\/[^/]+\/minit-saya\/?$/,
-        peta: [['.fi-ta-filters-trigger-action-ctn', 'minit-filters']],
+        peta: [['.fi-ta-filters-dropdown', 'minit-filters']],
     },
     {
         route: '/app/{tenant}/registry-files',

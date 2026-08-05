@@ -613,8 +613,8 @@
       "viewport": "both",
       "state": "ada batch",
       "permission": "disposal.execute",
-      "status": "reserved",
-      "since": "2026-08-03",
+      "status": "active",
+      "since": "2026-08-06",
       "reason": "Ditambah F6-W0 sebagai penambat lajur tindakan; belum dirujuk katalog. Tersedia untuk gelombang W5."
     },
     {
@@ -686,8 +686,8 @@
       "viewport": "both",
       "state": "ada batch",
       "permission": "disposal.view",
-      "status": "reserved",
-      "since": "2026-08-03",
+      "status": "active",
+      "since": "2026-08-06",
       "reason": "Ditambah F6-W0 sebagai penambat lajur; guide tenant.pelupusan v2 menyorot disposal-batches. Tersedia untuk gelombang W5."
     },
     {
@@ -2060,7 +2060,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "records.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2072,7 +2072,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "files.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2084,7 +2084,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "audit.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2096,7 +2096,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "audit.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2108,7 +2108,7 @@
       "viewport": "both",
       "state": "MinitsTable TIADA searchable(); kategori ialah SelectFilter (MinitsTable.php:48)",
       "permission": "minit.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2120,7 +2120,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong",
       "permission": "records.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2132,7 +2132,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong",
       "permission": "files.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2144,7 +2144,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong (sel Medium baris pertama)",
       "permission": "files.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2156,7 +2156,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong (sel Perubahan baris pertama)",
       "permission": "records.update",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2168,7 +2168,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong (sel Status baris pertama)",
       "permission": "records.update",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2180,7 +2180,7 @@
       "viewport": "both",
       "state": "ada permohonan status `menunggu` DAN kebenaran review",
       "permission": "records.update",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2192,7 +2192,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "retention.hold",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2204,7 +2204,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "retention.hold",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2216,7 +2216,7 @@
       "viewport": "both",
       "state": "kebenaran export.create (butang disembunyikan tanpanya)",
       "permission": "export.create",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2228,7 +2228,7 @@
       "viewport": "both",
       "state": "jadual tidak kosong (baris pertama)",
       "permission": "audit.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {
@@ -2240,7 +2240,7 @@
       "viewport": "both",
       "state": "-",
       "permission": "records.view",
-      "status": "reserved",
+      "status": "active",
       "since": "2026-08-06"
     },
     {

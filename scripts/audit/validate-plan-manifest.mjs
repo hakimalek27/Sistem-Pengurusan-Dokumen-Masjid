@@ -46,7 +46,7 @@ const JUSTIFICATIONS = 'resources/help/step-justifications.json';
 // Wave yang kerjanya SUDAH DITUTUP — setiap langkah generik di dalamnya mesti membawa
 // justifikasi eksplisit. Mesti kekal SAMA dengan `FROZEN.justified_waves` dalam
 // `tools/build-manifest.mjs` (disemak eksplisit di bawah supaya dua senarai tidak boleh hanyut).
-const JUSTIFIED_WAVES = ['W0', 'W1', 'W2', 'W3'];
+const JUSTIFIED_WAVES = ['W0', 'W1', 'W2', 'W3', 'W4'];
 const EXPECT = {
     waveGuides: { W0: 2, W1: 0, W2: 0, W3: 29, W4: 14, W5: 35, W6: 3 },
     waveSteps: { W0: 10, W1: 0, W2: 0, W3: 151, W4: 158, W5: 146, W6: 8 },

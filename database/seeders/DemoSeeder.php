@@ -11,11 +11,14 @@ use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
 use App\Models\Approval;
 use App\Models\ClassificationNode;
+use App\Models\DisposalBatch;
 use App\Models\FileAccessGrant;
 use App\Models\Minit;
 use App\Models\Mosque;
 use App\Models\Record;
+use App\Models\RecordCorrectionRequest;
 use App\Models\RegistryFile;
+use App\Models\SensitiveAccessLog;
 use App\Models\User;
 use App\Services\ApprovalService;
 use App\Services\FileTrackingService;
@@ -233,6 +236,64 @@ class DemoSeeder extends Seeder
             if (! $adaTertunggu) {
                 app(ApprovalService::class)->request($record, $kerani, $pelulus, 'Mohon kelulusan untuk tindakan susulan rekod ini.');
             }
+        }
+
+        $this->benihSkrinW4($mam, $record, $kerani);
+    }
+
+    /**
+     * F6-W4 — tiga skrin yang benih demo tinggalkan KOSONG, diukur 6 Ogos 2026:
+     * `DisposalBatch` 0 · `RecordCorrectionRequest` 0 · `SensitiveAccessLog` 0.
+     *
+     * Guide `workflow` W4 kini menyorot kawalan pada ketiga-tiga skrin itu. Tanpa baris,
+     * sasaran tidak dirender dan gate menjadi hijau PALSU (pelajaran W1) — atau merah tanpa
+     * sebab produk. Sebab itu setiap fixture di bawah ialah keadaan yang guide berkenaan
+     * benar-benar terangkan, bukan data hiasan.
+     *
+     * Sengaja TIDAK menyentuh `retention_due_at`/`legal_hold`: sasaran `/retensi`
+     * (`retention-schedule`, `retention-hold`, `retention-export`) diletak pada elemen yang
+     * dirender dalam keadaan KOSONG, jadi ia tidak memerlukan data — dan mengubah tarikh
+     * retensi benih akan menyentuh enjin retensi yang §0.3 melarang.
+     */
+    protected function benihSkrinW4(Mosque $mam, Record $record, User $kerani): void
+    {
+        // Batch pelupusan: `disposal-status` dan `disposal-actions` ialah sel HEADER jadual
+        // batch (`pelupusan-manual.blade.php:24,26`) di dalam cabang `@else` bagi
+        // `$batches->isEmpty()` — satu batch (apa-apa status) sudah cukup merendernya.
+        // Status `menunggu_kelulusan` dipilih supaya butang Lulus guide Pengerusi turut ada.
+        if (! DisposalBatch::query()->where('mosque_id', $mam->id)->exists()) {
+            DisposalBatch::query()->create([
+                'mosque_id' => $mam->id,
+                'kind' => 'manual',
+                'created_by' => $kerani->id,
+                'status' => 'menunggu_kelulusan',
+            ]);
+        }
+
+        // Permohonan pembetulan: guide `betulkan-rekod` langkah 8-10 menyorot lajur
+        // Perubahan/Status dan butang Luluskan, yang hanya wujud untuk status `menunggu`.
+        if (! RecordCorrectionRequest::query()->where('mosque_id', $mam->id)->exists()) {
+            RecordCorrectionRequest::query()->create([
+                'mosque_id' => $mam->id,
+                'record_id' => $record->id,
+                'requested_by' => $kerani->id,
+                'reason' => 'Tajuk rekod tersalah taip semasa klasifikasi; mohon pembetulan tanpa memadam sejarah.',
+                'proposed_changes' => ['title' => $record->title.' (dibetulkan)'],
+                'status' => 'menunggu',
+            ]);
+        }
+
+        // Log akses sulit: guide `workflow.audit` langkah 8 membaca baris pertama.
+        if (! SensitiveAccessLog::query()->where('mosque_id', $mam->id)->exists()) {
+            SensitiveAccessLog::query()->create([
+                'mosque_id' => $mam->id,
+                'is_superadmin' => false,
+                'user_id' => $kerani->id,
+                'record_id' => $record->id,
+                'action' => 'view',
+                'ip' => '127.0.0.1',
+                'user_agent' => 'Benih demo Diwan',
+            ]);
         }
     }
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by": "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs",
-  "catalog_version": "2026.08.05.2",
+  "catalog_version": "2026.08.06.1",
   "sources": {
     "catalogue": "resources/help/guides.json",
     "mobile_defects": "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json",
@@ -91,7 +91,8 @@
       "W0",
       "W1",
       "W2",
-      "W3"
+      "W3",
+      "W4"
     ],
     "cohort_baseline": {
       "resolved_to_generic": "119/124",
@@ -2811,17 +2812,15 @@
           "title": "Mulakan dari Papan pemuka",
           "title_placeholder": false,
           "instruction_preview": "Sahkan tenant MAM/data masjid sendiri.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#2",
@@ -2830,17 +2829,15 @@
           "title": "Mulakan dari Papan pemuka",
           "title_placeholder": false,
           "instruction_preview": "Pada menu kiri, tekan Peti Masuk.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#3",
@@ -2849,17 +2846,15 @@
           "title": "Senarai Peti Masuk",
           "title_placeholder": false,
           "instruction_preview": "Semak sumber, pengirim, tarikh dan masa diterima.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#4",
@@ -2868,17 +2863,15 @@
           "title": "Senarai Peti Masuk",
           "title_placeholder": false,
           "instruction_preview": "Semak Antivirus, OCR dan amaran Duplikat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-scan-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#5",
@@ -3057,17 +3050,15 @@
           "title": "Sahkan minit diedarkan",
           "title_placeholder": false,
           "instruction_preview": "Buka Minit Saya.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#16",
@@ -3076,17 +3067,15 @@
           "title": "Sahkan minit diedarkan",
           "title_placeholder": false,
           "instruction_preview": "Pilih kategori Saya Hantar.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#17",
@@ -3095,17 +3084,15 @@
           "title": "Sahkan minit diedarkan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan rekod, penerima, arahan, keutamaan dan tarikh akhir sepadan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#18",
@@ -3114,17 +3101,15 @@
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "title_placeholder": false,
           "instruction_preview": "Buka Log Aktiviti Masjid.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#19",
@@ -3133,17 +3118,15 @@
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.muat-naik-semak-dan-klasifikasikan-dokumen-serta-hantar-minit#20",
@@ -3152,17 +3135,15 @@
           "title": "Sahkan perjalanan dalam Log Aktiviti",
           "title_placeholder": false,
           "instruction_preview": "Sahkan urutan record_uploaded, record_classified dan minit_created dengan pelaku",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -3186,17 +3167,15 @@
           "title": "Cari rekod",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk atau nombor rujukan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#2",
@@ -3205,17 +3184,15 @@
           "title": "Cari rekod",
           "title_placeholder": false,
           "instruction_preview": "Buka Lihat pada rekod yang tepat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#3",
@@ -3309,17 +3286,15 @@
           "title": "Pantau atau semak permohonan",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan nilai asal dengan cadangan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "correction-diff",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pembetulan-rekod",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#9",
@@ -3328,17 +3303,15 @@
           "title": "Pantau atau semak permohonan",
           "title_placeholder": false,
           "instruction_preview": "Reviewer berkuasa memilih Luluskan atau Tolak.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "correction-decision",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pembetulan-rekod",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#10",
@@ -3347,17 +3320,15 @@
           "title": "Pantau atau semak permohonan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan status dan catatan semakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "correction-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pembetulan-rekod",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#11",
@@ -3366,17 +3337,15 @@
           "title": "Semak jejak pembetulan",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#12",
@@ -3385,17 +3354,15 @@
           "title": "Semak jejak pembetulan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pemohon, reviewer, keputusan dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.betulkan-rekod-salah-tawan-tanpa-memadam-sejarah#13",
@@ -3404,17 +3371,15 @@
           "title": "Semak jejak pembetulan",
           "title_placeholder": false,
           "instruction_preview": "Pastikan tiada perubahan senyap tanpa log.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -3438,17 +3403,15 @@
           "title": "Pilih fail",
           "title_placeholder": false,
           "instruction_preview": "Cari nombor fail.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "regfiles-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.urus-fail-fizikal-atau-hibrid-dan-jejak-penjagaan#2",
@@ -3457,17 +3420,15 @@
           "title": "Pilih fail",
           "title_placeholder": false,
           "instruction_preview": "Semak Medium dan Status.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "regfiles-medium",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.urus-fail-fizikal-atau-hibrid-dan-jejak-penjagaan#3",
@@ -3476,17 +3437,15 @@
           "title": "Pilih fail",
           "title_placeholder": false,
           "instruction_preview": "Buka Lihat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "regfiles-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.urus-fail-fizikal-atau-hibrid-dan-jejak-penjagaan#4",
@@ -3631,17 +3590,15 @@
           "title": "Semak log pergerakan",
           "title_placeholder": false,
           "instruction_preview": "Tapis jenis aktiviti fail fizikal.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.urus-fail-fizikal-atau-hibrid-dan-jejak-penjagaan#13",
@@ -3650,17 +3607,15 @@
           "title": "Semak log pergerakan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pemegang, lokasi asal/tujuan, pelaku dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -3684,17 +3639,15 @@
           "title": "Semak kelayakan retensi",
           "title_placeholder": false,
           "instruction_preview": "Semak tarikh cukup tempoh dan peraturan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-schedule",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#2",
@@ -3703,17 +3656,15 @@
           "title": "Semak kelayakan retensi",
           "title_placeholder": false,
           "instruction_preview": "Pastikan Legal Hold tidak aktif.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-hold",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#3",
@@ -3722,17 +3673,15 @@
           "title": "Semak kelayakan retensi",
           "title_placeholder": false,
           "instruction_preview": "Sediakan eksport luar jika diperlukan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-export",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#4",
@@ -3741,17 +3690,15 @@
           "title": "Buka Pelupusan",
           "title_placeholder": false,
           "instruction_preview": "Semak calon dan batch sedia ada.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-candidates",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#5",
@@ -3760,17 +3707,15 @@
           "title": "Buka Pelupusan",
           "title_placeholder": false,
           "instruction_preview": "Jangan cipta batch pendua.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-batches",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#6",
@@ -3830,17 +3775,15 @@
           "title": "Laksana selepas diluluskan",
           "title_placeholder": false,
           "instruction_preview": "Tunggu status Lulus.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#10",
@@ -3849,17 +3792,15 @@
           "title": "Laksana selepas diluluskan",
           "title_placeholder": false,
           "instruction_preview": "Tekan Laksana sekali.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-actions",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#11",
@@ -3868,17 +3809,15 @@
           "title": "Laksana selepas diluluskan",
           "title_placeholder": false,
           "instruction_preview": "Muat turun sijil apabila status Selesai.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-actions",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#12",
@@ -3887,17 +3826,15 @@
           "title": "Sahkan pemisahan tugas",
           "title_placeholder": false,
           "instruction_preview": "Sahkan penyedia, pelulus dan pelaksana ialah peristiwa berasingan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.admin_masjid.sediakan-dan-laksanakan-pelupusan-terkawal#13",
@@ -3906,17 +3843,15 @@
           "title": "Sahkan pemisahan tugas",
           "title_placeholder": false,
           "instruction_preview": "Semak tajuk rekod, batch dan masa setiap tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -3940,17 +3875,15 @@
           "title": "Pilih minit tindakan",
           "title_placeholder": false,
           "instruction_preview": "Tapis Perlu Tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.terima-baca-balas-dan-selesaikan-minit#2",
@@ -3959,17 +3892,15 @@
           "title": "Pilih minit tindakan",
           "title_placeholder": false,
           "instruction_preview": "Baca pengirim, arahan, keutamaan dan tarikh akhir.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.terima-baca-balas-dan-selesaikan-minit#3",
@@ -3978,17 +3909,15 @@
           "title": "Pilih minit tindakan",
           "title_placeholder": false,
           "instruction_preview": "Buka rekod berkaitan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.terima-baca-balas-dan-selesaikan-minit#4",
@@ -4116,17 +4045,15 @@
           "title": "Sahkan timeline minit",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.terima-baca-balas-dan-selesaikan-minit#12",
@@ -4135,17 +4062,15 @@
           "title": "Sahkan timeline minit",
           "title_placeholder": false,
           "instruction_preview": "Sahkan baca, balas dan selesai direkod atas nama pelaku yang betul.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -4169,17 +4094,15 @@
           "title": "Pilih permohonan kelulusan",
           "title_placeholder": false,
           "instruction_preview": "Pilih item Menunggu yang ditujukan kepada anda.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan#2",
@@ -4188,17 +4111,15 @@
           "title": "Pilih permohonan kelulusan",
           "title_placeholder": false,
           "instruction_preview": "Buka rekod asal sebelum memutuskan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan#3",
@@ -4258,17 +4179,15 @@
           "title": "Semak batch pelupusan",
           "title_placeholder": false,
           "instruction_preview": "Semak setiap rekod, retensi, hold dan sandaran.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-batches",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan#7",
@@ -4277,17 +4196,15 @@
           "title": "Semak batch pelupusan",
           "title_placeholder": false,
           "instruction_preview": "Tekan Lulus hanya jika penyedia bukan diri sendiri dan semua bukti lengkap.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "disposal-actions",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pelupusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan#8",
@@ -4296,17 +4213,15 @@
           "title": "Audit keputusan",
           "title_placeholder": false,
           "instruction_preview": "Tapis kelulusan/pelupusan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.pengerusi.buat-keputusan-kelulusan-atau-pelupusan#9",
@@ -4315,17 +4230,15 @@
           "title": "Audit keputusan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pelaku, tajuk, keputusan, IP jika tersedia dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -4349,17 +4262,15 @@
           "title": "Mulakan dari Papan pemuka",
           "title_placeholder": false,
           "instruction_preview": "Sahkan tenant.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#2",
@@ -4368,17 +4279,15 @@
           "title": "Mulakan dari Papan pemuka",
           "title_placeholder": false,
           "instruction_preview": "Tekan Peti Masuk.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#3",
@@ -4387,17 +4296,15 @@
           "title": "Pilih dokumen",
           "title_placeholder": false,
           "instruction_preview": "Semak sumber, pengirim, masa, antivirus, OCR dan duplikat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#4",
@@ -4508,17 +4415,15 @@
           "title": "Pantau minit dihantar",
           "title_placeholder": false,
           "instruction_preview": "Tapis Saya Hantar.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#11",
@@ -4527,17 +4432,15 @@
           "title": "Pantau minit dihantar",
           "title_placeholder": false,
           "instruction_preview": "Sahkan penerima dan status.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#12",
@@ -4546,17 +4449,15 @@
           "title": "Semak urutan aktiviti",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk surat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#13",
@@ -4565,17 +4466,15 @@
           "title": "Semak urutan aktiviti",
           "title_placeholder": false,
           "instruction_preview": "Sahkan klasifikasi dan minit direkod dalam tenant ini sahaja.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -4599,17 +4498,15 @@
           "title": "Pilih rekod",
           "title_placeholder": false,
           "instruction_preview": "Cari rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#2",
@@ -4618,17 +4515,15 @@
           "title": "Pilih rekod",
           "title_placeholder": false,
           "instruction_preview": "Buka Lihat dan semak media serta metadata.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#3",
@@ -4705,17 +4600,15 @@
           "title": "Pantau keputusan",
           "title_placeholder": false,
           "instruction_preview": "Semak status permohonan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#8",
@@ -4724,17 +4617,15 @@
           "title": "Pantau keputusan",
           "title_placeholder": false,
           "instruction_preview": "Jangan hantar pendua.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#9",
@@ -4743,17 +4634,15 @@
           "title": "Sahkan jejak keputusan",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.setiausaha.mohon-kelulusan-dan-pembetulan-rekod#10",
@@ -4762,17 +4651,15 @@
           "title": "Sahkan jejak keputusan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pemohon, penerima dan keputusan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -4796,17 +4683,15 @@
           "title": "Cari rekod kewangan",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk/rujukan dan semak fail kod 200/300.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.urus-rekod-kewangan-dan-minit#2",
@@ -4815,17 +4700,15 @@
           "title": "Cari rekod kewangan",
           "title_placeholder": false,
           "instruction_preview": "Buka rekod yang dibenarkan sahaja.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.urus-rekod-kewangan-dan-minit#3",
@@ -4919,17 +4802,15 @@
           "title": "Semak log yang dibenarkan",
           "title_placeholder": false,
           "instruction_preview": "Cari rekod kewangan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.urus-rekod-kewangan-dan-minit#9",
@@ -4938,17 +4819,15 @@
           "title": "Semak log yang dibenarkan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan aktiviti dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.urus-rekod-kewangan-dan-minit#10",
@@ -4965,9 +4844,9 @@
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Langkah menyatakan KESAN penapisan kebenaran terhadap hasil log: rekod pentadbiran sulit di luar akses bendahari tidak dipulangkan sama sekali, jadi tiada elemen DOM yang boleh disorot. Amaran konsep, bukan kawalan skrin.",
+          "since": "2026-08-06"
         }
       ]
     },
@@ -4991,17 +4870,15 @@
           "title": "Semak penggunaan dan pesanan",
           "title_placeholder": false,
           "instruction_preview": "Semak kuota efektif dan baki.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "storage-usage",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/penggunaan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.mohon-storan-tambahan#2",
@@ -5010,17 +4887,15 @@
           "title": "Semak penggunaan dan pesanan",
           "title_placeholder": false,
           "instruction_preview": "Pastikan tiada pesanan menunggu yang sama.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "storage-orders",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/penggunaan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.mohon-storan-tambahan#3",
@@ -5097,17 +4972,15 @@
           "title": "Jejak permohonan storan",
           "title_placeholder": false,
           "instruction_preview": "Tapis storage_order_created.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.mohon-storan-tambahan#8",
@@ -5116,17 +4989,15 @@
           "title": "Jejak permohonan storan",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pemohon, GB, invois dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.bendahari.mohon-storan-tambahan#9",
@@ -5135,17 +5006,15 @@
           "title": "Jejak permohonan storan",
           "title_placeholder": false,
           "instruction_preview": "Tunggu storage_order_paid sebelum menganggap kuota bertambah.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -5169,17 +5038,15 @@
           "title": "Semak minit",
           "title_placeholder": false,
           "instruction_preview": "Tapis Perlu Tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.nazir.proses-minit-dan-keputusan-kelulusan#2",
@@ -5188,17 +5055,15 @@
           "title": "Semak minit",
           "title_placeholder": false,
           "instruction_preview": "Baca arahan dan buka rekod.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.nazir.proses-minit-dan-keputusan-kelulusan#3",
@@ -5241,17 +5106,15 @@
           "title": "Semak kelulusan",
           "title_placeholder": false,
           "instruction_preview": "Pilih permohonan yang ditujukan kepada Nazir.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.nazir.proses-minit-dan-keputusan-kelulusan#6",
@@ -5260,17 +5123,15 @@
           "title": "Semak kelulusan",
           "title_placeholder": false,
           "instruction_preview": "Buka rekod asal.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "approval-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/kelulusan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.nazir.proses-minit-dan-keputusan-kelulusan#7",
@@ -5345,17 +5206,15 @@
           "title": "Pilih arahan",
           "title_placeholder": false,
           "instruction_preview": "Tapis Perlu Tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.ketua_imam.laksanakan-arahan-minit#2",
@@ -5364,17 +5223,15 @@
           "title": "Pilih arahan",
           "title_placeholder": false,
           "instruction_preview": "Baca arahan, keutamaan dan tarikh akhir.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.ketua_imam.laksanakan-arahan-minit#3",
@@ -5500,17 +5357,15 @@
           "title": "Pilih tugasan",
           "title_placeholder": false,
           "instruction_preview": "Tapis Perlu Tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.ajk.baca-rekod-dan-selesaikan-tugasan-minit#2",
@@ -5519,17 +5374,15 @@
           "title": "Pilih tugasan",
           "title_placeholder": false,
           "instruction_preview": "Baca arahan dan tarikh akhir.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.ajk.baca-rekod-dan-selesaikan-tugasan-minit#3",
@@ -5655,17 +5508,15 @@
           "title": "Cari sampel audit",
           "title_placeholder": false,
           "instruction_preview": "Gunakan metadata dan julat tarikh.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#2",
@@ -5674,17 +5525,15 @@
           "title": "Cari sampel audit",
           "title_placeholder": false,
           "instruction_preview": "Simpan carian jika perlu.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-favourite",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#3",
@@ -5693,17 +5542,15 @@
           "title": "Cari sampel audit",
           "title_placeholder": false,
           "instruction_preview": "Buka hanya hasil yang dibenarkan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-result-open",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#4",
@@ -5780,17 +5627,15 @@
           "title": "Semak akses sensitif",
           "title_placeholder": false,
           "instruction_preview": "Semak pengguna, tindakan, IP dan masa.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "sensitive-log-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/sensitive-access-logs",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#9",
@@ -5807,9 +5652,9 @@
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Perbandingan dibuat terhadap dokumen skop audit di LUAR Diwan; tiada kawalan dalam sistem yang mewakili \"skop audit\", jadi tiada sasaran yang jujur. Sama seperti langkah kerja-luar-sistem yang W3 kelaskan.",
+          "since": "2026-08-06"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#10",
@@ -5818,17 +5663,15 @@
           "title": "Semak ringkasan",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan jumlah rekod, retensi dan minit lewat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "report-summary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/laporan",
           "wave": "W4",
           "shard": "workflow",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "workflow.audit.laksanakan-semakan-audit-baca-sahaja#11",
@@ -5846,8 +5689,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W4 (F6)",
-          "since": "2026-08-02"
+          "reason": "Butang eksport /laporan (`report-export`) diauthorize oleh `export.create`, dan peranan `audit` DIUKUR tidak memilikinya (probe canIn 6 Ogos 2026), jadi butang itu tidak pernah dirender untuk khalayak guide ini. Arahan itu sendiri bersyarat: \"Eksport hanya jika dibenarkan\".",
+          "since": "2026-08-06",
+          "followup": "Jika peranan audit diberi export.create pada masa hadapan, tukar sasaran langkah ini kepada `report-export`."
         }
       ]
     },

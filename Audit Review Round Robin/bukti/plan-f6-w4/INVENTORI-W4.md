@@ -163,13 +163,15 @@ Setiap satu mesti masuk `resources/help/step-justifications.json` dengan sebab �
 ## 5. Ramalan (ditulis SEBELUM kod)
 
 1. Struktur kekal: `guides 83`, `steps 473`, `unique_step_ids 470`.
-2. `wave W4.guides` akan jadi **0** dan guide berpindah ke... **tiada wave lain** — W4 ialah
-   wave TERAKHIR shard `workflow`, jadi jangkaan: `W4 14 → 0`, `W3 29 → 29` (shard berbeza),
-   dan **jumlah 83/473 kekal**. ⚠️ Jika penjaga melaporkan `W4.guides` bukan 0, ertinya
-   ada langkah tertinggal — bukan ralat penjaga.
-3. `generic_declared` **236 → ≈8–12** (baki = W5 144 + W6 2 belum disentuh… **SALAH**:
-   W5/W6 masih generik, jadi ramalan betul ialah **236 → 236 − 82 + (justifikasi W4)**
-   iaitu **≈154–160**. Angka tepat direkod dalam laporan fasa.
+2. ~~`wave W4.guides` akan jadi **0**~~ — **❌ SALAH, dibetulkan 6 Ogos.** Diukur: `W4` kekal
+   **14g/158s**, dan itu BETUL. `build-manifest.mjs:165` mendefinisikan
+   `workflow → hasActionGeneric ? 'W2' : 'W4'`, jadi **W4 ialah baldi TERMINAL** shard
+   `workflow`: guide masuk dan kekal di sana. Tiada wave lebih lewat untuk dipindahkan.
+   Amaran saya ("jika W4.guides bukan 0, ada langkah tertinggal") juga salah — jadual beku
+   sudah betul pada 14/158 sejak batch W2. Yang bergerak ialah `generic_declared`, bukan
+   kiraan guide. **Jumlah 83/473 kekal** ✔ (bahagian itu betul).
+3. `generic_declared` **236 → ≈154–160** — **✔ TEPAT: 157.** (`specific` 237 → **316**;
+   baki generik: W5 144 · W3 8 · W4 3 · W6 2.)
 4. `action_generic` kekal **0** pada setiap wave.
 5. ~~Nama aset Vite **KEKAL** (`help-D0185fq1.js` / `help-CrH0eDM1.css`) kerana W4 tidak
    menyentuh `resources/js/help*` — hanya Blade/PHP/katalog.~~

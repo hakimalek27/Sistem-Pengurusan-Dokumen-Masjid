@@ -124,7 +124,7 @@ test('setiap langkah generik dalam wave TERTUTUP membawa justifikasi eksplisit b
     $m = planManifest();
     $tertutup = $m['invariants']['justified_waves'] ?? null;
     expect($tertutup)->toBeArray('manifest tiada `justified_waves` — jana semula manifest')
-        ->and($tertutup)->toBe(['W0', 'W1', 'W2', 'W3']);
+        ->and($tertutup)->toBe(['W0', 'W1', 'W2', 'W3', 'W4']);
 
     $allow = json_decode((string) file_get_contents(resource_path('help/step-justifications.json')), true, flags: JSON_THROW_ON_ERROR);
     $kunciAllow = collect($allow['justifications'])->pluck('key');

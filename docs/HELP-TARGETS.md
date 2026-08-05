@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (148) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (166) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -54,11 +54,13 @@
 | `minit-reply-submit` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:88` | both | modal:Balas & Edarkan terbuka | minit.view |
 | `minit-record` | workflow | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:48` | both | jadual tidak kosong (sel baris pertama) | minit.view |
 | `minit-status` | screen | `/app/{tenant}/minit-saya` | `app/Filament/App/Resources/Minits/Tables/MinitsTable.php:38` | both | jadual tidak kosong (sel baris pertama) | minit.view |
+| `disposal-actions` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:28` | both | ada batch | disposal.execute |
 | `disposal-batches` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:19` | both | - | disposal.view |
 | `disposal-candidates` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:14` | both | - | disposal.view |
 | `disposal-confirm` | screen | `/app/{tenant}/pelupusan` | `app/Filament/App/Pages/PelupusanManual.php:96` | both | modal:Sedia Senarai Semakan terbuka | disposal.prepare |
 | `disposal-prepare` | screen|tenant | `/app/{tenant}/pelupusan` | `app/Filament/App/Pages/PelupusanManual.php:94` | both | - | disposal.prepare |
 | `disposal-records` | screen | `/app/{tenant}/pelupusan` | `app/Filament/App/Pages/PelupusanManual.php:104` | both | modal:Sedia Senarai Semakan terbuka | disposal.prepare |
+| `disposal-status` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:26` | both | ada batch | disposal.view |
 | `disposal-warning` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:6` | both | - | disposal.view |
 | `storage-add` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:51` | both | - | storage.order |
 | `storage-blocks` | screen | `/app/{tenant}/penggunaan` | `app/Filament/App/Pages/PenggunaanStoran.php:60` | both | modal:Tambah Storan terbuka | storage.order |
@@ -157,33 +159,6 @@
 | `registration-organisation` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:22` | both | wizard pendaftaran langkah 1 | - |
 | `login-identity` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:16` | both | borang belum dihantar | public |
 | `login-submit` | public | `/log-masuk` | `resources/views/livewire/request-magic-link.blade.php:19` | both | borang belum dihantar | public |
-
-## Sasaran RIZAB (39) — wujud dlm DOM, belum dirujuk katalog
-
-| ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
-|---|---|---|---|---|---|---|
-| `members-invite-name` | screen | `/app/{tenant}/ahli-peranan` | `app/Filament/App/Pages/AhliPeranan.php:144` | both | modal:Jemput Ahli terbuka | users.manage |
-| `delegation-ends` | screen | `/app/{tenant}/delegasi/create` | `app/Filament/App/Resources/Delegations/Schemas/DelegationForm.php:27` | both | - | delegations.manage |
-| `favourite-open` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:9` | both | ada kegemaran | favourites.view |
-| `favourite-remove` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:13` | both | ada kegemaran | favourites.view |
-| `approval-tolak` | screen | `/app/{tenant}/kelulusan` | `app/Filament/App/Resources/Approvals/Tables/ApprovalsTable.php:59` | both | jadual tidak kosong (baris pertama, status menunggu) | approvals.decide |
-| `disposal-actions` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:28` | both | ada batch | disposal.execute |
-| `disposal-status` | tenant | `/app/{tenant}/pelupusan` | `resources/views/filament/app/pages/pelupusan-manual.blade.php:26` | both | ada batch | disposal.view |
-| `onboarding-jawatan` | screen | `/app/{tenant}/persediaan` | `app/Filament/App/Pages/OnboardingWizard.php:75` | both | wizard langkah 1 | mosque.settings |
-| `inbox-classification-modal` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:87` | both | modal:klasifikasi terbuka | inbox.classify |
-| `profil-password` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:107` | both | modal:Tetapkan Kata Laluan terbuka | - |
-| `regfile-location` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:44` | both | - | files.manage |
-| `retention-prefix` | screen | `/app/{tenant}/retensi-peraturan/create` | `app/Filament/App/Resources/RetentionRules/RetentionRuleResource.php:58` | both | - | retention.manage |
-| `what-next` | tenant|admin | `/app/{tenant}|/admin` | `resources/views/filament/widgets/what-next.blade.php:2` | both | - | - |
-| `registration-next` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:85` | both | wizard pendaftaran langkah 1-2 | - |
-| `registration-previous` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:83` | both | wizard pendaftaran langkah ≥2 | - |
-| `registration-submit` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:87` | both | wizard pendaftaran langkah 3 | - |
-| `viewer-download` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:51` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
-| `viewer-find` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:47` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
-| `viewer-page-input` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:40` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
-| `viewer-page-prev` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:39` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
-| `viewer-print` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:50` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
-| `viewer-zoom-in` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:45` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
 | `records-search` | workflow | `/app/{tenant}/records` | `js:decorateTargets (resources/js/help.js:92)` | both | - | records.view |
 | `regfiles-search` | workflow | `/app/{tenant}/registry-files` | `js:decorateTargets (resources/js/help.js:110)` | both | - | files.view |
 | `log-search` | workflow | `/app/{tenant}/log-aktiviti` | `js:decorateTargets (resources/js/help.js:98)` | both | - | audit.view |
@@ -200,6 +175,31 @@
 | `retention-export` | workflow | `/app/{tenant}/retensi` | `app/Filament/App/Pages/RetensiPegangan.php:79` | both | kebenaran export.create (butang disembunyikan tanpanya) | export.create |
 | `sensitive-log-record` | workflow | `/app/{tenant}/sensitive-access-logs` | `app/Filament/App/Resources/SensitiveAccessLogs/Tables/SensitiveAccessLogsTable.php:34` | both | jadual tidak kosong (baris pertama) | audit.view |
 | `report-summary` | workflow | `/app/{tenant}/laporan` | `resources/views/filament/app/pages/laporan.blade.php:5` | both | - | records.view |
+
+## Sasaran RIZAB (21) — wujud dlm DOM, belum dirujuk katalog
+
+| ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
+|---|---|---|---|---|---|---|
+| `members-invite-name` | screen | `/app/{tenant}/ahli-peranan` | `app/Filament/App/Pages/AhliPeranan.php:144` | both | modal:Jemput Ahli terbuka | users.manage |
+| `delegation-ends` | screen | `/app/{tenant}/delegasi/create` | `app/Filament/App/Resources/Delegations/Schemas/DelegationForm.php:27` | both | - | delegations.manage |
+| `favourite-open` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:9` | both | ada kegemaran | favourites.view |
+| `favourite-remove` | tenant | `/app/{tenant}/kegemaran` | `resources/views/filament/app/pages/kegemaran.blade.php:13` | both | ada kegemaran | favourites.view |
+| `approval-tolak` | screen | `/app/{tenant}/kelulusan` | `app/Filament/App/Resources/Approvals/Tables/ApprovalsTable.php:59` | both | jadual tidak kosong (baris pertama, status menunggu) | approvals.decide |
+| `onboarding-jawatan` | screen | `/app/{tenant}/persediaan` | `app/Filament/App/Pages/OnboardingWizard.php:75` | both | wizard langkah 1 | mosque.settings |
+| `inbox-classification-modal` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:87` | both | modal:klasifikasi terbuka | inbox.classify |
+| `profil-password` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:107` | both | modal:Tetapkan Kata Laluan terbuka | - |
+| `regfile-location` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:44` | both | - | files.manage |
+| `retention-prefix` | screen | `/app/{tenant}/retensi-peraturan/create` | `app/Filament/App/Resources/RetentionRules/RetentionRuleResource.php:58` | both | - | retention.manage |
+| `what-next` | tenant|admin | `/app/{tenant}|/admin` | `resources/views/filament/widgets/what-next.blade.php:2` | both | - | - |
+| `registration-next` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:85` | both | wizard pendaftaran langkah 1-2 | - |
+| `registration-previous` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:83` | both | wizard pendaftaran langkah ≥2 | - |
+| `registration-submit` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:87` | both | wizard pendaftaran langkah 3 | - |
+| `viewer-download` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:51` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `viewer-find` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:47` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `viewer-page-input` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:40` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `viewer-page-prev` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:39` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `viewer-print` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:50` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
+| `viewer-zoom-in` | screen | `/viewer/{media}` | `resources/views/document-viewer.blade.php:45` | both | halaman viewer TIADA runtime bantuan — rujuk nota F7 | records.view |
 | `report-export` | workflow | `/app/{tenant}/laporan` | `app/Filament/App/Pages/Laporan.php:48` | both | kebenaran export.create | export.create |
 
 - `members-invite-name`: - (sejak 2026-08-04)
@@ -207,8 +207,6 @@
 - `favourite-open`: Ditambah F6-W0; guide tenant.kegemaran v2 menyorot favourite-item yang membungkusnya. Tersedia untuk W5. (sejak 2026-08-03)
 - `favourite-remove`: Ditambah F6-W0; butang buang di dalam favourite-item. Tersedia untuk W5. (sejak 2026-08-03)
 - `approval-tolak`: - (sejak 2026-08-04)
-- `disposal-actions`: Ditambah F6-W0 sebagai penambat lajur tindakan; belum dirujuk katalog. Tersedia untuk gelombang W5. (sejak 2026-08-03)
-- `disposal-status`: Ditambah F6-W0 sebagai penambat lajur; guide tenant.pelupusan v2 menyorot disposal-batches. Tersedia untuk gelombang W5. (sejak 2026-08-03)
 - `onboarding-jawatan`: - (sejak 2026-08-04)
 - `inbox-classification-modal`: Wujud dlm DOM; sasaran rizab langkah orientasi (C12 — jangan guna dua kali berturut) (sejak 2026-08-02)
 - `profil-password`: - (sejak 2026-08-04)
@@ -224,22 +222,6 @@
 - `viewer-page-prev`: - (sejak 2026-08-04)
 - `viewer-print`: - (sejak 2026-08-04)
 - `viewer-zoom-in`: - (sejak 2026-08-04)
-- `records-search`: - (sejak 2026-08-06)
-- `regfiles-search`: - (sejak 2026-08-06)
-- `log-search`: - (sejak 2026-08-06)
-- `log-filters`: - (sejak 2026-08-06)
-- `minit-filters`: - (sejak 2026-08-06)
-- `records-view`: - (sejak 2026-08-06)
-- `regfiles-view`: - (sejak 2026-08-06)
-- `regfiles-medium`: - (sejak 2026-08-06)
-- `correction-diff`: - (sejak 2026-08-06)
-- `correction-status`: - (sejak 2026-08-06)
-- `correction-decision`: - (sejak 2026-08-06)
-- `retention-schedule`: - (sejak 2026-08-06)
-- `retention-hold`: - (sejak 2026-08-06)
-- `retention-export`: - (sejak 2026-08-06)
-- `sensitive-log-record`: - (sejak 2026-08-06)
-- `report-summary`: - (sejak 2026-08-06)
 - `report-export`: - (sejak 2026-08-06)
 
 ## Peraturan (gate registry §7.2)
