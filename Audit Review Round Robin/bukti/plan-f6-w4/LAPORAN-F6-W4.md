@@ -454,9 +454,64 @@ daripada tekaan pertama saya.** Sahkan daripada trace sebelum membaiki.
 | 3 | `e7c0fa6` | 12/15 | `route===null` — manifest isi route guide |
 | 4 | `6f1a249` | **13/15** | — (baki: G3 langkah ekor pertama) |
 
-🔑 **Corak yang mendasari KEEMPAT-EMPAT punca:** setiap tempat yang menyimpulkan sesuatu
+🔑 **Corak yang mendasari EMPAT punca pertama:** setiap tempat yang menyimpulkan sesuatu
 daripada "langkah ini generik" — sama ada `status === 'specific'` atau `route === null` —
 pecah serentak apabila W4 menjadikan semua langkah spesifik. **Cari corak ini dahulu pada W5.**
+
+### c.16 Punca KELIMA — `/minit-saya` kosong untuk setiausaha (guide terakhir)
+
+⚠️ **HIPOTESIS SAYA DALAM §c.14 SALAH, DAN DIBATALKAN DI SINI.** Saya meneka sync F2 memaju
+tour sendiri sehingga klik manual menjadi kemajuan KEDUA. Jejak ralat menolaknya terus:
+
+```
+- Expected substring:  11 daripada 13
++ Received string:     10 daripada 13  Kembali  Buat pada skrin
+```
+
+Kaunter **kekal 10** — ia tidak melompat ke 12, jadi tiada kemajuan berganda. Dan label CTA
+ialah **"Buat pada skrin"**, bukan "Seterusnya": runtime mengelaskan langkah 10 sebagai
+langkah **TINDAKAN**, jadi ia memang TIDAK sepatutnya maju. Assertion `+1` itu sendiri yang
+salah tempat — tetapi itu pun gejala, bukan punca.
+
+**Punca sebenar, diukur daripada DB selepas reproduksi tempatan:**
+
+```
+minit dlm tenant: 1
+  minit#1 from_user=2 (kerani/admin_masjid)
+setiausaha (user 4) sebagai penerima: 0
+```
+
+`MinitResource::getEloquentQuery()` berskop `from_user_id = saya OR saya penerima`.
+Setiausaha bukan kedua-duanya → **`/minit-saya` KOSONG untuk peranan itu**. Koreografi gate
+menekan "Seterusnya" pada langkah penerima tanpa mengisinya, jadi klasifikasinya tidak
+mencipta minit.
+
+**Satu punca, dua gejala berantai:** sasaran langkah 11 (`minit-status`, sel baris) tidak
+pernah dirender → `stepAdvancePlan` mengelaskan langkah 10 sebagai TINDAKAN → gate melaporkan
+"klik maju tidak menambah tepat satu langkah", yang **menyembunyikan** punca sebenar.
+
+**Fix:** benih demo memberi setiausaha satu minit yang benar-benar DIHANTARNYA — tepat seperti
+yang guide `klasifikasikan-surat-masuk-dan-edarkan-minit` terangkan. Penerima TUNGGAL
+(pengerusi) yang pasti boleh melihat rekod, kerana `MinitService` menolak SELURUH minit jika
+satu penerima tidak dibenarkan (punca CI W3).
+
+**Bukti:**
+
+```
+guide itu: GAGAL 1.4m  →  LULUS 30.7s   (larian tunggal tempatan, shard workflow)
+Pest: 573 lulus / 1 skip (5457 assertion) selepas perubahan benih
+```
+
+✅ **DISAHKAN VISUAL** (Chrome, akaun demo setiausaha, deep-link langkah 10): baris minit
+"Daripada: **Setiausaha (MAM)**" kini kelihatan, dan CTA popover ialah **"Seterusnya"** —
+bukan lagi "Buat pada skrin". Itu mengesahkan `stepAdvancePlan` kini memilih `advance`, tepat
+kerana sasaran langkah 11 sudah wujud.
+
+🔑 **Pelajaran:** mesej gate menuding pada *assertion* yang gagal, bukan pada keadaan yang
+menyebabkannya. "Klik maju tidak menambah" sebenarnya bermaksud "skrin ini kosong untuk
+peranan ini". Ini punca **ketiga** dalam W4 yang berpunca daripada skrin kosong untuk peranan
+tertentu (selepas `/pembetulan-rekod`, `/sensitive-access-logs`, dan `/kelulusan`).
+**Pada W5: semak KEKOSONGAN skrin per-peranan sebelum memetakan sasaran baris.**
 
 ## (d) Kriteria Siap W4
 

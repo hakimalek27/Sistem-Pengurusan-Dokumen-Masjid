@@ -90,6 +90,9 @@ sudo docker compose ps --format '{{.Name}}  {{.State}}'
 sudo docker compose exec -T app php artisan diwan:health < /dev/null
 sudo docker compose exec -T app php artisan diwan:smoke  < /dev/null
 curl -fsS -o /dev/null -w 'GET /up -> %{http_code}\n' https://bakwim.my/up
-sudo docker compose exec -T app php artisan tinker --execute='echo "failed_jobs=".DB::table("failed_jobs")->count().PHP_EOL;' < /dev/null
+# `tinker` memerlukan HOME boleh-tulis; tanpanya psysh gagal dengan
+# "Writing to directory /var/www/.config/psysh is not allowed" dan skrip keluar 1
+# walaupun deploy sudah berjaya sepenuhnya (berlaku pada Deploy 10).
+sudo docker compose exec -T -e HOME=/tmp app php artisan tinker --execute='echo "failed_jobs=".DB::table("failed_jobs")->count().PHP_EOL;' < /dev/null
 
 echo "═══ DEPLOY 10 SELESAI ═══"

@@ -1,6 +1,43 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W4 KOD SIAP, CI pusingan 4 berjalan (6 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W4 **LIVE** (Deploy 10), seterusnya F6-W5 (6 Ogos)
+
+**local = origin = server = `cea55da`** · imej produksi dibina daripada `cea55da`
+(label revisi membuktikannya) · **CI run 31095436926 = 7/7 HIJAU**, shard `workflow` **15/15**.
+
+📄 `bukti/plan-f6-w4/LAPORAN-F6-W4.md` (§c.10–c.16) · `bukti/deploy-10/BUKTI-DEPLOY-10.md`
+
+### Apa yang LIVE
+
+```
+catalog_version 2026.08.06.1 · guide 83 · langkah 473 · generik 159 (drp 236)
+aset help-D0185fq1.js → help-B9tTj0Zg.js (css help-CrH0eDM1.css KEKAL)
+smoke 9/9 · health OK · /up 200 · 8/8 container · failed_jobs 0 · cakera 61%
+```
+
+W4 menutup **82 langkah generik terakhir shard `workflow`**: 79 dinaikkan kepada sasaran DOM
+sebenar, 5 dijustifikasikan dengan sebab yang diukur.
+
+### 🔜 SETERUSNYA: F6-W5 — wave TERBESAR yang tinggal
+
+**35 guide / 146 langkah / 144 generik**, shard `tenant-admin-public`. Ia satu-satunya wave
+yang menggerakkan metrik KOHORT 25/124 (§7.3).
+
+⚠️ **Semakan PERTAMA sebelum memetakan sebarang sasaran baris:** *adakah skrin ini ada baris
+untuk peranan yang guide ini tujukan?* **TIGA** daripada lima punca W4 ialah skrin kosong
+untuk peranan tertentu (`/pembetulan-rekod`, `/sensitive-access-logs`, `/kelulusan`,
+`/minit-saya`) — dan gate melaporkannya dengan empat mesej ralat yang berlainan sepenuhnya,
+jadi setiap kali ia kelihatan seperti pepijat baharu.
+
+🔑 **Corak kedua:** setiap tempat yang menyimpulkan sesuatu daripada "langkah ini generik"
+(`status === 'specific'`, `route === null`) pecah serentak apabila wave menjadikan semua
+langkah spesifik. Cari corak itu dalam harness sebelum mula.
+
+🆕 Guna semula terus: `help/page-target-plan.js` · `PageTargetSelectorTest` (sauh kelas vendor,
+merah 7s vs shard 25 min) · `AKSI_KOREOGRAFI` + had bawah/atas `assertTrailTargets` ·
+skrip dalam `bukti/plan-f6-w4/skrip/` (`w4-map.mjs` = inventori, tukar `wave === 'W5'`).
+
+## 📌 SEBELUM INI — F6-W4 kod siap, CI pusingan 4 (6 Ogos)
 
 **local = origin = `6f1a249`** · **produksi kekal imej `2cd7ab8` (Deploy 9)**.
 📄 `bukti/plan-f6-w4/INVENTORI-W4.md` + `LAPORAN-F6-W4.md`
