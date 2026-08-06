@@ -1,15 +1,33 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W5 gate HIJAU, dikomit `f66ffe2`, menunggu CI (7 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W5 SIAP & gate hijau · ⛔ CI DISEKAT OLEH GITHUB (7 Ogos)
 
-**Produksi kekal `cea55da` (Deploy 10). `local = origin = f66ffe2`.**
+**Produksi kekal `cea55da` (Deploy 10).** Kod W5 terakhir = `296c419`; komit selepasnya dokumen sahaja.
 
 **Gate tempatan 3 shard HIJAU (pusingan 2):** screen 30/30 · workflow 15/15 ·
 tenant-admin-public 41/41 · agregator **GATE LULUS 83/473/172** (union SET).
 
-⚠️ **GitHub tidak mencipta larian CI untuk push `f66ffe2`** (push mendarat, Actions enabled,
-0 run). Dicetuskan manual — `gh workflow run "CI and release image" --ref main` — run
-**31127157590**. Sahkan `conclusion=success` untuk SHA `f66ffe2` sebelum Deploy 11.
+### ⛔ BLOKER: GitHub Actions tidak memperuntukkan runner
+
+**Deploy 11 DITAHAN.** Peraturan pelan #1 menuntut CI hijau SEBENAR sebelum deploy, dan CI
+tidak dapat berjalan atas sebab di luar repo:
+
+```
+push f66ffe2  -> 0 larian dicipta   (push mendarat, Actions enabled)
+push 296c419  -> 0 larian dicipta
+dispatch 31127157590 (f66ffe2) -> job utama BERJALAN, gagal pada 1 ujian (sudah dibaiki)
+dispatch 31127604032 (296c419) -> job utama DIBATALKAN selepas ~15 min beratur, 0 LANGKAH
+larian 2aa9c6b (push, 16:53Z)  -> beratur berjam-jam, kemudian cancelled
+```
+
+"Dibatalkan dengan 0 langkah" bermakna runner tidak pernah diperuntukkan — bukan kegagalan
+ujian. Tanda-tandanya konsisten dengan **minit Actions habis atau gangguan platform**.
+
+**Tindakan pemilik:** semak GitHub → Settings → Billing → Actions (minit/kredit). Saya tidak
+boleh menyemaknya — ia memerlukan skop auth `user` yang saya tidak akan minta sendiri.
+
+**Bila runner tersedia semula:** `gh workflow run "CI and release image" --ref main`, tunggu
+`conclusion=success` untuk SHA `296c419`, barulah Deploy 11.
 
 📄 `bukti/plan-f6-w5/INVENTORI-W5.md` (Revisi 2) · `LAPORAN-F6-W5.md` · `skrip/`
 
