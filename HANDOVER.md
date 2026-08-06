@@ -1,33 +1,38 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W5 SIAP & gate hijau · ⛔ CI DISEKAT OLEH GITHUB (7 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W5 SIAP & gate tempatan hijau · CI belum disahkan (7 Ogos)
 
 **Produksi kekal `cea55da` (Deploy 10).** Kod W5 terakhir = `296c419`; komit selepasnya dokumen sahaja.
 
 **Gate tempatan 3 shard HIJAU (pusingan 2):** screen 30/30 · workflow 15/15 ·
 tenant-admin-public 41/41 · agregator **GATE LULUS 83/473/172** (union SET).
 
-### ⛔ BLOKER: GitHub Actions tidak memperuntukkan runner
+### ⚠️ CI: larian `workflow_dispatch` DIBATALKAN pada tepat 15 minit; guna PUSH
 
-**Deploy 11 DITAHAN.** Peraturan pelan #1 menuntut CI hijau SEBENAR sebelum deploy, dan CI
-tidak dapat berjalan atas sebab di luar repo:
+**Deploy 11 DITAHAN** sehingga CI hijau (peraturan pelan #1). Corak yang DIUKUR, bukan diteka:
 
 ```
-push f66ffe2  -> 0 larian dicipta   (push mendarat, Actions enabled)
-push 296c419  -> 0 larian dicipta
-dispatch 31127157590 (f66ffe2) -> job utama BERJALAN, gagal pada 1 ujian (sudah dibaiki)
-dispatch 31127604032 (296c419) -> job utama DIBATALKAN selepas ~15 min beratur, 0 LANGKAH
-larian 2aa9c6b (push, 16:53Z)  -> beratur berjam-jam, kemudian cancelled
+push f66ffe2 / 296c419 / 2047faf  -> larian push LEWAT dicipta (kadang berjam-jam), tetapi
+                                      apabila ia berjalan, ia berjalan PENUH
+dispatch 31127604032 (296c419)    -> job utama dibatalkan 20:26:15 -> 20:41  (15 min tepat)
+dispatch 31128095025 (2047faf)    -> job utama dibatalkan 21:07:35 -> 21:22:37 (15 min tepat)
+push     31127951566 (296c419)    -> BERJALAN penuh, gagal pada composer audit (sebab sah)
 ```
 
-"Dibatalkan dengan 0 langkah" bermakna runner tidak pernah diperuntukkan — bukan kegagalan
-ujian. Tanda-tandanya konsisten dengan **minit Actions habis atau gangguan platform**.
+⚠️ **Pembetulan kepada catatan awal saya:** saya mula-mula menulis "minit Actions habis".
+Itu **SALAH** — larian push berjalan penuh, jadi runner memang tersedia. Yang berlaku ialah
+larian `workflow_dispatch` dibatalkan pada tepat 15 minit selepas beratur. Puncanya TIDAK
+diketahui dan sengaja tidak dispekulasi.
 
-**Tindakan pemilik:** semak GitHub → Settings → Billing → Actions (minit/kredit). Saya tidak
-boleh menyemaknya — ia memerlukan skop auth `user` yang saya tidak akan minta sendiri.
+➡️ **Jangan `gh workflow run` untuk repo ini.** Tunggu larian PUSH; ia lewat tetapi lengkap.
 
-**Bila runner tersedia semula:** `gh workflow run "CI and release image" --ref main`, tunggu
-`conclusion=success` untuk SHA `296c419`, barulah Deploy 11.
+### Keputusan CI setakat ini
+
+| Larian | SHA | Keputusan |
+|---|---|---|
+| 31127157590 | `f66ffe2` | merah — `guidance.spec.js:612` wizard klasifikasi → **kecacatan produk, dibaiki `296c419`** |
+| 31127951566 | `296c419` | merah — `composer audit`: 6 advisori `league/commonmark` diterbit 16 min sebelum larian → **dibaiki `2047faf`** |
+| (menunggu) | `2047faf` | langkah `Validate` gagal SEBELUM ujian pada larian lalu, jadi pembaikan produk BELUM disahkan CI |
 
 📄 `bukti/plan-f6-w5/INVENTORI-W5.md` (Revisi 2) · `LAPORAN-F6-W5.md` · `skrip/`
 
