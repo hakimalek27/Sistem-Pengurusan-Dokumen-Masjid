@@ -60,9 +60,14 @@ dan kini bersasar elemen kecil.
 menyemaknya untuk panel AWAM.
 
 **Pilihan yang dipertimbangkan (belum dipilih — keputusan produk):**
-1. Overlay TIDAK menghalang bagi guide AUTO (pointer-events: none pada `.driver-overlay`
-   bila `!explicit`). Paling betul dari segi UX — tour yang tidak diminta tidak patut
-   merampas halaman — tetapi ia mengubah kelakuan setiap tour automatik.
+1. Tour AUTO tidak menghalang halaman. ⚠️ **Lebih besar daripada yang disangka:** vendor
+   `driver.css` menetapkan `.driver-active * { pointer-events: none }` — jadi BUKAN hanya
+   overlay, SELURUH halaman dilumpuhkan kecuali elemen disorot dan popover. Membalikkannya
+   bagi `!explicit` mengubah model interaksi tour, dan seluruh reka bentuk F2 (banner
+   menunggu, CTA "Buat pada skrin", auto-minimize bertindih) dibina di atas overlay yang
+   MENGHALANG. Corak override sudah wujud dalam repo (`help.css:216`
+   `.diwan-tour-waiting * { pointer-events: auto; }`), jadi ia boleh dilaksana — tetapi ia
+   keputusan produk, bukan pembetulan kecil.
 2. Kekalkan sasaran besar (`page-content`) untuk LANGKAH 1 guide halaman sahaja, supaya
    lubang meliputi kandungan; langkah 2+ bersasar spesifik. Kos: langkah 1 kembali generik.
 3. Harness sahaja (semai progres pelayan dalam fixture `ci-domain`). Tidak membaiki UX.
