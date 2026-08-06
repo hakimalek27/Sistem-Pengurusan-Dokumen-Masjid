@@ -24,7 +24,50 @@ Itu **SALAH** — larian push berjalan penuh, jadi runner memang tersedia. Yang 
 larian `workflow_dispatch` dibatalkan pada tepat 15 minit selepas beratur. Puncanya TIDAK
 diketahui dan sengaja tidak dispekulasi.
 
-➡️ **Jangan `gh workflow run` untuk repo ini.** Tunggu larian PUSH; ia lewat tetapi lengkap.
+➡️ **Jangan `gh workflow run` untuk repo ini.** Yang BERKESAN ialah **`gh run rerun <id>`**
+pada larian sedia ada bagi SHA yang sama — dicuba selepas 2 jam tanpa larian push untuk
+`b514078`, dan attempt 2 terus berjalan. Larian push juga lengkap bila ia akhirnya tiba,
+tetapi kelewatannya boleh melebihi dua jam.
+
+### 🔜 TINDAKAN SETERUSNYA — satu isu tinggal, analisis sudah siap
+
+CI attempt 2 (`gh run rerun 31128095025`, SHA `2047faf`) mengesahkan **kedua-dua pembaikan
+terdahulu berkesan**:
+
+```
+9.  Validate, audit and format ........ success   (fix commonmark berkesan)
+13. Migrate PostgreSQL + full suite ... success
+18. Unit fungsi tulen ................. success
+20. Guidance smoke .................... success   (fix pengawal modal DISAHKAN CI)
+21. Domain flows ...................... FAILURE   ← satu-satunya baki
+```
+
+**Baki: `e2e/ddms-extended.spec.js:17` — butang "Cari" pada `/carian` tidak boleh diklik.**
+
+Punca (daripada log CI): tour `tenant.carian` AUTO-MULA (7 langkah) dan overlay Driver.js
+memintas klik. Sebelum W5 langkah 1 bersasar `page-content`, jadi lubang overlay meliputi
+SELURUH kandungan dan butang berada di dalamnya. W5 menjadikannya `search-text` (label Teks),
+jadi lubang mengecil dan butang "Cari" kini DI LUAR lubang.
+
+⚠️ **Ini akibat W5 yang nyata kepada pengguna**, bukan sekadar isu ujian: pengguna yang
+mendarat di `/carian` buat kali pertama akan mendapati klik pertamanya pada "Cari" hanya
+MENUTUP tour (`overlayClickBehavior: 'close'`, help.js:663) dan bukan mencari. Klik kedua
+berfungsi. Ringan tetapi nyata, dan ia terpakai pada SETIAP halaman yang guidenya auto-mula
+dan kini bersasar elemen kecil.
+
+`autoStart` = `! $progress` (`HelpLauncher.php:130`) — sekali per pengguna per versi guide.
+`disableAutomaticGuides()` harness TIDAK membantu: ia localStorage, dan `help.js:889` hanya
+menyemaknya untuk panel AWAM.
+
+**Pilihan yang dipertimbangkan (belum dipilih — keputusan produk):**
+1. Overlay TIDAK menghalang bagi guide AUTO (pointer-events: none pada `.driver-overlay`
+   bila `!explicit`). Paling betul dari segi UX — tour yang tidak diminta tidak patut
+   merampas halaman — tetapi ia mengubah kelakuan setiap tour automatik.
+2. Kekalkan sasaran besar (`page-content`) untuk LANGKAH 1 guide halaman sahaja, supaya
+   lubang meliputi kandungan; langkah 2+ bersasar spesifik. Kos: langkah 1 kembali generik.
+3. Harness sahaja (semai progres pelayan dalam fixture `ci-domain`). Tidak membaiki UX.
+
+⛔ **Deploy 11 DITAHAN.** Jangan deploy sebelum ini diputuskan dan CI hijau penuh.
 
 ### Keputusan CI setakat ini
 
