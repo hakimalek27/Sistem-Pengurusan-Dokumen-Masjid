@@ -685,11 +685,26 @@ async function driveFlowGuide(page, guide, basePath, detailPath = null) {
         // popover sebelum memindahkan `.driver-active-element` (animasi), dan sync F2 boleh
         // memajukan tour melintasi satu langkah dalam beberapa milisaat — pengundi seketika
         // terlepas pandang, lalu menunggu 90s untuk nombor yang tidak akan kembali.
-        const rekod = () => page.evaluate(([idx, sasaran]) => {
+        // F6-W5 — langkah GENERIK tidak boleh dituntut menyorot sasarannya.
+        //
+        // `page-content` / `page-primary` ialah sasaran generik: `page-primary` tiada elemen
+        // langsung (hanya `main` → `page-content` ditandakan), jadi runtime dengan BETUL
+        // menyorot fallback. `assertStepPopover` sudah lama menghadkan G2 kepada langkah
+        // `specific` atas sebab yang sama; `driveFlowGuide` tidak, kerana sehingga W5 tiada
+        // guide berlangkah-generik pernah mengambil laluan ALIRAN — pemandu dipilih daripada
+        // `state` registri, dan hanya guide bersasar penuh yang layak.
+        //
+        // W5 memecahkan andaian itu: `tenant.pembetulan-rekod` mendapat dua sasaran BARIS
+        // (langkah 4-5), jadi `needsFlow()` kini benar, sedangkan langkah 1-3 kekal generik
+        // dengan justifikasi bertulis. Diukur di gate: `jejak 1:page-content → 2:page-content`
+        // sedangkan langkah 2 mengisytihar `page-primary` — produk betul, pengamat terlalu
+        // ketat. Kedua-dua pemandu kini menguatkuasakan peraturan yang SAMA.
+        const perluSasaran = step.status === 'specific';
+        const rekod = () => page.evaluate(([idx, sasaran, wajib]) => {
             const log = window.__diwanTourLog ?? [];
 
             return {
-                jumpa: log.some((e) => e.n === idx && e.aktif.includes(sasaran) && !e.ralatPalsu),
+                jumpa: log.some((e) => e.n === idx && (!wajib || e.aktif.includes(sasaran)) && !e.ralatPalsu),
                 ralatPalsu: log.some((e) => e.ralatPalsu),
                 // Perekam yang tidak terpasang mesti kelihatan dalam mesej kegagalan —
                 // "log kosong" dan "langkah tidak berlaku" tidak boleh kelihatan sama.
@@ -716,7 +731,7 @@ async function driveFlowGuide(page, guide, basePath, detailPath = null) {
                 bannerModal: log.slice(-14)
                     .map((e) => `${e.banner ? 'B' : '-'}${e.modal ?? '?'}W${e.wizard ?? '-'}`).join(' '),
             };
-        }, [i, step.target])
+        }, [i, step.target, perluSasaran])
             // ⚠️ `expect.poll` TIDAK mencuba semula apabila callbacknya MELEMPAR — ia gagal
             // serta-merta. `page.evaluate` melempar "Execution context was destroyed" apabila
             // ia dinilai TEPAT semasa navigasi, dan F6-W2 memperkenalkan navigasi yang
@@ -757,12 +772,14 @@ async function driveFlowGuide(page, guide, basePath, detailPath = null) {
                 return false;
             }, {
                 timeout: 90_000,
-                message: `${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`,
+                message: `${step.key}: tour tidak pernah merekod langkah ${i}`
+                    + (perluSasaran ? ` dengan sasaran ${step.target}` : ' (langkah generik — kedudukan sahaja)'),
             })
             .toBe(true)
             .catch(async () => {
                 const k = await rekod();
-                throw new Error(`${step.key}: tour tidak pernah merekod langkah ${i} dengan sasaran ${step.target}`
+                throw new Error(`${step.key}: tour tidak pernah merekod langkah ${i}`
+                    + (perluSasaran ? ` dengan sasaran ${step.target}` : ' (langkah generik — kedudukan sahaja)')
                     + ` — perekam sedia=${k.sedia}, entri=${k.bilangan}`
                     + `\n  halaman         : ${k.url} (dokumen ke-${k.dokumen}, readyState=${k.sedia_dom}, popover=${k.popover}, guide=${k.guideAktif})`
                     + `\n  rangkaian       : ${permintaanTergantung(page)}`

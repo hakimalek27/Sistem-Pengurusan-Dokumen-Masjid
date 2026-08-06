@@ -18,15 +18,26 @@ class MosqueActivityLogsTable
 {
     public static function configure(Table $table): Table
     {
+        // F6-W5: sifat `static` hidup sepanjang PROSES, bukan permintaan. Kelas ini
+        // mengisytiharkan memo `baris1()` sejak W1 tetapi TIDAK PERNAH menetapkannya semula —
+        // jurang yang sama yang memerahkan CI tiga pusingan pada W3 (lulus SQLite, gagal
+        // PostgreSQL kerana jujukan ID tidak dirollback). Ia belum menggigit di sini kerana
+        // hanya satu sasaran menggunakannya; W5 menambah yang kedua. Diset semula pada titik
+        // masuk render, sama seperti Inbox/Minits/Approvals/RegistryFiles/Corrections.
+        self::$barisPertamaId = null;
+
         return $table
             ->defaultSort('created_at', 'desc')
             ->poll('30s')
             ->columns([
+                // F6-W5: `tenant.log-aktiviti` #4 ("Bandingkan masa peristiwa secara
+                // kronologi") — sel masa baris pertama, jadual sudah `defaultSort` menurun.
                 TextColumn::make('created_at')
                     ->label('Tarikh & Masa')
                     ->dateTime('d/m/Y h:i:s A')
                     ->sortable()
-                    ->wrap(),
+                    ->wrap()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'log-time')),
                 TextColumn::make('actor_name')
                     ->label('Pelaku')
                     ->description(fn (MosqueActivityLog $record) => $record->actor_role ?: ($record->actor_id ? 'Ahli masjid' : 'Sistem / penghantar luar'))

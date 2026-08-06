@@ -38,9 +38,12 @@ class SensitiveAccessLogsTable
                 TextColumn::make('user.name')
                     ->label('Pengguna')
                     ->searchable(),
+                // F6-W5: `tenant.sensitive-access-logs` #3 ("Siasat akses luar biasa melalui
+                // rekod asal") — sel REKOD baris pertama, bukan sel Masjid.
                 TextColumn::make('record.title')
                     ->label('Rekod')
-                    ->searchable(),
+                    ->searchable()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'sensitive-log-target')),
                 TextColumn::make('action')
                     ->label('Tindakan')
                     ->searchable(),

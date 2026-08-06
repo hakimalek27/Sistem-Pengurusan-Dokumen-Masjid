@@ -35,20 +35,48 @@ test('halaman BUTIRAN tidak dipadankan — medan carian tidak wujud di sana', ()
 });
 
 test('halaman tanpa pemetaan memulangkan kosong', () => {
-    for (const laluan of ['/app/mam', '/app/mam/peti-masuk', '/app/mam/carian', '/admin', '/log-masuk', '/']) {
+    // F6-W5: `/app/{tenant}` dan `/admin` KINI dipetakan (widget statistik papan pemuka),
+    // jadi ia dikeluarkan daripada senarai ini dan diassert secara positif di bawah.
+    for (const laluan of ['/app/mam/peti-masuk', '/app/mam/carian', '/log-masuk', '/']) {
         expect(pageTargetsFor(laluan), `${laluan} tidak sepatutnya dipetakan`).toEqual([]);
     }
 });
 
-test('TIADA sasaran bocor antara halaman — setiap sasaran milik satu laluan sahaja', () => {
-    const pemilik = new Map();
+test('papan pemuka kedua-dua panel dipetakan kepada widget statistik yang SAMA', () => {
+    // Sasaran dikongsi dengan sengaja: `.fi-wi-stats-overview` ialah pembalut yang sama pada
+    // kedua-dua panel, dan registri mengisytiharkannya sebagai satu entri dwi-laluan.
+    expect(sasaranBagi('/app/mam')).toEqual(['dashboard-stats']);
+    expect(sasaranBagi('/admin')).toEqual(['dashboard-stats']);
+    expect(sasaranBagi('/admin/')).toEqual(['dashboard-stats']);
+    // Sub-laluan panel admin TIDAK boleh terperangkap oleh regex `/admin`.
+    expect(sasaranBagi('/admin/mosques')).toEqual(['platform-mosques']);
+});
+
+test('sasaran dikongsi hanya bila registri mengisytiharkannya dwi-laluan', () => {
+    // Peraturan asal ("satu sasaran = satu laluan") wujud kerana satu ELEMEN hanya boleh
+    // memegang satu `data-help-target`. Itu kekal benar. Tetapi dua HALAMAN berbeza boleh
+    // berkongsi id sasaran apabila ia elemen yang setara pada kedua-duanya — papan pemuka dua
+    // panel, dan jadual tiket yang dikongsi `App\Filament\Support\SupportRequestsTable`.
+    //
+    // Penjaga DIKETATKAN, bukan dilonggarkan: perkongsian hanya sah jika registri
+    // mengisytiharkan TEPAT set laluan itu sebagai `a|b`. Sasaran yang bocor tanpa
+    // pengisytiharan tetap gagal.
+    const registri = JSON.parse(readFileSync('resources/help/targets.json', 'utf8')).targets;
+    const ikutId = new Map(registri.map((t) => [t.id, t]));
+    const laluanPemetaan = new Map();
+
     for (const entri of PAGE_TARGETS) {
         for (const [, target] of entri.peta) {
-            expect(pemilik.has(target), `${target} diisytihar pada lebih daripada satu laluan`).toBe(false);
-            pemilik.set(target, entri.route);
+            if (!laluanPemetaan.has(target)) laluanPemetaan.set(target, []);
+            laluanPemetaan.get(target).push(entri.route);
         }
     }
-    expect(pemilik.size).toBe(5);
+
+    for (const [target, laluan] of laluanPemetaan) {
+        const diisytihar = String(ikutId.get(target)?.route ?? '').split('|').sort();
+        expect(laluan.slice().sort(), `${target}: laluan pemetaan tidak sepadan registri`)
+            .toEqual(diisytihar);
+    }
 });
 
 test('dalam SATU halaman, satu selector tidak boleh memegang dua sasaran', () => {
@@ -69,7 +97,10 @@ test('setiap sasaran yang dipetakan wujud dalam registri targets.json', () => {
         for (const [, target] of entri.peta) {
             const rekod = ikutId.get(target);
             expect(rekod, `${target} tiada dalam registri`).toBeTruthy();
-            expect(rekod.route, `${target}: route registri tidak sepadan pemetaan`).toBe(entri.route);
+            // Entri dwi-laluan (`a|b`) sah selagi laluan pemetaan ini salah satu daripadanya;
+            // kesepadanan SET penuh dikuatkuasakan oleh ujian perkongsian di atas.
+            expect(String(rekod.route).split('|'), `${target}: route registri tidak sepadan pemetaan`)
+                .toContain(entri.route);
             expect(rekod.owner_source, `${target}: owner_source mesti menunjuk decorateTargets`)
                 .toContain('js:decorateTargets');
         }

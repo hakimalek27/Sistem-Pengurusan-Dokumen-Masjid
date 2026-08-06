@@ -11,9 +11,11 @@ use App\Enums\Sensitivity;
 use App\Enums\SourceChannel;
 use App\Models\Approval;
 use App\Models\ClassificationNode;
+use App\Models\Delegation;
 use App\Models\DisposalBatch;
 use App\Models\FileAccessGrant;
 use App\Models\Minit;
+use App\Models\MinitRecipient;
 use App\Models\Mosque;
 use App\Models\Record;
 use App\Models\RecordCorrectionRequest;
@@ -21,6 +23,7 @@ use App\Models\RegistryFile;
 use App\Models\SensitiveAccessLog;
 use App\Models\User;
 use App\Services\ApprovalService;
+use App\Services\DelegationService;
 use App\Services\FileTrackingService;
 use App\Services\MinitService;
 use App\Support\Roles;
@@ -239,6 +242,94 @@ class DemoSeeder extends Seeder
         }
 
         $this->benihSkrinW4($mam, $record, $kerani);
+        $this->benihSkrinW5($mam, $record, $kerani);
+    }
+
+    /**
+     * F6-W5 — dua skrin yang KOSONG untuk `admin_masjid`, diukur 7 Ogos 2026 pada benih
+     * demo sebenar melalui pelayar (log masuk `admin_masjid@demo.test`, `fetch()` setiap
+     * route dalam sesi yang sama):
+     *
+     *   /delegasi    → 0 baris  → aksi "Batal" tidak pernah dirender
+     *   /minit-saya  → 1 baris TETAPI 0 aksi baris — admin masjid ialah PENGHANTAR minit
+     *                  demo, bukan penerima tindakan, jadi "Tanda Selesai" dan
+     *                  "Balas & Edarkan" tiada untuknya
+     *
+     * Guide `tenant.delegasi` dan `tenant.minit-saya` menyorot tepat kawalan itu. Ini corak
+     * yang SAMA seperti tiga daripada lima punca gate W4, dan setiap kali gate melaporkannya
+     * dengan mesej yang berlainan sepenuhnya — sebab itu ia disemak dengan pertanyaan DB
+     * SEBELUM kod ditulis, bukan selepas pusingan merah.
+     *
+     * ⛔ `/kelulusan` sengaja TIDAK dibenihkan. Ia kosong untuk admin masjid kerana peranan
+     * itu tiada `approvals.decide` (`config/roles.php:57-70`) — `ApprovalService::request()`
+     * akan MENOLAK pelulus sedemikian. Itu reka bentuk peranan yang betul, bukan jurang data;
+     * langkah berkenaan dijustifikasikan dan penemuan kandungan direkod untuk F9.
+     *
+     * ⛔ `RetentionRuleSeeder` tidak disentuh (larangan pelan).
+     */
+    protected function benihSkrinW5(Mosque $mam, Record $record, User $kerani): void
+    {
+        // ── Delegasi aktif ──────────────────────────────────────────────────────────────
+        //
+        // Pasangan bendahari → audit dipilih DENGAN SEBAB: `MinitResource::getEloquentQuery()`
+        // (baris 41) memasukkan minit milik PRINCIPAL delegasi ke dalam senarai delegate.
+        // Memilih mana-mana pasangan yang sudah menjadi penerima minit demo akan menambah
+        // baris pada `/minit-saya` peranan itu dan menggeser baris pertama yang guide
+        // `workflow.*` W2 bergantung padanya. Bendahari bukan penerima mana-mana minit demo,
+        // jadi delegasi ini menambah SIFAR baris kepada sesiapa.
+        if (! Delegation::query()->where('mosque_id', $mam->id)->exists()) {
+            $bendahari = User::query()->where('email', 'bendahari@demo.test')->first();
+            $audit = User::query()->where('email', 'audit@demo.test')->first();
+
+            if ($bendahari && $audit) {
+                app(DelegationService::class)->create($kerani, $mam, [
+                    'principal_user_id' => $bendahari->id,
+                    'delegate_user_id' => $audit->id,
+                    'capabilities' => ['minit'],
+                    // Mesti `is_active` DAN `ends_at` pada masa hadapan, jika tidak aksi
+                    // "Batal" `->visible()` menjadi false dan sasaran tidak wujud.
+                    'starts_at' => now()->subHour(),
+                    'ends_at' => now()->addDays(30),
+                    'reason' => 'Bendahari bercuti; audit dibenarkan menjawab minit kewangan sementara.',
+                ]);
+            }
+        }
+
+        // ── Minit yang admin masjid perlu TINDAKI ───────────────────────────────
+        //
+        // 🔴 Versi pertama pembaikan ini MENCIPTA minit ketiga (pengerusi → admin masjid) dan
+        // MEMECAHKAN dua guide `screen` yang sebelumnya hijau. Puncanya diukur daripada DB:
+        // minit itu menjadi baris PERTAMA untuk pengerusi, dan pengerusi ialah PENGHANTARnya
+        // — jadi "Balas & Edarkan" dan "Tanda Selesai" tidak dirender pada baris itu, `baris1()`
+        // mengunci baris itu, dan `minit-reply` tidak pernah wujud.
+        //
+        // Ia kelas defect yang SAMA yang blok ini cuba elak, cuma untuk peranan LAIN: menambah
+        // baris demo boleh menggeser baris pertama seseorang kepada baris yang mereka tidak
+        // boleh tindaki. Pembaikan: JANGAN tambah minit; jadikan admin masjid penerima
+        // TINDAKAN pada minit setiausaha yang SEDIA ADA. Minit W2 ditarik ke belakang supaya
+        // minit setiausaha deterministik menjadi baris pertama — dan KEDUA-DUA admin masjid
+        // dan pengerusi ialah penerima tindakan padanya, jadi butang baris dirender untuk
+        // kedua-duanya.
+        $minitSetiausaha = Minit::query()->where('mosque_id', $mam->id)
+            ->whereHas('fromUser', fn ($q) => $q->where('email', 'setiausaha@demo.test'))
+            ->orderBy('id')->first();
+
+        if ($minitSetiausaha && ! MinitRecipient::query()
+            ->where('minit_id', $minitSetiausaha->id)->where('user_id', $kerani->id)->exists()) {
+            MinitRecipient::query()->create([
+                'minit_id' => $minitSetiausaha->id,
+                'user_id' => $kerani->id,
+                'jenis' => 'tindakan',
+                'status' => 'belum',
+            ]);
+
+            // Susunan mesti DETERMINISTIK: kedua-dua minit dicipta dalam saat yang sama, dan
+            // `created_at` yang seri memberi susunan tidak tentu pada PostgreSQL (pelajaran
+            // W3: `->first()` tanpa ORDER BY). Minit lain ditarik ke belakang SATU HARI.
+            Minit::query()->where('mosque_id', $mam->id)
+                ->where('id', '!=', $minitSetiausaha->id)
+                ->update(['created_at' => now()->subDay()]);
+        }
     }
 
     /**

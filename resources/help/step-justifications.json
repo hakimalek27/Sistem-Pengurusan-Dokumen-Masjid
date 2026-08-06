@@ -105,6 +105,330 @@
       "reason": "Halaman dan sebab yang sama seperti langkah 7: /kelulusan kosong untuk setiausaha. Langkah ini juga amaran prosedur (jangan hantar pendua), bukan rujukan kepada kawalan tertentu pada skrin.",
       "since": "2026-08-06",
       "followup": "Lihat langkah 7 — cadangan kandungan F9 yang sama."
+    },
+    {
+      "key": "tenant.sensitive-access-logs#4",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Melaporkan akses tidak dikenali kepada Admin dan wakil perlindungan data ialah tindakan di LUAR sistem; tiada kawalan skrin yang sepadan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.log-aktiviti#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Skop log bendahari ditentukan dasar akses peranan, bukan kawalan pada skrin; tiada elemen yang boleh disorot tanpa mengelirukan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.persediaan#2",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Medan jawatan dan telefon hidup dalam wizard MODAL yang hanya terbuka selepas menekan Mula Persediaan Berpandu; guide halaman ini tiada langkah tindakan (wait_for_user:false).",
+      "since": "2026-08-07",
+      "followup": "F7/W6 — wizard persediaan ialah modal berlangkah. Memberi guide halaman ini langkah TINDAKAN akan mengubah kiraan `action_steps` yang dibekukan F0; keputusan itu milik fasa yang boleh mengemas denominator."
+    },
+    {
+      "key": "tenant.persediaan#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Pilihan sumber nombor WhatsApp berada pada langkah 2 wizard modal; aliran penuh bersasar spesifik dalam screen.persediaan-berpandu.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.persediaan#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Repeater ahli awal berada pada langkah 3 wizard modal; ia tidak wujud dalam keadaan lalai halaman.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.persediaan#5",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Semakan peranan berlaku pada langkah 4 wizard modal sebelum simpan; tiada kawalan setara pada halaman.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.ahli-peranan#2",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Medan e-mel dan pilihan peranan berada dalam modal Jemput Ahli yang belum terbuka pada langkah ini.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.ahli-peranan#5",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Set Kata Laluan Sementara ialah item DALAM dropdown Tindakan yang sama seperti langkah 4; menyasarkannya akan menyorot elemen yang identik.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.classification-nodes#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Nasihat dasar (nyahaktifkan nod lama, jangan ubah nod terpakai) — tiada satu kawalan tunggal pada skrin yang mewakilinya.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.tetapan-masjid#2",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Suis intake WhatsApp dan e-mel berada dalam modal Sunting Tetapan; halaman lalai hanya memaparkan nilai semasa.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.tetapan-masjid#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Medan kata kunci intake berada dalam modal Sunting Tetapan yang belum terbuka pada langkah ini.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.tetapan-masjid#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Senarai alamat pengirim dipercayai berada dalam modal Sunting Tetapan; halaman lalai tidak merendernya.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.tetapan-masjid#6",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Mematikan notifikasi apabila peranti hilang ialah keputusan operasi merentas beberapa kawalan, bukan satu butang.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.penggunaan#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Nombor invois hanya wujud selepas pesanan storan dijana; benih demo dan keadaan lalai halaman tiada pesanan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.penggunaan#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran dasar bahawa pesanan menunggu bukan kuota aktif — konsep, bukan kawalan skrin.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.retensi#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Butang Legal Hold hanya dirender pada baris rekod yang menghampiri tempoh retensi; benih demo tiada rekod dalam skop 12 bulan (diukur: retention_due_at 0).",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.retensi#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Tarik balik hold memerlukan rekod yang sedang berpegangan; keadaan itu tidak wujud dalam keadaan lalai mahupun benih demo.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.delegasi#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Label \"bagi pihak\" muncul pada TINDAKAN yang delegate buat (minit, kelulusan), bukan pada halaman Delegasi ini.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.profil#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Pautan sambung Telegram berada dalam modal Tetapan Notifikasi; halaman lalai hanya memaparkan status.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.profil#6",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Tindakan pemulihan kecemasan merentas dua kawalan berbeza yang langkah 2 dan 5 sudah sorot secara berasingan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.records#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Tab OCR, Lampiran, Minit, Kelulusan dan Audit hidup pada halaman BUTIRAN rekod; URLnya dinamik (/records/{id}) jadi katalog tidak boleh mengisytiharkannya sebagai route langkah.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.records#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Butang Kegemaran berada pada halaman butiran rekod, bukan pada senarai ini.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.records#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran dasar bahawa tindakan ditentukan peranan — tiada elemen tunggal yang mewakilinya.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.registry-files#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Keluarkan Fail, Terima Pulangan dan Pindah Lokasi ialah tindakan halaman BUTIRAN fail; route butiran dinamik dan tidak boleh diisytihar dalam katalog.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.registry-files#5",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Tutup fail dan buka jilid baharu ialah tindakan pada halaman butiran fail berkenaan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.registry-files#6",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Geran akses khas diurus dalam relation manager pada halaman butiran fail sulit.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.minit-saya#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Perbezaan penerima tindakan dan s.k. ialah konsep tanggungjawab; lajur Penerima boleh-togol dan tersembunyi secara lalai.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.minit-saya#6",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Atribusi \"oleh X bagi pihak Y\" hanya muncul selepas seorang delegate benar-benar bertindak; ia tiada dalam keadaan lalai.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.kelulusan#1",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Jadual kelulusan menapis approver_id = pengguna semasa, dan admin_masjid TIADA kebenaran approvals.decide (config/roles.php) — skrin ini sentiasa kosong untuk peranan utama guide ini.",
+      "since": "2026-08-07",
+      "followup": "F9 — `tenant.kelulusan` menyenaraikan KESEMUA lapan peranan, tetapi hanya pengerusi dan nazir memegang `approvals.decide`. Guide ini sepatutnya berperanan pelulus sahaja; sehingga itu ia sentiasa kosong untuk peranan lain. Penemuan kandungan, bukan pepijat kod."
+    },
+    {
+      "key": "tenant.kelulusan#2",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Membuka rekod asal membawa pengguna ke halaman butiran rekod; tiada baris pada skrin ini untuk peranan guide.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.kelulusan#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Butang Lulus/Tolak ialah aksi baris; tiada baris kerana admin_masjid tidak boleh menjadi pelulus.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.kelulusan#4",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Medan kata laluan dan nota berada dalam modal keputusan yang hanya boleh dibuka oleh pelulus yang ditetapkan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.kelulusan#5",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran dasar keselamatan kata laluan — konsep, bukan kawalan skrin.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.kelulusan#6",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Lajur status dan \"bagi pihak\" ialah sel baris; jadual kosong untuk peranan yang guide ini tujukan.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.laporan#4",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Membuka dan mengawal perkongsian fail CSV berlaku di luar sistem selepas muat turun.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#1",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Butang Mohon Pembetulan berada pada halaman BUTIRAN rekod, bukan pada senarai permohonan ini.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#2",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Medan sebab dan cadangan perubahan berada dalam modal Mohon Pembetulan pada halaman butiran rekod.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#3",
+      "status": "generic-justified",
+      "wave": "W5",
+      "reason": "Penghantaran berlaku dalam modal pada halaman butiran rekod; skrin ini hanya memaparkan hasilnya.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.dashboard#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.mosques#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.users#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.storage-orders#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.status-sambungan#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.whatsapp-platform#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.tetapan-platform#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
+    },
+    {
+      "key": "admin.profil-saya#3",
+      "status": "not-applicable",
+      "wave": "W5",
+      "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+      "since": "2026-08-07"
     }
   ]
 }

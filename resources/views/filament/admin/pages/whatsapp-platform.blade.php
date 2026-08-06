@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W5: `admin.whatsapp-platform` #2 ("Urus sambungan WhatsApp platform dan semak
+         status sesi"). --}}
+    <x-filament::section data-help-target="platform-whatsapp">
         <x-slot name="heading">Sesi WhatsApp Platform</x-slot>
         <x-slot name="description">
             Nombor WhatsApp khas platform untuk menghantar alert kepada superadmin

@@ -114,7 +114,7 @@ const FROZEN = {
     //      senarai ini HANYA apabila wave itu benar-benar ditutup — ia mengunci wave supaya
     //      langkah generik baharu tidak boleh diselitkan tanpa sebab bertulis dan bertarikh.
     //      W0/W1/W2 sudah 0 langkah generik, jadi liputan mereka kosong secara sah.
-    justified_waves: ['W0', 'W1', 'W2', 'W3', 'W4'],
+    justified_waves: ['W0', 'W1', 'W2', 'W3', 'W4', 'W5'],
     // Kohort audit P11 (produksi 1 Ogos 2026) — perbandingan apple-to-apple SAHAJA, bukan gate.
     cohort_baseline: {
         resolved_to_generic: '119/124',

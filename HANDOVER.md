@@ -1,6 +1,59 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W4 **LIVE** (Deploy 10), seterusnya F6-W5 (6 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W5 kod SIAP, gate tempatan 3 shard (7 Ogos)
+
+**Produksi kekal `cea55da` (Deploy 10).** Kod W5 siap dan hijau pada setiap semakan
+tempatan; yang tinggal ialah gate 3 shard → CI → Deploy 11.
+
+📄 `bukti/plan-f6-w5/INVENTORI-W5.md` (Revisi 2) · `LAPORAN-F6-W5.md` · `skrip/`
+
+### Hasil W5
+
+```
+98 dinaikkan · 46 dijustifikasikan · generic_declared 159 → 61
+catalog_version 2026.08.07.1 · registri 187 → 223 (199 aktif · 24 rizab)
+justifikasi 13 → 59 · justified_waves +W5 dalam KETIGA-TIGA penjaga
+Pest 601✓/1 skip · unit JS 26/26 · validator manifest exit 0
+aset help-B9tTj0Zg.js → help-DHUxqBmp.js (css KEKAL) → Deploy 11 rebuild app DAN nginx
+```
+
+W5 ialah wave TERBESAR dan satu-satunya yang menggerakkan metrik KOHORT (23/25 guide kohort).
+Panel Pentadbir Platform menerima sasaran tour buat kali PERTAMA.
+
+### ⛔ Kekangan yang menentukan seluruh gelombang — baca sebelum menyentuh W5
+
+Kesemua 144 langkah `wait_for_user: false`, jadi CTA sentiasa "Seterusnya" dan
+`driveFlowGuide` **tidak pernah** mencapai cabang yang melakukan tindakan. Maka sasaran
+hanya boleh dinaikkan jika ia kelihatan dalam keadaan **LALAI** halaman. Sasaran dalam
+modal / wizard / halaman butiran dijustifikasikan — itu keputusan reka bentuk yang §7.2
+benarkan, bukan kerja yang terlepas.
+
+### Jika gate MERAH
+
+Baca `LAPORAN-F6-W5.md` §PENEMUAN dahulu. Dua kelas punca sudah ditutup SEBELUM gate
+(skrin kosong per-peranan, dan memo statik) — jangan andaikan ia berulang.
+
+⚠️ Jangan `TaskStop` gate dan terus menyunting: TaskStop tidak membunuh cucu. Bunuh ikut
+baris arahan (`playwright|gate-w5|8092|guidance-full`), sahkan port 8092 kosong DAHULU.
+
+### Selepas gate hijau
+
+1. `git add -A && git commit` (SATU commit W5) → push → **tunggu CI selesai sebelum push
+   dokumen** (`gh run list --limit 1 --json status`; `cancel-in-progress` membatalkan larian).
+2. Deploy 11 — guna `bukti/plan-f6-w4/skrip/deploy-10.sh` (sudah dibetulkan: `tinker`
+   perlu `-e HOME=/tmp`), tukar SHA. **Rebuild `app` DAN `nginx`** — aset berubah.
+   `catalog_version` berubah → `sync-help-index --delete`.
+   ⛔ **Jangan jalankan seeder pada produksi** — benih demo berubah.
+3. Rantaian bukti 5A penuh + pengesahan visual Chrome.
+
+### Tertunggak selepas W5
+
+- **F6-W6** — `public`, 3 guide / 2 langkah generik (kecil).
+- **F7** A11y (perlu pengecualian bertulis D5a sebelum `axe-core`).
+- **F8** perlu kredensial superadmin produksi daripada pemilik.
+- Pemilik: Google OAuth consent PUBLISHED.
+
+## 📌 SEBELUM INI — F6-W4 **LIVE** (Deploy 10)
 
 **local = origin = server = `cea55da`** · imej produksi dibina daripada `cea55da`
 (label revisi membuktikannya) · **CI run 31095436926 = 7/7 HIJAU**, shard `workflow` **15/15**.

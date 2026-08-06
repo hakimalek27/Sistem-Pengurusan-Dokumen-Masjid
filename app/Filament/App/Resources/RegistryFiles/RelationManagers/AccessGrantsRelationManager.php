@@ -47,6 +47,10 @@ class AccessGrantsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
+        // F6-W5: lihat nota sama dalam MosqueActivityLogsTable — memo statik mesti diset
+        // semula pada titik masuk render, bukan bergantung pada kitaran permintaan.
+        self::$barisPertamaId = null;
+
         return $table
             ->recordTitleAttribute('id')
             ->columns([

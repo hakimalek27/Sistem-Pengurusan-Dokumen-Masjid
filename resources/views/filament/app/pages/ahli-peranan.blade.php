@@ -1,7 +1,13 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W5: `tenant.ahli-peranan` #3 ("Selepas jemputan, pastikan ahli muncul dalam
+         senarai tenant ini"). Sasaran pada SEKSYEN supaya ia wujud walaupun senarai kosong. --}}
+    <x-filament::section data-help-target="members-list">
         <x-slot name="heading">Ahli Masjid ({{ $members->count() }})</x-slot>
         <x-slot name="description">Urus peranan, nombor WhatsApp, kata laluan dan keahlian — untuk masjid ini sahaja.</x-slot>
+
+        {{-- F6-W5: id ahli pertama yang dropdown "Tindakan"nya benar-benar dirender.
+             Dikira SEKALI di sini supaya sasaran itu deterministik dan unik (keunikan G2). --}}
+        @php ($idTindakanPertama = $members->first(fn ($u) => ! $u->is_superadmin)?->id)
 
         <div class="overflow-x-auto">
             <table class="w-full min-w-[720px] text-sm">
@@ -25,7 +31,12 @@
                                 @endif
                             </td>
                             <td class="py-3 pr-3 text-gray-500 dark:text-gray-400">{{ $m->email ?: '—' }}</td>
-                            <td class="py-3 pr-3">
+                            {{-- F6-W5: `tenant.ahli-peranan` #6 ("Untuk ubah peranan atau
+                                 keluarkan ahli, semak kesan terhadap tugasan/minit dahulu").
+                                 Baris PERTAMA yang boleh diubah — bukan `$loop->first`: select
+                                 baris superadmin `@disabled`, jadi menyorotnya menunjukkan
+                                 kawalan yang pengguna tidak boleh guna. --}}
+                            <td class="py-3 pr-3" @if ($m->id === $idTindakanPertama) data-help-target="members-role" @endif>
                                 <select
                                     class="w-full rounded-lg border-gray-300 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 dark:border-white/10 dark:bg-white/5"
                                     wire:change="changeRole({{ $m->id }}, $event.target.value)"
@@ -62,11 +73,27 @@
                             </td>
                             <td class="py-3 pr-3 text-right">
                                 @unless ($m->is_superadmin)
+                                    {{-- F6-W5: `tenant.ahli-peranan` #4 ("Gunakan Hantar Semula
+                                         Pautan"). Sasaran pada PENCETUS dropdown, bukan pada
+                                         item di dalamnya: item Filament dirender ke DOM tetapi
+                                         disembunyikan Alpine sehingga dropdown dibuka, jadi
+                                         menyasarkannya memberi sorotan pada elemen yang tidak
+                                         kelihatan.
+                                         `$loop->first` TIDAK boleh digunakan: baris pertama
+                                         boleh jadi superadmin dan `@unless` di atas
+                                         menghapuskan dropdownnya — sasaran hilang senyap
+                                         (keluarga defect `disposal-actions` W4). Sebab itu id
+                                         ahli pertama yang BUKAN superadmin dikira di atas.
+                                         ⚠️ Pembalut `<span>` diperlukan: `@if` dalam kedudukan
+                                         ATRIBUT tag komponen Blade tidak dikompil
+                                         (`syntax error, unexpected token "endif"`). --}}
                                     <x-filament::dropdown placement="bottom-end">
                                         <x-slot name="trigger">
+                                            <span @if ($m->id === $idTindakanPertama) data-help-target="members-actions" @endif>
                                             <x-filament::button size="xs" color="gray" icon="heroicon-m-ellipsis-horizontal">
                                                 Tindakan
                                             </x-filament::button>
+                                            </span>
                                         </x-slot>
                                         <x-filament::dropdown.list>
                                             <x-filament::dropdown.list.item

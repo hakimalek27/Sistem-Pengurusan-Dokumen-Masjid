@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by": "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs",
-  "catalog_version": "2026.08.06.1",
+  "catalog_version": "2026.08.07.1",
   "sources": {
     "catalogue": "resources/help/guides.json",
     "mobile_defects": "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json",
@@ -92,7 +92,8 @@
       "W1",
       "W2",
       "W3",
-      "W4"
+      "W4",
+      "W5"
     ],
     "cohort_baseline": {
       "resolved_to_generic": "119/124",
@@ -195,17 +196,15 @@
           "title": "Baca kad statistik",
           "title_placeholder": false,
           "instruction_preview": "Baca kad statistik; nombor hanya merangkumi data yang role ini dibenarkan lihat.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "dashboard-stats",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.dashboard#3",
@@ -214,17 +213,15 @@
           "title": "Semak senarai semak persediaan",
           "title_placeholder": false,
           "instruction_preview": "Semak senarai semak persediaan jika masih dipaparkan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "dashboard-checklist",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.dashboard#4",
@@ -267,17 +264,15 @@
           "title": "Cari nama, rekod atau tindakan",
           "title_placeholder": false,
           "instruction_preview": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "sensitive-log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/sensitive-access-logs",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.sensitive-access-logs#2",
@@ -286,17 +281,15 @@
           "title": "Semak pengguna, IP dan masa",
           "title_placeholder": false,
           "instruction_preview": "Semak pengguna, tindakan, alamat IP, user-agent dan masa akses.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "sensitive-log-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/sensitive-access-logs",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.sensitive-access-logs#3",
@@ -305,17 +298,15 @@
           "title": "Siasat akses luar biasa",
           "title_placeholder": false,
           "instruction_preview": "Siasat akses luar biasa melalui rekod asal; jangan padam atau ubah log.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "sensitive-log-target",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/sensitive-access-logs",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.sensitive-access-logs#4",
@@ -332,9 +323,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Melaporkan akses tidak dikenali kepada Admin dan wakil perlindungan data ialah tindakan di LUAR sistem; tiada kawalan skrin yang sepadan.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -361,17 +352,15 @@
           "title": "Tapis jenis, pelaku dan tarikh",
           "title_placeholder": false,
           "instruction_preview": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.log-aktiviti#2",
@@ -380,17 +369,15 @@
           "title": "Cari tajuk atau rujukan",
           "title_placeholder": false,
           "instruction_preview": "Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "log-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.log-aktiviti#3",
@@ -399,17 +386,15 @@
           "title": "Buka Butiran peristiwa",
           "title_placeholder": false,
           "instruction_preview": "Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-detail",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.log-aktiviti#4",
@@ -418,17 +403,15 @@
           "title": "Bandingkan masa secara kronologi",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "log-time",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/log-aktiviti",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.log-aktiviti#5",
@@ -445,9 +428,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Skop log bendahari ditentukan dasar akses peranan, bukan kawalan pada skrin; tiada elemen yang boleh disorot tanpa mengelirukan.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -471,17 +454,15 @@
           "title": "Buka wizard persediaan",
           "title_placeholder": false,
           "instruction_preview": "Tekan Mula Persediaan Berpandu.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "onboarding-start",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/persediaan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.persediaan#2",
@@ -499,8 +480,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Medan jawatan dan telefon hidup dalam wizard MODAL yang hanya terbuka selepas menekan Mula Persediaan Berpandu; guide halaman ini tiada langkah tindakan (wait_for_user:false).",
+          "since": "2026-08-07",
+          "followup": "F7/W6 — wizard persediaan ialah modal berlangkah. Memberi guide halaman ini langkah TINDAKAN akan mengubah kiraan `action_steps` yang dibekukan F0; keputusan itu milik fasa yang boleh mengemas denominator."
         },
         {
           "key": "tenant.persediaan#3",
@@ -518,8 +500,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Pilihan sumber nombor WhatsApp berada pada langkah 2 wizard modal; aliran penuh bersasar spesifik dalam screen.persediaan-berpandu.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.persediaan#4",
@@ -537,8 +519,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Repeater ahli awal berada pada langkah 3 wizard modal; ia tidak wujud dalam keadaan lalai halaman.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.persediaan#5",
@@ -556,8 +538,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Semakan peranan berlaku pada langkah 4 wizard modal sebelum simpan; tiada kawalan setara pada halaman.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.persediaan#6",
@@ -566,17 +548,15 @@
           "title": "Sambung semula jika dilangkau",
           "title_placeholder": false,
           "instruction_preview": "Jika dilangkau, kembali melalui menu Persediaan Berpandu untuk melengkapkan kemu",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/persediaan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -600,17 +580,15 @@
           "title": "Tekan Jemput Ahli",
           "title_placeholder": false,
           "instruction_preview": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "members-invite",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/ahli-peranan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.ahli-peranan#2",
@@ -628,8 +606,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Medan e-mel dan pilihan peranan berada dalam modal Jemput Ahli yang belum terbuka pada langkah ini.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.ahli-peranan#3",
@@ -638,17 +616,15 @@
           "title": "Sahkan ahli masuk senarai",
           "title_placeholder": false,
           "instruction_preview": "Selepas jemputan, pastikan ahli muncul dalam senarai tenant ini.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "members-list",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/ahli-peranan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.ahli-peranan#4",
@@ -657,17 +633,15 @@
           "title": "Hantar semula pautan jemputan",
           "title_placeholder": false,
           "instruction_preview": "Gunakan Hantar Semula Pautan jika ahli belum menerima pautan; jangan cipta akaun",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "members-actions",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/ahli-peranan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.ahli-peranan#5",
@@ -685,8 +659,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Set Kata Laluan Sementara ialah item DALAM dropdown Tindakan yang sama seperti langkah 4; menyasarkannya akan menyorot elemen yang identik.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.ahli-peranan#6",
@@ -695,17 +669,15 @@
           "title": "Semak kesan sebelum tukar peranan",
           "title_placeholder": false,
           "instruction_preview": "Untuk ubah peranan atau keluarkan ahli, semak kesan terhadap tugasan/minit dahul",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "members-role",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/ahli-peranan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -736,17 +708,15 @@
           "title": "Cari kod sedia ada dahulu",
           "title_placeholder": false,
           "instruction_preview": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "classnode-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/classification-nodes",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.classification-nodes#2",
@@ -755,17 +725,15 @@
           "title": "Pilih nod induk dan peringkat",
           "title_placeholder": false,
           "instruction_preview": "Pilih nod induk yang betul dan peringkat yang sepadan.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "classnode-parent",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/classification-nodes",
+          "route": "/app/{tenant}/classification-nodes/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.classification-nodes#3",
@@ -774,17 +742,15 @@
           "title": "Guna pola kod rasmi",
           "title_placeholder": false,
           "instruction_preview": "Gunakan pola kod seperti 500, 500-1 atau 500-1/2.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "classnode-code",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/classification-nodes",
+          "route": "/app/{tenant}/classification-nodes/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.classification-nodes#4",
@@ -793,17 +759,15 @@
           "title": "Tetapkan tajuk dan sensitiviti",
           "title_placeholder": false,
           "instruction_preview": "Tetapkan tajuk rasmi, sensitiviti lalai, status Aktif dan susunan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "classnode-title",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/classification-nodes",
+          "route": "/app/{tenant}/classification-nodes/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.classification-nodes#5",
@@ -820,9 +784,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Nasihat dasar (nyahaktifkan nod lama, jangan ubah nod terpakai) — tiada satu kawalan tunggal pada skrin yang mewakilinya.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -947,17 +911,15 @@
           "title": "Semak peraturan lalai platform",
           "title_placeholder": false,
           "instruction_preview": "Semak peraturan lalai platform sebelum membuat override masjid.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-schedule",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/retensi-peraturan",
+          "route": "/app/{tenant}/retensi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi-peraturan#2",
@@ -966,17 +928,15 @@
           "title": "Pilih jenis rekod atau prefix",
           "title_placeholder": false,
           "instruction_preview": "Pilih jenis rekod atau isi prefix klasifikasi yang khusus.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "retention-record-type",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/retensi-peraturan",
+          "route": "/app/{tenant}/retensi-peraturan/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi-peraturan#3",
@@ -985,17 +945,15 @@
           "title": "Isi tahun simpanan",
           "title_placeholder": false,
           "instruction_preview": "Isi tahun simpanan; kosongkan hanya apabila tindakan kekal memang dikehendaki.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-years",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/retensi-peraturan",
+          "route": "/app/{tenant}/retensi-peraturan/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi-peraturan#4",
@@ -1004,17 +962,15 @@
           "title": "Pilih tindakan akhir dan catatan",
           "title_placeholder": false,
           "instruction_preview": "Pilih tindakan akhir yang sah dan tulis catatan dasar/kelulusan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-action",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/retensi-peraturan",
+          "route": "/app/{tenant}/retensi-peraturan/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi-peraturan#5",
@@ -1023,17 +979,15 @@
           "title": "Uji kesan sebelum mengaktifkan",
           "title_placeholder": false,
           "instruction_preview": "Uji kesan pada halaman Retensi sebelum mengaktifkan pelupusan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-hold",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/retensi-peraturan",
+          "route": "/app/{tenant}/retensi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -1057,17 +1011,15 @@
           "title": "Semak telefon dan wakil data",
           "title_placeholder": false,
           "instruction_preview": "Semak telefon rasmi dan wakil perlindungan data.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "mosque-settings-profile",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/tetapan-masjid",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.tetapan-masjid#2",
@@ -1085,8 +1037,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Suis intake WhatsApp dan e-mel berada dalam modal Sunting Tetapan; halaman lalai hanya memaparkan nilai semasa.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.tetapan-masjid#3",
@@ -1104,8 +1056,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Medan kata kunci intake berada dalam modal Sunting Tetapan yang belum terbuka pada langkah ini.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.tetapan-masjid#4",
@@ -1123,8 +1075,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Senarai alamat pengirim dipercayai berada dalam modal Sunting Tetapan; halaman lalai tidak merendernya.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.tetapan-masjid#5",
@@ -1133,17 +1085,15 @@
           "title": "Pasang WhatsApp dan semak status",
           "title_placeholder": false,
           "instruction_preview": "Pasangkan WhatsApp melalui QR/kod telefon dan semak status tersambung.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "mosque-settings-whatsapp",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/tetapan-masjid",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.tetapan-masjid#6",
@@ -1160,9 +1110,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Mematikan notifikasi apabila peranti hilang ialah keputusan operasi merentas beberapa kawalan, bukan satu butang.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -1188,17 +1138,15 @@
           "title": "Bandingkan penggunaan dengan kuota",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan penggunaan GB, kuota efektif dan peratus penggunaan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "storage-usage",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/penggunaan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.penggunaan#2",
@@ -1207,17 +1155,15 @@
           "title": "Semak pesanan sedia ada",
           "title_placeholder": false,
           "instruction_preview": "Semak pesanan sedia ada sebelum memohon sekali lagi.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "storage-orders",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/penggunaan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.penggunaan#3",
@@ -1226,17 +1172,15 @@
           "title": "Tekan Tambah Storan",
           "title_placeholder": false,
           "instruction_preview": "Jika dibenarkan, tekan Tambah Storan dan pilih bilangan blok 10 GB.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "storage-add",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/penggunaan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.penggunaan#4",
@@ -1254,8 +1198,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Nombor invois hanya wujud selepas pesanan storan dijana; benih demo dan keadaan lalai halaman tiada pesanan.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.penggunaan#5",
@@ -1272,9 +1216,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran dasar bahawa pesanan menunggu bukan kuota aktif — konsep, bukan kawalan skrin.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -1298,17 +1242,15 @@
           "title": "Semak rekod akan luput",
           "title_placeholder": false,
           "instruction_preview": "Semak rekod yang akan luput dalam 365/90 hari.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-hold",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi#2",
@@ -1317,17 +1259,15 @@
           "title": "Bandingkan lalai dengan override",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan sumber peraturan lalai dengan override masjid.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "retention-schedule",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.retensi#3",
@@ -1345,8 +1285,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Butang Legal Hold hanya dirender pada baris rekod yang menghampiri tempoh retensi; benih demo tiada rekod dalam skop 12 bulan (diukur: retention_due_at 0).",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.retensi#4",
@@ -1364,8 +1304,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Tarik balik hold memerlukan rekod yang sedang berpegangan; keadaan itu tidak wujud dalam keadaan lalai mahupun benih demo.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.retensi#5",
@@ -1374,17 +1314,15 @@
           "title": "Eksport ZIP sebelum pelupusan",
           "title_placeholder": false,
           "instruction_preview": "Eksport ZIP sebelum pelupusan jika perlu; pautan eksport mempunyai tempoh tamat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "retention-export",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/retensi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -1415,17 +1353,15 @@
           "title": "Pilih Principal pemilik tugas",
           "title_placeholder": false,
           "instruction_preview": "Pilih Principal, iaitu pemilik tugas asal.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "delegation-principal",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/delegasi",
+          "route": "/app/{tenant}/delegasi/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.delegasi#2",
@@ -1434,17 +1370,15 @@
           "title": "Pilih Delegate yang bertindak",
           "title_placeholder": false,
           "instruction_preview": "Pilih Delegate, iaitu orang yang akan bertindak bagi pihak principal.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "delegation-delegate",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/delegasi",
+          "route": "/app/{tenant}/delegasi/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.delegasi#3",
@@ -1453,17 +1387,15 @@
           "title": "Hadkan capability delegasi",
           "title_placeholder": false,
           "instruction_preview": "Hadkan capability kepada Minit, Kelulusan atau kedua-duanya.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "delegation-capabilities",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/delegasi",
+          "route": "/app/{tenant}/delegasi/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.delegasi#4",
@@ -1472,17 +1404,15 @@
           "title": "Tetapkan tempoh dan sebab",
           "title_placeholder": false,
           "instruction_preview": "Tetapkan mula/tamat dan sebab yang boleh diaudit.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "delegation-starts",
+          "generic_declared": false,
           "wait_for_user": false,
-          "route": "/app/{tenant}/delegasi",
+          "route": "/app/{tenant}/delegasi/create",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.delegasi#5",
@@ -1499,9 +1429,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Label \"bagi pihak\" muncul pada TINDAKAN yang delegate buat (minit, kelulusan), bukan pada halaman Delegasi ini.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.delegasi#6",
@@ -1510,17 +1440,15 @@
           "title": "Batal delegasi bila tamat",
           "title_placeholder": false,
           "instruction_preview": "Batal delegasi sebaik keperluan tamat.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "delegation-revoke",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/delegasi",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -1551,17 +1479,15 @@
           "title": "Semak nama, e-mel dan WhatsApp",
           "title_placeholder": false,
           "instruction_preview": "Semak nama, e-mel dan nombor WhatsApp.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "profil-akaun",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/profil",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.profil#2",
@@ -1570,17 +1496,15 @@
           "title": "Hidupkan saluran yang boleh dicapai",
           "title_placeholder": false,
           "instruction_preview": "Buka Tetapan Notifikasi dan hidupkan hanya saluran yang boleh dicapai.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "profil-notifikasi",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/profil",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.profil#3",
@@ -1598,8 +1522,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Pautan sambung Telegram berada dalam modal Tetapan Notifikasi; halaman lalai hanya memaparkan status.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.profil#4",
@@ -1608,17 +1532,15 @@
           "title": "Hantar notifikasi ujian",
           "title_placeholder": false,
           "instruction_preview": "Gunakan Hantar Notifikasi Ujian selepas perubahan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "profil-ujian",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/profil",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.profil#5",
@@ -1627,17 +1549,15 @@
           "title": "Tetapkan kata laluan panjang unik",
           "title_placeholder": false,
           "instruction_preview": "Tetapkan kata laluan panjang, unik dan tidak digunakan di sistem lain.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "profil-kata-laluan",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/profil",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.profil#6",
@@ -1655,8 +1575,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Tindakan pemulihan kecemasan merentas dua kawalan berbeza yang langkah 2 dan 5 sudah sorot secara berasingan.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -1681,17 +1601,15 @@
           "title": "Semak lajur sumber dan status",
           "title_placeholder": false,
           "instruction_preview": "Semak Sumber, Tajuk/Fail, Tarikh Terima, Penghantar/Sumber, Diterima, Antivirus,",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.peti-masuk#2",
@@ -1700,17 +1618,15 @@
           "title": "Buka Lihat Dokumen dan OCR",
           "title_placeholder": false,
           "instruction_preview": "Buka Lihat Dokumen/OCR dan sahkan fail boleh dibaca serta benar untuk masjid ini",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "inbox-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.peti-masuk#3",
@@ -1719,17 +1635,15 @@
           "title": "Muat naik format dibenarkan sahaja",
           "title_placeholder": false,
           "instruction_preview": "Muat naik hanya format dibenarkan; fail melalui semakan antivirus dan kuota.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-upload",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.peti-masuk#4",
@@ -1738,17 +1652,15 @@
           "title": "Tekan Klasifikasikan dan lengkapkan",
           "title_placeholder": false,
           "instruction_preview": "Tekan Klasifikasikan dan lengkapkan metadata serta fail destinasi.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-classify",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.peti-masuk#5",
@@ -1757,17 +1669,15 @@
           "title": "Guna Padam Spam untuk spam",
           "title_placeholder": false,
           "instruction_preview": "Jika spam/tidak berkaitan, gunakan Padam (Spam) dan nyatakan sebab; jangan klasi",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-spam",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.peti-masuk#6",
@@ -1776,17 +1686,15 @@
           "title": "Sahkan sumber dan masa upload",
           "title_placeholder": false,
           "instruction_preview": "Pastikan sumber menunjukkan e-mel pengirim, nombor WhatsApp atau pengguna UI ser",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "inbox-source",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/peti-masuk",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -1817,17 +1725,15 @@
           "title": "Cari rujukan dan tapis jenis",
           "title_placeholder": false,
           "instruction_preview": "Cari melalui rujukan/tajuk dan tapis Jenis, Sensitiviti atau Status.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "records-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.records#2",
@@ -1836,17 +1742,15 @@
           "title": "Buka Lihat untuk metadata",
           "title_placeholder": false,
           "instruction_preview": "Buka Lihat untuk memeriksa metadata dan asal dokumen.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "records-view",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/records",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.records#3",
@@ -1864,8 +1768,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Tab OCR, Lampiran, Minit, Kelulusan dan Audit hidup pada halaman BUTIRAN rekod; URLnya dinamik (/records/{id}) jadi katalog tidak boleh mengisytiharkannya sebagai route langkah.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.records#4",
@@ -1883,8 +1787,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Butang Kegemaran berada pada halaman butiran rekod, bukan pada senarai ini.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.records#5",
@@ -1901,9 +1805,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran dasar bahawa tindakan ditentukan peranan — tiada elemen tunggal yang mewakilinya.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -1934,17 +1838,15 @@
           "title": "Cari fail sedia ada dahulu",
           "title_placeholder": false,
           "instruction_preview": "Cari nombor/tajuk fail sedia ada sebelum membuka fail baharu.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "regfiles-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.registry-files#2",
@@ -1953,17 +1855,15 @@
           "title": "Semak status dan bilangan kandungan",
           "title_placeholder": false,
           "instruction_preview": "Semak status terbuka/tutup dan bilangan kandungan.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "regfiles-status",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.registry-files#3",
@@ -1972,17 +1872,15 @@
           "title": "Semak lokasi dan pemegang fizikal",
           "title_placeholder": false,
           "instruction_preview": "Bagi hibrid/fizikal, semak rujukan, lokasi, pemegang dan tarikh pulang.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "regfiles-medium",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/registry-files",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.registry-files#4",
@@ -2000,8 +1898,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Keluarkan Fail, Terima Pulangan dan Pindah Lokasi ialah tindakan halaman BUTIRAN fail; route butiran dinamik dan tidak boleh diisytihar dalam katalog.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.registry-files#5",
@@ -2019,8 +1917,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Tutup fail dan buka jilid baharu ialah tindakan pada halaman butiran fail berkenaan.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.registry-files#6",
@@ -2038,8 +1936,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Geran akses khas diurus dalam relation manager pada halaman butiran fail sulit.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -2070,17 +1968,15 @@
           "title": "Tapis kategori minit",
           "title_placeholder": false,
           "instruction_preview": "Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.minit-saya#2",
@@ -2089,17 +1985,15 @@
           "title": "Baca arahan dan tarikh akhir",
           "title_placeholder": false,
           "instruction_preview": "Baca rekod, pengirim, arahan, penerima, keutamaan dan tarikh akhir.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "minit-record",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.minit-saya#3",
@@ -2108,17 +2002,15 @@
           "title": "Buat kerja sebelum Tanda Selesai",
           "title_placeholder": false,
           "instruction_preview": "Jika tindakan, buat kerja sebenar dahulu sebelum Tanda Selesai.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-complete",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.minit-saya#4",
@@ -2127,17 +2019,15 @@
           "title": "Guna Balas dan Edarkan",
           "title_placeholder": false,
           "instruction_preview": "Gunakan Balas & Edarkan untuk catatan susulan dan penerima seterusnya.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "minit-reply",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/minit-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.minit-saya#5",
@@ -2154,9 +2044,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Perbezaan penerima tindakan dan s.k. ialah konsep tanggungjawab; lajur Penerima boleh-togol dan tersembunyi secara lalai.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.minit-saya#6",
@@ -2173,9 +2063,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Atribusi \"oleh X bagi pihak Y\" hanya muncul selepas seorang delegate benar-benar bertindak; ia tiada dalam keadaan lalai.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -2215,8 +2105,9 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Jadual kelulusan menapis approver_id = pengguna semasa, dan admin_masjid TIADA kebenaran approvals.decide (config/roles.php) — skrin ini sentiasa kosong untuk peranan utama guide ini.",
+          "since": "2026-08-07",
+          "followup": "F9 — `tenant.kelulusan` menyenaraikan KESEMUA lapan peranan, tetapi hanya pengerusi dan nazir memegang `approvals.decide`. Guide ini sepatutnya berperanan pelulus sahaja; sehingga itu ia sentiasa kosong untuk peranan lain. Penemuan kandungan, bukan pepijat kod."
         },
         {
           "key": "tenant.kelulusan#2",
@@ -2234,8 +2125,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Membuka rekod asal membawa pengguna ke halaman butiran rekod; tiada baris pada skrin ini untuk peranan guide.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.kelulusan#3",
@@ -2253,8 +2144,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Butang Lulus/Tolak ialah aksi baris; tiada baris kerana admin_masjid tidak boleh menjadi pelulus.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.kelulusan#4",
@@ -2272,8 +2163,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Medan kata laluan dan nota berada dalam modal keputusan yang hanya boleh dibuka oleh pelulus yang ditetapkan.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.kelulusan#5",
@@ -2290,9 +2181,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran dasar keselamatan kata laluan — konsep, bukan kawalan skrin.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.kelulusan#6",
@@ -2310,8 +2201,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Lajur status dan \"bagi pihak\" ialah sel baris; jadual kosong untuk peranan yang guide ini tujukan.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -2342,17 +2233,15 @@
           "title": "Masukkan teks carian",
           "title_placeholder": false,
           "instruction_preview": "Masukkan teks tajuk, rujukan atau kandungan OCR jika perlu.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-text",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#2",
@@ -2361,17 +2250,15 @@
           "title": "Gabungkan penapis rekod",
           "title_placeholder": false,
           "instruction_preview": "Gabungkan Jenis, Fail, Arah, Sensitiviti, Status dan Saluran.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "search-filters",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#3",
@@ -2380,17 +2267,15 @@
           "title": "Isi pengirim dan julat tarikh",
           "title_placeholder": false,
           "instruction_preview": "Isi pengirim, rujukan, penerima serta julat tarikh rekod/terima.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-parties",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#4",
@@ -2399,17 +2284,15 @@
           "title": "Tekan Cari, semak jumlah",
           "title_placeholder": false,
           "instruction_preview": "Tekan Cari dan semak jumlah hasil.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-submit",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#5",
@@ -2418,17 +2301,15 @@
           "title": "Simpan carian dengan nama",
           "title_placeholder": false,
           "instruction_preview": "Isi Nama carian, tandakan Lalai jika sesuai, kemudian Simpan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-save",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#6",
@@ -2437,17 +2318,15 @@
           "title": "Guna semula atau padam carian",
           "title_placeholder": false,
           "instruction_preview": "Pilih carian tersimpan untuk guna semula atau Padam carian apabila tidak diperlu",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-saved",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.carian#7",
@@ -2456,17 +2335,15 @@
           "title": "Tekan bintang untuk Kegemaran",
           "title_placeholder": false,
           "instruction_preview": "Tekan bintang untuk menambah hasil ke Kegemaran.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "search-favourite",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/carian",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -2604,17 +2481,15 @@
           "title": "Semak empat kad ringkasan",
           "title_placeholder": false,
           "instruction_preview": "Semak Jumlah Rekod, Akan Luput, Minit Lewat dan Akses Sulit.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "report-summary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/laporan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.laporan#2",
@@ -2623,17 +2498,15 @@
           "title": "Bandingkan pecahan jenis dan status",
           "title_placeholder": false,
           "instruction_preview": "Bandingkan pecahan Jenis, Status dan Sumber.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "report-breakdown",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/laporan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.laporan#3",
@@ -2642,17 +2515,15 @@
           "title": "Tekan Eksport CSV jika ada",
           "title_placeholder": false,
           "instruction_preview": "Jika butang Eksport CSV tersedia, muat turun untuk analisis terkawal.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "report-export",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/laporan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.laporan#4",
@@ -2669,9 +2540,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Membuka dan mengawal perkongsian fail CSV berlaku di luar sistem selepas muat turun.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -2711,8 +2582,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Butang Mohon Pembetulan berada pada halaman BUTIRAN rekod, bukan pada senarai permohonan ini.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.pembetulan-rekod#2",
@@ -2730,8 +2601,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Medan sebab dan cadangan perubahan berada dalam modal Mohon Pembetulan pada halaman butiran rekod.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.pembetulan-rekod#3",
@@ -2749,8 +2620,8 @@
           "viewport": "desktop",
           "mobile_defect": false,
           "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "reason": "Penghantaran berlaku dalam modal pada halaman butiran rekod; skrin ini hanya memaparkan hasilnya.",
+          "since": "2026-08-07"
         },
         {
           "key": "tenant.pembetulan-rekod#4",
@@ -2759,17 +2630,15 @@
           "title": "Reviewer luluskan atau tolak",
           "title_placeholder": false,
           "instruction_preview": "Reviewer membandingkan nilai asal/cadangan, kemudian Luluskan atau Tolak dengan ",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "correction-decision",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pembetulan-rekod",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.pembetulan-rekod#5",
@@ -2778,17 +2647,15 @@
           "title": "Notifikasi keputusan dan audit",
           "title_placeholder": false,
           "instruction_preview": "Pemohon menerima notifikasi keputusan dan audit menyimpan sebelum/selepas.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "correction-diff",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/pembetulan-rekod",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -5721,17 +5588,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.dashboard#2",
@@ -5740,17 +5605,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Semak pertumbuhan tenant, status saluran dan tugasan operasi platform.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "dashboard-stats",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.dashboard#3",
@@ -5767,9 +5630,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -5793,17 +5656,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/mosques",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.mosques#2",
@@ -5812,17 +5673,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Semak, lulus, gantung atau pulihkan tenant tanpa mencampurkan data organisasi.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-mosques",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/mosques",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.mosques#3",
@@ -5839,9 +5698,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -5865,17 +5724,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/users",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.users#2",
@@ -5884,17 +5741,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Urus akaun global, status aktif dan akses superadmin secara terkawal.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-users",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/users",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.users#3",
@@ -5911,9 +5766,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -5937,17 +5792,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/storage-orders",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.storage-orders#2",
@@ -5956,17 +5809,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Sahkan pesanan dan pembayaran storan sebelum kuota ditambah.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-storage-orders",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/storage-orders",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.storage-orders#3",
@@ -5983,9 +5834,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -6009,17 +5860,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/status-sambungan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.status-sambungan#2",
@@ -6028,17 +5877,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Diagnosis WhatsApp, e-mel dan gateway merentas platform tanpa membuka dokumen te",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-channels",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/status-sambungan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.status-sambungan#3",
@@ -6055,9 +5902,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -6081,17 +5928,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/whatsapp-platform",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.whatsapp-platform#2",
@@ -6100,17 +5945,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Urus sambungan WhatsApp platform dan semak status sesi.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-whatsapp",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/whatsapp-platform",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.whatsapp-platform#3",
@@ -6127,9 +5970,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -6153,17 +5996,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/tetapan-platform",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.tetapan-platform#2",
@@ -6172,17 +6013,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Urus tetapan global yang dibenarkan dan kekalkan rahsia di persekitaran server.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "platform-settings",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/tetapan-platform",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.tetapan-platform#3",
@@ -6199,9 +6038,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -6225,17 +6064,15 @@
           "title": "Sahkan konteks",
           "title_placeholder": false,
           "instruction_preview": "Sahkan anda berada di panel Pentadbir Platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/profil-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.profil-saya#2",
@@ -6244,17 +6081,15 @@
           "title": "Semak data",
           "title_placeholder": false,
           "instruction_preview": "Urus profil, kata laluan dan saluran notifikasi akaun sendiri.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "profil-akaun",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/profil-saya",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.profil-saya#3",
@@ -6271,9 +6106,9 @@
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "not-applicable",
+          "reason": "Amaran operasi supaya tidak mengulang tindakan semasa sistem memproses — konsep merentas halaman, bukan kawalan tunggal.",
+          "since": "2026-08-07"
         }
       ]
     },
@@ -9535,17 +9370,15 @@
           "title": "Cari panduan atau hantar tiket",
           "title_placeholder": false,
           "instruction_preview": "Cari panduan, jalankan diagnosis, ubah tetapan bantuan atau hantar tiket.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "help-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.bantuan#2",
@@ -9554,17 +9387,15 @@
           "title": "Sahkan panel, tenant dan role",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9588,17 +9419,15 @@
           "title": "Semak penggunaan panduan agregat",
           "title_placeholder": false,
           "instruction_preview": "Semak penggunaan panduan secara agregat tanpa teks carian mentah atau pemarkahan",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "analytics-metrics",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/analitik-bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.analitik-bantuan#2",
@@ -9607,17 +9436,15 @@
           "title": "Sahkan panel, tenant dan role",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/analitik-bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9641,17 +9468,15 @@
           "title": "Urus tiket masjid semasa",
           "title_placeholder": false,
           "instruction_preview": "Semak dan urus tiket masjid semasa sahaja.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "tickets-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/tiket-sokongan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "tenant.tiket-sokongan#2",
@@ -9660,17 +9485,15 @@
           "title": "Sahkan panel, tenant dan role",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/app/{tenant}/tiket-sokongan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9694,17 +9517,15 @@
           "title": "Buka fungsi",
           "title_placeholder": false,
           "instruction_preview": "Cari panduan operasi platform, diagnosis dan laporan masalah.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "help-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.bantuan#2",
@@ -9713,17 +9534,15 @@
           "title": "Sahkan skop",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9747,17 +9566,15 @@
           "title": "Buka fungsi",
           "title_placeholder": false,
           "instruction_preview": "Semak metrik bantuan agregat merentas platform.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "analytics-metrics",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/analitik-bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.analitik-bantuan#2",
@@ -9766,17 +9583,15 @@
           "title": "Sahkan skop",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/analitik-bantuan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9800,17 +9615,15 @@
           "title": "Buka fungsi",
           "title_placeholder": false,
           "instruction_preview": "Urus tiket tenant dan awam dengan ID Permintaan.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "tickets-search",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/tiket-sokongan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.tiket-sokongan#2",
@@ -9819,17 +9632,15 @@
           "title": "Sahkan skop",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/tiket-sokongan",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },
@@ -9853,17 +9664,15 @@
           "title": "Buka fungsi",
           "title_placeholder": false,
           "instruction_preview": "Tambah FAQ atau makluman pelengkap tanpa mengubah workflow keselamatan rasmi.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "platform-announcements",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/help-announcements",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "admin.help-announcements#2",
@@ -9872,17 +9681,15 @@
           "title": "Sahkan skop",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "nav-primary",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/admin/help-announcements",
           "wave": "W5",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W5 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     },

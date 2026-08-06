@@ -64,6 +64,65 @@ export const PAGE_TARGETS = [
         padanan: /^\/app\/[^/]+\/registry-files\/?$/,
         peta: [['.fi-ta-search-field', 'regfiles-search']],
     },
+    // ── F6-W5 ────────────────────────────────────────────────────────────────────────────
+    {
+        route: '/app/{tenant}/classification-nodes',
+        padanan: /^\/app\/[^/]+\/classification-nodes\/?$/,
+        peta: [['.fi-ta-search-field', 'classnode-search']],
+    },
+    {
+        route: '/app/{tenant}/sensitive-access-logs',
+        padanan: /^\/app\/[^/]+\/sensitive-access-logs\/?$/,
+        peta: [['.fi-ta-search-field', 'sensitive-log-search']],
+    },
+    // Tiket sokongan wujud pada KEDUA-DUA panel dan berkongsi `App\Filament\Support\
+    // SupportRequestsTable`, jadi satu sasaran melayan dua guide. Medan carian DIUKUR hadir
+    // walaupun jadual KOSONG (benih demo: 0 tiket) — itulah sebab ia dipilih dan bukan
+    // sasaran baris.
+    {
+        route: '/app/{tenant}/tiket-sokongan',
+        padanan: /^\/app\/[^/]+\/tiket-sokongan\/?$/,
+        peta: [['.fi-ta-search-field', 'tickets-search']],
+    },
+    {
+        route: '/admin/tiket-sokongan',
+        padanan: /^\/admin\/tiket-sokongan\/?$/,
+        peta: [['.fi-ta-search-field', 'tickets-search']],
+    },
+    // Papan pemuka: `StatsOverviewWidget` Filament tidak menyalurkan `extraAttributes()` ke
+    // pembalutnya (`Stat extends Schemas\Components\Component`; blade `stat.blade.php` tidak
+    // pernah merender bag atribut). Kelas pembalut `.fi-wi-stats-overview` datang daripada
+    // `stats-overview-widget.blade.php:18` dan DIUKUR hadir pada kedua-dua panel.
+    {
+        route: '/app/{tenant}',
+        padanan: /^\/app\/[^/]+\/?$/,
+        peta: [['.fi-wi-stats-overview', 'dashboard-stats']],
+    },
+    {
+        route: '/admin',
+        padanan: /^\/admin\/?$/,
+        peta: [['.fi-wi-stats-overview', 'dashboard-stats']],
+    },
+    {
+        route: '/admin/mosques',
+        padanan: /^\/admin\/mosques\/?$/,
+        peta: [['.fi-ta-search-field', 'platform-mosques']],
+    },
+    {
+        route: '/admin/users',
+        padanan: /^\/admin\/users\/?$/,
+        peta: [['.fi-ta-search-field', 'platform-users']],
+    },
+    {
+        route: '/admin/storage-orders',
+        padanan: /^\/admin\/storage-orders\/?$/,
+        peta: [['.fi-ta-search-field', 'platform-storage-orders']],
+    },
+    {
+        route: '/admin/help-announcements',
+        padanan: /^\/admin\/help-announcements\/?$/,
+        peta: [['.fi-ta-search-field', 'platform-announcements']],
+    },
 ];
 
 /**

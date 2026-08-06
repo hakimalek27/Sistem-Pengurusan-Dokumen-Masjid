@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W5: `tenant.tetapan-masjid` #1 ("Semak telefon rasmi dan wakil perlindungan
+         data") — seksyen profil, dirender tanpa syarat. --}}
+    <x-filament::section data-help-target="mosque-settings-profile">
         <x-slot name="heading">Profil Masjid</x-slot>
         <dl class="grid grid-cols-2 gap-2 text-sm">
             <dt class="text-gray-500">Nama</dt><dd>{{ $mosque->name }}</dd>
@@ -8,7 +10,9 @@
         </dl>
     </x-filament::section>
 
-    <x-filament::section>
+    {{-- F6-W5: `tenant.tetapan-masjid` #5 ("Pasangkan WhatsApp melalui QR/kod telefon dan
+         semak status tersambung"). --}}
+    <x-filament::section data-help-target="mosque-settings-whatsapp">
         <x-slot name="heading">WhatsApp Masjid — Notifikasi Pilihan</x-slot>
         <p class="mb-3 text-sm text-gray-600 dark:text-gray-300">
             Aktifkan fungsi ini untuk menghantar notifikasi Diwan daripada nombor WhatsApp rasmi organisasi anda.

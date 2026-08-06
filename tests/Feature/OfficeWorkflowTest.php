@@ -18,7 +18,12 @@ it('memaparkan dashboard tenant lengkap dan wizard Rekod Baharu', function () {
         ->get('/app/mam')
         ->assertOk()
         ->assertSee('Ringkasan Pejabat')
-        ->assertSee('Checklist Onboarding');
+        // F6-W5 (peraturan repo #6, teks UI Bahasa Melayu): tajuk widget dibetulkan daripada
+        // "Checklist Onboarding" (bocor EN) kepada "Senarai Semak Persediaan". Tour
+        // `tenant.dashboard#3` merujuknya sebagai "senarai semak persediaan", jadi tajuk
+        // berlainan bahasa pada langkah yang sama akan mengelirukan pengguna. Ujian dikemas
+        // kerana PRODUK berubah dengan sengaja (peraturan #9), bukan untuk menghijaukan gate.
+        ->assertSee('Senarai Semak Persediaan');
 
     $this->actingAs($this->admin)
         ->get('/app/mam/records')

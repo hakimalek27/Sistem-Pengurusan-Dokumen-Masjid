@@ -43,7 +43,10 @@ class RegistryFilesTable
                 TextColumn::make('file_no')->label('No. Fail')->searchable()->sortable(),
                 TextColumn::make('title')->label('Tajuk')->searchable()->wrap(),
                 TextColumn::make('sensitivity')->label('Sensitiviti')->badge(),
+                // F6-W5: `tenant.registry-files` #2 ("Semak status terbuka/tutup dan bilangan
+                // kandungan") — sel Status baris pertama.
                 TextColumn::make('status')->label('Status')->badge()
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'regfiles-status'))
                     ->color(fn ($state) => $state === 'terbuka' ? 'success' : 'gray'),
                 TextColumn::make('enclosure_count')->label('Kandungan')->badge(),
                 // F6-W4: guide `urus-fail-fizikal` langkah 2 ("Semak Medium dan Status")

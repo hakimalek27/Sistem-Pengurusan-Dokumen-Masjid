@@ -60,9 +60,13 @@ class InboxTable
                     ->label('Tarikh Terima')
                     ->date('d/m/Y')
                     ->placeholder('—'),
+                // F6-W5: `tenant.peti-masuk` #6 ("Pastikan sumber menunjukkan e-mel pengirim,
+                // nombor WhatsApp atau pengguna UI serta masa upload") — lajur asal-usul INI,
+                // bukan lajur `source_channel` yang hanya memaparkan lencana saluran.
                 TextColumn::make('provenance')
                     ->label('Penghantar / Sumber')
                     ->state(fn (Record $record) => self::provenance($record))
+                    ->extraCellAttributes(fn ($record): array => self::baris1($record, 'inbox-source'))
                     ->wrap()->limit(80),
                 TextColumn::make('created_at')->label('Diterima')->dateTime('d/m/Y H:i')->sortable(),
                 // F6-W2 (§7.2) — langkah amaran guide muat naik ("jangan klasifikasikan
@@ -80,7 +84,10 @@ class InboxTable
                     ->tooltip('Amaran: sha256 sama wujud pada rekod lain masjid ini'),
             ])
             ->recordActions([
-                ViewAction::make()->label('Lihat Dokumen / OCR'),
+                // F6-W5: `tenant.peti-masuk` #2 ("Buka Lihat Dokumen/OCR dan sahkan fail
+                // boleh dibaca serta benar untuk masjid ini").
+                ViewAction::make()->label('Lihat Dokumen / OCR')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'inbox-view')),
                 self::classifyAction(),
                 self::deleteSpamAction(),
             ]);
@@ -422,11 +429,13 @@ class InboxTable
 
     protected static function deleteSpamAction(): Action
     {
+        // F6-W5: `tenant.peti-masuk` #5 ("Jika spam/tidak berkaitan, gunakan Padam (Spam)").
         return Action::make('padam')
             ->label('Padam (Spam)')
             ->icon('heroicon-o-trash')
             ->color('danger')
             ->authorize('delete')
+            ->extraAttributes(fn ($record): array => self::baris1($record, 'inbox-spam'))
             ->schema([
                 Textarea::make('reason')->label('Sebab (spam / tidak berkaitan)')->required(),
             ])

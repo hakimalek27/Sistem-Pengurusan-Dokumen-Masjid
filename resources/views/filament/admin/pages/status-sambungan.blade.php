@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W5: `admin.status-sambungan` #2 ("Diagnosis WhatsApp, e-mel dan gateway
+         merentas platform tanpa membuka dokumen tenant"). --}}
+    <x-filament::section data-help-target="platform-channels">
         <x-slot name="heading">Saluran Platform</x-slot>
         <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div class="flex items-center justify-between gap-2">

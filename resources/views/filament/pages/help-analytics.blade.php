@@ -1,6 +1,10 @@
 <x-filament-panels::page>
     <div data-help-target="page-content" class="space-y-6">
-        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        {{-- F6-W5: `tenant.analitik-bantuan` #1 dan `admin.analitik-bantuan` #1. View ini
+             DIKONGSI oleh kedua-dua panel (App\Filament\App\Pages\AnalitikBantuan dan
+             App\Filament\Admin\Pages\AnalitikBantuan menunjuk `filament.pages.help-analytics`),
+             jadi satu sasaran melayan dua guide. --}}
+        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-5" data-help-target="analytics-metrics">
             @foreach ([
                 ['Carian', $searches],
                 ['Tanpa Hasil', $noResults],

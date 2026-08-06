@@ -9,7 +9,9 @@
         <x-filament::section><div class="text-sm text-gray-500">Akses Sulit 30 Hari</div><div class="text-3xl font-semibold">{{ $sensitiveViews30 ?? 'Terhad' }}</div></x-filament::section>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
+    {{-- F6-W5: `tenant.laporan` #2 ("Bandingkan pecahan Jenis, Status dan Sumber"). Grid
+         ketiga-tiga seksyen, bukan satu daripadanya — langkah itu merujuk perbandingan. --}}
+    <div class="grid gap-4 lg:grid-cols-3" data-help-target="report-breakdown">
         @foreach ([['Jenis Rekod', $byType, true], ['Status', $byStatus, false], ['Sumber', $bySource, false]] as [$heading, $rows, $isType])
             <x-filament::section>
                 <x-slot name="heading">{{ $heading }}</x-slot>

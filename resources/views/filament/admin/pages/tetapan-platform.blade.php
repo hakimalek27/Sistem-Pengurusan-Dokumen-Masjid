@@ -1,5 +1,7 @@
 <x-filament-panels::page>
-    <x-filament::section>
+    {{-- F6-W5: `admin.tetapan-platform` #2 ("Urus tetapan global yang dibenarkan dan
+         kekalkan rahsia di persekitaran server"). --}}
+    <x-filament::section data-help-target="platform-settings">
         <x-slot name="heading">Harga & Bank</x-slot>
         <dl class="grid grid-cols-2 gap-2 text-sm">
             <dt class="text-gray-500">Harga RM/GB/tahun</dt><dd>{{ $pricing['per_gb_year_rm'] ?? '✋ belum ditetapkan' }}</dd>

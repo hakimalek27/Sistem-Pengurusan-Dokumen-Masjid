@@ -1,6 +1,9 @@
 <x-filament-panels::page>
     <div class="flex flex-wrap items-end gap-2 border-b border-gray-200 pb-4 dark:border-white/10">
-        <label class="min-w-64 flex-1 text-sm font-medium">Carian tersimpan
+        {{-- F6-W5: `tenant.carian` #6 ("Pilih carian tersimpan untuk guna semula atau Padam").
+             Dipasang pada LABEL, bukan pada `<select>` Padam, kerana yang kedua dirender
+             `@if (count(...) > 0)` — sasaran mesti wujud dalam keadaan LALAI juga. --}}
+        <label class="min-w-64 flex-1 text-sm font-medium" data-help-target="search-saved">Carian tersimpan
             <select class="fi-input mt-1 block w-full" wire:change="loadSearch($event.target.value)">
                 <option value="">Pilih carian</option>
                 @foreach ($this->savedSearchOptions() as $value => $label)
@@ -8,7 +11,8 @@
                 @endforeach
             </select>
         </label>
-        <label class="min-w-52 flex-1 text-sm font-medium">Nama carian
+        {{-- F6-W5: `tenant.carian` #5 ("Isi Nama carian, tandakan Lalai, kemudian Simpan"). --}}
+        <label class="min-w-52 flex-1 text-sm font-medium" data-help-target="search-save">Nama carian
             <input class="fi-input mt-1 block w-full" wire:model="savedSearchName" maxlength="100">
         </label>
         <label class="flex min-h-9 items-center gap-2 text-sm"><input type="checkbox" wire:model="savedSearchDefault"> Lalai</label>
@@ -25,7 +29,10 @@
 
     {{-- F6-W1 (§7.2) — sasaran tour `screen.hasil-carian-lanjutan`. --}}
     <form wire:submit="search" class="grid gap-3 md:grid-cols-2 xl:grid-cols-4" data-help-target="search-filters">
-        <label class="text-sm font-medium md:col-span-2 xl:col-span-4">Teks
+        {{-- F6-W5: `tenant.carian` #1 ("Masukkan teks tajuk, rujukan atau kandungan OCR").
+             Sasaran ini BERSARANG dalam `search-filters` (#2, keseluruhan borang) — itu sah:
+             satu ELEMEN memegang satu sasaran, dan dua langkah menyorot skop yang berbeza. --}}
+        <label class="text-sm font-medium md:col-span-2 xl:col-span-4" data-help-target="search-text">Teks
             <input type="search" wire:model="query" placeholder="Tajuk, rujukan atau kandungan OCR" class="fi-input mt-1 block w-full">
         </label>
         <label class="text-sm font-medium">Jenis rekod
@@ -46,7 +53,8 @@
         <label class="text-sm font-medium">Saluran
             <select wire:model="sourceChannel" class="fi-input mt-1 block w-full"><option value="">Semua</option><option value="muat_naik">Muat Naik UI</option><option value="emel">E-mel</option><option value="whatsapp">WhatsApp</option><option value="imbasan">Imbasan</option></select>
         </label>
-        <label class="text-sm font-medium">Pengirim / organisasi<input wire:model="sender" class="fi-input mt-1 block w-full"></label>
+        {{-- F6-W5: `tenant.carian` #3 ("Isi pengirim, rujukan, penerima serta julat tarikh"). --}}
+        <label class="text-sm font-medium" data-help-target="search-parties">Pengirim / organisasi<input wire:model="sender" class="fi-input mt-1 block w-full"></label>
         <label class="text-sm font-medium">Ruj. kami / tuan<input wire:model="reference" class="fi-input mt-1 block w-full"></label>
         <label class="text-sm font-medium">Penerima<input wire:model="recipient" class="fi-input mt-1 block w-full"></label>
         <div></div>
@@ -54,7 +62,8 @@
         <label class="text-sm font-medium">Tarikh rekod hingga<input type="date" wire:model="recordDateTo" class="fi-input mt-1 block w-full"></label>
         <label class="text-sm font-medium">Tarikh terima dari<input type="date" wire:model="receivedDateFrom" class="fi-input mt-1 block w-full"></label>
         <label class="text-sm font-medium">Tarikh terima hingga<input type="date" wire:model="receivedDateTo" class="fi-input mt-1 block w-full"></label>
-        <div class="md:col-span-2 xl:col-span-4"><x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Cari</x-filament::button></div>
+        {{-- F6-W5: `tenant.carian` #4 ("Tekan Cari dan semak jumlah hasil"). --}}
+        <div class="md:col-span-2 xl:col-span-4" data-help-target="search-submit"><x-filament::button type="submit" icon="heroicon-o-magnifying-glass">Cari</x-filament::button></div>
     </form>
 
     {{-- Bekas hasil dirender TANPA SYARAT (dahulu `@if ($searched)`): sasaran tour mesti
