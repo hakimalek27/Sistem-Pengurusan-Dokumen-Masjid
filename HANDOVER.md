@@ -18,10 +18,25 @@ smoke 9/9 · health OK · /up 200 · 8/8 container · failed_jobs 0 · cakera 61
 W4 menutup **82 langkah generik terakhir shard `workflow`**: 79 dinaikkan kepada sasaran DOM
 sebenar, 5 dijustifikasikan dengan sebab yang diukur.
 
-### 🔜 SETERUSNYA: F6-W5 — wave TERBESAR yang tinggal
+### 🔜 SETERUSNYA: F6-W5 — **langkah 1 (inventori) SUDAH SIAP**
+
+📄 `bukti/plan-f6-w5/INVENTORI-W5.md` — baca dahulu; ia mengandungi jadual keputusan,
+semakan skrin kosong yang sudah dijalankan, dan pembetulan penting di §3.
 
 **35 guide / 146 langkah / 144 generik**, shard `tenant-admin-public`. Ia satu-satunya wave
 yang menggerakkan metrik KOHORT 25/124 (§7.3).
+
+**Skop sebenar jauh lebih kecil daripada yang disangka:** ~13 daripada 16 langkah pada route
+yang kelihatan "tiada sasaran" sebenarnya sudah ada sasaran penuh pada sub-route `/create` —
+langkah-langkah itu menerangkan BORANG CIPTA tetapi mewarisi route SENARAI. Pemetaan betul =
+tetapkan `route` langkah kepada `/create` + sasarkan medan borang.
+
+**Sasaran baharu yang benar-benar diperlukan:** `/delegasi` senarai ×2 · `/classification-nodes`
+carian ×1 · `/retensi-peraturan` senarai ×1 · panel `/admin/*` ×7 (satu corak, 21 langkah).
+
+**Skrin kosong sudah diukur:** `/delegasi` 0 · `/retensi-peraturan` 0 ·
+`/admin/storage-orders` 0. Borang cipta dirender tanpa data, jadi hanya **4 langkah**
+benar-benar memerlukan baris. ⛔ JANGAN jalankan `RetentionRuleSeeder`.
 
 ⚠️ **Semakan PERTAMA sebelum memetakan sebarang sasaran baris:** *adakah skrin ini ada baris
 untuk peranan yang guide ini tujukan?* **TIGA** daripada lima punca W4 ialah skrin kosong
