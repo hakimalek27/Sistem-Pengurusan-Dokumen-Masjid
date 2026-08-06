@@ -45,12 +45,55 @@ ialah **memetakan**, bukan menulis atribut Blade baharu.
 
 ## 3. Route yang PERLU sasaran baharu
 
+⚠️ **DIBETULKAN selepas ukuran lanjut** — tiga daripada empat baris di bawah ternyata
+**sudah ada set sasaran penuh**, cuma pada sub-route `/create`:
+
+| Guide | Langkah | Sasaran sedia ada pada `<route>/create` |
+|---|---|---|
+| `tenant.delegasi` | 6 | `delegation-principal` `delegation-delegate` `delegation-capabilities` `delegation-starts` `delegation-ends` `delegation-reason` `delegation-submit` |
+| `tenant.retensi-peraturan` | 5 | `retention-record-type` `retention-prefix` `retention-years` `retention-action` `retention-note` `retention-submit` |
+| `tenant.classification-nodes` | 5 | `classnode-parent` `classnode-code` `classnode-title` `classnode-sensitivity` `classnode-level` `classnode-submit` |
+
+**Punca salah baca saya:** skrip inventori mengira `s.route ?? g.route`, dan langkah-langkah
+ini tidak mengisytiharkan route sendiri — jadi ia mewarisi route **SENARAI** sedangkan
+teksnya menerangkan **BORANG CIPTA** ("Pilih Principal…", "Isi tahun simpanan…",
+"Gunakan pola kod seperti 500-1/2").
+
+➡️ **Pemetaan yang betul:** tetapkan `route` langkah kepada sub-route `/create` DAN sasarkan
+medan borang. Runtime akan menavigasi ke sana sendiri (mekanisme yang sama seperti
+`kind: 'navigate'` yang W4 sahkan berfungsi). Ini mengubah skop W5 secara material:
+**~13 daripada 16 langkah itu memerlukan SIFAR sasaran baharu.**
+
+Baki yang benar-benar memerlukan sasaran baharu:
+
 | Route | Langkah | Nota |
 |---|---|---|
-| `/app/{tenant}/delegasi` | 6 | Principal, Delegate, capability, tempoh, jejak "bagi pihak", batal |
-| `/app/{tenant}/classification-nodes` | 5 | Cari, nod induk, pola kod, tajuk/sensitiviti, kunci selepas guna |
-| `/app/{tenant}/retensi-peraturan` | 5 | Peraturan lalai, jenis/prefix, tahun, tindakan akhir, uji kesan |
+| `/delegasi` (senarai) | 2 | "Semak nama *bagi pihak*" · "Batal delegasi" — kawalan pada BARIS |
+| `/classification-nodes` (senarai) | 1 | "Cari kod/tajuk sedia ada" — medan carian jadual |
+| `/retensi-peraturan` (senarai) | 1 | "Semak peraturan lalai platform" |
 | **`/admin/*` (7 route)** | **21** | Panel superadmin — lihat §4 |
+
+## 3A. ⚠️ Skrin KOSONG — diukur SEBELUM menulis kod (§5.1 dipatuhi)
+
+```
+delegasi (delegations)          0   ← kosong
+retensi-peraturan               0   ← kosong (override tenant; lalai platform diwarisi)
+admin/storage-orders            0   ← kosong
+classification-nodes           40   ✔
+admin/mosques                   2   ✔
+admin/users                    11   ✔
+sensitive_access_logs           1   ✔   (benih W4)
+record_correction_requests      1   ✔   (benih W4)
+disposal_batches                2   ✔   (benih W4)
+```
+
+Tiga skrin kosong. Nasib baik, kebanyakan langkahnya merujuk **borang cipta** (yang dirender
+tanpa data), jadi hanya **4 langkah** benar-benar memerlukan baris:
+`/delegasi` ×2, `/retensi-peraturan` ×1, `/admin/storage-orders` ×1 daripada 3.
+
+⛔ **JANGAN** jalankan `RetentionRuleSeeder` — pelan melarangnya. Jika `/retensi-peraturan`
+memerlukan baris, tambah SATU override demo dalam `DemoSeeder` (data sahaja, bukan enjin
+retensi yang §0.3 lindungi).
 
 ## 4. 🔁 Corak `/admin/*` — satu corak menyelesaikan 21 langkah
 
