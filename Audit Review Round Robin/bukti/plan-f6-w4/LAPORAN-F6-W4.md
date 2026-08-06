@@ -405,7 +405,58 @@ kandungan/route, di luar skop pemetaan sasaran W4.
 Justifikasi **11 → 13**. Manifest dijana semula, validator bebas exit 0, `PlanManifestTest`
 liputan wave tertutup **69 assertion** lulus.
 
-*(keputusan pusingan 3 — CI run 31038869313, komit `e7c0fa6` — diisi selepas selesai)*
+### c.13 Pusingan 3 (CI 31038869313, `e7c0fa6`) — 12/15, punca KEEMPAT
+
+```
+Error: workflow.admin_masjid.muat-naik-…#6: kedudukan langkah salah
+Error: workflow.setiausaha.klasifikasikan-…#5: kedudukan langkah salah
+  3 failed · 12 passed (9.2m)
+```
+
+Kedua-dua pembaikan pusingan 2 berkesan. Punca baharu: `padaHalamanKoreografi` menyemak
+`route === null`. **Dalam MANIFEST, langkah tanpa route sendiri DIISI dengan route GUIDE** —
+ia tidak pernah `null` di sana, tidak seperti `guides.json` mentah. Gelung berhenti pada
+langkah pertama (`tamat = 5`) lalu menghantar langkah 6 ke `driveGenericSteps`.
+
+**Fix:** padankan route guide juga — selamat kerana gelung bermula pada `mulaKoreografi`,
+jadi langkah papan pemuka yang berkongsi route itu sudah dikecualikan.
+**Disahkan terhadap manifest SEBELUM push** (bukan menunggu CI): mula/tamat = **5/14** dan
+**4/9**, pecahan awal 1–4 / 1–3 dan akhir 15–20 / 10–13.
+
+### c.14 Pusingan 4 (CI 31040898498, `6f1a249`) — 13/15
+
+```
+success  integration · screen · tenant-admin-public · Docker app · Docker web
+failure  guidance-e2e (workflow)   → 13 passed, 2 failed (8.2m)
+
+Error: workflow.setiausaha.klasifikasikan-surat-masuk-dan-edarkan-minit#10:
+       klik maju tidak menambah tepat satu langkah
+```
+
+Punca keempat ditutup. **Satu guide tinggal.** Langkah 10 ialah langkah EKOR pertama
+(julat koreografi tamat pada 9), pada `/minit-saya`. `driveGenericSteps` melihat langkah 11
+berkongsi route yang sama, jadi ia klik "Seterusnya" dan mengassert kaunter jadi `11`.
+
+**HIPOTESIS (belum disahkan):** sasaran langkah 11 (`minit-status`) sudah kelihatan sebaik
+langkah 10 dipaparkan, jadi sync F2 memaju tour sendiri dan klik manual menjadi kemajuan
+KEDUA. Keluarga masalah yang sama seperti G3 yang diselesaikan di tempat lain dengan
+mengassert **urutan yang DIREKOD** (`__diwanTourLog`), bukan kaunter seketika.
+
+⚠️ Ia direkod sebagai HIPOTESIS dengan sengaja: **empat kali dalam W4 punca sebenar berbeza
+daripada tekaan pertama saya.** Sahkan daripada trace sebelum membaiki.
+
+### c.15 Kemajuan merentas pusingan
+
+| Pusingan | Komit | `workflow` | Punca ditutup |
+|---|---|---|---|
+| 1 | `9abb066` | 2/15 | proksi `status==='specific'` · selektor tapisan |
+| 2 | `9abb066` | 11/15 | had bawah `assertTrailTargets` · `/kelulusan` kosong utk setiausaha |
+| 3 | `e7c0fa6` | 12/15 | `route===null` — manifest isi route guide |
+| 4 | `6f1a249` | **13/15** | — (baki: G3 langkah ekor pertama) |
+
+🔑 **Corak yang mendasari KEEMPAT-EMPAT punca:** setiap tempat yang menyimpulkan sesuatu
+daripada "langkah ini generik" — sama ada `status === 'specific'` atau `route === null` —
+pecah serentak apabila W4 menjadikan semua langkah spesifik. **Cari corak ini dahulu pada W5.**
 
 ## (d) Kriteria Siap W4
 
