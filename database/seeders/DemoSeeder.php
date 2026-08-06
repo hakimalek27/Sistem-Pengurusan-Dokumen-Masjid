@@ -290,6 +290,36 @@ class DemoSeeder extends Seeder
             ]);
         }
 
+        // Minit yang DIHANTAR OLEH setiausaha.
+        //
+        // `MinitResource` berskop `from_user_id = saya OR saya penerima`. Setiausaha bukan
+        // kedua-duanya bagi minit demo sedia ada (penghantar = kerani/admin_masjid), jadi
+        // `/minit-saya` KOSONG untuk peranan itu. Kesannya berantai dan halus: sasaran
+        // langkah 11 (`minit-status`, sel baris) tidak pernah dirender, jadi
+        // `stepAdvancePlan` mengelaskan langkah 10 sebagai langkah TINDAKAN ("Buat pada
+        // skrin") dan bukan `advance` — gate melaporkannya sebagai "klik maju tidak menambah
+        // tepat satu langkah", yang menyembunyikan punca sebenar (skrin kosong).
+        //
+        // Koreografi gate menekan "Seterusnya" pada langkah penerima tanpa mengisinya, jadi
+        // klasifikasinya tidak mencipta minit. Benih ini memberi setiausaha satu minit yang
+        // BENAR-BENAR dihantarnya — sama seperti yang guide `klasifikasikan-surat-masuk-dan-
+        // edarkan-minit` terangkan.
+        $setiausaha = User::query()->where('email', 'setiausaha@demo.test')->first();
+        $pengerusi = User::query()->where('email', 'pengerusi@demo.test')->first();
+        if ($setiausaha && $pengerusi && ! Minit::query()->where('mosque_id', $mam->id)
+            ->where('from_user_id', $setiausaha->id)->exists()) {
+            // Penerima TUNGGAL yang pasti boleh melihat rekod: `MinitService` menolak
+            // SELURUH minit jika satu penerima tidak dibenarkan (punca CI W3).
+            app(MinitService::class)->create(
+                $record,
+                $setiausaha,
+                [$pengerusi->id],
+                [],
+                'Surat telah diklasifikasikan; mohon semakan Pengerusi.',
+                MinitPriority::Biasa,
+            );
+        }
+
         // Log akses sulit: guide `workflow.audit` langkah 8 membaca baris pertama.
         if (! SensitiveAccessLog::query()->where('mosque_id', $mam->id)->exists()) {
             SensitiveAccessLog::query()->create([
