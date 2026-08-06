@@ -551,6 +551,17 @@ test('tour klasifikasi mengikuti modal lima langkah tanpa menghantar rekod', asy
     await context.close();
 });
 
+// F6-W5 — nota penjaga: invarian "guide AUTOMATIK berundur apabila modal dibuka" dijaga oleh
+// `wizard klasifikasi lima langkah…` di bawah, yang TERBUKTI dua arah: ia MERAH sebelum
+// pembaikan `guardAutomaticGuideFromDialogs` (popover memintas butang modal / memerangkap
+// fokus) dan HIJAU selepasnya.
+//
+// Penjaga yang lebih sempit pernah ditulis lalu DIBUANG: ia mengklik "Klasifikasikan" melalui
+// koordinat semasa tour aktif, dan overlay Driver.js menyerap klik koordinat
+// (`overlayClickBehavior: 'close'` — pelajaran F0/W1). Penjaga yang tidak setia kepada laluan
+// pengguna sebenar lebih buruk daripada tiada penjaga; ujian penuh di bawah memandu laluan
+// yang SAMA seperti pengguna dan sudah meliputi invarian ini.
+
 async function verifyClassificationWizard(browser, baseURL, account, viewport) {
     const context = await browser.newContext({ baseURL, viewport });
     await disableAutomaticGuides(context);

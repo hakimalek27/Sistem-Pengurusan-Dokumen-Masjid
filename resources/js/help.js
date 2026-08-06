@@ -397,7 +397,27 @@ function guardAutomaticGuideFromDialogs(guideSteps, guide) {
         const modal = [...document.querySelectorAll('.fi-modal-window')].find(isVisible);
         const index = activeDriver.getActiveIndex() ?? 0;
         const current = guideSteps[index];
-        if (!modal || !current || !GENERIC_TARGETS.has(current.target)) return;
+        if (!modal || !current) return;
+
+        // F6-W5 — predikat yang BETUL ialah "sorotan tour berada DI LUAR modal", bukan
+        // "langkah ini generik".
+        //
+        // Pengawal ini hanya dipasang untuk guide AUTOMATIK (`if (!explicit)` di bawah), jadi
+        // syarat `GENERIC_TARGETS.has(current.target)` tidak pernah menjawab soalan "adakah ini
+        // guide automatik" — ia proksi yang kebetulan benar selagi guide halaman bersasar
+        // generik. W5 menjadikan langkah `tenant.peti-masuk` spesifik (`inbox-record`), jadi
+        // pengawal berhenti berfungsi dan popover tour kekal DI ATAS modal klasifikasi:
+        // butang modal tidak boleh ditekan dan fokus terperangkap dalam popover.
+        // Diukur pada pelayar: modal terbuka, `diminimize:false`, fokus =
+        // `driver-popover-close-btn`. Ini KALI KEEMPAT corak "proksi langkah generik" muncul
+        // (W3 -> W4 -> W5 gate -> di sini) — rujuk LAPORAN-F6-W5.md.
+        //
+        // Niat asal dikekalkan: langkah yang sasarannya memang BERADA DALAM modal itu milik
+        // modal, jadi tour tidak dimusnahkan. `.driver-active-element` dibaca (bukan
+        // `resolveStepElement`) kerana ia tiada kesan sampingan — memanggil `decorateTargets()`
+        // dari dalam MutationObserver ialah punca ribut mutasi F5c.
+        const disorot = [...document.querySelectorAll('.driver-active-element')];
+        if (disorot.some((el) => modal.contains(el))) return;
 
         emit('dismissed', guide.id, current.sourceIndex, current.target);
         activeDriver.destroy();

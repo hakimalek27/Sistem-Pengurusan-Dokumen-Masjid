@@ -1,9 +1,15 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W5 kod SIAP, gate tempatan 3 shard (7 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W5 gate HIJAU, dikomit `f66ffe2`, menunggu CI (7 Ogos)
 
-**Produksi kekal `cea55da` (Deploy 10).** Kod W5 siap dan hijau pada setiap semakan
-tempatan; yang tinggal ialah gate 3 shard → CI → Deploy 11.
+**Produksi kekal `cea55da` (Deploy 10). `local = origin = f66ffe2`.**
+
+**Gate tempatan 3 shard HIJAU (pusingan 2):** screen 30/30 · workflow 15/15 ·
+tenant-admin-public 41/41 · agregator **GATE LULUS 83/473/172** (union SET).
+
+⚠️ **GitHub tidak mencipta larian CI untuk push `f66ffe2`** (push mendarat, Actions enabled,
+0 run). Dicetuskan manual — `gh workflow run "CI and release image" --ref main` — run
+**31127157590**. Sahkan `conclusion=success` untuk SHA `f66ffe2` sebelum Deploy 11.
 
 📄 `bukti/plan-f6-w5/INVENTORI-W5.md` (Revisi 2) · `LAPORAN-F6-W5.md` · `skrip/`
 

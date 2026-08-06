@@ -313,3 +313,89 @@ satu baris `.gitignore` + pemilik memindahkan/memadam sandaran itu.
 
 Cakera pelayan **61%** (12G lapang) — prune TIDAK diperlukan untuk Deploy 11
 (build cache 4.39GB, 2.73GB boleh dituntut jika perlu kemudian).
+
+### 10. PENGESAHAN VISUAL — dua sahih, satu ketidakpadanan MAKNA direkod
+
+Dijalankan pada pelayan tempatan dengan benih demo segar, deep-link `?panduan=&langkah=`
+(kaedah W4). Gate hanya membuktikan sasaran DISOROT; hanya mata boleh menilai sama ada
+sorotan itu BERMAKNA.
+
+| Semakan | Keputusan |
+|---|---|
+| `tenant.dashboard#2` → `dashboard-stats` | ✔ menyorot kad "Ringkasan Pejabat" — tepat "kad statistik" |
+| `tenant.dashboard#3` → `dashboard-checklist` | ✔ menyorot "Senarai Semak Persediaan (3/6)"; tajuk BM baharu kini SEPADAN teks tour |
+| `admin.mosques#2` → `platform-mosques` | ⚠️ berfungsi, tetapi sorotan jatuh pada kotak **Carian** sedangkan ayatnya berbunyi "Semak, lulus, gantung atau pulihkan tenant" — iaitu tindakan BARIS |
+
+⚠️ **Ketidakpadanan makna, bukan kegagalan.** Elemen yang disorot NYATA dan kelihatan
+(berbeza daripada defect `<th>` kosong W4), dan tindakan baris berada dalam pandangan yang
+sama — jadi pengguna tidak tersesat. Tetapi sasaran yang paling setia kepada ayat itu ialah
+sel tindakan baris pertama, bukan medan carian. Corak yang sama terpakai pada
+`admin.users#2` ("Urus akaun global…") dan `admin.storage-orders#2` ("Sahkan pesanan…").
+
+**Tidak dibaiki dalam W5 — sebab dinyatakan, bukan diam-diam dilangkau:** menukarnya bermakna
+sasaran baris baharu + satu pusingan gate 40 minit + satu pusingan CI, untuk menaikkan
+sorotan yang sudah sah kepada yang lebih tepat. `/admin/storage-orders` pula mempunyai **0
+baris** dalam benih, jadi ia tetap memerlukan sauh peringkat-halaman. Direkod sebagai
+penghalusan **F7/W6**, dalam keluarga yang sama seperti penemuan kandungan §2:
+**adakah sasaran menjawab AYAT langkah itu, bukan sekadar berada pada halaman yang betul?**
+
+### 11. CI pusingan 1 — KECACATAN PRODUK sebenar yang gate 3 shard tidak boleh lihat
+
+CI merah pada SATU ujian: `guidance.spec.js:612` wizard klasifikasi. Gate `guidance-e2e-gate`
+merah hanya kerana shard bergantung pada job itu dan DILANGKAU — bukan kegagalan gate.
+
+**Punca (diukur pada pelayar, bukan disimpulkan):** `guardAutomaticGuideFromDialogs`
+(`help.js:400`) memusnahkan tour AUTOMATIK apabila modal dibuka — tetapi hanya jika langkah
+semasa bersasar GENERIK:
+
+```js
+if (!modal || !current || !GENERIC_TARGETS.has(current.target)) return;
+```
+
+Pengawal itu hanya dipasang untuk guide automatik (`if (!explicit)`, help.js:854), jadi syarat
+`GENERIC_TARGETS` tidak pernah menjawab soalan "adakah ini guide automatik" — ia PROKSI yang
+kebetulan benar selagi guide halaman bersasar `page-content`. W5 menjadikan
+`tenant.peti-masuk#1` spesifik (`inbox-record`) dan pengawal berhenti berfungsi.
+
+Diukur dalam Chrome pada `/peti-masuk`: tour auto-mula, modal dibuka, `diminimize:false`,
+popover masih ada, `document.activeElement = driver-popover-close-btn`. CI melihat gejala
+yang lain — popover memintas klik pada butang "Seterusnya" modal.
+
+⚠️ **Ini KECACATAN PRODUK, bukan isu ujian.** `disableAutomaticGuides()` dalam harness hanya
+berkesan untuk panel AWAM (`help.js:889` menyemak `diwan-help-seen:` hanya bila
+`isPublic`), jadi guide tenant SENTIASA auto-mula. Tanpa pembaikan ini, setiap pengguna yang
+membuka Peti Masuk akan mendapat popover tour di atas modal klasifikasi — butang tidak boleh
+ditekan dan fokus terperangkap.
+
+**Pembaikan:** predikat digantikan dengan yang menjawab soalan sebenar — *adakah sorotan tour
+berada DI LUAR modal?* Niat asal dikekalkan (langkah yang sasarannya memang di dalam modal
+tidak memusnahkan tour). `.driver-active-element` dibaca dan bukan `resolveStepElement()`,
+kerana memanggil `decorateTargets()` dari dalam MutationObserver ialah punca ribut mutasi F5c.
+
+🔑 **KALI KEEMPAT corak "proksi langkah generik" muncul** (W3 → W4 ×2 → gate W5 → di sini).
+Senarai proksi yang sudah ditutup: `status === 'specific'` · `route === null` ·
+`needsFlow()` menukar pemandu · `GENERIC_TARGETS.has(step.target)` menentukan pengawal modal.
+**Cadangan F8: cari setiap rujukan `GENERIC_TARGETS` dan tanya "adakah ini benar-benar
+soalan yang hendak dijawab?"**
+
+### 12. Dua kesilapan saya semasa mendiagnosisnya — direkod
+
+**(a) Eksperimen "penentu" pertama saya menguji perkara yang salah.** Saya memulihkan katalog
+lama dan menjalankan ujian: ia GAGAL juga, jadi saya hampir menyimpulkan W5 tidak bersalah.
+Tetapi ia gagal pada assertion yang BERBEZA (fokus, baris 569) daripada CI (klik dipintas,
+baris 582) — reproduksi tempatan saya tidak setia. **Bandingkan TITIK kegagalan, bukan hanya
+lulus/gagal, sebelum mempercayai eksperimen pemulihan.**
+
+**(b) Penjaga sempit yang saya tulis kemudian adalah cacat dan DIBUANG.** Ia mengklik
+"Klasifikasikan" melalui koordinat semasa tour aktif — yang overlay Driver.js memang serap
+(`overlayClickBehavior: 'close'`, pelajaran F0/W1 yang sudah direkod dan saya langgar semula).
+Ujian `wizard klasifikasi` sedia ada sudah menjadi penjaga DUA ARAH yang terbukti: merah
+sebelum pembaikan, hijau selepasnya. Penjaga yang tidak setia kepada laluan pengguna lebih
+buruk daripada tiada penjaga.
+
+**Ralat Alpine `textareaFormComponent is not defined` DIKECUALIKAN daripada punca W5** melalui
+ukuran: katalog LAMA + pembaikan menghasilkan ralat yang sama, tetapi pada viewport yang
+BERBEZA (1440px, bukan 390px). Viewport berbeza setiap larian ⇒ perlumbaan pemuatan aset pada
+pelayan dev satu-benang Windows, bukan kecacatan produk. Tiga baki kegagalan `ci-guidance`
+tempatan semuanya `net::ERR_ABORTED` / tamat masa — had persekitaran yang sama dan sudah
+didokumen (`PHP_CLI_SERVER_WORKERS` tidak disokong pada Windows).
