@@ -119,12 +119,40 @@ arah yang selamat: gate lulus WALAUPUN di bawah beban yang memerahkan shard `t-a
 dalam sesi F7. Keadaan mesin direkod dahulu supaya ia tidak boleh dijadikan alasan selepas
 melihat keputusan — dalam kes ini ia tidak diperlukan langsung.
 
-## (g) Lencongan dari spec
+## (g) CI pusingan 1 MERAH — dan puncanya ialah jurang dalam verifikasi TEMPATAN saya
+
+CI **31211426672**: satu ujian merah, 35 lulus.
+
+```
+[ci-guidance] › e2e/guidance-f5.spec.js:323 › F6-W5d sorotan tour bertahan selepas morph Livewire
+```
+
+Job `guidance-e2e-gate` turut merah, tetapi itu **akibat, bukan punca**: shard matriks
+`skipped` apabila lapis 1 gagal, dan agregator melaporkan "missing shard (tidak berjalan ≠
+lulus)" — gagal-tertutup berkelakuan betul.
+
+**Punca:** penjaga W5d mengekod sasaran `tenant.bantuan#1` pada TIGA tempat (pemerhati mutasi,
+prasyarat keterlihatan, assertion akhir). Sasaran itu ialah tepat yang batch ini tukar. Ia
+merah atas sebab yang BETUL — penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod berada
+dalam komponen `help-center` yang sama, jadi senario morph yang dikunci kekal identik; hanya
+nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana
+`[data-help-target]`: ketepatan nod ialah sebahagian daripada apa yang penjaga itu buktikan.
+
+🔴 **Jurang proses sebenar:** saya menjalankan gate 3 shard (`guidance-full`), `unit`, dan Pest
+penuh — tetapi **bukan projek `ci-guidance`**, dan `guidance-f5.spec.js` hanya hidup di sana.
+Gate penuh 40 minit boleh hijau sepenuhnya sambil check WAJIB merah.
+**Peraturan baharu: apabila katalog berubah, jalankan `ci-guidance` DAN gate 3 shard.**
+Skrip: `bukti/plan-f7-hutang/skrip/` (lihat `jalan-ci-guidance.sh` dalam laporan ini).
+
+✅ **Bukti dua arah datang percuma:** CI 31211426672 ialah arah MERAH penjaga (sasaran tidak
+sepadan → gagal); larian tempatan selepas pembetulan ialah arah HIJAU (14.7s).
+
+## (h) Lencongan dari spec
 
 TIADA. Perubahan sasaran ialah tepat kerja yang §7.2 peruntukkan kepada F7 ("penghalusan
 semantik"), dan pengecualian polisi baharu tidak diperlukan.
 
-## (h) Nota untuk F8/F9
+## (i) Nota untuk F8/F9
 
 - `admin.storage-orders#2` kekal ketidakpadanan makna yang DIREKOD, bukan tersembunyi. Ia hanya
   boleh ditutup jika benih demo memperoleh sekurang-kurangnya satu pesanan storan — perubahan

@@ -320,6 +320,13 @@ test('F5b matriks: format salah ditolak, tour tidak tersangkut', async ({ page, 
 // Ia PERLUMBAAN: bila commit selesai SEBELUM sorotan, sorotan melekat. Itu sebab gate tempatan
 // lulus sedangkan CI (`31134978567`) gagal pada kod yang SAMA. Ujian ini membuang nasib itu
 // dengan menunggu morph BERLAKU dahulu, kemudian barulah menuntut sorotan.
+//
+// ⚠️ Hutang F7 (CI 31211426672): ujian ini mengekod sasaran `tenant.bantuan#1`, dan sasaran itu
+// bertukar `help-search` → `help-search-form` apabila hutang ditutup. Ia merah atas sebab yang
+// BETUL — penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod berada dalam komponen
+// `help-center` yang sama, jadi senario morph yang dikunci tetap identik; hanya nod yang
+// diperhatikan berubah. Jangan longgarkan pemerhati kepada mana-mana `[data-help-target]`:
+// ketepatan nod ialah sebahagian daripada apa yang ujian ini buktikan.
 test('F6-W5d sorotan tour bertahan selepas morph Livewire (bukan bergantung nasib)', async ({ page, context }) => {
     await disableAutomaticGuides(context);
 
@@ -336,7 +343,7 @@ test('F6-W5d sorotan tour bertahan selepas morph Livewire (bukan bergantung nasi
             new MutationObserver((muts) => {
                 for (const m of muts) {
                     if (m.type !== 'attributes' || m.attributeName !== 'class') continue;
-                    if (!m.target.matches?.('[data-help-target="help-search"]')) continue;
+                    if (!m.target.matches?.('[data-help-target="help-search-form"]')) continue;
                     window.__sorotan.push(m.target.classList.contains('driver-active-element'));
                 }
             }).observe(document.documentElement, {
@@ -350,7 +357,7 @@ test('F6-W5d sorotan tour bertahan selepas morph Livewire (bukan bergantung nasi
 
     // Prasyarat: guide yang betul dipilih dan sasaran memang ada dalam keadaan lalai halaman.
     await expect(page.locator('[data-diwan-help-runtime]')).toHaveAttribute('data-guide-id', 'tenant.bantuan');
-    await expect(page.locator('[data-help-target="help-search"]')).toBeVisible();
+    await expect(page.locator('[data-help-target="help-search-form"]')).toBeVisible();
 
     // Tunggu morph BENAR-BENAR berlaku — tanpa ini ujian hanya menguji perlumbaan yang bertuah.
     await expect(async () => {
@@ -361,7 +368,7 @@ test('F6-W5d sorotan tour bertahan selepas morph Livewire (bukan bergantung nasi
     const disorot = highlighted(page);
     await expect(disorot, 'sorotan hilang selepas morph Livewire dan tidak dipulihkan')
         .toBeVisible({ timeout: 15_000 });
-    await expect(disorot).toHaveAttribute('data-help-target', 'help-search');
+    await expect(disorot).toHaveAttribute('data-help-target', 'help-search-form');
 
     // Ia mesti KEKAL, bukan berkelip-kelip: sorotan masih ada 3s kemudian, dan pemulihan
     // berhenti (bilangan peralihan berbatas — bukan gelung moveTo/morph tanpa henti).
