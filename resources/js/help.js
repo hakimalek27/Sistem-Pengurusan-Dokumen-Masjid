@@ -25,6 +25,9 @@ let autoMinimiseTimer = null;
 let autoMinimiseFrame = null;
 let tourTrigger = null;
 let rehighlightIndex = null;
+let highlightLossPoller = null;
+let highlightLossIndex = null;
+let highlightLossRepairs = 0;
 // Indeks langkah yang pengguna sudah tekan "Buat pada skrin" — tour sedang menunggu tindakan.
 let menungguTindakanIndex = null;
 
@@ -395,6 +398,80 @@ function rehighlightWhenTargetArrives(driverApi, step, index) {
     });
 }
 
+/** Hentikan pengawas kehilangan sorotan (dipanggil dari setiap laluan pembongkaran). */
+function clearHighlightLossWatch() {
+    if (highlightLossPoller) window.clearInterval(highlightLossPoller);
+    highlightLossPoller = null;
+    highlightLossIndex = null;
+}
+
+/**
+ * Sorotan boleh HILANG selepas ia berjaya dipasang — morph Livewire memadamnya.
+ *
+ * `rehighlightWhenTargetArrives()` (di atas) menangani keadaan BERTENTANGAN: sasaran belum
+ * wujud ketika Driver.js memanggil `element:`. Ia menyemak SEKALI pada `onHighlighted` dan
+ * keluar awal apabila sorotan sudah betul — jadi ia buta kepada sorotan yang betul mula-mula
+ * dan dimusnahkan kemudian.
+ *
+ * Kelas `.driver-active-element` ditambah oleh Driver.js kepada nod DOM; ia tidak wujud dalam
+ * HTML yang dirender pelayan. Apabila komponen Livewire yang MENGANDUNGI sasaran menyelesaikan
+ * commitnya, morph menulis semula atribut `class` nod itu daripada HTML pelayan dan kelas itu
+ * lenyap. Popover kekal, nombor langkah kekal, tetapi tiada apa-apa yang disorot: pengguna
+ * membaca "Cari panduan atau hantar tiket" tanpa tahu KE MANA hendak melihat.
+ *
+ * DIUKUR pada `/app/{tenant}/bantuan` (jejak bercap masa, bukan penaakulan):
+ *   2423ms livewire-commit help-center → 2877ms +driver-active-element →
+ *   5460ms livewire-morph help-center → 5465ms −driver-active-element (tidak pernah kembali).
+ * Ia perlumbaan tulen: bila commit selesai SEBELUM sorotan, sorotan melekat. Itu sebab gate
+ * tempatan lulus dan CI gagal pada kod yang SAMA.
+ *
+ * Pemulihan menggunakan interval berkala pendek, bukan MutationObserver: `resolveStepElement()`
+ * memanggil `decorateTargets()`, dan memanggil itu dari dalam pemerhati mutasi ialah PUNCA
+ * ribut mutasi F5c. Ia berbatas pada dua arah — tempoh mengawal (6s) dan bilangan pembaikan
+ * (2 per langkah) — supaya ia tidak boleh menjadi gelung dengan halaman yang memang memorph
+ * berterusan. Mekanisme sync §0.3 tidak disentuh.
+ *
+ * ⚠️ `refresh()` TIDAK boleh membaiki keadaan ini, dan itu disahkan pada kod vendor bukan
+ * diandaikan: `driver.js.mjs:161` (`xe`) membaca `__activeElement` yang TERSIMPAN lalu hanya
+ * melukis semula overlay dan menempatkan semula popover. Ia tidak menilai semula callback
+ * `element:` dan tidak memasang semula kelas — kelas itu ditambah hanya dalam laluan sorot
+ * (`driver.js.mjs:190`). `moveTo(index)` memandu semula langkah yang SAMA, jadi sasaran
+ * diselesaikan semula, kelas dan atribut ARIA dipasang semula, dan popover kembali betul.
+ */
+function watchHighlightLoss(driverApi, step, index) {
+    if (highlightLossIndex !== index) {
+        clearHighlightLossWatch();
+        highlightLossRepairs = 0;
+    }
+    if (highlightLossPoller || !step?.target) return;
+    highlightLossIndex = index;
+
+    const bermula = Date.now();
+    highlightLossPoller = window.setInterval(() => {
+        if (Date.now() - bermula > 6000 || !driverApi?.isActive?.()) {
+            clearHighlightLossWatch();
+
+            return;
+        }
+        if ((driverApi.getActiveIndex() ?? -1) !== index) {
+            clearHighlightLossWatch();
+
+            return;
+        }
+        if (document.querySelector('.driver-active-element')) return;
+        // Sasaran mesti benar-benar ada — jika tidak, ini kes `rehighlightWhenTargetArrives`
+        // dan membiarkannya mengendalikan keadaan itu mengelak dua pembaikan berlumba.
+        if (!resolveStepElement(step)) return;
+        if (highlightLossRepairs >= 2) {
+            clearHighlightLossWatch();
+
+            return;
+        }
+        highlightLossRepairs += 1;
+        driverApi.moveTo(index);
+    }, 250);
+}
+
 function guardAutomaticGuideFromDialogs(guideSteps, guide) {
     clearAutomaticModalGuard();
     // F6-W5 — guide AUTOMATIK tidak boleh melumpuhkan halaman.
@@ -719,6 +796,7 @@ function showUnavailableGuide(runtime, guide, step) {
             clearAutomaticModalGuard();
             clearAutoMinimise();
             clearFocusManagement();
+            clearHighlightLossWatch();
             rehighlightIndex = null;
             menungguTindakanIndex = null;
         },
@@ -810,6 +888,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             focusPopover();               // F2d: fokus awal (vendor tidak melakukannya)
             scheduleAutoMinimise(current, plan);
             rehighlightWhenTargetArrives(options.driver, current, index);
+            watchHighlightLoss(options.driver, current, index);
             emit(index === driverStartIndex ? 'started' : 'progressed', guide.id, current.sourceIndex, current.target);
         },
         // F2a: cabang dipilih oleh plan YANG SAMA dengan label — tiada lagi label yang
@@ -886,6 +965,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
             clearAutomaticModalGuard();
             clearAutoMinimise();
             clearFocusManagement();       // F2d: fokus pulang ke pencetus/launcher
+            clearHighlightLossWatch();
             rehighlightIndex = null;
             menungguTindakanIndex = null;
             if (completed) stripGuideQuery();

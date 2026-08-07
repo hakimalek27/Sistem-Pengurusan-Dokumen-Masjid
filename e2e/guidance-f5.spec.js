@@ -301,3 +301,73 @@ test('F5b matriks: format salah ditolak, tour tidak tersangkut', async ({ page, 
     // Had saiz mesti dinyatakan pada dropzone (langkah 2 tour merujuknya).
     await expect(modal.getByText(/Format sah:/)).toBeVisible();
 });
+
+// ── F6-W5d: sorotan tour mesti BERTAHAN selepas morph Livewire ─────────────────────────
+//
+// Kecacatan yang ujian ini kunci (diukur pada `/app/{tenant}/bantuan`, bukan disimpulkan):
+//
+//   2423ms  livewire-commit  help-center            <- komponen mula commit
+//   2877ms  +driver-active-element                  <- Driver.js menyorot sasaran
+//   5460ms  livewire-morph   help-center            <- commit selesai
+//   5465ms  -driver-active-element                  <- morph menulis semula `class`
+//
+// Kelas `.driver-active-element` ditambah oleh Driver.js kepada nod DOM; ia tidak wujud dalam
+// HTML pelayan. Apabila komponen Livewire yang MENGANDUNGI sasaran menyelesaikan commitnya,
+// morph memulihkan atribut `class` daripada HTML pelayan dan sorotan lenyap — popover kekal,
+// nombor langkah kekal, tetapi tiada apa-apa disorot. Pengguna diberitahu "Cari panduan atau
+// hantar tiket" tanpa tahu ke mana hendak melihat.
+//
+// Ia PERLUMBAAN: bila commit selesai SEBELUM sorotan, sorotan melekat. Itu sebab gate tempatan
+// lulus sedangkan CI (`31134978567`) gagal pada kod yang SAMA. Ujian ini membuang nasib itu
+// dengan menunggu morph BERLAKU dahulu, kemudian barulah menuntut sorotan.
+test('F6-W5d sorotan tour bertahan selepas morph Livewire (bukan bergantung nasib)', async ({ page, context }) => {
+    await disableAutomaticGuides(context);
+
+    // Rakam peralihan kelas + peristiwa morph SEBELUM apa-apa skrip halaman berjalan.
+    await context.addInitScript(() => {
+        window.__morphHelpCenter = 0;
+        window.__sorotan = [];
+        document.addEventListener('livewire:init', () => {
+            window.Livewire.hook('morph', ({ component }) => {
+                if (component.name === 'help-center') window.__morphHelpCenter += 1;
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            new MutationObserver((muts) => {
+                for (const m of muts) {
+                    if (m.type !== 'attributes' || m.attributeName !== 'class') continue;
+                    if (!m.target.matches?.('[data-help-target="help-search"]')) continue;
+                    window.__sorotan.push(m.target.classList.contains('driver-active-element'));
+                }
+            }).observe(document.documentElement, {
+                subtree: true, attributes: true, attributeFilter: ['class'],
+            });
+        });
+    });
+
+    await loginAdmin(page);
+    await page.goto(`/app/${tenantSlug}/bantuan?panduan=tenant.bantuan&langkah=0`);
+
+    // Prasyarat: guide yang betul dipilih dan sasaran memang ada dalam keadaan lalai halaman.
+    await expect(page.locator('[data-diwan-help-runtime]')).toHaveAttribute('data-guide-id', 'tenant.bantuan');
+    await expect(page.locator('[data-help-target="help-search"]')).toBeVisible();
+
+    // Tunggu morph BENAR-BENAR berlaku — tanpa ini ujian hanya menguji perlumbaan yang bertuah.
+    await expect(async () => {
+        expect(await page.evaluate(() => window.__morphHelpCenter)).toBeGreaterThan(0);
+    }).toPass({ timeout: 60_000 });
+
+    // Selepas morph, sorotan mesti kembali (pemulihan berbatas: ≤250ms tinjauan + moveTo).
+    const disorot = highlighted(page);
+    await expect(disorot, 'sorotan hilang selepas morph Livewire dan tidak dipulihkan')
+        .toBeVisible({ timeout: 15_000 });
+    await expect(disorot).toHaveAttribute('data-help-target', 'help-search');
+
+    // Ia mesti KEKAL, bukan berkelip-kelip: sorotan masih ada 3s kemudian, dan pemulihan
+    // berhenti (bilangan peralihan berbatas — bukan gelung moveTo/morph tanpa henti).
+    await page.waitForTimeout(3_000);
+    await expect(disorot).toBeVisible();
+    const peralihan = await page.evaluate(() => window.__sorotan.length);
+    expect(peralihan, `sorotan berkelip ${peralihan} kali — pemulihan menjadi gelung`)
+        .toBeLessThanOrEqual(8);
+});

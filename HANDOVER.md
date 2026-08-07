@@ -1,71 +1,94 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W5 SIAP & gate tempatan hijau · CI belum disahkan (7 Ogos)
+## ▶️ SAMBUNG DI SINI — F6-W5 akibat KEEMPAT ditutup · gate penuh hijau (8 Ogos)
 
-**Produksi kekal `cea55da` (Deploy 10).** Kod W5 terakhir = `296c419`; komit selepasnya dokumen sahaja.
+**Produksi kekal `cea55da` (Deploy 10).** ⛔ **Deploy 11 DITAHAN** sehingga CI hijau penuh
+(peraturan pelan #1).
 
-**Gate tempatan 3 shard HIJAU (pusingan 2):** screen 30/30 · workflow 15/15 ·
-tenant-admin-public 41/41 · agregator **GATE LULUS 83/473/172** (union SET).
+**Gate tempatan 3 shard HIJAU pada kod terkini:** screen **30/30** (7.8m) ·
+workflow **15/15** (8.4m) · tenant-admin-public **41/41** (10.2m) ·
+agregator **GATE LULUS 83 guide · 473 langkah · 172 langkah tindakan** (union SET).
 
-### ⚠️ CI: larian `workflow_dispatch` DIBATALKAN pada tepat 15 minit; guna PUSH
+### 🔴 Akibat KEEMPAT — morph Livewire memadam sorotan tour (CI 31134978567)
 
-**Deploy 11 DITAHAN** sehingga CI hijau (peraturan pelan #1). Corak yang DIUKUR, bukan diteka:
+**`skipped` BUKAN `success`.** Dalam tiga pusingan CI sebelum ini job matriks `guidance-e2e`
+berstatus `skipped`, dan saya membaca larian itu sebagai kemajuan. Larian `31134978567`
+(`83e373b`, **push**) ialah yang PERTAMA benar-benar menguji sasaran W5 di CI. Semak SETIAP
+job yang gate bergantung padanya, bukan hanya yang merah.
+
+Ia merah pada satu ujian: `tenant.bantuan#1: tiada elemen aktif` — popover ada, tajuk betul,
+"1 daripada 2" betul, sasaran KELIHATAN pada skrinsyot, tetapi tiada apa-apa disorot.
+Ujian yang sama LULUS tempatan. Pengesan dalam halaman memberi puncanya:
 
 ```
-push f66ffe2 / 296c419 / 2047faf  -> larian push LEWAT dicipta (kadang berjam-jam), tetapi
-                                      apabila ia berjalan, ia berjalan PENUH
-dispatch 31127604032 (296c419)    -> job utama dibatalkan 20:26:15 -> 20:41  (15 min tepat)
-dispatch 31128095025 (2047faf)    -> job utama dibatalkan 21:07:35 -> 21:22:37 (15 min tepat)
-push     31127951566 (296c419)    -> BERJALAN penuh, gagal pada composer audit (sebab sah)
+2423  livewire-commit  help-center
+2877  +driver-active-element        <- Driver.js menyorot
+5460  livewire-morph   help-center
+5465  -driver-active-element        <- morph tulis semula `class`; tidak pernah kembali
 ```
 
-⚠️ **Pembetulan kepada catatan awal saya:** saya mula-mula menulis "minit Actions habis".
-Itu **SALAH** — larian push berjalan penuh, jadi runner memang tersedia. Yang berlaku ialah
-larian `workflow_dispatch` dibatalkan pada tepat 15 minit selepas beratur. Puncanya TIDAK
-diketahui dan sengaja tidak dispekulasi.
+`.driver-active-element` ialah kelas yang JS tambah pada nod DOM — ia tiada dalam HTML
+pelayan, jadi morph memulihkan `class` dan memadamnya. **Perlumbaan tulen:** commit selesai
+sebelum sorotan = melekat. Itu sebab tempatan hijau dan CI merah pada kod yang SAMA.
 
-➡️ **Jangan `gh workflow run` untuk repo ini.** Yang BERKESAN ialah **`gh run rerun <id>`**
-pada larian sedia ada bagi SHA yang sama — dicuba selepas 2 jam tanpa larian push untuk
-`b514078`, dan attempt 2 terus berjalan. Larian push juga lengkap bila ia akhirnya tiba,
-tetapi kelewatannya boleh melebihi dua jam.
+⚠️ **`refresh()` tidak boleh membaikinya** — disahkan pada sumber vendor
+(`driver.js.mjs:161`: `xe` membaca `__activeElement` TERSIMPAN, hanya lukis overlay +
+tempatkan popover; kelas ditambah hanya dalam laluan sorot, baris 190). Guna `moveTo(index)`.
+Ini juga menimbulkan soalan sama ada fix W1 (`rehighlightWhenTargetArrives` → `refresh()`)
+bergantung pada laluan lain — **soalan untuk F7/F8, BUKAN dakwaan.**
 
-### 🔜 TINDAKAN SETERUSNYA — jalankan CI, itu sahaja yang tinggal
+**Fix:** `watchHighlightLoss()` dalam `resources/js/help.js` — interval 250ms (bukan
+MutationObserver: `resolveStepElement()` memanggil `decorateTargets()` = punca ribut mutasi
+F5c), berbatas DUA arah (6s + maks 2 pembaikan/langkah), dibersihkan dalam KEDUA-DUA
+`onDestroyed`. **Penjaga:** `e2e/guidance-f5.spec.js` → "F6-W5d …" dalam projek `ci-guidance`
+(check WAJIB). Ia **menunggu morph benar-benar berlaku** sebelum menuntut sorotan — tanpa itu
+ia hanya menguji perlumbaan yang bertuah. Terbukti dua arah: regresi ✘ 23.7s → pulih ✓ 11.6s.
 
-Semua isu yang CI dedahkan sudah ditutup dan disahkan tempatan. Yang tinggal ialah
-mendapatkan larian CI hijau untuk komit terkini, kemudian Deploy 11.
+### 🎯 Env e2e mesti pada PROSES PELAYAN, bukan pada pelanggan Playwright
 
-**Cara mencetuskan CI (DIUKUR — jangan buang masa dengan yang lain):**
+Ujian baharu gagal DETERMINISTIK sebagai ujian ke-9 dalam fail (`page.waitForURL` tamat masa
+60s pada log masuk) walaupun lulus berasingan. POST `/livewire/update` **sampai** ke pelayan,
+jadi bukan klik hilang. Puncanya: **had kadar log masuk dibaca oleh proses PELAYAN.**
+`DIWAN_LOGIN_RATE_LIMIT=100 npx playwright test …` tidak berkesan langsung; CI menetapkannya
+pada **aras job** (`ci.yml:81,362`) supaya langkah `serve` mewarisinya.
+
+Lancar pelayan e2e tempatan begini:
 ```
-gh run rerun <run-id-lama>     ✅ BERJALAN serta-merta
+cd public && DIWAN_LOGIN_RATE_LIMIT=100 php -d max_execution_time=0 \
+  -S 127.0.0.1:8092 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php
+```
+
+⚠️ **Pembetulan kepada catatan saya sesi lalu:** saya menulis bahawa kelima-lima kegagalan
+`ci-guidance` tempatan ialah "had pelayan dev satu-benang Windows". Dengan pelayan
+dikonfigurasi betul: **5 → 2**. Tiga daripadanya ialah had kadar. Dua yang tinggal memang
+`net::ERR_ABORTED` (`explore.spec.js:83`, `guidance.spec.js:216`) dan kedua-duanya hijau di CI.
+
+### 🔜 TINDAKAN SETERUSNYA
+
+1. Cetuskan CI untuk komit terkini dan sahkan **semua 4 check wajib + ketiga-tiga shard**
+   (`gh run view <id> --json jobs` — pastikan tiada yang `skipped`).
+2. Deploy 11 selepas hijau.
+
+**Cara mencetuskan CI (DIUKUR):**
+```
+push                           ✅ berjalan PENUH (31134978567 berjalan ~12 min selepas push)
+gh run rerun <run-id-lama>     ✅ berkesan bila push tidak menghasilkan larian
 gh workflow run ...            ❌ job utama dibatalkan pada TEPAT 15 minit (2×)
-push                           ⚠️ berjalan penuh TETAPI lewat (35 min … >2 jam, kadang 0 larian)
 ```
+⚠️ Larian push kadang lewat 35 min hingga >2 jam. Itu kelewatan, bukan kegagalan.
 
-**Tiga pembaikan dalam rantaian ini, semuanya bermula daripada CI atau ukuran pelayar:**
+**Empat pembaikan dalam rantaian W5, semuanya bermula daripada CI atau ukuran pelayar:**
 
 | Komit | Isu | Bukti ditutup |
 |---|---|---|
-| `296c419` | pengawal modal guna proksi "langkah generik" → popover sekat modal klasifikasi | CI attempt 2 langkah 20 `Guidance smoke: success` |
-| `2047faf` | 6 advisori `league/commonmark` (diterbit 16 min sebelum larian) | CI attempt 2 langkah 9 `Validate: success` |
-| (belum dikomit → kini dikomit) | tour AUTO melumpuhkan halaman (`pointer-events`) | `ci-domain` 4/4 berasingan |
+| `296c419` | pengawal modal guna proksi "langkah generik" → popover sekat modal | CI `Guidance smoke: success` |
+| `2047faf` | 6 advisori `league/commonmark` (16 min sebelum larian) | CI `Validate: success` |
+| `83e373b` | tour AUTO melumpuhkan halaman (`pointer-events`) | `ci-domain` 4/4 |
+| (ini) | morph Livewire memadam sorotan | penjaga dua arah + gate 3 shard |
 
-**Keadaan ujian tempatan:** `ci-domain` 4/4 (berasingan) · `ci-guidance` 30/35 · unit 26/26 ·
-pint · Pest 601✓/1 skip · gate 3 shard 30/30·15/15·41/41 + GATE LULUS (dijalankan sebelum
-pembaikan tour; shard guna deep-link `?panduan=` jadi TIDAK terjejas — disahkan pada kod).
-
-⚠️ Kelima-lima kegagalan `ci-guidance` tempatan ialah tandatangan persekitaran yang didokumen
-(3× `net::ERR_ABORTED`/timeout log masuk, 2× perlumbaan Alpine). **Konsisten dengan** had
-pelayan dev satu-benang Windows — bukan dibuktikan satu-persatu. CI Linux ialah pengesah.
-
-⛔ **Deploy 11 kekal DITAHAN** sehingga CI hijau penuh.
-
-### Keputusan CI setakat ini
-
-| Larian | SHA | Keputusan |
-|---|---|---|
-| 31127157590 | `f66ffe2` | merah — `guidance.spec.js:612` wizard klasifikasi → **kecacatan produk, dibaiki `296c419`** |
-| 31127951566 | `296c419` | merah — `composer audit`: 6 advisori `league/commonmark` diterbit 16 min sebelum larian → **dibaiki `2047faf`** |
-| (menunggu) | `2047faf` | langkah `Validate` gagal SEBELUM ujian pada larian lalu, jadi pembaikan produk BELUM disahkan CI |
+**Keadaan ujian tempatan (kod terkini):** gate 30/30 · 15/15 · 41/41 + GATE LULUS ·
+Pest **601✓/1 skip** · unit JS **26/26** · `guidance-f5.spec.js` **9/9** ·
+`ci-guidance` **34/36** (2 = `net::ERR_ABORTED`, hijau di CI) · pint · validator exit 0.
 
 📄 `bukti/plan-f6-w5/INVENTORI-W5.md` (Revisi 2) · `LAPORAN-F6-W5.md` · `skrip/`
 

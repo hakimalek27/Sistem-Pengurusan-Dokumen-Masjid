@@ -465,3 +465,137 @@ Kelima-lima kegagalan `ci-guidance` ialah tandatangan persekitaran yang sudah di
 (perlumbaan pemuatan aset — dibuktikan bebas daripada W5 kerana katalog LAMA menghasilkannya
 pada viewport BERBEZA). ⚠️ Ini **konsisten dengan** had persekitaran, bukan dibuktikan
 satu-persatu; CI Linux ialah pengesah muktamad.
+
+---
+
+### 16. 🔴 AKIBAT KEEMPAT — sorotan tour dipadam oleh morph Livewire (CI 31134978567)
+
+**Larian CI pertama yang benar-benar menjalankan matriks 3 shard sejak W5 bermula.** Dalam
+kesemua larian sebelum ini job `guidance-e2e` berstatus **`skipped`**, jadi sasaran W5 tidak
+pernah diuji di CI walaupun laporan pusingan sebelumnya kelihatan bergerak ke hadapan.
+
+| Semakan | Keputusan |
+|---|---|
+| `PostgreSQL, Redis, Meili, OCR and tests` | ✅ success |
+| `Docker app image` / `Docker web image` | ✅ success |
+| `guidance-e2e (screen)` / `(workflow)` | ✅ success |
+| `guidance-e2e (tenant-admin-public)` | ❌ **2 failed / 39 passed** |
+
+Kegagalan sebenar hanya SATU (`tenant.bantuan`); yang kedua ialah akibatnya —
+`tulis shard JSON` menuntut `payload.complete`.
+
+```
+Error: tenant.bantuan#1: tiada elemen aktif
+  Locator: locator('.driver-active-element')   Timeout: 30000ms
+  at assertStepPopover (e2e/guidance-full.spec.js:221:65)
+```
+
+Skrinsyot kegagalan menunjukkan gejala yang bertentangan dengan jangkaan: popover **ada**,
+tajuknya betul, "1 daripada 2" betul, dan bahagian carian yang sepatutnya disorot **kelihatan
+jelas pada skrin** — tetapi tiada apa-apa yang disorot.
+
+#### Punca — diukur, bukan disimpulkan
+
+Ujian gate yang sama **LULUS** secara tempatan (55.1s). Jadi bukannya "sasaran tiada".
+Satu pengesan dalam halaman merakam setiap peralihan kelas pada nod sasaran serta setiap
+peristiwa Livewire:
+
+```
+  2402  html-class         fi -> fi
+  2423  livewire-commit    help-center            <- komponen mula commit
+  2877  sasaran-attr       class: ... -> ... driver-active-element      <- Driver.js menyorot
+  3284  livewire-commit    help-launcher
+  5459  livewire-selesai   help-center
+  5460  livewire-morph     help-center            <- commit selesai
+  5465  sasaran-attr       class: ... driver-active-element -> ...      <- SOROTAN DIPADAM
+```
+
+Sepanjang 20 saat selepas itu: `helpSearch: d=block v=visible w=896 h=2989`, `aktif: []`.
+Sasaran ada, kelihatan, dan **tidak pernah disorot semula**.
+
+`.driver-active-element` ialah kelas yang Driver.js **tambah pada nod DOM**; ia tidak wujud
+dalam HTML yang dirender pelayan. Apabila komponen Livewire yang MENGANDUNGI sasaran
+menyelesaikan commitnya, morph memulihkan atribut `class` nod itu daripada HTML pelayan dan
+kelas itu lenyap bersama-sama.
+
+**Ini perlumbaan tulen.** Jika commit selesai SEBELUM Driver.js menyorot, sorotan melekat.
+Itulah sebabnya gate tempatan lulus dan CI gagal **pada kod yang sama** — dan sebabnya
+kegagalan ini akan kelihatan seperti "flake" kepada sesiapa yang tidak mengukurnya.
+
+#### Mengapa dua pembaikan sedia ada tidak melindunginya
+
+`rehighlightWhenTargetArrives()` (W1) menangani keadaan **BERTENTANGAN**: sasaran belum wujud
+ketika Driver.js memanggil `element:`. Ia menyemak SEKALI dalam `onHighlighted` dan keluar awal
+apabila sorotan sudah betul — jadi ia buta sepenuhnya kepada sorotan yang betul mula-mula lalu
+dimusnahkan kemudian.
+
+#### `refresh()` TIDAK boleh membaikinya — disahkan pada kod vendor
+
+Percubaan pertama menggunakan `driverApi.refresh()` (bentuk yang dipakai fix W1) dan ia **gagal**
+— sorotan kekal hilang. Sebabnya ada dalam sumber vendor, bukan dalam tekaan:
+
+```js
+// node_modules/driver.js/dist/driver.js.mjs:161
+function xe() {
+  const e = l("__activeElement"), o = l("__activeStep");
+  e && (te(e), he(), ae(e, o));            // lukis overlay + tempatkan popover
+}
+```
+
+`refresh()` membaca `__activeElement` yang **TERSIMPAN**, melukis semula overlay dan
+menempatkan semula popover. Ia tidak menilai semula callback `element:` dan tidak memasang
+semula kelas — kelas itu ditambah hanya dalam laluan sorot (`driver.js.mjs:190`).
+`moveTo(index)` memandu semula langkah yang SAMA: sasaran diselesaikan semula, kelas dan
+atribut ARIA (`aria-haspopup`/`aria-expanded`/`aria-controls`, yang turut dipadam morph)
+dipasang semula, dan popover kembali betul.
+
+⚠️ Ini bermakna pembaikan W1 mungkin juga bergantung pada laluan lain untuk kesannya.
+**TIDAK didakwa di sini** — ia soalan yang diukur pada F7/F8, bukan andaian.
+
+#### Pembaikan
+
+`watchHighlightLoss(driverApi, step, index)` dalam `resources/js/help.js`, dipanggil dari
+`onHighlighted` bersebelahan `rehighlightWhenTargetArrives`, dibersihkan dalam KEDUA-DUA
+`onDestroyed`:
+
+- interval 250ms, **bukan** MutationObserver — `resolveStepElement()` memanggil
+  `decorateTargets()`, dan memanggil itu dari dalam pemerhati mutasi ialah PUNCA ribut mutasi
+  F5c yang sudah dibayar sekali;
+- berbatas DUA arah: tetingkap 6s **dan** maksimum 2 pembaikan per langkah, supaya halaman
+  yang memang memorph berterusan tidak boleh menjadikannya gelung;
+- tidak bertindih dengan `rehighlightWhenTargetArrives`: jika sasaran tidak dapat diselesaikan
+  langsung, pengawas ini berdiam dan membiarkan fungsi itu bekerja;
+- mekanisme sync §0.3 tidak disentuh.
+
+#### Penjaga — dibuktikan DUA arah
+
+`e2e/guidance-f5.spec.js` → `F6-W5d sorotan tour bertahan selepas morph Livewire`
+(projek `ci-guidance`, iaitu dalam check WAJIB). Ia **menunggu morph benar-benar berlaku**
+(`Livewire.hook('morph')` bagi komponen `help-center`) sebelum menuntut sorotan — tanpa itu
+ujian hanya menguji perlumbaan yang kebetulan bertuah, iaitu tepat kesilapan yang membenarkan
+kecacatan ini lolos daripada gate tempatan. Ia juga menuntut sorotan **kekal** 3s kemudian dan
+bilangan peralihan kelas ≤8, supaya pemulihan yang menjadi gelung moveTo↔morph ditangkap.
+
+```
+regresi dipasang (baris watchHighlightLoss dibuang) → npm run build →
+  ✘ 1 ... Error: sorotan hilang selepas morph Livewire dan tidak dipulihkan   (23.7s)
+pembaikan dipulihkan → npm run build →
+  ✓ 1 ... F6-W5d sorotan tour bertahan selepas morph Livewire                 (11.6s)
+```
+
+#### 🔑 Pelajaran
+
+1. **`skipped` bukan `success`.** Tiga pusingan CI berturut-turut melaporkan job matriks sebagai
+   `skipped` dan saya membaca larian itu sebagai kemajuan. Semak **setiap** job yang gate
+   bergantung padanya, bukan hanya yang merah.
+2. **Kelas yang JS tambah kepada nod DOM ialah keadaan rapuh dalam aplikasi ber-morph.**
+   Mana-mana perkara yang ditambah runtime kepada nod milik komponen Livewire boleh dipadam
+   pada commit BERIKUTNYA komponen itu. `data-*` daripada Blade selamat; kelas daripada vendor
+   JS tidak.
+3. **Sasaran yang mengecil mendedahkan perlumbaan yang sasaran besar sembunyikan.** Corak sama
+   seperti akibat ketiga (`pointer-events`): selagi tour menyorot `<main>`, morph komponen
+   dalaman tidak pernah menyentuh nod yang disorot. Ini akibat **keempat** W5 daripada punca
+   struktur yang satu.
+4. **Bila pembaikan tidak berkesan, baca sumber vendor sebelum mencuba variasi.** Satu carian
+   `grep` pada `driver.js.mjs` menjawab "mengapa `refresh()` tidak cukup" dengan muktamad —
+   lebih pantas daripada mencuba tempoh dan kekerapan yang berbeza.
