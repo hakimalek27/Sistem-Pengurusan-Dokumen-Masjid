@@ -17,11 +17,43 @@ TIDAK boleh disahkan live tanpa sesi log masuk produksi (kredensial tidak pernah
 Penggantinya: visual 6/6 tempatan pada bundel hash-sama + semakan `#2b` kandungan katalog
 DALAM imej + CI 7/7. **Pemilik boleh menutupnya dalam seminit** — langkah dalam BUKTI-DEPLOY-14.
 
-### 🔜 SETERUSNYA: **F8** (§9) — disekat pada pemilik
+### ▶️ F8 SEPARUH SIAP (`d7a78bb`) — metrik tempatan SIAP, satu baris TIDAK TERCAPAI
 
-F8 memerlukan **kredensial superadmin produksi** melalui env sesi pemilik sendiri
-(`E2E_PROD_SUPERADMIN_*`). Saya tidak pernah menciptanya dan tidak akan. Selebihnya F8 =
-pengukuran sahaja, tiada deploy.
+📄 `bukti/plan-f8/{metrik-f8.json, PENEMUAN-CENTERCOVERED.md, skrip/}`
+
+```
+generic_declared 443 -> 59 · placeholder 258 -> 0 · action-generic 200 -> 0
+specific 414 · not-applicable 23 · generic-justified 36 · risk-accepted 0 · blocked 0
+langkah tanpa status 0 · role_routes mismatch 0/410 · registri 200 aktif + 27 rizab
+kohort: title=instruction 77->0 · terpotong 20->0 · CTA 20->0 · generik 119->38
+agregator: 83/473/172 union, missing 0 extra 0 overlap 0, pass true
+```
+
+🔴 **`centerCovered` mobile: pelan menetapkan 6 → 0/6; diukur 45/124.** Ia BUKAN dibiarkan
+sebagai kegagalan tanpa penjelasan — tiga semakan dijalankan:
+1. metrik ditentukur (audit: 6/124 daripada 124; kawalan 5/6 tidak tertutup) → ia membezakan;
+2. **A/B mesin/tenant/benih IDENTIK**: katalog lama (generik) **1/24**, semasa (spesifik) **8/24**;
+3. kawalan dalaman: `tenant.profil#2` sudah spesifik dalam katalog LAMA dan tertutup dalam
+   KEDUA-DUA larian → puncanya **jenis sasaran**, bukan kod penempatan.
+
+**Maka metrik itu memberi ganjaran kepada sasaran generik** — popover yang tidak berlabuh
+diparkir jauh dari tengah. Mengejar 0 bermakna menolak popover MENJAUHI elemen yang dirujuknya,
+bertentangan dengan tujuan F6. Ukuran bermakna sudah wujud + hijau di CI: penjaga W0 "popover
+tidak menutup sasarannya sendiri".
+⚠️ **Keputusan PEMILIK diperlukan** (3 pilihan dalam PENEMUAN-CENTERCOVERED.md §5). Saya tidak
+mengubah metrik/penjaga/pelan.
+
+### 🔜 BAKI F8 — disekat pada pemilik
+
+Larian produksi §9.1a memerlukan **kredensial superadmin produksi** melalui env sesi pemilik
+sendiri (`E2E_PROD_SUPERADMIN_*`). Saya tidak pernah menciptanya dan tidak akan.
+⚠️ **Jangan hantar kata laluan dalam sembang** — ia masuk transkrip. Guna `!` supaya nilainya
+tidak pernah melalui saya:
+```
+! $env:E2E_PROD_SUPERADMIN_EMAIL='...'; $env:E2E_PROD_SUPERADMIN_PASSWORD='...'; `
+  pwsh scripts/audit/run-production-guidance-readonly.ps1
+```
+Selebihnya F8 = pengukuran sahaja, tiada deploy. F9/F10 tidak disekat.
 
 ### Apa yang Deploy 14 bawa
 
