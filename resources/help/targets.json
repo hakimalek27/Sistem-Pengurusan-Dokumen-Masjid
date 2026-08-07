@@ -814,6 +814,18 @@
             "reason": "Seksyen tetapan bantuan — calon W6/F7; belum dirujuk katalog."
         },
         {
+            "id": "help-scope",
+            "family": "public|tenant|admin",
+            "route": "/bantuan|/app/{tenant}/bantuan|/admin/bantuan",
+            "owner_source": "resources/views/livewire/help-center.blade.php:36",
+            "selector_hint": "[data-help-target=\"help-scope\"]",
+            "viewport": "both",
+            "state": "-",
+            "permission": "-",
+            "status": "active",
+            "since": "2026-08-08"
+        },
+        {
             "id": "help-search",
             "family": "tenant|admin",
             "route": "/app/{tenant}/bantuan|/admin/bantuan",
@@ -824,6 +836,18 @@
             "permission": "-",
             "status": "active",
             "since": "2026-08-07"
+        },
+        {
+            "id": "help-search-form",
+            "family": "public|tenant|admin",
+            "route": "/bantuan|/app/{tenant}/bantuan|/admin/bantuan",
+            "owner_source": "resources/views/livewire/help-center.blade.php:45",
+            "selector_hint": "[data-help-target=\"help-search-form\"]",
+            "viewport": "both",
+            "state": "-",
+            "permission": "-",
+            "status": "active",
+            "since": "2026-08-08"
         },
         {
             "id": "help-support",

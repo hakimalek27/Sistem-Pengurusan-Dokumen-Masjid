@@ -28,7 +28,12 @@
             </div>
         </div>
 
-        <div class="diwan-help-context">
+        {{-- F6-W6: `public.help#2` ("Sahkan skop") menyasar baris ini, bukan `page-primary`.
+             Ia baris 20px yang MENYATAKAN skop semasa, jadi sorotan menjawab ayat langkah.
+             Bandingkan `help-search` (seksyen 1199px pada /bantuan, 3211px pada panel tenant)
+             yang sah tetapi hampir tidak dapat dibezakan daripada menyorot seluruh halaman —
+             kecacatan makna yang direkod dalam LAPORAN-F6-W5.md §17. --}}
+        <div class="diwan-help-context" data-help-target="help-scope">
             <span>Skop panduan: <strong>{{ $contextLabel }}</strong></span>
             <span>Versi {{ $catalogVersion }}</span>
             @if ($panel === 'public')
@@ -36,7 +41,8 @@
             @endif
         </div>
 
-        <form wire:submit="search" class="diwan-help-search">
+        {{-- F6-W6: `public.help#1` menyasar BORANG (70px), bukan seksyen pembungkus. --}}
+        <form wire:submit="search" class="diwan-help-search" data-help-target="help-search-form">
             <label for="help-query">Apa yang anda mahu lakukan?</label>
             <div>
                 <input id="help-query" type="search" wire:model="query" maxlength="200"

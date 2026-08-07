@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (199) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (201) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -69,7 +69,9 @@
 | `file-relocate-location` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:61` | both | modal:Pindah Lokasi terbuka | files.track |
 | `file-relocate-notes` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:63` | both | modal:Pindah Lokasi terbuka | files.track |
 | `file-relocate-submit` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:57` | both | modal:Pindah Lokasi terbuka | files.track |
+| `help-scope` | public|tenant|admin | `/bantuan|/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:36` | both | - | - |
 | `help-search` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:23` | both | - | - |
+| `help-search-form` | public|tenant|admin | `/bantuan|/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:45` | both | - | - |
 | `inbox-classify` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:112` | both | jadual Peti Masuk mempunyai item belum diklasifikasi | inbox.classify |
 | `inbox-record` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:56` | both | jadual Peti Masuk tidak kosong (sel tajuk baris pertama) | inbox.view |
 | `inbox-scan-status` | workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:70` | desktop | jadual Peti Masuk tidak kosong (sel baris pertama); pada mobile lajur Antivirus berada di LUAR viewport lalai — diukur iPhone 13 (390px): x=621, w=107, tiada persilangan viewport (F6-W3, 5 Ogos 2026). Jadual boleh diskrol mendatar, jadi ia boleh dicapai pengguna tetapi tour tidak menggulung bekas dalaman (kecacatan diukur → F7) | inbox.view |

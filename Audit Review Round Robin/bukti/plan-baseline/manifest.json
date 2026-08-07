@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_by": "Audit Review Round Robin/bukti/plan-baseline/tools/build-manifest.mjs",
-  "catalog_version": "2026.08.07.1",
+  "catalog_version": "2026.08.08.1",
   "sources": {
     "catalogue": "resources/help/guides.json",
     "mobile_defects": "Audit Review Round Robin/bukti/pusingan-11-codex/production-mobile-all-tour-steps.json",
@@ -93,7 +93,8 @@
       "W2",
       "W3",
       "W4",
-      "W5"
+      "W5",
+      "W6"
     ],
     "cohort_baseline": {
       "resolved_to_generic": "119/124",
@@ -9713,17 +9714,15 @@
           "title": "Buka fungsi",
           "title_placeholder": false,
           "instruction_preview": "Cari panduan pendaftaran dan log masuk atau laporkan masalah.",
-          "target": "page-content",
-          "generic_declared": true,
+          "target": "help-search-form",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/bantuan",
           "wave": "W6",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W6 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         },
         {
           "key": "public.help#2",
@@ -9732,17 +9731,15 @@
           "title": "Sahkan skop",
           "title_placeholder": false,
           "instruction_preview": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary",
-          "generic_declared": true,
+          "target": "help-scope",
+          "generic_declared": false,
           "wait_for_user": false,
           "route": "/bantuan",
           "wave": "W6",
           "shard": "tenant-admin-public",
           "viewport": "desktop",
           "mobile_defect": false,
-          "status": "generic-justified",
-          "reason": "Baseline pra-F6: sasaran generik sedia ada; penambahbaikan dijadualkan W6 (F6)",
-          "since": "2026-08-02"
+          "status": "specific"
         }
       ]
     }

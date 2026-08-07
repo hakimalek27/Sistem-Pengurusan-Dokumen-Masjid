@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.07.1",
+  "catalog_version": "2026.08.08.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -7772,13 +7772,13 @@
           "id": "public.help.1",
           "title": "Buka fungsi",
           "instruction": "Cari panduan pendaftaran dan log masuk atau laporkan masalah.",
-          "target": "page-content"
+          "target": "help-search-form"
         },
         {
           "id": "public.help.2",
           "title": "Sahkan skop",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "page-primary"
+          "target": "help-scope"
         }
       ],
       "troubleshooting": [
