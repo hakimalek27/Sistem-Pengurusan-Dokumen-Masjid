@@ -1,10 +1,29 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — hutang F7 SIAP secara tempatan, menunggu gate (8 Ogos)
+## ▶️ SAMBUNG DI SINI — ✅ hutang F7 **LIVE** (Deploy 14 `2325bec`) · #73 ditutup (8 Ogos)
 
-**Produksi kekal `774f9ab` (Deploy 13).** Penemuan #73 DITUTUP (artifak tab latar — lihat di
-bawah). Enam sasaran katalog ditukar; **belum dikomit sehingga gate hijau**.
-📄 `bukti/plan-f7-hutang/{LAPORAN-HUTANG-F7.md, skrip/}` — laporan lengkap kecuali angka gate.
+**PRODUKSI: `2325bec`.** CI **31213031582 = 7/7**. Deploy 14 exit 0, **ramalan 5/5 tepat**:
+smoke 9/9 · /up 200 · failed_jobs=0 · 8/8 kontena · Nothing to migrate · 5A LULUS PENUH.
+📄 `bukti/deploy-14/BUKTI-DEPLOY-14.md` · `bukti/plan-f7-hutang/LAPORAN-HUTANG-F7.md`
+
+```
+app c101393d0e42 -> 838f60ba3018    web b28eb89aad0d -> 80ce84298fd8
+help-EPOANIj9.js -> help-Ckg4e8Xm.js · css KEKAL · a11y-landmarks-mQ2zo0LK.js KEKAL
+catalog_version 2026.08.08.2 · 83/473/generik 59 TIDAK berubah (itu sendiri semakannya)
+```
+
+⚠️ **Jurang jujur:** enam langkah yang berubah ada pada halaman tenant/admin, jadi sorotannya
+TIDAK boleh disahkan live tanpa sesi log masuk produksi (kredensial tidak pernah dicipta).
+Penggantinya: visual 6/6 tempatan pada bundel hash-sama + semakan `#2b` kandungan katalog
+DALAM imej + CI 7/7. **Pemilik boleh menutupnya dalam seminit** — langkah dalam BUKTI-DEPLOY-14.
+
+### 🔜 SETERUSNYA: **F8** (§9) — disekat pada pemilik
+
+F8 memerlukan **kredensial superadmin produksi** melalui env sesi pemilik sendiri
+(`E2E_PROD_SUPERADMIN_*`). Saya tidak pernah menciptanya dan tidak akan. Selebihnya F8 =
+pengukuran sahaja, tiada deploy.
+
+### Apa yang Deploy 14 bawa
 
 ```
 tenant.bantuan#1 · admin.bantuan#1   help-search (70%/53% <main>) -> help-search-form (1-2%)
@@ -16,19 +35,25 @@ catalog_version 2026.08.08.1 -> 2026.08.08.2 · 83/473/generik 59 TIDAK berubah
 registri 200 aktif + 27 rizab (help-search, platform-mosques, platform-users -> reserved)
 ```
 
-**Sudah hijau:** Pest **622✓/1 skip** · unit JS **33/33** · pint · build · validator manifest
-exit 0 · **pengesahan visual 6/6**. **Belum:** gate 3 shard (sedang berjalan) → CI → Deploy 14.
-Skrip deploy siap dengan 5 ramalan bertulis: `bukti/plan-f7-hutang/skrip/deploy-14.sh`.
+**Bukti:** Pest **622✓/1 skip** · unit JS **33/33** · pint · build · validator manifest exit 0 ·
+**pengesahan visual 6/6** · gate **30/30 + 15/15 + 41/41** + GATE LULUS 83/473/172 (hijau
+percubaan PERTAMA walaupun mesin 2× perlahan: RAM bebas 4.8 GB, ujian 13–30s vs ~12s W6).
 
-⚠️ Keadaan mesin semasa gate: RAM bebas **4.8 GB/31.7 GB**, 53 chrome, 30 node; tempoh ujian
-**13–28s** berbanding **~12s** baseline W6. Jika gate merah, bandingkan tempoh DAHULU — sesi F7
-memberi 38/41 palsu atas sebab ini.
+### 🎯 DUA pelajaran yang sesi ini bayar — jangan ulang
 
-🎯 **Penjaga yang tidak boleh gagal ditemui lagi** (keluarga sama seperti §8.1 F7): regex drift
-`PageTargetSelectorTest` hanya memadan selektor KELAS (`\.`), jadi selektor struktur baharu
-akan lolos tanpa sauh. Dibaiki + dibuktikan dua arah.
+1. **Gate 3 shard TIDAK memuatkan `ci-guidance`.** CI pusingan 1 (`31211426672`) merah pada
+   SATU ujian — `guidance-f5.spec.js` penjaga W5d — selepas gate penuh 40 minit hijau
+   sepenuhnya. Fail itu hidup dalam projek `ci-guidance` sahaja. **Katalog berubah = jalankan
+   KEDUA-DUANYA.** Skrip: `bukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh`.
+   Puncanya: penjaga mengekod sasaran `tenant.bantuan#1` pada TIGA tempat. **Selepas menukar
+   mana-mana sasaran katalog, `grep` nama LAMA di seluruh `e2e/` dan `tests/`.**
+   ✅ Sisi baik: kegagalan itu memberi arah MERAH penjaga percuma; tempatan selepas pembetulan
+   memberi HIJAU dua kali (14.7s, 12.2s) = bukti dua arah tanpa memasang regresi.
+2. **Penjaga yang tidak boleh gagal, kali KEDUA dalam dua fasa** (keluarga §8.1 F7): regex
+   drift `PageTargetSelectorTest` hanya memadan selektor KELAS (`\.`), jadi selektor STRUKTUR
+   baharu lolos tanpa sauh. Dibaiki + dibuktikan dua arah.
 
-**Seterusnya selepas Deploy 14:** **F8** — perlu kredensial superadmin produksi daripada pemilik.
+## 📌 SEBELUM INI — ✅ F7 **LIVE** (Deploy 13 `774f9ab`) (8 Ogos)
 
 **PRODUKSI: `774f9ab`.** CI **31184654233 = 7/7** termasuk `Accessibility (axe)` dan
 `Domain flows` (4 ujian viewer). Deploy 13 exit 0: smoke 9/9 · /up 200 · failed_jobs=0 ·
