@@ -130,23 +130,35 @@ test.describe('F7 §8.5 viewer dokumen', () => {
         }
 
         // ── had zum ────────────────────────────────────────────────────────────────────
-        // ⚠️ Gelung mesti berhenti apabila butang jadi disabled. Versi pertama saya mengklik
-        // 8 kali tanpa syarat dan TAMAT MASA pada klik terakhir — iaitu ujian menghukum
-        // produk kerana berkelakuan BETUL (butang memang dikunci pada had).
-        for (let i = 0; i < 10; i += 1) {
-            if ((await keadaanKawalan(page)).zoomIn.disabled) break;
-            await page.locator('[data-zoom-in]').click();
-        }
+        // ⚠️ DUA versi gelung ini sudah gagal sebelum ini, dan kedua-duanya salah UJIAN:
+        //   (1) klik 8 kali tanpa syarat  -> tamat masa pada klik terakhir kerana butang
+        //       MEMANG dikunci pada had (ujian menghukum produk kerana betul);
+        //   (2) `if (disabled) break` sebelum klik -> CHECK-THEN-ACT. `updateZoom()` async
+        //       (ia menunggu `renderPage`), jadi keadaan yang dibaca sudah BASI pada mesin
+        //       perlahan: baca "enabled", butang jadi disabled, klik tamat masa. Ia lulus
+        //       tempatan dan gagal di CI — tandatangan perlumbaan yang klasik.
+        //
+        // Versi ini dipandu oleh keadaan yang boleh DICERAP (label zum), bukan snapshot
+        // sebelum tindakan. `toPass` mengulang keseluruhan blok sehingga label mencapai
+        // sasaran; klik yang mendarat pada butang yang baru dikunci ditelan, dan assertion
+        // selepasnya memastikan gelung tidak boleh "lulus" tanpa kemajuan sebenar.
+        const zumSehingga = async (sasaran, butang) => {
+            await expect(async () => {
+                const label = page.locator('[data-zoom-label]');
+                if ((await label.textContent()) !== sasaran) {
+                    const btn = page.locator(butang);
+                    if (!(await btn.isDisabled())) await btn.click({ timeout: 5_000 }).catch(() => {});
+                }
+                await expect(label).toHaveText(sasaran, { timeout: 1_000 });
+            }).toPass({ timeout: 90_000 });
+        };
+
+        await zumSehingga('300%', '[data-zoom-in]');
         k = await keadaanKawalan(page);
-        expect(k.zum).toBe('300%');
         expect(k.zoomIn).toEqual({ disabled: true, aria: 'true' });
 
-        for (let i = 0; i < 12; i += 1) {
-            if ((await keadaanKawalan(page)).zoomOut.disabled) break;
-            await page.locator('[data-zoom-out]').click();
-        }
+        await zumSehingga('50%', '[data-zoom-out]');
         k = await keadaanKawalan(page);
-        expect(k.zum).toBe('50%');
         expect(k.zoomOut).toEqual({ disabled: true, aria: 'true' });
 
         // ── cari: jumpa / tidak jumpa / kosong / Enter ─────────────────────────────────
