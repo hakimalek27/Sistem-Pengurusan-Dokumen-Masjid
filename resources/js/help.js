@@ -446,9 +446,20 @@ function watchHighlightLoss(driverApi, step, index) {
     if (highlightLossPoller || !step?.target) return;
     highlightLossIndex = index;
 
+    // F7 — tetingkap 6s asal (W5d) TERLALU KETAT, dan sebabnya diukur bukan diteka: commit
+    // Livewire yang memadam sorotan mengambil ~3s pada mesin yang sihat, jadi pada mesin yang
+    // 2-3x lebih perlahan (runner CI sibuk, mesin dev yang kehabisan RAM) morph mendarat
+    // SELEPAS tetingkap ditutup dan pemulihan tidak pernah menembak — tepat gejala
+    // "tiada elemen aktif" yang W5d wujud untuk membaikinya.
+    //
+    // Melebarkannya SELAMAT kerana bukan tetingkap masa yang menghalang gelung: had sebenar
+    // ialah `highlightLossRepairs >= 2`, dan tinjauan ini juga berhenti sendiri sebaik tour
+    // tidak aktif atau indeks langkah berubah. Tetingkap hanya menghalang tinjauan berjalan
+    // selama-lamanya pada halaman yang ditinggalkan terbuka.
+    const TETINGKAP_MS = 20_000;
     const bermula = Date.now();
     highlightLossPoller = window.setInterval(() => {
-        if (Date.now() - bermula > 6000 || !driverApi?.isActive?.()) {
+        if (Date.now() - bermula > TETINGKAP_MS || !driverApi?.isActive?.()) {
             clearHighlightLossWatch();
 
             return;

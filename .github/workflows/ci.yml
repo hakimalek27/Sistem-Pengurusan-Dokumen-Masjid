@@ -226,6 +226,20 @@ jobs:
           node scripts/audit/assert-playwright-json.mjs \
             --file "$DIWAN_PW_JSON" --min-tests 2
 
+      # F7 §8.5 — larian axe SEBENAR (link-name / landmark-unique / empty-table-header) pada
+      # 5 halaman x 2 viewport. Tanpa langkah ini penjaga a11y hanya berjalan tempatan dan
+      # TIDAK melindungi `main`. `axe-core` ialah devDependency (ADDENDUM v2.7) dan disuntik
+      # daripada node_modules — tiada CDN, jadi ia tidak menambah kebergantungan rangkaian.
+      - name: Accessibility (axe)
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8092
+          E2E_ROLE_LOGIN_DELAY_MS: "0"
+          DIWAN_PW_JSON: storage/app/plan-ci/ci-a11y.json
+        run: |
+          npx playwright test --project=ci-a11y
+          node scripts/audit/assert-playwright-json.mjs \
+            --file "$DIWAN_PW_JSON" --min-tests 11
+
       - name: OCR upload gate                      # ci-ocr: fixture dikomit F0 → assert TIDAK di-skip
         env:
           E2E_BASE_URL: http://127.0.0.1:8092
