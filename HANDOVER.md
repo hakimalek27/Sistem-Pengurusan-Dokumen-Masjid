@@ -1,6 +1,45 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F7 **CI HIJAU 7/7** (`89a7c91`) · Deploy 13 sedia (8 Ogos)
+## ▶️ SAMBUNG DI SINI — ✅ F7 **LIVE** (Deploy 13 `774f9ab`) · 1 penemuan TERBUKA (8 Ogos)
+
+**PRODUKSI: `774f9ab`.** CI **31184654233 = 7/7** termasuk `Accessibility (axe)` dan
+`Domain flows` (4 ujian viewer). Deploy 13 exit 0: smoke 9/9 · /up 200 · failed_jobs=0 ·
+8/8 kontena · Nothing to migrate · 5A LULUS PENUH · **ramalan 5/5 tepat**.
+📄 `bukti/deploy-13/BUKTI-DEPLOY-13.md`
+
+```
+app 30cc176e7f97 -> c101393d0e42   web ade064feeae7 -> b28eb89aad0d
+help-D_qumira.js -> help-EPOANIj9.js  ·  help-Cfwb6f_j.css KEKAL
+BAHARU: a11y-landmarks-mQ2zo0LK.js   (entri Vite keenam — semakan #3c khusus)
+```
+
+✅ **Pembaikan a11y disahkan LIVE:** `driver-popover-title` dan `driver-popover-footer` kini
+`role="none"` pada produksi — landmark PALSU yang berlanggar dengan `<header class="brand">`
+sudah tiada.
+
+### 🔴 ITEM PERTAMA SESI BERIKUTNYA — sorotan tour masih hilang pada produksi
+
+Diukur pada `bakwim.my/bantuan?panduan=public.help&langkah=0`, dua bacaan berturut:
+
+```
+muatan segar           -> aktif = "help-search-form"     (BETUL)
+beberapa saat kemudian -> aktif = null                    (HILANG)
+                          sasaran MASIH dalam DOM · popover MASIH "1 daripada 2"
+```
+
+Tandatangan kecacatan **W5d** (morph memadam `.driver-active-element`). Pemulihan
+`watchHighlightLoss` — tetingkap dilebarkan 6s → 20s dalam F7 — tidak menyelamatkan kes ini.
+
+⚠️ **BELUM diketahui, jangan spekulasi:** masa tepat kehilangan · sama ada Deploy 12 sama
+(pada W6 saya hanya ukur SEBAIK selepas muatan, jadi F7 TIDAK boleh disalahkan) · sama ada
+punca ialah morph KEDUA selepas cap 2 pembaikan habis, atau morph selepas 20s.
+
+**Langkah seterusnya yang sudah diketahui:** guna pelayan TEMPATAN dengan benih sama; pasang
+perekam dalam halaman SEBELUM tour bermula (`addInitScript`); rakam setiap peralihan kelas
+DAN setiap commit Livewire; tentukan sama ada cap pembaikan atau tetingkap masa yang menjadi
+had. Baru kemudian ubah runtime.
+
+## 📌 SEBELUM INI — F7 CI hijau (`89a7c91`) (8 Ogos)
 
 **Produksi: `0e0fd84` (Deploy 12).** F0–F6 LIVE. F7 **CI hijau penuh**, belum di-deploy.
 CI **31174241411 = 7/7**, termasuk langkah WAJIB baharu `Accessibility (axe)` — 11 passed
