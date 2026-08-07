@@ -81,6 +81,27 @@ async function keadaanKawalan(page) {
 const sudahDipapar = (page, n) =>
     expect(page.locator('[data-status]')).toHaveText(`Halaman ${n} dipaparkan.`, { timeout: 30_000 });
 
+/**
+ * Assert keadaan kawalan dengan assertion yang MENCUBA SEMULA, bukan bacaan segera.
+ *
+ * ⚠️ Sebabnya ialah susunan dalam produk, dan ia diukur: `updateZoom()` menetapkan label zum
+ * DAHULU, kemudian `await renderPage(...)`, dan hanya selepas itu `syncControls()` berjalan.
+ * `renderPage()` pula menetapkan teks status dalam `try` dan memanggil `syncControls()` dalam
+ * `finally`. Jadi label DAN teks status kedua-duanya sampai SEBELUM keadaan `disabled`
+ * diselaraskan — mana-mana bacaan segera selepasnya ialah perlumbaan yang lulus pada mesin
+ * pantas dan gagal di CI. (Kedua-dua keadaan akhirnya betul; hanya susunannya berperingkat.)
+ */
+async function pastikanKawalan(page, pemilih, dikunci) {
+    const btn = page.locator(pemilih);
+    if (dikunci) {
+        await expect(btn).toBeDisabled({ timeout: 15_000 });
+    } else {
+        await expect(btn).toBeEnabled({ timeout: 15_000 });
+    }
+    // `aria-disabled` mesti SEIRING sifat native — itu kontrak §8.4, bukan hiasan.
+    await expect(btn).toHaveAttribute('aria-disabled', dikunci ? 'true' : 'false');
+}
+
 test.describe('F7 §8.5 viewer dokumen', () => {
     test.slow();
 
@@ -94,20 +115,18 @@ test.describe('F7 §8.5 viewer dokumen', () => {
         let k = await keadaanKawalan(page);
         expect(k.jumlah).toBe('3');
         expect(k.maxHalaman).toBe('3');            // §8.4 kerja BAHARU: markup asal tiada `max`
-        expect(k.prev).toEqual({ disabled: true, aria: 'true' });   // aria SEIRING native
-        expect(k.next).toEqual({ disabled: false, aria: 'false' });
+        await pastikanKawalan(page, '[data-prev]', true);
+        await pastikanKawalan(page, '[data-next]', false);
 
         await page.locator('[data-next]').click();
         await sudahDipapar(page, 2);
-        k = await keadaanKawalan(page);
-        expect(k.prev.disabled).toBe(false);
-        expect(k.next.disabled).toBe(false);
+        await pastikanKawalan(page, '[data-prev]', false);
+        await pastikanKawalan(page, '[data-next]', false);
 
         await page.locator('[data-next]').click();
         await sudahDipapar(page, 3);
-        k = await keadaanKawalan(page);
-        expect(k.next).toEqual({ disabled: true, aria: 'true' });   // halaman terakhir
-        expect(k.prev.disabled).toBe(false);
+        await pastikanKawalan(page, '[data-next]', true);           // halaman terakhir
+        await pastikanKawalan(page, '[data-prev]', false);
 
         // ── clamp input halaman (kes tepi §8.5) ────────────────────────────────────────
         //
@@ -154,12 +173,10 @@ test.describe('F7 §8.5 viewer dokumen', () => {
         };
 
         await zumSehingga('300%', '[data-zoom-in]');
-        k = await keadaanKawalan(page);
-        expect(k.zoomIn).toEqual({ disabled: true, aria: 'true' });
+        await pastikanKawalan(page, '[data-zoom-in]', true);
 
         await zumSehingga('50%', '[data-zoom-out]');
-        k = await keadaanKawalan(page);
-        expect(k.zoomOut).toEqual({ disabled: true, aria: 'true' });
+        await pastikanKawalan(page, '[data-zoom-out]', true);
 
         // ── cari: jumpa / tidak jumpa / kosong / Enter ─────────────────────────────────
         await page.locator('[data-find-input]').fill('UNIKKEYWORD');   // hanya pada halaman 2
@@ -209,10 +226,10 @@ test.describe('F7 §8.5 viewer dokumen', () => {
         const k = await keadaanKawalan(page);
         expect(k.jumlah).toBe('1');
         expect(k.maxHalaman).toBe('1');
-        expect(k.prev).toEqual({ disabled: true, aria: 'true' });
-        expect(k.next).toEqual({ disabled: true, aria: 'true' });
+        await pastikanKawalan(page, '[data-prev]', true);
+        await pastikanKawalan(page, '[data-next]', true);
         // Zum kekal HIDUP walaupun dokumen satu halaman.
-        expect(k.zoomIn.disabled).toBe(false);
+        await pastikanKawalan(page, '[data-zoom-in]', false);
     });
 
     test('PDF tanpa lapisan teks: cari melaporkan tidak ditemui, viewer tidak tersekat', async ({ page }) => {
