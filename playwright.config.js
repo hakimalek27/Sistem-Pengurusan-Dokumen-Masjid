@@ -60,6 +60,10 @@ export default defineConfig({
             testMatch: [
                 'e2e/office-workflow.spec.js',
                 'e2e/ddms-extended.spec.js',
+                // F7 §8.5 — viewer dokumen dalam pelayar sebenar (had, clamp, cari, cetak,
+                // keadaan ralat). Diletak dalam `ci-domain` kerana ia memandu aliran domain
+                // penuh (muat naik -> Peti Masuk -> viewer), bukan sekadar imbasan a11y.
+                'e2e/document-viewer.spec.js',
             ],
         },
         {

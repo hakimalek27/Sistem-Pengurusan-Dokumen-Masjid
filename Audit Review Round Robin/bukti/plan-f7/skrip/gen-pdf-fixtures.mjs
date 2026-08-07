@@ -5,6 +5,11 @@
 // skrip dan bukan fail yang dikomit sekali sahaja tanpa cara menjananya semula.
 //
 // Tiga fixture:
+// ⚠️ MediaBox mesti CUKUP LEBAR untuk barisnya. Versi pertama guna 300x200 dengan teks 48
+// aksara pada 18pt; alirannya betul (/Length padan) tetapi `getTextContent()` pdf.js
+// memulangkan teks TERPOTONG ("...mengandungi kata"), jadi ujian carian gagal atas fixture,
+// bukan atas produk. Diukur, bukan diteka — bandingkan aliran mentah dengan hasil ekstrak.
+//
 //   satu-halaman.pdf    — 1 halaman berteks  (prev DAN next mesti disabled)
 //   tiga-halaman.pdf    — 3 halaman berteks  (had pada halaman 1 dan 3)
 //   tanpa-teks.pdf      — 1 halaman tanpa operator teks (kes "PDF tanpa lapisan teks")
@@ -31,13 +36,13 @@ function binaPdf(teks) {
     objek[idFont] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';
 
     teks.forEach((baris, i) => {
-        objek[idHalaman[i]] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 300 200] `
+        objek[idHalaman[i]] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] `
             + `/Resources << /Font << /F1 ${idFont} 0 R >> >> /Contents ${idKandungan[i]} 0 R >>`;
 
         // Halaman tanpa teks: aliran kandungan yang hanya melukis segi empat, tiada BT/ET.
         const aliran = baris === ''
-            ? '0.9 0.9 0.9 rg 20 20 260 160 re f'
-            : `BT /F1 18 Tf 24 120 Td (${baris}) Tj ET`;
+            ? '0.9 0.9 0.9 rg 40 40 532 712 re f'
+            : `BT /F1 18 Tf 48 700 Td (${baris}) Tj ET`;
         objek[idKandungan[i]] = `<< /Length ${aliran.length} >>\nstream\n${aliran}\nendstream`;
     });
 
@@ -66,7 +71,7 @@ const fixture = {
     'satu-halaman.pdf': binaPdf(['Dokumen ujian satu halaman']),
     'tiga-halaman.pdf': binaPdf([
         'Halaman pertama ujian',
-        'Halaman kedua mengandungi kata kunci UNIKKEYWORD',
+        'Halaman kedua UNIKKEYWORD',
         'Halaman ketiga ujian',
     ]),
     'tanpa-teks.pdf': binaPdf(['']),

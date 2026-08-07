@@ -264,3 +264,53 @@ secara tempatan. Itu mengesahkan bacaan §(g): kegagalan tempatan ialah keadaan 
 (RAM bebas 1.9 GB, ~1 min/ujian), bukan perubahan F7. Menahan diri daripada "membaiki" kod
 yang tidak rosak ialah keputusan yang betul di sini — tetapi hanya kerana keadaan mesin
 DIUKUR dahulu, bukan diandaikan.
+
+---
+
+## (i) e2e viewer dalam pelayar sebenar — BAKI F7 ditutup
+
+`e2e/document-viewer.spec.js` (projek `ci-domain`), 4 ujian, **4/4 lulus**. Ia memandu aliran
+domain PENUH: log masuk → muat naik fixture ke Peti Masuk melalui UI → buka tab
+"Lampiran & Versi" → ikut pautan "Buka Viewer" (URL bertandatangan, diambil daripada UI
+kerana membinanya sendiri bermakna menguji URL yang pengguna tidak pernah dapat) → viewer.
+
+Liputan §8.5: dokumen 3 halaman (prev disabled di 1, next disabled di 3) · dokumen 1 halaman
+(kedua-duanya disabled, zum kekal hidup) · `pageInput.max === numPages` · clamp
+`''` / `0` / `-3` / `abc` / `999` · had zum 50%/300% dengan `aria-disabled` seiring `disabled`
+· cari jumpa / tidak jumpa / kosong / Enter / PDF tanpa lapisan teks · cetak
+(`.print-meta` dipaparkan, `.viewer-stage` dan `.viewer-toolbar` TIDAK).
+
+### EMPAT kegagalan sebelum hijau — keempat-empatnya dalam UJIAN saya, bukan produk
+
+| Gejala | Punca sebenar |
+|---|---|
+| `Buka Viewer` "element(s) not found" | `RecordInfolist` BERTAB; pautan media dalam tab "Lampiran & Versi" (:56), bukan tab lalai "Maklumat" (:24) |
+| `fill('abc')` ditolak Playwright | `input[type=number]` — pelayar sebenar pun tidak membenarkan pengguna menaipnya; nilai bukan-nombor hanya sampai melalui laluan PROGRAMATIK |
+| klik zum ke-8 tamat masa | butang memang jadi `disabled` pada had — gelung saya menghukum produk kerana berkelakuan BETUL |
+| cari `UNIKKEYWORD` tidak ditemui | **fixture** memotong teks |
+
+Yang terakhir paling bernilai: aliran PDF **betul** (`/Length` padan bait-untuk-bait, teks
+penuh ada dalam fail), tetapi `getTextContent()` pdf.js memulangkan
+`"Halaman kedua mengandungi kata"` — MediaBox 300×200 terlalu sempit untuk baris 48 aksara
+pada 18pt. Fixture yang memotong kandungan secara SENYAP menjadikan ujian carian tidak
+bermakna. Dibetulkan kepada 612×792 dan **pengekstrakan SETIAP halaman disahkan**, bukan
+halaman pertama sahaja seperti semakan asal saya.
+
+### ⚠️ PENEMUAN PRODUK — muatan yang DIBATALKAN tidak pernah melaporkan ralat
+
+Diukur, bukan diandaikan. Apabila permintaan media **dibatalkan** (bukan ditolak dengan status
+ralat), `pdfjsLib.getDocument().promise` **tidak menolak**, jadi cabang `.catch()` dalam
+`document-viewer.js` tidak pernah berjalan:
+
+```
+<div role="status" data-status data-error="false">Memuatkan dokumen...</div>   ← kekal selamanya
+```
+
+**Sifat keselamatan §8.4 KEKAL dipenuhi:** kawalan tetap dikunci, jadi pengguna tidak boleh
+berinteraksi dengan viewer kosong — itu yang ujian assert. Yang hilang ialah **maklum balas**:
+pengguna tidak pernah diberitahu mengapa tiada apa-apa berlaku.
+
+**TIDAK dibaiki dalam F7, dan sebabnya dinyatakan:** menambah tempoh-tamat muatan ialah
+keputusan reka bentuk dengan pertukaran nyata (berapa lama? apa kesannya pada sambungan mudah
+alih perlahan atau PDF besar?) dan §8.4 tidak memintanya — ia meminta kawalan kekal disabled,
+yang memang berlaku. Diserahkan kepada pemilik/F8 dengan ukuran penuh di atas.
