@@ -211,3 +211,56 @@ unit JS 33/33 · Pest 620 lulus/1 skip · pint passed · build OK
 🔑 **Kegagalan di bawah beban ialah maklumat, bukan gangguan.** Ia tidak membuktikan
 perubahan fasa ini rosak, tetapi ia mendedahkan pemalar masa yang dikalibrasi pada mesin
 yang sihat sahaja — persis kelas pepijat yang muncul di CI dan hilang secara tempatan.
+
+---
+
+## (h) CI — dua pusingan, dan pengesahan bahawa gate tempatan memang tidak boleh dipercayai
+
+### Pusingan 1 (`8a6ef28`) — MERAH pada langkah PERTAMA
+
+```
+failure  Install dependencies
+npm error `npm ci` can only install packages when your package.json and
+          package-lock.json ... are in sync
+npm error Missing: @emnapi/core@1.11.3 from lock file
+npm error Missing: @emnapi/runtime@1.11.3 from lock file
+npm error Missing: @emnapi/wasi-threads@1.2.3 from lock file
+```
+
+**Punca saya sendiri, diukur:** `npm install --save-dev axe-core` yang dijalankan pada
+**Windows** MEMANGKAS tiga entri optional khusus-platform yang bersarang di bawah
+`node_modules/@tailwindcss/oxide-wasm32-wasi/node_modules/@emnapi/*`. Kiraan `@emnapi` dalam
+lock: **12** (baseline `f111ef6`, terbukti berfungsi di CI) → **9**. Runner Linux memerlukan
+entri itu; Windows tidak, jadi npm membuangnya secara senyap.
+
+⚠️ `npm install --package-lock-only` **TIDAK** memulihkannya — npm menyelesaikan dep optional
+mengikut platform SEMASA. Lock dibina semula daripada baseline yang terbukti berfungsi dengan
+HANYA dua penambahan axe-core disisipkan: diff **+11/−0**, `npm ci --dry-run` exit 0.
+
+⚠️ Percubaan pertama saya menulis lock itu dengan indentasi **2** dan menghasilkan diff
+**2,886 baris**; `package-lock.json` guna **4**. Itu perangkap yang SAMA seperti
+`targets.json` dalam W6 — direkod dua commit sebelumnya, lalu dilanggar semula dalam sesi
+yang sama.
+
+### Pusingan 2 (`89a7c91`) — HIJAU PENUH 7/7
+
+```
+success  PostgreSQL, Redis, Meili, OCR and tests
+success  guidance-e2e (screen) · (workflow) · (tenant-admin-public)
+success  guidance-e2e-gate
+success  Docker app image · Docker web image
+```
+
+Langkah baharu, dalam job WAJIB:
+
+```
+success  Accessibility (axe)
+         11 passed (46.7s)
+         OK [storage/app/plan-ci/ci-a11y.json]: 11 ujian, 0 skipped/timedOut
+```
+
+⭐ **`guidance-e2e (tenant-admin-public)` HIJAU di CI** — shard yang sama yang memberi 38/41
+secara tempatan. Itu mengesahkan bacaan §(g): kegagalan tempatan ialah keadaan mesin
+(RAM bebas 1.9 GB, ~1 min/ujian), bukan perubahan F7. Menahan diri daripada "membaiki" kod
+yang tidak rosak ialah keputusan yang betul di sini — tetapi hanya kerana keadaan mesin
+DIUKUR dahulu, bukan diandaikan.

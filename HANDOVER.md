@@ -1,6 +1,48 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6 **TAMAT** (W6 dikomit `0e0fd84`) · seterusnya F7 (8 Ogos)
+## ▶️ SAMBUNG DI SINI — F7 **CI HIJAU 7/7** (`89a7c91`) · Deploy 13 sedia (8 Ogos)
+
+**Produksi: `0e0fd84` (Deploy 12).** F0–F6 LIVE. F7 **CI hijau penuh**, belum di-deploy.
+CI **31174241411 = 7/7**, termasuk langkah WAJIB baharu `Accessibility (axe)` — 11 passed
+(46.7s), `assert-playwright-json` mengesahkan 11 ujian benar-benar berjalan.
+⭐ Shard `tenant-admin-public` HIJAU di CI — shard yang sama yang memberi 38/41 tempatan;
+itu mengesahkan kegagalan tempatan ialah beban mesin, bukan kod.
+📄 `bukti/plan-f7/LAPORAN-F7.md`
+
+```
+f111ef6  ADDENDUM v2.7 — pengecualian D5a, SEBELUM package.json disentuh
+d3b56a1  §8.1 link-name · §8.2 landmark-unique · §8.3 empty-table-header
+c660119  §8.4 kawalan viewer PDF (modul tulen + 7 ujian unit + fixture PDF)
+e2ffe59  axe automatik 11/11 + landmark PALSU popover ditutup
+8a6ef28  tetingkap pemulihan sorotan 6s -> 20s + langkah axe dalam ci.yml + laporan
+89a7c91  pulihkan entri lock khusus-platform yang npm install Windows buang
+```
+
+### 🔴 BAKI F7 sebelum ia boleh diisytihar siap
+
+1. **e2e viewer dalam pelayar sebenar** — logik kawalan sudah diuji PENUH sebagai fungsi tulen
+   (`viewer-control-plan.js`, 7 ujian), dan fixture PDF **sudah dikomit dan disahkan**
+   (`tests/fixtures/viewer/`: 1 halaman / 3 halaman / tanpa lapisan teks, dijana oleh
+   `bukti/plan-f7/skrip/gen-pdf-fixtures.mjs`, tiada pakej baharu). Yang belum: muat naik PDF
+   melalui UI Peti Masuk → buka `/viewer/{media}` → sahkan `disabled` pada DOM + kes cari
+   (kosong/jumpa/tidak jumpa/tanpa teks/Enter) + `.print-meta` metadata sahaja.
+   Koreografi muat naik sudah wujud (`e2e/helpers/upload.js`).
+2. **CI hijau** untuk `89a7c91`, kemudian Deploy 13.
+
+### 🎯 TIGA perangkap yang sesi ini bayar — jangan ulang
+
+1. **`npm install` pada Windows MEMANGKAS entri lock yang Linux perlukan.** Menambah
+   `axe-core` membuang 3 entri `@emnapi/*` (12 → 9) → `npm ci` gagal pada langkah PERTAMA CI.
+   `--package-lock-only` tidak memulihkannya. Bina semula lock daripada baseline yang terbukti
+   berfungsi + sisip pakej baharu sahaja, kemudian **`npm ci --dry-run`** sebelum push.
+2. **Indentasi JSON tidak seragam.** `package-lock.json` = 4 ruang; `guides.json` = 2;
+   `targets.json` = 4. Menulis dengan indentasi salah = diff seluruh fail yang menyembunyikan
+   perubahan sebenar. `sed -n '2p' fail.json | cat -A` sebelum menulis.
+3. **Ukur keadaan MESIN sebelum menyalahkan kod.** Gate tempatan memberi t-a-p 38/41; ukuran
+   menunjukkan RAM bebas 1.9 GB/31.7 GB dan ~1 min/ujian berbanding ~12s semasa gate W6 pada
+   set SAMA. Kedua-dua yang gagal LULUS berasingan. Larian itu bukan bukti apa-apa.
+
+## 📌 SEBELUM INI — F6 **TAMAT** (W6 `0e0fd84`, Deploy 12) (8 Ogos)
 
 **Produksi: `f0fc273` (Deploy 11).** W6 dikomit dan dipush; **Deploy 12 menunggu CI hijau.**
 
