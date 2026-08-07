@@ -494,3 +494,64 @@ dikembalikan**" — tidak lagi tepat apabila lalai suis ialah `false`. Teks peng
 5. Ujian kontrak lama (`auto_disposal_enabled === true` untuk masjid baharu tanpa override)
    **digantikan** dengan kontrak baharu (`=== false`) dalam commit yang sama, dengan rujukan
    "ADDENDUM v2.6" dalam mesej commit (peraturan #9 dicatat).
+
+---
+
+# ADDENDUM v2.7 — Pengecualian polisi `axe-core` (dev-only) untuk F7 (8 Ogos 2026)
+
+> Diluluskan pemilik: **KEPUTUSAN-PEMILIK.md D5 = Ya**, meliputi kedua-dua bahagian —
+> **(a)** pengecualian polisi bertulis untuk `axe-core` (dev-only), **(b)** `package.json` +
+> lockfile boleh diubah untuk menambahnya.
+>
+> Syarat D5 menetapkan pengecualian (a) mesti **direkodkan dalam dokumen kawalan repo semasa
+> pelaksanaan F7**, iaitu SEBELUM pakej ditambah. Addendum ini ialah rekod itu. Ia ditulis
+> dan dikomit sebelum sebarang perubahan kepada `package.json`.
+
+## Pindaan §3.3 — pakej baharu (kelulusan pemilik)
+
+Ditambah **`axe-core`** kepada **`devDependencies`** sahaja.
+
+| Perkara | Nilai |
+|---|---|
+| Pakej | `axe-core` |
+| Skop | `devDependencies` — **dev-only**, TIDAK pernah dibundelkan |
+| Tujuan | PELAN-PEMBAIKAN §8 (F7): mengukur `link-name`, `landmark-unique`, `empty-table-header` secara automatik dan boleh-ulang |
+| Kesan runtime produksi | **TIADA.** Ia tidak muncul dalam mana-mana entri `input` `vite.config.js`, jadi ia tidak boleh masuk ke dalam `public/build`. Imej Docker produksi menjalankan `npm ci --omit=dev`/binaan aset sahaja |
+| Kesan imej | Tiada — tiada ext PHP baharu, tiada pakej Composer |
+
+**Larangan §0.3 yang lain KEKAL sepenuhnya.** Pengecualian ini **khusus kepada `axe-core`
+sahaja** dan tidak mewujudkan preseden am untuk pakej npm lain. Sebarang pakej tambahan
+memerlukan kelulusan berasingan mengikut §0.1(2).
+
+## Sebab laluan automatik dipilih berbanding laluan lalai
+
+PELAN-PEMBAIKAN §8.5 menetapkan **laluan lalai** ialah alat luaran/manual (contohnya sambungan
+axe DevTools dalam pelayar) yang tidak menyentuh `package.json`. Laluan automatik dipilih
+kerana:
+
+1. **Boleh-ulang oleh sesiapa.** Sambungan pelayar memerlukan pemasangan manual pada mesin
+   tertentu; hasilnya tidak boleh dijana semula oleh CI mahupun oleh penyelenggara akan datang.
+2. **Boleh dijadikan penjaga.** Hanya larian dalam-suite boleh MENGGAGALKAN build apabila
+   pelanggaran baharu diperkenalkan. Laporan manual mengukur satu ketika; penjaga mengukur
+   selama-lamanya. Ini sejajar dengan corak seluruh pelan: setiap dakwaan mesti ada penjaga
+   yang gagal apabila dakwaan itu tidak lagi benar.
+3. **Sasaran adalah SAMA pada kedua-dua laluan** (§8.5), jadi pilihan ini tidak melonggarkan
+   apa-apa kriteria — ia hanya menjadikan bukti berulang.
+
+## Kontrak pelaksanaan
+
+1. Addendum ini dikomit **sebelum** `package.json` diubah (dua commit berasingan, urutan
+   direkod dalam bukti fasa F7).
+2. `axe-core` masuk ke `devDependencies` sahaja; `package-lock.json` dikemas dalam commit yang
+   sama dengan `package.json`.
+3. Ujian a11y menyuntik `axe-core` daripada `node_modules` dalam langkah e2e — **tiada CDN,
+   tiada muat turun runtime** (persekitaran ujian mesti kekal boleh-jalan tanpa rangkaian luar,
+   peraturan #5 CLAUDE.md).
+4. Sasaran F7 tidak berubah: `link-name` **0**, `landmark-unique` **0**,
+   `empty-table-header` **0-atau-didokumen**.
+5. Bukti fasa merekod versi tepat `axe-core` yang dipasang + JSON hasil per-peraturan.
+
+## Bukti v2.7
+
+`Audit Review Round Robin/bukti/plan-f7/` — laporan fasa F7, JSON axe per halaman/viewport,
+dan rekod urutan commit yang membuktikan addendum ini mendahului perubahan `package.json`.
