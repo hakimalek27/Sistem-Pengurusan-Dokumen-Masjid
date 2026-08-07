@@ -49,7 +49,10 @@ test('papan pemuka kedua-dua panel dipetakan kepada widget statistik yang SAMA',
     expect(sasaranBagi('/admin')).toEqual(['dashboard-stats']);
     expect(sasaranBagi('/admin/')).toEqual(['dashboard-stats']);
     // Sub-laluan panel admin TIDAK boleh terperangkap oleh regex `/admin`.
-    expect(sasaranBagi('/admin/mosques')).toEqual(['platform-mosques']);
+    // Hutang F7: `/admin/mosques` kini memetakan DUA sasaran — kotak carian (kekal, kini
+    // `reserved` dalam registri) dan sel tindakan baris pertama yang `admin.mosques#2` guna.
+    // Yang diuji di sini ialah bahawa `dashboard-stats` TIDAK bocor ke sub-laluan.
+    expect(sasaranBagi('/admin/mosques')).toEqual(['platform-mosques', 'platform-mosques-actions']);
 });
 
 test('sasaran dikongsi hanya bila registri mengisytiharkannya dwi-laluan', () => {

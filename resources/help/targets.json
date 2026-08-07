@@ -834,7 +834,7 @@
             "viewport": "both",
             "state": "-",
             "permission": "-",
-            "status": "active",
+            "status": "reserved",
             "since": "2026-08-07"
         },
         {
@@ -1556,8 +1556,20 @@
             "viewport": "desktop",
             "state": "-",
             "permission": "-",
-            "status": "active",
+            "status": "reserved",
             "since": "2026-08-07"
+        },
+        {
+            "id": "platform-mosques-actions",
+            "family": "admin",
+            "route": "/admin/mosques",
+            "owner_source": "js:decorateTargets (page-target-plan.js → tbody tr:first-child td:last-child)",
+            "selector_hint": "[data-help-target=\"platform-mosques-actions\"]",
+            "viewport": "both",
+            "state": "perlu sekurang-kurangnya satu baris tenant",
+            "permission": "superadmin",
+            "status": "active",
+            "since": "2026-08-08"
         },
         {
             "id": "platform-settings",
@@ -1592,8 +1604,20 @@
             "viewport": "desktop",
             "state": "-",
             "permission": "-",
-            "status": "active",
+            "status": "reserved",
             "since": "2026-08-07"
+        },
+        {
+            "id": "platform-users-actions",
+            "family": "admin",
+            "route": "/admin/users",
+            "owner_source": "js:decorateTargets (page-target-plan.js → tbody tr:first-child td:last-child)",
+            "selector_hint": "[data-help-target=\"platform-users-actions\"]",
+            "viewport": "both",
+            "state": "perlu sekurang-kurangnya satu baris pengguna",
+            "permission": "superadmin",
+            "status": "active",
+            "since": "2026-08-08"
         },
         {
             "id": "platform-whatsapp",

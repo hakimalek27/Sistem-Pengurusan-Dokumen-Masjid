@@ -5,7 +5,7 @@
 > JANGAN sunting fail ini secara tangan (PELAN-PEMBAIKAN.md §7.2 langkah 4).
 > Registry ialah sumber kebenaran; ujian membaca registry, bukan grep sumber.
 
-## Sasaran AKTIF (201) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
+## Sasaran AKTIF (200) — dirujuk katalog; mesti unik + kelihatan dlm DOM route-nya
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -70,7 +70,6 @@
 | `file-relocate-notes` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:63` | both | modal:Pindah Lokasi terbuka | files.track |
 | `file-relocate-submit` | screen | `/app/{tenant}/registry-files` | `app/Filament/App/Resources/RegistryFiles/Pages/ViewRegistryFile.php:57` | both | modal:Pindah Lokasi terbuka | files.track |
 | `help-scope` | public|tenant|admin | `/bantuan|/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:36` | both | - | - |
-| `help-search` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:23` | both | - | - |
 | `help-search-form` | public|tenant|admin | `/bantuan|/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:45` | both | - | - |
 | `inbox-classify` | screen|workflow | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:112` | both | jadual Peti Masuk mempunyai item belum diklasifikasi | inbox.classify |
 | `inbox-record` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:56` | both | jadual Peti Masuk tidak kosong (sel tajuk baris pertama) | inbox.view |
@@ -126,10 +125,10 @@
 | `page-actions` | screen | `/app/{tenant}/records` | `resources/js/help.js:decorateTargets` | both | detail:records | - |
 | `platform-announcements` | admin | `/admin/help-announcements` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
 | `platform-channels` | admin | `/admin/status-sambungan` | `resources/views/filament/admin/pages/status-sambungan.blade.php:4` | both | - | - |
-| `platform-mosques` | admin | `/admin/mosques` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
+| `platform-mosques-actions` | admin | `/admin/mosques` | `resources/js/help/page-target-plan.js (sel tindakan baris pertama)` | both | perlu sekurang-kurangnya satu baris tenant | superadmin |
 | `platform-settings` | admin | `/admin/tetapan-platform` | `resources/views/filament/admin/pages/tetapan-platform.blade.php:4` | both | - | - |
 | `platform-storage-orders` | admin | `/admin/storage-orders` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
-| `platform-users` | admin | `/admin/users` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
+| `platform-users-actions` | admin | `/admin/users` | `resources/js/help/page-target-plan.js (sel tindakan baris pertama)` | both | perlu sekurang-kurangnya satu baris pengguna | superadmin |
 | `platform-whatsapp` | admin | `/admin/whatsapp-platform` | `resources/views/filament/admin/pages/whatsapp-platform.blade.php:4` | both | - | - |
 | `profil-akaun` | screen|admin | `/app/{tenant}/profil|/admin/profil-saya` | `resources/views/filament/app/pages/profil.blade.php:4` | both | - | - |
 | `profil-kata-laluan` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:95` | both | - | - |
@@ -211,7 +210,7 @@
 | `storage-usage` | screen | `/app/{tenant}/penggunaan` | `resources/views/filament/app/pages/penggunaan-storan.blade.php:6` | both | - | - |
 | `tickets-search` | tenant|admin | `/app/{tenant}/tiket-sokongan|/admin/tiket-sokongan` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | support.manage |
 
-## Sasaran RIZAB (24) — wujud dlm DOM, belum dirujuk katalog
+## Sasaran RIZAB (27) — wujud dlm DOM, belum dirujuk katalog
 
 | ID | Family | Route | Sumber | Viewport | Prasyarat (`state`) | Permission |
 |---|---|---|---|---|---|---|
@@ -222,10 +221,13 @@
 | `help-center` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:1` | both | - | - |
 | `help-diagnosis` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:128` | both | - | - |
 | `help-preferences` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:158` | both | - | - |
+| `help-search` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:23` | both | - | - |
 | `help-support` | tenant|admin | `/app/{tenant}/bantuan|/admin/bantuan` | `resources/views/livewire/help-center.blade.php:199` | both | - | - |
 | `inbox-classification-modal` | screen | `/app/{tenant}/peti-masuk` | `app/Filament/App/Resources/Inbox/Tables/InboxTable.php:87` | both | modal:klasifikasi terbuka | inbox.classify |
 | `members-invite-name` | screen | `/app/{tenant}/ahli-peranan` | `app/Filament/App/Pages/AhliPeranan.php:144` | both | modal:Jemput Ahli terbuka | users.manage |
 | `onboarding-jawatan` | screen | `/app/{tenant}/persediaan` | `app/Filament/App/Pages/OnboardingWizard.php:75` | both | wizard langkah 1 | mosque.settings |
+| `platform-mosques` | admin | `/admin/mosques` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
+| `platform-users` | admin | `/admin/users` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
 | `profil-password` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:107` | both | modal:Tetapkan Kata Laluan terbuka | - |
 | `regfile-location` | screen | `/app/{tenant}/registry-files/create` | `app/Filament/App/Resources/RegistryFiles/Schemas/RegistryFileForm.php:44` | both | - | files.manage |
 | `registration-next` | public | `/daftar` | `resources/views/livewire/register-mosque.blade.php:85` | both | wizard pendaftaran langkah 1-2 | - |
@@ -247,10 +249,13 @@
 - `help-center`: Pembalut seluruh pusat bantuan; dipakai oleh gate laluan fallback (guidance-full.spec.js) tetapi belum dirujuk mana-mana langkah katalog. (sejak 2026-08-07)
 - `help-diagnosis`: Seksyen diagnosis pusat bantuan — calon W6/F7; belum dirujuk katalog. (sejak 2026-08-07)
 - `help-preferences`: Seksyen tetapan bantuan — calon W6/F7; belum dirujuk katalog. (sejak 2026-08-07)
+- `help-search`: - (sejak 2026-08-07)
 - `help-support`: Seksyen hantar tiket — calon W6/F7; belum dirujuk katalog. (sejak 2026-08-07)
 - `inbox-classification-modal`: Wujud dlm DOM; sasaran rizab langkah orientasi (C12 — jangan guna dua kali berturut) (sejak 2026-08-02)
 - `members-invite-name`: - (sejak 2026-08-04)
 - `onboarding-jawatan`: - (sejak 2026-08-04)
+- `platform-mosques`: - (sejak 2026-08-07)
+- `platform-users`: - (sejak 2026-08-07)
 - `profil-password`: - (sejak 2026-08-04)
 - `regfile-location`: - (sejak 2026-08-04)
 - `registration-next`: Belum dirujuk katalog (diguna e2e sebagai kawalan navigasi) (sejak 2026-08-02)

@@ -1,10 +1,34 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — ✅ F7 **LIVE** (Deploy 13 `774f9ab`) · penemuan #73 DITUTUP (8 Ogos)
+## ▶️ SAMBUNG DI SINI — hutang F7 SIAP secara tempatan, menunggu gate (8 Ogos)
 
-**Seterusnya:** hutang F7 (`tenant.bantuan#1`/`admin.bantuan#1` → `help-search-form`; sorotan
-tenant kini DIUKUR **1041×3186 = 70% tinggi `<main>`**) → kemudian **F8** (perlu kredensial
-superadmin produksi daripada pemilik).
+**Produksi kekal `774f9ab` (Deploy 13).** Penemuan #73 DITUTUP (artifak tab latar — lihat di
+bawah). Enam sasaran katalog ditukar; **belum dikomit sehingga gate hijau**.
+📄 `bukti/plan-f7-hutang/{LAPORAN-HUTANG-F7.md, skrip/}` — laporan lengkap kecuali angka gate.
+
+```
+tenant.bantuan#1 · admin.bantuan#1   help-search (70%/53% <main>) -> help-search-form (1-2%)
+tenant.bantuan#2 · admin.bantuan#2   nav-primary -> help-scope    (selaras public.help W6)
+admin.mosques#2                      platform-mosques -> platform-mosques-actions (629x105)
+admin.users#2                        platform-users   -> platform-users-actions   (222x57)
+admin.storage-orders#2               KEKAL — benih 0 baris (diukur), sasaran baris mustahil
+catalog_version 2026.08.08.1 -> 2026.08.08.2 · 83/473/generik 59 TIDAK berubah
+registri 200 aktif + 27 rizab (help-search, platform-mosques, platform-users -> reserved)
+```
+
+**Sudah hijau:** Pest **622✓/1 skip** · unit JS **33/33** · pint · build · validator manifest
+exit 0 · **pengesahan visual 6/6**. **Belum:** gate 3 shard (sedang berjalan) → CI → Deploy 14.
+Skrip deploy siap dengan 5 ramalan bertulis: `bukti/plan-f7-hutang/skrip/deploy-14.sh`.
+
+⚠️ Keadaan mesin semasa gate: RAM bebas **4.8 GB/31.7 GB**, 53 chrome, 30 node; tempoh ujian
+**13–28s** berbanding **~12s** baseline W6. Jika gate merah, bandingkan tempoh DAHULU — sesi F7
+memberi 38/41 palsu atas sebab ini.
+
+🎯 **Penjaga yang tidak boleh gagal ditemui lagi** (keluarga sama seperti §8.1 F7): regex drift
+`PageTargetSelectorTest` hanya memadan selektor KELAS (`\.`), jadi selektor struktur baharu
+akan lolos tanpa sauh. Dibaiki + dibuktikan dua arah.
+
+**Seterusnya selepas Deploy 14:** **F8** — perlu kredensial superadmin produksi daripada pemilik.
 
 **PRODUKSI: `774f9ab`.** CI **31184654233 = 7/7** termasuk `Accessibility (axe)` dan
 `Domain flows` (4 ujian viewer). Deploy 13 exit 0: smoke 9/9 · /up 200 · failed_jobs=0 ·

@@ -58,6 +58,12 @@ dataset('sauh-vendor-admin', [
     'admin/storage-orders: carian' => ['/admin/storage-orders', 'fi-ta-search-field'],
     'admin/help-announcements: carian' => ['/admin/help-announcements', 'fi-ta-search-field'],
     'admin/tiket-sokongan: carian' => ['/admin/tiket-sokongan', 'fi-ta-search-field'],
+    // Hutang F7 — `admin.mosques#2`/`admin.users#2` kini menyasar sel tindakan baris pertama
+    // (`tbody tr:first-child td:last-child`). Selektor itu STRUKTUR, jadi sauh yang boleh
+    // disahkan dari PHP ialah kewujudan tindakan baris yang dirender: tanpa `fi-ta-actions`
+    // tiada butang dalam sel itu dan sorotan menjadi tidak bermakna.
+    'admin/mosques: tindakan baris' => ['/admin/mosques', 'fi-ta-actions'],
+    'admin/users: tindakan baris' => ['/admin/users', 'fi-ta-actions'],
 ]);
 
 test('kelas vendor yang pemetaan JS bergantung padanya wujud dalam HTML', function (string $laluan, string $kelas) {
@@ -91,10 +97,19 @@ test('setiap selektor dalam page-target-plan.js diuji oleh dataset di atas', fun
     // Penjaga terhadap DRIFT: menambah pemetaan baharu tanpa menambah sauhnya di sini akan
     // mengembalikan tepat jurang yang W4 bayar harganya.
     $modul = file_get_contents(base_path('resources/js/help/page-target-plan.js'));
-    preg_match_all("/\['(\.[a-z0-9-]+)',\s*'[a-z-]+'\]/i", $modul, $padanan);
+    // ⚠️ Regex asal ialah `\['(\.[a-z0-9-]+)'` — ia hanya memadan selektor KELAS. Sebaik
+    // hutang F7 memperkenalkan selektor STRUKTUR (`tbody tr:first-child td:last-child`),
+    // penjaga ini akan lulus tanpa meliputinya langsung: penjaga yang tidak boleh gagal.
+    // Kini ia memadan mana-mana selektor dalam pasangan `['sel', 'target']`.
+    preg_match_all("/\['([^']+)',\s*'[a-z0-9-]+'\]/i", $modul, $padanan);
 
     $selektor = collect($padanan[1])->map(fn (string $s): string => ltrim($s, '.'))->unique()->values();
-    $diuji = collect(['fi-ta-search-field', 'fi-ta-filters-dropdown', 'fi-wi-stats-overview']);
+    $diuji = collect([
+        'fi-ta-search-field', 'fi-ta-filters-dropdown', 'fi-wi-stats-overview',
+        // Hutang F7 — sel tindakan baris pertama; sauhnya ialah `fi-ta-actions` dalam
+        // dataset admin di atas (kewujudan sel tindakan yang dirender).
+        'tbody tr:first-child td:last-child',
+    ]);
 
     expect($selektor->diff($diuji)->all())->toBe([],
         'ada selektor dalam page-target-plan.js yang tiada sauh dalam dataset `sauh-vendor`');

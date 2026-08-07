@@ -103,15 +103,34 @@ export const PAGE_TARGETS = [
         padanan: /^\/admin\/?$/,
         peta: [['.fi-wi-stats-overview', 'dashboard-stats']],
     },
+    // ── Hutang F7 (W5 §10) ───────────────────────────────────────────────────────────────
+    // `admin.mosques#2` berbunyi "Semak, lulus, gantung atau pulihkan tenant" dan
+    // `admin.users#2` "Urus akaun global, status aktif dan akses superadmin" — kedua-duanya
+    // menerangkan tindakan BARIS, tetapi menyorot kotak carian (211x36). Sasaran kini sel
+    // tindakan baris pertama, yang benar-benar mengandungi butang yang ayat itu namakan.
+    //
+    // ⚠️ Sel `<td>`, BUKAN `.fi-ta-actions` di dalamnya. Diukur: `.fi-ta-actions` ialah
+    // 593x20 (mosques) / 186x20 (users) — jalur nipis yang tidak melitupi butang yang
+    // membalut ke baris kedua. Itu tepat kecacatan `disposal-actions` yang W4 bayar
+    // (sorotan sah tetapi tidak bermakna). `<td>` = 629x105 / 222x57 dan melitupi semuanya.
+    //
+    // Sasaran hanya wujud bila ada baris. Diukur pada benih demo: mosques 2, users 10.
+    // (`/admin/storage-orders` ada 0 baris, sebab itu ia KEKAL pada sasaran carian.)
     {
         route: '/admin/mosques',
         padanan: /^\/admin\/mosques\/?$/,
-        peta: [['.fi-ta-search-field', 'platform-mosques']],
+        peta: [
+            ['.fi-ta-search-field', 'platform-mosques'],
+            ['tbody tr:first-child td:last-child', 'platform-mosques-actions'],
+        ],
     },
     {
         route: '/admin/users',
         padanan: /^\/admin\/users\/?$/,
-        peta: [['.fi-ta-search-field', 'platform-users']],
+        peta: [
+            ['.fi-ta-search-field', 'platform-users'],
+            ['tbody tr:first-child td:last-child', 'platform-users-actions'],
+        ],
     },
     {
         route: '/admin/storage-orders',

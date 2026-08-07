@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.08.1",
+  "catalog_version": "2026.08.08.2",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -4784,7 +4784,7 @@
           "id": "mosques.2",
           "title": "Semak data",
           "instruction": "Semak, lulus, gantung atau pulihkan tenant tanpa mencampurkan data organisasi.",
-          "target": "platform-mosques"
+          "target": "platform-mosques-actions"
         },
         {
           "id": "mosques.3",
@@ -4832,7 +4832,7 @@
           "id": "users.2",
           "title": "Semak data",
           "instruction": "Urus akaun global, status aktif dan akses superadmin secara terkawal.",
-          "target": "platform-users"
+          "target": "platform-users-actions"
         },
         {
           "id": "users.3",
@@ -7468,13 +7468,13 @@
           "id": "tenant.bantuan.1",
           "title": "Cari panduan atau hantar tiket",
           "instruction": "Cari panduan, jalankan diagnosis, ubah tetapan bantuan atau hantar tiket.",
-          "target": "help-search"
+          "target": "help-search-form"
         },
         {
           "id": "tenant.bantuan.2",
           "title": "Sahkan panel, tenant dan role",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "nav-primary"
+          "target": "help-scope"
         }
       ],
       "troubleshooting": [
@@ -7602,13 +7602,13 @@
           "id": "admin.bantuan.1",
           "title": "Buka fungsi",
           "instruction": "Cari panduan operasi platform, diagnosis dan laporan masalah.",
-          "target": "help-search"
+          "target": "help-search-form"
         },
         {
           "id": "admin.bantuan.2",
           "title": "Sahkan skop",
           "instruction": "Pastikan panel, tenant dan role semasa adalah betul.",
-          "target": "nav-primary"
+          "target": "help-scope"
         }
       ],
       "troubleshooting": [
