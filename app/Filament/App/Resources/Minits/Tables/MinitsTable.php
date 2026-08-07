@@ -68,6 +68,11 @@ class MinitsTable
                         };
                     }),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 // F6-W1 (§7.2) — aksi BARIS: sasaran dipasang pada baris PERTAMA sahaja
                 // supaya ia unik (corak sama seperti F6-W0 pada halaman Kegemaran).

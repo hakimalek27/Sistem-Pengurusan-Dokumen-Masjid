@@ -33,6 +33,11 @@ class ApprovalsTable
                     ->extraCellAttributes(fn ($record): array => self::baris1($record, 'approval-status')),
                 TextColumn::make('onBehalfOf.name')->label('Bagi pihak')->placeholder('—')->toggleable(),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 self::decideAction('lulus', 'Lulus', 'success', ApprovalStatus::Lulus, false),
                 self::decideAction('tolak', 'Tolak', 'danger', ApprovalStatus::Tolak, true),

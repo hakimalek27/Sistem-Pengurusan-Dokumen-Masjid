@@ -78,11 +78,41 @@ class InboxTable
                 TextColumn::make('ocr_status')
                     ->label('OCR')
                     ->badge(),
+                // F7 §8.1 (RR-04-01, axe `link-name` serious) — kolum ini PENUNJUK STATUS,
+                // bukan tindakan.
+                //
+                // Punca pelanggaran bukan teksnya tetapi kewujudan `<a>` itu sendiri: Filament
+                // membungkus setiap sel dengan `<a href=recordUrl>`, dan state `''` menghasilkan
+                // pautan tanpa nama boleh-akses. Disahkan pada vendor terpasang (4.11.8),
+                // `vendor/filament/tables/resources/views/index.blade.php:2233-2237`:
+                //     ($columnUrl || ($recordUrl && $columnAction === null))
+                //         && (! $columnHasStateBasedUrls) && (! $isColumnClickDisabled) => 'a',
+                //     default => 'div',
+                // `$isColumnClickDisabled` datang daripada `Column::isClickDisabled()`
+                // (`Concerns/CanBeDisabled.php:47`), ditetapkan oleh `disabledClick()` (:20).
+                //
+                // ⚠️ `disabledClick()`, BUKAN `disableClick()` — yang kedua ialah alias
+                // @deprecated (CanBeDisabled.php:28-30). Disemak pada vendor, bukan diandaikan.
+                //
+                // Kedua-dua keadaan membawa teks BM bermakna supaya pembaca skrin membaca
+                // sesuatu dalam SETIAP keadaan, bukan sel kosong.
+                //
+                // Kiraan duplikat ("2 duplikat") DITOLAK: `isFlaggedDuplicate()` sudah dipanggil
+                // setiap baris; menukarnya kepada agregat menambah N+1 pada jadual yang paling
+                // kerap dibuka, untuk nilai a11y yang kecil.
                 TextColumn::make('duplikat')
                     ->label('Duplikat')
-                    ->state(fn ($record) => app(InboxIngestService::class)->isFlaggedDuplicate($record) ? '⚠' : '')
-                    ->tooltip('Amaran: sha256 sama wujud pada rekod lain masjid ini'),
+                    ->disabledClick()
+                    ->state(fn ($record) => app(InboxIngestService::class)->isFlaggedDuplicate($record)
+                        ? 'Duplikat dikesan'
+                        : 'Tiada duplikat')
+                    ->tooltip('Padanan SHA-256 dengan dokumen lain dalam masjid yang sama'),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 // F6-W5: `tenant.peti-masuk` #2 ("Buka Lihat Dokumen/OCR dan sahkan fail
                 // boleh dibaca serta benar untuk masjid ini").

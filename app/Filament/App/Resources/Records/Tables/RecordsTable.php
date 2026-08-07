@@ -56,6 +56,11 @@ class RecordsTable
                     ->label('Status')
                     ->options(collect(RecordStatus::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()])),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 // F6-W4: tiga guide `workflow` bermula dengan "Buka Lihat pada rekod yang
                 // tepat" / "Buka rekod yang dibenarkan sahaja" pada SENARAI. `page-actions`

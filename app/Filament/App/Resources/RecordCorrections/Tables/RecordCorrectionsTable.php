@@ -44,6 +44,11 @@ class RecordCorrectionsTable
                     ->extraCellAttributes(fn ($record): array => self::baris1($record, 'correction-status')),
                 TextColumn::make('created_at')->label('Dimohon')->dateTime('d/m/Y H:i'),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 // Langkah 9 ("Reviewer berkuasa memilih Luluskan atau Tolak") — sasaran pada
                 // butang Luluskan; `Tolak` bersebelahannya jadi popover meliputi kedua-duanya.

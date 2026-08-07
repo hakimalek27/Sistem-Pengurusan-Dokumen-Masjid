@@ -32,6 +32,11 @@ class StorageOrdersTable
                 SelectFilter::make('status')->label('Status')
                     ->options(collect(OrderStatus::cases())->mapWithKeys(fn ($c) => [$c->value => $c->getLabel()])),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 Action::make('tandakanDibayar')
                     ->label('Tandakan Dibayar')->color('success')->icon('heroicon-o-banknotes')

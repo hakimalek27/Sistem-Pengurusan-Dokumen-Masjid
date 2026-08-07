@@ -35,19 +35,24 @@ class DelegationsTable
             TextColumn::make('starts_at')->label('Mula')->dateTime('d/m/Y H:i'),
             TextColumn::make('ends_at')->label('Tamat')->dateTime('d/m/Y H:i'),
             TextColumn::make('is_active')->label('Status')->formatStateUsing(fn ($state, $record) => $state && $record->ends_at?->isFuture() ? 'Aktif' : 'Tidak aktif')->badge(),
-        ])->recordActions([
-            // F6-W5: `tenant.delegasi` #6 ("Batal delegasi sebaik keperluan tamat").
-            // ⚠️ Butang ini `visible()` HANYA untuk delegasi aktif yang belum tamat — benih
-            // demo diperluas serentak supaya sekurang-kurangnya satu baris memenuhi syarat
-            // itu. Tanpa baris, sasaran tidak wujud dan gate hijau bermakna "tiada yang diuji"
-            // (pelajaran W4: butang Laksana yang tidak pernah dirender).
-            Action::make('revoke')->label('Batal')->icon('heroicon-o-no-symbol')->color('danger')->authorize('delete')
-                ->extraAttributes(fn ($record): array => self::baris1($record, 'delegation-revoke'))
-                ->visible(fn ($record) => $record->is_active && $record->ends_at?->isFuture())
-                ->requiresConfirmation()->action(function ($record): void {
-                    app(DelegationService::class)->revoke($record, Auth::user());
-                    Notification::make()->title('Delegasi dibatalkan.')->success()->send();
-                }),
-        ]);
+        ])            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
+            ->recordActions([
+                // F6-W5: `tenant.delegasi` #6 ("Batal delegasi sebaik keperluan tamat").
+                // ⚠️ Butang ini `visible()` HANYA untuk delegasi aktif yang belum tamat — benih
+                // demo diperluas serentak supaya sekurang-kurangnya satu baris memenuhi syarat
+                // itu. Tanpa baris, sasaran tidak wujud dan gate hijau bermakna "tiada yang diuji"
+                // (pelajaran W4: butang Laksana yang tidak pernah dirender).
+                Action::make('revoke')->label('Batal')->icon('heroicon-o-no-symbol')->color('danger')->authorize('delete')
+                    ->extraAttributes(fn ($record): array => self::baris1($record, 'delegation-revoke'))
+                    ->visible(fn ($record) => $record->is_active && $record->ends_at?->isFuture())
+                    ->requiresConfirmation()->action(function ($record): void {
+                        app(DelegationService::class)->revoke($record, Auth::user());
+                        Notification::make()->title('Delegasi dibatalkan.')->success()->send();
+                    }),
+            ]);
     }
 }

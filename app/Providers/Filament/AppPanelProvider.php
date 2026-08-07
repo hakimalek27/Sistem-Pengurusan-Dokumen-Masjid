@@ -74,6 +74,13 @@ class AppPanelProvider extends PanelProvider
                 PanelsRenderHook::SCRIPTS_AFTER,
                 fn (): string => view('filament.help-assets')->render(),
             )
+            // F7 §8.2 — hook TERSENDIRI untuk aset a11y. Berasingan daripada
+            // `filament.help-assets` supaya label landmark tidak boleh hilang bersama runtime
+            // panduan (suis `DIWAN_GUIDANCE_ENABLED` / ralat import dalam `help.js`).
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): string => view('filament.a11y-assets')->render(),
+            )
             // §10 Aliran I — banner persediaan pada Dashboard sehingga onboarding selesai.
             ->renderHook(
                 PanelsRenderHook::PAGE_START,

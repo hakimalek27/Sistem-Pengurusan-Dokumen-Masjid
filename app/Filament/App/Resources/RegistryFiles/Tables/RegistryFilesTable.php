@@ -58,6 +58,11 @@ class RegistryFilesTable
                 TextColumn::make('physical_location')->label('Lokasi')->placeholder('—')->toggleable(),
                 TextColumn::make('custody_status')->label('Penjagaan')->badge()->toggleable(),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 // F6-W4: langkah 3 ("Buka Lihat"). Atribut STATIK seperti `inbox-classify`
                 // (corak terbukti W2) — bukan `baris1()`: tindakan jadual Filament tidak

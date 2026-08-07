@@ -77,6 +77,11 @@ class UsersTable
                 TernaryFilter::make('is_active')->label('Status Aktif'),
                 TernaryFilter::make('is_superadmin')->label('Superadmin'),
             ])
+            // F7 §8.3 (axe `empty-table-header` minor) — sel header lajur tindakan
+            // kosong walaupun `aria-label` wujud; axe menuntut TEKS atau `aria-hidden`.
+            // API semasa: `recordActionsColumnLabel()` (HasRecordActions.php:76);
+            // `actionsColumnLabel()` ialah alias @deprecated (:162-164) — jangan guna.
+            ->recordActionsColumnLabel('Tindakan')
             ->recordActions([
                 EditAction::make()->label('Sunting'),
                 Action::make('toggleActive')
