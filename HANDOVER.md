@@ -1,6 +1,10 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — ✅ F7 **LIVE** (Deploy 13 `774f9ab`) · 1 penemuan TERBUKA (8 Ogos)
+## ▶️ SAMBUNG DI SINI — ✅ F7 **LIVE** (Deploy 13 `774f9ab`) · penemuan #73 DITUTUP (8 Ogos)
+
+**Seterusnya:** hutang F7 (`tenant.bantuan#1`/`admin.bantuan#1` → `help-search-form`; sorotan
+tenant kini DIUKUR **1041×3186 = 70% tinggi `<main>`**) → kemudian **F8** (perlu kredensial
+superadmin produksi daripada pemilik).
 
 **PRODUKSI: `774f9ab`.** CI **31184654233 = 7/7** termasuk `Accessibility (axe)` dan
 `Domain flows` (4 ujian viewer). Deploy 13 exit 0: smoke 9/9 · /up 200 · failed_jobs=0 ·
@@ -17,27 +21,36 @@ BAHARU: a11y-landmarks-mQ2zo0LK.js   (entri Vite keenam — semakan #3c khusus)
 `role="none"` pada produksi — landmark PALSU yang berlanggar dengan `<header class="brand">`
 sudah tiada.
 
-### 🔴 ITEM PERTAMA SESI BERIKUTNYA — sorotan tour masih hilang pada produksi
+### ✅ DITUTUP — "sorotan hilang pada produksi" ialah ARTIFAK PENGUKURAN, bukan kecacatan
 
-Diukur pada `bakwim.my/bantuan?panduan=public.help&langkah=0`, dua bacaan berturut:
+📄 `bukti/penemuan-sorotan-tab-latar/PENEMUAN-SOROTAN-TAB-LATAR.md` (+ `skrip/`)
+
+Bacaan Deploy 13 dibuat dalam tab MCP yang **tidak pernah dibawa ke hadapan**. Diukur terus
+dalam tab itu: `visibilityState "hidden"` · interval 250ms memberi **2 detik dalam 3000ms**.
+Tinjauan pemulihan `watchHighlightLoss` berjalan pada 250ms, jadi ia tidak boleh menembak di
+sana — sorotan kekal padam selagi tiada siapa melihat tab itu.
+
+**Sepuluh pengukuran pada bundel yang SAMA** (hash tempatan `help-EPOANIj9.js` = produksi):
 
 ```
-muatan segar           -> aktif = "help-search-form"     (BETUL)
-beberapa saat kemudian -> aktif = null                    (HILANG)
-                          sasaran MASIH dalam DOM · popover MASIH "1 daripada 2"
+produksi bersih          morph SEBELUM sorotan  -> tiada kehilangan langsung   ✅ 60s
+produksi cpu 6/8/20x     morph selepas sorotan  -> pulih 40-270ms              ✅ 60-75s
+tab latar -> ke hadapan  pemasa beku 25s        -> pulih 26ms selepas aktif    ✅
+TENANT /app/mam/bantuan  morph selepas sorotan  -> pulih 139ms                 ✅ 30s
 ```
 
-Tandatangan kecacatan **W5d** (morph memadam `.driver-active-element`). Pemulihan
-`watchHighlightLoss` — tetingkap dilebarkan 6s → 20s dalam F7 — tidak menyelamatkan kes ini.
+⭐ Larian tenant menutup **jurang yang terbuka sejak W5** — senario W5d sebenar (sasaran DI
+DALAM komponen yang memorph) tidak pernah disahkan kerana kredensial produksi tidak wujud.
 
-⚠️ **BELUM diketahui, jangan spekulasi:** masa tepat kehilangan · sama ada Deploy 12 sama
-(pada W6 saya hanya ukur SEBAIK selepas muatan, jadi F7 TIDAK boleh disalahkan) · sama ada
-punca ialah morph KEDUA selepas cap 2 pembaikan habis, atau morph selepas 20s.
+⚠️ **Baki jujur:** dalam tab latar yang terbuka ~342s, overlay Driver.js juga tiada, bukan
+hanya kelas. Saya tidak menentukan sebabnya; ia tidak berlaku dalam tab yang di hadapan pada
+mana-mana sepuluh larian.
 
-**Langkah seterusnya yang sudah diketahui:** guna pelayan TEMPATAN dengan benih sama; pasang
-perekam dalam halaman SEBELUM tour bermula (`addInitScript`); rakam setiap peralihan kelas
-DAN setiap commit Livewire; tentukan sama ada cap pembaikan atau tetingkap masa yang menjadi
-had. Baru kemudian ubah runtime.
+🎯 **Pelajaran (F6-W1 diulang + satu tambahan):** jangan assert pada keadaan sementara — rakam
+urutannya. **Dan sahkan persekitaran pengukuran boleh memerhati apa yang diukur:** tab latar
+membekukan pemasa, jadi mana-mana pembaikan berasaskan `setInterval` kelihatan mati di sana
+walaupun sihat. Ukur `visibilityState` + buktikan pemasa berdetik sebelum melaporkan kecacatan
+masa-nyata daripada pelayar automatik.
 
 ## 📌 SEBELUM INI — F7 CI hijau (`89a7c91`) (8 Ogos)
 
