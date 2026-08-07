@@ -1,0 +1,1666 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 664
+  },
+  "nota": "audit = produksi tenant smoke; kini = tempatan tenant mam, benih demo",
+  "audit_centercovered": 6,
+  "kini_centercovered": 45,
+  "pulih": [],
+  "baharu": [
+    "tenant.sensitive-access-logs#1",
+    "tenant.log-aktiviti#1",
+    "tenant.log-aktiviti#2",
+    "tenant.persediaan#1",
+    "tenant.ahli-peranan#1",
+    "tenant.classification-nodes#1",
+    "tenant.classification-nodes#2",
+    "tenant.classification-nodes#4",
+    "tenant.pelupusan#2",
+    "tenant.pelupusan#3",
+    "tenant.pelupusan#4",
+    "tenant.retensi-peraturan#1",
+    "tenant.retensi-peraturan#2",
+    "tenant.retensi-peraturan#3",
+    "tenant.retensi-peraturan#4",
+    "tenant.retensi-peraturan#5",
+    "tenant.tetapan-masjid#2",
+    "tenant.penggunaan#2",
+    "tenant.penggunaan#3",
+    "tenant.retensi#1",
+    "tenant.retensi#2",
+    "tenant.retensi#5",
+    "tenant.delegasi#1",
+    "tenant.delegasi#2",
+    "tenant.delegasi#4",
+    "tenant.delegasi#6",
+    "tenant.profil#2",
+    "tenant.profil#4",
+    "tenant.profil#5",
+    "tenant.peti-masuk#3",
+    "tenant.records#1",
+    "tenant.registry-files#1",
+    "tenant.minit-saya#1",
+    "tenant.carian#4",
+    "tenant.carian#5",
+    "tenant.carian#6",
+    "tenant.laporan#3",
+    "tenant.bantuan#2",
+    "tenant.tiket-sokongan#1"
+  ],
+  "tiada_popover": [],
+  "hasil": [
+    {
+      "key": "tenant.dashboard#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 6,
+        "top": 65
+      },
+      "target": null
+    },
+    {
+      "key": "tenant.dashboard#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "dashboard-stats"
+    },
+    {
+      "key": "tenant.dashboard#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "dashboard-checklist"
+    },
+    {
+      "key": "tenant.dashboard#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 6,
+        "top": 65
+      },
+      "target": null
+    },
+    {
+      "key": "tenant.sensitive-access-logs#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 222
+      },
+      "target": "sensitive-log-search"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 340
+      },
+      "target": "sensitive-log-record"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 340
+      },
+      "target": "sensitive-log-target"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.log-aktiviti#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 214
+      },
+      "target": "log-filters"
+    },
+    {
+      "key": "tenant.log-aktiviti#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 222
+      },
+      "target": "log-search"
+    },
+    {
+      "key": "tenant.log-aktiviti#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 357
+      },
+      "target": "log-detail"
+    },
+    {
+      "key": "tenant.log-aktiviti#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 6
+      },
+      "target": "log-time"
+    },
+    {
+      "key": "tenant.log-aktiviti#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.persediaan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 195
+      },
+      "target": "onboarding-start"
+    },
+    {
+      "key": "tenant.persediaan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.persediaan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.persediaan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.persediaan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.persediaan#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 6,
+        "top": 65
+      },
+      "target": null
+    },
+    {
+      "key": "tenant.ahli-peranan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "members-invite"
+    },
+    {
+      "key": "tenant.ahli-peranan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.ahli-peranan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "members-list"
+    },
+    {
+      "key": "tenant.ahli-peranan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 361
+      },
+      "target": "members-actions"
+    },
+    {
+      "key": "tenant.ahli-peranan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.ahli-peranan#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 390
+      },
+      "target": "members-role"
+    },
+    {
+      "key": "tenant.classification-nodes#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 274
+      },
+      "target": "classnode-search"
+    },
+    {
+      "key": "tenant.classification-nodes#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 244
+      },
+      "target": "classnode-parent"
+    },
+    {
+      "key": "tenant.classification-nodes#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 94
+      },
+      "target": "classnode-code"
+    },
+    {
+      "key": "tenant.classification-nodes#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 189
+      },
+      "target": "classnode-title"
+    },
+    {
+      "key": "tenant.classification-nodes#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.pelupusan#1",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 212
+      },
+      "target": "disposal-candidates"
+    },
+    {
+      "key": "tenant.pelupusan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 227
+      },
+      "target": "disposal-batches"
+    },
+    {
+      "key": "tenant.pelupusan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 227
+      },
+      "target": "disposal-batches"
+    },
+    {
+      "key": "tenant.pelupusan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 264,
+        "left": 14,
+        "top": 206
+      },
+      "target": "disposal-batches"
+    },
+    {
+      "key": "tenant.pelupusan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 366
+      },
+      "target": "disposal-warning"
+    },
+    {
+      "key": "tenant.retensi-peraturan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 263
+      },
+      "target": "retention-schedule"
+    },
+    {
+      "key": "tenant.retensi-peraturan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 276
+      },
+      "target": "retention-record-type"
+    },
+    {
+      "key": "tenant.retensi-peraturan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 105
+      },
+      "target": "retention-years"
+    },
+    {
+      "key": "tenant.retensi-peraturan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 193
+      },
+      "target": "retention-action"
+    },
+    {
+      "key": "tenant.retensi-peraturan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 160
+      },
+      "target": "retention-hold"
+    },
+    {
+      "key": "tenant.tetapan-masjid#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "mosque-settings-profile"
+    },
+    {
+      "key": "tenant.tetapan-masjid#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 195
+      },
+      "target": null
+    },
+    {
+      "key": "tenant.tetapan-masjid#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.tetapan-masjid#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 12,
+        "top": 391
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.tetapan-masjid#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "mosque-settings-whatsapp"
+    },
+    {
+      "key": "tenant.tetapan-masjid#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.penggunaan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 381
+      },
+      "target": "storage-usage"
+    },
+    {
+      "key": "tenant.penggunaan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 240
+      },
+      "target": "storage-orders"
+    },
+    {
+      "key": "tenant.penggunaan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "storage-add"
+    },
+    {
+      "key": "tenant.penggunaan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.penggunaan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.retensi#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 14,
+        "top": 181
+      },
+      "target": "retention-hold"
+    },
+    {
+      "key": "tenant.retensi#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 263
+      },
+      "target": "retention-schedule"
+    },
+    {
+      "key": "tenant.retensi#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.retensi#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.retensi#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "retention-export"
+    },
+    {
+      "key": "tenant.delegasi#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 244
+      },
+      "target": "delegation-principal"
+    },
+    {
+      "key": "tenant.delegasi#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 332
+      },
+      "target": "delegation-delegate"
+    },
+    {
+      "key": "tenant.delegasi#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 420
+      },
+      "target": "delegation-capabilities"
+    },
+    {
+      "key": "tenant.delegasi#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 182
+      },
+      "target": "delegation-starts"
+    },
+    {
+      "key": "tenant.delegasi#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.delegasi#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 14,
+        "top": 314
+      },
+      "target": "delegation-revoke"
+    },
+    {
+      "key": "tenant.profil#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 66
+      },
+      "target": "profil-akaun"
+    },
+    {
+      "key": "tenant.profil#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "profil-notifikasi"
+    },
+    {
+      "key": "tenant.profil#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.profil#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 243
+      },
+      "target": "profil-ujian"
+    },
+    {
+      "key": "tenant.profil#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 291
+      },
+      "target": "profil-kata-laluan"
+    },
+    {
+      "key": "tenant.profil#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.peti-masuk#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 14,
+        "top": 37
+      },
+      "target": "inbox-record"
+    },
+    {
+      "key": "tenant.peti-masuk#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 386
+      },
+      "target": "inbox-view"
+    },
+    {
+      "key": "tenant.peti-masuk#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "inbox-upload"
+    },
+    {
+      "key": "tenant.peti-masuk#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 386
+      },
+      "target": "inbox-classify"
+    },
+    {
+      "key": "tenant.peti-masuk#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 14,
+        "top": 386
+      },
+      "target": "inbox-spam"
+    },
+    {
+      "key": "tenant.peti-masuk#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 14,
+        "top": 37
+      },
+      "target": "inbox-source"
+    },
+    {
+      "key": "tenant.records#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 274
+      },
+      "target": "records-search"
+    },
+    {
+      "key": "tenant.records#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 357
+      },
+      "target": "records-view"
+    },
+    {
+      "key": "tenant.records#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.records#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.records#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 263,
+        "left": 12,
+        "top": 391
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.registry-files#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 274
+      },
+      "target": "regfiles-search"
+    },
+    {
+      "key": "tenant.registry-files#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 14,
+        "top": 78
+      },
+      "target": "regfiles-status"
+    },
+    {
+      "key": "tenant.registry-files#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 400
+      },
+      "target": "regfiles-medium"
+    },
+    {
+      "key": "tenant.registry-files#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.registry-files#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.registry-files#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.minit-saya#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 206
+      },
+      "target": "minit-filters"
+    },
+    {
+      "key": "tenant.minit-saya#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "minit-record"
+    },
+    {
+      "key": "tenant.minit-saya#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 357
+      },
+      "target": "minit-complete"
+    },
+    {
+      "key": "tenant.minit-saya#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 357
+      },
+      "target": "minit-reply"
+    },
+    {
+      "key": "tenant.minit-saya#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.minit-saya#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.kelulusan#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.carian#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 402
+      },
+      "target": "search-text"
+    },
+    {
+      "key": "tenant.carian#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "search-filters"
+    },
+    {
+      "key": "tenant.carian#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 382
+      },
+      "target": "search-parties"
+    },
+    {
+      "key": "tenant.carian#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 208
+      },
+      "target": "search-submit"
+    },
+    {
+      "key": "tenant.carian#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 288
+      },
+      "target": "search-save"
+    },
+    {
+      "key": "tenant.carian#6",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 225
+      },
+      "target": "search-saved"
+    },
+    {
+      "key": "tenant.carian#7",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 14,
+        "top": 337
+      },
+      "target": "search-favourite"
+    },
+    {
+      "key": "tenant.kegemaran#1",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 238
+      },
+      "target": "favourites-list"
+    },
+    {
+      "key": "tenant.kegemaran#2",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 238
+      },
+      "target": "favourites-list"
+    },
+    {
+      "key": "tenant.kegemaran#3",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 237
+      },
+      "target": "favourite-item"
+    },
+    {
+      "key": "tenant.kegemaran#4",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 237
+      },
+      "target": "favourite-item"
+    },
+    {
+      "key": "tenant.kegemaran#5",
+      "dahulu": true,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 238
+      },
+      "target": "favourites-list"
+    },
+    {
+      "key": "tenant.laporan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "report-summary"
+    },
+    {
+      "key": "tenant.laporan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "report-breakdown"
+    },
+    {
+      "key": "tenant.laporan#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 195
+      },
+      "target": "report-export"
+    },
+    {
+      "key": "tenant.laporan#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 12,
+        "top": 432
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#3",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#4",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 346
+      },
+      "target": "correction-decision"
+    },
+    {
+      "key": "tenant.pembetulan-rekod#5",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "correction-diff"
+    },
+    {
+      "key": "tenant.bantuan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 26
+      },
+      "target": "help-search-form"
+    },
+    {
+      "key": "tenant.bantuan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 296
+      },
+      "target": "help-scope"
+    },
+    {
+      "key": "tenant.analitik-bantuan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 12,
+        "top": 411
+      },
+      "target": "analytics-metrics"
+    },
+    {
+      "key": "tenant.analitik-bantuan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 6,
+        "top": 65
+      },
+      "target": null
+    },
+    {
+      "key": "tenant.tiket-sokongan#1",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 14,
+        "top": 222
+      },
+      "target": "tickets-search"
+    },
+    {
+      "key": "tenant.tiket-sokongan#2",
+      "dahulu": false,
+      "adaPopover": true,
+      "centerCovered": false,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 6,
+        "top": 65
+      },
+      "target": null
+    }
+  ]
+}

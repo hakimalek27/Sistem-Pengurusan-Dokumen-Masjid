@@ -1,0 +1,186 @@
+{
+  "dijana": "metrik-f8.mjs",
+  "catalog_version": "2026.08.08.2",
+  "definisi_kohort": "Kohort audit produksi P11 = family `tenant` (25 guide / 124 langkah) — perbandingan apple-to-apple sahaja, BUKAN gate keluaran",
+  "paras_i_kohort": {
+    "denominator": "25/124",
+    "resolved_to_generic": {
+      "asas": "119/124",
+      "kini": "38/124"
+    },
+    "title_equals_instruction": {
+      "asas": "77/124",
+      "kini": "0/124"
+    },
+    "title_truncated_mid_word": {
+      "asas": "20/124",
+      "kini": "0/124"
+    },
+    "cta_buat_pada_skrin": {
+      "asas": 20,
+      "kini": 0
+    }
+  },
+  "paras_ii_katalog_penuh": {
+    "guides": {
+      "asas": 83,
+      "kini": 83
+    },
+    "steps": {
+      "asas": 473,
+      "kini": 473
+    },
+    "generic_declared": {
+      "asas": 443,
+      "kini": 59
+    },
+    "placeholder_titles": {
+      "asas": 258,
+      "kini": 0
+    },
+    "action_steps_with_generic_target": {
+      "asas": 200,
+      "kini": 0
+    },
+    "mobile_defects": {
+      "asas": 6,
+      "kini": 6
+    },
+    "wait_for_user": {
+      "asas": 172,
+      "kini": 172
+    },
+    "empat_kategori": {
+      "specific": 414,
+      "not-applicable": 23,
+      "generic-justified": 36,
+      "risk-accepted": 0,
+      "blocked": 0
+    },
+    "tanpa_status": 0
+  },
+  "paras_iii_pecahan": {
+    "family": {
+      "tenant": {
+        "guides": 25,
+        "steps": 124,
+        "generic": 38,
+        "action_generic": 0,
+        "placeholder": 0
+      },
+      "workflow": {
+        "guides": 14,
+        "steps": 158,
+        "generic": 5,
+        "action_generic": 0,
+        "placeholder": 0
+      },
+      "admin": {
+        "guides": 12,
+        "steps": 32,
+        "generic": 8,
+        "action_generic": 0,
+        "placeholder": 0
+      },
+      "public": {
+        "guides": 3,
+        "steps": 8,
+        "generic": 0,
+        "action_generic": 0,
+        "placeholder": 0
+      },
+      "screen": {
+        "guides": 29,
+        "steps": 151,
+        "generic": 8,
+        "action_generic": 0,
+        "placeholder": 0
+      }
+    },
+    "wave": {
+      "W5": {
+        "guides": 35,
+        "steps": 146,
+        "generic": 46
+      },
+      "W0": {
+        "guides": 2,
+        "steps": 10,
+        "generic": 0
+      },
+      "W4": {
+        "guides": 14,
+        "steps": 158,
+        "generic": 5
+      },
+      "W6": {
+        "guides": 3,
+        "steps": 8,
+        "generic": 0
+      },
+      "W3": {
+        "guides": 29,
+        "steps": 151,
+        "generic": 8
+      }
+    },
+    "shard": {
+      "tenant-admin-public": {
+        "guides": 40,
+        "steps": 164,
+        "action_steps": 4
+      },
+      "workflow": {
+        "guides": 14,
+        "steps": 158,
+        "action_steps": 57
+      },
+      "screen": {
+        "guides": 29,
+        "steps": 151,
+        "action_steps": 111
+      }
+    },
+    "viewport": {
+      "desktop": 469,
+      "both": 4
+    }
+  },
+  "registri": {
+    "jumlah": 227,
+    "aktif": 200,
+    "rizab": 27
+  },
+  "role_routes": {
+    "identiti": 10,
+    "entri": 410,
+    "mismatches": 0,
+    "probe_silang_tenant": 8
+  },
+  "gate_agregator": {
+    "pass": true,
+    "shards": 3,
+    "masalah": 0,
+    "guide_ids": {
+      "union": 83,
+      "expected": 83,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    },
+    "step_ids": {
+      "union": 473,
+      "expected": 473,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    },
+    "action_step_ids": {
+      "union": 172,
+      "expected": 172,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    }
+  }
+}

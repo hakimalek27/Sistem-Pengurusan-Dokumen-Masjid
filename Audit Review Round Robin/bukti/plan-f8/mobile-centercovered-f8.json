@@ -1,0 +1,118 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 664
+  },
+  "asas_audit": 6,
+  "kini": 6,
+  "hasil": [
+    {
+      "key": "tenant.pelupusan#1",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 14,
+        "top": 212
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "disposal-candidates",
+      "statusText": "1 daripada 5",
+      "title": "Semak calon cukup tempoh"
+    },
+    {
+      "key": "tenant.kegemaran#1",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 238
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "favourites-list",
+      "statusText": "1 daripada 5",
+      "title": "Senarai kegemaran anda"
+    },
+    {
+      "key": "tenant.kegemaran#2",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 238
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "favourites-list",
+      "statusText": "2 daripada 5",
+      "title": "Buka Kegemaran dari menu Tugasan"
+    },
+    {
+      "key": "tenant.kegemaran#3",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 237
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "favourite-item",
+      "statusText": "3 daripada 5",
+      "title": "Klik item untuk buka sumber asal"
+    },
+    {
+      "key": "tenant.kegemaran#4",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 222,
+        "left": 10,
+        "top": 237
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "favourite-item",
+      "statusText": "4 daripada 5",
+      "title": "Bintang penuh membuang kegemaran"
+    },
+    {
+      "key": "tenant.kegemaran#5",
+      "adaPopover": true,
+      "popSize": {
+        "w": 366,
+        "h": 243,
+        "left": 10,
+        "top": 238
+      },
+      "pusat": {
+        "x": 195,
+        "y": 332
+      },
+      "centerCovered": true,
+      "target": "favourites-list",
+      "statusText": "5 daripada 5",
+      "title": "Kegemaran tidak mengatasi permission"
+    }
+  ]
+}
