@@ -1,6 +1,56 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — ✅ F6-W5 **LIVE** (Deploy 11 `f0fc273`) · seterusnya F6-W6 (8 Ogos)
+## ▶️ SAMBUNG DI SINI — F6 **TAMAT** (W6 dikomit `0e0fd84`) · seterusnya F7 (8 Ogos)
+
+**Produksi: `f0fc273` (Deploy 11).** W6 dikomit dan dipush; **Deploy 12 menunggu CI hijau.**
+
+### F6-W6 — dua langkah generik TERAKHIR ditutup; ketujuh-tujuh gelombang kini tertutup
+
+```
+generic_declared 61 -> 59   (kesemua 59 berjustifikasi eksplisit bertarikh)
+action-generic 0 · placeholder 0 · blocked 0 · risk-accepted 0
+catalog_version 2026.08.07.1 -> 2026.08.08.1 · registri 223 -> 225 (201 aktif · 24 rizab)
+gate 30/30 · 15/15 · 41/41 + GATE LULUS 83/473/172 · Pest 606✓/1 skip · validator exit 0
+```
+📄 `bukti/plan-f6-w6/{INVENTORI-W6.md (DIJANA), LAPORAN-F6-W6.md, skrip/}`
+
+`W6` kini dalam `justified_waves` (TIGA penjaga), jadi **mana-mana langkah generik baharu
+dalam mana-mana wave akan menggagalkan penjanaan manifest** melainkan ia membawa justifikasi
+bertarikh. Katalog gagal-tertutup terhadap kemerosotan.
+
+### ⚠️ Deploy 12 — bukti mesti BERBEZA daripada Deploy 11
+
+W6 menyentuh **Blade + JSON sahaja**, jadi nama aset **KEKAL** (`help-D_qumira.js` +
+`help-Cfwb6f_j.css`). Itu BUKAN tanda deploy gagal. Bukti utama = **kandungan dalam imej**
+(#2a: `catalog_version 2026.08.08.1 | guide 83 | langkah 473 | generik 59`) + ImageID berubah
++ label revisi. Corak ini sudah terbukti pada Deploy 2, 7, 8.
+Skrip siap: `bukti/plan-f6-w6/skrip/deploy-12.sh <sha>` (rebuild `app` DAN `nginx` tetap wajib;
+`sync-help-index --delete` wajib kerana `catalog_version` berubah; ⛔ jangan seed produksi).
+
+### 🎯 Dua pelajaran BAHARU daripada W6
+
+1. **Semak indentasi setiap fail JSON secara berasingan.** `guides.json` = 2 ruang,
+   `targets.json` = **4**. Menulis kedua-duanya dengan indentasi sama menghasilkan diff
+   SELURUH FAIL (5,410 baris untuk 2 entri) yang menyembunyikan perubahan sebenar daripada
+   semakan. Keluarga sama seperti perangkap CRLF W2. `sunting-w6.mjs` kini ada peta `INDEN`.
+2. **Skema manifest bukan `{guides, steps}`** — `manifest.catalogue` ialah ARRAY entri guide,
+   setiap satu membawa `steps`. Semak skema sebelum menulis alat terhadapnya.
+
+### ▶️ SETERUSNYA: F7 — A11y & baki kecil (§8)
+
+⚠️ **Pengecualian bertulis D5a mesti direkod DAHULU** sebelum `axe-core` ditambah kepada
+`devDependencies` — itu satu-satunya pakej baharu yang pelan benarkan, dan hanya selepas
+dokumen kawalan dikemas.
+
+F7 turut memiliki **dua hutang yang W6 buat lebih murah**:
+- `help-search-form` kini WUJUD → `tenant.bantuan#1` dan `admin.bantuan#1` boleh ditukar
+  daripada `help-search` (seksyen **3211px** pada panel tenant) kepadanya. Dua baris dalam
+  `guides.json`; kedua-duanya sudah `specific` jadi tiada denominator bergerak — tetapi
+  katalog berubah, jadi perlu gate penuh + `sync-help-index --delete`.
+- Penghalusan semantik `admin.*` (tiga ketidakpadanan direkod LAPORAN-F6-W5.md §10) +
+  **tambah ukuran SAIZ sorotan** ke senarai semak, bukan sekadar identitinya.
+
+## 📌 SEBELUM INI — ✅ F6-W5 **LIVE** (Deploy 11 `f0fc273`) (8 Ogos)
 
 **PRODUKSI: `f0fc273`** (sebelum: `cea55da`). CI **31140198079 = 7/7 HIJAU** termasuk
 ketiga-tiga shard. Deploy 11 selesai exit 0: **smoke 9/9 · /up 200 · failed_jobs=0 ·

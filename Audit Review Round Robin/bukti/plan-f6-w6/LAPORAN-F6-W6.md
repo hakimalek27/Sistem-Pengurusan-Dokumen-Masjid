@@ -146,3 +146,40 @@ Cadangan ayat: *"Semak baris skop: panduan yang dipaparkan hanya untuk Orang Awa
 `justified_waves` = `W0…W6`. Selepas ini, mana-mana langkah generik BAHARU dalam mana-mana
 wave akan menggagalkan penjanaan manifest melainkan ia membawa justifikasi bertarikh. Itu
 menjadikan katalog gagal-tertutup terhadap kemerosotan — sifat yang F6 wujud untuk membina.
+
+---
+
+## PENGESAHAN VISUAL — diukur DAN dipandang (pelayan tempatan, viewport 1280×900)
+
+Diukur **7 saat selepas muat**, iaitu selepas tetingkap morph Livewire yang memusnahkan
+sorotan sebelum W5d:
+
+```
+langkah 1: help-search-form  FORM  y=231 w=1008 h= 70   3% tinggi <main>
+           teks dalam sorotan: "Apa yang anda mahu lakukan? Cari"
+           popover "Buka fungsi" · 1 daripada 2 · ralat palsu: tiada
+
+langkah 2: help-scope        DIV   y=198 w=1008 h= 20   1% tinggi <main>
+           teks dalam sorotan: "Skop panduan: Orang Awam Versi 2026.08.08.1 …"
+           popover "Sahkan skop" · 2 daripada 2 · ralat palsu: tiada
+```
+
+**Sebelum W6 kedua-dua langkah menyorot `page-content`, iaitu 100% tinggi `<main>`.**
+Jadi metrik yang bermakna bukan "sasaran spesifik" (ia sudah boleh dicapai dengan sasaran
+pembungkus) tetapi **100% → 3%** dan **100% → 1%**.
+
+Skrinsyot mengesahkan pengalaman sebenar: borang carian menyala terang manakala selebihnya
+halaman malap; pengguna nampak SERTA-MERTA ke mana hendak melihat. Itu tidak pernah benar
+apabila sorotan meliputi seluruh halaman.
+
+### ⭐ Skrinsyot langkah 2 MEMBUKTIKAN penemuan kandungan (f)(2) secara visual
+
+Dalam satu paparan, popover berbunyi *"Pastikan panel, tenant dan role semasa adalah betul"*
+sementara baris yang disorot berbunyi *"Skop panduan: **Orang Awam**"*. Ketidakpadanan itu
+tidak dapat dilihat daripada katalog atau daripada mana-mana ujian automatik — ia hanya
+kelihatan apabila sasaran menjadi cukup ketat sehingga mata boleh membandingkan **ayat
+langkah** dengan **perkara yang disorot** serentak.
+
+🔑 **Sasaran yang lebih ketat bukan sahaja pengalaman yang lebih baik — ia alat AUDIT.**
+Sorotan seluruh halaman menyembunyikan ketidakpadanan makna; sorotan 20px mendedahkannya.
+Ini sebab tambahan untuk menutup hutang `admin.*` (W5 §10) dalam F7.
