@@ -52,6 +52,7 @@ export default defineConfig({
                 'e2e/step-advance-plan.spec.js',
                 'e2e/nav-target-plan.spec.js',
                 'e2e/page-target-plan.spec.js',
+                'e2e/viewer-control-plan.spec.js',
             ],
         },
         {
