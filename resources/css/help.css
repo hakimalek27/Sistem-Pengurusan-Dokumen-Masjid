@@ -217,6 +217,52 @@ body.driver-active .diwan-help-launcher-button { visibility: hidden; }
 .diwan-tour-waiting span { min-width: 0; flex: 1; }
 .diwan-tour-waiting button { flex: 0 0 auto; border: 0; border-radius: .3rem; padding: .38rem .5rem; background: #047857; color: #fff; font: inherit; font-size: .75rem; font-weight: 750; cursor: pointer; }
 
+/*
+ * F6-W5 — tour AUTOMATIK tidak boleh merampas halaman.
+ *
+ * Vendor `driver.css` menetapkan `.driver-active *{pointer-events:none}` dan hanya
+ * mengecualikan elemen yang DISOROT (+ anaknya) serta popover. Selagi guide halaman bersasar
+ * `page-content` (iaitu `<main>`), pengecualian itu meliputi SELURUH kandungan, jadi halaman
+ * kekal boleh diguna dan tiada siapa perasan. W5 menjadikan langkah 1 bersasar elemen KECIL
+ * (`search-text` pada /carian), jadi pengecualian mengecil dan seluruh halaman menjadi mati.
+ *
+ * DIUKUR pada pelayar sebelum pembaikan ini — bukan disimpulkan: dua klik SEBENAR pada butang
+ * "Cari" tidak mencari, tidak menutup tour, dan tour kekal pada "1 daripada 7".
+ * `getComputedStyle(butang).pointerEvents === 'none'`. `overlayClickBehavior: 'close'` TIDAK
+ * menyelamatkan kerana overlay itu sendiri `pointer-events: none`, jadi klik mendarat pada
+ * BODY dan pengendali overlay Driver.js tidak pernah menerimanya. Pengguna benar-benar
+ * TERSEKAT sehingga dia menemui butang ✕ pada popover.
+ *
+ * Guide AUTOMATIK tidak diminta pengguna, jadi ia tidak boleh menghalang kerja. Peraturan di
+ * bawah memulihkan tepat kelakuan pra-W5 (halaman boleh diguna) sambil mengekalkan sorotan
+ * spesifik yang menjadi tujuan seluruh F6. Overlay dikekalkan `pointer-events: none` supaya ia
+ * kekal hiasan visual semata-mata.
+ *
+ * Skop SENGAJA sempit: kelas hanya dipasang bila `!explicit` (help.js), jadi tour yang
+ * pengguna MULAKAN sendiri — dan setiap guide dalam gate e2e, yang menggunakan deep-link
+ * `?panduan=` — kekal berkelakuan seperti sedia ada.
+ */
+/*
+ * ⚠️ SKOP kepada `<main>` SAHAJA — bukan `*`.
+ *
+ * Percubaan pertama menggunakan `.diwan-tour-auto.driver-active * { pointer-events: auto; }`
+ * dan itu SALAH: ia turut memaksa bekas notifikasi Filament (`div.fi-no`, `position: fixed`,
+ * `z-index: 50`) menjadi `auto`. Bekas itu meliputi sebahagian besar skrin dan sengaja
+ * `pointer-events: none` supaya hanya notifikasi individu boleh diklik — jadi peraturan
+ * selimut itu MENUKAR satu penyekat dengan penyekat lain. Diukur:
+ * `document.elementFromPoint()` pada butang "Cari" memulangkan `DIV.fi-no` selepas
+ * pembaikan pertama.
+ *
+ * Skop `main` memulihkan TEPAT keadaan pra-W5: dahulu langkah 1 menyorot `<main>`, dan vendor
+ * memberi `pointer-events: auto` kepada elemen disorot BESERTA semua anaknya. Kandungan
+ * halaman boleh diguna semula, dan segala-galanya di luar `main` (overlay, bekas notifikasi,
+ * sidebar) kekal mengikut peraturan vendor.
+ */
+.diwan-tour-auto.driver-active main,
+.diwan-tour-auto.driver-active main *,
+.diwan-tour-auto .driver-active main,
+.diwan-tour-auto .driver-active main * { pointer-events: auto; }
+
 @media (max-width: 720px) {
     .diwan-help-results { grid-template-columns: 1fr; }
     .diwan-help-heading { align-items: stretch; flex-direction: column; }

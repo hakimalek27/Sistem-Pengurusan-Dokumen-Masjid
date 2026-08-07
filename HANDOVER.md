@@ -29,50 +29,35 @@ pada larian sedia ada bagi SHA yang sama — dicuba selepas 2 jam tanpa larian p
 `b514078`, dan attempt 2 terus berjalan. Larian push juga lengkap bila ia akhirnya tiba,
 tetapi kelewatannya boleh melebihi dua jam.
 
-### 🔜 TINDAKAN SETERUSNYA — satu isu tinggal, analisis sudah siap
+### 🔜 TINDAKAN SETERUSNYA — jalankan CI, itu sahaja yang tinggal
 
-CI attempt 2 (`gh run rerun 31128095025`, SHA `2047faf`) mengesahkan **kedua-dua pembaikan
-terdahulu berkesan**:
+Semua isu yang CI dedahkan sudah ditutup dan disahkan tempatan. Yang tinggal ialah
+mendapatkan larian CI hijau untuk komit terkini, kemudian Deploy 11.
 
+**Cara mencetuskan CI (DIUKUR — jangan buang masa dengan yang lain):**
 ```
-9.  Validate, audit and format ........ success   (fix commonmark berkesan)
-13. Migrate PostgreSQL + full suite ... success
-18. Unit fungsi tulen ................. success
-20. Guidance smoke .................... success   (fix pengawal modal DISAHKAN CI)
-21. Domain flows ...................... FAILURE   ← satu-satunya baki
+gh run rerun <run-id-lama>     ✅ BERJALAN serta-merta
+gh workflow run ...            ❌ job utama dibatalkan pada TEPAT 15 minit (2×)
+push                           ⚠️ berjalan penuh TETAPI lewat (35 min … >2 jam, kadang 0 larian)
 ```
 
-**Baki: `e2e/ddms-extended.spec.js:17` — butang "Cari" pada `/carian` tidak boleh diklik.**
+**Tiga pembaikan dalam rantaian ini, semuanya bermula daripada CI atau ukuran pelayar:**
 
-Punca (daripada log CI): tour `tenant.carian` AUTO-MULA (7 langkah) dan overlay Driver.js
-memintas klik. Sebelum W5 langkah 1 bersasar `page-content`, jadi lubang overlay meliputi
-SELURUH kandungan dan butang berada di dalamnya. W5 menjadikannya `search-text` (label Teks),
-jadi lubang mengecil dan butang "Cari" kini DI LUAR lubang.
+| Komit | Isu | Bukti ditutup |
+|---|---|---|
+| `296c419` | pengawal modal guna proksi "langkah generik" → popover sekat modal klasifikasi | CI attempt 2 langkah 20 `Guidance smoke: success` |
+| `2047faf` | 6 advisori `league/commonmark` (diterbit 16 min sebelum larian) | CI attempt 2 langkah 9 `Validate: success` |
+| (belum dikomit → kini dikomit) | tour AUTO melumpuhkan halaman (`pointer-events`) | `ci-domain` 4/4 berasingan |
 
-⚠️ **Ini akibat W5 yang nyata kepada pengguna**, bukan sekadar isu ujian: pengguna yang
-mendarat di `/carian` buat kali pertama akan mendapati klik pertamanya pada "Cari" hanya
-MENUTUP tour (`overlayClickBehavior: 'close'`, help.js:663) dan bukan mencari. Klik kedua
-berfungsi. Ringan tetapi nyata, dan ia terpakai pada SETIAP halaman yang guidenya auto-mula
-dan kini bersasar elemen kecil.
+**Keadaan ujian tempatan:** `ci-domain` 4/4 (berasingan) · `ci-guidance` 30/35 · unit 26/26 ·
+pint · Pest 601✓/1 skip · gate 3 shard 30/30·15/15·41/41 + GATE LULUS (dijalankan sebelum
+pembaikan tour; shard guna deep-link `?panduan=` jadi TIDAK terjejas — disahkan pada kod).
 
-`autoStart` = `! $progress` (`HelpLauncher.php:130`) — sekali per pengguna per versi guide.
-`disableAutomaticGuides()` harness TIDAK membantu: ia localStorage, dan `help.js:889` hanya
-menyemaknya untuk panel AWAM.
+⚠️ Kelima-lima kegagalan `ci-guidance` tempatan ialah tandatangan persekitaran yang didokumen
+(3× `net::ERR_ABORTED`/timeout log masuk, 2× perlumbaan Alpine). **Konsisten dengan** had
+pelayan dev satu-benang Windows — bukan dibuktikan satu-persatu. CI Linux ialah pengesah.
 
-**Pilihan yang dipertimbangkan (belum dipilih — keputusan produk):**
-1. Tour AUTO tidak menghalang halaman. ⚠️ **Lebih besar daripada yang disangka:** vendor
-   `driver.css` menetapkan `.driver-active * { pointer-events: none }` — jadi BUKAN hanya
-   overlay, SELURUH halaman dilumpuhkan kecuali elemen disorot dan popover. Membalikkannya
-   bagi `!explicit` mengubah model interaksi tour, dan seluruh reka bentuk F2 (banner
-   menunggu, CTA "Buat pada skrin", auto-minimize bertindih) dibina di atas overlay yang
-   MENGHALANG. Corak override sudah wujud dalam repo (`help.css:216`
-   `.diwan-tour-waiting * { pointer-events: auto; }`), jadi ia boleh dilaksana — tetapi ia
-   keputusan produk, bukan pembetulan kecil.
-2. Kekalkan sasaran besar (`page-content`) untuk LANGKAH 1 guide halaman sahaja, supaya
-   lubang meliputi kandungan; langkah 2+ bersasar spesifik. Kos: langkah 1 kembali generik.
-3. Harness sahaja (semai progres pelayan dalam fixture `ci-domain`). Tidak membaiki UX.
-
-⛔ **Deploy 11 DITAHAN.** Jangan deploy sebelum ini diputuskan dan CI hijau penuh.
+⛔ **Deploy 11 kekal DITAHAN** sehingga CI hijau penuh.
 
 ### Keputusan CI setakat ini
 

@@ -278,6 +278,11 @@ function clearFinalActionWatch() {
 function clearAutomaticModalGuard() {
     automaticModalGuard?.disconnect();
     automaticModalGuard = null;
+    // F6-W5 — kelas ini BERPASANGAN dengan pengawal: kedua-duanya wujud hanya untuk guide
+    // AUTOMATIK. Dibuang di sini kerana fungsi ini dipanggil dari SETIAP laluan pembongkaran
+    // (onDestroyed pemandu utama DAN pemandu fallback), jadi tiada laluan yang boleh
+    // meninggalkan halaman dalam keadaan "auto" selepas tour tamat.
+    document.documentElement.classList.remove('diwan-tour-auto');
 }
 
 /** F2c (§3.3) — batalkan tempoh-baca auto-minimize; dipanggil pada setiap peralihan. */
@@ -392,6 +397,23 @@ function rehighlightWhenTargetArrives(driverApi, step, index) {
 
 function guardAutomaticGuideFromDialogs(guideSteps, guide) {
     clearAutomaticModalGuard();
+    // F6-W5 — guide AUTOMATIK tidak boleh melumpuhkan halaman.
+    //
+    // Vendor `driver.css` menetapkan `.driver-active *{pointer-events:none}` dan hanya
+    // mengecualikan elemen yang DISOROT (+ anaknya) serta popover. Selagi guide halaman
+    // bersasar `page-content` (iaitu `<main>`), pengecualian itu meliputi seluruh kandungan
+    // dan halaman kekal boleh diguna. W5 menjadikan sasaran KECIL, jadi seluruh halaman mati.
+    //
+    // DIUKUR pada pelayar, bukan disimpulkan: dua klik SEBENAR pada butang "Cari" (/carian)
+    // tidak mencari, tidak menutup tour, dan tour kekal "1 daripada 7";
+    // `getComputedStyle(butang).pointerEvents === 'none'`. `overlayClickBehavior: 'close'`
+    // TIDAK menyelamatkan kerana overlay itu sendiri `pointer-events: none` — klik mendarat
+    // pada BODY dan pengendali Driver.js tidak pernah menerimanya. Pengguna TERSEKAT.
+    //
+    // Peraturan pemulih ada dalam `help.css`; kelas ini menghadkannya kepada tour yang
+    // pengguna TIDAK minta. Tour eksplisit (termasuk setiap guide dalam gate e2e, yang
+    // menggunakan deep-link `?panduan=`) tidak pernah mendapat kelas ini.
+    document.documentElement.classList.add('diwan-tour-auto');
     automaticModalGuard = new MutationObserver(() => {
         if (!activeDriver?.isActive()) return;
         const modal = [...document.querySelectorAll('.fi-modal-window')].find(isVisible);

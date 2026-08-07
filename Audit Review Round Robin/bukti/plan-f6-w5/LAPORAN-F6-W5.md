@@ -399,3 +399,69 @@ BERBEZA (1440px, bukan 390px). Viewport berbeza setiap larian ⇒ perlumbaan pem
 pelayan dev satu-benang Windows, bukan kecacatan produk. Tiga baki kegagalan `ci-guidance`
 tempatan semuanya `net::ERR_ABORTED` / tamat masa — had persekitaran yang sama dan sudah
 didokumen (`PHP_CLI_SERVER_WORKERS` tidak disokong pada Windows).
+
+### 13. CI attempt 2 — dua pembaikan DISAHKAN, satu akibat ketiga ditutup
+
+```
+9.  Validate, audit and format ... success   (fix league/commonmark berkesan)
+13. Migrate PostgreSQL + suite .. success
+18. Unit fungsi tulen ........... success
+20. Guidance smoke .............. success   (fix pengawal modal DISAHKAN CI)
+21. Domain flows ................ FAILURE   → ditangani di bawah
+```
+
+**Akibat KETIGA W5: tour AUTO melumpuhkan halaman.** Vendor `driver.css` menetapkan
+`.driver-active * { pointer-events: none }` dan hanya mengecualikan elemen DISOROT beserta
+anaknya. Selagi guide halaman bersasar `page-content` (`<main>`), pengecualian itu meliputi
+seluruh kandungan; W5 menjadikan sasaran KECIL, jadi seluruh halaman mati.
+
+Diukur: `getComputedStyle(butangCari).pointerEvents === 'none'` dan
+`document.elementFromPoint()` pada butang memulangkan `BODY`. `overlayClickBehavior: 'close'`
+tidak menyelamatkan kerana overlay sendiri `pointer-events: none`.
+
+**Pembaikan (dua lelaran, kedua-duanya diukur):**
+1. ❌ `.diwan-tour-auto.driver-active * { pointer-events: auto; }` — TERLALU LUAS. Ia memaksa
+   bekas notifikasi Filament (`div.fi-no`, fixed, z-50) menjadi `auto`, dan bekas itu
+   kemudiannya menutupi halaman. Menukar satu penyekat dengan penyekat lain.
+2. ✅ Skop kepada `main` sahaja — memulihkan TEPAT keadaan pra-W5 (dahulu `<main>` yang
+   disorot, jadi vendor memberi seluruh kandungan `auto`). Segala di luar `main` kekal
+   mengikut vendor. Kelas `diwan-tour-auto` dipasang/dibuang BERPASANGAN dengan
+   `guardAutomaticGuideFromDialogs`, jadi tour EKSPLISIT (termasuk setiap guide gate) tidak
+   pernah terjejas.
+
+**Harness:** `ddms-extended.spec.js` sudah cuba mematikan tour melalui `localStorage`, tetapi
+`help.js:889` hanya menghormati `diwan-help-seen:` untuk panel AWAM — helper itu kod mati yang
+kelihatan berfungsi. Diganti dengan penutupan tour sebenar (laluan pengguna), dan helper mesti
+MENUNGGU kerana tour auto-mula selepas `setTimeout(450)` — versi pertama helper menjadi no-op
+atas sebab itu.
+
+Selepas pembaikan: `ci-domain` **4/4 lulus** apabila dijalankan berasingan; `ddms-extended`
+tidak lagi gagal.
+
+### 14. ⚠️ TIGA kesilapan metodologi saya dalam siasatan ini
+
+**(a) Instrumen ukur tidak disahkan.** Saya melaporkan "dua klik SEBENAR pada butang Cari
+tidak berbuat apa-apa" sebagai bukti pengguna tersekat. Eksperimen kawalan kemudian
+menunjukkan klik koordinat MCP **tidak sampai ke halaman langsung** — klik pada butang
+popover pun tidak memajukan tour. Kesimpulan (pengguna tersekat) kekal SAH kerana
+`pointer-events: none` + `elementFromPoint → BODY`, tetapi bukti yang saya petik sebahagiannya
+tidak sah. **Sahkan instrumen sebelum mempercayai keputusannya** — pelajaran yang sudah ada
+dalam memori dan saya langgar.
+
+**(b) Eksperimen pemulihan katalog hampir menyesatkan.** Katalog lama juga gagal, jadi saya
+hampir menyimpulkan W5 tidak bersalah — tetapi ia gagal pada assertion BERBEZA daripada CI.
+**Bandingkan TITIK kegagalan, bukan hanya lulus/gagal.**
+
+**(c) Penjaga sempit yang cacat, dibuang.** Ia mengklik koordinat semasa tour aktif — yang
+overlay memang serap (pelajaran F0/W1 yang saya langgar semula).
+
+### 15. Keadaan ujian tempatan ketika sesi ditutup
+
+`ci-domain` 4/4 (berasingan) · `ci-guidance` 30/35 · unit 26/26 · pint lulus · Pest 601✓/1 skip.
+
+Kelima-lima kegagalan `ci-guidance` ialah tandatangan persekitaran yang sudah didokumen:
+3× `net::ERR_ABORTED` / `waitForURL` tamat masa (pelayan dev satu-benang Windows;
+`PHP_CLI_SERVER_WORKERS` tidak disokong) dan 2× `textareaFormComponent is not defined`
+(perlumbaan pemuatan aset — dibuktikan bebas daripada W5 kerana katalog LAMA menghasilkannya
+pada viewport BERBEZA). ⚠️ Ini **konsisten dengan** had persekitaran, bukan dibuktikan
+satu-persatu; CI Linux ialah pengesah muktamad.
