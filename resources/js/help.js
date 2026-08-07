@@ -472,6 +472,31 @@ function watchHighlightLoss(driverApi, step, index) {
     }, 250);
 }
 
+/**
+ * F7 §8.2 — popover Driver.js memperkenalkan LANDMARK PALSU.
+ *
+ * Vendor merender `<header class="driver-popover-title">` dan
+ * `<footer class="driver-popover-footer">` DI DALAM `div[role="dialog"]`. `div` bukan
+ * kandungan seksyen mengikut HTML, jadi pelayar memetakan kedua-duanya kepada landmark
+ * `banner` dan `contentinfo` PERINGKAT HALAMAN — sedangkan ia hanyalah bahagian dalam
+ * sebuah dialog.
+ *
+ * Diukur pada `/bantuan` (axe `landmark-unique`, moderate):
+ *   <header class="brand">                 <- banner halaman sebenar
+ *   <header class="driver-popover-title">  <- banner PALSU daripada popover
+ * Dua banner tanpa nama = tidak boleh dibezakan. Pada panel Filament ia lolos hanya kerana
+ * layout di sana tidak menggunakan `<header>`, jadi popover menjadi satu-satunya banner.
+ *
+ * `role="none"` membuang peranan landmark itu tanpa menyembunyikan teksnya: tajuk kekal
+ * dibaca (ia juga sumber nama popover), butang footer kekal boleh dicapai.
+ */
+function neutralkanLandmarkPopover(popover) {
+    for (const el of [popover?.title, popover?.footer, popover?.wrapper?.querySelector('header'),
+        popover?.wrapper?.querySelector('footer')]) {
+        if (el instanceof HTMLElement && !el.hasAttribute('role')) el.setAttribute('role', 'none');
+    }
+}
+
 function guardAutomaticGuideFromDialogs(guideSteps, guide) {
     clearAutomaticModalGuard();
     // F6-W5 — guide AUTOMATIK tidak boleh melumpuhkan halaman.
@@ -781,6 +806,7 @@ function showUnavailableGuide(runtime, guide, step) {
         onPopoverRender: (popover) => {
             popover.closeButton.setAttribute('aria-label', 'Tutup panduan');
             popover.closeButton.title = 'Tutup panduan';
+            neutralkanLandmarkPopover(popover);
             // F2d (§3.4): fallback ialah SATU langkah tanpa interaksi halaman, jadi
             // aria-modal jujur di sini (popover UTAMA sengaja TIADA aria-modal — halaman
             // di sana masih boleh diguna melalui minimize/focusActionTarget).
@@ -868,6 +894,7 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
         onPopoverRender: (popover) => {
             popover.closeButton.setAttribute('aria-label', 'Tutup panduan');
             popover.closeButton.title = 'Tutup panduan';
+            neutralkanLandmarkPopover(popover);
         },
         onHighlighted: (_element, _step, options) => {
             const index = options.driver.getActiveIndex() ?? 0;

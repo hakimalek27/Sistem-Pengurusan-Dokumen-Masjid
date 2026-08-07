@@ -63,6 +63,13 @@ export default defineConfig({
             ],
         },
         {
+            // F7 §8.5 — larian axe sebenar (link-name / landmark-unique / empty-table-header)
+            // pada 5 halaman × 2 viewport. Projek berasingan supaya kegagalan a11y boleh
+            // dibaca tanpa menyelak keputusan domain.
+            name: 'ci-a11y',
+            testMatch: ['e2e/a11y-axe.spec.js'],
+        },
+        {
             name: 'ci-ocr',
             testMatch: ['e2e/ocr-upload.spec.js'],
         },
