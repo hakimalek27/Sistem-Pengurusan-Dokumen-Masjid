@@ -9,9 +9,12 @@
 # JANGAN jalankan git dengan `sudo` di /opt/diwan — ia meninggalkan fail milik root yang
 # menyekat deploy berikutnya DUA KALI (pelajaran Deploy 8).
 #
-# W5 mengubah `resources/js/help/page-target-plan.js` -> nama aset BERUBAH
-# (help-B9tTj0Zg.js -> help-DHUxqBmp.js; help-CrH0eDM1.css KEKAL), jadi rebuild
-# `app` DAN `nginx` adalah WAJIB. `catalog_version` berubah -> sync-help-index --delete.
+# RAMALAN ASET (ditulis SEBELUM deploy — semak satu per satu selepasnya, pelajaran Deploy 8).
+# W5 menyentuh `page-target-plan.js` + `help.js` DAN `help.css` (W5c/W5d), jadi KEDUA-DUA
+# nama aset berubah kali ini — bukan hanya JS seperti gelombang terdahulu:
+#   binaan tempatan komit ini -> assets/help-D_qumira.js + assets/help-Cfwb6f_j.css
+# Rebuild `app` DAN `nginx` WAJIB. `catalog_version` berubah -> sync-help-index --delete.
+# ⛔ JANGAN jalankan seeder pada produksi — benih demo berubah dalam W5.
 # ═══════════════════════════════════════════════════════════════════════════════════════
 set -euo pipefail
 

@@ -599,3 +599,40 @@ pembaikan dipulihkan → npm run build →
 4. **Bila pembaikan tidak berkesan, baca sumber vendor sebelum mencuba variasi.** Satu carian
    `grep` pada `driver.js.mjs` menjawab "mengapa `refresh()` tidak cukup" dengan muktamad —
    lebih pantas daripada mencuba tempoh dan kekerapan yang berbeza.
+
+### 17. PENGESAHAN VISUAL selepas pembaikan — sorotan pulih, tetapi maknanya tetap luas
+
+Diukur pada `/app/mam/bantuan?panduan=tenant.bantuan&langkah=0`, **9 saat selepas muat**
+(iaitu selepas morph yang dahulu memadam sorotan):
+
+```json
+{ "disorot": "help-search", "tag": "SECTION",
+  "rect": { "x": 352, "y": 0, "w": 1056, "h": 3211 },
+  "tajukDalamSorotan": "Cari panduan", "adaMedanCarian": true,
+  "popover": "Cari panduan atau hantar tiket" }
+```
+
+Pembaikan berkuat kuasa: sasaran yang DIISYTIHARKAN disorot, dan ia benar-benar mengandungi
+medan carian yang ayat langkah rujuk.
+
+⚠️ **Tetapi skrinsyot selepas pembaikan hampir SERUPA dengan skrinsyot kegagalan.** Sebabnya
+`help-search` ialah `<section class="diwan-help-band">` (`help-center.blade.php:23`) yang
+membungkus bukan sahaja borang carian tetapi juga seluruh grid kad panduan — **3211px bermula
+pada y=0**. Lubang overlay meliputi hampir keseluruhan lajur kandungan, jadi kepada pengguna
+ia kelihatan hampir sama seperti menyorot `page-content`.
+
+Ini kelas penemuan yang SAMA seperti §10 (`admin.mosques#2` menyorot kotak carian sedangkan
+ayatnya tentang tindakan baris): sasaran itu **sah dan `specific`**, tetapi ia tidak menjawab
+AYAT langkah dengan setia. Calon yang lebih ketat sudah wujud dalam DOM — borang
+`.diwan-help-search` (`help-center.blade.php:39`).
+
+**TIDAK dibaiki dalam W5, dan itu keputusan skop yang dinyatakan:** W5 ialah gelombang menutup
+langkah generik, dan penghalusan semantik sasaran sudah diperuntukkan kepada F7/W6 bersama
+tiga ketidakpadanan `admin.*` yang direkod dalam §10. Menukarnya sekarang bermakna entri
+registri baharu + ujian yatim dua hala + pusingan gate 40 minit, untuk isu yang bukan
+kecacatan yang gelombang ini dibuka untuk membaikinya.
+
+🔑 **Yang penting: sorotan yang pulih ≠ sorotan yang berguna.** Penjaga automatik hanya boleh
+menuntut kelas itu ada pada elemen yang betul. Hanya mengukur `getBoundingClientRect()` — atau
+memandangnya — memberitahu anda sama ada pengguna sebenarnya belajar ke mana hendak melihat.
+Tambahkan **ukuran saiz sorotan** kepada senarai semak F7, bukan sekadar identitinya.

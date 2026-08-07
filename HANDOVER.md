@@ -1,13 +1,29 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F6-W5 akibat KEEMPAT ditutup · gate penuh hijau (8 Ogos)
+## ▶️ SAMBUNG DI SINI — ✅ F6-W5 **LIVE** (Deploy 11 `f0fc273`) · seterusnya F6-W6 (8 Ogos)
 
-**Produksi kekal `cea55da` (Deploy 10).** ⛔ **Deploy 11 DITAHAN** sehingga CI hijau penuh
-(peraturan pelan #1).
+**PRODUKSI: `f0fc273`** (sebelum: `cea55da`). CI **31140198079 = 7/7 HIJAU** termasuk
+ketiga-tiga shard. Deploy 11 selesai exit 0: **smoke 9/9 · /up 200 · failed_jobs=0 ·
+8/8 kontena · Nothing to migrate · 83 guide disegerakkan · 5A LULUS PENUH**.
+📄 `bukti/deploy-11/BUKTI-DEPLOY-11.md` — 5/5 ramalan pra-deploy tepat.
 
-**Gate tempatan 3 shard HIJAU pada kod terkini:** screen **30/30** (7.8m) ·
+```
+app ImageID ba034a48e81a -> 5a92fd87659f    web 016f6b18c559 -> d8ca2e76c04a
+aset help-D_qumira.js + help-Cfwb6f_j.css   (KEDUA-DUA berubah; app = nginx = badan awam)
+revisi app = f0fc273314dacb09108fb639ad4bdd88f5a8c0ba
+```
+
+**Gate tempatan 3 shard HIJAU pada kod yang di-deploy:** screen **30/30** (7.8m) ·
 workflow **15/15** (8.4m) · tenant-admin-public **41/41** (10.2m) ·
 agregator **GATE LULUS 83 guide · 473 langkah · 172 langkah tindakan** (union SET).
+
+### ▶️ SETERUSNYA: F6-W6 — `public`, 3 guide / 2 langkah generik (gelombang TERKECIL)
+
+Selepas W6, generik katalog sepatutnya mencecah 0 dan F6 tamat → F7 (A11y; perlu pengecualian
+bertulis D5a SEBELUM menambah `axe-core`).
+
+⚠️ **Peraturan W6 yang dibayar mahal dalam W5:** jadual inventori mesti **DIJANA daripada
+skrip**, jangan ditaip tangan (inventori W5 versi pertama tersilap kira 16 langkah).
 
 ### 🔴 Akibat KEEMPAT — morph Livewire memadam sorotan tour (CI 31134978567)
 
@@ -63,11 +79,15 @@ cd public && DIWAN_LOGIN_RATE_LIMIT=100 php -d max_execution_time=0 \
 dikonfigurasi betul: **5 → 2**. Tiga daripadanya ialah had kadar. Dua yang tinggal memang
 `net::ERR_ABORTED` (`explore.spec.js:83`, `guidance.spec.js:216`) dan kedua-duanya hijau di CI.
 
-### 🔜 TINDAKAN SETERUSNYA
+### Tertunggak — tindakan PEMILIK
 
-1. Cetuskan CI untuk komit terkini dan sahkan **semua 4 check wajib + ketiga-tiga shard**
-   (`gh run view <id> --json jobs` — pastikan tiada yang `skipped`).
-2. Deploy 11 selepas hijau.
+1. **Sahkan sorotan tour tenant** (jurang yang saya tidak boleh tutup): buka
+   `/app/<masjid>/bantuan` dalam sesi anda sendiri dan pastikan bahagian "Cari panduan"
+   **kekal disorot** selepas halaman siap dimuat. Saya sahkan senario ini pada pelayan
+   tempatan + shard CI, tetapi live hanya pada halaman AWAM — kredensial produksi tidak
+   pernah saya cipta atau taip.
+2. Google Cloud OAuth consent **PUBLISHED** (Drive mirror).
+3. Dua pengesahan visual tenant dari W2/W3 yang masih terbuka.
 
 **Cara mencetuskan CI (DIUKUR):**
 ```
