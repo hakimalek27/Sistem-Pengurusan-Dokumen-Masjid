@@ -40,9 +40,10 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Suite domain dalam gate CI | 0/3 | 2/3 wajib hijau | **`ci-domain` hijau dalam CI 31213031582** | ✅ |
 | Gate antivirus intake fail-closed | 0 ujian | 3/3 status ditolak | **3/3** (`infected`·`unavailable`·`error`) + 1 kawalan `clean` | ✅ |
 | Kohort: `resolved_to_generic` | 119/124 | ≤25/124 + allowlist | **38/124** | ✅ |
-| Kohort: tajuk = penerangan | 77/124 | 0 | **belum disahkan** | ⏳ nota C |
-| Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **belum disahkan** | ⏳ nota C |
-| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **belum disahkan** | ⏳ nota C |
+| Kohort: tajuk = penerangan | 77/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
+| Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
+| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** (RUNTIME) | ✅ nota C |
+| Kohort: placeholder `Langkah N` pada popover | 118 (katalog) | 0 | **0/124** (RUNTIME) | ✅ |
 | Tour `/log-masuk` ralat palsu | 100% | lulus | **lulus** (CI `ci-guidance`, disahkan live Deploy 5) | ✅ |
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
 | Default borang retensi | `auto_padam` | `semak` + dialog | **`semak`** (F4) | ✅ |
@@ -73,8 +74,22 @@ ia tidak boleh menunjukkan pergerakan. Puncanya: 118/124 tajuk kohort ialah plac
 `"Langkah N"` pada masa itu, jadi tour MENERBITKAN tajuk daripada arahan; dan medan
 `wait_for_user` **tidak wujud** sama sekali (disahkan bebas oleh Codex: `oldMissing: 124`).
 Definisi audit DITENTUKUR tepat pada data auditnya sendiri (77 · 20 · 20 dihasilkan semula),
-jadi definisinya betul dan hanya sumber saya yang salah. Sisi semasa sedang diukur pada popover
-sebenar (`skrip/ukur-runtime-kohort-f8.mjs`). Sehingga itu: **belum disahkan**, bukan ✅.
+jadi definisinya betul dan hanya sumber saya yang salah.
+
+✅ **DISELESAIKAN.** Sisi semasa diukur pada popover SEBENAR dengan definisi yang sama
+(`skrip/ukur-runtime-kohort-f8.mjs`, desktop 1440×1000, **124/124 popover dirender**):
+
+```
+title == description   : 0   (asas 77)
+tajuk terpotong        : 0   (asas 20)
+CTA "Buat pada skrin"  : 0   (asas 20)
+placeholder "Langkah N": 0   (asas 118 dalam katalog)
+```
+
+Kedua-dua belah kini diukur dengan kaedah yang SAMA pada permukaan yang SAMA. Kesimpulan asal
+saya (0 pada ketiga-tiganya) ternyata **betul** — tetapi buktinya salah sehingga langkah ini.
+Nombor yang betul atas sebab yang salah tetap perlu dibetulkan; jika tidak, alat yang cacat itu
+kekal dalam repo dan akan menipu fasa seterusnya.
 
 **Nota B — drift dokumen akses role.** Premis pelan ("8/8 role berbeza") diperiksa dan
 **ditolak sebagai percanggahan**. `guidance.spec.js:16-18` sudah membaca `expected_page_counts`
@@ -202,9 +217,8 @@ yang dicipta oleh `run_uuid` larian itu.
 
 ## 5. Ringkasan jujur
 
-Jadual §1 mengandungi **30 baris**: **20 tercapai** · **4 tidak tercapai** (§2.1–2.4) ·
-**3 menunggu kredensial** (§3) · **3 belum disahkan** (nota C — tentukuran gagal, ukuran runtime
-sedang dijalankan). Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
+Jadual §1 mengandungi **31 baris**: **24 tercapai** · **4 tidak tercapai** (§2.1–2.4) ·
+**3 menunggu kredensial** (§3). Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
 **2.6** `public.help#2`) **bukan** baris jadual §9 — ia penemuan yang dibawa ke F9/F10, dan
 disenaraikan di sana supaya ia tidak hilang, bukan untuk membesarkan kiraan kegagalan.
 

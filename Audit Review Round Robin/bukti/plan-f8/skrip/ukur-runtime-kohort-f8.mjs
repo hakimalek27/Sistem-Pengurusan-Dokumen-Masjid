@@ -49,8 +49,26 @@ await p.getByRole('button', { name: /Log masuk/i }).click();
 await p.waitForURL((u) => u.pathname.replace(/\/$/, '') === `/app/${TENANT}`, { timeout: 90_000 });
 console.log(`log masuk OK · ${kohort.length} langkah kohort · desktop 1440x1000\n`);
 
-const hasil = [];
-for (const [i, s] of kohort.entries()) {
+// BOLEH SAMBUNG: had hayat tugas latar membunuh larian ini dua kali pada 20/124 dan 40/124.
+// Hasil sebelumnya dimuat semula dan langkah yang sudah diukur dilangkau, jadi larian boleh
+// dipecahkan kepada beberapa bahagian pendek tanpa kehilangan kerja.
+let hasil = [];
+try {
+    const lama = JSON.parse(readFileSync(KELUAR, 'utf8'));
+    hasil = (lama.hasil ?? []).filter((h) => h.adaPopover);   // ulang yang gagal
+    console.log(`sambung: ${hasil.length} langkah sudah diukur, dilangkau\n`);
+} catch { /* larian pertama */ }
+const sudah = new Set(hasil.map((h) => h.key));
+const HAD = Number(process.env.AB_HAD || 0);   // 0 = semua
+let dibuat = 0;
+
+for (const s of kohort) {
+    if (sudah.has(s.key)) continue;
+    if (HAD && dibuat >= HAD) {
+        console.log(`had ${HAD} dicapai — jalankan semula untuk menyambung`);
+        break;
+    }
+    dibuat += 1;
     const laluan = String(s.route || '').replace('{tenant}', TENANT) || `/app/${TENANT}`;
     const url = `${BASE}${laluan}?panduan=${s.guide}&langkah=${s.index - 1}`;
     let r = { adaPopover: false };
@@ -77,11 +95,17 @@ for (const [i, s] of kohort.entries()) {
         r = { adaPopover: false, ralat: String(e.message).split('\n')[0].slice(0, 70) };
     }
     hasil.push({ ...s, ...r });
-    if ((i + 1) % 20 === 0 || i + 1 === kohort.length) {
-        console.log(`  … ${i + 1}/${kohort.length}`);
-        writeFileSync(KELUAR, JSON.stringify({ lengkap: i + 1 === kohort.length, diukur: i + 1, hasil }, null, 2) + '\n');
+    // Kemajuan dikira daripada `hasil.length`, bukan `i` — dengan sambungan, `i` melompat.
+    if (hasil.length % 10 === 0 || hasil.length === kohort.length) {
+        console.log(`  … ${hasil.length}/${kohort.length}`);
+        writeFileSync(KELUAR, JSON.stringify({
+            lengkap: hasil.length === kohort.length, diukur: hasil.length, hasil,
+        }, null, 2) + '\n');
     }
 }
+writeFileSync(KELUAR, JSON.stringify({
+    lengkap: hasil.length === kohort.length, diukur: hasil.length, hasil,
+}, null, 2) + '\n');
 
 const ada = hasil.filter((h) => h.adaPopover);
 const sama = ada.filter((h) => bersih(h.title) === bersih(h.description));
