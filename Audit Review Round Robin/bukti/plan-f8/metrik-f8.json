@@ -342,7 +342,48 @@
         "langkah": 41
       }
     },
-    "nota_silang": "langkah dikira sekali per role yang boleh melihatnya; jumlah > 473 dengan sengaja"
+    "nota_silang": "langkah dikira sekali per role yang boleh melihatnya; jumlah > 473 dengan sengaja",
+    "diukur_per_viewport": {
+      "desktop_1440x1000": {
+        "sumber": "runtime-kohort-f8.json",
+        "langkah_diukur": 124,
+        "popover_dirender": 124,
+        "title_equals_description": 0,
+        "tajuk_terpotong": 0,
+        "cta_buat_pada_skrin": 0,
+        "placeholder": 0
+      },
+      "mobile_390x664": {
+        "sumber": "mobile-kohort-f8.json",
+        "langkah_diukur": 124,
+        "popover_dirender": 124,
+        "centerCovered": 45,
+        "centerCovered_ikut_guide": {
+          "tenant.retensi-peraturan": 5,
+          "tenant.kegemaran": 5,
+          "tenant.pelupusan": 4,
+          "tenant.delegasi": 4,
+          "tenant.classification-nodes": 3,
+          "tenant.retensi": 3,
+          "tenant.profil": 3,
+          "tenant.carian": 3,
+          "tenant.log-aktiviti": 2,
+          "tenant.penggunaan": 2,
+          "tenant.sensitive-access-logs": 1,
+          "tenant.persediaan": 1,
+          "tenant.ahli-peranan": 1,
+          "tenant.tetapan-masjid": 1,
+          "tenant.peti-masuk": 1,
+          "tenant.records": 1,
+          "tenant.registry-files": 1,
+          "tenant.minit-saya": 1,
+          "tenant.laporan": 1,
+          "tenant.bantuan": 1,
+          "tenant.tiket-sokongan": 1
+        }
+      },
+      "nota": "dua viewport, dua artifak, dua set metrik berbeza — bukan matriks penuh setiap metrik × setiap viewport. §9.3 menuntut yang penuh; ini separa dan dilabel sedemikian."
+    }
   },
   "registri": {
     "jumlah": 227,

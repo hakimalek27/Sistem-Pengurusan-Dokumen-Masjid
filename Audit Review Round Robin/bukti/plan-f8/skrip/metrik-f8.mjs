@@ -171,6 +171,59 @@ const hasil = {
             return t;
         })(),
         nota_silang: 'langkah dikira sekali per role yang boleh melihatnya; jumlah > 473 dengan sengaja',
+
+        // 🔴 Codex pusingan 2 (#4) betul: `silang_family_role_viewport` di atas ialah pengiraan
+        // medan `viewport` STATIK katalog — bukan hasil MENGUKUR pada setiap viewport. Kesemua
+        // selnya `mobile: 0` kerana katalog menandakan hampir semua langkah `desktop`.
+        //
+        // Blok di bawah ialah pecahan yang benar-benar DIUKUR, dibina daripada dua artifak
+        // ukuran kohort yang berbeza viewport:
+        //   desktop 1440x1000 -> runtime-kohort-f8.json  (tajuk/penerangan/CTA popover)
+        //   mobile   390x664  -> mobile-kohort-f8.json   (geometri popover vs pusat)
+        // Ia dilabel `diukur` supaya ia tidak boleh dibaca sebagai partition katalog.
+        diukur_per_viewport: (() => {
+            const baca = (f) => {
+                try { return JSON.parse(readFileSync(`${AKAR}/plan-f8/${f}`, 'utf8')); } catch { return null; }
+            };
+            const d = baca('runtime-kohort-f8.json');
+            const m = baca('mobile-kohort-f8.json');
+            const hasilD = d?.hasil ?? [];
+            const hasilM = m?.hasil ?? [];
+
+            return {
+                desktop_1440x1000: d ? {
+                    sumber: 'runtime-kohort-f8.json',
+                    langkah_diukur: hasilD.length,
+                    popover_dirender: hasilD.filter((x) => x.adaPopover).length,
+                    title_equals_description: d.kini?.title_equals_description ?? null,
+                    tajuk_terpotong: d.kini?.truncated ?? null,
+                    cta_buat_pada_skrin: d.kini?.cta_buat_pada_skrin ?? null,
+                    placeholder: d.kini?.placeholder ?? null,
+                } : 'BELUM DIUKUR',
+                mobile_390x664: m ? {
+                    sumber: 'mobile-kohort-f8.json',
+                    langkah_diukur: hasilM.length,
+                    popover_dirender: hasilM.filter((x) => x.adaPopover).length,
+                    centerCovered: hasilM.filter((x) => x.centerCovered).length,
+                    // Pecahan `centerCovered` mengikut GUIDE — ukuran, bukan medan katalog.
+                    // ⚠️ Kohort = family `tenant` sepenuhnya, jadi pecahan ikut family remeh
+                    // (`tenant: semua`); pecahan ikut guide yang boleh ditindaklanjuti.
+                    // Entri mobile membawa `key` (`guide#n`), bukan medan `guide` berasingan —
+                    // versi pertama menyertai medan yang tidak wujud dan memberi `"?": 45`.
+                    centerCovered_ikut_guide: (() => {
+                        const t = {};
+                        for (const h of hasilM.filter((x) => x.centerCovered)) {
+                            const g = String(h.key ?? '').split('#')[0] || '?';
+                            t[g] = (t[g] ?? 0) + 1;
+                        }
+                        return Object.fromEntries(Object.entries(t).sort((a, b) => b[1] - a[1]));
+                    })(),
+                } : 'BELUM DIUKUR',
+                nota: 'dua viewport, dua artifak, dua set metrik berbeza — bukan matriks penuh '
+                    + 'setiap metrik × setiap viewport. §9.3 menuntut yang penuh; ini separa dan '
+                    + 'dilabel sedemikian.',
+            };
+        })(),
     },
 
     registri: {

@@ -20,6 +20,23 @@ class SyncHelpIndex extends Command
         'tolong',
     ];
 
+    /**
+     * Medan yang Meilisearch benar-benar CARI. Diangkat menjadi pemalar supaya ujian boleh
+     * menjaganya tanpa Meilisearch hidup.
+     *
+     * ⚠️ Codex pusingan 2 (#8) menunjukkan lubangnya: membuang `steps_text` daripada senarai
+     * ini mengekalkan SETIAP ujian F8 hijau (pengiraan set perkataan, contoh fallback, ujian
+     * (b)) sedangkan Meili berhenti mencari teks arahan sepenuhnya. Metrik jurang J1/J2 boleh
+     * berubah hampir keseluruhannya tanpa satu pun penjaga merah.
+     *
+     * 📌 `steps_text` mengandungi `instruction` SAHAJA — tajuk langkah TIDAK diindeks. Itu
+     * keputusan yang direkod (`bukti/plan-f8/PENEMUAN-CARIAN.md` §4), bukan terlepas pandang.
+     */
+    public const SEARCHABLE_ATTRIBUTES = ['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text'];
+
+    /** Medan yang boleh ditapis — skop role/panel dikuatkuasakan di lapisan servis, bukan indeks. */
+    public const FILTERABLE_ATTRIBUTES = ['panel', 'roles'];
+
     protected $signature = 'diwan:sync-help-index {--delete : Padam indeks bantuan sebelum bina semula}';
 
     protected $description = 'Sahkan katalog dan segerakkan indeks panduan bantuan tanpa data tenant';
@@ -63,8 +80,8 @@ class SyncHelpIndex extends Command
             $documents = collect($catalog->raw()['guides'] ?? [])->map(self::documentFor(...))->all();
             $tasks = [
                 $index->addDocuments($documents, 'document_id'),
-                $index->updateFilterableAttributes(['panel', 'roles']),
-                $index->updateSearchableAttributes(['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text']),
+                $index->updateFilterableAttributes(self::FILTERABLE_ATTRIBUTES),
+                $index->updateSearchableAttributes(self::SEARCHABLE_ATTRIBUTES),
                 $index->updateStopWords(self::HELP_STOP_WORDS),
             ];
             $taskUids = collect($tasks)->pluck('taskUid')->filter()->values()->all();

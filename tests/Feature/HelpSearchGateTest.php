@@ -308,6 +308,20 @@ it('(f) korpus yang boleh dicari DIUKUR — dua jurang direkod, bukan disembunyi
     // exact tidak memodelkan ASCII-folding, substring dan Levenshtein yang `HelpCatalog::search`
     // lakukan, jadi suntingan copy biasa akan memerahkan suite tanpa membuktikan regresi produk.
     // Yang dikunci sekarang ialah ARAH (jurang WUJUD) + contoh yang DISAHKAN pada laluan sebenar.
+    // 🔴 Codex pusingan 2 (#8): kedua-dua assertion `>0` di bawah TIDAK menyentuh Meilisearch,
+    // jadi membuang `steps_text` daripada indeks mengekalkan semuanya hijau sedangkan Meili
+    // berhenti mencari teks arahan. Lubang itu ditutup di sini dengan menjaga senarai atribut
+    // boleh-cari SECARA STRUKTUR — satu-satunya cara yang mungkin tanpa Meilisearch hidup.
+    //
+    // Tanpa `steps_text` dalam senarai ini, jurang J1/J2 yang dilaporkan menjadi karut, kerana
+    // ia dikira dengan andaian Meili MEMANG mencari teks arahan.
+    expect(SyncHelpIndex::SEARCHABLE_ATTRIBUTES)->toBe(
+        ['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text'],
+        'atribut boleh-cari Meilisearch berubah — jurang J1/J2 dalam PENEMUAN-CARIAN.md dikira '
+        .'dengan andaian `steps_text` diindeks; kemas dokumen sebelum menukar senarai ini',
+    );
+    expect(SyncHelpIndex::FILTERABLE_ATTRIBUTES)->toBe(['panel', 'roles']);
+
     expect(count($hanyaTajuk))->toBeGreaterThan(0,
         'J1 tertutup — tajuk langkah kini boleh dicari? Kemas PENEMUAN-CARIAN.md §4');
     expect(count($hanyaInstruksi))->toBeGreaterThan(0,
