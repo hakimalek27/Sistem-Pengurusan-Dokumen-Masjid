@@ -284,7 +284,9 @@ Jadual §1 mengandungi **32 baris** — dikira secara mekanikal terhadap jadual 
 🔴 tidak tercapai       4   (§2.1–2.4)
 ⚠️  bersyarat/lencongan  3   (nota A: 172 lawan 229 · nota D: lapisan C · nota E: CTA)
 ⏸  menunggu kredensial  3   (§3)
-``` Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
+```
+
+Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
 **2.6** `public.help#2`) **bukan** baris jadual §9 — ia penemuan yang dibawa ke F9/F10, dan
 disenaraikan di sana supaya ia tidak hilang, bukan untuk membesarkan kiraan kegagalan.
 
@@ -475,15 +477,39 @@ untuk menumpu. §9.3 menetapkan "2 pusingan" sebagai minimum, bukan sebagai bukt
 
 ## 6. Artifak
 
+Dikira terhadap direktori, bukan daripada ingatan: **8 skrip boleh-ulang + 2 prompt**,
+**6 fail data**, **5 artifak larian**.
+
 ```
-bukti/plan-f8/metrik-f8.json                jadual §9, tiga paras, dijana
-bukti/plan-f8/PENEMUAN-CENTERCOVERED.md     A/B + tentukur + kawalan dalaman
-bukti/plan-f8/PENEMUAN-CARIAN.md            tiga penemuan carian + kesilapan saya sendiri
-bukti/plan-f8/mobile-kohort-f8.json         124 langkah, definisi audit tepat
-bukti/plan-f8/{ab-lama,ab-semasa}.json      A/B mentah
-bukti/plan-f8/skrip/                        6 skrip boleh-ulang
-docs/AKSES-PAGE-MENGIKUT-ROLE.md            DIJANA daripada role_routes
-scripts/audit/generate-role-access-doc.mjs  penjana
-tests/Feature/RoleAccessDocTest.php         4 penjaga (2 regresi dibuktikan)
-tests/Feature/HelpSearchGateTest.php        6 penjaga §9.2 (2 regresi dibuktikan)
+bukti/plan-f8/
+  metrik-f8.json                    jadual §9, tiga paras, dijana
+  runtime-kohort-f8.json            124 popover desktop (arahan teras, + provenance)
+  mobile-kohort-f8.json             124 popover mobile 390x664
+  mobile-centercovered-f8.json      enam langkah cacat asal
+  ab-lama.json / ab-semasa.json     A/B, setiap satu membawa versi + hash katalognya
+  gambar/                           skrinsyot beranotasi (TIDAK dikomit — bukti/.gitignore *.png)
+
+  PENEMUAN-CENTERCOVERED.md         A/B + tentukur + kawalan dalaman + bukti VISUAL
+  PENEMUAN-CARIAN.md                tiga penemuan carian + kesilapan saya sendiri
+  PENEMUAN-TENTUKURAN.md            alat saya gagal tentukuran, dan pembetulannya
+  PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md   runner §9.1a `No tests found`
+  LATIHAN-9.1-TEMPATAN.md           7 kontrak diukur · 1 gantung · 2 penemuan reka bentuk
+  RR-P1-CODEX.md / RR-P2-CODEX.md   23 + 19 penemuan audit adversarial
+
+  bukti-larian/
+    ci-domain.json                  8/8 · 0 unexpected
+    ci-a11y.json                    11/11 = 5 halaman × 2 viewport + 1 semakan-diri
+    ci-coverage-gate-31213031582.json   83/473/172 · missing/extra/overlap 0 · pass true
+    produksi-smoke-meili.txt        smoke 9/9 + stats & query Meili produksi
+    pest-suite-632.txt              632 lulus / 2 skip
+
+docs/AKSES-PAGE-MENGIKUT-ROLE.md            DIJANA + perbandingan sejarah DIKIRA
+scripts/audit/generate-role-access-doc.mjs  penjana (gagal-tertutup)
+tests/Feature/RoleAccessDocTest.php         4 penjaga — 3 regresi dibuktikan MERAH
+tests/Feature/HelpSearchGateTest.php        7 penjaga — 6 regresi dibuktikan MERAH
+playwright.config.js                        project `production-readonly` (bukan dalam CI)
+scripts/audit/run-production-guidance-readonly.ps1   laluan kontena + cleanup ikut ID + delta
 ```
+
+**Sepuluh regresi sengaja dibuktikan MERAH lalu dipulihkan** merentas kedua-dua fail ujian —
+setiap satu menyasar lubang yang audit namakan, bukan lubang yang senang dibuktikan.
