@@ -66,8 +66,30 @@ juga tidak melihatnya. Diukur: **17 perkataan** hidup HANYA dalam tajuk langkah 
 ⭐ Ini bernilai kerana F6 melabur banyak untuk menjadikan tajuk langkah bermakna
 (placeholder **258 → 0**). Teks itu kini tepat, deskriptif — dan **tidak boleh dicari**.
 Menambah `pluck('title')` kepada `steps_text` ialah satu baris; ia akan menjadikan hasil kerja
-F6 boleh ditemui. Saya tidak melakukannya di F8 kerana fasa ini ialah **pengukuran, tiada
-deploy** — ia dicadangkan untuk F10 atau hotfix berasingan.
+F6 boleh ditemui. **Belum dibuat** — tidak seperti tempoh Meilisearch (§4A), ini mengubah
+KANDUNGAN indeks, jadi ia memerlukan `sync-help-index --delete` + gate katalog penuh + deploy.
+Dicadangkan untuk F10.
+
+## 4A. ✅ Penemuan D — Meili TERGANTUNG menyekat halaman 24 saat (DIBAIKI)
+
+Ujian (a) asal menggunakan `connection refused` (port 1), yang kembali serta-merta. Laluan
+**timeout** berbeza sama sekali, dan mengukurnya mendedahkan yang lebih buruk daripada
+"carian jadi cetek":
+
+```
+DIUKUR SEBELUM : 24,232 ms   sebelum fallback PHP menyelamatkan hasil
+DIUKUR SELEPAS :  2,085 ms   (12x)  — 10 guide, engine=php, tidak berubah
+```
+
+Klien Meilisearch dibina tanpa tempoh eksplisit, jadi ia mewarisi lalai yang panjang. Fallback
+PHP sudah wujud dan pantas; satu-satunya yang hilang ialah keputusan untuk **berhenti menunggu**.
+
+**Dibaiki:** `diwan.guidance.meilisearch_timeout` (lalai 2.0s, env `DIWAN_MEILISEARCH_TIMEOUT`)
+dihantar kepada klien HTTP sebagai `timeout` + `connect_timeout`.
+⚠️ **BELUM di-deploy** — produksi kekal `2325bec`; ia menunggu keputusan pemilik bersama baki F8.
+
+Ujian (a2) menjaganya, dan hadnya DITERBITKAN daripada config (4× tempoh) supaya membuang
+tempoh itu memerahkannya. Kerana laluan kini ~2s, ia berjalan setiap larian dan bukan opt-in.
 
 ## 5. Apa yang penjaga baharu kunci
 
