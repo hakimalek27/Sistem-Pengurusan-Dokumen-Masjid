@@ -284,7 +284,9 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 | 2 | 3 query (tepat/salah ejaan/akronim) + tapisan role | ⏸ dalam spec |
 | 3 | `bukti/plan-f8/route-manifest.json` DIKOMIT | 🔴 **belum dihasilkan** — hanya larian produksi boleh menjananya |
 | 4 | read-only mutlak (tiada `ensureInboxFixture`) | ✅ dikunci dalam spec sejak F0 |
-| 5 | kontrak runner §9.1a dibekukan | ✅ dibekukan F0 |
+| 5 | kontrak runner §9.1a dibekukan | ✅ dibekukan F0 — **dan 7 itemnya kini DIUKUR tempatan**, lihat `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md` |
+| — | **runner boleh menemui spec** | 🔴→✅ **DIBAIKI** — sebelum ini `No tests found` (`PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`) |
+| — | **latihan matriks tempatan** | 🔴 **TERGANTUNG** selepas ~41 muatan halaman pada satu `POST /livewire/update`; `php -S` satu-benang; **0 bukti separa** kerana spec ialah SATU ujian monolitik |
 | 6 | semua halaman desktop DAN mobile ikut `role_routes` | ⏸ dalam spec |
 | 7 | assert tepat 8 role + superadmin berasingan + public tanpa login | ⏸ dalam spec |
 | 8 | assert tepat **20** context (`toBe(20)`) | ⏸ dalam spec |
