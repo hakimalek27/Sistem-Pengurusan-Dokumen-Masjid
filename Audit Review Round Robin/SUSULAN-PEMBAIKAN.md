@@ -1,7 +1,7 @@
 # SUSULAN-PEMBAIKAN — laporan F8 (§9) · ⚠️ **BELUM PENUTUP**
 
 > **Status: F8 BELUM SIAP.** Round-robin §9.3 memberi **23 penemuan (pusingan 1)** dan
-> **19 penemuan (pusingan 2)**; 14 kekal TERBUKA dan majoritinya **tidak** disekat oleh
+> **19 penemuan (pusingan 2)**; **8 kekal TERBUKA** (6 ditutup selepas itu) dan majoritinya **tidak** disekat oleh
 > kredensial pemilik. Lihat **§5C**. Baris jadual yang terbukti melebih-lebih sudah ditukar
 > daripada ✅ kepada ⚠️/🔴. Jangan baca dokumen ini sebagai pengesahan keluaran.
 
@@ -397,6 +397,18 @@ dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JAL
 | 18 | "0 mismatch pada 3 pasangan" | diukur: 410/410 `actual_status` = null → baris ditukar kepada ⚠️ (nota D) |
 | 19 (sebahagian) | "23 assertion" lapuk | dibetulkan kepada 33 (kiraan sebenar) |
 
+### DITUTUP selepas §5C mula ditulis (setiap satu dengan counterexample/ukuran)
+
+| # | Perkara | Bukti penutupan |
+|---|---|---|
+| 8 | (f) bukan gate Meili — buang `steps_text` kekalkan semua hijau | senarai atribut diangkat jadi pemalar `SEARCHABLE_ATTRIBUTES` + dijaga; counterexample TEPAT Codex → MERAH |
+| 9 | gate route dokumen vakum per-seksyen | setiap pasangan identiti×panel mesti HADIR; buang seksyen Juruaudit → MERAH `audit/app` |
+| 15 | (a) refused, bukan timeout | ujian (a2) guna 192.0.2.1 (RFC 5737). **DIUKUR: 24,232 ms** sebelum fallback → halaman TERSEKAT 24s, bukan sekadar carian cetek. Opt-in `DIWAN_SLOW_TESTS=1` |
+| 17 | `ab-mobile.sh` tanpa `-e`, artifak basi | `set -euo pipefail` + artifak dibuang sebelum larian |
+| 1 (A/B) | artifak tiada provenance | `ab-lama` katalog **2026.07.22.2** hash `7c9b43ff…` → 1/24 · `ab-semasa` **2026.08.08.2** hash `bf0f8bcd…` → 8/24 — dalam fail |
+| 4 (sebahagian) | pecahan silang bukan ukuran | blok `diukur_per_viewport` daripada dua artifak ukuran SEBENAR; dilabel SEPARA, status tidak dinaikkan ✅ |
+| 23 (lanjutan) | "tidak dibuktikan tidak merosakkan UX" | 📸 bukti visual 390×664: sasaran kelihatan PENUH, tidak terlindung — `PENEMUAN-CENTERCOVERED.md` §3B |
+
 ### 🔴 MASIH TERBUKA — dan saya tidak menandakannya siap
 
 | # | Perkara | Mengapa ia penting |
@@ -420,9 +432,14 @@ dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JAL
 ### Pendirian jujur
 
 **F8 BELUM SIAP.** Pusingan 2 menunjukkan laporan versi terdahulu menandakan beberapa baris ✅
-yang sepatutnya ⚠️ atau 🔴. Empat belas penemuan kekal terbuka, dan **sebahagian besar boleh
-dibaiki tanpa kredensial** (#3, #4, #6, #7, #8, #9, #14, #15, #17, #19) — jadi ia bukan disekat
-pada pemilik; ia kerja yang belum saya buat.
+yang sepatutnya ⚠️ atau 🔴.
+
+**Kemajuan sejak §5C ditulis: 6 penemuan DITUTUP** (#1 A/B · #4 separa · #8 · #9 · #15 · #17)
+**+ lanjutan #23** (bukti visual). **Baki TERBUKA: 8** — #2, #3, #6, #7, #12, #13, #14, #16, #19.
+
+Daripada 8 itu, **enam tidak disekat kredensial** (#2, #3, #6, #7, #14, #16, #19) dan dua ialah
+kecacatan wrapper produksi (#12 fail rahsia kontena-lawan-host, #13 cleanup tidak guna inventori)
+yang boleh dibaiki tanpa kredensial tetapi hanya boleh **disahkan** dengan larian sebenar.
 
 ⭐ Satu perkara yang round-robin ini buktikan dengan jelas: **dua pusingan tidak mencukupi untuk
 menutup fasa pengukuran ini.** Pusingan 1 memberi 23 penemuan, pusingan 2 memberi 19 selepas
