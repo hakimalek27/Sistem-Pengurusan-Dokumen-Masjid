@@ -66,6 +66,35 @@ it('(a) Meilisearch MATI (host tidak boleh dihubungi) — carian masih memulangk
     expect(data_get($peristiwa->metadata, 'engine'))->toBe('php');
 });
 
+it('(a2) Meilisearch TERGANTUNG (timeout, bukan refused) — fallback menyelamatkan, tetapi LAMBAT', function () {
+    // Codex pusingan 2 (#15) betul: ujian (a) ialah `connection refused` pada port 1, bukan
+    // TIMEOUT. Cabang itu berbeza — refused kembali serta-merta; hang menunggu tempoh klien.
+    //
+    // 192.0.2.1 = RFC 5737 TEST-NET-1: tidak boleh dirutkan, jadi `connect` TERGANTUNG lalu
+    // timeout. Tiada rangkaian LUAR diperlukan (peraturan #5 CLAUDE.md) — paket tidak pergi
+    // ke mana-mana.
+    //
+    // 🔴 DIUKUR: 24,232 ms. Fallback MEMANG menyelamatkan hasil (10 guide, `engine=php`) —
+    // tetapi pengguna menunggu ~24 saat dahulu. Itu lebih buruk daripada "carian jadi cetek":
+    // halaman tersekat. Klien Meilisearch tiada tempoh eksplisit; ia mewarisi lalai.
+    // Cadangan (BUKAN dibuat di F8 — perubahan produk): beri klien tempoh eksplisit ~2s.
+    //
+    // Ujian ini OPT-IN kerana ia menambah ~24s kepada suite. `DIWAN_SLOW_TESTS=1` menghidupkannya.
+    config()->set('scout.meilisearch.host', 'http://192.0.2.1:7700');
+    config()->set('scout.meilisearch.key', 'kunci-tidak-sah');
+
+    $mula = microtime(true);
+    $hasil = app(HelpSearchService::class)->search('klasifikasi surat', 'app', $this->adminMam, $this->mam);
+    $ms = (int) round((microtime(true) - $mula) * 1000);
+
+    expect($hasil)->not->toBeEmpty('fallback TIDAK menyelamatkan carian apabila Meili tergantung');
+    expect(data_get(HelpEvent::query()->latest('id')->first()->metadata, 'engine'))->toBe('php');
+
+    // Sempadan atas yang generous — ia mendokumenkan tingkah laku, bukan mengunci prestasi.
+    // Jika ia melebihi 60s, sesuatu berubah menjadi lebih buruk dan patut disiasat.
+    expect($ms)->toBeLessThan(60_000, "laluan timeout mengambil {$ms} ms — semak tempoh klien");
+})->skip(! env('DIWAN_SLOW_TESTS'), 'ujian LAMBAT (~24s) — hidupkan dengan DIWAN_SLOW_TESTS=1');
+
 it('(b) korpus yang diindeks tidak mengandungi data tenant atau pengguna', function () {
     // Medan yang benar-benar diindeks (disahkan pada indeks PRODUKSI, 8 Ogos 2026):
     // document_id, guide_id, panel, roles, title, summary, keywords, steps_text,

@@ -140,6 +140,31 @@ test('setiap route disenaraikan di bawah identiti DAN panel yang betul', functio
 
     expect($perIdentitiPanel)->not->toBeEmpty('tiada seksyen identiti dapat dihurai daripada dokumen');
 
+    // ⚠️ Codex pusingan 2 (#9): versi terdahulu hanya mengaudit seksyen yang BERJAYA dihurai.
+    // Counterexample: buang seluruh seksyen "Juruaudit" tetapi kekalkan baris ringkasannya —
+    // parser kekal tidak kosong dan Juruaudit langsung TIDAK diaudit. Kini setiap pasangan
+    // identiti×panel yang manifest jangkakan mesti HADIR sebagai seksyen dalam dokumen.
+    $dijangkaSeksyen = [];
+    foreach (array_values(LABEL_KE_IDENTITI) as $id) {
+        foreach (['app', 'admin'] as $p) {
+            $ada = collect($rr['entries'])->contains(fn ($e) => $e['identity'] === $id
+                && $e['panel'] === $p && $e['expected_access'] === 'allow' && $e['in_navigation']);
+            if ($ada) {
+                $dijangkaSeksyen[] = "{$id}/{$p}";
+            }
+        }
+    }
+    $adaSeksyen = [];
+    foreach ($perIdentitiPanel as $id => $ikutPanel) {
+        foreach (array_keys($ikutPanel) as $p) {
+            $adaSeksyen[] = "{$id}/{$p}";
+        }
+    }
+    $seksyenHilang = array_values(array_diff($dijangkaSeksyen, $adaSeksyen));
+    expect($seksyenHilang)->toBe([],
+        'seksyen identiti/panel HILANG daripada dokumen (jadi tidak diaudit langsung): '
+        .implode(', ', $seksyenHilang));
+
     $salah = [];
     foreach ($perIdentitiPanel as $id => $ikutPanel) {
         foreach ($ikutPanel as $p => $routes) {

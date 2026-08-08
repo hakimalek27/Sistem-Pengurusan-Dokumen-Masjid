@@ -86,6 +86,41 @@ arah dan mekanisme yang konsisten merentas 24 langkah berpasangan pada persekita
 identik.** Kesimpulan yang DITARIK: "sasaran 0 patut dibersarakan" — itu keputusan pemilik,
 bukan hasil ukuran ini.
 
+## 3B. 📸 BUKTI VISUAL — dan ia menyelesaikan persoalan
+
+📸 `gambar/centercovered-mobile-390x664.png` · skrip `skrip/gambar-centercovered.mjs`
+Produksi, mobile **390×664 tepat**, dengan titik pusat viewport dan sempadan sasaran DILUKIS
+pada gambar supaya hubungan itu boleh dilihat, bukan hanya dibaca.
+
+Diukur pada gambar yang sama:
+
+```
+viewport 390x664 · pusat (195, 332)
+popover  x10  y100  366x243   -> merentangi y 100..343, jadi ia menyentuh y=332
+sasaran  help-search-form  x16 y363 358x116   -> y 363..479
+centerCovered            : true
+popoverMenutupSasaran    : FALSE
+sasaranKelihatanPenuh    : TRUE
+```
+
+**Apa yang gambar tunjukkan:** popover di ATAS, titik pusat jatuh pada **tepi bawahnya**, dan
+borang carian yang ia terangkan berada **terus di bawah — kelihatan penuh, tidak terlindung**.
+Arahan di atas, benda yang dirujuk di bawah, kedua-duanya jelas.
+
+⭐ **Itu susun atur yang BETUL.** `centerCovered = true` di sini menandakan reka bentuk yang
+baik, bukan kecacatan. Pada viewport 664px, mana-mana popover yang diletakkan **di atas**
+sasarannya akan menyentuh titik tengah — geometri, bukan kualiti.
+
+Ini menjawab kebimbangan yang §3A biarkan terbuka ("saya TIDAK membuktikan bahawa menutup
+bahagian tengah tidak merosakkan UX"). Bagi kes ini, ia **dibuktikan tidak merosakkan**: sasaran
+kelihatan penuh dan tidak terlindung. Ia satu kes, bukan 45 — tetapi ia kes yang metrik itu
+tandakan merah.
+
+ℹ️ **Nota kaedah:** MCP Chrome dicuba dahulu dan **tidak boleh** melayani tujuan ini — tab
+kumpulan MCP melaporkan `outer: 0x0`, tidak menghormati `resize_window` (viewport kekal
+1920×889), dan `visibilityState` kekal `hidden`. Itu had struktur yang SAMA yang menyebabkan
+penggera palsu #73. Diukur, kemudian kaedah terkawal digunakan.
+
 ## 4. Apa yang saya TIDAK dakwa
 
 - Saya **tidak** mengukur 124 langkah pada produksi — itu memerlukan sesi tenant produksi
@@ -96,6 +131,11 @@ bukan hasil ukuran ini.
 - Saya **tidak** mengubah metrik, penjaga, atau pelan. Ini keputusan pemilik.
 
 ## 5. Pilihan yang dicadangkan (pemilik memutuskan)
+
+⭐ Selepas bukti visual §3B, cadangan (1) tidak lagi bersandar pada mekanisme sahaja: pada kes
+yang metrik ini tandakan merah, **sasaran kelihatan penuh dan tidak terlindung**, dan popover
+berada betul-betul di atasnya. Gambar itu menunjukkan susun atur yang baik ditandakan sebagai
+kecacatan.
 
 1. **Bersara `centerCovered` sebagai gate; kekalkan sebagai pemerhatian.** Gantikan dengan
    penjaga "popover tidak menutup sasarannya sendiri" (sudah wujud, sudah dalam CI), diperluas
