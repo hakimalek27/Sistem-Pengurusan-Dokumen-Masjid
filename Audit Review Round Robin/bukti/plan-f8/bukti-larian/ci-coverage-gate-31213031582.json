@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "manifest": "Audit Review Round Robin/bukti/plan-baseline/manifest.json",
+  "manifest_sha256": "a9a5dd3ec0cfc754161984df972bfaa9066cdb8c4de65ee6a64344878fa50eba",
+  "shards_found": [
+    {
+      "shard": "workflow",
+      "file": "storage/app/plan-f6/artifacts/guidance-shard-workflow/shard-workflow.json",
+      "complete": true
+    },
+    {
+      "shard": "tenant-admin-public",
+      "file": "storage/app/plan-f6/artifacts/guidance-shard-tenant-admin-public/shard-tenant-admin-public.json",
+      "complete": true
+    },
+    {
+      "shard": "screen",
+      "file": "storage/app/plan-f6/artifacts/guidance-shard-screen/shard-screen.json",
+      "complete": true
+    }
+  ],
+  "summary": {
+    "guide_ids": {
+      "union": 83,
+      "expected": 83,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    },
+    "step_ids": {
+      "union": 473,
+      "expected": 473,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    },
+    "action_step_ids": {
+      "union": 172,
+      "expected": 172,
+      "missing": 0,
+      "extra": 0,
+      "overlap": 0
+    }
+  },
+  "problems": [],
+  "pass": true
+}

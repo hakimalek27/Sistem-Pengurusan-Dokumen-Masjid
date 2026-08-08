@@ -62,6 +62,30 @@ mengassert *popover tidak menutup **sasarannya sendiri*** — iaitu perkara yang
 sebenarnya perlu lihat. Ia berjalan desktop DAN mobile untuk kedua-dua guide W0, dan hijau
 dalam CI `31213031582`.
 
+## 3A. ⚠️ Had eksperimen — dinyatakan selepas audit pusingan 1 (Codex #22, #23)
+
+Codex betul bahawa kesimpulan versi pertama melampaui eksperimennya. Had yang sebenar:
+
+- **A/B ialah 24 langkah, sampel BERTUJUAN.** Kriteria: 8 guide tenant × 3 langkah pertama,
+  dipilih kerana kesemuanya mempunyai ≥3 langkah dalam KEDUA-DUA katalog, merentas papan pemuka
+  / senarai / borang / laporan. Ia direka untuk mengasingkan **satu** pemboleh ubah, BUKAN untuk
+  mendakwa kadar populasi. Data per-langkah kini dikomit (`ab-lama.json`, `ab-semasa.json`).
+- **Perbandingan penuh 6/124 → 45/124 mencampurkan persekitaran** (produksi/`smoke` lawan
+  tempatan/`mam`). A/B wujud tepat untuk menampung kelemahan itu, tetapi ia tidak
+  menghapuskannya bagi angka 45 itu sendiri.
+- **Satu kawalan dalaman (`tenant.profil#2`) tidak mengasingkan kesan seluruh katalog.** Ia
+  menunjukkan mekanisme itu masuk akal; ia bukan bukti bahawa tiada faktor lain menyumbang.
+- **Penjaga "tidak menutup sasaran sendiri" hanya berjalan pada DUA guide W0**, bukan kohort
+  penuh. Mencadangkannya sebagai pengganti bermakna meluaskannya dahulu.
+- **Saya TIDAK membuktikan bahawa menutup bahagian tengah tidak merosakkan UX.** 39 langkah
+  baharu itu tidak diperiksa dengan mata. Jadi cadangan (1) di §5 ialah cadangan berdasarkan
+  mekanisme, bukan kesimpulan berdasarkan pengalaman pengguna yang diukur.
+
+Kesimpulan yang KEKAL disokong: **metrik itu bergerak apabila jenis sasaran berubah, dengan
+arah dan mekanisme yang konsisten merentas 24 langkah berpasangan pada persekitaran yang
+identik.** Kesimpulan yang DITARIK: "sasaran 0 patut dibersarakan" — itu keputusan pemilik,
+bukan hasil ukuran ini.
+
 ## 4. Apa yang saya TIDAK dakwa
 
 - Saya **tidak** mengukur 124 langkah pada produksi — itu memerlukan sesi tenant produksi

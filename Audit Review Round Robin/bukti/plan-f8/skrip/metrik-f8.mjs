@@ -32,22 +32,26 @@ const kumpul = (arr, kunci) => arr.reduce((a, s) => {
     return a;
 }, {});
 
-// ── kandungan tajuk: dikira daripada KATALOG semasa, bukan daripada preview manifest ──────
-const guidesById = new Map((katalog.guides ?? katalog).map((g) => [g.id, g]));
-const bersih = (t) => String(t ?? '').trim().replace(/[.!?]+$/, '').toLowerCase();
-
-function kandunganKohort() {
-    let sama = 0;
-    let terpotong = 0;
-    for (const s of kohort) {
-        const g = guidesById.get(s.guide.guide_id);
-        const st = g?.steps?.[s.index - 1];
-        if (!st) continue;
-        if (bersih(st.title) === bersih(st.instruction)) sama += 1;
-        if (/[…]$|\.\.\.$/.test(String(st.title ?? '').trim())) terpotong += 1;
-    }
-    return { sama, terpotong };
-}
+// ── metrik KANDUNGAN kohort: TIDAK dikira di sini ─────────────────────────────────────────
+//
+// 🔴 Versi pertama skrip ini mengira `title == instruction`, "tajuk terpotong" dan CTA daripada
+// KATALOG. Ketiga-tiganya SALAH sebagai perbandingan apple-to-apple, dan tentukuran
+// membuktikannya: dijalankan pada katalog commit audit `4e07a70` ia memberi 0 pada KEDUA-DUA
+// belah, bukan 77/20/20.
+//
+//   • Asas audit ialah ukuran RUNTIME. Pada `4e07a70`, 118/124 tajuk kohort ialah placeholder
+//     `"Langkah N"`, jadi tour MENERBITKAN tajuk daripada arahan (`HelpCatalog.php` sekitar
+//     :196-220). Katalog tidak boleh menunjukkannya.
+//   • CTA lebih tegas lagi: label "Buat pada skrin" diputuskan oleh `step-advance-plan.js`
+//     daripada keadaan sasaran/route/DOM — BUKAN oleh medan `wait_for_user`. Dan pada
+//     `4e07a70` medan itu tidak wujud sama sekali. Mengira `wait_for_user` bukan mengira CTA.
+//
+// Maka ketiga-tiganya diukur oleh `ukur-runtime-kohort-f8.mjs` pada popover SEBENAR, dan skrip
+// ini hanya MERUJUK hasil itu. Ia tidak mengira semula, supaya tiada dua nombor bercanggah.
+let runtime = null;
+try {
+    runtime = JSON.parse(readFileSync(`${AKAR}/plan-f8/runtime-kohort-f8.json`, 'utf8'));
+} catch { /* belum diukur */ }
 
 // ── gate agregator (jika larian tempatan wujud) ───────────────────────────────────────────
 let gate = null;
@@ -66,9 +70,9 @@ if (existsSync(laluanGate)) {
     };
 }
 
-const status = kumpul(langkah, 's' in {} ? 'status' : 'status');
-const statusKira = Object.fromEntries(Object.entries(status).map(([k, v]) => [k, v.length]));
-const kandungan = kandunganKohort();
+const statusKira = Object.fromEntries(
+    Object.entries(kumpul(langkah, 'status')).map(([k, v]) => [k, v.length]),
+);
 
 const hasil = {
     dijana: 'metrik-f8.mjs',
@@ -77,10 +81,22 @@ const hasil = {
 
     paras_i_kohort: {
         denominator: `${new Set(kohort.map((s) => s.guide.guide_id)).size}/${kohort.length}`,
+        // Dikira di sini kerana `generic_declared` ialah medan katalog pada KEDUA-DUA belah.
         resolved_to_generic: { asas: kohortAsas.resolved_to_generic, kini: `${kira(kohort, (s) => s.generic_declared)}/${kohort.length}` },
-        title_equals_instruction: { asas: kohortAsas.title_equals_instruction, kini: `${kandungan.sama}/${kohort.length}` },
-        title_truncated_mid_word: { asas: kohortAsas.title_truncated_mid_word, kini: `${kandungan.terpotong}/${kohort.length}` },
-        cta_buat_pada_skrin: { asas: kohortAsas.cta.buat_pada_skrin, kini: kira(kohort, (s) => s.wait_for_user) },
+        // Tiga metrik KANDUNGAN datang daripada ukuran RUNTIME, bukan dikira semula di sini.
+        sumber_metrik_kandungan: 'runtime-kohort-f8.json (popover sebenar, desktop 1440x1000)',
+        title_equals_description: runtime
+            ? { asas: kohortAsas.title_equals_instruction, kini: `${runtime.kini.title_equals_description}/${runtime.kini.popover}`, kaedah: 'runtime' }
+            : { asas: kohortAsas.title_equals_instruction, kini: 'BELUM DIUKUR — jalankan ukur-runtime-kohort-f8.mjs' },
+        title_truncated_mid_word: runtime
+            ? { asas: kohortAsas.title_truncated_mid_word, kini: `${runtime.kini.truncated}/${runtime.kini.popover}`, kaedah: 'runtime' }
+            : { asas: kohortAsas.title_truncated_mid_word, kini: 'BELUM DIUKUR' },
+        cta_buat_pada_skrin: runtime
+            ? { asas: kohortAsas.cta.buat_pada_skrin, kini: runtime.kini.cta_buat_pada_skrin, kaedah: 'runtime (teks butang popover)' }
+            : { asas: kohortAsas.cta.buat_pada_skrin, kini: 'BELUM DIUKUR' },
+        placeholder_popover: runtime
+            ? { kini: `${runtime.kini.placeholder}/${runtime.kini.popover}`, kaedah: 'runtime' }
+            : { kini: 'BELUM DIUKUR' },
     },
 
     paras_ii_katalog_penuh: {
@@ -92,7 +108,20 @@ const hasil = {
             asas: asas.action_steps_with_generic_target,
             kini: kira(langkah, (s) => s.wait_for_user && s.generic_declared),
         },
-        mobile_defects: { asas: asas.mobile_defects, kini: kira(langkah, (s) => s.mobile_defect) },
+        // ⚠️ `mobile_defect` dalam manifest ialah INPUT BEKU audit — membacanya semula sentiasa
+        // memberi 6. Ia BUKAN ukuran keadaan semasa, jadi ia dinamakan sedemikian di sini.
+        // Ukuran semasa hidup dalam `mobile-kohort-f8.json` (45/124) dan dirujuk, tidak dikira
+        // semula — versi pertama menerbitkan `kini: 6` yang bercanggah dengan laporan.
+        mobile_defects_asas_beku: { asas: asas.mobile_defects, dalam_manifest: kira(langkah, (s) => s.mobile_defect) },
+        mobile_centercovered_diukur: (() => {
+            try {
+                const d = JSON.parse(readFileSync(`${AKAR}/plan-f8/mobile-kohort-f8.json`, 'utf8'));
+                const h = d.hasil ?? [];
+                return { sumber: 'mobile-kohort-f8.json', kini: h.filter((x) => x.centerCovered).length, daripada: h.length };
+            } catch {
+                return { kini: 'BELUM DIUKUR' };
+            }
+        })(),
         wait_for_user: { asas: asas.wait_for_user, kini: kira(langkah, (s) => s.wait_for_user) },
         empat_kategori: {
             specific: statusKira.specific ?? 0,
@@ -121,6 +150,27 @@ const hasil = {
             action_steps: kira(v, (s) => s.wait_for_user),
         }])),
         viewport: Object.fromEntries(Object.entries(kumpul(langkah, 'viewport')).map(([k, v]) => [k, v.length])),
+
+        // §9.3 menuntut pecahan SILANG `family × role × viewport`, bukan tiga agregat
+        // berasingan. Versi pertama memberi agregat sahaja; itu bukan pecahan silang.
+        // `roles` ialah medan guide (satu guide boleh melayan banyak role), jadi langkah
+        // dikira SEKALI bagi setiap role yang boleh melihatnya — jumlah lajur melebihi 473
+        // dengan sengaja, dan itu dinyatakan supaya ia tidak dibaca sebagai denominator.
+        silang_family_role_viewport: (() => {
+            const t = {};
+            for (const s of langkah) {
+                const roles = s.guide.roles?.length ? s.guide.roles : ['(tiada role)'];
+                for (const r of roles) {
+                    const kunci = `${s.guide.family}|${r}`;
+                    t[kunci] ??= { desktop: 0, mobile: 0, both: 0, generik: 0, langkah: 0 };
+                    t[kunci][s.viewport] = (t[kunci][s.viewport] ?? 0) + 1;
+                    t[kunci].langkah += 1;
+                    if (s.generic_declared) t[kunci].generik += 1;
+                }
+            }
+            return t;
+        })(),
+        nota_silang: 'langkah dikira sekali per role yang boleh melihatnya; jumlah > 473 dengan sengaja',
     },
 
     registri: {
@@ -148,12 +198,23 @@ const p2 = hasil.paras_ii_katalog_penuh;
 console.log(`catalog_version ${hasil.catalog_version}   kohort: ${definisiKohort} (${p1.denominator})\n`);
 console.log('── PARAS (i) KOHORT 25/124 — apple-to-apple dengan audit asal ──');
 for (const [k, v] of Object.entries(p1)) {
-    if (k === 'denominator') continue;
-    console.log(`  ${k.padEnd(28)} ${String(v.asas).padStart(9)} -> ${v.kini}`);
+    if (k === 'denominator' || typeof v === 'string') continue;
+    const asas = v.asas === undefined ? '—' : String(v.asas);
+    const kaedah = v.kaedah ? `   [${v.kaedah}]` : '';
+    console.log(`  ${k.padEnd(28)} ${asas.padStart(9)} -> ${v.kini}${kaedah}`);
 }
+console.log(`  (metrik kandungan: ${p1.sumber_metrik_kandungan})`);
 console.log('\n── PARAS (ii) KATALOG PENUH 83/473 ──');
 for (const [k, v] of Object.entries(p2)) {
     if (k === 'empat_kategori' || k === 'tanpa_status') continue;
+    if (k === 'mobile_defects_asas_beku') {
+        console.log(`  ${k.padEnd(34)} ${String(v.asas).padStart(4)} (input beku; dalam manifest ${v.dalam_manifest})`);
+        continue;
+    }
+    if (k === 'mobile_centercovered_diukur') {
+        console.log(`  ${k.padEnd(34)} DIUKUR ${v.kini}/${v.daripada ?? '?'}  <- ${v.sumber ?? '-'}`);
+        continue;
+    }
     const tanda = v.kini === v.asas ? ' ' : (v.kini < v.asas ? '↓' : '↑');
     console.log(`  ${k.padEnd(34)} ${String(v.asas).padStart(4)} -> ${String(v.kini).padStart(4)} ${tanda}`);
 }

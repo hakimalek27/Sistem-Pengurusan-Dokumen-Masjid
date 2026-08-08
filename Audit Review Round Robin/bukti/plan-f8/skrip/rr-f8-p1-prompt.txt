@@ -1,0 +1,49 @@
+Anda pengaudit ADVERSARIAL. Repo: Sistem Pengurusan Dokumen Masjid (Diwan/SPDM), Laravel 12 + Filament 4.
+
+Tugas: audit hasil fasa F8 (audit semula & metrik penutup) yang baru disiapkan. Cari perkara
+yang SALAH, dilebih-lebihkan, atau tidak disokong bukti. Jangan memuji.
+
+Baca fail ini (semuanya dalam repo):
+  1. Audit Review Round Robin/SUSULAN-PEMBAIKAN.md              <- penghantaran F8
+  2. Audit Review Round Robin/bukti/plan-f8/PENEMUAN-CENTERCOVERED.md
+  3. Audit Review Round Robin/bukti/plan-f8/PENEMUAN-CARIAN.md
+  4. Audit Review Round Robin/bukti/plan-f8/metrik-f8.json
+  5. Audit Review Round Robin/bukti/plan-f8/skrip/metrik-f8.mjs
+  6. tests/Feature/HelpSearchGateTest.php
+  7. tests/Feature/RoleAccessDocTest.php
+  8. scripts/audit/generate-role-access-doc.mjs
+  9. Audit Review Round Robin/PELAN-PEMBAIKAN.md  seksyen "## 9. FASA F8" (baris ~3521-3808)
+     — ini spec yang F8 mesti patuhi.
+
+Soalan khusus yang saya mahu dijawab dengan bukti kod/fail, bukan pendapat:
+
+A. Adakah mana-mana dakwaan dalam SUSULAN-PEMBAIKAN.md tidak disokong oleh artifak yang
+   dinamakannya? Semak angka satu per satu terhadap metrik-f8.json dan terhadap kod.
+
+B. metrik-f8.mjs: adakah pengiraannya betul? Khususnya
+   - definisi kohort (family=tenant) — betulkah 25 guide / 124 langkah?
+   - "title_equals_instruction" dan "title_truncated_mid_word": adakah kaedahnya menghasilkan
+     semula angka asas audit (77 dan 20) jika dijalankan pada katalog LAMA? Jika tidak boleh
+     disemak, katakan begitu.
+   - "cta_buat_pada_skrin" dikira sebagai bilangan wait_for_user dalam kohort. Adakah itu
+     definisi yang betul untuk CTA?
+
+C. HelpSearchGateTest.php: adakah mana-mana daripada 6 ujian itu boleh LULUS walaupun tingkah
+   laku yang didakwanya rosak? Cari ujian yang tidak boleh gagal, assertion yang terlalu
+   longgar, atau fixture yang lemah.
+
+D. Ujian (f) mengunci nombor 17 dan 38. Adakah pengiraan set-perkataan itu betul dan stabil?
+   Adakah ia akan pecah atas sebab remeh (cth aksara Unicode, kata dasar) dan menjadi gangguan?
+
+E. RoleAccessDocTest.php + generate-role-access-doc.mjs: adakah dakwaan "expected_page_counts
+   ialah panel-skop" benar? Sahkan terhadap e2e/guidance.spec.js dan manifest.
+
+F. Adakah F8 melangkau mana-mana keperluan §9/§9.1/§9.2/§9.3 yang TIDAK disebut sama sekali
+   dalam SUSULAN-PEMBAIKAN.md? Senaraikan setiap satu.
+
+G. Adakah kesimpulan "metrik centerCovered bergerak bertentangan dengan matlamat" disokong
+   oleh A/B itu? Cari kelemahan dalam eksperimen (saiz sampel 24, tenant tempatan, dsb).
+
+Format jawapan: senarai bernombor. Setiap item: [TERUK/SEDANG/KECIL] + fail:baris + apa yang
+salah + apa bukti yang menunjukkannya. Jika sesuatu betul, jangan sebut. Akhiri dengan
+"PENEMUAN SUBSTANTIF: <n>".

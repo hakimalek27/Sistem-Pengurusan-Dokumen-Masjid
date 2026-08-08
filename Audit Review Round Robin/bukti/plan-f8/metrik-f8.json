@@ -8,17 +8,25 @@
       "asas": "119/124",
       "kini": "38/124"
     },
-    "title_equals_instruction": {
+    "sumber_metrik_kandungan": "runtime-kohort-f8.json (popover sebenar, desktop 1440x1000)",
+    "title_equals_description": {
       "asas": "77/124",
-      "kini": "0/124"
+      "kini": "0/124",
+      "kaedah": "runtime"
     },
     "title_truncated_mid_word": {
       "asas": "20/124",
-      "kini": "0/124"
+      "kini": "0/124",
+      "kaedah": "runtime"
     },
     "cta_buat_pada_skrin": {
       "asas": 20,
-      "kini": 0
+      "kini": 0,
+      "kaedah": "runtime (teks butang popover)"
+    },
+    "placeholder_popover": {
+      "kini": "0/124",
+      "kaedah": "runtime"
     }
   },
   "paras_ii_katalog_penuh": {
@@ -42,9 +50,14 @@
       "asas": 200,
       "kini": 0
     },
-    "mobile_defects": {
+    "mobile_defects_asas_beku": {
       "asas": 6,
-      "kini": 6
+      "dalam_manifest": 6
+    },
+    "mobile_centercovered_diukur": {
+      "sumber": "mobile-kohort-f8.json",
+      "kini": 45,
+      "daripada": 124
     },
     "wait_for_user": {
       "asas": 172,
@@ -144,7 +157,192 @@
     "viewport": {
       "desktop": 469,
       "both": 4
-    }
+    },
+    "silang_family_role_viewport": {
+      "tenant|admin_masjid": {
+        "desktop": 124,
+        "mobile": 0,
+        "both": 0,
+        "generik": 38,
+        "langkah": 124
+      },
+      "tenant|pengerusi": {
+        "desktop": 86,
+        "mobile": 0,
+        "both": 0,
+        "generik": 26,
+        "langkah": 86
+      },
+      "tenant|setiausaha": {
+        "desktop": 78,
+        "mobile": 0,
+        "both": 0,
+        "generik": 23,
+        "langkah": 78
+      },
+      "tenant|bendahari": {
+        "desktop": 77,
+        "mobile": 0,
+        "both": 0,
+        "generik": 25,
+        "langkah": 77
+      },
+      "tenant|nazir": {
+        "desktop": 67,
+        "mobile": 0,
+        "both": 0,
+        "generik": 22,
+        "langkah": 67
+      },
+      "tenant|ketua_imam": {
+        "desktop": 67,
+        "mobile": 0,
+        "both": 0,
+        "generik": 22,
+        "langkah": 67
+      },
+      "tenant|ajk": {
+        "desktop": 67,
+        "mobile": 0,
+        "both": 0,
+        "generik": 22,
+        "langkah": 67
+      },
+      "tenant|audit": {
+        "desktop": 71,
+        "mobile": 0,
+        "both": 0,
+        "generik": 23,
+        "langkah": 71
+      },
+      "workflow|admin_masjid": {
+        "desktop": 59,
+        "mobile": 0,
+        "both": 0,
+        "generik": 0,
+        "langkah": 59
+      },
+      "workflow|pengerusi": {
+        "desktop": 21,
+        "mobile": 0,
+        "both": 0,
+        "generik": 0,
+        "langkah": 21
+      },
+      "workflow|setiausaha": {
+        "desktop": 23,
+        "mobile": 0,
+        "both": 0,
+        "generik": 2,
+        "langkah": 23
+      },
+      "workflow|bendahari": {
+        "desktop": 19,
+        "mobile": 0,
+        "both": 0,
+        "generik": 1,
+        "langkah": 19
+      },
+      "workflow|nazir": {
+        "desktop": 9,
+        "mobile": 0,
+        "both": 0,
+        "generik": 0,
+        "langkah": 9
+      },
+      "workflow|ketua_imam": {
+        "desktop": 8,
+        "mobile": 0,
+        "both": 0,
+        "generik": 0,
+        "langkah": 8
+      },
+      "workflow|ajk": {
+        "desktop": 8,
+        "mobile": 0,
+        "both": 0,
+        "generik": 0,
+        "langkah": 8
+      },
+      "workflow|audit": {
+        "desktop": 11,
+        "mobile": 0,
+        "both": 0,
+        "generik": 2,
+        "langkah": 11
+      },
+      "admin|superadmin": {
+        "desktop": 32,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 32
+      },
+      "public|public": {
+        "desktop": 4,
+        "mobile": 0,
+        "both": 4,
+        "generik": 0,
+        "langkah": 8
+      },
+      "screen|admin_masjid": {
+        "desktop": 134,
+        "mobile": 0,
+        "both": 0,
+        "generik": 7,
+        "langkah": 134
+      },
+      "screen|bendahari": {
+        "desktop": 65,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 65
+      },
+      "screen|setiausaha": {
+        "desktop": 81,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 81
+      },
+      "screen|pengerusi": {
+        "desktop": 66,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 66
+      },
+      "screen|nazir": {
+        "desktop": 57,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 57
+      },
+      "screen|ketua_imam": {
+        "desktop": 51,
+        "mobile": 0,
+        "both": 0,
+        "generik": 8,
+        "langkah": 51
+      },
+      "screen|ajk": {
+        "desktop": 40,
+        "mobile": 0,
+        "both": 0,
+        "generik": 7,
+        "langkah": 40
+      },
+      "screen|audit": {
+        "desktop": 41,
+        "mobile": 0,
+        "both": 0,
+        "generik": 7,
+        "langkah": 41
+      }
+    },
+    "nota_silang": "langkah dikira sekali per role yang boleh melihatnya; jumlah > 473 dengan sengaja"
   },
   "registri": {
     "jumlah": 227,

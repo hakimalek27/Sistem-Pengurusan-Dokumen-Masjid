@@ -1,0 +1,20 @@
+  ✓ Daftar masjid (menunggu)
+  ✓ Lulus + KF disalin (40 nod)
+  ✓ Jemput ahli (Admin / Kerani + pengerusi)
+  ✓ Klasifikasi → difailkan + rujukan 04D588.100-4/33(1)
+  ✓ Edarkan minit
+  ✓ Kelulusan (lulus + IP)
+  ✓ Carian jumpa rekod
+  ✓ Eksport ZIP dijana
+  ✓ Auto-padam + sijil + batu nisan
+
+SMOKE E2E: 9 lulus, 0 gagal.
+--- MEILI ---
+{"numberOfDocuments":83,"isIndexing":false}
+["document_id","guide_id","panel","roles","title","summary","keywords","steps_text","troubleshooting_text"]
+klasifikasi surat => 11
+klasifikas => 12
+OCR => 10
+DDMS => 0
+XYZQ => 0
+taip => 1

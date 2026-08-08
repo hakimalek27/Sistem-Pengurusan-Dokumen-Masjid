@@ -1,0 +1,202 @@
+{
+  "label": "semasa",
+  "pemilihan": "8 guide tenant × 3 langkah pertama; guide dengan >=3 langkah dalam KEDUA-DUA katalog",
+  "definisi": "centerCovered = rect popover mengandungi (innerWidth/2, innerHeight/2) pada 390x664",
+  "cc": 8,
+  "ada": 24,
+  "jumlah": 24,
+  "hasil": [
+    {
+      "key": "tenant.dashboard#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 65,
+      "h": 263,
+      "target": null
+    },
+    {
+      "key": "tenant.dashboard#2",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "dashboard-stats"
+    },
+    {
+      "key": "tenant.dashboard#3",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "dashboard-checklist"
+    },
+    {
+      "key": "tenant.records#1",
+      "adaPopover": true,
+      "cc": true,
+      "top": 274,
+      "h": 243,
+      "target": "records-search"
+    },
+    {
+      "key": "tenant.records#2",
+      "adaPopover": true,
+      "cc": false,
+      "top": 357,
+      "h": 243,
+      "target": "records-view"
+    },
+    {
+      "key": "tenant.records#3",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.peti-masuk#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 37,
+      "h": 263,
+      "target": "inbox-record"
+    },
+    {
+      "key": "tenant.peti-masuk#2",
+      "adaPopover": true,
+      "cc": false,
+      "top": 386,
+      "h": 243,
+      "target": "inbox-view"
+    },
+    {
+      "key": "tenant.peti-masuk#3",
+      "adaPopover": true,
+      "cc": true,
+      "top": 195,
+      "h": 243,
+      "target": "inbox-upload"
+    },
+    {
+      "key": "tenant.carian#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 402,
+      "h": 243,
+      "target": "search-text"
+    },
+    {
+      "key": "tenant.carian#2",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "search-filters"
+    },
+    {
+      "key": "tenant.carian#3",
+      "adaPopover": true,
+      "cc": false,
+      "top": 382,
+      "h": 243,
+      "target": "search-parties"
+    },
+    {
+      "key": "tenant.retensi#1",
+      "adaPopover": true,
+      "cc": true,
+      "top": 181,
+      "h": 222,
+      "target": "retention-hold"
+    },
+    {
+      "key": "tenant.retensi#2",
+      "adaPopover": true,
+      "cc": true,
+      "top": 263,
+      "h": 243,
+      "target": "retention-schedule"
+    },
+    {
+      "key": "tenant.retensi#3",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.profil#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 66,
+      "h": 222,
+      "target": "profil-akaun"
+    },
+    {
+      "key": "tenant.profil#2",
+      "adaPopover": true,
+      "cc": true,
+      "top": 195,
+      "h": 243,
+      "target": "profil-notifikasi"
+    },
+    {
+      "key": "tenant.profil#3",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "page-content"
+    },
+    {
+      "key": "tenant.penggunaan#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 381,
+      "h": 243,
+      "target": "storage-usage"
+    },
+    {
+      "key": "tenant.penggunaan#2",
+      "adaPopover": true,
+      "cc": true,
+      "top": 240,
+      "h": 243,
+      "target": "storage-orders"
+    },
+    {
+      "key": "tenant.penggunaan#3",
+      "adaPopover": true,
+      "cc": true,
+      "top": 195,
+      "h": 243,
+      "target": "storage-add"
+    },
+    {
+      "key": "tenant.laporan#1",
+      "adaPopover": true,
+      "cc": false,
+      "top": 411,
+      "h": 243,
+      "target": "report-summary"
+    },
+    {
+      "key": "tenant.laporan#2",
+      "adaPopover": true,
+      "cc": false,
+      "top": 432,
+      "h": 222,
+      "target": "report-breakdown"
+    },
+    {
+      "key": "tenant.laporan#3",
+      "adaPopover": true,
+      "cc": true,
+      "top": 195,
+      "h": 243,
+      "target": "report-export"
+    }
+  ]
+}

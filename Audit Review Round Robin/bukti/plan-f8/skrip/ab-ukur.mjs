@@ -1,5 +1,15 @@
 // Separuh ukur bagi A/B `centerCovered`. Set langkah DIPAKU (24 langkah yang wujud dalam
 // KEDUA-DUA katalog) supaya kedua-dua belah mengukur perkara yang sama.
+//
+// 🔴 Versi pertama menulis ke `/tmp` dan saya menyalinnya ke folder bukti dengan `cp … 2>/dev/null`
+// yang MENELAN kegagalannya. Fail tidak pernah tiba, `/tmp` kemudian dibersihkan, dan
+// SUSULAN-PEMBAIKAN.md menamakan dua artifak yang TIDAK WUJUD. Codex pusingan 1 menangkapnya
+// (#22). Kini ia menulis terus ke folder bukti — tiada langkah salinan untuk gagal secara senyap.
+//
+// PEMILIHAN SAMPEL (Codex #22 menuntutnya dinyatakan): 8 guide tenant × 3 langkah pertama.
+// Kriteria: guide yang mempunyai >=3 langkah dalam KEDUA-DUA katalog (lama `9619509` dan
+// semasa), merentas jenis halaman berbeza (papan pemuka, senarai, borang, laporan). Ia sampel
+// BERTUJUAN untuk mengasingkan satu pemboleh ubah, bukan sampel wakil untuk mendakwa kadar.
 
 const { chromium } = await import(
     'file:///C:/Projek%20Coding/Sistem%20Pengurusan%20Dokumen%20Masjid/node_modules/playwright/index.mjs'
@@ -67,5 +77,13 @@ console.log(`  [${LABEL}] centerCovered ${cc}/${ada} (daripada ${hasil.length} d
 for (const h of hasil) {
     console.log(`     ${h.cc ? '🔴' : (h.adaPopover ? '✅' : '· ')} ${h.key.padEnd(24)} target=${h.target ?? '-'} top=${h.top ?? '-'} h=${h.h ?? '-'}`);
 }
-writeFileSync(`/tmp/ab-${LABEL}.json`, JSON.stringify({ label: LABEL, cc, ada, hasil }, null, 2));
+writeFileSync(
+    `Audit Review Round Robin/bukti/plan-f8/ab-${LABEL}.json`,
+    JSON.stringify({
+        label: LABEL,
+        pemilihan: '8 guide tenant × 3 langkah pertama; guide dengan >=3 langkah dalam KEDUA-DUA katalog',
+        definisi: 'centerCovered = rect popover mengandungi (innerWidth/2, innerHeight/2) pada 390x664',
+        cc, ada, jumlah: hasil.length, hasil,
+    }, null, 2) + '\n',
+);
 await pelayar.close();

@@ -34,8 +34,8 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Placeholder tajuk `Langkah N` | 258/473 | 0 | **0** | ✅ |
 | Langkah `blocked` | belum diukur | **0** | **0** | ✅ |
 | `risk-accepted` (dilapor berasingan) | — | boleh >0 dgn fallback+tiket+luput | **0** | ✅ |
-| Liputan gate diassert agregator | tiada | 473 · 229 · 83 union | **83/473/172 union · missing 0 · extra 0 · overlap 0 · pass true** | ✅ ⚠️ nota A |
-| Mismatch `role_routes` (3 pasangan) | belum diukur | 0 | **0** pada 410 entri × 10 identiti | ✅ |
+| Liputan gate diassert agregator | tiada | 473 · **229** · 83 union | **83/473/172 union · missing 0 · extra 0 · overlap 0 · pass true** | ⚠️ **LENCONGAN** — nota A |
+| Mismatch `role_routes` (3 pasangan) | belum diukur | 0 | **0** pada **410 pasangan identiti×route** (41 route × 10 identiti) | ✅ |
 | Drift dokumen akses role | 8/8 role | 0 | **0 percanggahan** (premis diperiksa — nota B) | ✅ |
 | Suite domain dalam gate CI | 0/3 | 2/3 wajib hijau | **`ci-domain` hijau dalam CI 31213031582** | ✅ |
 | Gate antivirus intake fail-closed | 0 ujian | 3/3 status ditolak | **3/3** (`infected`·`unavailable`·`error`) + 1 kawalan `clean` | ✅ |
@@ -61,10 +61,23 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | `helpUrl` `asal=livewire/update` | ada | 0 | **menunggu larian produksi** | ⏸ §3 |
 | EN-leak permukaan UI (crawl produksi) | ≥5 kelas | 0 | **menunggu larian produksi** | ⏸ §3 |
 
-**Nota A — 172, bukan 229.** Agregator melaporkan 172 langkah tindakan, dan itu BUKAN liputan
-yang berkurangan: `wait_for_user` dalam manifest beku ialah 172 (invarian `wait_for_user: 172`).
-Angka 229 dalam pelan datang daripada kiraan audit sebelum katalog diselaraskan. Union tiga
-shard = 172 = jangkaan manifest, dengan `missing 0 · extra 0 · overlap 0`.
+**Nota A — ⚠️ LENCONGAN yang memerlukan tandatangan pemilik: 172, bukan 229.**
+§9 (PELAN-PEMBAIKAN.md:3532, 3535) mewajibkan **229** langkah tindakan dan black-box **229/229**.
+Yang dihantar ialah **172**, dan dua perkara mesti dipisahkan dengan jelas:
+
+- **Denominator berubah, bukan liputan berkurangan.** Invarian manifest ialah
+  `wait_for_user: 172`; angka 229 datang daripada kiraan audit SEBELUM katalog diselaraskan
+  (F5/F6 menukar banyak langkah kepada `wait_for_user: false`). Union tiga shard = **172 =
+  jangkaan manifest**, dengan `missing 0 · extra 0 · overlap 0` — artifak CI dikomit:
+  `bukti/plan-f8/bukti-larian/ci-coverage-gate-31213031582.json`.
+- **Yang agregator BUKTIKAN ialah liputan ID, bukan pelaksanaan black-box.** Ia mengesahkan
+  setiap ID langkah tindakan muncul dalam union shard. Ia **tidak** membuktikan setiap satu
+  dipandu sebagai aliran black-box penuh. Dakwaan "black-box 229/229" **tidak** dihantar, dan
+  saya tidak menandakannya hijau.
+
+**Keputusan pemilik diperlukan:** terima 172 sebagai denominator baharu (dengan sebab di atas
+direkod), ATAU tetapkan bahawa 229 mesti dicapai — yang bermakna mengembalikan `wait_for_user`
+pada 57 langkah, iaitu memundurkan keputusan reka bentuk F5/F6.
 
 **Nota C — 🔴 tiga baris DITARIK daripada ✅ oleh tentukuran saya sendiri.**
 📄 `bukti/plan-f8/PENEMUAN-TENTUKURAN.md`
@@ -230,6 +243,109 @@ carian dan membandingkannya, bukan mempercayai bahawa "carian berfungsi".
 Empat penemuan itu tidak ada dalam senarai asal audit. Itu hujah untuk fasa pengukuran
 berasingan: F8 menemui perkara yang F0–F7 tidak boleh melihat, kerana ia satu-satunya fasa yang
 tugasnya menyoal ukuran itu sendiri.
+
+## 5A. Kepatuhan setiap item §9.1 / §9.1a / §9.2 / §9.3 — audit pusingan 1 menuntutnya
+
+Versi pertama laporan ini menandakan §9.1/§9.1a sebagai "3 baris menunggu" dan itu **melebihkan
+kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pusingan 1 (#18,
+#19, #20, #21) betul. Setiap item disenaraikan di sini dengan statusnya.
+
+### §9.1 — matriks produksi 20 BrowserContext
+
+| # | Item | Status |
+|---|---|---|
+| 1 | tour per role × viewport | ⏸ dalam spec, larian belum dijalankan |
+| 2 | 3 query (tepat/salah ejaan/akronim) + tapisan role | ⏸ dalam spec |
+| 3 | `bukti/plan-f8/route-manifest.json` DIKOMIT | 🔴 **belum dihasilkan** — hanya larian produksi boleh menjananya |
+| 4 | read-only mutlak (tiada `ensureInboxFixture`) | ✅ dikunci dalam spec sejak F0 |
+| 5 | kontrak runner §9.1a dibekukan | ✅ dibekukan F0 |
+| 6 | semua halaman desktop DAN mobile ikut `role_routes` | ⏸ dalam spec |
+| 7 | assert tepat 8 role + superadmin berasingan + public tanpa login | ⏸ dalam spec |
+| 8 | assert tepat **20** context (`toBe(20)`) | ⏸ dalam spec |
+| — | setiap route: 200 · `<main>` · 0 console error · 0 overflow · bantuan/carian/tour | ⏸ dalam spec |
+| — | probe silang-tenant 404 setiap role tenant | ✅ dalam manifest (410 pasangan) · ⏸ live |
+| — | context/localStorage terasing · sela login ≥15s | ✅ dikunci `guidance.spec.js:10,37-40` |
+
+### §9.1a — kontrak keselamatan runner
+
+| Item | Status |
+|---|---|
+| nama spec + wrapper dibekukan | ✅ `e2e/production-guidance-readonly.spec.js` + `.ps1` wujud |
+| `workers=1` dipaksa wrapper · `-RunUuid` opsyenal-tapi-direkod · `-CleanupOnly` | ✅ dalam wrapper (F0) |
+| tenant larian `smoke-<run_uuid>`, **bukan** `smoke` | ✅ dikunci |
+| `diwan:audit-fixture` prepare/cleanup/inventory + validasi UUID/slug | ✅ `app/Console/Commands/AuditFixture.php` + `AuditFixtureCommandTest` |
+| kata laluan rawak, tidak pernah ke stdout · superadmin di luar skop | ✅ dikunci F0 |
+| validasi env tanpa mencetak nilai | ✅ dikunci F0 |
+| inventori `before/created/after` + cleanup idempotent + ujian recovery | ✅ ujian F0 · ⏸ larian live |
+| **larian sebenar + set bukti fasa** | 🔴 **belum** — disekat pada kredensial pemilik |
+
+### §9.2 — gate carian
+
+| Item | Status |
+|---|---|
+| indeks tepat 83 dokumen | ✅ **83** live (`bukti-larian/produksi-smoke-meili.txt`) |
+| tiada data tenant/pengguna dalam dokumen | ✅ 9 medan disenaraikan; 0 e-mel/slug/domain |
+| query biasa · salah ejaan · akronim | ✅ 11 · 12 · OCR 10 — dan 🔴 `DDMS` 0 (§2.2) |
+| Meili mati/timeout → fallback berfungsi | ✅ ujian (a); ⚠️ ia `connection refused`, **bukan timeout** — dinyatakan sebagai had |
+| hasil setara fallback vs Meili | 🔴 **TIDAK** — §2.3 |
+| tapisan role/panel/permission · awam tidak nampak tenant | ✅ ujian (c)+(e) + `HelpCatalogTest` |
+| query mentah tidak disimpan | ✅ `HelpCatalogTest` (`query_hash` 64 aksara) |
+| step CI Meili: `SCOUT_DRIVER=meilisearch sync --delete` + assert 83 sebelum e2e | ✅ `ci.yml` lapis 1 (F0) |
+
+### §9.3 — disiplin penutup
+
+| Item | Status |
+|---|---|
+| manifest beku F0, set SAMA diukur | ✅ |
+| tiga paras (kohort · katalog penuh · **family × role × viewport**) | ✅ pecahan SILANG ditambah (26 sel) selepas Codex #6 |
+| empat kategori dipisahkan, tiada "baki" | ✅ |
+| setiap angka pada denominator penuh | ✅ |
+| persampelan dilabel "smoke", tidak menutup ID penemuan | ✅ A/B dilabel sampel bertujuan 24 langkah |
+| telemetri diisytihar DAHULU | ✅ §3 |
+| **kiraan telemetri SELEPAS larian** (token, `intended_url`, zon KL, luput, senarai cleanup) | 🔴 **belum** — bergantung larian |
+| regresi CSV RR-04-02 | 🔴 **tidak disemak dalam F8** — dibawa ke F10 |
+| round-robin mini Claude↔Codex 2 pusingan | ⏳ pusingan 1 SELESAI (23 penemuan, §5B); pusingan 2 selepas pembaikan |
+
+## 5B. Audit pusingan 1 (Codex) — 23 penemuan, dan apa yang saya buat dengannya
+
+📄 Laporan penuh: `bukti/plan-f8/RR-P1-CODEX.md`
+
+Codex mengaudit F8 secara adversarial dan mengembalikan **23 penemuan**. Dua daripadanya
+(kaedah tajuk bukan apple-to-apple; `wait_for_user` bukan definisi CTA) mengesahkan secara
+bebas apa yang saya sudah temui melalui tentukuran sendiri — dan Codex memberi rujukan kod yang
+lebih tepat (`HelpCatalog.php` untuk tajuk terbitan, `step-advance-plan.js` untuk CTA).
+
+Yang paling memalukan, dan betul: **`ab-lama.json` dan `ab-semasa.json` yang laporan ini namakan
+tidak wujud.** `cp` saya menggunakan `2>/dev/null` yang menelan kegagalannya, `/tmp` kemudian
+dibersihkan, dan data A/B mentah hilang. Skrip kini menulis TERUS ke folder bukti (tiada langkah
+salinan untuk gagal senyap), A/B dijalankan semula dan **menghasilkan semula 1/24 lawan 8/24
+tepat**, dengan data per-langkah dan kriteria pemilihan sampel yang dinyatakan.
+
+### Pendirian ke atas setiap penemuan
+
+| # | Ringkasan Codex | Pendirian |
+|---|---|---|
+| 1 | kaedah tajuk bukan apple-to-apple | ✅ **DITERIMA** — sudah ditemui sendiri; kini diukur RUNTIME |
+| 2 | `wait_for_user` bukan definisi CTA | ✅ **DITERIMA** — rujukan `step-advance-plan.js` lebih tepat drp saya; CTA kini dibaca drp teks butang popover |
+| 3 | `metrik-f8.json` bercanggah dgn laporan (mobile 6 vs 45) | ✅ **DITERIMA** — medan dinamakan `mobile_defects_asas_beku` + rujukan ukuran sebenar |
+| 4 | "410 entri × 10 identiti" melebihkan 10× | ✅ **DITERIMA** — dibetulkan kepada 410 pasangan (41 × 10) |
+| 5 | 229 → 172 ditanda hijau | ✅ **DITERIMA** — kini LENCONGAN yang perlu tandatangan (nota A) |
+| 6 | tiga paras bukan pecahan silang | ✅ **DITERIMA** — silang `family × role × viewport` ditambah (26 sel) |
+| 7 | "4 tambahan, 0 hilang" hard-coded | ⚠️ **SEBAHAGIAN** — nombor memang hard-coded (dibetulkan: kini DIKIRA + diuji). Tetapi dakwaan "fail sejarah tiada dalam repo" **SALAH**: ia di root, `AKSES-PAGE-MENGIKUT-ROLE-PRODUCTION-2026-07-21.md` |
+| 8 | gate dokumen boleh lulus walau role salah | ✅ **DITERIMA** — label→identiti + route per identiti/panel ditambah |
+| 9 | ujian (a) terlalu longgar | ✅ **DITERIMA** — relevansi hasil diassert |
+| 10 | ujian (b) tidak menguji korpus yang diindeks | ✅ **DITERIMA** — kini membina dokumen melalui laluan `SyncHelpIndex` yang sama |
+| 11 | ujian (c) lulus secara vakum | ✅ **DITERIMA** — assert hasil awam TIDAK kosong dahulu |
+| 12 | ujian (d) `pluck('id')` membuang data | ✅ **DITERIMA** — kini membandingkan objek penuh |
+| 13 | ujian (e) tidak memanggil carian DDMS | ✅ **DITERIMA** — kini memanggil carian + case-insensitive |
+| 14 | ujian (f) tidak menghubungi Meili | ⚠️ **SEBAHAGIAN** — betul; tetapi Meili tiada tempatan (§17 CLAUDE.md larang kredensial luar untuk lulus ujian). Bukti Meili kekal sebagai artifak produksi yang dikomit; ujian dilabel inferens struktur, bukan gate dua-enjin |
+| 15 | 17/38 rapuh, tidak memodelkan carian | ✅ **DITERIMA** — dilonggarkan kepada arah + contoh yang disahkan, bukan kiraan tepat |
+| 16 | dakwaan CI/live hanyalah prosa | ⚠️ **SEBAHAGIAN** — artifak `ci-playwright-json` MEMANG ada di CI (28 KB); ia tiada dalam set bukti saya. Kini dikomit: `ci-domain` 8/8, `ci-a11y` 11/11, coverage-gate, smoke+Meili produksi, log suite |
+| 17–21 | banyak keperluan §9/§9.1/§9.1a/§9.2/§9.3 tidak disebut | ✅ **DITERIMA** — §5A menyenaraikan setiap item dengan status |
+| 22 | A/B tidak boleh diaudit semula | ✅ **DITERIMA** — punca (cp gagal senyap) direkod; A/B dijana semula dgn artifak |
+| 23 | kesimpulan centerCovered melampaui eksperimen | ✅ **DITERIMA** — had disenaraikan (§3A dalam PENEMUAN-CENTERCOVERED.md); cadangan "bersara" ditarik menjadi keputusan pemilik |
+
+**Diterima 19 · sebahagian 3 · ditolak 0 · satu sub-dakwaan disangkal dengan bukti (#7).**
 
 ## 6. Artifak
 

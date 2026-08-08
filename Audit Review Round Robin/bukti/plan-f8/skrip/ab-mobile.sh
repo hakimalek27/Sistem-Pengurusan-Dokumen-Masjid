@@ -10,7 +10,7 @@
 set -uo pipefail
 cd "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid" || exit 1
 
-ASAL="/tmp/guides-semasa.json"
+ASAL="$(mktemp)"   # katalog semasa disimpan sementara; dipulihkan dalam trap
 cp resources/help/guides.json "$ASAL"
 
 pulih() {
@@ -25,7 +25,7 @@ git show 9619509:resources/help/guides.json > resources/help/guides.json || exit
 node -e "const d=require('./resources/help/guides.json'); console.log('  catalog_version', d.catalog_version)"
 php artisan optimize:clear > /dev/null 2>&1
 DIWAN_LOGIN_RATE_LIMIT=100 AB_LABEL=lama AB_HAD=24 \
-  node "C:/Users/hakim/AppData/Local/Temp/claude/C--Projek-Coding-Sistem-Pengurusan-Dokumen-Masjid/e88973f3-ecbe-4b56-9c1e-7b82460d73b0/scratchpad/ab-ukur.mjs"
+  node "Audit Review Round Robin/bukti/plan-f8/skrip/ab-ukur.mjs"
 
 echo
 echo "=== B: katalog SEMASA (sasaran spesifik) ==="
@@ -33,4 +33,4 @@ cp "$ASAL" resources/help/guides.json
 node -e "const d=require('./resources/help/guides.json'); console.log('  catalog_version', d.catalog_version)"
 php artisan optimize:clear > /dev/null 2>&1
 DIWAN_LOGIN_RATE_LIMIT=100 AB_LABEL=semasa AB_HAD=24 \
-  node "C:/Users/hakim/AppData/Local/Temp/claude/C--Projek-Coding-Sistem-Pengurusan-Dokumen-Masjid/e88973f3-ecbe-4b56-9c1e-7b82460d73b0/scratchpad/ab-ukur.mjs"
+  node "Audit Review Round Robin/bukti/plan-f8/skrip/ab-ukur.mjs"

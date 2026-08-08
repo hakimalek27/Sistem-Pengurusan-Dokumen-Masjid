@@ -1,0 +1,704 @@
+{
+  "config": {
+    "argv": [
+      "/opt/hostedtoolcache/node/22.23.1/x64/bin/node",
+      "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/node_modules/.bin/playwright",
+      "test",
+      "--project=ci-a11y"
+    ],
+    "configFile": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/playwright.config.js",
+    "rootDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+        "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+        "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+      },
+      "gitCommit": {
+        "shortHash": "2325bec",
+        "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+        "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+        "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+        "author": {
+          "name": "hakimalek27",
+          "email": "azanmalek@maiwp.gov.my",
+          "time": 1786132050000
+        },
+        "committer": {
+          "name": "hakimalek27",
+          "email": "azanmalek@maiwp.gov.my",
+          "time": 1786132050000
+        },
+        "branch": "main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "ci-guidance",
+        "name": "ci-guidance",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/ci-session-canary.spec.js",
+          "e2e/guidance.spec.js",
+          "e2e/guidance-f5.spec.js",
+          "e2e/panel-landing.spec.js",
+          "e2e/registration.spec.js",
+          "e2e/explore.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "unit",
+        "name": "unit",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/step-advance-plan.spec.js",
+          "e2e/nav-target-plan.spec.js",
+          "e2e/page-target-plan.spec.js",
+          "e2e/viewer-control-plan.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "ci-domain",
+        "name": "ci-domain",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/office-workflow.spec.js",
+          "e2e/ddms-extended.spec.js",
+          "e2e/document-viewer.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "ci-a11y",
+        "name": "ci-a11y",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/a11y-axe.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "ci-ocr",
+        "name": "ci-ocr",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/ocr-upload.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/commit/2325becb4828724f0f46f22712eefefcf43a276d",
+            "commitHash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "buildHref": "https://github.com/hakimalek27/Sistem-Pengurusan-Dokumen-Masjid/actions/runs/31213031582"
+          },
+          "gitCommit": {
+            "shortHash": "2325bec",
+            "hash": "2325becb4828724f0f46f22712eefefcf43a276d",
+            "subject": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)",
+            "body": "fix(e2e): penjaga W5d mengikut sasaran katalog yang ditukar (punca CI 31211426672)\n\nCI merah pada SATU ujian: guidance-f5.spec.js \"F6-W5d sorotan tour bertahan selepas morph\nLivewire\". Penjaga itu mengekod sasaran tenant.bantuan#1 pada TIGA tempat — pemerhati\nmutasi, prasyarat keterlihatan, dan assertion akhir — dan sasaran itu ialah tepat yang\n01e65da tukar (help-search -> help-search-form).\n\nIa merah atas sebab yang BETUL: penjaga mengikut katalog, bukan sebaliknya. Kedua-dua nod\nberada dalam komponen help-center yang sama, jadi senario morph yang dikunci kekal identik;\nhanya nod yang diperhatikan berubah. Pemerhati sengaja TIDAK dilonggarkan kepada mana-mana\n[data-help-target] — ketepatan nod ialah sebahagian daripada apa yang penjaga buktikan.\n\nJob guidance-e2e-gate turut merah, tetapi itu akibat: shard matriks `skipped` apabila lapis 1\ngagal dan agregator melaporkan \"missing shard (tidak berjalan != lulus)\". Gagal-tertutup\nberkelakuan betul.\n\nJURANG PROSES yang ini dedahkan: gate 3 shard (guidance-full) TIDAK memuatkan\nguidance-f5.spec.js — fail itu hidup dalam projek ci-guidance. Gate penuh 40 minit boleh\nhijau sepenuhnya sambil check WAJIB merah. Skrip ditambah supaya ia tidak berulang:\nbukti/plan-f7-hutang/skrip/jalan-ci-guidance.sh\n\nBukti dua arah tanpa memasang regresi: CI 31211426672 = arah MERAH (sasaran tidak sepadan);\nlarian tempatan selepas pembetulan = arah HIJAU, dua kali (14.7s, 12.2s). Baki 35 ujian\nci-guidance sudah LULUS di CI pada 01e65da dengan katalog baharu.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01VcqkMaF7RVVE9p1teWg72T\n",
+            "author": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "committer": {
+              "name": "hakimalek27",
+              "email": "azanmalek@maiwp.gov.my",
+              "time": 1786132050000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "guidance-full",
+        "name": "guidance-full",
+        "testDir": "/home/runner/work/Sistem-Pengurusan-Dokumen-Masjid/Sistem-Pengurusan-Dokumen-Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/guidance-full.spec.js"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "storage/app/plan-ci/ci-a11y.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "a11y-axe.spec.js",
+      "file": "a11y-axe.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "axe awam /bantuan — desktop 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3062,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:13.748Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-0558a034c2a22e8b5b1e",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe papan pemuka — desktop 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4774,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:17.017Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-02d7eaeabfdd756d45f9",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe peti masuk — desktop 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4934,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:21.814Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-ba5ba4a7535d6caed5a1",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe rekod — desktop 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4899,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:26.765Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-353ff7be36f7fc493127",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe fail registri — desktop 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:31.687Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-9ac87527c942daf886ba",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe awam /bantuan — mobile 390×664",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2761,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:36.747Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-52063f472f96fdeaeef1",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe papan pemuka — mobile 390×664",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4612,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:39.524Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-4d0fc970200068eb8828",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe peti masuk — mobile 390×664",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4732,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:44.153Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-d42de6a2a1aff2033472",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe rekod — mobile 390×664",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:48.905Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-80484ea5d421c569b07c",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe fail registri — mobile 390×664",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4939,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:53.669Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-4623112dd40ec51480c5",
+          "file": "a11y-axe.spec.js",
+          "line": 75,
+          "column": 9
+        },
+        {
+          "title": "axe benar-benar berjalan — pelanggaran yang disuntik DIKESAN",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "ci-a11y",
+              "projectName": "ci-a11y",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 846,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-07T20:11:58.625Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "14125ad8c45f6dd61462-685d013651481d187aea",
+          "file": "a11y-axe.spec.js",
+          "line": 110,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-07T20:11:13.207Z",
+    "duration": 46386.535,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
