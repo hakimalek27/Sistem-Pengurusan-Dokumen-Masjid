@@ -53,26 +53,65 @@ function Invoke-ServerArtisan {
     if ($LASTEXITCODE -ne 0) { throw "SSH artisan gagal (exit $LASTEXITCODE): $ArtisanArgs" }
 }
 
+# 🔴 F8 (Codex P2 #12) — artisan berjalan DALAM kontena `app`, jadi `--json=/tmp/...` menulis ke
+# `/tmp` KONTENA. Versi terdahulu membaca dan memadamnya dengan `ssh $Server "cat /tmp/..."`,
+# iaitu `/tmp` HOS — fail itu tidak pernah ada di sana. Dua akibat: fail inventori yang
+# "disalin" sebenarnya KOSONG, dan fail kredensial KEKAL hidup di dalam kontena.
+# Kedua-dua operasi kini berlaku di tempat fail itu benar-benar berada.
+function Get-ContainerFile {
+    param([string] $Path)
+    $out = ssh $Server "cd $ComposeDir && docker compose exec -T app sh -lc 'cat $Path'"
+    if ($LASTEXITCODE -ne 0) { throw "Gagal membaca fail kontena: $Path" }
+    return $out
+}
+
+function Remove-ContainerFile {
+    param([string] $Path)
+    ssh $Server "cd $ComposeDir && docker compose exec -T app sh -lc 'rm -f $Path'" | Out-Null
+}
+
+function Set-ContainerFile {
+    param([string] $Path, [string] $Content)
+    $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Content))
+    ssh $Server "cd $ComposeDir && docker compose exec -T app sh -lc 'echo $b64 | base64 -d > $Path'" | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Gagal menulis fail kontena: $Path" }
+}
+
 $serverSecret = "/tmp/diwan-audit-$RunUuid.json"
+# Inventori TEREDAKSI (ID sahaja, TIADA kata laluan) dikekalkan dalam kontena supaya
+# `cleanup` boleh memadam ikut ID — lihat komen #13 di bawah.
+$serverInventory = "/tmp/diwan-audit-$RunUuid.inventory.json"
 $localSecret = Join-Path $env:TEMP "diwan-audit-$RunUuid.json"
 
 try {
     # Inventori BEFORE (read-only).
     Invoke-ServerArtisan "diwan:audit-fixture inventory --run=$RunUuid --json=$serverSecret.before" |
         Tee-Object -FilePath $log -Append
-    ssh $Server "cat $serverSecret.before" | Set-Content (Join-Path $evidenceDir 'inventory-before.json')
-    ssh $Server "rm -f $serverSecret.before"
+    Get-ContainerFile "$serverSecret.before" | Set-Content (Join-Path $evidenceDir 'inventory-before.json')
+    Remove-ContainerFile "$serverSecret.before"
 
     if (-not $CleanupOnly) {
         # PREPARE — kredensial role ditulis ke fail server sementara, ditarik ke fail lokal
         # ber-ACL ketat, kemudian DIPADAM di server. Superadmin tidak disentuh command.
         Invoke-ServerArtisan "diwan:audit-fixture prepare --run=$RunUuid --json=$serverSecret" |
             Tee-Object -FilePath $log -Append
-        ssh $Server "cat $serverSecret" | Set-Content $localSecret
-        ssh $Server "rm -f $serverSecret"
+        Get-ContainerFile $serverSecret | Set-Content $localSecret
         icacls $localSecret /inheritance:r /grant:r "$($env:USERNAME):(R)" | Out-Null
 
         $inventoryJson = Get-Content $localSecret -Raw | ConvertFrom-Json
+
+        # 🔴 F8 (Codex P2 #13) — `cleanup --force` TANPA `--json` memadam ikut corak e-mel dan
+        # slug, bukan ikut ID `created`. Itu bercanggah dengan kontrak §9.1a "padam hanya ID
+        # yang dicipta larian ini". Tetapi fail kredensial penuh TIDAK boleh ditinggalkan dalam
+        # kontena (#12). Penyelesaian: tulis inventori TEREDAKSI — `run_uuid` + `slug` +
+        # `created` sahaja, TIADA kata laluan — dan padam fail penuh dari kontena sekarang.
+        $redacted = @{
+            run_uuid = $inventoryJson.run_uuid
+            slug     = $inventoryJson.slug
+            created  = $inventoryJson.created
+        } | ConvertTo-Json -Depth 8
+        Set-ContainerFile $serverInventory $redacted
+        Remove-ContainerFile $serverSecret
         ($inventoryJson | Select-Object run_uuid, slug, created |
             ConvertTo-Json -Depth 6) | Set-Content (Join-Path $evidenceDir 'inventory-created.json')
 
@@ -109,17 +148,52 @@ try {
 finally {
     # CLEANUP sentiasa berjalan (Ctrl-C/ralat/putus rangkaian larian seterusnya guna -CleanupOnly).
     try {
-        Invoke-ServerArtisan "diwan:audit-fixture cleanup --run=$RunUuid --force" |
-            Tee-Object -FilePath $log -Append
+        # Padam ikut ID inventori. `--force` HANYA dalam mod -CleanupOnly (pemulihan), di mana
+        # tiada inventori tersedia dan padanan run-uuid ialah satu-satunya jalan.
+        $cleanupArgs = if ($CleanupOnly) {
+            "diwan:audit-fixture cleanup --run=$RunUuid --force"
+        } else {
+            "diwan:audit-fixture cleanup --run=$RunUuid --json=$serverInventory"
+        }
+        Invoke-ServerArtisan $cleanupArgs | Tee-Object -FilePath $log -Append
         Invoke-ServerArtisan "diwan:audit-fixture inventory --run=$RunUuid --json=$serverSecret.after" |
             Tee-Object -FilePath $log -Append
-        ssh $Server "cat $serverSecret.after" | Set-Content (Join-Path $evidenceDir 'inventory-after.json')
-        ssh $Server "rm -f $serverSecret.after $serverSecret"
+        Get-ContainerFile "$serverSecret.after" | Set-Content (Join-Path $evidenceDir 'inventory-after.json')
+        Remove-ContainerFile "$serverSecret.after"
+        Remove-ContainerFile $serverSecret
+        Remove-ContainerFile $serverInventory
     } catch {
         "AMARAN cleanup: $($_.Exception.Message) — jalankan semula dengan -CleanupOnly -RunUuid $RunUuid" |
             Tee-Object -FilePath $log -Append
     }
     if (Test-Path $localSecret) { Remove-Item -Force $localSecret }
+
+    # 🔴 F8 (Codex P2 #13) — sebelum ini `before`/`after` hanya DITULIS, deltanya tidak pernah
+    # diassert. Inventori yang menunjukkan baki tenant/akaun larian ini kini RALAT, bukan nota.
+    $afterPath = Join-Path $evidenceDir 'inventory-after.json'
+    if (Test-Path $afterPath) {
+        try {
+            # ⚠️ Bentuk JSON DIUKUR pada keluaran `diwan:audit-fixture inventory` yang sebenar:
+            #     { run_uuid, slug, counts, run_scoped: { mosque_exists, run_users }, superadmin }
+            # Versi pertama semakan ini meneka `after.mosques.slugs` / `after.users.emails` —
+            # medan yang TIDAK WUJUD, jadi ia sentiasa memberi 0 dan lulus secara VAKUM.
+            $after = Get-Content $afterPath -Raw | ConvertFrom-Json
+            $bakiMosque = [bool] $after.run_scoped.mosque_exists
+            $bakiUser = [int] $after.run_scoped.run_users
+            "delta cleanup: mosque_exists=$bakiMosque run_users=$bakiUser" | Tee-Object -FilePath $log -Append
+            if ($null -eq $after.run_scoped) {
+                throw "Inventori AFTER tiada blok `run_scoped` — bentuk berubah, semakan delta tidak sah."
+            }
+            if ($bakiMosque -or $bakiUser -gt 0) {
+                throw "CLEANUP TIDAK LENGKAP: tenant_ada=$bakiMosque akaun_baki=$bakiUser bagi larian $RunUuid. " +
+                      "Jalankan: -CleanupOnly -RunUuid $RunUuid"
+            }
+        } catch {
+            "AMARAN delta: $($_.Exception.Message)" | Tee-Object -FilePath $log -Append
+            throw
+        }
+    }
+
     "tamat=$(Get-Date -Format o)" | Tee-Object -FilePath $log -Append
 }
 
