@@ -63,6 +63,35 @@ async function login(page, email, password, loginPath, homePattern) {
     lastLoginAt = Date.now();
 }
 
+// F8 (Codex P2 #14) — semakan per-halaman yang SEBELUM INI hanya dipakai pada role tenant.
+// Blok `public` hanya mengassert status 200, dan `superadmin` melangkau overflow — jadi dua
+// daripada sepuluh identiti tidak pernah diperiksa untuk landmark atau overflow mendatar.
+async function assertHalamanSihat(page, expect, label) {
+    await expect(page.locator('main')).toBeVisible();
+    const overflow = await page.evaluate(() => Math.max(
+        document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0,
+    ) - window.innerWidth);
+    expect(overflow, `${label} overflow mendatar`).toBeLessThanOrEqual(2);
+}
+
+// Tiga pertanyaan §9.1 jurang (2). ⚠️ Mengassert `.diwan-help-search-status` KELIHATAN sahaja
+// tidak bermakna — elemen itu sentiasa ada. Yang diassert di sini ialah TEKSNYA berubah dan
+// membezakan "ada hasil" daripada "0 hasil".
+async function assertCarianBantuan(page, expect, label) {
+    const status = page.locator('.diwan-help-search-status');
+    const hasil = [];
+    for (const query of ['Peti Masuk', 'klasfikasi surat', 'zzqqxx-tiada-langsung']) {
+        await page.locator('#help-query').fill(query);
+        await page.getByRole('button', { name: 'Cari', exact: true }).click();
+        await expect(status).toBeVisible();
+        await expect(status).not.toBeEmpty();
+        hasil.push(((await status.textContent()) ?? '').trim());
+    }
+    // Pertanyaan karut MESTI memberi keadaan "0 hasil"; pertanyaan tepat MESTI tidak.
+    expect(hasil[2], `${label}: query karut sepatutnya 0 hasil — dapat "${hasil[2]}"`).toContain('0 hasil');
+    expect(hasil[0], `${label}: query tepat memberi 0 hasil — carian mungkin rosak`).not.toContain('0 hasil');
+}
+
 function monitorBrowserErrors(page) {
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
@@ -99,8 +128,16 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
             for (const item of routesFor('public').filter((r) => r.template.startsWith('/'))) {
                 const response = await page.goto(item.url);
                 expect(response?.status(), `public ${viewport.name}: ${item.url}`).toBe(200);
+                await assertHalamanSihat(page, expect, `public ${viewport.name} ${item.url}`);
                 visited.push({ url: item.url, status: response?.status() });
             }
+
+            // (1)+(2) untuk AWAM juga — sebelum ini hanya role tenant yang diuji.
+            await page.goto('/bantuan?panduan=public.help&langkah=0');
+            await expect(page.locator('.driver-popover')).toBeVisible();
+            await page.locator('.driver-popover-close-btn').click();
+            await assertCarianBantuan(page, expect, `public ${viewport.name}`);
+
             expect([...new Set(errors)]).toEqual([]);
             inventory.push({ viewport: viewport.name, identity: 'public', pages: visited });
             await context.close();
@@ -115,11 +152,17 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
             await login(page, process.env.E2E_PROD_SUPERADMIN_EMAIL, process.env.E2E_PROD_SUPERADMIN_PASSWORD,
                 '/admin/login', /\/admin\/?$/);
             const visited = [];
-            for (const item of rr.entries.filter((e) => e.identity === 'superadmin' && e.panel === 'admin' && e.expected_access === 'allow')) {
-                const response = await page.goto(item.url);
-                expect(response?.status(), `superadmin ${viewport.name}: ${item.url}`).toBe(200);
-                await expect(page.locator('main')).toBeVisible();
-                visited.push({ url: item.url, status: response?.status() });
+            // ⚠️ Sebelum ini hanya panel `admin` dilawati, jadi 25 halaman panel `app` yang
+            // superadmin BOLEH capai tidak pernah diperiksa (Codex P2 #14).
+            const laluanSuperadmin = rr.entries.filter((e) => e.identity === 'superadmin'
+                && e.expected_access === 'allow'
+                && (e.panel === 'admin' || e.panel === 'app'));
+            for (const item of laluanSuperadmin) {
+                const url = item.url.replaceAll('/app/mam', `/app/${tenantSlug}`);
+                const response = await page.goto(url);
+                expect(response?.status(), `superadmin ${viewport.name}: ${url}`).toBe(200);
+                await assertHalamanSihat(page, expect, `superadmin ${viewport.name} ${url}`);
+                visited.push({ url, status: response?.status() });
             }
             // (1) satu tour read-only (telemetri diisytihar dalam laporan larian).
             const tour = tourForRole('superadmin');
@@ -163,11 +206,7 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
 
                 // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah DDMS).
                 await page.goto(`/app/${tenantSlug}/bantuan`);
-                for (const query of ['Peti Masuk', 'klasfikasi surat', 'DDMS']) {
-                    await page.locator('#help-query').fill(query);
-                    await page.getByRole('button', { name: 'Cari', exact: true }).click();
-                    await expect(page.locator('.diwan-help-search-status')).toBeVisible();
-                }
+                await assertCarianBantuan(page, expect, `${account.role} ${viewport.name}`);
 
                 // Probe silang-tenant 404 (S1) — tenant sebenar TIDAK dilog masuk, hanya URL.
                 const cross = await page.goto('/app/mamad/records');

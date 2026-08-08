@@ -86,3 +86,20 @@ data tempatan — jadi larian produksi kekal satu arahan, bukan satu eksperimen.
 🔑 **Pelajaran:** perkakas yang menunggu kebergantungan luaran mesti dilatih terhadap sasaran
 TEMPATAN dahulu. "Ia belum pernah dijalankan" bukan status neutral — ia bermakna tidak diketahui,
 dan §9.1a mendapati "tidak diketahui" bermaksud "rosak" selama beberapa fasa.
+
+
+## ⚠️ `No tests found` kini ada DUA punca — jangan tersalah diagnosis
+
+Selepas pembaikan project, mesej yang sama masih boleh muncul atas sebab yang **berbeza dan
+disengajakan**: spec melempar semasa import jika env wajib tiada (`E2E_PRODUCTION`,
+`E2E_PROD_TENANT`, `E2E_PROD_ROLE_ACCOUNTS`, `E2E_PROD_SUPERADMIN_*`, `E2E_PROD_REPORT`),
+jadi Playwright mengumpul sifar ujian.
+
+```
+tanpa env  -> Total: 0 tests in 0 files     (penjaga env — BETUL)
+dengan env -> Total: 1 test in 1 file       (project + env kedua-duanya baik)
+```
+
+Cara membezakan: tetapkan env dummy dan `--list` semula. Jika ia muncul, masalahnya env; jika
+masih 0, masalahnya project/`testMatch`. Wrapper menetapkan env sebelum melancarkan, jadi ia
+tidak terdedah kepada punca pertama.
