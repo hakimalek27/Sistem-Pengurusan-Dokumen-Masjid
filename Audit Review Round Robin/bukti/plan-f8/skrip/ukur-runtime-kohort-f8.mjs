@@ -22,6 +22,29 @@ const { chromium } = await import(
 );
 import { readFileSync, writeFileSync } from 'node:fs';
 
+// ── Provenance (Codex P2 #1/#17) ──────────────────────────────────────────────────────────
+// Artifak tanpa provenance tidak boleh diaudit: dua larian versi berbeza boleh dicampur dan
+// tetap kelihatan lengkap. Setiap fail ukuran kini membawa commit, versi+hash katalog, tenant,
+// base URL, viewport dan masa.
+async function provenance(extra = {}) {
+    const { execSync } = await import('node:child_process');
+    const { createHash } = await import('node:crypto');
+    let commit = 'tidak-diketahui';
+    try { commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(); } catch { /* noop */ }
+    // ⚠️ JANGAN telan kegagalan ini. Versi katalog ialah medan provenance yang PALING penting
+    // (bagi A/B ia satu-satunya yang membuktikan fail `ab-lama` benar-benar sisi katalog lama).
+    // Versi pertama membalutnya dalam try/catch dan menghasilkan `katalog_version: null` secara
+    // senyap kerana `readFileSync` tidak diimport — provenance yang gagal senyap lebih buruk
+    // daripada tiada provenance.
+    const mentah = readFileSync('resources/help/guides.json', 'utf8');
+    const katalogVersi = JSON.parse(mentah).catalog_version ?? null;
+    const katalogHash = createHash('sha256').update(mentah).digest('hex').slice(0, 16);
+    if (!katalogVersi) throw new Error('provenance: catalog_version tidak dapat dibaca');
+
+    return { commit, katalog_version: katalogVersi, katalog_sha256_16: katalogHash,
+        masa: new Date().toISOString(), ...extra };
+}
+
 const BASE = process.env.E2E_BASE_URL || 'http://127.0.0.1:8092';
 const TENANT = process.env.E2E_TENANT || 'mam';
 const KATA = process.env.MANUAL_DEMO_PASSWORD || 'password';
@@ -122,7 +145,8 @@ console.log(`  placeholder "Langkah N": ${placeholder.length}   (asas audit 118 
 if (sama.length) console.log('  contoh title==description:', sama.slice(0, 5).map((h) => h.key).join(', '));
 
 writeFileSync(KELUAR, JSON.stringify({
-    lengkap: true,
+    provenance: await provenance({ tenant: TENANT, base_url: BASE, viewport: '1440x1000' }),
+    lengkap: hasil.length === kohort.length,
     definisi: 'title==description selepas buang noktah akhir; terpotong = tajuk berakhir elipsis',
     asas_audit: { title_equals_description: 77, truncated: 20, cta_buat_pada_skrin: 20 },
     kini: {

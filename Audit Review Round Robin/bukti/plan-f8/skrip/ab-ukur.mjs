@@ -14,7 +14,30 @@
 const { chromium } = await import(
     'file:///C:/Projek%20Coding/Sistem%20Pengurusan%20Dokumen%20Masjid/node_modules/playwright/index.mjs'
 );
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
+
+// ── Provenance (Codex P2 #1/#17) ──────────────────────────────────────────────────────────
+// Artifak tanpa provenance tidak boleh diaudit: dua larian versi berbeza boleh dicampur dan
+// tetap kelihatan lengkap. Setiap fail ukuran kini membawa commit, versi+hash katalog, tenant,
+// base URL, viewport dan masa.
+async function provenance(extra = {}) {
+    const { execSync } = await import('node:child_process');
+    const { createHash } = await import('node:crypto');
+    let commit = 'tidak-diketahui';
+    try { commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(); } catch { /* noop */ }
+    // ⚠️ JANGAN telan kegagalan ini. Versi katalog ialah medan provenance yang PALING penting
+    // (bagi A/B ia satu-satunya yang membuktikan fail `ab-lama` benar-benar sisi katalog lama).
+    // Versi pertama membalutnya dalam try/catch dan menghasilkan `katalog_version: null` secara
+    // senyap kerana `readFileSync` tidak diimport — provenance yang gagal senyap lebih buruk
+    // daripada tiada provenance.
+    const mentah = readFileSync('resources/help/guides.json', 'utf8');
+    const katalogVersi = JSON.parse(mentah).catalog_version ?? null;
+    const katalogHash = createHash('sha256').update(mentah).digest('hex').slice(0, 16);
+    if (!katalogVersi) throw new Error('provenance: catalog_version tidak dapat dibaca');
+
+    return { commit, katalog_version: katalogVersi, katalog_sha256_16: katalogHash,
+        masa: new Date().toISOString(), ...extra };
+}
 
 const BASE = 'http://127.0.0.1:8092';
 const T = 'mam';
@@ -80,6 +103,7 @@ for (const h of hasil) {
 writeFileSync(
     `Audit Review Round Robin/bukti/plan-f8/ab-${LABEL}.json`,
     JSON.stringify({
+        provenance: await provenance({ tenant: T, base_url: BASE, viewport: '390x664' }),
         label: LABEL,
         pemilihan: '8 guide tenant × 3 langkah pertama; guide dengan >=3 langkah dalam KEDUA-DUA katalog',
         definisi: 'centerCovered = rect popover mengandungi (innerWidth/2, innerHeight/2) pada 390x664',

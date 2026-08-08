@@ -1,4 +1,13 @@
 {
+  "provenance": {
+    "commit": "83a3802",
+    "katalog_version": "2026.07.22.2",
+    "katalog_sha256_16": "7c9b43ff378e9435",
+    "masa": "2026-08-08T20:09:39.454Z",
+    "tenant": "mam",
+    "base_url": "http://127.0.0.1:8092",
+    "viewport": "390x664"
+  },
   "label": "lama",
   "pemilihan": "8 guide tenant × 3 langkah pertama; guide dengan >=3 langkah dalam KEDUA-DUA katalog",
   "definisi": "centerCovered = rect popover mengandungi (innerWidth/2, innerHeight/2) pada 390x664",

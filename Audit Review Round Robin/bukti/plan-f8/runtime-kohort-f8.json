@@ -1254,5 +1254,6 @@
       "description": "Pastikan panel, tenant dan role semasa adalah betul.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
       "button": "Kembali | Selesai"
     }
-  ]
+  ],
+  "provenance_nota": "LARIAN INI MENDAHULUI penambahan provenance (Codex P2 #1). Commit tepat, hash katalog dan masa TIDAK direkod pada masa larian; menambahnya sekarang secara retroaktif akan menjadi provenance palsu. Yang DIKETAHUI: sesi 8-9 Ogos 2026, tenant tempatan mam, benih demo, katalog 2026.08.08.2. Larian berikutnya akan membawa provenance sebenar."
 }
