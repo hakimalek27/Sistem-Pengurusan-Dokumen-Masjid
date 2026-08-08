@@ -8,6 +8,11 @@ return [
         'support_enabled' => filter_var(env('DIWAN_SUPPORT_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
         'catalog_path' => resource_path('help/guides.json'),
         'help_index' => env('DIWAN_HELP_INDEX', 'diwan_help_guides'),
+        // Tempoh (saat) untuk panggilan carian Meilisearch. Tanpa nilai eksplisit, klien
+        // mewarisi lalai yang panjang: DIUKUR 24,232 ms pada laluan timeout sebenar sebelum
+        // fallback PHP menyelamatkan hasil (F8 §9.2). Fallback pantas, jadi menunggu lama tidak
+        // memberi apa-apa — ia hanya menyekat halaman bantuan.
+        'meilisearch_timeout' => (float) env('DIWAN_MEILISEARCH_TIMEOUT', 2.0),
         'analytics_retention_days' => (int) env('DIWAN_HELP_ANALYTICS_RETENTION_DAYS', 90),
         'support_retention_months' => (int) env('DIWAN_SUPPORT_RETENTION_MONTHS', 24),
         'support_attachment_max_kb' => 5120,

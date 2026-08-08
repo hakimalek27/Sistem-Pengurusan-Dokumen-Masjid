@@ -79,12 +79,15 @@ it('(a2) Meilisearch TERGANTUNG (timeout, bukan refused) — fallback menyelamat
     // timeout. Tiada rangkaian LUAR diperlukan (peraturan #5 CLAUDE.md) — paket tidak pergi
     // ke mana-mana.
     //
-    // 🔴 DIUKUR: 24,232 ms. Fallback MEMANG menyelamatkan hasil (10 guide, `engine=php`) —
-    // tetapi pengguna menunggu ~24 saat dahulu. Itu lebih buruk daripada "carian jadi cetek":
-    // halaman tersekat. Klien Meilisearch tiada tempoh eksplisit; ia mewarisi lalai.
-    // Cadangan (BUKAN dibuat di F8 — perubahan produk): beri klien tempoh eksplisit ~2s.
+    // 🔴 DIUKUR SEBELUM PEMBAIKAN: 24,232 ms. Fallback MEMANG menyelamatkan hasil, tetapi
+    // pengguna menunggu ~24 saat dahulu — halaman bantuan TERSEKAT, bukan sekadar cetek.
+    // Puncanya: klien Meilisearch tiada tempoh eksplisit dan mewarisi lalai yang panjang.
     //
-    // Ujian ini OPT-IN kerana ia menambah ~24s kepada suite. `DIWAN_SLOW_TESTS=1` menghidupkannya.
+    // ✅ DIBAIKI: `diwan.guidance.meilisearch_timeout` (lalai 2.0s) dihantar kepada klien HTTP.
+    // DIUKUR SELEPAS: **2,085 ms**, hasil dan `engine=php` tidak berubah. 12x lebih pantas.
+    //
+    // Kerana ia kini ~2s, ujian ini BUKAN lagi opt-in — ia berjalan setiap larian dan menjaga
+    // tempoh itu daripada hilang secara senyap.
     config()->set('scout.meilisearch.host', 'http://192.0.2.1:7700');
     config()->set('scout.meilisearch.key', 'kunci-tidak-sah');
 
@@ -95,10 +98,12 @@ it('(a2) Meilisearch TERGANTUNG (timeout, bukan refused) — fallback menyelamat
     expect($hasil)->not->toBeEmpty('fallback TIDAK menyelamatkan carian apabila Meili tergantung');
     expect(data_get(HelpEvent::query()->latest('id')->first()->metadata, 'engine'))->toBe('php');
 
-    // Sempadan atas yang generous — ia mendokumenkan tingkah laku, bukan mengunci prestasi.
-    // Jika ia melebihi 60s, sesuatu berubah menjadi lebih buruk dan patut disiasat.
-    expect($ms)->toBeLessThan(60_000, "laluan timeout mengambil {$ms} ms — semak tempoh klien");
-})->skip(! env('DIWAN_SLOW_TESTS'), 'ujian LAMBAT (~24s) — hidupkan dengan DIWAN_SLOW_TESTS=1');
+    // Sempadan: tempoh dikonfigurasi 2.0s, jadi 8s memberi ruang luas untuk mesin perlahan
+    // sambil tetap MERAH jika tempoh itu dibuang (yang akan mengembalikan ~24s).
+    $had = (int) (config('diwan.guidance.meilisearch_timeout') * 4000);
+    expect($ms)->toBeLessThan($had,
+        "laluan timeout mengambil {$ms} ms (had {$had} ms) — tempoh klien Meilisearch mungkin hilang");
+});
 
 it('(b) korpus yang diindeks tidak mengandungi data tenant atau pengguna', function () {
     // Medan yang benar-benar diindeks (disahkan pada indeks PRODUKSI, 8 Ogos 2026):

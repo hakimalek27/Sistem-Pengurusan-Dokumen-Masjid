@@ -23,9 +23,20 @@ class HelpSearchService
 
         if ($query !== '' && filled(config('scout.meilisearch.host', env('MEILISEARCH_HOST')))) {
             try {
+                // 🔴 F8 §9.2 — klien TANPA tempoh eksplisit mewarisi lalai yang sangat panjang.
+                // DIUKUR pada laluan timeout sebenar (RFC 5737 TEST-NET-1, tiada rangkaian
+                // luar): **24,232 ms** sebelum fallback PHP menyelamatkan hasil. Jadi apabila
+                // Meilisearch TERGANTUNG, carian bukan sekadar menjadi lebih cetek — halaman
+                // bantuan TERSEKAT ~24 saat sebelum memaparkan apa-apa.
+                //
+                // Fallback PHP sudah wujud dan pantas; satu-satunya yang hilang ialah keputusan
+                // untuk BERHENTI MENUNGGU. Tempoh pendek menjadikan degradasi hampir tidak
+                // dapat dirasai, dan `catch (Throwable)` di bawah sudah mengendalikan lemparannya.
+                $tempoh = (float) config('diwan.guidance.meilisearch_timeout', 2.0);
                 $client = new Client(
                     (string) config('scout.meilisearch.host', env('MEILISEARCH_HOST')),
                     (string) config('scout.meilisearch.key', env('MEILISEARCH_KEY')),
+                    new \GuzzleHttp\Client(['timeout' => $tempoh, 'connect_timeout' => $tempoh]),
                 );
                 $response = $client->index((string) config('diwan.guidance.help_index'))->search($query, ['limit' => 30]);
                 $results = collect($response->getHits())

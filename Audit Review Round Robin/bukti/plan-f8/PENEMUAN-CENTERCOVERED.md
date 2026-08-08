@@ -119,10 +119,23 @@ bahagian tengah tidak merosakkan UX"). Bagi kes ini, ia **dibuktikan tidak meros
 kelihatan penuh dan tidak terlindung. Ia satu kes, bukan 45 — tetapi ia kes yang metrik itu
 tandakan merah.
 
-ℹ️ **Nota kaedah:** MCP Chrome dicuba dahulu dan **tidak boleh** melayani tujuan ini — tab
-kumpulan MCP melaporkan `outer: 0x0`, tidak menghormati `resize_window` (viewport kekal
-1920×889), dan `visibilityState` kekal `hidden`. Itu had struktur yang SAMA yang menyebabkan
-penggera palsu #73. Diukur, kemudian kaedah terkawal digunakan.
+ℹ️ **Nota kaedah — MCP Chrome DIUKUR tidak boleh melayani tujuan ini (tiga probe bebas):**
+
+```
+1. document.visibilityState  -> "hidden"   pada SETIAP tab MCP (yang dicipta DAN sedia ada)
+2. outerWidth x outerHeight  -> 0x0        tetingkap tiada dimensi; resize_window diakui
+                                            tetapi viewport kekal 1920x889
+3. Page.captureScreenshot    -> CDP timeout 30s, "renderer may be frozen"
+```
+
+Ketiga-tiganya menunjuk punca yang SAMA, dan ia punca yang sama seperti penemuan **#73**:
+tetingkap kumpulan MCP pada mesin ini tidak pernah dipaparkan, jadi Chrome membekukan
+pemasa dan rendering di dalamnya. Ia bukan langkah yang dilangkau — ia had persekitaran yang
+diukur, dan kaedah terkawal (Playwright pada 390×664 tepat) digunakan sebagai gantinya.
+
+🔑 Ini menjadikan #73 lebih bernilai daripada satu penggera palsu: had yang sama akan
+menjatuhkan **mana-mana** pengesahan visual melalui MCP pada mesin ini, jadi ia perlu diketahui
+sekali dan bukan ditemui semula setiap kali.
 
 ## 4. Apa yang saya TIDAK dakwa
 

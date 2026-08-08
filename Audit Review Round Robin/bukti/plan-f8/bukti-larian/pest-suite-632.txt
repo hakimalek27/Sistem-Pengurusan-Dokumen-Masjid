@@ -1,30 +1,30 @@
-  [32;1m✓[39;22m[90m [39m[90mit kemas kini routing hanya menyentuh pivot tenant yang dibenarkan[39m[90m                                          [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kemas kini routing hanya menyentuh pivot tenant yang dibenarkan[39m[90m                                          [39m [90m0.05s[39m  
   [32;1m✓[39;22m[90m [39m[90mit menolak pelakon tenant lain dan nombor pendua dalam tenant sama[39m[90m                                          [39m [90m0.06s[39m  
 
   [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppSettingsAccessTest[39m
-  [32;1m✓[39;22m[90m [39m[90mit hanya pemegang kebenaran tenant boleh membuka tetapan WhatsApp dan ahli[39m[90m                                  [39m [90m0.30s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit admin satu tenant tidak boleh membuka halaman tenant lain[39m[90m                                                [39m [90m0.06s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit nilai penuh api key tidak pernah dirender pada halaman tenant[39m[90m                                            [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit hanya pemegang kebenaran tenant boleh membuka tetapan WhatsApp dan ahli[39m[90m                                  [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit admin satu tenant tidak boleh membuka halaman tenant lain[39m[90m                                                [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nilai penuh api key tidak pernah dirender pada halaman tenant[39m[90m                                            [39m [90m0.18s[39m  
 
   [30;42;1m PASS [39;49;22m[39m Tests\Feature\WhatsAppWebhookTest[39m
   [32;1m✓[39;22m[90m [39m[90mit menolak HMAC salah dengan 401 tanpa maklumat[39m[90m                                                             [39m [90m0.06s[39m  
   [32;1m✓[39;22m[90m [39m[90mit fail-closed jika rahsia webhook WhatsApp belum dikonfigurasi[39m[90m                                             [39m [90m0.07s[39m  
   [32;1m✓[39;22m[90m [39m[90mit sesi tidak dikenali → 200 + tiada rekod[39m[90m                                                                  [39m [90m0.06s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit nombor asing tanpa kata kunci → SENYAP sepenuhnya (tiada balasan, tiada gelung §11.1)[39m[90m                    [39m [90m0.15s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit orang luar hantar kata kunci + dokumen → submission awam diterima (creator null)[39m[90m                         [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nombor asing tanpa kata kunci → SENYAP sepenuhnya (tiada balasan, tiada gelung §11.1)[39m[90m                    [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orang luar hantar kata kunci + dokumen → submission awam diterima (creator null)[39m[90m                         [39m [90m0.53s[39m  
   [32;1m✓[39;22m[90m [39m[90mit mod ahli-sahaja (allow_public_intake=false): orang luar + kata kunci + dokumen → SENYAP, tiada rekod[39m[90m     [39m [90m0.08s[39m  
   [32;1m✓[39;22m[90m [39m[90mit imej daripada ahli sah → peti masuk + ack sebut nama masjid[39m[90m                                              [39m [90m0.51s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit menerima envelope dan tandatangan webhook sebenar gateway termasuk media[39m[90m                                 [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menerima envelope dan tandatangan webhook sebenar gateway termasuk media[39m[90m                                 [39m [90m0.54s[39m  
   [32;1m✓[39;22m[90m [39m[90mit menyokong aliran dua langkah spdm kemudian dokumen dalam sesi tenant sama[39m[90m                                [39m [90m0.53s[39m  
   [32;1m✓[39;22m[90m [39m[90mit slot upload WhatsApp tidak boleh digunakan oleh nombor atau tenant lain[39m[90m                                  [39m [90m0.08s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit mengabaikan event lain, group, echo sendiri dan media tanpa kata kunci[39m[90m                                   [39m [90m0.08s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit message_id ulang → idempotensi, tiada rekod pendua[39m[90m                                                       [39m [90m0.50s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit message_id sama pada dua sesi tenant tidak saling menyekat[39m[90m                                               [39m [90m1.02s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit dokumen format tidak disokong (.zip) → tolak dengan mesej format, tiada rekod[39m[90m                            [39m [90m0.10s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit kuota penuh → balasan tolak, tiada rekod[39m[90m                                                                 [39m [90m0.07s[39m  
-  [32;1m✓[39;22m[90m [39m[90mit intake dimatikan → balasan tolak, tiada rekod[39m[90m                                                            [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mengabaikan event lain, group, echo sendiri dan media tanpa kata kunci[39m[90m                                   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit message_id ulang → idempotensi, tiada rekod pendua[39m[90m                                                       [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit message_id sama pada dua sesi tenant tidak saling menyekat[39m[90m                                               [39m [90m0.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dokumen format tidak disokong (.zip) → tolak dengan mesej format, tiada rekod[39m[90m                            [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kuota penuh → balasan tolak, tiada rekod[39m[90m                                                                 [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit intake dimatikan → balasan tolak, tiada rekod[39m[90m                                                            [39m [90m0.07s[39m  
   [32;1m✓[39;22m[90m [39m[90mit ahli MAM hantar kata kunci+dokumen ke sesi MAN → SENYAP, tiada rekod (isolasi §18.37)[39m[90m                    [39m [90m0.06s[39m  
 
-  [90mTests:[39m    [33;1m2 skipped[39;22m[90m,[39m[39m [39m[32;1m632 passed[39;22m[90m (5872 assertions)[39m
-  [90mDuration:[39m [39m230.06s[39m
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m633 passed[39;22m[90m (5875 assertions)[39m
+  [90mDuration:[39m [39m136.51s[39m
 
