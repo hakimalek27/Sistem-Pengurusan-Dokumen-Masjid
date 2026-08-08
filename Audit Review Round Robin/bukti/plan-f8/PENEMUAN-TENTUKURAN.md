@@ -79,3 +79,29 @@ untuk melangkau tentukuran.
 🔑 Corak yang boleh diuji: bagi mana-mana metrik "sebelum → selepas", jalankan alat pada
 **commit sebelum** dan tuntut ia memberi angka *sebelum*. Jika tidak boleh, alat itu mengukur
 perkara lain.
+
+
+## Susulan — Codex pusingan 2 (#3): metrik itu diukur SEMULA dengan betul
+
+Codex mendapati ukuran runtime membandingkan tajuk dengan **keseluruhan** `textContent`
+`.driver-popover-description`, yang mengandungi boilerplate:
+
+```
+p.diwan-tour-instruction   <- arahan TERAS
+p.diwan-tour-hint          "Baca penerangan ini, kemudian tekan Seterusnya."
+p.diwan-tour-status
+a.diwan-tour-article       "Buka panduan penuh"
+```
+
+Kebimbangannya sah: dengan boilerplate disertakan, `title == description` hampir **mustahil**,
+jadi `0` sebahagiannya dijamin oleh STRUKTUR dan bukan oleh kualiti kandungan.
+
+**Diukur semula pada arahan teras sahaja (124/124 popover): masih `0`.**
+
+Jadi jawapannya tidak berubah — tetapi sebabnya kini betul. Perbezaan antara "0 kerana metrik
+tidak boleh memberi apa-apa selain 0" dan "0 kerana tajuk memang berbeza daripada arahan"
+adalah keseluruhan nilai metrik itu. Artifak kini turut menyimpan `description_penuh` supaya
+kedua-dua bacaan boleh diaudit.
+
+🔑 Pelajaran: apabila metrik memberi jawapan yang menyenangkan, semak sama ada ia **boleh**
+memberi jawapan lain. Metrik yang hanya mampu satu nilai bukan ukuran.

@@ -110,7 +110,16 @@ for (const s of kohort) {
             return {
                 adaPopover: true,
                 title: pop.querySelector('.driver-popover-title')?.textContent?.trim() ?? '',
-                description: pop.querySelector('.driver-popover-description')?.textContent?.trim() ?? '',
+                // 🔴 Codex P2 #3: `.driver-popover-description` mengandungi arahan PLUS
+                // boilerplate — hint ("Baca penerangan ini, kemudian tekan Seterusnya"), baris
+                // status, dan pautan "Buka panduan penuh". Membandingkan tajuk dengannya
+                // menjadikan `title == description` hampir MUSTAHIL, jadi `0` sebahagiannya
+                // dijamin oleh STRUKTUR, bukan oleh kualiti kandungan.
+                // Arahan teras hidup dalam `p.diwan-tour-instruction` — itulah yang audit
+                // bandingkan (rekod auditnya membawa arahan sahaja, tanpa boilerplate).
+                description: pop.querySelector('.diwan-tour-instruction')?.textContent?.trim()
+                    ?? pop.querySelector('.driver-popover-description')?.textContent?.trim() ?? '',
+                description_penuh: pop.querySelector('.driver-popover-description')?.textContent?.trim() ?? '',
                 button: btn.join(' | '),
             };
         });
