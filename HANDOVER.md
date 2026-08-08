@@ -1,61 +1,65 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — ⚠️ **F8 BELUM SIAP** (`314f4b0`) · 14 penemuan TERBUKA (9 Ogos)
+## ▶️ SAMBUNG DI SINI — F8: 19/19 penemuan P2 DITANGANI · 3 keputusan pemilik (9 Ogos)
 
-**Produksi kekal `2325bec` (Deploy 14).** CI **31272447049 = hijau** pada `f6aed9c`.
-📄 **BACA DAHULU:** `Audit Review Round Robin/SUSULAN-PEMBAIKAN.md` §5C (senarai terbuka)
+**Produksi kekal `2325bec` (Deploy 14).** F8 TIDAK deploy. CI hijau pada `f6aed9c`.
+📄 **BACA DAHULU:** `Audit Review Round Robin/SUSULAN-PEMBAIKAN.md` §5C
 
-### 🔴 PENEMUAN TERBESAR F8 — runner produksi TIDAK BOLEH BERJALAN (DIBAIKI)
-
-`run-production-guidance-readonly.ps1` ialah satu-satunya titik masuk §9.1a, dan arahannya
-memberi **`Error: No tests found.`** Spec sengaja di luar setiap project Playwright supaya CI
-tidak menjalankannya; Playwright menapis ikut project → allowlist bercanggah dengan dirinya.
-Ia akan gagal **pada saat pemilik membekalkan kredensial**.
-Dibaiki: project `production-readonly` (bukan dalam ci.yml) + `--project` dalam wrapper →
-`Total: 1 test in 1 file`. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`
-⭐ Ditemui SERENTAK oleh saya (jalankan arahan) dan Codex P2 #11 (baca semantik project).
-
-### Round-robin §9.3: P1 **23** penemuan · P2 **19** penemuan → F8 BELUM SIAP
-
-📄 `bukti/plan-f8/RR-P1-CODEX.md` · `RR-P2-CODEX.md`
-**14 kekal TERBUKA**, dan **10 daripadanya TIDAK disekat kredensial** (#3,#4,#6,#7,#8,#9,#14,
-#15,#17,#19) — ia kerja yang belum dibuat, bukan menunggu pemilik. §5C menyenaraikan setiap satu.
-⚠️ **Dua pusingan tidak mencukupi:** 23 → 19 bukan konvergensi. Audit pelan asal ambil 27
-pusingan. §9.3 menetapkan 2 sebagai MINIMUM, bukan bukti.
-
-### ✅ Yang F8 sudah hasilkan
+### Jadual §9 — dikira mekanikal terhadap jadual, bukan ingatan
 
 ```
-jadual §9: 24 ✅ · 4 🔴 · 3 ⏸ (kredensial) · 2 ⚠️ LENCONGAN/nota
-metrik: generic 443->59 · placeholder 258->0 · action-generic 200->0 · blocked 0
-kohort RUNTIME (124/124 popover): title=desc 0 (asas 77) · terpotong 0 (20) · CTA 0 (20)
-§9.1a: 7 kontrak DIUKUR tempatan (prepare · rahsia · cleanup ikut inventori · IDEMPOTENT ·
-       0 sisa · tenant lain tidak disentuh) 📄 bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md
-penjaga baharu: HelpSearchGateTest 6 · RoleAccessDocTest 4 — 6 regresi dibuktikan MERAH
-artifak: ci-domain 8/8 · ci-a11y 11/11 (5 halaman × 2 viewport) · coverage-gate 83/473/172
+32 baris = 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸
+⚠️ A: 172 lawan 229 (lencongan)   ⚠️ D: role_routes lapisan C (410/410 actual_status = null)
+⚠️ E: CTA bergantung DOM           ⚠️ F: e-mel sebenar belum dihantar
 ```
 
-### 🔴 Empat metrik jadual §9 yang TIDAK tercapai
+### 🎯 TIGA keputusan PEMILIK — F8 tidak boleh ditutup tanpanya
 
-1. `centerCovered` mobile 6 → **45/124** — metrik memberi ganjaran kepada sasaran GENERIK
-   (A/B: katalog lama 1/24, semasa 8/24 pada mesin identik) → **keputusan pemilik**
-2. akronim `DDMS` 0 hits — istilah **0 kali** dalam katalog (perbendaharaan, bukan enjin)
-3. fallback PHP lebih cetek daripada Meili (38 perkataan) — §9.2 "hasil setara" tidak dipenuhi
-4. tajuk langkah **tidak boleh dicari** oleh mana-mana enjin (17 perkataan) — F6 tulis 473
-   tajuk bermakna dan tiada satu pun boleh ditemui; `pluck('title')` satu baris → cadang F10
+1. **`centerCovered`** — bersara sebagai gate / laras penempatan / risk-accept 45/124.
+   📸 Bukti visual ada: pada kes yang metrik tandakan MERAH, sasaran kelihatan PENUH dan tidak
+   terlindung; popover di atasnya. Metrik menandakan susun atur yang BETUL.
+2. **Denominator 229 lawan 172** — 172 = invarian manifest; 229 = teks pelan. Memilih 229
+   bermakna memundurkan keputusan reka bentuk F5/F6 pada 57 langkah.
+3. **Kredensial superadmin produksi** — guna `!` supaya nilainya tidak melalui saya.
+   ⛔ Jangan hantar kata laluan dalam sembang (pernah berlaku; sila tukar kata laluan itu).
 
-### 🎯 TIGA keputusan PEMILIK
+**+ satu tindakan pemilik (nota F):** hantar e-mel ujian sebenar dan BACA kerangkanya —
+`diwan:staging-check --mail-to=<alamat>`. Saya tidak menjalankannya kerana ia menghantar mesej
+bagi pihak anda.
 
-1. `centerCovered`: bersara sebagai gate · laras penempatan · atau risk-accept
-2. denominator **229 lawan 172** (nota A) — 172 = invarian manifest; 229 = teks pelan
-3. kredensial superadmin produksi (guna `!` supaya nilainya tidak melalui saya)
+### 🔴 PENEMUAN TERBESAR F8 — runner produksi TIDAK BOLEH BERJALAN (dibaiki)
 
-### ⚠️ Latihan §9.1 tempatan TERGANTUNG — dan itu penemuan reka bentuk
+Arahan wrapper §9.1a memberi **`Error: No tests found.`** — spec di luar setiap project
+Playwright, dan allowlist yang membenarkannya bercanggah dengan dirinya sendiri. Ia akan gagal
+**pada saat kredensial dibekalkan**. Dibaiki: project `production-readonly` + `--project`.
+📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md` (termasuk nota: `No tests found` kini
+ada DUA punca — project, dan penjaga env)
 
-~41 muatan halaman, kemudian `POST /livewire/update` tanpa status, 60 minit sifar permintaan.
-`php -S` satu-benang. **0 bukti separa** kerana spec ialah SATU ujian monolitik (10 identiti ×
-2 viewport × ~40 route). Pada produksi ia akan membazirkan tetingkap kredensial dan
-meninggalkan tenant fixture. Cadangan: pecah per identiti + tulis laporan berperingkat.
+### Round-robin §9.3: P1 23 penemuan · P2 19 penemuan — kesemuanya ditangani
+
+15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana dakwaan asal
+saya melebih-lebih (#2 CTA, #16 e-mel, #18 tiga-lapisan, #4 separa).
+⚠️ **Dua pusingan bukan konvergensi** — 23 → 19. Audit asal ambil 27 pusingan.
+
+### Yang MASIH terbuka selepas keputusan pemilik
+
+- larian produksi §9.1a (3 baris ⏸) — satu arahan selepas kredensial
+- latihan §9.1 tempatan TERGANTUNG: `php -S` satu-benang + spec MONOLITIK (satu ujian,
+  10 identiti × 2 viewport × ~40 route, artifak ditulis hanya di hujung) →
+  **0 bukti separa**. Cadangan: pecah per identiti + tulis berperingkat.
+  📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
+- 4 baris 🔴: `centerCovered` · `DDMS` tiada dalam korpus · fallback lebih cetek daripada Meili ·
+  tajuk langkah tidak boleh dicari (`pluck('title')` satu baris → cadang F10)
+- 🔴 **Meili tergantung = halaman tersekat 24 saat** (diukur 24,232 ms). Klien tiada tempoh
+  eksplisit; cadangan ~2s. Perubahan produk, jadi bukan F8.
+
+### Penjaga baharu F8 (10 regresi dibuktikan MERAH)
+
+```
+tests/Feature/HelpSearchGateTest.php   7 ujian §9.2 (1 opt-in DIWAN_SLOW_TESTS=1)
+tests/Feature/RoleAccessDocTest.php    4 ujian dokumen akses role
+Pest 632 ✓ / 2 skip
+```
 
 ## 📌 SEBELUM INI — ✅ hutang F7 **LIVE** (Deploy 14 `2325bec`) · #73 ditutup (8 Ogos)
 
