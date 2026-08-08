@@ -185,7 +185,7 @@ berjalan. Ia dipadam serta-merta (`mam, man` · 0 akaun `@smoke.test`). Dicatat 
 menunjukkan hadnya: trap melindungi daripada gantung dan Ctrl-C, bukan daripada shell yang
 dibunuh dari luar. `-CleanupOnly -RunUuid <uuid>` ialah pemulihan untuk kes itu.
 
-## 🔴 TERBUKA — `desktop · admin_masjid` gagal, dan asimetrinya menarik
+## 🟡 `desktop · admin_masjid` gagal — disiasat sehingga habis, halaman SIHAT
 
 Tiga larian, tiga kali konteks ini tidak selesai. Sekali ia memberi ralat yang boleh dibaca:
 
@@ -208,10 +208,35 @@ tidak melemparkan apa-apa. `ERR_ABORTED` ialah guguran pada aras pengangkutan, b
 Kiraan laluan menolak teori "terlalu berat": `admin_masjid` ada **29** laluan, superadmin **41**
 dan lulus.
 
-**Apa yang saya TIDAK dakwa:** bahawa ini kecacatan produk. Pelayan latihan ialah `php -S`
-(satu-benang), yang memang boleh menggugurkan sambungan, dan gantung berselang-seli §sebelum
-ini menunjukkan mesin ini tidak stabil untuk larian panjang. Saya tidak menghasilkan semula ia
-pada pelayan berbilang-pekerja kerana tiada satu pun tempatan (tiada Docker).
+### Disiasat sehingga habis — halaman itu SIHAT
+
+Daripada menghentikannya sebagai "mungkin php -S", laluan itu diprob terus sebagai
+`admin_masjid` sebenar (tenant `mam`, akaun `admin_masjid@demo.test`), dengan pendengar
+`requestfailed` yang memberi sebab guguran:
+
+```
+cubaan 1: status=200  722 ms
+cubaan 2: status=200  713 ms
+cubaan 3: status=200  754 ms
+permintaan GAGAL: GET /favicon.svg :: net::ERR_ABORTED  (×2)
+```
+
+⭐ **`/peti-masuk` memberi 200 tiga kali daripada tiga, ~720 ms** — halaman itu tidak rosak untuk
+role ini. Satu-satunya `ERR_ABORTED` dalam prob itu ialah **favicon**, dan favicon itu sendiri
+sihat (`curl` → 200 dalam 1.5 ms, tiga kali). Chrome memang membatalkan permintaan favicon
+apabila navigasi berikutnya bermula — iaitu tepat corak yang spec hasilkan, kerana ia melompat
+dari halaman ke halaman tanpa henti.
+
+**Kesimpulan yang disokong:** `ERR_ABORTED` dalam matriks ialah guguran pada aras **pengangkutan**
+di bawah navigasi pantas pada pelayan `php -S` satu-benang — bukan kecacatan halaman. Bukti
+menyokongnya dari tiga arah: halaman memberi 200 apabila diprob bersendirian, pelayan tidak
+melemparkan apa-apa (0 `local.ERROR`), dan superadmin memuatkan URL yang SAMA dengan 200 dalam
+larian yang sama.
+
+**Yang masih TIDAK dibuktikan:** bahawa ia tidak akan berlaku pada produksi. Produksi berjalan
+di belakang nginx + php-fpm berbilang-pekerja, jadi mod kegagalan `php -S` tidak wujud di sana —
+tetapi itu alasan mekanistik, bukan ukuran. Larian produksi akan mengesahkannya, dan inventori
+berperingkat akan menamakannya jika ia berulang.
 
 **Langkah seterusnya yang dinamakan:** larian produksi berjalan di belakang nginx + php-fpm,
 jadi kekeliruan `php -S` tidak wujud di sana. Jika `admin_masjid` menggugurkan `/peti-masuk`
