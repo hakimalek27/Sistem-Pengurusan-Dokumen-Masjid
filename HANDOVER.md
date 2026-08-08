@@ -41,17 +41,39 @@ ada DUA punca — project, dan penjaga env)
 saya melebih-lebih (#2 CTA, #16 e-mel, #18 tiga-lapisan, #4 separa).
 ⚠️ **Dua pusingan bukan konvergensi** — 23 → 19. Audit asal ambil 27 pusingan.
 
+### Sesi 9 Ogos (petang) — EMPAT kecacatan dibaiki, semuanya ditemui dengan MENJALANKAN
+
+1. **Gate carian bantuan hijau tanpa menguji apa-apa.** Status dibaca sebelum Livewire
+   menggantikannya → setiap keputusan tersasar SATU pertanyaan; kedua-dua assertion lulus atas
+   sebab yang salah. Selepas dibaiki: `q1` benar-benar 2 hasil, `q3` benar-benar 0.
+2. **Meili tergantung 24,232 ms → 2,085 ms** (12×). `diwan.guidance.meilisearch_timeout`.
+   Ujian penjaga bukan lagi opt-in; hadnya diterbitkan daripada config.
+3. **Regresi saya sendiri:** mendaftarkan spec produksi dalam project memecahkan kutipan SEMUA
+   project (`Total: 0 tests in 0 files`). Project kini bersyarat `E2E_PRODUCTION`.
+4. **Had per-ujian TIDAK menyelamatkan worker terkunci** (diukur 11m19s melepasi had 600s), dan
+   wrapper memanggil `WaitForExit()` tanpa had. Kini `--global-timeout` + `-TimeoutMinutes`
+   (lalai 120) + `Kill($true)`; dibuktikan: had 240s → tamat 246s, bukti separa SELAMAT,
+   cleanup berjalan.
+
+**Runner §9.1 kini tahan-gantung:** 1 monolit → **22 ujian** (20 konteks BERNAMA), inventori
+ditulis ke CAKERA selepas setiap konteks, dan medan `cuba` menamakan LALUAN yang sedang dimuat.
+Gantung kini memberi "19/20 + laluan X" dan bukan kekosongan.
+
+⚠️ **NYARIS (dilaporkan sendiri):** satu commit tempatan menarik masuk fail kredensial fixture.
+Belum ditolak; dikeluarkan melalui amend + `bukti/.gitignore` + penjaga Pest yang mengimbas
+artifak bukti yang DIJEJAK git (67 fail, 0 pelanggaran).
+
 ### Yang MASIH terbuka selepas keputusan pemilik
 
 - larian produksi §9.1a (3 baris ⏸) — satu arahan selepas kredensial
-- latihan §9.1 tempatan TERGANTUNG: `php -S` satu-benang + spec MONOLITIK (satu ujian,
-  10 identiti × 2 viewport × ~40 route, artifak ditulis hanya di hujung) →
-  **0 bukti separa**. Cadangan: pecah per identiti + tulis berperingkat.
+- **latihan §9.1 tempatan belum 20/20.** Terbaik setakat ini 2/20 + 41 halaman. Ia terkunci
+  pada `desktop|admin_masjid` walaupun pada pelayan SELARI, jadi bukan kelajuan.
+  Punca kelembapan tempatan pula DITEMUI: pertikaian kunci SQLite (`SESSION_DRIVER=database`
+  atas SQLite) — 8 permintaan selari **29,064 ms → 1,064 ms** dengan pemacu fail. Resipi
+  pelayan selari: `skrip/pelayan-berbilang.mjs` (modul `http` terbina, tiada pakej baharu).
   📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
 - 4 baris 🔴: `centerCovered` · `DDMS` tiada dalam korpus · fallback lebih cetek daripada Meili ·
   tajuk langkah tidak boleh dicari (`pluck('title')` satu baris → cadang F10)
-- 🔴 **Meili tergantung = halaman tersekat 24 saat** (diukur 24,232 ms). Klien tiada tempoh
-  eksplisit; cadangan ~2s. Perubahan produk, jadi bukan F8.
 
 ### Penjaga baharu F8 (10 regresi dibuktikan MERAH)
 
