@@ -31,8 +31,10 @@ export default defineConfig({
     //   ci-ocr        lapis 1c: TIDAK required sehingga fixture tests/fixtures/ocr dikomit +
     //                 assert "tidak di-skip" (§1 F0(iv) syarat ci-ocr)
     //   guidance-full lapis 2: gate penuh G1–G5, dipandu GUIDANCE_SHARD (3 shard CI)
-    // production-*.spec.js SENGAJA di luar semua project — produksi sahaja, melalui wrapper
-    // (allowlist bersebab dalam tests/Feature/PlanManifestTest.php).
+    // production-readonly.spec.js kekal di luar semua project (allowlist bersebab dalam
+    // tests/Feature/PlanManifestTest.php). production-guidance-readonly.spec.js pula mempunyai
+    // project BERSYARAT di bawah — ia perlukan satu untuk dipilih oleh `--project`, tetapi
+    // project itu hanya wujud apabila E2E_PRODUCTION diset. CI tidak pernah menetapkannya.
     projects: [
         {
             name: 'ci-guidance',
@@ -97,9 +99,27 @@ export default defineConfig({
         //
         // Project ini TIDAK dirujuk oleh `.github/workflows/ci.yml` — CI kekal tidak pernah
         // menjalankannya. Ia hanya memberi wrapper sesuatu untuk dipilih (`--project`).
-        {
-            name: 'production-readonly',
-            testMatch: ['e2e/production-guidance-readonly.spec.js'],
-        },
+        //
+        // ⚠️ BERSYARAT. Spec ini melempar pada peringkat KUTIPAN apabila env produksi tiada,
+        // dan kutipan yang melempar membatalkan keseluruhan larian — bukan satu project:
+        //     npx playwright test --list   ->   Total: 0 tests in 0 files
+        // Pendaftaran bersyarat mengeluarkannya daripada laluan kutipan biasa.
+        //
+        // ⚠️ Kejujuran ukuran: ini BUKAN satu-satunya sebab larian telanjang gagal.
+        // `guidance-full.spec.js:37` melempar dengan cara yang sama apabila `GUIDANCE_SHARD`
+        // tiada, dan itu SENGAJA (F0(iv)(e): "skip senyap ialah gate palsu"). Jadi
+        // `npx playwright test` tanpa argumen kekal gagal selepas perubahan ini, dan ia tidak
+        // diubah — CI sentiasa membekalkan shard melalui matriks. Yang diperbaiki di sini
+        // hanyalah: spec produksi tidak lagi menjadi sebab KEDUA.
+        //
+        // Wrapper menetapkan E2E_PRODUCTION=1 pada proses anak (ps1:131) SEBELUM memanggil
+        // `--project=production-readonly`, jadi project sentiasa wujud pada laluan yang sah
+        // (disahkan: dengan env itu, larian mengadu `E2E_PROD_TENANT`, bukan project hilang).
+        ...(process.env.E2E_PRODUCTION
+            ? [{
+                name: 'production-readonly',
+                testMatch: ['e2e/production-guidance-readonly.spec.js'],
+            }]
+            : []),
     ],
 });

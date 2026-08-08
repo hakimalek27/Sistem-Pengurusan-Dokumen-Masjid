@@ -7,3 +7,6 @@
 *.jpeg
 *.gif
 *.webp
+
+# Kredensial fixture latihan §9.1 (kata laluan akaun smoke) — TIDAK PERNAH ke git.
+plan-f8/latihan-9.1/fixture-*.json

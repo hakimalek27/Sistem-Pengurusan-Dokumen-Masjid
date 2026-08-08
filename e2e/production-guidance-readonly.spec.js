@@ -1,6 +1,7 @@
 // D11 #9 (PELAN-PEMBAIKAN.md §9.1/§9.1a) — matriks PRODUKSI 20 BrowserContext, READ-ONLY MUTLAK.
 // HANYA dijalankan melalui wrapper scripts/audit/run-production-guidance-readonly.ps1 —
-// SENGAJA tiada dalam mana-mana project playwright.config.js (allowlist PlanManifestTest).
+// project `production-readonly` dalam playwright.config.js WUJUD hanya apabila E2E_PRODUCTION
+// diset (wrapper menetapkannya), jadi CI tidak pernah mengutip mahupun menjalankan fail ini.
 //
 // Menutup lapan jurang §9.1: (1) satu tour per role×viewport; (2) carian 3 pertanyaan;
 // (3) artifak inventori berstruktur (E2E_PROD_REPORT); (4) TIADA mutasi — ensureInboxFixture
@@ -8,12 +9,23 @@
 // (6) page-by-page desktop DAN mobile daripada manifest role_routes (bukan sidebar);
 // (7) set role diassert TEPAT lapan; (8) TEPAT 20 konteks diassert.
 //
+// ⚠️ STRUKTUR: 20 `test()` BERASINGAN (satu per identiti×viewport), bukan satu monolit.
+// Sebabnya DIUKUR pada latihan tempatan 9 Ogos 2026 (LATIHAN-9.1-TEMPATAN.md): satu
+// `POST /livewire/update` menggantung, dan kerana keseluruhan matriks ialah SATU test yang
+// menulis artifaknya hanya di hujung, larian itu menghasilkan **sifar** bukti selepas ~41
+// muatan halaman. Pada produksi kesannya lebih teruk: ia membazirkan satu-satunya tetingkap
+// kredensial pemilik dan tidak meninggalkan apa-apa untuk dianalisis.
+// Kini setiap konteks menulis inventorinya ke cakera SEBAIK ia tamat, jadi gantung memberi
+// "19/20 selesai, `mobile · bendahari` tergantung" — hasil yang berguna. Penulisan ke cakera
+// (bukan memori) sengaja: apabila satu ujian tamat masa, Playwright boleh memulakan semula
+// worker, dan keadaan dalam-memori akan hilang bersamanya.
+//
 // Env WAJIB (disemak — gagal jelas, bukan skip senyap): E2E_PRODUCTION=1, E2E_PROD_TENANT
 // (smoke-<uuid>), E2E_PROD_ROLE_ACCOUNTS (JSON 8 akaun fixture), E2E_PROD_SUPERADMIN_EMAIL/
 // _PASSWORD (dibekal pemilik — TIADA lalai demo; lalai diam guidance.spec dilarang di sini),
 // E2E_PROD_REPORT (laluan JSON output). Jarak log masuk: 15s (had produksi 5/min).
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test } from '@playwright/test';
 
@@ -35,7 +47,11 @@ if (!/^smoke-[0-9a-f-]{36}$/i.test(tenantSlug)) {
 const roleAccounts = JSON.parse(process.env.E2E_PROD_ROLE_ACCOUNTS);
 const EXPECTED_ROLES = ['admin_masjid', 'pengerusi', 'setiausaha', 'bendahari', 'nazir', 'ketua_imam', 'ajk', 'audit'];
 const loginDelayMs = Number(process.env.E2E_PROD_ROLE_LOGIN_DELAY_MS ?? 15_000);
-let lastLoginAt = 0;
+const REPORT_PATH = process.env.E2E_PROD_REPORT;
+const VIEWPORTS = [
+    { name: 'desktop', width: 1440, height: 1000 },
+    { name: 'mobile', width: 390, height: 844 },
+];
 
 const catalogGuideIds = manifest.catalogue.map((g) => g.guide_id);
 const tourForRole = (role) => (role === 'superadmin'
@@ -48,25 +64,75 @@ function routesFor(identity) {
         .map((e) => ({ url: e.url.replaceAll('/app/mam', `/app/${tenantSlug}`), template: e.route_template }));
 }
 
-async function waitForLoginSlot(page) {
-    const remaining = loginDelayMs - (Date.now() - lastLoginAt);
+// ── Keadaan berterusan pada CAKERA ──────────────────────────────────────────────────────────
+// Dikunci pada `run_tenant`: slug ialah `smoke-<uuid>` unik per larian, jadi fail daripada
+// larian TERDAHULU dibuang secara automatik, sementara worker yang dimulakan semula dalam
+// larian yang SAMA menyambung inventori yang sedia ada. Tiada pemadaman membuta.
+function bacaKeadaan(baseURL) {
+    if (existsSync(REPORT_PATH)) {
+        try {
+            const sedia = JSON.parse(readFileSync(REPORT_PATH, 'utf8'));
+            if (sedia.run_tenant === tenantSlug) return sedia;
+        } catch {
+            // Fail rosak (cth larian dibunuh semasa menulis) — mula semula, jangan gagal larian.
+        }
+    }
+    return {
+        schema_version: 2,
+        run_tenant: tenantSlug,
+        base_url: baseURL ?? null,
+        expected_page_counts: rr.expected_page_counts,
+        last_login_at: 0,
+        inventory: [],
+    };
+}
+
+function tulisKeadaan(keadaan) {
+    mkdirSync(dirname(REPORT_PATH), { recursive: true });
+    writeFileSync(REPORT_PATH, JSON.stringify(keadaan, null, 2) + '\n');
+}
+
+// Satu baca-ubah-tulis per identiti. `kunci` = viewport|identity, jadi percubaan semula
+// menggantikan entri lama dan bukan menggandakannya.
+function rekod(baseURL, viewport, identity, ubah) {
+    const keadaan = bacaKeadaan(baseURL);
+    const kunci = `${viewport}|${identity}`;
+    const idx = keadaan.inventory.findIndex((e) => `${e.viewport}|${e.identity}` === kunci);
+    const asal = idx >= 0 ? keadaan.inventory[idx] : { viewport, identity };
+    const baharu = { ...asal, ...ubah };
+    if (idx >= 0) keadaan.inventory[idx] = baharu; else keadaan.inventory.push(baharu);
+    tulisKeadaan(keadaan);
+    return keadaan;
+}
+
+// Jarak log masuk dikekalkan pada CAKERA juga: jika worker dimulakan semula selepas tamat
+// masa, cap masa dalam-memori hilang dan larian berikutnya akan melanggar had kadar 5/min.
+async function waitForLoginSlot(page, baseURL) {
+    const { last_login_at: lalu = 0 } = bacaKeadaan(baseURL);
+    const remaining = loginDelayMs - (Date.now() - lalu);
     if (remaining > 0) await page.waitForTimeout(remaining);
 }
 
-async function login(page, email, password, loginPath, homePattern) {
-    await waitForLoginSlot(page);
+function catatLogMasuk(baseURL) {
+    const keadaan = bacaKeadaan(baseURL);
+    keadaan.last_login_at = Date.now();
+    tulisKeadaan(keadaan);
+}
+
+async function login(page, baseURL, email, password, loginPath, homePattern) {
+    await waitForLoginSlot(page, baseURL);
     await page.goto(loginPath);
     await page.locator('input[id="form.login"]').fill(email);
     await page.locator('input[type="password"]').fill(password);
     await page.getByRole('button', { name: /Log masuk/i }).click();
     await page.waitForURL(homePattern, { timeout: 90_000 });
-    lastLoginAt = Date.now();
+    catatLogMasuk(baseURL);
 }
 
 // F8 (Codex P2 #14) — semakan per-halaman yang SEBELUM INI hanya dipakai pada role tenant.
 // Blok `public` hanya mengassert status 200, dan `superadmin` melangkau overflow — jadi dua
 // daripada sepuluh identiti tidak pernah diperiksa untuk landmark atau overflow mendatar.
-async function assertHalamanSihat(page, expect, label) {
+async function assertHalamanSihat(page, label) {
     await expect(page.locator('main')).toBeVisible();
     const overflow = await page.evaluate(() => Math.max(
         document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0,
@@ -77,7 +143,7 @@ async function assertHalamanSihat(page, expect, label) {
 // Tiga pertanyaan §9.1 jurang (2). ⚠️ Mengassert `.diwan-help-search-status` KELIHATAN sahaja
 // tidak bermakna — elemen itu sentiasa ada. Yang diassert di sini ialah TEKSNYA berubah dan
 // membezakan "ada hasil" daripada "0 hasil".
-async function assertCarianBantuan(page, expect, label) {
+async function assertCarianBantuan(page, label) {
     const status = page.locator('.diwan-help-search-status');
     const hasil = [];
     for (const query of ['Peti Masuk', 'klasfikasi surat', 'zzqqxx-tiada-langsung']) {
@@ -85,11 +151,27 @@ async function assertCarianBantuan(page, expect, label) {
         await page.getByRole('button', { name: 'Cari', exact: true }).click();
         await expect(status).toBeVisible();
         await expect(status).not.toBeEmpty();
+        // ⚠️ MENUNGGU pertanyaan itu MUNCUL dalam status. Tanpa ini keputusan tersasar SATU:
+        // DIUKUR pada latihan tempatan, `textContent` dibaca sebelum Livewire menggantikan
+        // status, jadi pertanyaan #1 merakam teks AWAL ("3 panduan disyorkan") dan pertanyaan
+        // #3 merakam hasil pertanyaan #2. Kedua-dua assertion di bawah kemudian LULUS atas
+        // sebab yang salah — gate hijau yang tidak menguji apa-apa yang dinamakannya.
+        // Status memaparkan pertanyaan itu sendiri (`… untuk "<query>"`), jadi ia penanda
+        // yang tepat untuk "kitaran INI sudah selesai".
+        await expect(status, `${label}: status tidak pernah mencerminkan pertanyaan "${query}"`)
+            .toContainText(query, { timeout: 30_000 });
         hasil.push(((await status.textContent()) ?? '').trim());
     }
     // Pertanyaan karut MESTI memberi keadaan "0 hasil"; pertanyaan tepat MESTI tidak.
+    // ⚠️ Pertanyaan #2 (salah ejaan) DIREKAM tetapi TIDAK diassert, dan sebabnya dinyatakan:
+    // toleransi typo datang daripada Meilisearch sahaja. Fallback PHP memadan substring, jadi
+    // "klasfikasi surat" memberi 0 hasil yang SAH pada laluan fallback (diukur — PENEMUAN-CARIAN
+    // §3). Mengassertnya akan menjadikan latihan tempatan mustahil dijalankan, dan latihan itu
+    // satu-satunya cara membuktikan runner sebelum tetingkap kredensial produksi dibuka.
+    // Nilainya ada dalam artifak `carian[1]` untuk dibaca pada laporan larian produksi.
     expect(hasil[2], `${label}: query karut sepatutnya 0 hasil — dapat "${hasil[2]}"`).toContain('0 hasil');
     expect(hasil[0], `${label}: query tepat memberi 0 hasil — carian mungkin rosak`).not.toContain('0 hasil');
+    return hasil;
 }
 
 function monitorBrowserErrors(page) {
@@ -102,33 +184,30 @@ function monitorBrowserErrors(page) {
     return errors;
 }
 
-test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async ({ browser, baseURL }) => {
-    test.setTimeout(3_600_000);
-    // (7) Set role diassert TEPAT — bukan sekadar panjang array.
+// ── Kontrak (7): set role fixture diassert TEPAT, sebelum apa-apa pelayar dibuka ────────────
+test('kontrak: akaun fixture ialah TEPAT lapan role yang dijangka', async () => {
     const roles = roleAccounts.map((a) => a.role).sort();
     expect(roles).toEqual([...EXPECTED_ROLES].sort());
     expect(new Set(roles).size).toBe(8);
+});
 
-    const contexts = new Set();
-    const inventory = [];
+// ── 20 konteks: satu `test()` setiap satu ───────────────────────────────────────────────────
+for (const viewport of VIEWPORTS) {
+    const size = { width: viewport.width, height: viewport.height };
 
-    for (const viewport of [
-        { name: 'desktop', width: 1440, height: 1000 },
-        { name: 'mobile', width: 390, height: 844 },
-    ]) {
-        const size = { width: viewport.width, height: viewport.height };
-
-        // public (tanpa akaun — identiti ke-10).
-        {
-            const context = await browser.newContext({ baseURL, viewport: size });
-            contexts.add(context);
+    // public (tanpa akaun — identiti ke-10).
+    test(`${viewport.name} · public`, async ({ browser, baseURL }) => {
+        test.setTimeout(600_000);
+        rekod(baseURL, viewport.name, 'public', { status: 'mula' });
+        const context = await browser.newContext({ baseURL, viewport: size });
+        try {
             const page = await context.newPage();
             const errors = monitorBrowserErrors(page);
             const visited = [];
             for (const item of routesFor('public').filter((r) => r.template.startsWith('/'))) {
                 const response = await page.goto(item.url);
                 expect(response?.status(), `public ${viewport.name}: ${item.url}`).toBe(200);
-                await assertHalamanSihat(page, expect, `public ${viewport.name} ${item.url}`);
+                await assertHalamanSihat(page, `public ${viewport.name} ${item.url}`);
                 visited.push({ url: item.url, status: response?.status() });
             }
 
@@ -136,21 +215,25 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
             await page.goto('/bantuan?panduan=public.help&langkah=0');
             await expect(page.locator('.driver-popover')).toBeVisible();
             await page.locator('.driver-popover-close-btn').click();
-            await assertCarianBantuan(page, expect, `public ${viewport.name}`);
+            const carian = await assertCarianBantuan(page, `public ${viewport.name}`);
 
             expect([...new Set(errors)]).toEqual([]);
-            inventory.push({ viewport: viewport.name, identity: 'public', pages: visited });
+            rekod(baseURL, viewport.name, 'public', { status: 'selesai', pages: visited, carian });
+        } finally {
             await context.close();
         }
+    });
 
-        // superadmin (kredensial DIBEKAL LUARAN — tiada lalai).
-        {
-            const context = await browser.newContext({ baseURL, viewport: size });
-            contexts.add(context);
+    // superadmin (kredensial DIBEKAL LUARAN — tiada lalai).
+    test(`${viewport.name} · superadmin`, async ({ browser, baseURL }) => {
+        test.setTimeout(600_000);
+        rekod(baseURL, viewport.name, 'superadmin', { status: 'mula' });
+        const context = await browser.newContext({ baseURL, viewport: size });
+        try {
             const page = await context.newPage();
             const errors = monitorBrowserErrors(page);
-            await login(page, process.env.E2E_PROD_SUPERADMIN_EMAIL, process.env.E2E_PROD_SUPERADMIN_PASSWORD,
-                '/admin/login', /\/admin\/?$/);
+            await login(page, baseURL, process.env.E2E_PROD_SUPERADMIN_EMAIL,
+                process.env.E2E_PROD_SUPERADMIN_PASSWORD, '/admin/login', /\/admin\/?$/);
             const visited = [];
             // ⚠️ Sebelum ini hanya panel `admin` dilawati, jadi 25 halaman panel `app` yang
             // superadmin BOLEH capai tidak pernah diperiksa (Codex P2 #14).
@@ -161,7 +244,7 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
                 const url = item.url.replaceAll('/app/mam', `/app/${tenantSlug}`);
                 const response = await page.goto(url);
                 expect(response?.status(), `superadmin ${viewport.name}: ${url}`).toBe(200);
-                await assertHalamanSihat(page, expect, `superadmin ${viewport.name} ${url}`);
+                await assertHalamanSihat(page, `superadmin ${viewport.name} ${url}`);
                 visited.push({ url, status: response?.status() });
             }
             // (1) satu tour read-only (telemetri diisytihar dalam laporan larian).
@@ -172,17 +255,21 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
                 await page.locator('.driver-popover-close-btn').click();
             }
             expect([...new Set(errors)]).toEqual([]);
-            inventory.push({ viewport: viewport.name, identity: 'superadmin', pages: visited });
+            rekod(baseURL, viewport.name, 'superadmin', { status: 'selesai', pages: visited });
+        } finally {
             await context.close();
         }
+    });
 
-        for (const account of roleAccounts) {
-            await test.step(`${viewport.name}: ${account.role}`, async () => {
-                const context = await browser.newContext({ baseURL, viewport: size });
-                contexts.add(context);
+    for (const account of roleAccounts) {
+        test(`${viewport.name} · ${account.role}`, async ({ browser, baseURL }) => {
+            test.setTimeout(600_000);
+            rekod(baseURL, viewport.name, account.role, { status: 'mula' });
+            const context = await browser.newContext({ baseURL, viewport: size });
+            try {
                 const page = await context.newPage();
                 const errors = monitorBrowserErrors(page);
-                await login(page, account.email, account.password, '/app/login',
+                await login(page, baseURL, account.email, account.password, '/app/login',
                     (url) => url.pathname.replace(/\/$/, '') === `/app/${tenantSlug}`);
 
                 // (6) Page-by-page daripada MANIFEST role_routes — desktop DAN mobile.
@@ -190,11 +277,7 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
                 for (const item of routesFor(account.role)) {
                     const response = await page.goto(item.url);
                     expect(response?.status(), `${account.role} ${viewport.name}: ${item.url}`).toBe(200);
-                    await expect(page.locator('main')).toBeVisible();
-                    const overflow = await page.evaluate(() => Math.max(
-                        document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0,
-                    ) - window.innerWidth);
-                    expect(overflow, `${account.role} ${viewport.name} overflow: ${item.url}`).toBeLessThanOrEqual(2);
+                    await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
                     visited.push({ url: item.url, status: response?.status() });
                 }
 
@@ -204,33 +287,44 @@ test('matriks produksi read-only: 10 identiti × 2 viewport = 20 konteks', async
                 await expect(page.locator('.driver-popover')).toBeVisible();
                 await page.locator('.driver-popover-close-btn').click();
 
-                // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah DDMS).
+                // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah karut).
                 await page.goto(`/app/${tenantSlug}/bantuan`);
-                await assertCarianBantuan(page, expect, `${account.role} ${viewport.name}`);
+                const carian = await assertCarianBantuan(page, `${account.role} ${viewport.name}`);
 
                 // Probe silang-tenant 404 (S1) — tenant sebenar TIDAK dilog masuk, hanya URL.
                 const cross = await page.goto('/app/mamad/records');
                 expect(cross?.status(), `${account.role} silang-tenant`).toBe(404);
 
                 expect([...new Set(errors)], `${account.role} ${viewport.name}`).toEqual([]);
-                inventory.push({ viewport: viewport.name, identity: account.role, pages: visited, crossTenant: cross?.status() });
+                rekod(baseURL, viewport.name, account.role, {
+                    status: 'selesai', pages: visited, carian, crossTenant: cross?.status(),
+                });
+            } finally {
                 await context.close();
-            });
-        }
+            }
+        });
     }
+}
 
-    // (8) TEPAT 20 konteks — diwarisi daripada guidance.spec.js:214, bukan toBe(accounts.length).
-    expect(contexts.size).toBe(20);
+// ── Kontrak (8): TEPAT 20 konteks SELESAI, dan set identiti×viewport tepat ──────────────────
+// Diassert daripada CAKERA, bukan kaunter dalam-memori: kaunter tidak akan selamat daripada
+// worker yang dimulakan semula, dan lebih penting — ia tidak boleh MENAMAKAN konteks yang
+// hilang. Ujian ini diisytihar terakhir, jadi ia berjalan terakhir (workers: 1, urutan fail).
+test('kontrak: TEPAT 20 konteks selesai — dan yang hilang DINAMAKAN', async ({ baseURL }) => {
+    const keadaan = bacaKeadaan(baseURL);
+    const dijangka = VIEWPORTS.flatMap((v) => ['public', 'superadmin', ...roleAccounts.map((a) => a.role)]
+        .map((identity) => `${v.name}|${identity}`));
+    expect(dijangka).toHaveLength(20);
 
-    // (3) Artifak inventori berstruktur — BUKAN console.log.
-    const report = {
-        schema_version: 1,
-        run_tenant: tenantSlug,
-        base_url: baseURL,
-        contexts: contexts.size,
-        expected_page_counts: rr.expected_page_counts,
-        inventory,
-    };
-    mkdirSync(dirname(process.env.E2E_PROD_REPORT), { recursive: true });
-    writeFileSync(process.env.E2E_PROD_REPORT, JSON.stringify(report, null, 2) + '\n');
+    const selesai = keadaan.inventory.filter((e) => e.status === 'selesai')
+        .map((e) => `${e.viewport}|${e.identity}`);
+    const hilang = dijangka.filter((k) => !selesai.includes(k));
+
+    keadaan.contexts = selesai.length;
+    keadaan.missing_contexts = hilang;
+    tulisKeadaan(keadaan);
+
+    expect(hilang, `konteks TIDAK selesai: ${hilang.join(', ') || '(tiada)'}`).toEqual([]);
+    expect(selesai.sort()).toEqual([...dijangka].sort());
+    expect(selesai).toHaveLength(20);
 });

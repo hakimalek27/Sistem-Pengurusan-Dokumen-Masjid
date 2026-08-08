@@ -1,0 +1,208 @@
+{
+  "schema_version": 2,
+  "run_tenant": "smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e",
+  "base_url": "http://127.0.0.1:8092",
+  "expected_page_counts": {
+    "public": 0,
+    "superadmin": 25,
+    "admin_masjid": 25,
+    "pengerusi": 17,
+    "setiausaha": 15,
+    "bendahari": 15,
+    "nazir": 13,
+    "ketua_imam": 13,
+    "ajk": 13,
+    "audit": 14
+  },
+  "last_login_at": 1786227080921,
+  "inventory": [
+    {
+      "viewport": "desktop",
+      "identity": "public",
+      "status": "selesai",
+      "pages": [
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    2 hasil dalam skop Orang Awam\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "identity": "superadmin",
+      "status": "selesai",
+      "pages": [
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/profil-saya",
+          "status": 200
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "status": 200
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin",
+          "status": 200
+        },
+        {
+          "url": "/admin/help-announcements",
+          "status": 200
+        },
+        {
+          "url": "/admin/mosques",
+          "status": 200
+        },
+        {
+          "url": "/admin/storage-orders",
+          "status": 200
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/users",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "identity": "admin_masjid",
+      "status": "mula"
+    }
+  ]
+}

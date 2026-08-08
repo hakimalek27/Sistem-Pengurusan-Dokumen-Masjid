@@ -169,7 +169,11 @@ test('setiap spec e2e tersenarai dalam project CI atau allowlist bersebab', func
     // Allowlist "sengaja di luar CI" — mesti ada sebab bertulis + tarikh semakan semula (F0(iv)).
     $allowlist = [
         'production-readonly.spec.js' => 'Ditujukan kepada PRODUKSI sahaja (E2E_PRODUCTION gate) — dijalankan manual, bukan CI. Semak semula: 2026-09-30 (F8)',
-        'production-guidance-readonly.spec.js' => 'Matriks produksi F8 — HANYA melalui wrapper scripts/audit/run-production-guidance-readonly.ps1 (§9.1a). Semak semula: 2026-09-30 (F8)',
+        // Mempunyai project `production-readonly` dalam playwright.config.js, tetapi project itu
+        // BERSYARAT kepada E2E_PRODUCTION — jadi ia tidak wujud semasa larian CI, dan `$inProject`
+        // (padanan teks pada config) tidak boleh membuktikan ia pernah dijalankan CI. Allowlist
+        // kekal sebagai rekod yang jujur: CI memang tidak pernah menjalankannya.
+        'production-guidance-readonly.spec.js' => 'Matriks produksi F8 — HANYA melalui wrapper scripts/audit/run-production-guidance-readonly.ps1 (§9.1a); project Playwright bersyarat E2E_PRODUCTION, jadi CI tidak pernah mengutipnya. Semak semula: 2026-09-30 (F8)',
     ];
 
     $config = (string) file_get_contents(base_path('playwright.config.js'));
