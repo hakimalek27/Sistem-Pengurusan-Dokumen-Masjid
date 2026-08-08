@@ -27,6 +27,7 @@
  * berubah secara senyap.
  */
 
+use App\Console\Commands\SyncHelpIndex;
 use App\Models\HelpEvent;
 use App\Models\Mosque;
 use App\Services\HelpCatalog;
@@ -48,6 +49,14 @@ it('(a) Meilisearch MATI (host tidak boleh dihubungi) — carian masih memulangk
 
     expect($hasil)->not->toBeEmpty('fallback PHP tidak menyelamatkan carian apabila Meili mati');
 
+    // ⚠️ "tidak kosong" SAHAJA terlalu longgar (Codex #9): fallback yang memulangkan guide
+    // rawak masih lulus. Hasil mesti RELEVAN kepada pertanyaan.
+    $ids = $hasil->pluck('id');
+    expect($ids->contains(fn (string $id) => str_contains($id, 'klasifikasi')
+        || str_contains($id, 'klasifikasikan')
+        || str_contains($id, 'peti-masuk')))
+        ->toBeTrue('fallback memulangkan hasil TIDAK BERKAITAN dengan "klasifikasi surat": '.$ids->implode(', '));
+
     // Dan ia mesti direkod sebagai enjin `php`, bukan `meilisearch` — jika tidak, telemetri
     // akan mendakwa Meili sihat sedangkan ia mati (keluarga "sihat != tiada ralat").
     // ⚠️ `engine` bukan kolum: ia hidup dalam `metadata` (`HelpSearchService::recordSearch`).
@@ -62,11 +71,20 @@ it('(b) korpus yang diindeks tidak mengandungi data tenant atau pengguna', funct
     // document_id, guide_id, panel, roles, title, summary, keywords, steps_text,
     // troubleshooting_text. Tiada mosque_id, tiada user_id, tiada e-mel.
     $guides = app(HelpCatalog::class)->raw()['guides'];
-    $korpus = collect($guides)->map(fn (array $g): string => json_encode([
-        $g['title'] ?? '', $g['summary'] ?? '', $g['keywords'] ?? [],
-        collect($g['steps'] ?? [])->map(fn ($s) => [$s['title'] ?? '', $s['instruction'] ?? ''])->all(),
-        $g['troubleshooting'] ?? [],
-    ], JSON_UNESCAPED_UNICODE))->implode("\n");
+
+    // ⚠️ Versi pertama membina proyeksinya SENDIRI daripada `guides.json`, jadi jika
+    // `SyncHelpIndex` ditukar untuk memasukkan `mosque_id`/`user_id`, ujian kekal hijau
+    // (Codex #10). Kini dokumen dibina melalui `SyncHelpIndex::documentFor()` — laluan yang
+    // SAMA seperti runtime.
+    $dokumen = collect($guides)->map(fn (array $g): array => SyncHelpIndex::documentFor($g));
+
+    // Set medan DIKUNCI: medan baharu mesti keputusan sedar, bukan penambahan senyap.
+    expect(array_keys($dokumen->first()))->toBe([
+        'document_id', 'guide_id', 'panel', 'roles', 'title', 'summary', 'keywords',
+        'steps_text', 'troubleshooting_text',
+    ], 'set medan dokumen indeks berubah — sahkan tiada data tenant/pengguna masuk');
+
+    $korpus = $dokumen->map(fn (array $d): string => json_encode($d, JSON_UNESCAPED_UNICODE))->implode("\n");
 
     // ⚠️ Versi pertama ujian ini memadan slug `mam`/`man` sebagai SUBSTRING dan gagal — bukan
     // kerana korpus bocor, tetapi kerana tiga aksara itu muncul dalam perkataan Melayu biasa
@@ -107,27 +125,70 @@ it('(b) korpus yang diindeks tidak mengandungi data tenant atau pengguna', funct
 it('(c) panel awam tidak pernah memulangkan guide tenant atau admin', function () {
     config()->set('scout.meilisearch.host', null);
 
+    // ⚠️ Versi pertama LULUS SECARA VAKUM: jika keempat-empat query memulangkan koleksi kosong,
+    // `$bukanAwam` kosong dan ujian hijau walaupun carian awam rosak sepenuhnya (Codex #11).
+    // Kini sekurang-kurangnya satu query MESTI memberi hasil awam sebelum sempadan bermakna.
+    $jumlahHasil = 0;
     foreach (['klasifikasi surat', 'pelupusan', 'kelulusan', 'daftar masjid'] as $q) {
         $hasil = app(HelpSearchService::class)->search($q, 'public');
+        $jumlahHasil += $hasil->count();
         $bukanAwam = $hasil->pluck('id')->reject(fn (string $id) => str_starts_with($id, 'public.'))->all();
         expect($bukanAwam)->toBe([], "carian awam \"{$q}\" membocorkan guide bukan-awam: ".implode(', ', $bukanAwam));
     }
+    expect($jumlahHasil)->toBeGreaterThan(0,
+        'TIADA satu pun query awam memberi hasil — sempadan "tiada kebocoran" tidak bermakna '
+        .'apabila carian memulangkan kosong untuk semuanya');
 });
 
-it('(d) dua tenant memberi hasil IDENTIK — katalog agnostik-tenant (regresi isolasi)', function () {
+it('(d) dua tenant: SET guide sama, laluan dikontekskan, tiada silang slug (isolasi)', function () {
     config()->set('scout.meilisearch.host', null);
     $q = 'klasifikasi surat';
 
-    $a = app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam)->pluck('id')->all();
-    $b = app(HelpSearchService::class)->search($q, 'app', $this->adminMan, $this->man)->pluck('id')->all();
+    // ⚠️ Versi pertama `pluck('id')` SEBELUM membanding, jadi kebocoran dalam route/title/
+    // summary/metadata hasil tidak pernah diperiksa (Codex #12). Kini objek PENUH dibanding.
+    $a = app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam)->values()->all();
+    $b = app(HelpSearchService::class)->search($q, 'app', $this->adminMan, $this->man)->values()->all();
 
-    expect($a)->not->toBeEmpty()->and($b)->toBe($a,
-        'dua tenant dengan role yang sama memberi hasil BERBEZA — katalog tidak sepatutnya '
-        .'bergantung kepada tenant, jadi ini bermakna data tenant memasuki laluan carian');
+    // 🔴 Membanding objek PENUH mendedahkan bahawa premis "IDENTIK" itu SENDIRI salah:
+    // `route` dikontekskan kepada tenant semasa (`/app/mam/peti-masuk` lawan
+    // `/app/man/peti-masuk`). Itu tingkah laku yang BETUL — setiap tenant mendapat laluannya
+    // sendiri. Jadi sifat isolasi yang sebenar ada DUA, dan kedua-duanya diassert:
+    //   (i)  SET guide sama       → katalog tidak bergantung kepada tenant;
+    //   (ii) tiada silang slug     → tenant A tidak pernah melihat laluan tenant B.
+    // Versi `pluck('id')` yang lama lulus atas sebab yang betul tetapi menguji kurang; versi
+    // objek-penuh MERAH atas sebab yang sah. Kedua-dua sifat kini dikunci.
+    expect($a)->not->toBeEmpty();
 
-    // Dan tiada slug tenant dalam mana-mana hasil.
-    $json = json_encode($a).json_encode($b);
-    expect($json)->not->toContain($this->mam->slug)->and($json)->not->toContain($this->man->slug);
+    expect(collect($b)->pluck('id')->all())->toBe(collect($a)->pluck('id')->all(),
+        'dua tenant dengan role yang sama memberi SET guide berbeza — katalog tidak sepatutnya '
+        .'bergantung kepada tenant');
+
+    // ⚠️ `JSON_UNESCAPED_SLASHES` WAJIB. Tanpanya `json_encode` menghasilkan `\/app\/mam\/`,
+    // jadi setiap `toContain('/app/…/')` di bawah TIDAK MUNGKIN padan dan kedua-dua semakan
+    // silang-tenant akan lulus secara VAKUM. Semakan positif pada baris terakhir blok ini
+    // yang mendedahkannya — itulah sebabnya ia ada.
+    $jsonA = json_encode($a, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $jsonB = json_encode($b, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    // 🔴 JANGAN guna `toContain($needle, $mesej)` — **`toContain` VARIADIK**: argumen kedua
+    // menjadi NEEDLE KEDUA, bukan mesej. Kesannya dua arah dan kedua-duanya buruk:
+    //   `expect($x)->toContain($n, 'ayat')`      → gagal, kerana 'ayat' tiada
+    //   `expect($x)->not->toContain($n, 'ayat')` → LULUS VAKUM ("tidak mengandungi kedua-duanya")
+    // Ini pelajaran yang sudah direkod dalam memori projek dan saya langgar semula di sini.
+    // `str_contains` + `toBeFalse/toBeTrue` menerima mesej dengan betul.
+    expect(str_contains($jsonA, "/app/{$this->man->slug}/"))->toBeFalse(
+        'hasil tenant MAM mengandungi laluan tenant MAN — kebocoran silang-tenant');
+    expect(str_contains($jsonB, "/app/{$this->mam->slug}/"))->toBeFalse(
+        'hasil tenant MAN mengandungi laluan tenant MAM — kebocoran silang-tenant');
+
+    // Kontekstualisasi mesti BENAR-BENAR berlaku, jika tidak dua semakan di atas lulus vakum.
+    expect(str_contains($jsonA, "/app/{$this->mam->slug}/"))->toBeTrue(
+        'hasil tidak dikontekskan kepada tenant semasa — semakan silang di atas tidak bermakna');
+
+    foreach ([$jsonA, $jsonB] as $json) {
+        expect(preg_match('/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i', $json))->toBe(0,
+            'hasil carian mengandungi alamat e-mel');
+    }
 });
 
 it('(e) akronim: yang ADA dalam korpus memberi hasil, yang TIADA memberi kosong', function () {
@@ -156,9 +217,14 @@ it('(e) akronim: yang ADA dalam korpus memberi hasil, yang TIADA memberi kosong'
     // TIADA dalam korpus — ini merekod penemuan §9.2, bukan menyembunyikannya.
     // Jika `DDMS` kemudian DITAMBAH kepada keywords, ujian ini merah dan memaksa jadual §9
     // dikemas — itu tingkah laku yang dikehendaki, bukan gangguan.
+    // ⚠️ Versi pertama hanya `substr_count` case-SENSITIVE dan tidak pernah MEMANGGIL carian
+    // (Codex #13): `ddms` huruf kecil boleh ditambah tanpa dikesan, dan tingkah laku carian
+    // sebenar tidak diuji. Kini kedua-duanya diuji.
     foreach (['DDMS', 'SPDM'] as $akronim) {
-        expect(substr_count($mentah, $akronim))->toBe(0,
-            "{$akronim} kini ADA dalam katalog — kemas kini jadual §9 dan PENEMUAN-CARIAN.md");
+        expect(mb_stripos($mentah, $akronim))->toBeFalse(
+            "{$akronim} kini ADA dalam katalog (apa-apa huruf) — kemas kini jadual §9 dan PENEMUAN-CARIAN.md");
+        expect(app(HelpSearchService::class)->search($akronim, 'app', $this->adminMam, $this->mam))
+            ->toBeEmpty("{$akronim} kini memberi hasil — penemuan §9.2 berubah, kemas dokumen");
     }
 });
 
@@ -197,13 +263,26 @@ it('(f) korpus yang boleh dicari DIUKUR — dua jurang direkod, bukan disembunyi
     $hanyaInstruksi = array_values(array_diff($I, $B));                  // Meili ada, fallback tiada
     $hanyaTajuk = array_values(array_diff($T, array_merge($B, $I)));     // tiada mana-mana enjin
 
-    expect(count($hanyaTajuk))->toBe(17,
-        'jurang J1 berubah ('.count($hanyaTajuk).') — kemas kini PENEMUAN-CARIAN.md dan jadual §9');
-    expect(count($hanyaInstruksi))->toBe(38,
-        'jurang J2 berubah ('.count($hanyaInstruksi).') — kemas kini PENEMUAN-CARIAN.md dan jadual §9');
+    // ⚠️ Versi pertama MENGUNCI 17 dan 38 tepat. Codex #15 betul bahawa itu rapuh: set token
+    // exact tidak memodelkan ASCII-folding, substring dan Levenshtein yang `HelpCatalog::search`
+    // lakukan, jadi suntingan copy biasa akan memerahkan suite tanpa membuktikan regresi produk.
+    // Yang dikunci sekarang ialah ARAH (jurang WUJUD) + contoh yang DISAHKAN pada laluan sebenar.
+    expect(count($hanyaTajuk))->toBeGreaterThan(0,
+        'J1 tertutup — tajuk langkah kini boleh dicari? Kemas PENEMUAN-CARIAN.md §4');
+    expect(count($hanyaInstruksi))->toBeGreaterThan(0,
+        'J2 tertutup — fallback kini seluas Meili? Kemas PENEMUAN-CARIAN.md §3');
 
-    // Dan buktikan J2 pada laluan fallback SEBENAR, bukan hanya pada set perkataan.
+    // Contoh yang DISAHKAN pada laluan fallback SEBENAR (bukan inferens set perkataan):
+    //   `taip`    hanya dalam instruction  -> Meili 1 hit (produksi), fallback 0
+    //   `penapis` hanya dalam tajuk langkah -> Meili 0, fallback 0
     config()->set('scout.meilisearch.host', null);
-    expect(app(HelpSearchService::class)->search('taip', 'app', $this->adminMam, $this->mam))
-        ->toBeEmpty('`taip` kini dijumpai oleh fallback — J2 mungkin sudah ditutup, kemas dokumen');
+    foreach (['taip', 'penapis'] as $q) {
+        expect(app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam))
+            ->toBeEmpty("`{$q}` kini dijumpai oleh fallback — jurang mungkin ditutup, kemas dokumen");
+    }
+
+    // Kawalan: perkataan dalam title/summary/keywords MESTI dijumpai oleh fallback yang sama.
+    // Tanpa ini, "kosong" di atas boleh bermakna carian rosak sepenuhnya.
+    expect(app(HelpSearchService::class)->search('klasifikasi', 'app', $this->adminMam, $this->mam))
+        ->not->toBeEmpty('kawalan gagal: fallback tidak menjumpai perkataan yang ADA dalam badan');
 });

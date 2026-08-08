@@ -60,17 +60,7 @@ class SyncHelpIndex extends Command
                 }
             }
             $index = $client->index($uid);
-            $documents = collect($catalog->raw()['guides'] ?? [])->map(fn (array $guide): array => [
-                'document_id' => self::documentId($guide['id']),
-                'guide_id' => $guide['id'],
-                'panel' => $guide['panel'],
-                'roles' => $guide['roles'],
-                'title' => $guide['title'],
-                'summary' => $guide['summary'],
-                'keywords' => $guide['keywords'],
-                'steps_text' => collect($guide['steps'] ?? [])->pluck('instruction')->implode(' '),
-                'troubleshooting_text' => collect($guide['troubleshooting'] ?? [])->implode(' '),
-            ])->all();
+            $documents = collect($catalog->raw()['guides'] ?? [])->map(self::documentFor(...))->all();
             $tasks = [
                 $index->addDocuments($documents, 'document_id'),
                 $index->updateFilterableAttributes(['panel', 'roles']),
@@ -100,5 +90,31 @@ class SyncHelpIndex extends Command
     public static function documentId(string $guideId): string
     {
         return hash('sha256', $guideId);
+    }
+
+    /**
+     * Dokumen TEPAT yang dihantar ke Meilisearch bagi satu guide.
+     *
+     * Diekstrak menjadi kaedah awam supaya ujian menguji laluan yang SAMA seperti runtime.
+     * Sebelum ini pemetaan ini inline dalam `handle()`, dan ujian F8 §9.2 (b) membina
+     * proyeksinya SENDIRI daripada `guides.json` — jadi jika `mosque_id` atau `user_id`
+     * ditambah di sini, ujian itu kekal hijau. Codex pusingan 1 (#10) menangkapnya.
+     *
+     * ⚠️ `steps_text` ialah `instruction` SAHAJA — tajuk langkah TIDAK diindeks. Itu keputusan
+     * yang direkod, bukan terlepas pandang: lihat `bukti/plan-f8/PENEMUAN-CARIAN.md` §4.
+     */
+    public static function documentFor(array $guide): array
+    {
+        return [
+            'document_id' => self::documentId($guide['id']),
+            'guide_id' => $guide['id'],
+            'panel' => $guide['panel'],
+            'roles' => $guide['roles'],
+            'title' => $guide['title'],
+            'summary' => $guide['summary'],
+            'keywords' => $guide['keywords'],
+            'steps_text' => collect($guide['steps'] ?? [])->pluck('instruction')->implode(' '),
+            'troubleshooting_text' => collect($guide['troubleshooting'] ?? [])->implode(' '),
+        ];
     }
 }

@@ -106,9 +106,19 @@ kekal dalam repo dan akan menipu fasa seterusnya.
 
 **Nota B — drift dokumen akses role.** Premis pelan ("8/8 role berbeza") diperiksa dan
 **ditolak sebagai percanggahan**. `guidance.spec.js:16-18` sudah membaca `expected_page_counts`
-daripada manifest sejak F0. Beza yang tinggal ialah dokumen crawl 21 Julai: **4 halaman
-tambahan, 0 hilang**, dan keempat-empatnya (`/bantuan`, `/analitik-bantuan`, `/tiket-sokongan`,
-`/log-aktiviti`) ditambah **2026-07-22** (`f9e4e09`, `b9a5c30`) — sehari SELEPAS crawl.
+daripada manifest sejak F0. Beza yang tinggal ialah dokumen crawl 21 Julai, dan ia kini
+**DIKIRA oleh penjana** (bukan prosa hard-coded — Codex #7):
+
+```
+14 pasangan role-halaman ditambah · 4 halaman UNIK · 0 HILANG
+/app/{tenant}/bantuan · /analitik-bantuan · /tiket-sokongan · /log-aktiviti
+```
+
+⚠️ Versi pertama nota ini menulis "4 tambahan" tanpa membezakan **pasangan** daripada **halaman
+unik**. Kedua-dua angka betul untuk perkara berbeza; menyebut satu sahaja mengelirukan.
+Keempat-empat halaman unik itu ditambah **2026-07-22** (`f9e4e09`, `b9a5c30`) — sehari SELEPAS
+crawl. **`0 hilang`** ialah angka yang menentukan: tiada apa dalam dokumen 21 Julai yang hilang
+daripada manifest, jadi tiada percanggahan.
 Dokumen bertarikh dikekalkan sebagai rekod sejarah; `docs/AKSES-PAGE-MENGIKUT-ROLE.md` kini
 DIJANA daripada `role_routes` dan dijaga oleh `tests/Feature/RoleAccessDocTest.php` (4 ujian).
 

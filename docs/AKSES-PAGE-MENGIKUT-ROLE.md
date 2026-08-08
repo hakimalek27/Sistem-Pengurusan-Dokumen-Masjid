@@ -33,21 +33,35 @@ berasingan supaya tiada nombor dalam dokumen ini bercanggah dengan manifestnya.
 | Orang Awam (tidak log masuk) | 0 | 0 | 0 | ✔ |
 | **Jumlah panel `app` (tanpa awam)** | **150** | | | |
 
-## Perbandingan dengan crawl produksi 21 Julai 2026
+## Perbandingan dengan crawl produksi 21 Julai 2026 — DIKIRA
 
-`AKSES-PAGE-MENGIKUT-ROLE-PRODUCTION-2026-07-21.md` ialah rekod **bertarikh** bagi
-crawl produksi dan **tidak diubah**. Kiraannya lebih rendah kerana empat halaman
-ditambah pada **2026-07-22** — sehari selepas crawl itu:
+`AKSES-PAGE-MENGIKUT-ROLE-PRODUCTION-2026-07-21.md` ialah rekod **bertarikh** crawl produksi dan **tidak diubah**.
+Perbandingan di bawah dikira oleh penjana ini setiap kali ia dijalankan.
 
-```
-/app/{tenant}/bantuan            f9e4e09  2026-07-22
-/app/{tenant}/analitik-bantuan   f9e4e09  2026-07-22
-/app/{tenant}/tiket-sokongan     f9e4e09  2026-07-22
-/app/{tenant}/log-aktiviti       b9a5c30  2026-07-22
-```
+| Role | Dokumen 21 Jul | Manifest (`app` nav) | Tambahan | Hilang |
+|---|---:|---:|---:|---:|
+| admin_masjid | 21 | 25 | 4 | 0 |
+| pengerusi | 15 | 17 | 2 | 0 |
+| setiausaha | 13 | 15 | 2 | 0 |
+| bendahari | 13 | 15 | 2 | 0 |
+| nazir | 12 | 13 | 1 | 0 |
+| ketua_imam | 12 | 13 | 1 | 0 |
+| ajk | 12 | 13 | 1 | 0 |
+| audit | 13 | 14 | 1 | 0 |
 
-Diukur: halaman dalam dokumen 21 Julai yang **tiada** dalam manifest = **0**.
-Jadi kedua-duanya konsisten; bezanya masa, bukan percanggahan.
+**Jumlah tambahan 14 · jumlah HILANG 0.**
+
+Tiada halaman dalam dokumen 21 Julai yang hilang daripada manifest, jadi kedua-duanya KONSISTEN — bezanya masa, bukan percanggahan.
+
+Halaman unik yang manifest ada tetapi dokumen 21 Julai tiada:
+
+- `/app/{tenant}/analitik-bantuan`
+- `/app/{tenant}/bantuan`
+- `/app/{tenant}/log-aktiviti`
+- `/app/{tenant}/tiket-sokongan`
+
+*(Sejarah git bagi halaman ini menunjukkan ia ditambah 2026-07-22 — sehari*
+*selepas crawl: `f9e4e09` dan `b9a5c30`. Itu fakta git, bukan dikira di sini.)*
 
 ## Superadmin (Pentadbir Platform) — 25 page (`app`) + 12 (`admin`)
 

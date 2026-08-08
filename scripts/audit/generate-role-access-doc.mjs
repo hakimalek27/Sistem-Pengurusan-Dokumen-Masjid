@@ -91,21 +91,76 @@ for (const id of urutan) {
 }
 baris.push(`| **Jumlah panel \`app\` (tanpa awam)** | **${jumlah}** | | | |`);
 baris.push('');
-baris.push('## Perbandingan dengan crawl produksi 21 Julai 2026');
+// ── Perbandingan dengan dokumen bertarikh — DIKIRA, bukan ditulis tangan ──────────────────
+// Codex pusingan 1 (#7) betul: versi pertama menulis "4 tambahan, 0 hilang" sebagai prosa
+// hard-coded. Nombor yang tidak dikira oleh alat tidak boleh diaudit semula. Kini dokumen
+// 21 Julai DIBACA dan dibandingkan; jika ia tiada, itu dinyatakan dan bukan diandaikan.
+const DOK_SEJARAH = 'AKSES-PAGE-MENGIKUT-ROLE-PRODUCTION-2026-07-21.md';
+const PETA_LABEL_SEJARAH = {
+    'Admin / Kerani': 'admin_masjid', Pengerusi: 'pengerusi', Setiausaha: 'setiausaha',
+    Bendahari: 'bendahari', Nazir: 'nazir', 'Ketua Imam': 'ketua_imam', AJK: 'ajk',
+    Juruaudit: 'audit',
+};
+
+function bacaDokSejarah() {
+    let teks;
+    try {
+        teks = readFileSync(DOK_SEJARAH, 'utf8');
+    } catch {
+        return null;
+    }
+    const perRole = {};
+    let semasa = null;
+    for (const b of teks.split('\n')) {
+        const h = b.match(/^##\s+\d+\.\s+(.+?)\s+-\s+\d+\s+page/);
+        if (h) { semasa = PETA_LABEL_SEJARAH[h[1].trim()] ?? null; continue; }
+        if (!semasa) continue;
+        const item = b.match(/^\d+\.\s+.*?`([^`]+)`/);
+        if (item) (perRole[semasa] ??= []).push(item[1]);
+    }
+    return perRole;
+}
+
+const sejarah = bacaDokSejarah();
+baris.push('## Perbandingan dengan crawl produksi 21 Julai 2026 — DIKIRA');
 baris.push('');
-baris.push('`AKSES-PAGE-MENGIKUT-ROLE-PRODUCTION-2026-07-21.md` ialah rekod **bertarikh** bagi');
-baris.push('crawl produksi dan **tidak diubah**. Kiraannya lebih rendah kerana empat halaman');
-baris.push('ditambah pada **2026-07-22** — sehari selepas crawl itu:');
-baris.push('');
-baris.push('```');
-baris.push('/app/{tenant}/bantuan            f9e4e09  2026-07-22');
-baris.push('/app/{tenant}/analitik-bantuan   f9e4e09  2026-07-22');
-baris.push('/app/{tenant}/tiket-sokongan     f9e4e09  2026-07-22');
-baris.push('/app/{tenant}/log-aktiviti       b9a5c30  2026-07-22');
-baris.push('```');
-baris.push('');
-baris.push('Diukur: halaman dalam dokumen 21 Julai yang **tiada** dalam manifest = **0**.');
-baris.push('Jadi kedua-duanya konsisten; bezanya masa, bukan percanggahan.');
+if (!sejarah) {
+    baris.push(`⚠️ \`${DOK_SEJARAH}\` tidak dijumpai; perbandingan DILANGKAU (tiada nombor didakwa).`);
+} else {
+    baris.push(`\`${DOK_SEJARAH}\` ialah rekod **bertarikh** crawl produksi dan **tidak diubah**.`);
+    baris.push('Perbandingan di bawah dikira oleh penjana ini setiap kali ia dijalankan.');
+    baris.push('');
+    baris.push('| Role | Dokumen 21 Jul | Manifest (`app` nav) | Tambahan | Hilang |');
+    baris.push('|---|---:|---:|---:|---:|');
+    let jumTambah = 0;
+    let jumHilang = 0;
+    const semuaTambahan = new Set();
+    for (const role of Object.values(PETA_LABEL_SEJARAH)) {
+        const lama = sejarah[role] ?? [];
+        const kini = halamanNav(role, 'app');
+        const tambahan = kini.filter((r) => !lama.includes(r));
+        const hilang = lama.filter((r) => !kini.includes(r));
+        tambahan.forEach((r) => semuaTambahan.add(r));
+        jumTambah += tambahan.length;
+        jumHilang += hilang.length;
+        baris.push(`| ${role} | ${lama.length} | ${kini.length} | ${tambahan.length} | ${hilang.length} |`);
+    }
+    baris.push('');
+    baris.push(`**Jumlah tambahan ${jumTambah} · jumlah HILANG ${jumHilang}.**`);
+    baris.push('');
+    baris.push(jumHilang === 0
+        ? 'Tiada halaman dalam dokumen 21 Julai yang hilang daripada manifest, jadi kedua-duanya '
+          + 'KONSISTEN — bezanya masa, bukan percanggahan.'
+        : '⚠️ Ada halaman dalam dokumen 21 Julai yang TIADA dalam manifest — itu percanggahan '
+          + 'sebenar dan mesti disiasat.');
+    baris.push('');
+    baris.push('Halaman unik yang manifest ada tetapi dokumen 21 Julai tiada:');
+    baris.push('');
+    for (const r of [...semuaTambahan].sort()) baris.push(`- \`${r}\``);
+    baris.push('');
+    baris.push('*(Sejarah git bagi halaman ini menunjukkan ia ditambah 2026-07-22 — sehari*');
+    baris.push('*selepas crawl: `f9e4e09` dan `b9a5c30`. Itu fakta git, bukan dikira di sini.)*');
+}
 baris.push('');
 
 for (const id of urutan) {

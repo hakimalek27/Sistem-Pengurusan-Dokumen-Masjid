@@ -48,61 +48,115 @@ test('dokumen akses role menyatakan ia DIJANA dan menamakan sumbernya', function
         ->and($dok)->toContain('scripts/audit/generate-role-access-doc.mjs');
 });
 
+/** Label dokumen → identiti manifest. Dieja di sini supaya label yang berubah = ujian merah. */
+const LABEL_KE_IDENTITI = [
+    'Superadmin (Pentadbir Platform)' => 'superadmin',
+    'Admin / Kerani' => 'admin_masjid',
+    'Pengerusi' => 'pengerusi',
+    'Setiausaha' => 'setiausaha',
+    'Bendahari' => 'bendahari',
+    'Nazir' => 'nazir',
+    'Ketua Imam' => 'ketua_imam',
+    'AJK' => 'ajk',
+    'Juruaudit' => 'audit',
+    'Orang Awam (tidak log masuk)' => 'public',
+];
+
 test('kiraan panel app dalam dokumen sepadan expected_page_counts manifest', function () {
     $rr = manifestRoleRoutes();
     $dok = dokAksesRole();
 
-    // Baris ringkasan: | Label | app | admin | beku | ✔ |
+    // ⚠️ Versi pertama ujian ini hanya meminta ">= 9 baris" dan TIDAK memetakan label dokumen
+    // kepada identiti manifest — jadi satu role yang HILANG atau tersalah label masih lulus
+    // (Codex pusingan 1 #8). Kini setiap identiti mesti hadir MELALUI labelnya.
     preg_match_all('/^\|\s*([^|]+?)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+|—)\s*\|\s*(✔|✘|—)\s*\|$/mu', $dok, $m, PREG_SET_ORDER);
-    expect(count($m))->toBeGreaterThanOrEqual(9, 'jadual ringkasan dokumen tidak dapat dihurai');
 
-    $tidakSepadan = [];
+    $dalamDok = [];
     foreach ($m as $baris) {
-        [, $label, $app, , $beku, $tanda] = $baris;
-        if ($beku === '—') {
-            continue;
+        [, $label, $app, $adminPanel, $beku, $tanda] = $baris;
+        $label = trim($label);
+        if (! isset(LABEL_KE_IDENTITI[$label])) {
+            continue;   // baris "Jumlah"
         }
-        if ((int) $app !== (int) $beku || $tanda !== '✔') {
-            $tidakSepadan[] = trim($label)." app={$app} beku={$beku} tanda={$tanda}";
-        }
+        $dalamDok[LABEL_KE_IDENTITI[$label]] = [
+            'app' => (int) $app, 'admin' => (int) $adminPanel, 'beku' => $beku, 'tanda' => $tanda,
+        ];
     }
 
-    expect($tidakSepadan)->toBe([],
-        'kiraan dokumen menyimpang daripada manifest: '.implode(' · ', $tidakSepadan));
+    // Setiap identiti manifest mesti hadir dalam jadual dokumen.
+    $hilangDrpDok = array_values(array_diff(array_keys($rr['expected_page_counts']), array_keys($dalamDok)));
+    expect($hilangDrpDok)->toBe([],
+        'identiti tiada dalam jadual dokumen: '.implode(', ', $hilangDrpDok));
 
-    // Dan setiap identiti dalam manifest mesti hadir dalam jadual itu — supaya identiti baharu
-    // tidak boleh diperkenalkan tanpa dokumen dikemas.
-    foreach (array_keys($rr['expected_page_counts']) as $identiti) {
-        if ($identiti === 'public') {
-            continue;
+    // Dan setiap baris mesti sepadan kiraan yang DIKIRA SEMULA daripada manifest — bukan
+    // sekadar sepadan nilai `expected_page_counts` yang dokumen sendiri cetak.
+    $salah = [];
+    foreach ($dalamDok as $identiti => $d) {
+        $app = collect($rr['entries'])->filter(fn ($e) => $e['identity'] === $identiti
+            && $e['expected_access'] === 'allow' && $e['in_navigation'] && $e['panel'] === 'app')->count();
+        $admin = collect($rr['entries'])->filter(fn ($e) => $e['identity'] === $identiti
+            && $e['expected_access'] === 'allow' && $e['in_navigation'] && $e['panel'] === 'admin')->count();
+
+        if ($d['app'] !== $app) {
+            $salah[] = "{$identiti} app dok={$d['app']} dikira={$app}";
         }
-        $bilangan = collect($rr['entries'])
-            ->filter(fn ($e) => $e['identity'] === $identiti
-                && $e['expected_access'] === 'allow'
-                && $e['in_navigation']
-                && $e['panel'] === 'app')
-            ->count();
-        expect($bilangan)->toBe($rr['expected_page_counts'][$identiti],
-            "manifest tidak konsisten dengan sendiri untuk {$identiti}");
+        if ($d['admin'] !== $admin) {
+            $salah[] = "{$identiti} admin dok={$d['admin']} dikira={$admin}";
+        }
+        $beku = $rr['expected_page_counts'][$identiti] ?? null;
+        if ($beku !== null && ($d['beku'] !== (string) $beku || $d['tanda'] !== '✔')) {
+            $salah[] = "{$identiti} beku dok={$d['beku']} manifest={$beku} tanda={$d['tanda']}";
+        }
     }
+    expect($salah)->toBe([], 'dokumen menyimpang daripada manifest: '.implode(' · ', $salah));
 });
 
-test('setiap route yang disenaraikan dokumen benar-benar dibenarkan dalam manifest', function () {
+test('setiap route disenaraikan di bawah identiti DAN panel yang betul', function () {
     $rr = manifestRoleRoutes();
     $dok = dokAksesRole();
 
-    $dibenarkan = collect($rr['entries'])
-        ->filter(fn ($e) => $e['expected_access'] === 'allow' && $e['in_navigation'])
-        ->pluck('route_template')
-        ->unique()
-        ->all();
+    // ⚠️ Versi pertama menggunakan allowlist GLOBAL: route yang dibenarkan untuk AJK tetapi
+    // diletakkan di bawah Juruaudit masih lulus (Codex #8). Kini dokumen dihurai per seksyen
+    // identiti DAN per sub-tajuk panel, dan setiap route disemak terhadap pasangan itu.
+    $perIdentitiPanel = [];
+    $identiti = null;
+    $panel = null;
+    foreach (explode("\n", $dok) as $b) {
+        if (preg_match('/^##\s+(.+?)\s+—\s+\d+\s+page/u', $b, $h)) {
+            $identiti = LABEL_KE_IDENTITI[trim($h[1])] ?? null;
+            $panel = null;
 
-    preg_match_all('/^\d+\.\s+`([^`]+)`$/m', $dok, $m);
-    $disenarai = array_unique($m[1]);
-    expect($disenarai)->not->toBeEmpty('dokumen tidak menyenaraikan sebarang route');
+            continue;
+        }
+        if (preg_match('/^Panel `(app|admin)`:$/', $b, $h)) {
+            $panel = $h[1];
 
-    $hantu = array_values(array_diff($disenarai, $dibenarkan));
-    expect($hantu)->toBe([], 'dokumen menyenaraikan route yang manifest TIDAK benarkan: '.implode(', ', $hantu));
+            continue;
+        }
+        if ($identiti && $panel && preg_match('/^\d+\.\s+`([^`]+)`$/', $b, $h)) {
+            $perIdentitiPanel[$identiti][$panel][] = $h[1];
+        }
+    }
+
+    expect($perIdentitiPanel)->not->toBeEmpty('tiada seksyen identiti dapat dihurai daripada dokumen');
+
+    $salah = [];
+    foreach ($perIdentitiPanel as $id => $ikutPanel) {
+        foreach ($ikutPanel as $p => $routes) {
+            $dibenarkan = collect($rr['entries'])
+                ->filter(fn ($e) => $e['identity'] === $id && $e['panel'] === $p
+                    && $e['expected_access'] === 'allow' && $e['in_navigation'])
+                ->pluck('route_template')->unique()->all();
+
+            foreach (array_diff($routes, $dibenarkan) as $r) {
+                $salah[] = "{$id}/{$p}: {$r} TIDAK dibenarkan";
+            }
+            foreach (array_diff($dibenarkan, $routes) as $r) {
+                $salah[] = "{$id}/{$p}: {$r} HILANG daripada dokumen";
+            }
+        }
+    }
+    expect($salah)->toBe([], 'route tersalah letak atau hilang: '.implode(' · ', array_slice($salah, 0, 12)));
 });
 
 test('dokumen adalah keluaran penjana yang TEPAT (jana semula tidak mengubah apa-apa)', function () {
