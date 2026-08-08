@@ -49,13 +49,18 @@ it('(a) Meilisearch MATI (host tidak boleh dihubungi) — carian masih memulangk
 
     expect($hasil)->not->toBeEmpty('fallback PHP tidak menyelamatkan carian apabila Meili mati');
 
-    // ⚠️ "tidak kosong" SAHAJA terlalu longgar (Codex #9): fallback yang memulangkan guide
-    // rawak masih lulus. Hasil mesti RELEVAN kepada pertanyaan.
+    // ⚠️ Dua pusingan menegaskan ini. P1 #9: "tidak kosong" terlalu longgar. P2 #7: menerima
+    // mana-mana ID yang mengandungi tiga substring MASIH proksi — guide rawak dengan ID yang
+    // "kebetulan sesuai" lulus. Kini KEDUDUKAN diassert: hasil TERATAS mesti guide yang betul.
+    // DIUKUR pada fallback: "klasifikasi surat" -> tenant.peti-masuk, tenant.classification-nodes,
+    // workflow.admin_masjid.muat-naik-…-klasifikasikan-…
     $ids = $hasil->pluck('id');
-    expect($ids->contains(fn (string $id) => str_contains($id, 'klasifikasi')
-        || str_contains($id, 'klasifikasikan')
-        || str_contains($id, 'peti-masuk')))
-        ->toBeTrue('fallback memulangkan hasil TIDAK BERKAITAN dengan "klasifikasi surat": '.$ids->implode(', '));
+    expect($ids->first())->toBeIn(['tenant.peti-masuk', 'tenant.classification-nodes'],
+        'hasil TERATAS untuk "klasifikasi surat" bukan guide yang berkaitan: '.$ids->implode(', '));
+
+    // Dan sekurang-kurangnya satu guide klasifikasi hadir dalam keseluruhan set.
+    expect($ids->contains('tenant.classification-nodes'))->toBeTrue(
+        'guide klasifikasi tiada dalam hasil: '.$ids->implode(', '));
 
     // Dan ia mesti direkod sebagai enjin `php`, bukan `meilisearch` — jika tidak, telemetri
     // akan mendakwa Meili sihat sedangkan ia mati (keluarga "sihat != tiada ralat").
@@ -200,9 +205,24 @@ it('(d) dua tenant: SET guide sama, laluan dikontekskan, tiada silang slug (isol
     // objek-penuh MERAH atas sebab yang sah. Kedua-dua sifat kini dikunci.
     expect($a)->not->toBeEmpty();
 
-    expect(collect($b)->pluck('id')->all())->toBe(collect($a)->pluck('id')->all(),
-        'dua tenant dengan role yang sama memberi SET guide berbeza — katalog tidak sepatutnya '
-        .'bergantung kepada tenant');
+    // ⚠️ Codex P2 #6: komen mendakwa "objek penuh dibanding" tetapi kod hanya membanding ID,
+    // jadi perbezaan dalam `title`/`summary`/metadata antara dua tenant kekal hijau. Kini
+    // objek PENUH dibanding selepas `route` DINORMALKAN kembali kepada `{tenant}` — kerana
+    // kontekstualisasi route itu SAH (dan diassert berasingan di bawah), manakala apa-apa
+    // perbezaan LAIN antara dua tenant tidak sepatutnya wujud.
+    // ⚠️ Normalisasi mesti MENYELURUH: versi pertama guna `array_map` peringkat atas sahaja,
+    // jadi `steps[].route` yang bersarang kekal membawa slug dan ujian gagal atas sebab yang
+    // salah. Round-trip JSON menyentuh setiap rentetan pada setiap kedalaman.
+    $normal = fn (array $senarai, string $slug): array => json_decode(
+        str_replace("/app/{$slug}", '/app/{tenant}', json_encode($senarai, JSON_UNESCAPED_SLASHES)),
+        true,
+    );
+    $aNorm = $normal($a, $this->mam->slug);
+    $bNorm = $normal($b, $this->man->slug);
+
+    expect($bNorm)->toBe($aNorm,
+        'dua tenant dengan role yang sama memberi hasil BERBEZA selepas route dinormalkan — '
+        .'perbezaan itu bermakna data tenant memasuki medan selain route');
 
     // ⚠️ `JSON_UNESCAPED_SLASHES` WAJIB. Tanpanya `json_encode` menghasilkan `\/app\/mam\/`,
     // jadi setiap `toContain('/app/…/')` di bawah TIDAK MUNGKIN padan dan kedua-dua semakan
