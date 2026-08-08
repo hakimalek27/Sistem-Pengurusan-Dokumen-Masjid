@@ -78,11 +78,23 @@ it('(b) korpus yang diindeks tidak mengandungi data tenant atau pengguna', funct
     // SAMA seperti runtime.
     $dokumen = collect($guides)->map(fn (array $g): array => SyncHelpIndex::documentFor($g));
 
-    // Set medan DIKUNCI: medan baharu mesti keputusan sedar, bukan penambahan senyap.
-    expect(array_keys($dokumen->first()))->toBe([
+    // Set medan DIKUNCI pada SETIAP dokumen, bukan hanya yang pertama.
+    // ⚠️ Codex pusingan 2 (#5) menjalankan counterexample: menambah `mosque_id`/`user_id` pada
+    // dokumen KEDUA melepasi versi terdahulu yang hanya memeriksa `->first()`. Satu dokumen
+    // bukan sampel yang mencukupi bagi invarian struktur.
+    $medanDijangka = [
         'document_id', 'guide_id', 'panel', 'roles', 'title', 'summary', 'keywords',
         'steps_text', 'troubleshooting_text',
-    ], 'set medan dokumen indeks berubah — sahkan tiada data tenant/pengguna masuk');
+    ];
+    $medanSalah = [];
+    foreach ($dokumen as $d) {
+        if (array_keys($d) !== $medanDijangka) {
+            $medanSalah[] = ($d['guide_id'] ?? '?').': '.implode(',', array_diff(array_keys($d), $medanDijangka));
+        }
+    }
+    expect($medanSalah)->toBe([],
+        'set medan dokumen indeks berubah pada '.count($medanSalah).' dokumen — sahkan tiada '
+        .'data tenant/pengguna masuk: '.implode(' · ', array_slice($medanSalah, 0, 5)));
 
     $korpus = $dokumen->map(fn (array $d): string => json_encode($d, JSON_UNESCAPED_UNICODE))->implode("\n");
 

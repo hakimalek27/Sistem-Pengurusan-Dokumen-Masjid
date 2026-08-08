@@ -102,12 +102,16 @@ const PETA_LABEL_SEJARAH = {
     Juruaudit: 'audit',
 };
 
+// ⚠️ GAGAL-TERTUTUP. Codex pusingan 2 (#10): versi pertama gagal-TERBUKA — fail rosak atau
+// heading yang tidak sepadan menghasilkan objek kosong, setiap senarai lama menjadi kosong,
+// `jumlah HILANG` menjadi 0, dan penjana mengisytiharkan "KONSISTEN" tanpa membandingkan
+// apa-apa. Kini struktur yang dihurai DIVALIDASI: lapan role, setiap satu ≥1 route.
 function bacaDokSejarah() {
     let teks;
     try {
         teks = readFileSync(DOK_SEJARAH, 'utf8');
     } catch {
-        return null;
+        return null;   // fail memang tiada — dinyatakan, bukan didakwa konsisten
     }
     const perRole = {};
     let semasa = null;
@@ -117,6 +121,18 @@ function bacaDokSejarah() {
         if (!semasa) continue;
         const item = b.match(/^\d+\.\s+.*?`([^`]+)`/);
         if (item) (perRole[semasa] ??= []).push(item[1]);
+    }
+
+    // Validasi: struktur yang dihurai mesti masuk akal, jika tidak LEMPAR — jangan
+    // mengisytiharkan "KONSISTEN" atas huraian yang gagal.
+    const dijangka = Object.values(PETA_LABEL_SEJARAH);
+    const hilang = dijangka.filter((r) => !(perRole[r]?.length));
+    if (hilang.length) {
+        throw new Error(
+            `Dokumen sejarah ${DOK_SEJARAH} tidak dapat dihurai: ${hilang.length} role tiada `
+            + `route (${hilang.join(', ')}). Perbandingan DIBATALKAN — memberi "0 hilang" atas `
+            + 'huraian yang gagal akan menjadi dakwaan palsu.',
+        );
     }
     return perRole;
 }

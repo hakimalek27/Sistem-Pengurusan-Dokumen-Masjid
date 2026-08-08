@@ -1,7 +1,7 @@
 # F8 §9.2 — gate carian bantuan: keputusan, dan TIGA penemuan
 
 **Tarikh:** 9 Ogos 2026 · **Produksi diukur:** `2325bec` (Deploy 14) · **Indeks:** `diwan_help_guides`
-**Penjaga baharu:** `tests/Feature/HelpSearchGateTest.php` (6 ujian, 23 assertion)
+**Penjaga baharu:** `tests/Feature/HelpSearchGateTest.php` (6 ujian, 33 assertion)
 
 ## 1. Meilisearch produksi — LULUS
 
@@ -74,18 +74,25 @@ deploy** — ia dicadangkan untuk F10 atau hotfix berasingan.
 | Ujian | Menutup |
 |---|---|
 | (a) | Meili **MATI** (host ditolak) → fallback masih memberi hasil, dan telemetri merekod `engine=php` |
-| (b) | tiada e-mel · tiada URL mutlak · tiada route memaku slug tenant sebenar |
-| (c) | panel awam tidak pernah memulangkan guide tenant/admin |
-| (d) | dua tenant → hasil IDENTIK (regresi isolasi RR-02-04) |
-| (e) | akronim boleh dicari **dan** skop role dihormati; `DDMS` masih tiada dalam korpus |
-| (f) | jurang J1=17 dan J2=38 dikunci — melebar/mengecil = ujian merah |
+| (b) | set medan dokumen dikunci pada **SETIAP** dokumen · tiada e-mel · tiada URL mutlak · tiada route memaku slug tenant |
+| (c) | panel awam tidak pernah memulangkan guide tenant/admin — **dan** hasil awam mesti >0 dahulu |
+| (d) | SET guide sama · laluan dikontekskan kepada tenant semasa · tiada silang slug |
+| (e) | akronim boleh dicari **dan** skop role dihormati; `DDMS` masih tiada (katalog DAN carian) |
+| (f) | jurang J1/J2 masih WUJUD + dua contoh disahkan pada laluan sebenar + kawalan positif |
 
-**Dua regresi sengaja dibuktikan** (bukan didakwa):
+**Empat regresi sengaja dibuktikan** (bukan didakwa):
 ```
-fallback dilumpuhkan (`if (false)`)        -> (a) MERAH
-route dengan slug `mam` sebenar disisipkan -> (b) MERAH, mesej menamakan guide + route
-kedua-duanya dipulihkan                    -> 6/6 hijau, git status 0 baris
+fallback dilumpuhkan (`if (false)`)                  -> (a) MERAH
+route dengan slug `mam` sebenar disisipkan            -> (b) MERAH, menamakan guide + route
+mosque_id/user_id pada dokumen KEDUA (counterexample
+  tepat Codex P2 #5)                                  -> (b) MERAH, menamakan guide + medan
+carian awam dilumpuhkan (memulangkan kosong)          -> (c) MERAH — lubang vakum ditutup
+semuanya dipulihkan                                   -> 6/6 hijau, git status 0 baris
 ```
+
+⚠️ **Baris (d) dan (f) DIKEMAS selepas Codex pusingan 2.** Versi pertama mendakwa "hasil
+IDENTIK" (premis salah — laluan memang dikontekskan) dan mengunci kiraan tepat 17/38 (rapuh
+terhadap suntingan copy). Lihat `RR-P2-CODEX.md` #6, #8, #15.
 
 ## 6. Kesilapan saya sendiri dalam larian ini — direkod supaya tidak diulang
 

@@ -1,4 +1,9 @@
-# SUSULAN-PEMBAIKAN — laporan penutup F8 (§9)
+# SUSULAN-PEMBAIKAN — laporan F8 (§9) · ⚠️ **BELUM PENUTUP**
+
+> **Status: F8 BELUM SIAP.** Round-robin §9.3 memberi **23 penemuan (pusingan 1)** dan
+> **19 penemuan (pusingan 2)**; 14 kekal TERBUKA dan majoritinya **tidak** disekat oleh
+> kredensial pemilik. Lihat **§5C**. Baris jadual yang terbukti melebih-lebih sudah ditukar
+> daripada ✅ kepada ⚠️/🔴. Jangan baca dokumen ini sebagai pengesahan keluaran.
 
 **Tarikh:** 9 Ogos 2026 · **Kod diukur:** `7d98883` · **Produksi:** `2325bec` (Deploy 14)
 **Asas perbandingan:** audit round-robin 14 pusingan, commit `4e07a70`, manifest beku
@@ -35,7 +40,8 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Langkah `blocked` | belum diukur | **0** | **0** | ✅ |
 | `risk-accepted` (dilapor berasingan) | — | boleh >0 dgn fallback+tiket+luput | **0** | ✅ |
 | Liputan gate diassert agregator | tiada | 473 · **229** · 83 union | **83/473/172 union · missing 0 · extra 0 · overlap 0 · pass true** | ⚠️ **LENCONGAN** — nota A |
-| Mismatch `role_routes` (3 pasangan) | belum diukur | 0 | **0** pada **410 pasangan identiti×route** (41 route × 10 identiti) | ✅ |
+| Mismatch `role_routes` — lapisan A↔B | belum diukur | 0 | **0** pada **410 pasangan identiti×route** (41 route × 10 identiti) | ✅ |
+| Mismatch `role_routes` — lapisan C (probe `actual_status`) | belum diukur | 0 | **TIDAK dalam manifest**: kesemua 410 `actual_status` = `null` | ⚠️ nota D |
 | Drift dokumen akses role | 8/8 role | 0 | **0 percanggahan** (premis diperiksa — nota B) | ✅ |
 | Suite domain dalam gate CI | 0/3 | 2/3 wajib hijau | **`ci-domain` hijau dalam CI 31213031582** | ✅ |
 | Gate antivirus intake fail-closed | 0 ujian | 3/3 status ditolak | **3/3** (`infected`·`unavailable`·`error`) + 1 kawalan `clean` | ✅ |
@@ -78,6 +84,16 @@ Yang dihantar ialah **172**, dan dua perkara mesti dipisahkan dengan jelas:
 **Keputusan pemilik diperlukan:** terima 172 sebagai denominator baharu (dengan sebab di atas
 direkod), ATAU tetapkan bahawa 229 mesti dicapai — yang bermakna mengembalikan `wait_for_user`
 pada 57 langkah, iaitu memundurkan keputusan reka bentuk F5/F6.
+
+**Nota D — 🔴 dakwaan "3 pasangan" saya MELEBIH-LEBIH (Codex P2 #18).**
+§9 menuntut `expected_access` ↔ `declared_access` ↔ `actual_status` — **tiga** lapisan. Diukur:
+kesemua **410** `actual_status` dalam manifest ialah `null`, dan pembina `mismatches` sengaja
+mengabaikan `actual` yang null. Jadi manifest membuktikan **dua** lapisan, bukan tiga.
+
+Lapisan C **memang** dijalankan — `PlanManifestTest` "role_routes lapisan C: probe HTTP sebenar
+sepadan expected_status" berjalan bagi **10 identiti** pada SETIAP larian suite (dilihat hijau
+dalam larian 632). Tetapi tiada artifak per-pasangan dikomit, jadi ia tidak boleh diaudit
+selepas larian. Baris itu kini ⚠️, bukan ✅.
 
 **Nota C — 🔴 tiga baris DITARIK daripada ✅ oleh tentukuran saya sendiri.**
 📄 `bukti/plan-f8/PENEMUAN-TENTUKURAN.md`
@@ -356,6 +372,60 @@ tepat**, dengan data per-langkah dan kriteria pemilihan sampel yang dinyatakan.
 | 23 | kesimpulan centerCovered melampaui eksperimen | ✅ **DITERIMA** — had disenaraikan (§3A dalam PENEMUAN-CENTERCOVERED.md); cadangan "bersara" ditarik menjadi keputusan pemilik |
 
 **Diterima 19 · sebahagian 3 · ditolak 0 · satu sub-dakwaan disangkal dengan bukti (#7).**
+
+## 5C. Audit pusingan 2 (Codex) — 19 penemuan · F8 **BELUM SIAP**
+
+📄 `bukti/plan-f8/RR-P2-CODEX.md` · prompt `skrip/rr-f8-p2-prompt.txt`
+
+Pusingan 2 bertanya satu soalan: adakah pembaikan pusingan 1 **benar-benar** menutup penemuan?
+Codex menjalankan **counterexample sebenar** terhadap ujian yang saya kukuhkan, dan mendapati
+beberapa daripadanya masih boleh hijau.
+
+⭐ **#11 mengesahkan secara BEBAS** penemuan runner yang saya temui serentak: spec produksi tiada
+dalam mana-mana project Playwright, jadi arahan wrapper memberi `No tests found`. Dua pengaudit,
+dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`
+
+### DITUTUP dalam pusingan ini (dengan counterexample dibuktikan merah)
+
+| # | Perkara | Bukti penutupan |
+|---|---|---|
+| 5 | set medan hanya disemak pada dokumen PERTAMA | counterexample tepat Codex (`mosque_id`+`user_id` pada dokumen KEDUA) → MERAH, menamakan guide + medan |
+| 10 | pembaca dokumen sejarah gagal-TERBUKA | heading dirosakkan → penjana kini **melempar**, bukan mengisytiharkan "KONSISTEN" |
+| 11 | runner produksi tidak boleh berjalan | project `production-readonly` + `--project` dalam wrapper → `Total: 1 test` |
+| 18 | "0 mismatch pada 3 pasangan" | diukur: 410/410 `actual_status` = null → baris ditukar kepada ⚠️ (nota D) |
+| 19 (sebahagian) | "23 assertion" lapuk | dibetulkan kepada 33 (kiraan sebenar) |
+
+### 🔴 MASIH TERBUKA — dan saya tidak menandakannya siap
+
+| # | Perkara | Mengapa ia penting |
+|---|---|---|
+| 1 | artifak runtime/A/B tiada **provenance** (hash katalog, commit, tenant, benih, masa); `lengkap:true` ditulis walaupun `AB_HAD` memotong larian | dua larian versi berbeza boleh dicampur dan kelihatan lengkap |
+| 2 | CTA `0` bukan apple-to-apple: asas = produksi/`smoke`, ukuran = tempatan/`mam` + benih berbeza | CTA bergantung kepada kewujudan sasaran seterusnya dalam DOM, jadi benih boleh mengubahnya |
+| 3 | `title==description` kini dibanding dengan **seluruh** `textContent` popover (termasuk boilerplate "Buka panduan penuh") | metrik boleh kekal 0 walaupun tajuk kembali menduplikasi arahan teras |
+| 4 | "pecahan silang" ialah pengiraan medan statik, bukan hasil ukuran per-viewport; semua sel `mobile=0` | §9.3 menuntut pecahan setiap metrik × role × viewport — status ✅ saya SALAH |
+| 6 | komen (d) mendakwa objek penuh dibanding; kod membanding ID + cari 2 slug | perbezaan tenant dalam `title`/`summary`/metadata masih hijau |
+| 7 | relevansi masih proksi: (a) terima mana-mana ID mengandungi 3 substring; (e) hanya "tidak kosong" | guide rawak dengan ID "sesuai" masih lulus |
+| 8 | (f) bukan gate Meili; membuang `steps_text` daripada `updateSearchableAttributes` kekalkan semua hijau | jurang J1/J2 boleh berubah sepenuhnya tanpa dikesan |
+| 9 | gate route dokumen tidak menuntut setiap identiti/panel HADIR — buang seluruh seksyen dan ia tidak diaudit | vakum per-seksyen |
+| 12 | wrapper menulis fail rahsia dalam **kontena**, lalu membaca/memadam `/tmp` pada **host** | kredensial boleh kekal dalam kontena; kontrak pemadaman rahsia pecah |
+| 13 | cleanup wrapper guna `cleanup --force` tanpa `--json` → padam ikut corak e-mel/slug, bukan ID inventori | bercanggah dengan kontrak "padam hanya ID `created`"; delta before/after tidak diassert |
+| 14 | beberapa item §9.1 belum ada dalam spec: awam tiada tour/carian/`<main>`/overflow; superadmin hanya panel `admin`; bantuan/carian/tour tidak diuji per route; 3 query hanya assert elemen status | ini **boleh dibaiki tempatan tanpa kredensial** |
+| 15 | (a) ialah `connection refused`, bukan **timeout** | laluan fallback selepas sambungan tergantung belum diuji |
+| 16 | "e-mel 0/18" hanya `toMail()`+`render()`, bukan penghantaran; tiada skrinsyot axe 5×2; ringkasan mengira baris LENCONGAN 172 sebagai tercapai | ✅ terlalu murah |
+| 17 | `ab-mobile.sh` guna `set -uo pipefail` (bukan `-e`) — kegagalan larian A tidak menghentikan B; JSON tiada provenance | `1/24` tidak membuktikan ia benar-benar sisi katalog lama |
+| 19 | banyak nombor hanya hidup dalam **prosa**: shard JSON mentah, dump kebocoran produksi, `pelupusn 7`/`kelulusn 16`/akronim, kawalan fallback 10–12, log merah dua ujian mutasi | tidak boleh dihasilkan semula daripada artifak |
+
+### Pendirian jujur
+
+**F8 BELUM SIAP.** Pusingan 2 menunjukkan laporan versi terdahulu menandakan beberapa baris ✅
+yang sepatutnya ⚠️ atau 🔴. Empat belas penemuan kekal terbuka, dan **sebahagian besar boleh
+dibaiki tanpa kredensial** (#3, #4, #6, #7, #8, #9, #14, #15, #17, #19) — jadi ia bukan disekat
+pada pemilik; ia kerja yang belum saya buat.
+
+⭐ Satu perkara yang round-robin ini buktikan dengan jelas: **dua pusingan tidak mencukupi untuk
+menutup fasa pengukuran ini.** Pusingan 1 memberi 23 penemuan, pusingan 2 memberi 19 selepas
+pembaikan — kadar penemuan tidak menghampiri sifar. Audit pelan asal mengambil **27 pusingan**
+untuk menumpu. §9.3 menetapkan "2 pusingan" sebagai minimum, bukan sebagai bukti konvergensi.
 
 ## 6. Artifak
 

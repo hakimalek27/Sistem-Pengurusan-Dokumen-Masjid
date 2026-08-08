@@ -1,0 +1,45 @@
+Anda pengaudit ADVERSARIAL, PUSINGAN 2. Repo: Sistem Pengurusan Dokumen Masjid (Diwan/SPDM).
+
+Dalam pusingan 1 anda mengembalikan 23 penemuan ke atas fasa F8. Pembaikan telah dibuat dalam
+commit `9e96e4f`, `1af627b` dan sebelumnya. Tugas anda sekarang: **semak sama ada pembaikan itu
+BENAR-BENAR menutup penemuan, atau hanya kelihatan menutupnya.** Jangan memuji; jangan ulang
+penemuan yang sudah betul-betul ditutup.
+
+Baca:
+  1. Audit Review Round Robin/SUSULAN-PEMBAIKAN.md          (§5A kepatuhan, §5B pendirian, nota A/B/C)
+  2. Audit Review Round Robin/bukti/plan-f8/RR-P1-CODEX.md  (23 penemuan anda)
+  3. Audit Review Round Robin/bukti/plan-f8/PENEMUAN-TENTUKURAN.md
+  4. Audit Review Round Robin/bukti/plan-f8/PENEMUAN-CENTERCOVERED.md  (§3A had baharu)
+  5. Audit Review Round Robin/bukti/plan-f8/PENEMUAN-CARIAN.md
+  6. Audit Review Round Robin/bukti/plan-f8/metrik-f8.json + skrip/metrik-f8.mjs
+  7. Audit Review Round Robin/bukti/plan-f8/runtime-kohort-f8.json + skrip/ukur-runtime-kohort-f8.mjs
+  8. Audit Review Round Robin/bukti/plan-f8/{ab-lama,ab-semasa}.json + skrip/ab-*.
+  9. Audit Review Round Robin/bukti/plan-f8/bukti-larian/   (artifak CI + produksi)
+ 10. tests/Feature/HelpSearchGateTest.php · tests/Feature/RoleAccessDocTest.php
+ 11. scripts/audit/generate-role-access-doc.mjs · app/Console/Commands/SyncHelpIndex.php
+
+Soalan:
+
+A. Bagi SETIAP penemuan pusingan 1 yang didakwa ditutup: adakah ia benar-benar ditutup? Namakan
+   yang MASIH terbuka dan tunjukkan mengapa dengan fail:baris.
+
+B. Ukuran runtime baharu (`runtime-kohort-f8.json`, 124 popover) mendakwa title==description 0,
+   terpotong 0, CTA 0. Adakah kaedahnya betul dan adakah ia benar-benar apple-to-apple dengan
+   data audit produksi? Cari kelemahan (mis. tenant/benih berbeza, viewport, tour dimatikan).
+
+C. Ujian yang dikukuhkan: adakah mana-mana daripadanya MASIH boleh lulus secara vakum atau atas
+   proksi? Cuba cari cara membuatnya hijau sambil tingkah laku rosak.
+
+D. Adakah pembaikan memperkenalkan MASALAH BAHARU? Khususnya:
+   - `SyncHelpIndex::documentFor()` diekstrak — adakah tingkah laku sync berubah?
+   - penjana dokumen akses role kini membaca fail sejarah — apa jadi jika fail itu tiada/rosak?
+   - ujian (f) kini `toBeGreaterThan(0)` — adakah itu terlalu longgar sehingga tidak berguna?
+
+E. §5A mendakwa status setiap item §9.1/§9.1a/§9.2/§9.3. Adakah mana-mana status itu SALAH
+   (didakwa ✅ padahal tidak, atau ⏸ padahal sebenarnya boleh dibuat sekarang tanpa kredensial)?
+
+F. Adakah ada apa-apa dalam F8 yang masih TIDAK BOLEH dihasilkan semula daripada artifak yang
+   dikomit? Senaraikan setiap nombor yang hanya hidup dalam prosa.
+
+Format: senarai bernombor. [TERUK/SEDANG/KECIL] + fail:baris + apa yang salah + bukti.
+Jika sesuatu sudah betul, JANGAN sebut. Akhiri dengan "PENEMUAN SUBSTANTIF: <n>".

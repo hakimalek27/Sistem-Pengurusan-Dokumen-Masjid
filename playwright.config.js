@@ -81,5 +81,25 @@ export default defineConfig({
             name: 'guidance-full',
             testMatch: ['e2e/guidance-full.spec.js'],
         },
+        // 🔴 F8 §9.1a — DITAMBAH selepas penemuan bahawa runner produksi TIDAK BOLEH BERJALAN.
+        //
+        // `e2e/production-guidance-readonly.spec.js` sengaja diletakkan di luar setiap project
+        // supaya CI tidak pernah menjalankannya, dan `PlanManifestTest` mengallowlistkannya
+        // dengan sebab "HANYA melalui wrapper". Tetapi arahan TEPAT wrapper
+        // (`run-production-guidance-readonly.ps1:87`) ialah
+        //     playwright test e2e/production-guidance-readonly.spec.js --workers=1
+        // dan Playwright menapis ikut PROJECT: fail yang tiada dalam mana-mana `testMatch`
+        // memberi `Error: No tests found.` — DISAHKAN empirikal dengan menjalankan arahan itu.
+        //
+        // Jadi allowlist itu bercanggah dengan dirinya sendiri: spec dikecualikan daripada
+        // project KERANA ia berjalan melalui wrapper, sedangkan wrapper memerlukan project.
+        // Ia akan gagal pada saat pemilik akhirnya membekalkan kredensial.
+        //
+        // Project ini TIDAK dirujuk oleh `.github/workflows/ci.yml` — CI kekal tidak pernah
+        // menjalankannya. Ia hanya memberi wrapper sesuatu untuk dipilih (`--project`).
+        {
+            name: 'production-readonly',
+            testMatch: ['e2e/production-guidance-readonly.spec.js'],
+        },
     ],
 });

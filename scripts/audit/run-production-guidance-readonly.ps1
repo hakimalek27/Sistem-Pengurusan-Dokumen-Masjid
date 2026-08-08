@@ -84,7 +84,9 @@ try {
         $report = Join-Path $evidenceDir 'route-manifest.json'
         $psi = New-Object System.Diagnostics.ProcessStartInfo
         $psi.FileName = 'npx'
-        $psi.Arguments = 'playwright test e2e/production-guidance-readonly.spec.js --workers=1'
+        # F8: `--project` WAJIB. Tanpanya Playwright menapis ikut project dan memberi
+        # `Error: No tests found.` — disahkan empirikal. Lihat komen dalam playwright.config.js.
+        $psi.Arguments = 'playwright test --project=production-readonly --workers=1'
         $psi.WorkingDirectory = $repoRoot
         $psi.UseShellExecute = $false
         $psi.EnvironmentVariables['E2E_PRODUCTION'] = '1'
