@@ -40,9 +40,9 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Suite domain dalam gate CI | 0/3 | 2/3 wajib hijau | **`ci-domain` hijau dalam CI 31213031582** | ✅ |
 | Gate antivirus intake fail-closed | 0 ujian | 3/3 status ditolak | **3/3** (`infected`·`unavailable`·`error`) + 1 kawalan `clean` | ✅ |
 | Kohort: `resolved_to_generic` | 119/124 | ≤25/124 + allowlist | **38/124** | ✅ |
-| Kohort: tajuk = penerangan | 77/124 | 0 | **0/124** | ✅ |
-| Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **0/124** | ✅ |
-| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** | ✅ |
+| Kohort: tajuk = penerangan | 77/124 | 0 | **belum disahkan** | ⏳ nota C |
+| Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **belum disahkan** | ⏳ nota C |
+| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **belum disahkan** | ⏳ nota C |
 | Tour `/log-masuk` ralat palsu | 100% | lulus | **lulus** (CI `ci-guidance`, disahkan live Deploy 5) | ✅ |
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
 | Default borang retensi | `auto_padam` | `semak` + dialog | **`semak`** (F4) | ✅ |
@@ -64,6 +64,17 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 yang berkurangan: `wait_for_user` dalam manifest beku ialah 172 (invarian `wait_for_user: 172`).
 Angka 229 dalam pelan datang daripada kiraan audit sebelum katalog diselaraskan. Union tiga
 shard = 172 = jangkaan manifest, dengan `missing 0 · extra 0 · overlap 0`.
+
+**Nota C — 🔴 tiga baris DITARIK daripada ✅ oleh tentukuran saya sendiri.**
+📄 `bukti/plan-f8/PENEMUAN-TENTUKURAN.md`
+`metrik-f8.mjs` mengira ketiga-tiganya daripada **katalog**; asas audit ialah ukuran **RUNTIME**.
+Dijalankan pada katalog commit audit `4e07a70`, alat itu memberi **0 pada KEDUA-DUA belah** —
+ia tidak boleh menunjukkan pergerakan. Puncanya: 118/124 tajuk kohort ialah placeholder
+`"Langkah N"` pada masa itu, jadi tour MENERBITKAN tajuk daripada arahan; dan medan
+`wait_for_user` **tidak wujud** sama sekali (disahkan bebas oleh Codex: `oldMissing: 124`).
+Definisi audit DITENTUKUR tepat pada data auditnya sendiri (77 · 20 · 20 dihasilkan semula),
+jadi definisinya betul dan hanya sumber saya yang salah. Sisi semasa sedang diukur pada popover
+sebenar (`skrip/ukur-runtime-kohort-f8.mjs`). Sehingga itu: **belum disahkan**, bukan ✅.
 
 **Nota B — drift dokumen akses role.** Premis pelan ("8/8 role berbeza") diperiksa dan
 **ditolak sebagai percanggahan**. `guidance.spec.js:16-18` sudah membaca `expected_page_counts`
@@ -191,8 +202,9 @@ yang dicipta oleh `run_uuid` larian itu.
 
 ## 5. Ringkasan jujur
 
-Jadual §1 mengandungi **30 baris**: **23 tercapai** · **4 tidak tercapai** (§2.1–2.4) ·
-**3 menunggu kredensial** (§3). Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
+Jadual §1 mengandungi **30 baris**: **20 tercapai** · **4 tidak tercapai** (§2.1–2.4) ·
+**3 menunggu kredensial** (§3) · **3 belum disahkan** (nota C — tentukuran gagal, ukuran runtime
+sedang dijalankan). Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
 **2.6** `public.help#2`) **bukan** baris jadual §9 — ia penemuan yang dibawa ke F9/F10, dan
 disenaraikan di sana supaya ia tidak hilang, bukan untuk membesarkan kiraan kegagalan.
 

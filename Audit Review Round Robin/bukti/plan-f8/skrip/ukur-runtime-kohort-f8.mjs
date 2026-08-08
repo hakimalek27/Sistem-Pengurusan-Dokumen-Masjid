@@ -1,0 +1,110 @@
+// F8 §9 — ukur SEMULA tiga metrik KANDUNGAN kohort pada RUNTIME, apple-to-apple.
+//
+// 🔴 Mengapa skrip ini wujud: `metrik-f8.mjs` mengira `title == instruction` daripada KATALOG
+// dan memberi 0 pada kedua-dua belah — jadi ia tidak boleh menunjukkan pergerakan. Ditentukur
+// dan gagal: pada commit audit `4e07a70`, katalog memberi 0 sedangkan asas audit ialah 77.
+//
+// Puncanya: asas audit ialah ukuran RUNTIME. Pada `4e07a70`, **118/124** tajuk langkah kohort
+// ialah placeholder `"Langkah N"`, jadi tour MENERBITKAN tajuk daripada arahan — dan pada
+// popover, `title == description` untuk 77 langkah. Katalog tidak boleh menunjukkannya.
+//
+// Sisi asas DITENTUKUR TEPAT daripada data audit sendiri
+// (`pusingan-11-codex/production-desktop-all-tour-steps.json`):
+//     title == description 77 · tajuk terpotong 20 · CTA "Buat pada skrin" 20
+// Ketiga-tiganya dihasilkan semula dengan definisi di bawah. Maka definisi itu betul, dan
+// sisi SEMASA mesti diukur dengan definisi yang SAMA pada popover sebenar.
+//
+// Guna: node "Audit Review Round Robin/bukti/plan-f8/skrip/ukur-runtime-kohort-f8.mjs"
+//   (perlu pelayan tempatan pada :8092 + benih demo)
+
+const { chromium } = await import(
+    'file:///C:/Projek%20Coding/Sistem%20Pengurusan%20Dokumen%20Masjid/node_modules/playwright/index.mjs'
+);
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const BASE = process.env.E2E_BASE_URL || 'http://127.0.0.1:8092';
+const TENANT = process.env.E2E_TENANT || 'mam';
+const KATA = process.env.MANUAL_DEMO_PASSWORD || 'password';
+const KELUAR = 'Audit Review Round Robin/bukti/plan-f8/runtime-kohort-f8.json';
+
+const manifest = JSON.parse(readFileSync('Audit Review Round Robin/bukti/plan-baseline/manifest.json', 'utf8'));
+const kohort = manifest.catalogue
+    .filter((g) => g.family === 'tenant')
+    .flatMap((g) => g.steps.map((s) => ({ key: s.key, guide: g.guide_id, index: s.index, route: s.route || g.route })));
+
+// Definisi audit, disahkan menghasilkan semula 77/20/20 pada datanya sendiri.
+const bersih = (t) => String(t ?? '').trim().replace(/[.!?]+$/, '').toLowerCase();
+const terpotong = (t) => /(…|\.\.\.)$/.test(String(t ?? '').trim());
+
+const pelayar = await chromium.launch();
+// Audit mengukur DESKTOP untuk metrik kandungan ini.
+const k = await pelayar.newContext({ viewport: { width: 1440, height: 1000 } });
+await k.addInitScript(() => { try { localStorage.setItem('diwan-help-mode', 'dimatikan'); } catch { /* noop */ } });
+const p = await k.newPage();
+
+await p.goto(`${BASE}/app/login`);
+await p.locator('input[id="form.login"]').fill('admin_masjid@demo.test');
+await p.locator('input[type="password"]').fill(KATA);
+await p.getByRole('button', { name: /Log masuk/i }).click();
+await p.waitForURL((u) => u.pathname.replace(/\/$/, '') === `/app/${TENANT}`, { timeout: 90_000 });
+console.log(`log masuk OK · ${kohort.length} langkah kohort · desktop 1440x1000\n`);
+
+const hasil = [];
+for (const [i, s] of kohort.entries()) {
+    const laluan = String(s.route || '').replace('{tenant}', TENANT) || `/app/${TENANT}`;
+    const url = `${BASE}${laluan}?panduan=${s.guide}&langkah=${s.index - 1}`;
+    let r = { adaPopover: false };
+    try {
+        for (let c = 1; ; c += 1) {
+            try { await p.goto(url, { waitUntil: 'domcontentloaded' }); break; }
+            catch (e) { if (c >= 3) throw e; await p.waitForTimeout(1200); }
+        }
+        await p.waitForTimeout(2200);
+        r = await p.evaluate(() => {
+            const pop = document.querySelector('.driver-popover');
+            if (!pop) return { adaPopover: false };
+            const btn = [...pop.querySelectorAll('button')]
+                .map((b) => (b.textContent || '').trim())
+                .filter((t) => t && !/^[×✕✖]$/.test(t));
+            return {
+                adaPopover: true,
+                title: pop.querySelector('.driver-popover-title')?.textContent?.trim() ?? '',
+                description: pop.querySelector('.driver-popover-description')?.textContent?.trim() ?? '',
+                button: btn.join(' | '),
+            };
+        });
+    } catch (e) {
+        r = { adaPopover: false, ralat: String(e.message).split('\n')[0].slice(0, 70) };
+    }
+    hasil.push({ ...s, ...r });
+    if ((i + 1) % 20 === 0 || i + 1 === kohort.length) {
+        console.log(`  … ${i + 1}/${kohort.length}`);
+        writeFileSync(KELUAR, JSON.stringify({ lengkap: i + 1 === kohort.length, diukur: i + 1, hasil }, null, 2) + '\n');
+    }
+}
+
+const ada = hasil.filter((h) => h.adaPopover);
+const sama = ada.filter((h) => bersih(h.title) === bersih(h.description));
+const potong = ada.filter((h) => terpotong(h.title));
+const cta = ada.filter((h) => (h.button || '').includes('Buat pada skrin'));
+const placeholder = ada.filter((h) => /^Langkah \d+$/.test(h.title));
+
+console.log('\n── RUNTIME kohort, definisi audit yang SAMA ──');
+console.log(`  popover dirender      : ${ada.length}/${hasil.length}`);
+console.log(`  title == description  : ${sama.length}   (asas audit 77)`);
+console.log(`  tajuk terpotong       : ${potong.length}   (asas audit 20)`);
+console.log(`  CTA "Buat pada skrin" : ${cta.length}   (asas audit 20)`);
+console.log(`  placeholder "Langkah N": ${placeholder.length}   (asas audit 118 dlm katalog)`);
+if (sama.length) console.log('  contoh title==description:', sama.slice(0, 5).map((h) => h.key).join(', '));
+
+writeFileSync(KELUAR, JSON.stringify({
+    lengkap: true,
+    definisi: 'title==description selepas buang noktah akhir; terpotong = tajuk berakhir elipsis',
+    asas_audit: { title_equals_description: 77, truncated: 20, cta_buat_pada_skrin: 20 },
+    kini: {
+        popover: ada.length, title_equals_description: sama.length,
+        truncated: potong.length, cta_buat_pada_skrin: cta.length, placeholder: placeholder.length,
+    },
+    hasil,
+}, null, 2) + '\n');
+await pelayar.close();

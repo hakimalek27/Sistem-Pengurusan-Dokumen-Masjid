@@ -1,0 +1,406 @@
+{
+  "lengkap": false,
+  "diukur": 40,
+  "hasil": [
+    {
+      "key": "tenant.dashboard#1",
+      "guide": "tenant.dashboard",
+      "index": 1,
+      "route": "/app/{tenant}",
+      "adaPopover": true,
+      "title": "Sahkan tenant yang betul",
+      "description": "Semak nama masjid pada menu navigasi untuk memastikan tenant yang betul; pada skrin kecil tekan menu (tiga garis) dahulu.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.dashboard#2",
+      "guide": "tenant.dashboard",
+      "index": 2,
+      "route": "/app/{tenant}",
+      "adaPopover": true,
+      "title": "Baca kad statistik",
+      "description": "Baca kad statistik; nombor hanya merangkumi data yang role ini dibenarkan lihat.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.dashboard#3",
+      "guide": "tenant.dashboard",
+      "index": 3,
+      "route": "/app/{tenant}",
+      "adaPopover": true,
+      "title": "Semak senarai semak persediaan",
+      "description": "Semak senarai semak persediaan jika masih dipaparkan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.dashboard#4",
+      "guide": "tenant.dashboard",
+      "index": 4,
+      "route": "/app/{tenant}",
+      "adaPopover": true,
+      "title": "Buka tugasan dari menu",
+      "description": "Gunakan menu navigasi untuk membuka tugasan; pada skrin kecil tekan menu (tiga garis) dahulu. Jangan taip URL tenant lain secara manual.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#1",
+      "guide": "tenant.sensitive-access-logs",
+      "index": 1,
+      "route": "/app/{tenant}/sensitive-access-logs",
+      "adaPopover": true,
+      "title": "Cari nama, rekod atau tindakan",
+      "description": "Gunakan carian jadual untuk nama pengguna, rekod atau tindakan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#2",
+      "guide": "tenant.sensitive-access-logs",
+      "index": 2,
+      "route": "/app/{tenant}/sensitive-access-logs",
+      "adaPopover": true,
+      "title": "Semak pengguna, IP dan masa",
+      "description": "Semak pengguna, tindakan, alamat IP, user-agent dan masa akses.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#3",
+      "guide": "tenant.sensitive-access-logs",
+      "index": 3,
+      "route": "/app/{tenant}/sensitive-access-logs",
+      "adaPopover": true,
+      "title": "Siasat akses luar biasa",
+      "description": "Siasat akses luar biasa melalui rekod asal; jangan padam atau ubah log.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.sensitive-access-logs#4",
+      "guide": "tenant.sensitive-access-logs",
+      "index": 4,
+      "route": "/app/{tenant}/sensitive-access-logs",
+      "adaPopover": true,
+      "title": "Laporkan akses tidak dikenali",
+      "description": "Laporkan akses tidak dikenali kepada Admin/Kerani dan wakil perlindungan data.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.log-aktiviti#1",
+      "guide": "tenant.log-aktiviti",
+      "index": 1,
+      "route": "/app/{tenant}/log-aktiviti",
+      "adaPopover": true,
+      "title": "Tapis jenis, pelaku dan tarikh",
+      "description": "Tapis mengikut jenis aktiviti, pelaku, saluran atau julat tarikh.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.log-aktiviti#2",
+      "guide": "tenant.log-aktiviti",
+      "index": 2,
+      "route": "/app/{tenant}/log-aktiviti",
+      "adaPopover": true,
+      "title": "Cari tajuk atau rujukan",
+      "description": "Cari tajuk, keterangan, nombor rujukan atau alamat IP yang berkaitan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.log-aktiviti#3",
+      "guide": "tenant.log-aktiviti",
+      "index": 3,
+      "route": "/app/{tenant}/log-aktiviti",
+      "adaPopover": true,
+      "title": "Buka Butiran peristiwa",
+      "description": "Tekan Butiran untuk melihat snapshot rekod/fail, pengirim dan metadata peristiwa.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.log-aktiviti#4",
+      "guide": "tenant.log-aktiviti",
+      "index": 4,
+      "route": "/app/{tenant}/log-aktiviti",
+      "adaPopover": true,
+      "title": "Bandingkan masa secara kronologi",
+      "description": "Bandingkan masa peristiwa secara kronologi; log tidak boleh diedit atau dipadam.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.log-aktiviti#5",
+      "guide": "tenant.log-aktiviti",
+      "index": 5,
+      "route": "/app/{tenant}/log-aktiviti",
+      "adaPopover": true,
+      "title": "Bendahari lihat log dibenarkan",
+      "description": "Bendahari hanya menerima log rekod/fail yang dasar aksesnya benarkan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.persediaan#1",
+      "guide": "tenant.persediaan",
+      "index": 1,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Buka wizard persediaan",
+      "description": "Tekan Mula Persediaan Berpandu.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.persediaan#2",
+      "guide": "tenant.persediaan",
+      "index": 2,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Isi jawatan dan telefon masjid",
+      "description": "Isi jawatan anda dan nombor telefon rasmi masjid.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.persediaan#3",
+      "guide": "tenant.persediaan",
+      "index": 3,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Pilih nombor WhatsApp digunakan",
+      "description": "Pilih sama ada nombor sendiri digunakan sementara atau nombor khas masjid.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.persediaan#4",
+      "guide": "tenant.persediaan",
+      "index": 4,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Tambah ahli awal",
+      "description": "Tambah ahli awal dengan nama, peranan, telefon dan e-mel jika ada.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.persediaan#5",
+      "guide": "tenant.persediaan",
+      "index": 5,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Semak peranan sebelum simpan",
+      "description": "Semak setiap peranan sebelum simpan; elakkan memberi Admin/Kerani tanpa keperluan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.persediaan#6",
+      "guide": "tenant.persediaan",
+      "index": 6,
+      "route": "/app/{tenant}/persediaan",
+      "adaPopover": true,
+      "title": "Sambung semula jika dilangkau",
+      "description": "Jika dilangkau, kembali melalui menu Persediaan Berpandu untuk melengkapkan kemudian.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.ahli-peranan#1",
+      "guide": "tenant.ahli-peranan",
+      "index": 1,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Tekan Jemput Ahli",
+      "description": "Tekan Jemput Ahli dan isi nama serta nombor WhatsApp format negara.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.ahli-peranan#2",
+      "guide": "tenant.ahli-peranan",
+      "index": 2,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Pilih satu peranan tepat",
+      "description": "Masukkan e-mel jika tersedia dan pilih hanya satu peranan yang tepat.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.ahli-peranan#3",
+      "guide": "tenant.ahli-peranan",
+      "index": 3,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Sahkan ahli masuk senarai",
+      "description": "Selepas jemputan, pastikan ahli muncul dalam senarai tenant ini.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.ahli-peranan#4",
+      "guide": "tenant.ahli-peranan",
+      "index": 4,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Hantar semula pautan jemputan",
+      "description": "Gunakan Hantar Semula Pautan jika ahli belum menerima pautan; jangan cipta akaun pendua.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.ahli-peranan#5",
+      "guide": "tenant.ahli-peranan",
+      "index": 5,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Tetapkan semula kata laluan sementara",
+      "description": "Tetapkan semula kata laluan sementara hanya apabila identiti ahli disahkan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.ahli-peranan#6",
+      "guide": "tenant.ahli-peranan",
+      "index": 6,
+      "route": "/app/{tenant}/ahli-peranan",
+      "adaPopover": true,
+      "title": "Semak kesan sebelum tukar peranan",
+      "description": "Untuk ubah peranan atau keluarkan ahli, semak kesan terhadap tugasan/minit dahulu.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.classification-nodes#1",
+      "guide": "tenant.classification-nodes",
+      "index": 1,
+      "route": "/app/{tenant}/classification-nodes",
+      "adaPopover": true,
+      "title": "Cari kod sedia ada dahulu",
+      "description": "Cari kod/tajuk sedia ada sebelum mencipta nod baharu.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.classification-nodes#2",
+      "guide": "tenant.classification-nodes",
+      "index": 2,
+      "route": "/app/{tenant}/classification-nodes/create",
+      "adaPopover": true,
+      "title": "Pilih nod induk dan peringkat",
+      "description": "Pilih nod induk yang betul dan peringkat yang sepadan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.classification-nodes#3",
+      "guide": "tenant.classification-nodes",
+      "index": 3,
+      "route": "/app/{tenant}/classification-nodes/create",
+      "adaPopover": true,
+      "title": "Guna pola kod rasmi",
+      "description": "Gunakan pola kod seperti 500, 500-1 atau 500-1/2.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.classification-nodes#4",
+      "guide": "tenant.classification-nodes",
+      "index": 4,
+      "route": "/app/{tenant}/classification-nodes/create",
+      "adaPopover": true,
+      "title": "Tetapkan tajuk dan sensitiviti",
+      "description": "Tetapkan tajuk rasmi, sensitiviti lalai, status Aktif dan susunan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.classification-nodes#5",
+      "guide": "tenant.classification-nodes",
+      "index": 5,
+      "route": "/app/{tenant}/classification-nodes",
+      "adaPopover": true,
+      "title": "Nyahaktifkan nod lama, jangan ubah",
+      "description": "Nod yang sudah digunakan tidak boleh diubah sesuka hati; nyahaktifkan nod lama jika perlu.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.pelupusan#1",
+      "guide": "tenant.pelupusan",
+      "index": 1,
+      "route": "/app/{tenant}/pelupusan",
+      "adaPopover": true,
+      "title": "Semak calon cukup tempoh",
+      "description": "Admin/Kerani memilih rekod cukup tempoh satu per satu dan menyediakan batch.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.pelupusan#2",
+      "guide": "tenant.pelupusan",
+      "index": 2,
+      "route": "/app/{tenant}/pelupusan",
+      "adaPopover": true,
+      "title": "Pengerusi semak dan luluskan batch",
+      "description": "Pengerusi menyemak senarai, pegangan undang-undang dan bukti sandaran sebelum meluluskan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.pelupusan#3",
+      "guide": "tenant.pelupusan",
+      "index": 3,
+      "route": "/app/{tenant}/pelupusan",
+      "adaPopover": true,
+      "title": "Laksana hanya selepas diluluskan",
+      "description": "Admin/Kerani hanya melaksanakan batch selepas status diluluskan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.pelupusan#4",
+      "guide": "tenant.pelupusan",
+      "index": 4,
+      "route": "/app/{tenant}/pelupusan",
+      "adaPopover": true,
+      "title": "Batch gagal: cuba semula, jangan pendua",
+      "description": "Jika gagal, jangan cipta batch pendua; baiki storan dan gunakan Cuba Semula pada batch sama.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.pelupusan#5",
+      "guide": "tenant.pelupusan",
+      "index": 5,
+      "route": "/app/{tenant}/pelupusan",
+      "adaPopover": true,
+      "title": "Sijil disimpan, metadata kekal",
+      "description": "Simpan sijil pelupusan; metadata audit kekal walaupun blob rekod dipadam.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    },
+    {
+      "key": "tenant.retensi-peraturan#1",
+      "guide": "tenant.retensi-peraturan",
+      "index": 1,
+      "route": "/app/{tenant}/retensi",
+      "adaPopover": true,
+      "title": "Semak peraturan lalai platform",
+      "description": "Semak peraturan lalai platform sebelum membuat override masjid.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.retensi-peraturan#2",
+      "guide": "tenant.retensi-peraturan",
+      "index": 2,
+      "route": "/app/{tenant}/retensi-peraturan/create",
+      "adaPopover": true,
+      "title": "Pilih jenis rekod atau prefix",
+      "description": "Pilih jenis rekod atau isi prefix klasifikasi yang khusus.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.retensi-peraturan#3",
+      "guide": "tenant.retensi-peraturan",
+      "index": 3,
+      "route": "/app/{tenant}/retensi-peraturan/create",
+      "adaPopover": true,
+      "title": "Isi tahun simpanan",
+      "description": "Isi tahun simpanan; kosongkan hanya apabila tindakan kekal memang dikehendaki.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.retensi-peraturan#4",
+      "guide": "tenant.retensi-peraturan",
+      "index": 4,
+      "route": "/app/{tenant}/retensi-peraturan/create",
+      "adaPopover": true,
+      "title": "Pilih tindakan akhir dan catatan",
+      "description": "Pilih tindakan akhir yang sah dan tulis catatan dasar/kelulusan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Seterusnya"
+    },
+    {
+      "key": "tenant.retensi-peraturan#5",
+      "guide": "tenant.retensi-peraturan",
+      "index": 5,
+      "route": "/app/{tenant}/retensi",
+      "adaPopover": true,
+      "title": "Uji kesan sebelum mengaktifkan",
+      "description": "Uji kesan pada halaman Retensi sebelum mengaktifkan pelupusan.\n        Baca penerangan ini, kemudian tekan Seterusnya.\n        \n        Buka panduan penuh",
+      "button": "Kembali | Selesai"
+    }
+  ]
+}
