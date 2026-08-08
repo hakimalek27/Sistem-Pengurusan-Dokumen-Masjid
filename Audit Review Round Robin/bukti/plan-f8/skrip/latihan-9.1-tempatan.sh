@@ -49,7 +49,14 @@ export E2E_PROD_REPORT="$OUT/route-manifest-TEMPATAN.json"
 rm -f "$E2E_PROD_REPORT"
 
 echo "── matriks 20 konteks -> $E2E_PROD_REPORT"
-npx playwright test --project=production-readonly --reporter=line 2>&1 | tee "$OUT/larian-TEMPATAN.txt"
+# Had MENYELURUH (sama seperti wrapper produksi): dikuatkuasakan oleh proses utama Playwright,
+# jadi ia berkesan walaupun satu worker terkunci dan mengabaikan had per-ujiannya sendiri.
+GT="${LATIHAN_GLOBAL_TIMEOUT_MS:-5400000}"
+# LATIHAN_GREP: hadkan kepada sebahagian konteks semasa MENDIAGNOS satu identiti. Larian
+# latihan PENUH mesti dijalankan tanpanya — kontrak penutup 20 konteks akan gagal jika tidak,
+# jadi larian separa tidak boleh tersilap dibaca sebagai lulus.
+npx playwright test --project=production-readonly --reporter=line --global-timeout "$GT" \
+    ${LATIHAN_GREP:+--grep "$LATIHAN_GREP"} 2>&1 | tee "$OUT/larian-TEMPATAN.txt"
 KEPUTUSAN=${PIPESTATUS[0]}
 
 # Laporan ditulis BERPERINGKAT oleh spec, jadi ia wujud walaupun larian dibunuh separuh jalan.

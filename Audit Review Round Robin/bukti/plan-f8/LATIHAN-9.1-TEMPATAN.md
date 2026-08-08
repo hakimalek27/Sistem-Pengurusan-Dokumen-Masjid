@@ -156,9 +156,75 @@ hujung larian) dan ia **tidak lagi boleh memusnahkan bukti**, kerana inventori s
 cakera sebelum pembongkaran bermula. Itu perbezaan antara "larian produksi mungkin membazirkan
 tetingkap kredensial pemilik" dan "larian produksi mungkin mengambil lima minit lebih lama".
 
+
+## ✅ Jaring keselamatan DIBUKTIKAN hujung-ke-hujung (bukan didakwa)
+
+Had per-ujian **tidak mencukupi**, dan itu diukur: satu konteks kekal `mula` selama **11 minit
+19 saat** melepasi hadnya sendiri (600s) tanpa gagal. Sebabnya struktur — had per-ujian
+dikuatkuasakan DI DALAM worker yang terkunci itu. Wrapper produksi pula memanggil
+`WaitForExit()` **tanpa argumen**, iaitu tunggu selama-lamanya. Itu tepat cara tetingkap
+kredensial pemilik akan terbakar tanpa menghasilkan apa-apa.
+
+Dibaiki pada dua aras, dan kedua-duanya diuji:
+
+| Lapis | Bukti |
+|---|---|
+| `--global-timeout` (dikuatkuasakan proses UTAMA, bukan worker) | had 240s → larian tamat pada **246s** |
+| `WaitForExit($ms)` + `Kill($true)` sebagai sandaran keras | wrapper `-TimeoutMinutes` (lalai 120); sintaks disahkan dengan parser PowerShell |
+| bukti separa terselamat | `konteks selesai: 2/20 · halaman 41 · BELUM: desktop\|admin_masjid, desktop\|pengerusi` |
+| cleanup tetap berjalan | `{"users":8,"mosques":1,"login_tokens":0}` · tenant kembali `mam, man` |
+| kredensial fixture dipadam | fail `fixture-<uuid>.json` tiada selepas larian |
+
+Playwright melaporkan `1 failed · 18 did not run · 3 passed` — iaitu hasil yang **boleh
+dianalisis**, bukan kekosongan. Bandingkan dengan pusingan pertama: sifar bukti, tenant
+tertinggal.
+
+⚠️ Satu tenant fixture MEMANG tertinggal sekali dalam sesi ini — bukan oleh gantung, tetapi
+kerana saya sendiri memotong shell latihan pada had 10 minit alat, jadi `trap` tidak sempat
+berjalan. Ia dipadam serta-merta (`mam, man` · 0 akaun `@smoke.test`). Dicatat kerana ia
+menunjukkan hadnya: trap melindungi daripada gantung dan Ctrl-C, bukan daripada shell yang
+dibunuh dari luar. `-CleanupOnly -RunUuid <uuid>` ialah pemulihan untuk kes itu.
+
+## 🔴 TERBUKA — `desktop · admin_masjid` gagal, dan asimetrinya menarik
+
+Tiga larian, tiga kali konteks ini tidak selesai. Sekali ia memberi ralat yang boleh dibaca:
+
+```
+page.goto: net::ERR_ABORTED at /app/smoke-<uuid>/peti-masuk
+  - navigating to "…/peti-masuk", waiting until "load"
+```
+
+Yang menjadikannya bernilai ialah kawalan dalam larian yang **sama**:
+
+```
+superadmin    -> /app/smoke-<uuid>/peti-masuk   status 200   ✔ (37 halaman lulus)
+admin_masjid  -> URL yang SAMA                  ERR_ABORTED  ✘
+```
+
+URL sama, pelayan sama, larian sama — identiti berbeza, keputusan berbeza.
+
+Diukur juga: **0** entri `local.ERROR`/`CRITICAL` dalam `laravel.log` hari itu, jadi pelayan
+tidak melemparkan apa-apa. `ERR_ABORTED` ialah guguran pada aras pengangkutan, bukan 500.
+Kiraan laluan menolak teori "terlalu berat": `admin_masjid` ada **29** laluan, superadmin **41**
+dan lulus.
+
+**Apa yang saya TIDAK dakwa:** bahawa ini kecacatan produk. Pelayan latihan ialah `php -S`
+(satu-benang), yang memang boleh menggugurkan sambungan, dan gantung berselang-seli §sebelum
+ini menunjukkan mesin ini tidak stabil untuk larian panjang. Saya tidak menghasilkan semula ia
+pada pelayan berbilang-pekerja kerana tiada satu pun tempatan (tiada Docker).
+
+**Langkah seterusnya yang dinamakan:** larian produksi berjalan di belakang nginx + php-fpm,
+jadi kekeliruan `php -S` tidak wujud di sana. Jika `admin_masjid` menggugurkan `/peti-masuk`
+pada produksi juga, ia kecacatan produk dan inventori berperingkat akan menamakannya. Jika
+tidak, ia artifak pelayan latihan. Larian itu kini boleh menjawabnya kerana ia tidak lagi
+kehilangan bukti.
+
 ## Nota kejujuran
 
 Pusingan pertama menghasilkan tujuh pengesahan kontrak §9.1a dan dua penemuan reka bentuk.
 Pusingan kedua menghasilkan **dua kecacatan sebenar** (satu gate palsu, satu regresi yang saya
-sendiri perkenalkan), runner yang tahan-gantung, dan satu hipotesis yang ditolak sebelum
-dilaporkan. Status §9.1 pada produksi kekal ⏸ — ia menunggu kredensial pemilik, bukan kod.
+sendiri perkenalkan), runner yang tahan-gantung dengan had menyeluruh yang dibuktikan, satu
+hipotesis yang ditolak sebelum dilaporkan, dan satu pemerhatian terbuka yang jujur
+(`admin_masjid`). Matriks 20 konteks TEMPATAN **tidak** disiapkan — 2/20 ialah angka sebenar,
+dan ia tidak dilaporkan sebagai apa-apa selain itu. Status §9.1 pada produksi kekal ⏸: ia
+menunggu kredensial pemilik, dan kini runner sudah bersedia menerimanya.

@@ -330,7 +330,9 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 | 3 | `bukti/plan-f8/route-manifest.json` DIKOMIT | 🔴 **belum dihasilkan** — hanya larian produksi boleh menjananya |
 | 4 | read-only mutlak (tiada `ensureInboxFixture`) | ✅ dikunci dalam spec sejak F0 |
 | 5 | kontrak runner §9.1a dibekukan | ✅ dibekukan F0 — **dan 7 itemnya kini DIUKUR tempatan**, lihat `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md` |
-| — | **runner boleh menemui spec** | 🔴→✅ **DIBAIKI** — sebelum ini `No tests found` (`PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`) |
+| — | **runner boleh menemui spec** | 🔴→✅ **DIBAIKI** — sebelum ini `No tests found` (`PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`); project kini BERSYARAT `E2E_PRODUCTION` selepas ia memecahkan kutipan semua project |
+| — | **matriks tahan-gantung** | 🔴→✅ **DIBAIKI** — 1 monolit → **22 ujian** (20 konteks BERNAMA); inventori ditulis ke cakera per konteks, jadi gantung memberi "19/20 + yang hilang dinamakan" dan bukan sifar bukti |
+| — | **gate carian bantuan hijau tanpa menguji** | 🔴→✅ **DIBAIKI** — status dibaca sebelum Livewire menggantikannya, jadi setiap keputusan tersasar SATU pertanyaan dan kedua-dua assertion lulus atas sebab yang salah. `LATIHAN-9.1-TEMPATAN.md` kecacatan 1 |
 | — | **latihan matriks tempatan** | 🔴 **TERGANTUNG** selepas ~41 muatan halaman pada satu `POST /livewire/update`; `php -S` satu-benang; **0 bukti separa** kerana spec ialah SATU ujian monolitik |
 | 6 | semua halaman desktop DAN mobile ikut `role_routes` | ⏸ dalam spec |
 | 7 | assert tepat 8 role + superadmin berasingan + public tanpa login | ⏸ dalam spec |
@@ -359,7 +361,7 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 | indeks tepat 83 dokumen | ✅ **83** live (`bukti-larian/produksi-smoke-meili.txt`) |
 | tiada data tenant/pengguna dalam dokumen | ✅ 9 medan disenaraikan; 0 e-mel/slug/domain |
 | query biasa · salah ejaan · akronim | ✅ 11 · 12 · OCR 10 — dan 🔴 `DDMS` 0 (§2.2) |
-| Meili mati/timeout → fallback berfungsi | ✅ ujian (a); ⚠️ ia `connection refused`, **bukan timeout** — dinyatakan sebagai had |
+| Meili mati/timeout → fallback berfungsi | ✅ ujian (a) `refused` + ujian (a2) **timeout sebenar**. Timeout DIUKUR 24,232 ms → **DIBAIKI kepada 2,085 ms** (`diwan.guidance.meilisearch_timeout`); (a2) bukan lagi opt-in |
 | hasil setara fallback vs Meili | 🔴 **TIDAK** — §2.3 |
 | tapisan role/panel/permission · awam tidak nampak tenant | ✅ ujian (c)+(e) + `HelpCatalogTest` |
 | query mentah tidak disimpan | ✅ `HelpCatalogTest` (`query_hash` 64 aksara) |
@@ -448,7 +450,7 @@ dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JAL
 |---|---|---|
 | 8 | (f) bukan gate Meili — buang `steps_text` kekalkan semua hijau | senarai atribut diangkat jadi pemalar `SEARCHABLE_ATTRIBUTES` + dijaga; counterexample TEPAT Codex → MERAH |
 | 9 | gate route dokumen vakum per-seksyen | setiap pasangan identiti×panel mesti HADIR; buang seksyen Juruaudit → MERAH `audit/app` |
-| 15 | (a) refused, bukan timeout | ujian (a2) guna 192.0.2.1 (RFC 5737). **DIUKUR: 24,232 ms** sebelum fallback → halaman TERSEKAT 24s, bukan sekadar carian cetek. Opt-in `DIWAN_SLOW_TESTS=1` |
+| 15 | (a) refused, bukan timeout | ujian (a2) guna 192.0.2.1 (RFC 5737). **DIUKUR: 24,232 ms** sebelum fallback → halaman TERSEKAT 24s. **KINI DIBAIKI: 2,085 ms** (12×), hasil & enjin tidak berubah; had ujian diterbitkan drp config, jadi membuang tempoh = MERAH. Bukan lagi opt-in |
 | 17 | `ab-mobile.sh` tanpa `-e`, artifak basi | `set -euo pipefail` + artifak dibuang sebelum larian |
 | 1 (A/B) | artifak tiada provenance | `ab-lama` katalog **2026.07.22.2** hash `7c9b43ff…` → 1/24 · `ab-semasa` **2026.08.08.2** hash `bf0f8bcd…` → 8/24 — dalam fail |
 | 4 (sebahagian) | pecahan silang bukan ukuran | blok `diukur_per_viewport` daripada dua artifak ukuran SEBENAR; dilabel SEPARA, status tidak dinaikkan ✅ |

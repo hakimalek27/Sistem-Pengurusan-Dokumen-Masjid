@@ -16,6 +16,11 @@ param(
     [string] $BaseUrl = 'https://bakwim.my',
     [string] $Server = 'ubuntu@43.156.242.188',
     [string] $ComposeDir = '/opt/diwan',
+    # F8 — had MENYELURUH. Latihan tempatan 9 Ogos membuktikan had per-ujian TIDAK MENCUKUPI:
+    # satu konteks terkunci melepasi hadnya sendiri (600s) tanpa gagal, kerana had per-ujian
+    # dikuatkuasakan DI DALAM worker yang terkunci itu. `WaitForExit()` tanpa argumen kemudian
+    # menunggu selama-lamanya — iaitu tepat cara tetingkap kredensial pemilik akan terbakar.
+    [int] $TimeoutMinutes = 120,
     [switch] $CleanupOnly
 )
 
@@ -125,7 +130,11 @@ try {
         $psi.FileName = 'npx'
         # F8: `--project` WAJIB. Tanpanya Playwright menapis ikut project dan memberi
         # `Error: No tests found.` — disahkan empirikal. Lihat komen dalam playwright.config.js.
-        $psi.Arguments = 'playwright test --project=production-readonly --workers=1'
+        # `--global-timeout` dikuatkuasakan oleh proses UTAMA Playwright, bukan oleh worker —
+        # itu sebabnya ia berkesan apabila had per-ujian tidak, dan sebabnya ia diberi di sini
+        # dan bukan hanya sebagai `timeout` dalam config.
+        $globalTimeoutMs = $TimeoutMinutes * 60 * 1000
+        $psi.Arguments = "playwright test --project=production-readonly --workers=1 --global-timeout $globalTimeoutMs"
         $psi.WorkingDirectory = $repoRoot
         $psi.UseShellExecute = $false
         $psi.EnvironmentVariables['E2E_PRODUCTION'] = '1'
@@ -137,9 +146,20 @@ try {
         $psi.EnvironmentVariables['E2E_PROD_REPORT'] = $report
         $psi.EnvironmentVariables['DIWAN_PW_JSON'] = (Join-Path $evidenceDir 'playwright-report.json')
         $process = [System.Diagnostics.Process]::Start($psi)
-        $process.WaitForExit()
+        # Sandaran keras: beri Playwright 2 minit melebihi had menyeluruhnya untuk menutup
+        # dirinya dengan kemas, kemudian bunuh. Tanpa ini, proses yang tidak menghormati
+        # --global-timeout (worker terkunci) menggantung wrapper tanpa had.
+        if (-not $process.WaitForExit($globalTimeoutMs + 120000)) {
+            "TIMEOUT: playwright melepasi $TimeoutMinutes minit + 2 minit anjal — dibunuh." | Tee-Object -FilePath $log -Append
+            try { $process.Kill($true) } catch { }
+            $process.WaitForExit(30000) | Out-Null
+        }
         "playwright exit=$($process.ExitCode)" | Tee-Object -FilePath $log -Append
-        if ($process.ExitCode -ne 0) { throw "Spec produksi gagal (exit $($process.ExitCode)) — lihat $log" }
+        if ($process.ExitCode -ne 0) {
+            # Laporan inventori ditulis BERPERINGKAT oleh spec, jadi ia wujud walaupun larian
+            # terputus — arahkan operator kepadanya dan bukan hanya kepada log.
+            throw "Spec produksi gagal (exit $($process.ExitCode)) — lihat $log dan inventori separa $report (medan 'missing_contexts' menamakan konteks yang tidak selesai)."
+        }
 
         node scripts/audit/assert-playwright-json.mjs --file (Join-Path $evidenceDir 'playwright-report.json') --min-tests 1
         if ($LASTEXITCODE -ne 0) { throw 'assert-playwright-json gagal untuk larian produksi.' }
