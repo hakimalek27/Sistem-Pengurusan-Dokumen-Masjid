@@ -244,6 +244,45 @@ pada produksi juga, ia kecacatan produk dan inventori berperingkat akan menamaka
 tidak, ia artifak pelayan latihan. Larian itu kini boleh menjawabnya kerana ia tidak lagi
 kehilangan bukti.
 
+
+## ⚡ Punca sebenar kelembapan tempatan: pertikaian kunci SQLite (27×)
+
+Selepas `/peti-masuk` terbukti sihat, soalan yang tinggal ialah mengapa mesin ini tidak boleh
+menjalankan larian panjang langsung. Jawapannya diukur, bukan diteka.
+
+`php artisan serve` ialah `php -S` — satu-benang. Penyelesaian yang tidak memerlukan pakej
+baharu: empat backend + proksi round-robin menggunakan modul `http` **terbina** Node
+(`skrip/pelayan-berbilang.mjs`). Keputusan pertama mengecewakan:
+
+```
+8 permintaan selari -> 29,064 ms      (empat backend, sepatutnya ~2 pusingan)
+```
+
+Keselarian tidak menolong langsung, jadi sesuatu menyiri di belakang. `.env` tempatan:
+
+```
+DB_CONNECTION=sqlite
+SESSION_DRIVER=database      <- setiap permintaan MENULIS baris sesi
+CACHE_STORE=database         <- dan cache juga
+```
+
+Empat proses berebut satu kunci tulis SQLite. Dengan pemacu fail pada backend latihan sahaja
+(`.env` TIDAK diubah):
+
+```
+8 permintaan selari ->  1,064 ms      27× lebih pantas
+```
+
+⭐ Ini menjelaskan tingkah laku yang sebelum ini kelihatan misteri: ayunan masa dinding
+22s↔188s untuk arahan yang identik, `ERR_ABORTED` rawak pada dokumen utama, dan worker yang
+terkunci pada larian panjang. Semuanya konsisten dengan permintaan yang beratur di belakang
+kunci pangkalan data.
+
+ℹ️ **Skop:** ini kekangan **mesin dev sahaja**. Produksi menggunakan PostgreSQL + Redis dan CI
+menggunakan PostgreSQL, jadi tiada satu pun terjejas. Ia juga menerangkan sebab resipi CI dalam
+pelan sendiri menetapkan `SESSION_DRIVER=file` pada langkah `serve` — nota itu kini mempunyai
+angka di sebaliknya.
+
 ## Nota kejujuran
 
 Pusingan pertama menghasilkan tujuh pengesahan kontrak §9.1a dan dua penemuan reka bentuk.

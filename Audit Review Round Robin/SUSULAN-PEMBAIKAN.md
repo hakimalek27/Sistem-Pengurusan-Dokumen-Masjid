@@ -440,7 +440,7 @@ dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JAL
 |---|---|---|
 | 5 | set medan hanya disemak pada dokumen PERTAMA | counterexample tepat Codex (`mosque_id`+`user_id` pada dokumen KEDUA) → MERAH, menamakan guide + medan |
 | 10 | pembaca dokumen sejarah gagal-TERBUKA | heading dirosakkan → penjana kini **melempar**, bukan mengisytiharkan "KONSISTEN" |
-| 11 | runner produksi tidak boleh berjalan | project `production-readonly` + `--project` dalam wrapper → `Total: 1 test` |
+| 11 | runner produksi tidak boleh berjalan | project `production-readonly` + `--project` dalam wrapper → `Total: 22 tests`. ⚠️ Pembaikan pertama memperkenalkan regresi (kutipan SEMUA project mati) — project kini BERSYARAT `E2E_PRODUCTION`; lihat `LATIHAN-9.1-TEMPATAN.md` kecacatan 2 |
 | 18 | "0 mismatch pada 3 pasangan" | diukur: 410/410 `actual_status` = null → baris ditukar kepada ⚠️ (nota D) |
 | 19 (sebahagian) | "23 assertion" lapuk | dibetulkan kepada 33 (kiraan sebenar) |
 
@@ -470,7 +470,7 @@ dua laluan, satu kesimpulan. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JAL
 | 8 | atribut Meili dijaga | buang `steps_text` → MERAH |
 | 9 | setiap identiti×panel mesti HADIR | buang seksyen Juruaudit → MERAH |
 | 10 | pembaca sejarah gagal-TERTUTUP | heading rosak → MELEMPAR |
-| 11 | runner boleh berjalan | project `production-readonly` → `Total: 1 test` |
+| 11 | runner boleh berjalan | project BERSYARAT `E2E_PRODUCTION` → `Total: 22 tests`; had menyeluruh dibuktikan (240s → tamat 246s) |
 | 12 | fail dibaca/dipadam DALAM kontena | `Get/Set/Remove-ContainerFile` |
 | 13 | cleanup ikut ID + delta diassert | inventori teredaksi; `run_scoped` disemak |
 | 14 | jurang spec §9.1 ditutup | awam dapat main/overflow/tour/carian; superadmin dapat panel `app` |

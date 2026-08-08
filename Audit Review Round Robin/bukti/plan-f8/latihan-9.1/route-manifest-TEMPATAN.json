@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "run_tenant": "smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e",
-  "base_url": "http://127.0.0.1:8092",
+  "run_tenant": "smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326",
+  "base_url": "http://127.0.0.1:8095",
   "expected_page_counts": {
     "public": 0,
     "superadmin": 25,
@@ -14,7 +14,7 @@
     "ajk": 13,
     "audit": 14
   },
-  "last_login_at": 1786227080921,
+  "last_login_at": 1786229384795,
   "inventory": [
     {
       "viewport": "desktop",
@@ -50,103 +50,103 @@
       "status": "selesai",
       "pages": [
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/ahli-peranan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/ahli-peranan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/analitik-bantuan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/analitik-bantuan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/bantuan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/bantuan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/carian",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/carian",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/kegemaran",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/kegemaran",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/laporan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/laporan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/persediaan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/persediaan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/pelupusan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/pelupusan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/penggunaan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/penggunaan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/profil",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/profil",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/retensi",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/retensi",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/tetapan-masjid",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/tetapan-masjid",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/kelulusan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/kelulusan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/classification-nodes",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/classification-nodes",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/delegasi",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/delegasi",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/peti-masuk",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/peti-masuk",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/minit-saya",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/minit-saya",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/log-aktiviti",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/log-aktiviti",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/pembetulan-rekod",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/pembetulan-rekod",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/records",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/records",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/registry-files",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/registry-files",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/retensi-peraturan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/retensi-peraturan",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/sensitive-access-logs",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/sensitive-access-logs",
           "status": 200
         },
         {
-          "url": "/app/smoke-54ca82f4-0ab9-44a7-b792-b08491382a5e/tiket-sokongan",
+          "url": "/app/smoke-73df5d54-d5cf-4d63-bb12-dd3be231a326/tiket-sokongan",
           "status": 200
         },
         {

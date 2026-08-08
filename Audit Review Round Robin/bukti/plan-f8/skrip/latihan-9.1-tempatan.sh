@@ -6,8 +6,20 @@
 # eksperimen. Sasaran ialah pelayan TEMPATAN sahaja — skrip ini menolak apa-apa selain
 # 127.0.0.1 supaya ia tidak boleh tersalah tuju ke bakwim.my.
 #
-# Prasyarat (dijalankan sendiri, bukan oleh skrip ini supaya ia tidak membunuh pelayan orang):
-#   php artisan serve --host=127.0.0.1 --port=8092 --no-reload
+# Prasyarat (dijalankan sendiri, bukan oleh skrip ini supaya ia tidak membunuh pelayan orang).
+#
+# ⚠️ SATU `php artisan serve` TIDAK MENCUKUPI untuk matriks penuh, dan ini diukur:
+#   - `php -S` satu-benang + navigasi pantas -> `net::ERR_ABORTED` rawak pada dokumen utama;
+#   - `.env` tempatan guna SESSION_DRIVER=database + CACHE_STORE=database atas SQLite, jadi
+#     SETIAP permintaan mengambil kunci tulis. 8 permintaan selari = 29,064 ms.
+#     Dengan pemacu FAIL pada backend sahaja (.env tidak diubah): 1,064 ms — 27× lebih pantas.
+#
+# Resipi yang berfungsi (empat backend + proksi round-robin, tiada pakej npm baharu):
+#   for P in 8101 8102 8103 8104; do
+#     SESSION_DRIVER=file CACHE_STORE=file php artisan serve --host=127.0.0.1 --port=$P --no-reload &
+#   done
+#   node "Audit Review Round Robin/bukti/plan-f8/skrip/pelayan-berbilang.mjs" 8095 8101 8102 8103 8104
+#   E2E_BASE_URL=http://127.0.0.1:8095 bash <skrip ini>
 #
 # Guna:  bash "Audit Review Round Robin/bukti/plan-f8/skrip/latihan-9.1-tempatan.sh" [keluaran]
 set -uo pipefail
