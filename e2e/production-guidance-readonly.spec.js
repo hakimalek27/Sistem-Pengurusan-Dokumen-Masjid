@@ -92,6 +92,16 @@ function tulisKeadaan(keadaan) {
     writeFileSync(REPORT_PATH, JSON.stringify(keadaan, null, 2) + '\n');
 }
 
+// Jejak DALAM konteks: `cuba` ditulis SEBELUM setiap navigasi, jadi apabila larian terkunci
+// artifak menamakan **laluan** yang menyekat dan bukan hanya identitinya.
+// Sebabnya diukur: pada latihan tempatan satu konteks terkunci 40 minit tanpa had per-ujiannya
+// menembak, dan inventori hanya boleh melaporkan "desktop|admin_masjid" — cukup untuk
+// mengulanginya, tidak cukup untuk mendiagnosnya.
+async function jejak(baseURL, viewport, identity, url, kerja) {
+    rekod(baseURL, viewport, identity, { cuba: url });
+    return kerja();
+}
+
 // Satu baca-ubah-tulis per identiti. `kunci` = viewport|identity, jadi percubaan semula
 // menggantikan entri lama dan bukan menggandakannya.
 function rekod(baseURL, viewport, identity, ubah) {
@@ -205,14 +215,16 @@ for (const viewport of VIEWPORTS) {
             const errors = monitorBrowserErrors(page);
             const visited = [];
             for (const item of routesFor('public').filter((r) => r.template.startsWith('/'))) {
-                const response = await page.goto(item.url);
+                const response = await jejak(baseURL, viewport.name, 'public', item.url,
+                    () => page.goto(item.url));
                 expect(response?.status(), `public ${viewport.name}: ${item.url}`).toBe(200);
                 await assertHalamanSihat(page, `public ${viewport.name} ${item.url}`);
                 visited.push({ url: item.url, status: response?.status() });
             }
 
             // (1)+(2) untuk AWAM juga — sebelum ini hanya role tenant yang diuji.
-            await page.goto('/bantuan?panduan=public.help&langkah=0');
+            await jejak(baseURL, viewport.name, 'public', '/bantuan?panduan=public.help',
+                () => page.goto('/bantuan?panduan=public.help&langkah=0'));
             await expect(page.locator('.driver-popover')).toBeVisible();
             await page.locator('.driver-popover-close-btn').click();
             const carian = await assertCarianBantuan(page, `public ${viewport.name}`);
@@ -242,7 +254,8 @@ for (const viewport of VIEWPORTS) {
                 && (e.panel === 'admin' || e.panel === 'app'));
             for (const item of laluanSuperadmin) {
                 const url = item.url.replaceAll('/app/mam', `/app/${tenantSlug}`);
-                const response = await page.goto(url);
+                const response = await jejak(baseURL, viewport.name, 'superadmin', url,
+                    () => page.goto(url));
                 expect(response?.status(), `superadmin ${viewport.name}: ${url}`).toBe(200);
                 await assertHalamanSihat(page, `superadmin ${viewport.name} ${url}`);
                 visited.push({ url, status: response?.status() });
@@ -275,7 +288,8 @@ for (const viewport of VIEWPORTS) {
                 // (6) Page-by-page daripada MANIFEST role_routes — desktop DAN mobile.
                 const visited = [];
                 for (const item of routesFor(account.role)) {
-                    const response = await page.goto(item.url);
+                    const response = await jejak(baseURL, viewport.name, account.role, item.url,
+                        () => page.goto(item.url));
                     expect(response?.status(), `${account.role} ${viewport.name}: ${item.url}`).toBe(200);
                     await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
                     visited.push({ url: item.url, status: response?.status() });
@@ -283,16 +297,19 @@ for (const viewport of VIEWPORTS) {
 
                 // (1) satu tour per role×viewport.
                 const tour = tourForRole(account.role);
-                await page.goto(`${tour.route}?panduan=${tour.guide}&langkah=0`);
+                await jejak(baseURL, viewport.name, account.role, `${tour.route}?panduan=${tour.guide}`,
+                    () => page.goto(`${tour.route}?panduan=${tour.guide}&langkah=0`));
                 await expect(page.locator('.driver-popover')).toBeVisible();
                 await page.locator('.driver-popover-close-btn').click();
 
                 // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah karut).
-                await page.goto(`/app/${tenantSlug}/bantuan`);
+                await jejak(baseURL, viewport.name, account.role, `/app/${tenantSlug}/bantuan`,
+                    () => page.goto(`/app/${tenantSlug}/bantuan`));
                 const carian = await assertCarianBantuan(page, `${account.role} ${viewport.name}`);
 
                 // Probe silang-tenant 404 (S1) — tenant sebenar TIDAK dilog masuk, hanya URL.
-                const cross = await page.goto('/app/mamad/records');
+                const cross = await jejak(baseURL, viewport.name, account.role, '/app/mamad/records',
+                    () => page.goto('/app/mamad/records'));
                 expect(cross?.status(), `${account.role} silang-tenant`).toBe(404);
 
                 expect([...new Set(errors)], `${account.role} ${viewport.name}`).toEqual([]);
