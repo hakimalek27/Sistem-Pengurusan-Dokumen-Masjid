@@ -1,0 +1,43 @@
+{
+    "diukur": "produksi bakwim.my, indeks diwan_help_guides, baca sahaja",
+    "numberOfDocuments": 83,
+    "isIndexing": false,
+    "medan_dokumen": [
+        "document_id",
+        "guide_id",
+        "panel",
+        "roles",
+        "title",
+        "summary",
+        "keywords",
+        "steps_text",
+        "troubleshooting_text"
+    ],
+    "dokumen_diperiksa": 83,
+    "imbasan_kebocoran": {
+        "@": 0,
+        "smoke": 0,
+        "bakwim": 0,
+        "mamkl": 0,
+        "http": 0
+    },
+    "hits": {
+        "klasifikasi surat": 11,
+        "klasifikas": 12,
+        "pelupusn": 7,
+        "kelulusn": 16,
+        "OCR": 10,
+        "AJK": 1,
+        "QR": 1,
+        "ZIP": 1,
+        "SLA": 1,
+        "PDF": 1,
+        "DDMS": 0,
+        "SPDM": 0,
+        "XYZQ": 0,
+        "penapis": 0,
+        "lajur": 0,
+        "taip": 1,
+        "modal": 36
+    }
+}

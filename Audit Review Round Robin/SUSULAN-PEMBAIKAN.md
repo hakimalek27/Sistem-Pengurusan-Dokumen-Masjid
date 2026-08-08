@@ -54,7 +54,7 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
 | Default borang retensi | `auto_padam` | `semak` + dialog | **`semak`** (F4) | ✅ |
 | axe serious (`link-name`) | 1 | 0 | **0** — langkah `Accessibility (axe)` 11/11 dalam CI | ✅ |
-| E-mel kerangka EN | 9 diuji | 0/18 kelas | **0/18** (`LocalisationTest`, 18/18 data-provider) | ✅ |
+| E-mel kerangka EN | 9 diuji | 0/18 kelas **+ e-mel sebenar** | **0/18 render** · penghantaran sebenar **BELUM** | ⚠️ nota F |
 | Suite Pest | 409✓/1s | semua ✓ | **632 ✓ / 1 skip** (5,868 assertion) | ✅ |
 | `diwan:smoke` produksi | 9/9 | 9/9 | **9/9** (Deploy 14) | ✅ |
 | Meilisearch: indeks = bilangan guide | — | tepat 83 | **83** · `isIndexing false` | ✅ |
@@ -84,6 +84,22 @@ Yang dihantar ialah **172**, dan dua perkara mesti dipisahkan dengan jelas:
 **Keputusan pemilik diperlukan:** terima 172 sebagai denominator baharu (dengan sebab di atas
 direkod), ATAU tetapkan bahawa 229 mesti dicapai — yang bermakna mengembalikan `wait_for_user`
 pada 57 langkah, iaitu memundurkan keputusan reka bentuk F5/F6.
+
+**Nota F — ⚠️ e-mel: render diuji, PENGHANTARAN SEBENAR belum (Codex P2 #16).**
+§9 menuntut *"Ujian render data-provider 18 entri **+ e-mel sebenar**"*. Yang dihantar ialah
+bahagian render sahaja: `LocalisationTest` memanggil `toMail()` + `render()` bagi 18/18 kelas.
+Laporan F3 sendiri menandakan penghantaran sebenar sebagai ⏳ *"semasa Deploy 3"*
+(`bukti/plan-f3/LAPORAN-FASA-3.md:198`) dan tiada bukti ia pernah dijalankan.
+
+⛔ **Saya tidak menjalankannya.** `diwan:staging-check --mail-to=<alamat>` MENGHANTAR e-mel
+sebenar daripada sistem produksi; menghantar mesej bagi pihak pemilik memerlukan kebenaran
+pemilik. Arahan tepat, untuk pemilik jalankan sendiri:
+
+```
+ssh ubuntu@43.156.242.188 'cd /opt/diwan && sudo docker compose exec -T -e HOME=/tmp app   php artisan diwan:staging-check --mail-to=<alamat-anda> --json'
+```
+
+Kemudian **baca** e-mel itu dan sahkan kerangkanya Bahasa Melayu (bukan "Hello!/Regards,").
 
 **Nota E — ⚠️ CTA `0` diukur TEMPATAN dan metriknya BERGANTUNG DOM (Codex P2 #2).**
 Saya menganggap CTA ditentukan oleh medan `wait_for_user`, jadi `0` akan bebas persekitaran.
@@ -280,9 +296,9 @@ yang dicipta oleh `run_uuid` larian itu.
 Jadual §1 mengandungi **32 baris** — dikira secara mekanikal terhadap jadual itu sendiri, bukan daripada ingatan:
 
 ```
-✅ tercapai            22
+✅ tercapai            21
 🔴 tidak tercapai       4   (§2.1–2.4)
-⚠️  bersyarat/lencongan  3   (nota A: 172 lawan 229 · nota D: lapisan C · nota E: CTA)
+⚠️  bersyarat/lencongan  4   (A: 172 lawan 229 · D: lapisan C · E: CTA · F: e-mel sebenar)
 ⏸  menunggu kredensial  3   (§3)
 ```
 
