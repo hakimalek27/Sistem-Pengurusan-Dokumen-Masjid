@@ -48,7 +48,7 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Kohort: `resolved_to_generic` | 119/124 | ≤25/124 + allowlist | **38/124** | ✅ |
 | Kohort: tajuk = penerangan | 77/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
 | Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
-| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** (RUNTIME) | ✅ nota C |
+| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** (RUNTIME **tempatan**) | ⚠️ nota E |
 | Kohort: placeholder `Langkah N` pada popover | 118 (katalog) | 0 | **0/124** (RUNTIME) | ✅ |
 | Tour `/log-masuk` ralat palsu | 100% | lulus | **lulus** (CI `ci-guidance`, disahkan live Deploy 5) | ✅ |
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
@@ -84,6 +84,27 @@ Yang dihantar ialah **172**, dan dua perkara mesti dipisahkan dengan jelas:
 **Keputusan pemilik diperlukan:** terima 172 sebagai denominator baharu (dengan sebab di atas
 direkod), ATAU tetapkan bahawa 229 mesti dicapai — yang bermakna mengembalikan `wait_for_user`
 pada 57 langkah, iaitu memundurkan keputusan reka bentuk F5/F6.
+
+**Nota E — ⚠️ CTA `0` diukur TEMPATAN dan metriknya BERGANTUNG DOM (Codex P2 #2).**
+Saya menganggap CTA ditentukan oleh medan `wait_for_user`, jadi `0` akan bebas persekitaran.
+**Salah**, dan kodnya menunjukkannya — `step-advance-plan.js:60`:
+
+```js
+const menungguTindakan = step.wait_for_user || next.target !== step.target;
+```
+
+"Buat pada skrin" boleh muncul walaupun `wait_for_user` **palsu**, apabila sasaran langkah
+seterusnya BERBEZA dan **tidak kelihatan** (`isVisible(next)`, baris 55). Jadi CTA bergantung
+pada apa yang ada dalam DOM — dan DOM bergantung pada benih dan tenant.
+
+Asas audit ialah **produksi, tenant `smoke`**; ukuran saya **tempatan, tenant `mam`, benih demo**.
+`0` yang saya ukur adalah benar **untuk persekitaran itu**, tetapi ia **bukan** perbandingan
+apple-to-apple dengan 20 pada produksi. Baris ini kekal ⚠️ sehingga larian produksi §9.1
+mengukurnya di tempat yang sama seperti audit.
+
+⭐ Ini kali KEDUA andaian "medan katalog menentukan tingkah laku runtime" menipu saya dalam F8
+yang sama (kali pertama: tajuk terbitan, nota C). Corak yang perlu diingat: **jika metrik
+diberi nama mengikut apa yang PENGGUNA lihat, ukurlah pada apa yang pengguna lihat.**
 
 **Nota D — 🔴 dakwaan "3 pasangan" saya MELEBIH-LEBIH (Codex P2 #18).**
 §9 menuntut `expected_access` ↔ `declared_access` ↔ `actual_status` — **tiga** lapisan. Diukur:
@@ -256,8 +277,14 @@ yang dicipta oleh `run_uuid` larian itu.
 
 ## 5. Ringkasan jujur
 
-Jadual §1 mengandungi **31 baris**: **24 tercapai** · **4 tidak tercapai** (§2.1–2.4) ·
-**3 menunggu kredensial** (§3). Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
+Jadual §1 mengandungi **32 baris** — dikira secara mekanikal terhadap jadual itu sendiri, bukan daripada ingatan:
+
+```
+✅ tercapai            22
+🔴 tidak tercapai       4   (§2.1–2.4)
+⚠️  bersyarat/lencongan  3   (nota A: 172 lawan 229 · nota D: lapisan C · nota E: CTA)
+⏸  menunggu kredensial  3   (§3)
+``` Dua item lagi dalam §2 (**2.5** `admin.storage-orders#2`,
 **2.6** `public.help#2`) **bukan** baris jadual §9 — ia penemuan yang dibawa ke F9/F10, dan
 disenaraikan di sana supaya ia tidak hilang, bukan untuk membesarkan kiraan kegagalan.
 
