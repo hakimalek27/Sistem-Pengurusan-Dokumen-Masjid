@@ -252,3 +252,34 @@ test('role_routes lapisan C: probe HTTP sebenar sepadan expected_status', functi
         expect($cross->getStatusCode())->toBe(404, "S1 gagal: {$identity} silang-tenant → {$cross->getStatusCode()}");
     }
 })->with(['public', 'superadmin', 'admin_masjid', 'pengerusi', 'setiausaha', 'bendahari', 'nazir', 'ketua_imam', 'ajk', 'audit']);
+
+/**
+ * F8 — penjaga yang lahir daripada kesilapan SEBENAR: satu commit tempatan (belum ditolak)
+ * memasukkan `latihan-9.1/fixture-<uuid>.json`, iaitu fail kredensial yang ditulis oleh
+ * `diwan:audit-fixture prepare` dan mengandungi kata laluan lapan akaun fixture. Ia dikeluarkan
+ * daripada HEAD dan `bukti/.gitignore` dikemas — tetapi corak "artifak larian ditulis ke dalam
+ * folder bukti, kemudian `git add -A`" akan berulang pada setiap latihan berikutnya.
+ *
+ * Ujian ini mengimbas apa yang BENAR-BENAR dijejak git (bukan cakera), supaya fail yang
+ * diabaikan tidak memberi positif palsu dan fail baharu yang dikomit tidak boleh lolos.
+ */
+test('tiada kredensial dalam artifak bukti yang dijejak git', function () {
+    exec('git ls-files "Audit Review Round Robin/bukti/*.json" "Audit Review Round Robin/bukti/**/*.json"', $fail, $kod);
+    expect($kod)->toBe(0, 'git ls-files gagal — penjaga ini tidak boleh mengesahkan apa-apa');
+
+    // Anti-vakum: jika glob rosak, senarai kosong akan LULUS secara senyap.
+    expect(count($fail))->toBeGreaterThan(50, 'terlalu sedikit JSON bukti dijumpai — glob mungkin rosak');
+
+    $pelanggaran = [];
+    foreach ($fail as $laluan) {
+        $isi = @file_get_contents(base_path($laluan));
+        if ($isi !== false && preg_match('/"(password|secret|token)"\s*:\s*"/i', $isi)) {
+            $pelanggaran[] = $laluan;
+        }
+    }
+
+    expect($pelanggaran)->toBeEmpty(
+        'artifak bukti mengandungi kunci kredensial: '.implode(', ', $pelanggaran)
+        .' — keluarkan daripada git dan tambah corak ke Audit Review Round Robin/bukti/.gitignore',
+    );
+})->group('plan-manifest');
