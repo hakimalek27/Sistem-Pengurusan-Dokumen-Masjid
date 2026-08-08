@@ -88,7 +88,10 @@ bukan hasil ukuran ini.
 
 ## 3B. 📸 BUKTI VISUAL — dan ia menyelesaikan persoalan
 
-📸 `gambar/centercovered-mobile-390x664.png` · skrip `skrip/gambar-centercovered.mjs`
+📸 `gambar/centercovered-mobile-390x664.png` — ⚠️ **tidak dikomit**: `bukti/.gitignore:5` menolak
+`*.png` mengikut polisi pelan ("PNG kekal luar git"). Ia boleh dijana semula bila-bila dengan
+`skrip/gambar-centercovered.mjs`, dan ukurannya dicetak sebagai teks di bawah supaya angka itu
+kekal boleh diaudit walaupun gambar tiada.
 Produksi, mobile **390×664 tepat**, dengan titik pusat viewport dan sempadan sasaran DILUKIS
 pada gambar supaya hubungan itu boleh dilihat, bukan hanya dibaca.
 
