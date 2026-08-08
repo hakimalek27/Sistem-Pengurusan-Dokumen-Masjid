@@ -1,6 +1,63 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — ✅ hutang F7 **LIVE** (Deploy 14 `2325bec`) · #73 ditutup (8 Ogos)
+## ▶️ SAMBUNG DI SINI — ⚠️ **F8 BELUM SIAP** (`314f4b0`) · 14 penemuan TERBUKA (9 Ogos)
+
+**Produksi kekal `2325bec` (Deploy 14).** CI **31272447049 = hijau** pada `f6aed9c`.
+📄 **BACA DAHULU:** `Audit Review Round Robin/SUSULAN-PEMBAIKAN.md` §5C (senarai terbuka)
+
+### 🔴 PENEMUAN TERBESAR F8 — runner produksi TIDAK BOLEH BERJALAN (DIBAIKI)
+
+`run-production-guidance-readonly.ps1` ialah satu-satunya titik masuk §9.1a, dan arahannya
+memberi **`Error: No tests found.`** Spec sengaja di luar setiap project Playwright supaya CI
+tidak menjalankannya; Playwright menapis ikut project → allowlist bercanggah dengan dirinya.
+Ia akan gagal **pada saat pemilik membekalkan kredensial**.
+Dibaiki: project `production-readonly` (bukan dalam ci.yml) + `--project` dalam wrapper →
+`Total: 1 test in 1 file`. 📄 `bukti/plan-f8/PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`
+⭐ Ditemui SERENTAK oleh saya (jalankan arahan) dan Codex P2 #11 (baca semantik project).
+
+### Round-robin §9.3: P1 **23** penemuan · P2 **19** penemuan → F8 BELUM SIAP
+
+📄 `bukti/plan-f8/RR-P1-CODEX.md` · `RR-P2-CODEX.md`
+**14 kekal TERBUKA**, dan **10 daripadanya TIDAK disekat kredensial** (#3,#4,#6,#7,#8,#9,#14,
+#15,#17,#19) — ia kerja yang belum dibuat, bukan menunggu pemilik. §5C menyenaraikan setiap satu.
+⚠️ **Dua pusingan tidak mencukupi:** 23 → 19 bukan konvergensi. Audit pelan asal ambil 27
+pusingan. §9.3 menetapkan 2 sebagai MINIMUM, bukan bukti.
+
+### ✅ Yang F8 sudah hasilkan
+
+```
+jadual §9: 24 ✅ · 4 🔴 · 3 ⏸ (kredensial) · 2 ⚠️ LENCONGAN/nota
+metrik: generic 443->59 · placeholder 258->0 · action-generic 200->0 · blocked 0
+kohort RUNTIME (124/124 popover): title=desc 0 (asas 77) · terpotong 0 (20) · CTA 0 (20)
+§9.1a: 7 kontrak DIUKUR tempatan (prepare · rahsia · cleanup ikut inventori · IDEMPOTENT ·
+       0 sisa · tenant lain tidak disentuh) 📄 bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md
+penjaga baharu: HelpSearchGateTest 6 · RoleAccessDocTest 4 — 6 regresi dibuktikan MERAH
+artifak: ci-domain 8/8 · ci-a11y 11/11 (5 halaman × 2 viewport) · coverage-gate 83/473/172
+```
+
+### 🔴 Empat metrik jadual §9 yang TIDAK tercapai
+
+1. `centerCovered` mobile 6 → **45/124** — metrik memberi ganjaran kepada sasaran GENERIK
+   (A/B: katalog lama 1/24, semasa 8/24 pada mesin identik) → **keputusan pemilik**
+2. akronim `DDMS` 0 hits — istilah **0 kali** dalam katalog (perbendaharaan, bukan enjin)
+3. fallback PHP lebih cetek daripada Meili (38 perkataan) — §9.2 "hasil setara" tidak dipenuhi
+4. tajuk langkah **tidak boleh dicari** oleh mana-mana enjin (17 perkataan) — F6 tulis 473
+   tajuk bermakna dan tiada satu pun boleh ditemui; `pluck('title')` satu baris → cadang F10
+
+### 🎯 TIGA keputusan PEMILIK
+
+1. `centerCovered`: bersara sebagai gate · laras penempatan · atau risk-accept
+2. denominator **229 lawan 172** (nota A) — 172 = invarian manifest; 229 = teks pelan
+3. kredensial superadmin produksi (guna `!` supaya nilainya tidak melalui saya)
+
+### ⚠️ Latihan §9.1 tempatan TERGANTUNG — dan itu penemuan reka bentuk
+
+~41 muatan halaman, kemudian `POST /livewire/update` tanpa status, 60 minit sifar permintaan.
+`php -S` satu-benang. **0 bukti separa** kerana spec ialah SATU ujian monolitik (10 identiti ×
+2 viewport × ~40 route). Pada produksi ia akan membazirkan tetingkap kredensial dan
+meninggalkan tenant fixture. Cadangan: pecah per identiti + tulis laporan berperingkat.
+
+## 📌 SEBELUM INI — ✅ hutang F7 **LIVE** (Deploy 14 `2325bec`) · #73 ditutup (8 Ogos)
 
 **PRODUKSI: `2325bec`.** CI **31213031582 = 7/7**. Deploy 14 exit 0, **ramalan 5/5 tepat**:
 smoke 9/9 · /up 200 · failed_jobs=0 · 8/8 kontena · Nothing to migrate · 5A LULUS PENUH.
