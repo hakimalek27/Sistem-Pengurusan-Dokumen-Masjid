@@ -7,7 +7,10 @@
 # Guna:
 #   pwsh -File scripts/audit/run-production-guidance-readonly.ps1 [-RunUuid <uuid>] `
 #        [-BaseUrl https://bakwim.my] [-Server ubuntu@43.156.242.188] [-ComposeDir /opt/diwan] `
-#        [-CleanupOnly]
+#        [-TimeoutMinutes 120] [-CleanupOnly]
+# Had 120 minit memberi ~3× ruang: 20 log masuk × jarak 15s = 300s, ~500 muatan halaman merentas
+# internet ≈ 30–45 minit. Naikkan jika rangkaian perlahan; JANGAN buang — larian tanpa had ialah
+# cara tetingkap kredensial terbakar tanpa hasil.
 # Env WAJIB pemanggil: E2E_PROD_SUPERADMIN_EMAIL, E2E_PROD_SUPERADMIN_PASSWORD.
 
 [CmdletBinding()]

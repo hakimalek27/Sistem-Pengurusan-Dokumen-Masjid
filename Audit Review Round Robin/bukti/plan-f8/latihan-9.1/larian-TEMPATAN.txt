@@ -1,0 +1,7 @@
+
+Running 22 tests using 1 worker
+
+[1/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:188:1 › kontrak: akaun fixture ialah TEPAT lapan role yang dijangka
+[2/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:199:5 › desktop · public
+[3/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:228:5 › desktop · superadmin
+[4/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:265:9 › desktop · admin_masjid
