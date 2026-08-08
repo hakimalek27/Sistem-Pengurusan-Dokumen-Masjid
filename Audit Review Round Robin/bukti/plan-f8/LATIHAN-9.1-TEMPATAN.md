@@ -185,7 +185,7 @@ berjalan. Ia dipadam serta-merta (`mam, man` · 0 akaun `@smoke.test`). Dicatat 
 menunjukkan hadnya: trap melindungi daripada gantung dan Ctrl-C, bukan daripada shell yang
 dibunuh dari luar. `-CleanupOnly -RunUuid <uuid>` ialah pemulihan untuk kes itu.
 
-## 🟡 `desktop · admin_masjid` gagal — disiasat sehingga habis, halaman SIHAT
+## 🟡 `desktop · admin_masjid` gagal — halaman SIHAT (lihat kesimpulan akhir di bawah)
 
 Tiga larian, tiga kali konteks ini tidak selesai. Sekali ia memberi ralat yang boleh dibaca:
 
@@ -282,6 +282,52 @@ kunci pangkalan data.
 menggunakan PostgreSQL, jadi tiada satu pun terjejas. Ia juga menerangkan sebab resipi CI dalam
 pelan sendiri menetapkan `SESSION_DRIVER=file` pada langkah `serve` — nota itu kini mempunyai
 angka di sebaliknya.
+
+
+## 🧭 Kesimpulan akhir: gantung itu KUMULATIF, bukan milik mana-mana laluan
+
+Penjejakan per-laluan (`cuba`) menjawab soalan yang tiga larian sebelumnya tidak dapat jawab.
+Larian berjejak berhenti dengan artifak yang MENAMAKAN laluannya:
+
+```
+BELUM selesai : desktop|admin_masjid
+cuba          : /app/smoke-ce3661af-…/peti-masuk        <- laluan ke-17 daripada 29
+```
+
+Kemudian laluan itu diprob bersendirian pada tenant `smoke` yang KOSONG — pemboleh ubah terakhir
+yang belum diasingkan (prob "sihat" terdahulu menggunakan `mam` yang berdata demo):
+
+```
+cubaan 1: status=200  696 ms
+cubaan 2: status=200  759 ms
+cubaan 3: status=200  648 ms
+kawalan /records: status=200  708 ms
+permintaan GAGAL: (tiada)
+```
+
+**Hipotesis "tenant kosong" DITOLAK juga.** Kini tiga hipotesis saya sendiri telah gugur kepada
+ukuran: "puncanya `/bantuan`", "`/peti-masuk` rosak untuk admin_masjid", dan "tenant kosong".
+
+Yang tinggal, dan yang disokong oleh keseluruhan set ukuran:
+
+| Bukti | Menolak |
+|---|---|
+| setiap laluan yang disyaki memberi 200 apabila diprob BERSENDIRIAN (3× setiap satu) | "laluan X rosak" |
+| gantung mendarat pada laluan BERBEZA antara larian (`/bantuan`, kemudian `peti-masuk` ke-17) | "satu laluan tertentu" |
+| ujian tanpa pelayar tamat 2s; spec lain keluar bersih | "mesin/persekitaran semata-mata" |
+| CI Linux menjalankan matriks panduan penuh (83 guide / 473 langkah, 3 shard) dan HIJAU | "kod aplikasi" |
+
+⭐ Maka: **gantung itu kumulatif dalam satu konteks pelayar** — ia muncul selepas belasan hingga
+puluhan navigasi berturut-turut dalam konteks yang sama, pada Windows dengan
+`channel: 'chrome'`, dan ia mendarat pada mana-mana navigasi yang kebetulan berikutnya. Ia bukan
+kecacatan produk, dan bukan laluan tertentu.
+
+**Kesan kepada §9.1:** matriks TEMPATAN tidak dapat disiapkan pada mesin ini — angka terbaik
+kekal **2/20 + 41 halaman**, dan ia dilaporkan begitu. Larian produksi tidak lagi bergantung
+kepada nasib untuk menghasilkan sesuatu: had menyeluruh menamatkannya, inventori berperingkat
+mengekalkan apa yang sudah dilawati, `cuba` menamakan navigasi yang menyekat, dan cleanup
+berjalan. Itu perbezaan antara larian yang boleh diulang secara berperingkat dan larian yang
+mesti bermula semula dari kosong.
 
 ## Nota kejujuran
 

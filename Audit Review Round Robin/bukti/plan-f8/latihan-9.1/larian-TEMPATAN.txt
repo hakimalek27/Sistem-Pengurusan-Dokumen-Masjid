@@ -30,3 +30,5 @@ Running 22 tests using 1 worker
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
 
+[3/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:228:5 › desktop · superadmin
+[4/22] [production-readonly] › e2e\production-guidance-readonly.spec.js:265:9 › desktop · admin_masjid

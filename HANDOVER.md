@@ -66,8 +66,12 @@ artifak bukti yang DIJEJAK git (67 fail, 0 pelanggaran).
 ### Yang MASIH terbuka selepas keputusan pemilik
 
 - larian produksi §9.1a (3 baris ⏸) — satu arahan selepas kredensial
-- **latihan §9.1 tempatan belum 20/20.** Terbaik setakat ini 2/20 + 41 halaman. Ia terkunci
-  pada `desktop|admin_masjid` walaupun pada pelayan SELARI, jadi bukan kelajuan.
+- **latihan §9.1 tempatan belum 20/20** — terbaik 2/20 + 41 halaman, dan ia TIDAK akan siap pada
+  mesin ini. Gantung terbukti **kumulatif dalam satu konteks pelayar** (Windows + `channel:
+  chrome`): setiap laluan yang disyaki memberi 200 apabila diprob bersendirian (3× setiap satu,
+  ~700 ms — termasuk pada tenant smoke KOSONG), gantung mendarat pada laluan BERBEZA antara
+  larian, dan CI Linux menjalankan 83 guide / 473 langkah dengan HIJAU. Tiga hipotesis saya
+  sendiri gugur kepada ukuran: `/bantuan`, `/peti-masuk` rosak, dan tenant kosong.
   Punca kelembapan tempatan pula DITEMUI: pertikaian kunci SQLite (`SESSION_DRIVER=database`
   atas SQLite) — 8 permintaan selari **29,064 ms → 1,064 ms** dengan pemacu fail. Resipi
   pelayan selari: `skrip/pelayan-berbilang.mjs` (modul `http` terbina, tiada pakej baharu).
