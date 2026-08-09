@@ -56,6 +56,42 @@ GET /bantuan/imej/public.registration -> 200           ✔
    tempatan, bukan kecacatan produk — dan kini itu dibuktikan pada produksi, bukan hanya
    disimpulkan daripada `curl` tempatan.
 
+
+## 2A. Sempadan MCP DIUKUR DENGAN TEPAT — bukan "boleh" atau "tidak boleh"
+
+Cubaan seterusnya ialah mengesahkan carian bantuan produksi hujung-ke-hujung (pembaikan
+tersasar-satu). Masalah pemasa beku dielak dengan bijak: **menunggu antara panggilan alat**
+dan bukan dalam halaman. Panggilan pertama berjaya:
+
+```
+medan #help-query        : ADA
+butang "Cari"            : ADA
+status SEBELUM           : "Sedang mencari panduan... 3 panduan disyorkan untuk Orang Awam."
+```
+
+Nilai diisi, event `input` dihantar, butang diklik. **Selepas itu renderer tidak lagi bertindak
+balas** — dua panggilan `Runtime.evaluate` berturut tamat masa 45s. Dua percubaan, kemudian
+berhenti.
+
+**Sempadan sebenar, sekarang diketahui:**
+
+| Operasi MCP pada mesin ini | Keputusan |
+|---|---|
+| Baca DOM statik / `fetch` / geometri | ✅ berfungsi |
+| Interaksi yang mencetuskan render semula Livewire | ❌ renderer jadi tidak bertindak balas |
+| `Page.captureScreenshot` | ❌ CDP timeout 30s |
+| Keadaan runtime tour (pemasa) | ❌ tidak boleh dipercayai (#73) |
+
+⭐ Jadi MCP berguna untuk **fakta struktur pada sistem hidup**, dan Playwright kekal satu-satunya
+alat untuk apa-apa yang interaktif atau berpemasa. Itu pembahagian kerja yang jelas, bukan
+"MCP rosak".
+
+⚠️ **Kesan yang saya sebabkan pada produksi, didedahkan:** klik "Cari" itu berkemungkinan
+menghasilkan **satu baris telemetri `help_events`** pada produksi (pertanyaan di-hash, bukan
+teks mentah — §15). Tiada data lain disentuh, tiada borang lain dihantar, tiada kredensial
+ditaip. Carian ialah tindakan baca biasa dan spec §9.1 sendiri melakukannya dengan telemetri
+yang diisytihar.
+
 ## 3. Apa yang MASIH tidak boleh disahkan tanpa kredensial
 
 Halaman panel tenant/admin memerlukan sesi. Semua di atas ialah laluan AWAM. Matriks §9.1a
