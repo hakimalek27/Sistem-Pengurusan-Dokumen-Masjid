@@ -11,10 +11,10 @@
 > **Yang menyekat penutupan:** 3 keputusan pemilik · kredensial superadmin produksi (3 baris ⏸) ·
 > e-mel `diwan:staging-check --mail-to=` (nota F). Tiada satu pun boleh saya selesaikan sendiri.
 >
-> ⚠️ **Latihan §9.1 TEMPATAN kekal 2/20** dan tidak akan siap pada mesin dev ini — gantung
-> terbukti **kumulatif dalam satu konteks pelayar**, bukan kecacatan produk (📄
-> `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`). Runner kini tahan-gantung: had menyeluruh, inventori
-> berperingkat, dan medan `cuba` yang menamakan laluan yang menyekat.
+> ✅ **Latihan §9.1 TEMPATAN SELESAI 20/20** (396 halaman, 0 ralat console, kontrak 2/2 lulus).
+> Ia mendedahkan satu assertion yang **tidak boleh dipenuhi pada mana-mana mesin** — probe
+> silang-tenant menjana 404 yang ujian sama assert mesti sifar, jadi larian PRODUKSI akan gagal
+> pada kesemua 16 konteks role tenant. Dibaiki. 📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
 >
 > Jangan baca dokumen ini sebagai pengesahan keluaran.
 
@@ -345,7 +345,9 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 | 5 | kontrak runner §9.1a dibekukan | ✅ dibekukan F0 — **dan 7 itemnya kini DIUKUR tempatan**, lihat `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md` |
 | — | **runner boleh menemui spec** | 🔴→✅ **DIBAIKI** — sebelum ini `No tests found` (`PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md`); project kini BERSYARAT `E2E_PRODUCTION` selepas ia memecahkan kutipan semua project |
 | — | **matriks tahan-gantung** | 🔴→✅ **DIBAIKI** — 1 monolit → **22 ujian** (20 konteks BERNAMA); inventori ditulis ke cakera per konteks + medan `cuba` menamakan LALUAN yang sedang dimuat. Had menyeluruh dibuktikan: 240s → tamat 246s, bukti separa selamat, cleanup berjalan |
-| — | latihan TEMPATAN 20 konteks | ⏸ **2/20 · 41 halaman** — tidak dapat disiapkan pada mesin ini. Gantung terbukti **kumulatif dalam satu konteks pelayar** (Windows + `channel: chrome`), BUKAN laluan atau produk: setiap laluan yang disyaki memberi 200 apabila diprob bersendirian (3×), gantung mendarat pada laluan berbeza antara larian, dan CI Linux menjalankan 83 guide / 473 langkah HIJAU |
+| — | latihan TEMPATAN 20 konteks | ✅ **20/20 · 396 halaman · 0 ralat console** · kontrak penutup 2/2 LULUS. ⚠️ Kesimpulan terdahulu saya ("tidak dapat disiapkan pada mesin ini", "gantung kumulatif") **DITARIK** — ia salah |
+| — | **assertion ralat console MUSTAHIL dipenuhi** | 🔴→✅ **DIBAIKI** — probe silang-tenant menjana 404 yang ujian SAMA assert mesti sifar. Tidak boleh lulus pada MANA-MANA mesin, termasuk produksi: kesemua 16 konteks role tenant akan gagal. Ralat dipotong pada sempadan probe; selepasnya tetap DIREKOD |
+| — | `net::ERR_ABORTED` semasa navigasi pantas | ⚠️ **14/396 (3.5%)** — satu cuba-semula, DIREKOD (`ulang`) supaya ia tidak senyap. Setiap laluan terlibat memberi 200 3/3 apabila diprob bersendirian |
 | — | **gate carian bantuan hijau tanpa menguji** | 🔴→✅ **DIBAIKI** — status dibaca sebelum Livewire menggantikannya, jadi setiap keputusan tersasar SATU pertanyaan dan kedua-dua assertion lulus atas sebab yang salah. `LATIHAN-9.1-TEMPATAN.md` kecacatan 1 |
 | — | **latihan matriks tempatan** | 🔴 **TERGANTUNG** selepas ~41 muatan halaman pada satu `POST /livewire/update`; `php -S` satu-benang; **0 bukti separa** kerana spec ialah SATU ujian monolitik |
 | 6 | semua halaman desktop DAN mobile ikut `role_routes` | ⏸ dalam spec |

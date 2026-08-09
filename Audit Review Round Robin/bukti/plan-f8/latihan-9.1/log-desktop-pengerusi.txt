@@ -1,39 +1,10 @@
 
 Running 1 test using 1 worker
 
-[1/1] [production-readonly] › e2e\production-guidance-readonly.spec.js:293:9 › desktop · pengerusi
-  1) [production-readonly] › e2e\production-guidance-readonly.spec.js:293:9 › desktop · pengerusi ──
+[1/1] [production-readonly] › e2e\production-guidance-readonly.spec.js:332:9 › desktop · pengerusi
+Timed out waiting 150s for the test suite to run
 
-    Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:8095/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya
-    Call log:
-      - navigating to "http://127.0.0.1:8095/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya", waiting until "load"
+Timed out waiting 150s for the teardown for report begin to run
 
-
-      305 |                 for (const item of routesFor(account.role)) {
-      306 |                     const response = await jejak(baseURL, viewport.name, account.role, item.url,
-    > 307 |                         () => page.goto(item.url));
-          |                                    ^
-      308 |                     expect(response?.status(), `${account.role} ${viewport.name}: ${item.url}`).toBe(200);
-      309 |                     await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
-      310 |                     visited.push({ url: item.url, status: response?.status() });
-        at kerja (C:\Projek Coding\Sistem Pengurusan Dokumen Masjid\e2e\production-guidance-readonly.spec.js:307:36)
-        at jejak (C:\Projek Coding\Sistem Pengurusan Dokumen Masjid\e2e\production-guidance-readonly.spec.js:117:12)
-        at C:\Projek Coding\Sistem Pengurusan Dokumen Masjid\e2e\production-guidance-readonly.spec.js:306:44
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\production-guidance-readonly-desktop-·-pengerusi-production-readonly\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results\production-guidance-readonly-desktop-·-pengerusi-production-readonly\error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results\production-guidance-readonly-desktop-·-pengerusi-production-readonly\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\production-guidance-readonly-desktop-·-pengerusi-production-readonly\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-  1 failed
-    [production-readonly] › e2e\production-guidance-readonly.spec.js:293:9 › desktop · pengerusi ───
+  1 passed (2.5m)
+  2 errors were not a part of any test, see above for details

@@ -329,12 +329,88 @@ mengekalkan apa yang sudah dilawati, `cuba` menamakan navigasi yang menyekat, da
 berjalan. Itu perbezaan antara larian yang boleh diulang secara berperingkat dan larian yang
 mesti bermula semula dari kosong.
 
+
+---
+
+# ✅ PUSINGAN KETIGA — matriks TEMPATAN SELESAI 20/20
+
+**Dan kesimpulan pusingan kedua saya SALAH.** Saya melaporkan dua kali bahawa matriks "tidak
+akan siap pada mesin ini" dan bahawa gantungnya "kumulatif dalam satu konteks pelayar". Ia siap
+— **20/20 konteks, 396 halaman, kira-kira 13 minit**. Pembetulan ini didahulukan kerana ia
+kesimpulan yang saya komit, bukan sekadar draf.
+
+```
+konteks selesai : 20/20      hilang: []      amaran_rosak: (tiada)
+halaman dilawati: 396
+ralat console   : 0 unik merentas KESEMUA 20 konteks
+kontrak penutup : 2/2 LULUS  (set role TEPAT lapan · TEPAT 20 konteks)
+```
+
+## Apa yang sebenarnya menghalangnya — tiga perkara, tiada satu pun "kumulatif"
+
+### 🔴 1. Assertion yang MUSTAHIL dipenuhi (penemuan terbesar)
+
+Ujian role tenant melawat `/app/mamad/records` dengan **sengaja** untuk membuktikan isolasi
+tenant, dan mengassert 404. 404 itu menjana ralat console `Failed to load resource: … 404`.
+Beberapa baris kemudian ujian yang SAMA mengassert **sifar** ralat console.
+
+⭐ Jadi assertion itu tidak boleh dipenuhi oleh pembinaannya sendiri — **bukan pada mesin ini
+sahaja, tetapi pada mana-mana mesin, termasuk PRODUKSI**. Kesemua 16 konteks role tenant akan
+gagal, dan larian produksi yang menunggu kredensial pemilik tidak akan pernah boleh hijau.
+Ralat kini dipotong pada sempadan probe; apa-apa selepasnya tetap DIREKOD, bukan dibuang.
+
+Kegagalan itulah yang menyebabkan "gantung": ujian GAGAL, kemudian Playwright cuba menangkap
+skrinsyot/trace kegagalan, dan penangkapan itu tergantung pada mesin dengan renderer beku —
+tandatangan yang sama seperti `Page.captureScreenshot` dalam probe MCP (#73).
+
+### 🔴 2. 500 daripada kunci SQLite, bukan daripada produk
+
+`/bantuan/imej/*` memberi 500 dalam matriks. Ia kelihatan seperti kecacatan produk dan saya
+hampir melaporkannya begitu. `curl` terus memberi **200**, dan log memberi puncanya:
+`SQLSTATE: database is locked`. `php artisan serve` **tidak** menghantar `SESSION_DRIVER`/
+`CACHE_STORE` kepada proses anaknya, jadi backend masih menulis cache ke SQLite.
+Ubatnya ialah resipi `php -S` langsung:
+
+```
+cd public && SESSION_DRIVER=file CACHE_STORE=file   php -d max_execution_time=0 -S 127.0.0.1:8101   ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php
+```
+
+Selepas itu `desktop · admin_masjid` — konteks yang gagal pada SETIAP percubaan selama berjam —
+selesai dalam **50 saat**.
+
+### 🟡 3. `net::ERR_ABORTED` itu nyata, tetapi kadarnya kecil dan kini DIREKOD
+
+Merentas 396 navigasi, **14** memerlukan satu percubaan semula (≈3.5%). Ia mendarat pada laluan
+berbeza untuk identiti berbeza (`sensitive-access-logs`, `minit-saya`, `peti-masuk`), dan setiap
+laluan yang terlibat memberi 200 tiga-daripada-tiga apabila diprob bersendirian. Harness kini
+mencuba semula **sekali** dan merekod `ulang` dalam artifak — mencuba semula secara senyap akan
+menyembunyikannya jika ia berlaku pada produksi.
+
+## Cara ia dijumpai — setiap langkah mengecilkan skop
+
+| Langkah | Apa yang ia hapuskan |
+|---|---|
+| penanda fasa ekor | tersekat pada `semak-ralat-console`, **bukan** navigasi |
+| masa per-navigasi | 32 navigasi = 33.9s → ~200s+ dibelanja SELEPAS navigasi terakhir |
+| isi ralat direkod | hanya **2** ralat unik: satu 500, satu 404 |
+| pendengar respons | 404 itu ialah `/app/mamad/records` — **probe kita sendiri** |
+| `curl` + log Laravel | 500 itu kunci SQLite, bukan `/bantuan/imej` |
+
+## Kesilapan saya sendiri dalam pusingan ini
+
+1. **Saya mengisytiharkan kemustahilan sebelum menghabiskan diagnosis.** "Tidak akan siap pada
+   mesin ini" dikomit dua kali. Ia siap.
+2. **"Lengkung kemerosotan" saya mencampurkan dua larian.** `masa[]` terkumpul merentas larian
+   kerana keadaan dikunci pada tenant, bukan pada larian. Saya hampir melaporkan kemerosotan
+   yang tidak wujud; kini ia direset setiap konteks bermula.
+3. **Saya hampir melaporkan 500 sebagai kecacatan produk** tanpa `curl`.
+
 ## Nota kejujuran
 
 Pusingan pertama menghasilkan tujuh pengesahan kontrak §9.1a dan dua penemuan reka bentuk.
-Pusingan kedua menghasilkan **dua kecacatan sebenar** (satu gate palsu, satu regresi yang saya
-sendiri perkenalkan), runner yang tahan-gantung dengan had menyeluruh yang dibuktikan, satu
-hipotesis yang ditolak sebelum dilaporkan, dan satu pemerhatian terbuka yang jujur
-(`admin_masjid`). Matriks 20 konteks TEMPATAN **tidak** disiapkan — 2/20 ialah angka sebenar,
-dan ia tidak dilaporkan sebagai apa-apa selain itu. Status §9.1 pada produksi kekal ⏸: ia
-menunggu kredensial pemilik, dan kini runner sudah bersedia menerimanya.
+Pusingan kedua menghasilkan dua kecacatan sebenar dan satu runner tahan-gantung, tetapi ia juga
+menghasilkan **kesimpulan yang salah** ("tidak akan siap pada mesin ini") yang bertahan dua
+commit. Pusingan ketiga membatalkannya dengan menyiapkan matriks **20/20**, dan dalam proses itu
+menemui assertion yang tidak boleh dipenuhi — yang akan menggagalkan larian PRODUKSI pada
+setiap role tenant. Status §9.1 pada produksi kekal ⏸ (menunggu kredensial), tetapi runner kini
+bukan sahaja boleh berjalan; ia kini boleh LULUS.

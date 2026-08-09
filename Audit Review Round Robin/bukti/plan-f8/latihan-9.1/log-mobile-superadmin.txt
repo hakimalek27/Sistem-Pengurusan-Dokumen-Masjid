@@ -1,0 +1,5 @@
+
+Running 1 test using 1 worker
+
+[1/1] [production-readonly] › e2e\production-guidance-readonly.spec.js:294:5 › mobile · superadmin
+  1 passed (1.0m)
