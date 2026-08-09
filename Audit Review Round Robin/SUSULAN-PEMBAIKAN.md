@@ -24,6 +24,11 @@
 > pada kesemua 16 konteks role tenant. Dibaiki. 📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
 >
 > Jangan baca dokumen ini sebagai pengesahan keluaran.
+>
+> ✅ **Ketekalan dokumen diaudit mekanikal** (13 dokumen F8, **81 rujukan fail konkrit**): setiap
+> rujukan sama ada WUJUD atau ditanda eksplisit sebagai belum dihasilkan. Satu-satunya yang tiada
+> ialah `bukti/plan-f8/route-manifest.json` — output larian produksi, dan baris §9.1a memang
+> sudah menandakannya 🔴 "belum dihasilkan". Tiada dakwaan lapuk tertinggal.
 
 **Tarikh:** 9 Ogos 2026 · **Kod diukur:** `7d98883` · **Produksi:** `2325bec` (Deploy 14)
 **Asas perbandingan:** audit round-robin 14 pusingan, commit `4e07a70`, manifest beku
