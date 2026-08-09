@@ -66,7 +66,17 @@ class HelpCatalog
                 $title = $this->normalise((string) ($guide['title'] ?? ''));
                 $summary = $this->normalise((string) ($guide['summary'] ?? ''));
                 $keywords = $this->normalise(collect($guide['keywords'] ?? [])->implode(' '));
-                $body = trim("{$title} {$summary} {$keywords}");
+                // 🔴 F8 jurang J2: badan fallback dahulu = title + summary + keywords SAHAJA,
+                // sedangkan Meilisearch turut mencari teks langkah dan penyelesaian masalah.
+                // Akibatnya apabila Meili mati, carian bukan sekadar lebih perlahan — ia jadi
+                // lebih CETEK secara senyap, melanggar §9.2 "hasil setara" secara literal.
+                // DIUKUR: 38 perkataan hanya wujud dalam instruction (Meili jumpa, fallback 0).
+                // Korpus kini SEPADAN dengan `SyncHelpIndex::SEARCHABLE_ATTRIBUTES`.
+                $langkah = $this->normalise(collect($guide['steps'] ?? [])
+                    ->flatMap(fn (array $step) => [$step['title'] ?? '', $step['instruction'] ?? ''])
+                    ->filter()->implode(' '));
+                $masalah = $this->normalise(collect($guide['troubleshooting'] ?? [])->implode(' '));
+                $body = trim("{$title} {$summary} {$keywords} {$langkah} {$masalah}");
                 $score = 0;
 
                 if ($title === $needle) {
@@ -85,9 +95,17 @@ class HelpCatalog
                     } elseif (str_contains($body, $token)) {
                         $score += 6;
                     } else {
-                        $close = collect(preg_split('/\s+/', $body) ?: [])->contains(
+                        // Ambang typo DISELARASKAN dengan Meilisearch (minWordSizeForTypos:
+                        // 1 typo mulai 5 aksara, 2 typo mulai 9). Sebelum ini fallback
+                        // membenarkan 1 edit pada token 4-aksara, dan sebaik korpus diluaskan
+                        // untuk pariti J2, itu menjadi DIVERGENSI: `SPDM` (tiada dalam katalog)
+                        // mula memberi 1 hasil pada fallback sedangkan Meili produksi memberi 0.
+                        // Pariti bermakna korpus SAMA *dan* toleransi typo yang sama.
+                        $panjang = mb_strlen($token);
+                        $hadEdit = $panjang >= 9 ? 2 : ($panjang >= 5 ? 1 : 0);
+                        $close = $hadEdit > 0 && collect(preg_split('/\s+/', $body) ?: [])->contains(
                             fn (string $word): bool => abs(strlen($word) - strlen($token)) <= 2
-                                && levenshtein($word, $token) <= (strlen($token) > 6 ? 2 : 1),
+                                && levenshtein($word, $token) <= $hadEdit,
                         );
                         if ($close) {
                             $score += 3;

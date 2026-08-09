@@ -1,4 +1,4 @@
-# F8 §9.2 — gate carian bantuan: keputusan, dan TIGA penemuan
+# F8 §9.2 — gate carian bantuan: keputusan, dan EMPAT penemuan (B, C, D DIBAIKI)
 
 **Tarikh:** 9 Ogos 2026 · **Produksi diukur:** `2325bec` (Deploy 14) · **Indeks:** `diwan_help_guides`
 **Penjaga baharu:** `tests/Feature/HelpSearchGateTest.php` (6 ujian, 33 assertion)
@@ -38,7 +38,7 @@ akronim yang MEMANG ada semuanya memberi hasil.
 Ujian `(e)` mengassert `DDMS` masih 0 dalam katalog — jadi jika ia ditambah kelak, ujian MERAH
 dan memaksa dokumen ini serta jadual §9 dikemas. Penemuan tidak boleh hilang secara senyap.
 
-## 3. 🔴 Penemuan B — fallback PHP mencari korpus yang LEBIH KECIL daripada Meilisearch
+## 3. ✅ Penemuan B (DIBAIKI) — fallback PHP dahulu mencari korpus yang LEBIH KECIL
 
 Dibaca pada kod, bukan diandaikan:
 
@@ -57,7 +57,11 @@ Kawalan dijalankan supaya angka 0 itu bermakna: perkataan yang ADA dalam
 **tidak dipenuhi**. Kesan sebenar: apabila Meilisearch mati, carian tidak sahaja jadi lebih
 perlahan — ia jadi **lebih cetek**, secara senyap.
 
-## 4. 🔴 Penemuan C — tajuk langkah TIDAK boleh dicari oleh mana-mana enjin
+**DIBAIKI.** Badan carian fallback kini merangkumi tajuk+arahan langkah dan teks penyelesaian
+masalah, jadi korpusnya SEPADAN dengan `SEARCHABLE_ATTRIBUTES`. Dibuktikan dengan
+counterexample: pulihkan badan lama → ujian (f) **MERAH** (`J2 dibuka semula: 'navigasi' …`).
+
+## 4. ✅ Penemuan C (DIBAIKI) — tajuk langkah dahulu TIDAK boleh dicari oleh mana-mana enjin
 
 `steps_text` dibina daripada `instruction` sahaja. Tajuk langkah tidak diindeks, dan fallback
 juga tidak melihatnya. Diukur: **17 perkataan** hidup HANYA dalam tajuk langkah — cth
@@ -65,10 +69,14 @@ juga tidak melihatnya. Diukur: **17 perkataan** hidup HANYA dalam tajuk langkah 
 
 ⭐ Ini bernilai kerana F6 melabur banyak untuk menjadikan tajuk langkah bermakna
 (placeholder **258 → 0**). Teks itu kini tepat, deskriptif — dan **tidak boleh dicari**.
-Menambah `pluck('title')` kepada `steps_text` ialah satu baris; ia akan menjadikan hasil kerja
-F6 boleh ditemui. **Belum dibuat** — tidak seperti tempoh Meilisearch (§4A), ini mengubah
-KANDUNGAN indeks, jadi ia memerlukan `sync-help-index --delete` + gate katalog penuh + deploy.
-Dicadangkan untuk F10.
+**DIBAIKI.** `steps_text` kini merangkumi tajuk DAN arahan setiap langkah, jadi kerja F6
+(placeholder 258 → 0) akhirnya boleh ditemui. Dibuktikan dengan counterexample: buang tajuk
+daripada `steps_text` → ujian (f) **MERAH**.
+
+⚠️ **Ini mengubah KANDUNGAN indeks.** Deploy MESTI menjalankan `diwan:sync-help-index --delete`;
+tanpa itu dokumen lama kekal dan jurang kelihatan masih terbuka. Katalog (`guides.json`) TIDAK
+disentuh, jadi tiada gate katalog diperlukan.
+⚠️ **BELUM di-deploy** — produksi kekal `2325bec`.
 
 ## 4A. ✅ Penemuan D — Meili TERGANTUNG menyekat halaman 24 saat (DIBAIKI)
 
@@ -90,6 +98,35 @@ dihantar kepada klien HTTP sebagai `timeout` + `connect_timeout`.
 
 Ujian (a2) menjaganya, dan hadnya DITERBITKAN daripada config (4× tempoh) supaya membuang
 tempoh itu memerahkannya. Kerana laluan kini ~2s, ia berjalan setiap larian dan bukan opt-in.
+
+
+## 4B. ⚠️ Kesan sampingan yang DIUKUR — dan pembaikan ketiga yang ia paksa
+
+Menutup J2 sahaja **memecahkan dua ujian lain**, dan itu bukan gangguan — ia isyarat.
+
+`(e) akronim` merah: **`SPDM` mula memberi 1 hasil** (`tenant.peti-masuk`) walaupun rentetan
+`SPDM` **tiada** dalam katalog (assertion literal pada baris sebelumnya tetap hijau). Jadi ia
+padanan **kabur**, bukan padanan sebenar.
+
+Puncanya: fallback membenarkan **1 edit Levenshtein pada token 4-aksara**. Meilisearch tidak —
+lalainya `minWordSizeForTypos` ialah 1 typo mulai **5** aksara, 2 typo mulai **9**. Itulah
+sebabnya Meili produksi memberi `DDMS`/`SPDM` = **0**. Meluaskan korpus tanpa menyelaraskan
+ambang typo menjadikan fallback **LEBIH LONGGAR** daripada Meili — iaitu divergensi baharu,
+bukan pariti.
+
+**Pembaikan ketiga:** ambang typo diselaraskan dengan Meilisearch. Diukur selepasnya:
+
+```
+SPDM  -> 0     DDMS -> 0          sepadan Meili produksi        ✔
+taip  -> 1     penapis -> 1       J2 dan J1 DITUTUP (dahulu 0)  ✔
+klasifikas -> 11   pelupusn -> 4  toleransi typo DIKEKALKAN     ✔
+klasifikasi -> 11                 kawalan positif               ✔
+zzqqxx-tiada-langsung -> 0        kawalan negatif               ✔
+```
+
+🔑 **Pelajaran:** "pariti" bermakna korpus yang sama **dan** peraturan padanan yang sama. Saya
+menyelaraskan yang pertama sahaja dan hampir menghantar enjin yang lebih bising. Dua ujian yang
+merah itulah yang menangkapnya — bukan saya.
 
 ## 5. Apa yang penjaga baharu kunci
 

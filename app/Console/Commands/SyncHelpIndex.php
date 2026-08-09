@@ -130,7 +130,17 @@ class SyncHelpIndex extends Command
             'title' => $guide['title'],
             'summary' => $guide['summary'],
             'keywords' => $guide['keywords'],
-            'steps_text' => collect($guide['steps'] ?? [])->pluck('instruction')->implode(' '),
+            // 🔴 F8 jurang J1: `steps_text` dahulu = `pluck('instruction')` SAHAJA, jadi TAJUK
+            // langkah tidak boleh dicari oleh mana-mana enjin. Itu membuang hasil kerja F6, yang
+            // menukar 258 tajuk placeholder kepada tajuk deskriptif — teks yang tepat dan
+            // berguna, tetapi tidak dapat ditemui. DIUKUR: 17 perkataan hidup HANYA dalam tajuk
+            // langkah dan memberi 0 hasil pada kedua-dua enjin.
+            // ⚠️ Menukar kandungan indeks memerlukan `diwan:sync-help-index --delete` semasa
+            // deploy; tanpa itu dokumen lama kekal dan jurang kelihatan masih terbuka.
+            'steps_text' => collect($guide['steps'] ?? [])
+                ->flatMap(fn (array $step) => [$step['title'] ?? '', $step['instruction'] ?? ''])
+                ->filter()
+                ->implode(' '),
             'troubleshooting_text' => collect($guide['troubleshooting'] ?? [])->implode(' '),
         ];
     }

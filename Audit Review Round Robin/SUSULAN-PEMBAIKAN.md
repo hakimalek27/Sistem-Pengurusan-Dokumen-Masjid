@@ -8,10 +8,12 @@
 > Jadual §9 dikira mekanikal: **33 baris = 23 ✅ · 4 🔴 · 3 ⚠️ · 3 ⏸**. Baris yang terbukti
 > melebih-lebih sudah ditukar daripada ✅ kepada ⚠️/🔴.
 >
-> **Empat baris 🔴 yang tinggal memerlukan keputusan pemilik ATAU deploy**, dan F8 tidak deploy:
-> `centerCovered` (kini terbukti positif-palsu 100% — keputusan pemilik) · akronim `DDMS` tiada
-> dalam korpus (perbendaharaan kandungan) · fallback PHP lebih cetek daripada Meili (perubahan
-> produk) · tajuk langkah tidak boleh dicari (`pluck('title')`, dicadangkan F10).
+> **DUA baris 🔴 yang tinggal**, kedua-duanya keputusan pemilik dan bukan kerja yang tertunggak:
+> `centerCovered` (terbukti positif-palsu **100%** merentas kohort penuh) dan akronim `DDMS`
+> yang memang **tiada dalam korpus** (perbendaharaan kandungan, bukan keupayaan carian).
+> Dua lagi — fallback lebih cetek, dan tajuk langkah tidak boleh dicari — **sudah DIBAIKI**
+> dalam fasa ini, setiap satu dengan counterexample dibuktikan MERAH. ⚠️ Belum di-deploy;
+> deploy MESTI menjalankan `diwan:sync-help-index --delete` kerana kandungan indeks berubah.
 >
 > **Yang menyekat penutupan:** 3 keputusan pemilik · kredensial superadmin produksi (3 baris ⏸) ·
 > e-mel `diwan:staging-check --mail-to=` (nota F). Tiada satu pun boleh saya selesaikan sendiri.
@@ -80,8 +82,8 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | **Popover mobile menutup tengah** (`centerCovered`) | 6 | **0/6** | **45/124** | 🔴 **TIDAK TERCAPAI** — tetapi lihat baris di bawah: kadar positif-palsu **100%** |
 | **Metrik PENGGANTI: popover menutup sasarannya sendiri** | belum diukur | 0 | **0/124 menutup ≥50%** · 0 sasaran luar viewport · **45/45 penanda `centerCovered` = sasaran SELAMAT** | ✅ diukur kohort PENUH (bukan 2 guide W0) — 📄 `PENEMUAN-CENTERCOVERED.md` §3C |
 | **Carian: akronim `DDMS`** | — | ada hasil | **0 hits** | 🔴 §2.2 |
-| **Fallback PHP setara dgn Meili** | — | setara | **38 perkataan hanya Meili** | 🔴 §2.3 |
-| **Tajuk langkah boleh dicari** | — | (tidak dinyatakan) | **17 perkataan tidak boleh dicari** | 🔴 §2.4 |
+| **Fallback PHP setara dgn Meili** | — | setara | **SEPADAN** — badan fallback kini merangkumi tajuk+arahan langkah + penyelesaian masalah; counterexample MERAH | ✅ **DIBAIKI** (belum deploy) |
+| **Tajuk langkah boleh dicari** | — | (tidak dinyatakan) | **BOLEH** — `steps_text` kini merangkumi tajuk langkah; kerja F6 (placeholder 258→0) akhirnya boleh ditemui | ✅ **DIBAIKI** (perlu `sync-help-index --delete` semasa deploy) |
 | Halaman produksi kekal konteks bantuan | 6/25 | 25/25 | **menunggu larian produksi** | ⏸ §3 |
 | `helpUrl` `asal=livewire/update` | ada | 0 | **menunggu larian produksi** | ⏸ §3 |
 | EN-leak permukaan UI (crawl produksi) | ≥5 kelas | 0 | **menunggu larian produksi** | ⏸ §3 |
@@ -384,7 +386,7 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 | tiada data tenant/pengguna dalam dokumen | ✅ 9 medan disenaraikan; 0 e-mel/slug/domain |
 | query biasa · salah ejaan · akronim | ✅ 11 · 12 · OCR 10 — dan 🔴 `DDMS` 0 (§2.2) |
 | Meili mati/timeout → fallback berfungsi | ✅ ujian (a) `refused` + ujian (a2) **timeout sebenar**. Timeout DIUKUR 24,232 ms → **DIBAIKI kepada 2,085 ms** (`diwan.guidance.meilisearch_timeout`); (a2) bukan lagi opt-in |
-| hasil setara fallback vs Meili | 🔴 **TIDAK** — §2.3 |
+| hasil setara fallback vs Meili | ✅ **YA** — korpus fallback = `SEARCHABLE_ATTRIBUTES`; ujian (f) 17 assertion, dua counterexample dibuktikan MERAH |
 | tapisan role/panel/permission · awam tidak nampak tenant | ✅ ujian (c)+(e) + `HelpCatalogTest` |
 | query mentah tidak disimpan | ✅ `HelpCatalogTest` (`query_hash` 64 aksara) |
 | step CI Meili: `SCOUT_DRIVER=meilisearch sync --delete` + assert 83 sebelum e2e | ✅ `ci.yml` lapis 1 (F0) |

@@ -294,19 +294,17 @@ it('(e) akronim: yang ADA dalam korpus memberi hasil, yang TIADA memberi kosong'
     }
 });
 
-it('(f) korpus yang boleh dicari DIUKUR — dua jurang direkod, bukan disembunyikan', function () {
-    // Diukur 9 Ogos 2026 dan dikunci di sini supaya ia tidak boleh bergerak secara senyap:
-    //
-    //   fallback PHP  (HelpCatalog::search:69) : title + summary + keywords SAHAJA
-    //   Meilisearch   (SyncHelpIndex:70-71)    : + steps_text (INSTRUCTION sahaja) + troubleshooting
-    //
-    // Dua jurang, kedua-duanya disahkan pada Meilisearch PRODUKSI:
+it('(f) korpus fallback SEPADAN dengan Meilisearch — jurang J1 dan J2 DITUTUP', function () {
+    // SEJARAH (jangan buang — ia menerangkan mengapa ujian ini wujud):
+    // Diukur 9 Ogos 2026, fallback PHP mencari title+summary+keywords SAHAJA sedangkan
+    // Meilisearch turut mencari steps_text + troubleshooting_text. Dua jurang:
     //   J1  perkataan hanya dalam TAJUK langkah -> 0 hasil pada KEDUA-DUA enjin
-    //       (`penapis`, `lajur`: Meili 0, fallback 0)
+    //       (tajuk yang F6 tulis, placeholder 258 -> 0, tidak boleh dicari langsung)
     //   J2  perkataan hanya dalam instruction   -> Meili jumpa, fallback TIDAK
-    //       (`taip`: Meili 1, fallback 0) — melanggar §9.2 "hasil setara" secara literal
-    //
-    // ⚠️ J1 bermakna tajuk langkah yang F6 tulis (placeholder 258 -> 0) TIDAK boleh dicari.
+    //       (melanggar §9.2 "hasil setara" secara literal)
+    // Kedua-duanya kini DITUTUP: `steps_text` merangkumi tajuk langkah, dan badan fallback
+    // merangkumi tajuk+arahan langkah serta teks penyelesaian masalah.
+    // ⚠️ Perubahan kandungan indeks memerlukan `diwan:sync-help-index --delete` semasa deploy.
     $guides = app(HelpCatalog::class)->raw()['guides'];
     $kata = fn (string $t): array => array_values(array_unique(array_filter(
         preg_split('/[^\p{L}\p{N}]+/u', mb_strtolower($t)) ?: [],
@@ -321,48 +319,43 @@ it('(f) korpus yang boleh dicari DIUKUR — dua jurang direkod, bukan disembunyi
             $instruksi .= ' '.($s['instruction'] ?? '');
         }
     }
-
     $B = $kata($badan);
-    $I = $kata($instruksi);
-    $T = $kata($tajukLangkah);
+    $hanyaInstruksi = array_values(array_diff($kata($instruksi), $B));
+    $hanyaTajuk = array_values(array_diff($kata($tajukLangkah), array_merge($B, $kata($instruksi))));
 
-    $hanyaInstruksi = array_values(array_diff($I, $B));                  // Meili ada, fallback tiada
-    $hanyaTajuk = array_values(array_diff($T, array_merge($B, $I)));     // tiada mana-mana enjin
+    // Anti-vakum: jika katalog kehilangan teks langkah, set ini jadi kosong dan gelung di bawah
+    // akan LULUS tanpa menguji apa-apa.
+    expect(count($hanyaInstruksi))->toBeGreaterThan(5, 'terlalu sedikit perkataan hanya-instruction — set ujian rosak');
+    expect(count($hanyaTajuk))->toBeGreaterThan(5, 'terlalu sedikit perkataan hanya-tajuk-langkah — set ujian rosak');
 
-    // ⚠️ Versi pertama MENGUNCI 17 dan 38 tepat. Codex #15 betul bahawa itu rapuh: set token
-    // exact tidak memodelkan ASCII-folding, substring dan Levenshtein yang `HelpCatalog::search`
-    // lakukan, jadi suntingan copy biasa akan memerahkan suite tanpa membuktikan regresi produk.
-    // Yang dikunci sekarang ialah ARAH (jurang WUJUD) + contoh yang DISAHKAN pada laluan sebenar.
-    // 🔴 Codex pusingan 2 (#8): kedua-dua assertion `>0` di bawah TIDAK menyentuh Meilisearch,
-    // jadi membuang `steps_text` daripada indeks mengekalkan semuanya hijau sedangkan Meili
-    // berhenti mencari teks arahan. Lubang itu ditutup di sini dengan menjaga senarai atribut
-    // boleh-cari SECARA STRUKTUR — satu-satunya cara yang mungkin tanpa Meilisearch hidup.
-    //
-    // Tanpa `steps_text` dalam senarai ini, jurang J1/J2 yang dilaporkan menjadi karut, kerana
-    // ia dikira dengan andaian Meili MEMANG mencari teks arahan.
+    // Penjaga STRUKTUR sisi Meilisearch (tiada Meili tempatan): senarai atribut mesti kekal,
+    // DAN dokumen mesti benar-benar membawa tajuk langkah dalam `steps_text`.
     expect(SyncHelpIndex::SEARCHABLE_ATTRIBUTES)->toBe(
         ['title', 'summary', 'keywords', 'steps_text', 'troubleshooting_text'],
-        'atribut boleh-cari Meilisearch berubah — jurang J1/J2 dalam PENEMUAN-CARIAN.md dikira '
-        .'dengan andaian `steps_text` diindeks; kemas dokumen sebelum menukar senarai ini',
+        'atribut boleh-cari Meilisearch berubah — pariti J1/J2 dikira dengan andaian senarai ini',
     );
     expect(SyncHelpIndex::FILTERABLE_ATTRIBUTES)->toBe(['panel', 'roles']);
 
-    expect(count($hanyaTajuk))->toBeGreaterThan(0,
-        'J1 tertutup — tajuk langkah kini boleh dicari? Kemas PENEMUAN-CARIAN.md §4');
-    expect(count($hanyaInstruksi))->toBeGreaterThan(0,
-        'J2 tertutup — fallback kini seluas Meili? Kemas PENEMUAN-CARIAN.md §3');
+    $adaTajuk = collect($guides)->first(fn (array $g) => filled(collect($g['steps'] ?? [])->pluck('title')->filter()));
+    $dok = SyncHelpIndex::documentFor($adaTajuk);
+    $tajukPertama = (string) collect($adaTajuk['steps'])->pluck('title')->filter()->first();
+    expect(str_contains($dok['steps_text'], $tajukPertama))->toBeTrue(
+        "`steps_text` tidak mengandungi tajuk langkah \"{$tajukPertama}\" — jurang J1 dibuka semula",
+    );
 
-    // Contoh yang DISAHKAN pada laluan fallback SEBENAR (bukan inferens set perkataan):
-    //   `taip`    hanya dalam instruction  -> Meili 1 hit (produksi), fallback 0
-    //   `penapis` hanya dalam tajuk langkah -> Meili 0, fallback 0
+    // PARITI pada laluan fallback SEBENAR (bukan inferens set perkataan). Meili dimatikan.
     config()->set('scout.meilisearch.host', null);
-    foreach (['taip', 'penapis'] as $q) {
-        expect(app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam))
-            ->toBeEmpty("`{$q}` kini dijumpai oleh fallback — jurang mungkin ditutup, kemas dokumen");
+    $cari = fn (string $q) => app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam);
+
+    foreach (array_slice($hanyaInstruksi, 0, 5) as $q) {
+        expect($cari($q))->not->toBeEmpty("J2 dibuka semula: `{$q}` hanya dalam instruction dan fallback tidak menjumpainya");
+    }
+    foreach (array_slice($hanyaTajuk, 0, 5) as $q) {
+        expect($cari($q))->not->toBeEmpty("J1 dibuka semula: `{$q}` hanya dalam tajuk langkah dan fallback tidak menjumpainya");
     }
 
-    // Kawalan: perkataan dalam title/summary/keywords MESTI dijumpai oleh fallback yang sama.
-    // Tanpa ini, "kosong" di atas boleh bermakna carian rosak sepenuhnya.
-    expect(app(HelpSearchService::class)->search('klasifikasi', 'app', $this->adminMam, $this->mam))
-        ->not->toBeEmpty('kawalan gagal: fallback tidak menjumpai perkataan yang ADA dalam badan');
+    // Kawalan DUA HALA — tanpa ini "semuanya dijumpai" boleh bermakna carian memulangkan
+    // segala-galanya, dan gelung di atas akan lulus secara vakum.
+    expect($cari('klasifikasi'))->not->toBeEmpty('kawalan positif gagal: perkataan badan tidak dijumpai');
+    expect($cari('zzqqxx-tiada-langsung'))->toBeEmpty('kawalan negatif gagal: carian memulangkan hasil untuk perkataan karut');
 });
