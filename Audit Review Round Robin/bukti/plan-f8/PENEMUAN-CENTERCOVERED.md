@@ -137,6 +137,40 @@ diukur, dan kaedah terkawal (Playwright pada 390×664 tepat) digunakan sebagai g
 menjatuhkan **mana-mana** pengesahan visual melalui MCP pada mesin ini, jadi ia perlu diketahui
 sekali dan bukan ditemui semula setiap kali.
 
+
+## 3C. ⭐ METRIK PENGGANTI DIUKUR MERENTAS KOHORT PENUH — jurang §3A ditutup
+
+§3A menyatakan had yang jujur: *"Penjaga 'tidak menutup sasaran sendiri' hanya berjalan pada
+DUA guide W0, bukan kohort penuh. Mencadangkannya sebagai pengganti bermakna meluaskannya
+dahulu."* Ia kini diluaskan dan diukur pada **kesemua 124 langkah**, dalam larian yang SAMA
+seperti `centerCovered` supaya perbandingan bukan merentas larian.
+
+Provenance dalam artifak: commit `ebd837b` · katalog `2026.08.08.2` · viewport 390×664.
+
+```
+langkah dengan rect sasaran                        : 124/124
+popover menutup SEBAHAGIAN sasarannya              :  47
+popover menutup >=50% sasarannya                   :   0     <-- sifar
+sasaran berada di LUAR viewport                    :   0     <-- sifar
+
+centerCovered = TRUE tetapi sasaran TIDAK terlindung : 45/45
+```
+
+⭐ **Kesemua 45 penanda `centerCovered` ialah penggera palsu.** Dalam setiap satu daripada 45,
+benda yang pengguna perlu lihat — sasaran langkah itu — **tidak dilindungi oleh popover**.
+Kadar positif-palsu metrik itu pada kohort ini ialah **100%**.
+
+Dan metrik pengganti sudah **hijau merentas kohort penuh**, bukan hanya pada dua guide W0:
+tiada satu langkah pun yang popovernya menutup ≥50% sasarannya, dan tiada satu sasaran pun
+terkeluar daripada viewport. 47 langkah mempunyai pertindihan tepi, tetapi tiada yang
+mengaburkan.
+
+Ini mengubah pilihan (1) di §5 daripada cadangan berdasarkan mekanisme + satu tangkapan skrin
+kepada **cadangan berangka**: penggantinya bukan sahaja lebih bermakna, ia sudah dipenuhi.
+
+⚠️ Yang masih TIDAK didakwa: ini diukur pada tenant `mam` tempatan dengan benih demo, bukan
+pada produksi. Larian §9.1a akan mengesahkannya pada data sebenar.
+
 ## 4. Apa yang saya TIDAK dakwa
 
 - Saya **tidak** mengukur 124 langkah pada produksi — itu memerlukan sesi tenant produksi

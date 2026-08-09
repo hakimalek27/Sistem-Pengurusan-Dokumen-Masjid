@@ -72,7 +72,8 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | `diwan:smoke` produksi | 9/9 | 9/9 | **9/9** (Deploy 14) | ✅ |
 | Meilisearch: indeks = bilangan guide | — | tepat 83 | **83** · `isIndexing false` | ✅ |
 | Meilisearch: tiada data tenant/pengguna | — | 0 | **0** e-mel · 0 slug · 0 domain | ✅ |
-| **Popover mobile menutup tengah** | 6 | **0/6** | **45/124** | 🔴 **TIDAK TERCAPAI** — §2.1 |
+| **Popover mobile menutup tengah** (`centerCovered`) | 6 | **0/6** | **45/124** | 🔴 **TIDAK TERCAPAI** — tetapi lihat baris di bawah: kadar positif-palsu **100%** |
+| **Metrik PENGGANTI: popover menutup sasarannya sendiri** | belum diukur | 0 | **0/124 menutup ≥50%** · 0 sasaran luar viewport · **45/45 penanda `centerCovered` = sasaran SELAMAT** | ✅ diukur kohort PENUH (bukan 2 guide W0) — 📄 `PENEMUAN-CENTERCOVERED.md` §3C |
 | **Carian: akronim `DDMS`** | — | ada hasil | **0 hits** | 🔴 §2.2 |
 | **Fallback PHP setara dgn Meili** | — | setara | **38 perkataan hanya Meili** | 🔴 §2.3 |
 | **Tajuk langkah boleh dicari** | — | (tidak dinyatakan) | **17 perkataan tidak boleh dicari** | 🔴 §2.4 |
