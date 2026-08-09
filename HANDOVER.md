@@ -13,7 +13,24 @@
 ⚠️ E: CTA bergantung DOM           ⚠️ F: e-mel sebenar belum dihantar
 ```
 
-### 🎯 TIGA keputusan PEMILIK — F8 tidak boleh ditutup tanpanya
+### 🔴 PENEMUAN TERBESAR SESI INI — larian PRODUKSI tidak akan pernah boleh hijau
+
+Ujian role tenant melawat `/app/mamad/records` dengan sengaja (isolasi tenant) dan mengassert
+404. 404 itu menjana ralat console; ujian yang **sama** kemudian mengassert **sifar** ralat
+console. Assertion itu tidak boleh dipenuhi oleh pembinaannya sendiri — pada mana-mana mesin,
+termasuk produksi. Kesemua **16** konteks role tenant akan gagal. Dibaiki (ralat dipotong pada
+sempadan probe; selepasnya tetap DIREKOD). Tanpa ini, tetingkap kredensial anda akan terbakar
+pada kegagalan yang bukan salah produksi.
+
+### 🎯 TIGA keputusan PEMILIK — dua kini disokong DATA
+
+⭐ **#1 `centerCovered`** dan **#2 denominator** tidak lagi memerlukan pertimbangan buta:
+- **#1:** metrik pengganti diukur pada KOHORT PENUH 124 langkah — **0** langkah menutup ≥50%
+  sasarannya, **0** sasaran luar viewport, dan **45/45** penanda `centerCovered` ialah penggera
+  palsu (sasaran selamat). Kadar positif-palsu **100%**. 📄 `PENEMUAN-CENTERCOVERED.md` §3C
+- **#2:** manifest F0 diekstrak dan dibandingkan per kunci — 58 hilang / 1 tambah; kesemuanya
+  wajar, termasuk 3 yang dibendera dan diperiksa tangan. 📄 `PENEMUAN-DENOMINATOR.md`
+
 
 1. **`centerCovered`** — bersara sebagai gate / laras penempatan / risk-accept 45/124.
    📸 Bukti visual ada: pada kes yang metrik tandakan MERAH, sasaran kelihatan PENUH dan tidak
@@ -66,12 +83,11 @@ artifak bukti yang DIJEJAK git (67 fail, 0 pelanggaran).
 ### Yang MASIH terbuka selepas keputusan pemilik
 
 - larian produksi §9.1a (3 baris ⏸) — satu arahan selepas kredensial
-- **latihan §9.1 tempatan belum 20/20** — terbaik 2/20 + 41 halaman, dan ia TIDAK akan siap pada
-  mesin ini. Gantung terbukti **kumulatif dalam satu konteks pelayar** (Windows + `channel:
-  chrome`): setiap laluan yang disyaki memberi 200 apabila diprob bersendirian (3× setiap satu,
-  ~700 ms — termasuk pada tenant smoke KOSONG), gantung mendarat pada laluan BERBEZA antara
-  larian, dan CI Linux menjalankan 83 guide / 473 langkah dengan HIJAU. Tiga hipotesis saya
-  sendiri gugur kepada ukuran: `/bantuan`, `/peti-masuk` rosak, dan tenant kosong.
+- ✅ **latihan §9.1 tempatan SELESAI 20/20** (396 halaman · 0 ralat console · kontrak 2/2 lulus).
+  ⚠️ Kesimpulan saya sebelum ini ("tidak akan siap pada mesin ini", "gantung kumulatif") **SALAH
+  dan sudah ditarik**. Ia siap ~13 minit sebaik tiga perkara sebenar ditangani. Resipi pelayan
+  yang WAJIB (jika tidak, 500 kunci SQLite): `php -S` LANGSUNG dengan `SESSION_DRIVER=file
+  CACHE_STORE=file` — `artisan serve` TIDAK menghantar env ke proses anaknya.
   Punca kelembapan tempatan pula DITEMUI: pertikaian kunci SQLite (`SESSION_DRIVER=database`
   atas SQLite) — 8 permintaan selari **29,064 ms → 1,064 ms** dengan pemacu fail. Resipi
   pelayan selari: `skrip/pelayan-berbilang.mjs` (modul `http` terbina, tiada pakej baharu).
