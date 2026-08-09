@@ -54,7 +54,7 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | `risk-accepted` (dilapor berasingan) | — | boleh >0 dgn fallback+tiket+luput | **0** | ✅ |
 | Liputan gate diassert agregator | tiada | 473 · **229** · 83 union | **83/473/172 union · missing 0 · extra 0 · overlap 0 · pass true** | ⚠️ **LENCONGAN** — nota A |
 | Mismatch `role_routes` — lapisan A↔B | belum diukur | 0 | **0** pada **410 pasangan identiti×route** (41 route × 10 identiti) | ✅ |
-| Mismatch `role_routes` — lapisan C (probe `actual_status`) | belum diukur | 0 | **TIDAK dalam manifest**: kesemua 410 `actual_status` = `null` | ⚠️ nota D |
+| Mismatch `role_routes` — lapisan C (probe `actual_status`) | belum diukur | 0 | **`null` DENGAN SENGAJA — dan itu betul.** `--probe` dijalankan ke fail berasingan: 37 "mismatch", tetapi keputusan AKSES bersetuju pada kesemua 37 (`deny`=`deny`, `allow`=`allow`); hanya STATUS berbeza (302→500). HTTP sebenar pada laluan yang sama memberi **302 seperti dijangka** → 500 itu artifak prob dalaman. Mengisi manifest akan menyuntik 37 mismatch PALSU. Lapisan C dikuatkuasakan `PlanManifestTest` setiap larian | ✅ 📄 `PENEMUAN-LAPISAN-C.md` |
 | Drift dokumen akses role | 8/8 role | 0 | **0 percanggahan** (premis diperiksa — nota B) | ✅ |
 | Suite domain dalam gate CI | 0/3 | 2/3 wajib hijau | **`ci-domain` hijau dalam CI 31213031582** | ✅ |
 | Gate antivirus intake fail-closed | 0 ujian | 3/3 status ditolak | **3/3** (`infected`·`unavailable`·`error`) + 1 kawalan `clean` | ✅ |

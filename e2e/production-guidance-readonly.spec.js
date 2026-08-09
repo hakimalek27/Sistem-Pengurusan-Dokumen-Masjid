@@ -25,7 +25,7 @@
 // _PASSWORD (dibekal pemilik — TIADA lalai demo; lalai diam guidance.spec dilarang di sini),
 // E2E_PROD_REPORT (laluan JSON output). Jarak log masuk: 15s (had produksi 5/min).
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, renameSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { expect, test } from '@playwright/test';
 
@@ -68,13 +68,20 @@ function routesFor(identity) {
 // Dikunci pada `run_tenant`: slug ialah `smoke-<uuid>` unik per larian, jadi fail daripada
 // larian TERDAHULU dibuang secara automatik, sementara worker yang dimulakan semula dalam
 // larian yang SAMA menyambung inventori yang sedia ada. Tiada pemadaman membuta.
+let rosakDikesan = null;
+
 function bacaKeadaan(baseURL) {
     if (existsSync(REPORT_PATH)) {
         try {
             const sedia = JSON.parse(readFileSync(REPORT_PATH, 'utf8'));
             if (sedia.run_tenant === tenantSlug) return sedia;
-        } catch {
-            // Fail rosak (cth larian dibunuh semasa menulis) — mula semula, jangan gagal larian.
+        } catch (e) {
+            // ⚠️ JANGAN mula semula secara SENYAP. Versi pertama berbuat demikian dan ia
+            // memusnahkan bukti sebenar: laporan berundur daripada 2/20 kepada 0/20 kerana satu
+            // penulisan terpotong menyebabkan setiap invokasi berikutnya membuang inventori
+            // terkumpul. Penulisan kini ATOMIK (tulis .tmp → rename), jadi keadaan ini
+            // sepatutnya mustahil — dan jika ia tetap berlaku, ia MESTI kelihatan.
+            rosakDikesan = String(e.message).slice(0, 120);
         }
     }
     return {
@@ -87,9 +94,17 @@ function bacaKeadaan(baseURL) {
     };
 }
 
+// Tulisan ATOMIK. `jejak()` menulis sebelum SETIAP navigasi (~30 kali per konteks), jadi
+// tetingkap "fail separuh ditulis" dilalui berpuluh kali setiap konteks. Larian yang ditamatkan
+// dalam tetingkap itu meninggalkan JSON terpotong — DIPERHATIKAN: laporan berundur 2/20 → 0/20.
+// Tulis ke `.tmp` kemudian `rename` bermakna pembaca hanya nampak fail LENGKAP: sama ada yang
+// lama atau yang baharu, tidak pernah separuh.
 function tulisKeadaan(keadaan) {
     mkdirSync(dirname(REPORT_PATH), { recursive: true });
-    writeFileSync(REPORT_PATH, JSON.stringify(keadaan, null, 2) + '\n');
+    if (rosakDikesan) keadaan.amaran_rosak = rosakDikesan;
+    const tmp = `${REPORT_PATH}.tmp`;
+    writeFileSync(tmp, JSON.stringify(keadaan, null, 2) + '\n');
+    renameSync(tmp, REPORT_PATH);
 }
 
 // Jejak DALAM konteks: `cuba` ditulis SEBELUM setiap navigasi, jadi apabila larian terkunci
@@ -340,6 +355,11 @@ test('kontrak: TEPAT 20 konteks selesai — dan yang hilang DINAMAKAN', async ({
     keadaan.contexts = selesai.length;
     keadaan.missing_contexts = hilang;
     tulisKeadaan(keadaan);
+
+    // Kehilangan data tidak boleh lulus sebagai kejayaan: jika inventori pernah dibaca dalam
+    // keadaan rosak, kiraan 20 itu sendiri tidak boleh dipercayai.
+    expect(keadaan.amaran_rosak ?? null,
+        `inventori pernah rosak semasa larian (${keadaan.amaran_rosak}) — kiraan tidak boleh dipercayai`).toBeNull();
 
     expect(hilang, `konteks TIDAK selesai: ${hilang.join(', ') || '(tiada)'}`).toEqual([]);
     expect(selesai.sort()).toEqual([...dijangka].sort());

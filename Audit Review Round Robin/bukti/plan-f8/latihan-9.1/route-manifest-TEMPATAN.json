@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "run_tenant": "smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d",
+  "run_tenant": "smoke-88ba4e65-be15-4f29-b907-257e099fe772",
   "base_url": "http://127.0.0.1:8095",
   "expected_page_counts": {
     "public": 0,
@@ -14,7 +14,7 @@
     "ajk": 13,
     "audit": 14
   },
-  "last_login_at": 1786236740920,
+  "last_login_at": 1786237530060,
   "inventory": [
     {
       "viewport": "desktop",
@@ -52,103 +52,103 @@
       "cuba": "/admin/users",
       "pages": [
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/ahli-peranan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/ahli-peranan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/analitik-bantuan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/analitik-bantuan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/bantuan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/bantuan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/carian",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/carian",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/kegemaran",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/kegemaran",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/laporan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/laporan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/persediaan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/persediaan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/pelupusan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/pelupusan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/penggunaan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/penggunaan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/profil",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/profil",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/retensi",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/retensi",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/tetapan-masjid",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/tetapan-masjid",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/kelulusan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/kelulusan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/classification-nodes",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/classification-nodes",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/delegasi",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/delegasi",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/peti-masuk",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/peti-masuk",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/minit-saya",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/log-aktiviti",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/log-aktiviti",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/pembetulan-rekod",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/pembetulan-rekod",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/records",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/records",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/registry-files",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/registry-files",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/retensi-peraturan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/retensi-peraturan",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/sensitive-access-logs",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/sensitive-access-logs",
           "status": 200
         },
         {
-          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/tiket-sokongan",
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/tiket-sokongan",
           "status": 200
         },
         {
@@ -200,6 +200,12 @@
           "status": 200
         }
       ]
+    },
+    {
+      "viewport": "desktop",
+      "identity": "admin_masjid",
+      "status": "mula",
+      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772"
     }
   ]
 }

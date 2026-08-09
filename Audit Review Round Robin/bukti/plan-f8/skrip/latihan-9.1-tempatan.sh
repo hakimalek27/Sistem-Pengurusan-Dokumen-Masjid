@@ -72,12 +72,42 @@ if [ "${LATIHAN_SATU_SATU:-0}" = "1" ]; then
     PERKONTEKS="${LATIHAN_PERKONTEKS_MS:-300000}"
     PERANAN=$(python3 -c "import json,sys;print(' '.join(x['role'] for x in json.load(open(sys.argv[1],encoding='utf-8'))['role_credentials']))" "$FIXTURE")
     : > "$OUT/larian-TEMPATAN.txt"
+    # Pembongkaran Playwright pada mesin ini menelan 300s TETAP setiap invokasi (worker
+    # force-kill), sedangkan kerja konteks itu sendiri hanya beberapa saat. Diukur: 5.0 minit
+    # per konteks, iaitu ~100 minit untuk 20 konteks — kesemuanya menunggu, bukan mengukur.
+    # Inventori ditulis ke cakera SEBAIK konteks tamat, jadi sebaik ia muncul di sana kita sudah
+    # ada bukti dan proses itu tidak lagi memberi apa-apa. Ia ditamatkan awal.
+    selesai_kah() {
+        python3 -c "
+import json,sys
+try: d=json.load(open(sys.argv[1],encoding='utf-8'))
+except Exception: sys.exit(1)
+for e in d.get('inventory',[]):
+    if e.get('viewport')==sys.argv[2] and e.get('identity')==sys.argv[3] and e.get('status')=='selesai':
+        sys.exit(0)
+sys.exit(1)" "$E2E_PROD_REPORT" "$1" "$2" 2>/dev/null
+    }
     for VP in desktop mobile; do
         for ID in public superadmin $PERANAN; do
             printf '── %s · %s\n' "$VP" "$ID" | tee -a "$OUT/larian-TEMPATAN.txt"
             npx playwright test --project=production-readonly --reporter=line \
-                --global-timeout "$PERKONTEKS" --grep "$VP . $ID" 2>&1 \
-                | grep -E "passed|failed|did not run|Error:|force-killed" | tee -a "$OUT/larian-TEMPATAN.txt"
+                --global-timeout "$PERKONTEKS" --grep "$VP . $ID" > "$OUT/log-$VP-$ID.txt" 2>&1 &
+            PID=$!
+            MAKS=$(( PERKONTEKS / 2000 ))
+            N=0
+            while kill -0 "$PID" 2>/dev/null; do
+                if selesai_kah "$VP" "$ID"; then
+                    kill "$PID" 2>/dev/null
+                    echo "   selesai — proses ditamatkan awal (melangkau pembongkaran 300s)" \
+                        | tee -a "$OUT/larian-TEMPATAN.txt"
+                    break
+                fi
+                N=$((N + 1)); [ "$N" -ge "$MAKS" ] && break
+                sleep 2
+            done
+            wait "$PID" 2>/dev/null
+            grep -E "passed|failed|did not run|Error:" "$OUT/log-$VP-$ID.txt" 2>/dev/null \
+                | head -3 | tee -a "$OUT/larian-TEMPATAN.txt"
         done
     done
     echo "── kontrak penutup 20 konteks" | tee -a "$OUT/larian-TEMPATAN.txt"
