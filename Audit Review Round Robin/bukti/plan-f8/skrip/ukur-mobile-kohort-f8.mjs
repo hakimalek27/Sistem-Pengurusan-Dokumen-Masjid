@@ -84,6 +84,11 @@ if (!(await p.locator('[data-help-target="favourite-item"]').count())) {
     }
 }
 
+// ⚠️ `provenance()` diisytihar dalam fail ini sejak Codex P2 #1 tetapi TIDAK PERNAH dipanggil,
+// jadi artifak kohort ini keluar TANPA provenance — tepat kelemahan yang fungsi itu wujud untuk
+// hapuskan. Dipanggil sekarang, sekali, dan dilampirkan pada tulisan berperingkat DAN akhir.
+const prov = await provenance({ base_url: BASE, tenant: TENANT, viewport: '390x664' });
+
 const hasil = [];
 for (const [i, s] of kohort.entries()) {
     const laluan = String(s.route || '').replace('{tenant}', TENANT) || `/app/${TENANT}`;
@@ -100,11 +105,31 @@ for (const [i, s] of kohort.entries()) {
             if (!pop) return { adaPopover: false };
             const b = pop.getBoundingClientRect();
             const cx = innerWidth / 2; const cy = innerHeight / 2;
+            // F8 — metrik PENGGANTI yang dicadangkan: adakah popover menutup SASARANNYA
+            // SENDIRI? Itu perkara yang pengguna sebenarnya perlu lihat. `centerCovered`
+            // hanya bertanya sama ada popover menyentuh titik tengah viewport, yang pada
+            // skrin 664px ditepati oleh mana-mana popover yang diletak DI ATAS sasarannya —
+            // iaitu susun atur yang BETUL (bukti visual §3B). Kedua-duanya diukur di sini
+            // supaya perbandingan dibuat pada larian yang SAMA, bukan merentas larian.
+            const el = document.querySelector('.driver-active-element');
+            const t = el?.getBoundingClientRect();
+            const bertindih = t
+                ? !(b.right <= t.left || b.left >= t.right || b.bottom <= t.top || b.top >= t.bottom)
+                : null;
+            const luasT = t ? Math.max(0, t.width) * Math.max(0, t.height) : 0;
+            const luasTindih = t && bertindih
+                ? Math.max(0, Math.min(b.right, t.right) - Math.max(b.left, t.left))
+                  * Math.max(0, Math.min(b.bottom, t.bottom) - Math.max(b.top, t.top))
+                : 0;
             return {
                 adaPopover: true,
                 centerCovered: b.left <= cx && b.right >= cx && b.top <= cy && b.bottom >= cy,
                 popSize: { w: Math.round(b.width), h: Math.round(b.height), left: Math.round(b.left), top: Math.round(b.top) },
-                target: document.querySelector('.driver-active-element')?.getAttribute('data-help-target') ?? null,
+                target: el?.getAttribute('data-help-target') ?? null,
+                targetRect: t ? { w: Math.round(t.width), h: Math.round(t.height), left: Math.round(t.left), top: Math.round(t.top) } : null,
+                menutupSasaran: bertindih,
+                peratusSasaranTertutup: luasT > 0 ? Math.round((luasTindih / luasT) * 100) : null,
+                sasaranDalamViewport: t ? (t.top < innerHeight && t.bottom > 0 && t.left < innerWidth && t.right > 0) : null,
             };
         });
     } catch (e) {
@@ -118,6 +143,7 @@ for (const [i, s] of kohort.entries()) {
     if ((i + 1) % 20 === 0 || i + 1 === kohort.length) {
         console.log(`  … ${i + 1}/${kohort.length}`);
         writeFileSync('Audit Review Round Robin/bukti/plan-f8/mobile-kohort-f8.json', JSON.stringify({
+            provenance: prov,
             lengkap: i + 1 === kohort.length, diukur: i + 1, daripada: kohort.length, hasil,
         }, null, 2) + '\n');
     }
@@ -138,11 +164,40 @@ console.log(`  BAHARU tertutup         : ${baharu.length}`);
 for (const h of baharu) console.log(`     ${h.key.padEnd(26)} target=${h.target} pop=${h.popSize?.h}px@${h.popSize?.top}`);
 console.log(`  tiada popover (diukur)  : ${tiadaPopover.length}  ${tiadaPopover.map((h) => h.key).slice(0, 8).join(', ')}`);
 
+// ── METRIK PENGGANTI yang dicadangkan, diukur pada larian yang SAMA ─────────────────────────
+// Keputusan pemilik #1 sebelum ini bersandar pada satu tangkapan skrin. Di sini ia diukur
+// merentas kohort penuh supaya "gantikan centerCovered dengan penjaga sasaran-sendiri" menjadi
+// cadangan BERANGKA dan bukan cadangan berdasarkan mekanisme.
+const adaSasaran = hasil.filter((h) => h.adaPopover && h.targetRect);
+const menutup = adaSasaran.filter((h) => h.menutupSasaran);
+const teruk = menutup.filter((h) => (h.peratusSasaranTertutup ?? 0) >= 50);
+const luarViewport = adaSasaran.filter((h) => h.sasaranDalamViewport === false);
+console.log(`\n── METRIK PENGGANTI: popover menutup SASARANNYA SENDIRI ──`);
+console.log(`  langkah dgn rect sasaran : ${adaSasaran.length}/${hasil.length}`);
+console.log(`  menutup sasaran (apa2)   : ${menutup.length}`);
+console.log(`  menutup >=50% sasaran    : ${teruk.length}`);
+for (const h of teruk) console.log(`     ${h.key.padEnd(26)} ${h.peratusSasaranTertutup}% target=${h.target}`);
+console.log(`  sasaran di LUAR viewport : ${luarViewport.length}  ${luarViewport.map((h) => h.key).slice(0, 6).join(', ')}`);
+// Silang-jadual: berapa banyak yang centerCovered TETAPI sasarannya kelihatan penuh?
+const palsu = hasil.filter((h) => h.centerCovered && h.targetRect && !h.menutupSasaran);
+console.log(`\n  ⭐ centerCovered=TRUE tetapi sasaran TIDAK terlindung : ${palsu.length}/${kini.length}`);
+console.log(`     (setiap satu = susun atur baik yang metrik lama tandakan MERAH)`);
+
 writeFileSync('Audit Review Round Robin/bukti/plan-f8/mobile-kohort-f8.json', JSON.stringify({
+    provenance: prov,
     viewport: { width: 390, height: 664 },
     nota: 'audit = produksi tenant smoke; kini = tempatan tenant mam, benih demo',
     audit_centercovered: dahuluCc.length, kini_centercovered: kini.length,
     pulih: pulih.map((h) => h.key), baharu: baharu.map((h) => h.key),
-    tiada_popover: tiadaPopover.map((h) => h.key), hasil,
+    tiada_popover: tiadaPopover.map((h) => h.key),
+    metrik_pengganti: {
+        definisi: 'popover bertindih dengan rect .driver-active-element (sasarannya sendiri)',
+        langkah_dgn_rect_sasaran: adaSasaran.length,
+        menutup_sasaran: menutup.length,
+        menutup_50pc_atau_lebih: teruk.map((h) => ({ key: h.key, peratus: h.peratusSasaranTertutup })),
+        sasaran_luar_viewport: luarViewport.map((h) => h.key),
+        centercovered_tetapi_sasaran_selamat: palsu.map((h) => h.key),
+    },
+    hasil,
 }, null, 2) + '\n');
 await pelayar.close();

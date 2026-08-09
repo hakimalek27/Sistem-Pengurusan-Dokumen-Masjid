@@ -14,7 +14,7 @@
     "ajk": 13,
     "audit": 14
   },
-  "last_login_at": 0,
+  "last_login_at": 1786236740920,
   "inventory": [
     {
       "viewport": "desktop",
@@ -43,6 +43,162 @@
         "Sedang mencari panduan...\n            \n                                    2 hasil dalam skop Orang Awam\n                     untuk “Peti Masuk”                     Kosongkan carian",
         "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
         "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "identity": "superadmin",
+      "status": "selesai",
+      "cuba": "/admin/users",
+      "pages": [
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-406a69ad-21ed-4cee-bc4c-2613ad491e4d/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/profil-saya",
+          "status": 200
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "status": 200
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin",
+          "status": 200
+        },
+        {
+          "url": "/admin/help-announcements",
+          "status": 200
+        },
+        {
+          "url": "/admin/mosques",
+          "status": 200
+        },
+        {
+          "url": "/admin/storage-orders",
+          "status": 200
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/users",
+          "status": 200
+        }
       ]
     }
   ]
