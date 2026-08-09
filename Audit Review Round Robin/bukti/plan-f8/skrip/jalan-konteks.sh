@@ -31,6 +31,26 @@ export E2E_PROD_REPORT="$OUT/route-manifest-TEMPATAN.json"
 
 PERKONTEKS="${PERKONTEKS_MS:-240000}"
 
+# ⚠️ Penjaga yang lahir daripada kesilapan SEBENAR: satu larian pengesahan DUA konteks ditulis
+# ke atas laporan yang sudah mengandungi larian LENGKAP 20/20, dan commit berikutnya
+# menggantikan artifak bukti dengan versi 2/20. Ia dipulihkan daripada git, tetapi corak itu
+# akan berulang. Menimpa hasil LENGKAP dengan larian tenant BERBEZA kini perlu izin eksplisit.
+if [ -f "$OUT/route-manifest-TEMPATAN.json" ]; then
+    LENGKAP=$(python3 -c "
+import json,sys
+try: d=json.load(open(sys.argv[1],encoding='utf-8'))
+except Exception: print(''); raise SystemExit
+siap=[e for e in d.get('inventory',[]) if e.get('status')=='selesai']
+print(d.get('run_tenant','') if len(siap)>=20 else '')
+" "$OUT/route-manifest-TEMPATAN.json" 2>/dev/null)
+    if [ -n "$LENGKAP" ] && [ "$LENGKAP" != "$E2E_PROD_TENANT" ] && [ "${IZIN_TIMPA:-0}" != "1" ]; then
+        echo "TOLAK: $OUT/route-manifest-TEMPATAN.json mengandungi larian LENGKAP 20/20" >&2
+        echo "       (tenant $LENGKAP). Larian ini guna tenant BERBEZA dan akan memusnahkannya." >&2
+        echo "       Guna OUT_DIR=<laluan lain> untuk larian pengesahan, atau IZIN_TIMPA=1." >&2
+        exit 3
+    fi
+fi
+
 selesai_kah() {
     python3 -c "
 import json,sys
