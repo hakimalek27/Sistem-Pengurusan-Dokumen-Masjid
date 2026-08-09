@@ -5,8 +5,13 @@
 > ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
 > dakwaan asal saya melebih-lebih). Lihat **§5C**.
 >
-> Jadual §9 dikira mekanikal: **32 baris = 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸**. Baris yang terbukti
+> Jadual §9 dikira mekanikal: **33 baris = 23 ✅ · 4 🔴 · 3 ⚠️ · 3 ⏸**. Baris yang terbukti
 > melebih-lebih sudah ditukar daripada ✅ kepada ⚠️/🔴.
+>
+> **Empat baris 🔴 yang tinggal memerlukan keputusan pemilik ATAU deploy**, dan F8 tidak deploy:
+> `centerCovered` (kini terbukti positif-palsu 100% — keputusan pemilik) · akronim `DDMS` tiada
+> dalam korpus (perbendaharaan kandungan) · fallback PHP lebih cetek daripada Meili (perubahan
+> produk) · tajuk langkah tidak boleh dicari (`pluck('title')`, dicadangkan F10).
 >
 > **Yang menyekat penutupan:** 3 keputusan pemilik · kredensial superadmin produksi (3 baris ⏸) ·
 > e-mel `diwan:staging-check --mail-to=` (nota F). Tiada satu pun boleh saya selesaikan sendiri.
