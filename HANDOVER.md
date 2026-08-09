@@ -1,5 +1,11 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
+## 📋 BACA DAHULU: `Audit Review Round Robin/KEPUTUSAN-PEMILIK-F8.md`
+
+Enam perkara menunggu pemilik. Fail itu memberi, untuk SETIAP satu: apa yang diukur, pilihan
+yang ada, dan **arahan tepat** yang akan dijalankan sebaik jawapan diberi. Tiada satu pun
+memerlukan penyiasatan lanjut — hanya keputusan.
+
 ## ▶️ SAMBUNG DI SINI — F8: 19/19 penemuan P2 DITANGANI · 3 keputusan pemilik (9 Ogos)
 
 **Produksi kekal `2325bec` (Deploy 14).** F8 TIDAK deploy. CI hijau pada `f6aed9c`.
