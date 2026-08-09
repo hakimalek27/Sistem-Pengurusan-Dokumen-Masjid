@@ -248,6 +248,35 @@ function monitorRespons(page) {
     return buruk;
 }
 
+
+// ── Nota E: CTA "Buat pada skrin" DIREKOD pada produksi ─────────────────────────────────────
+// Baris §9 "CTA pada langkah tanpa tindakan" kekal ⚠️ kerana `0` hanya diukur TEMPATAN, dan
+// metriknya BERGANTUNG DOM: `step-advance-plan.js:60` memutuskan CTA daripada
+// `step.wait_for_user || next.target !== step.target`, jadi ia berubah dengan benih dan tenant.
+// Audit asal mengukurnya pada PRODUKSI/tenant `smoke`; tanpa data produksi baris itu tidak boleh
+// ditutup. Ia dirakam DI SINI supaya larian §9.1a menutupnya dalam larian yang SAMA, dan bukan
+// memerlukan tetingkap kredensial KEDUA.
+//
+// ⚠️ SEPARA dan dilabel begitu: hanya langkah tour yang dilawati setiap identiti (20 titik data),
+// bukan kohort 124 langkah audit. Ia data produksi sebenar untuk baris itu, bukan penutupannya.
+const langkahKatalog = new Map(
+    manifest.catalogue.flatMap((g) => (g.steps ?? []).map((s) => [`${g.guide_id}#${s.index}`, s])),
+);
+
+async function rakamCta(page, guideId, indexSatu) {
+    const btn = page.locator('.driver-popover-next-btn');
+    const label = (await btn.count()) ? ((await btn.first().textContent()) ?? '').trim() : null;
+    const langkah = langkahKatalog.get(`${guideId}#${indexSatu}`);
+    return {
+        guide: guideId,
+        langkah: indexSatu,
+        cta: label,
+        wait_for_user: langkah?.wait_for_user ?? null,
+        // Kecacatan yang audit kira: CTA "Buat pada skrin" pada langkah yang BUKAN tindakan.
+        cacat_cta: label === 'Buat pada skrin' && langkah?.wait_for_user === false,
+    };
+}
+
 // ── Kontrak (7): set role fixture diassert TEPAT, sebelum apa-apa pelayar dibuka ────────────
 test('kontrak: akaun fixture ialah TEPAT lapan role yang dijangka', async () => {
     const roles = roleAccounts.map((a) => a.role).sort();
@@ -280,11 +309,12 @@ for (const viewport of VIEWPORTS) {
             await jejak(baseURL, viewport.name, 'public', '/bantuan?panduan=public.help',
                 () => page.goto('/bantuan?panduan=public.help&langkah=0'));
             await expect(page.locator('.driver-popover')).toBeVisible();
+            const cta = await rakamCta(page, 'public.help', 1);
             await page.locator('.driver-popover-close-btn').click();
             const carian = await assertCarianBantuan(page, `public ${viewport.name}`);
 
             expect([...new Set(errors)]).toEqual([]);
-            rekod(baseURL, viewport.name, 'public', { status: 'selesai', pages: visited, carian });
+            rekod(baseURL, viewport.name, 'public', { status: 'selesai', pages: visited, carian, cta });
         } finally {
             await context.close();
         }
@@ -316,13 +346,15 @@ for (const viewport of VIEWPORTS) {
             }
             // (1) satu tour read-only (telemetri diisytihar dalam laporan larian).
             const tour = tourForRole('superadmin');
+            let cta = null;
             if (catalogGuideIds.includes(tour.guide)) {
                 await page.goto(`${tour.route}?panduan=${tour.guide}&langkah=0`);
                 await expect(page.locator('.driver-popover')).toBeVisible();
+                cta = await rakamCta(page, tour.guide, 1);
                 await page.locator('.driver-popover-close-btn').click();
             }
             expect([...new Set(errors)]).toEqual([]);
-            rekod(baseURL, viewport.name, 'superadmin', { status: 'selesai', pages: visited });
+            rekod(baseURL, viewport.name, 'superadmin', { status: 'selesai', pages: visited, cta });
         } finally {
             await context.close();
         }
@@ -362,6 +394,7 @@ for (const viewport of VIEWPORTS) {
                 await jejak(baseURL, viewport.name, account.role, `${tour.route}?panduan=${tour.guide}`,
                     () => page.goto(`${tour.route}?panduan=${tour.guide}&langkah=0`));
                 await expect(page.locator('.driver-popover')).toBeVisible();
+                const cta = await rakamCta(page, tour.guide, 1);
                 await page.locator('.driver-popover-close-btn').click();
 
                 // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah karut).
@@ -401,7 +434,7 @@ for (const viewport of VIEWPORTS) {
                 });
                 expect(unik, `${account.role} ${viewport.name}`).toEqual([]);
                 rekod(baseURL, viewport.name, account.role, {
-                    status: 'selesai', fasa: 'selesai', pages: visited, carian, crossTenant: cross?.status(),
+                    status: 'selesai', fasa: 'selesai', pages: visited, carian, cta, crossTenant: cross?.status(),
                 });
             } finally {
                 await context.close();

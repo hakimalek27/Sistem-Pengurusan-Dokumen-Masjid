@@ -139,6 +139,15 @@ Asas audit ialah **produksi, tenant `smoke`**; ukuran saya **tempatan, tenant `m
 apple-to-apple dengan 20 pada produksi. Baris ini kekal ⚠️ sehingga larian produksi §9.1
 mengukurnya di tempat yang sama seperti audit.
 
+✅ **Disediakan supaya ia ditutup dalam larian yang SAMA, bukan memerlukan tetingkap kredensial
+KEDUA:** spec §9.1a kini merakam CTA setiap langkah tour yang dilawati —
+`{guide, langkah, cta, wait_for_user, cacat_cta}` — dengan `cacat_cta` = CTA berkata
+"Buat pada skrin" pada langkah yang `wait_for_user: false` (definisi tepat yang audit kira).
+Disahkan berfungsi tempatan: `public.help#1` dan `tenant.dashboard#1` kedua-duanya
+`cta: "Seterusnya"`, `cacat_cta: false`.
+⚠️ **SEPARA dan dilabel begitu:** 20 titik data (satu langkah tour per identiti), bukan kohort
+124 langkah audit. Ia data produksi SEBENAR untuk baris ini, bukan penutupannya.
+
 ⭐ Ini kali KEDUA andaian "medan katalog menentukan tingkah laku runtime" menipu saya dalam F8
 yang sama (kali pertama: tajuk terbitan, nota C). Corak yang perlu diingat: **jika metrik
 diberi nama mengikut apa yang PENGGUNA lihat, ukurlah pada apa yang pengguna lihat.**
