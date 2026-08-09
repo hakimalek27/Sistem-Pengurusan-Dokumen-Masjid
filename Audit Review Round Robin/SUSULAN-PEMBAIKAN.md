@@ -1,9 +1,22 @@
 # SUSULAN-PEMBAIKAN — laporan F8 (§9) · ⚠️ **BELUM PENUTUP**
 
-> **Status: F8 BELUM SIAP.** Round-robin §9.3 memberi **23 penemuan (pusingan 1)** dan
-> **19 penemuan (pusingan 2)**; **8 kekal TERBUKA** (6 ditutup selepas itu) dan majoritinya **tidak** disekat oleh
-> kredensial pemilik. Lihat **§5C**. Baris jadual yang terbukti melebih-lebih sudah ditukar
-> daripada ✅ kepada ⚠️/🔴. Jangan baca dokumen ini sebagai pengesahan keluaran.
+> **Status: F8 BELUM SIAP — tetapi kini ia tersekat pada PEMILIK, bukan pada kod.**
+> Round-robin §9.3 memberi **23 penemuan (pusingan 1)** + **19 (pusingan 2)**; **kesemuanya kini
+> ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
+> dakwaan asal saya melebih-lebih). Lihat **§5C**.
+>
+> Jadual §9 dikira mekanikal: **32 baris = 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸**. Baris yang terbukti
+> melebih-lebih sudah ditukar daripada ✅ kepada ⚠️/🔴.
+>
+> **Yang menyekat penutupan:** 3 keputusan pemilik · kredensial superadmin produksi (3 baris ⏸) ·
+> e-mel `diwan:staging-check --mail-to=` (nota F). Tiada satu pun boleh saya selesaikan sendiri.
+>
+> ⚠️ **Latihan §9.1 TEMPATAN kekal 2/20** dan tidak akan siap pada mesin dev ini — gantung
+> terbukti **kumulatif dalam satu konteks pelayar**, bukan kecacatan produk (📄
+> `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`). Runner kini tahan-gantung: had menyeluruh, inventori
+> berperingkat, dan medan `cuba` yang menamakan laluan yang menyekat.
+>
+> Jangan baca dokumen ini sebagai pengesahan keluaran.
 
 **Tarikh:** 9 Ogos 2026 · **Kod diukur:** `7d98883` · **Produksi:** `2325bec` (Deploy 14)
 **Asas perbandingan:** audit round-robin 14 pusingan, commit `4e07a70`, manifest beku
