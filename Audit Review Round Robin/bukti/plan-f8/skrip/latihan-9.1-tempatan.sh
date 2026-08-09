@@ -61,6 +61,30 @@ export E2E_PROD_REPORT="$OUT/route-manifest-TEMPATAN.json"
 rm -f "$E2E_PROD_REPORT"
 
 echo "── matriks 20 konteks -> $E2E_PROD_REPORT"
+
+# ── MOD SATU-PROSES-SATU-KONTEKS ────────────────────────────────────────────────────────────
+# Gantung tempatan terbukti KUMULATIF dalam satu proses pelayar (LATIHAN-9.1-TEMPATAN.md), jadi
+# beri setiap konteks prosesnya SENDIRI: pelayar baharu setiap kali, kaunter kumulatif direset.
+# Ini hanya mungkin kerana inventori hidup pada CAKERA dan dikunci pada `run_tenant` — ia
+# terkumpul merentas invokasi dengan sendirinya. Kontrak penutup 20 konteks dijalankan di hujung
+# dan MASIH menguatkuasakan set penuh, jadi mod ini tidak boleh menyembunyikan konteks yang gagal.
+if [ "${LATIHAN_SATU_SATU:-0}" = "1" ]; then
+    PERKONTEKS="${LATIHAN_PERKONTEKS_MS:-300000}"
+    PERANAN=$(python3 -c "import json,sys;print(' '.join(x['role'] for x in json.load(open(sys.argv[1],encoding='utf-8'))['role_credentials']))" "$FIXTURE")
+    : > "$OUT/larian-TEMPATAN.txt"
+    for VP in desktop mobile; do
+        for ID in public superadmin $PERANAN; do
+            printf '── %s · %s\n' "$VP" "$ID" | tee -a "$OUT/larian-TEMPATAN.txt"
+            npx playwright test --project=production-readonly --reporter=line \
+                --global-timeout "$PERKONTEKS" --grep "$VP . $ID" 2>&1 \
+                | grep -E "passed|failed|did not run|Error:|force-killed" | tee -a "$OUT/larian-TEMPATAN.txt"
+        done
+    done
+    echo "── kontrak penutup 20 konteks" | tee -a "$OUT/larian-TEMPATAN.txt"
+    npx playwright test --project=production-readonly --reporter=line \
+        --global-timeout 120000 --grep "kontrak: TEPAT 20 konteks" 2>&1 | tee -a "$OUT/larian-TEMPATAN.txt"
+    KEPUTUSAN=${PIPESTATUS[0]}
+else
 # Had MENYELURUH (sama seperti wrapper produksi): dikuatkuasakan oleh proses utama Playwright,
 # jadi ia berkesan walaupun satu worker terkunci dan mengabaikan had per-ujiannya sendiri.
 GT="${LATIHAN_GLOBAL_TIMEOUT_MS:-5400000}"
@@ -70,6 +94,7 @@ GT="${LATIHAN_GLOBAL_TIMEOUT_MS:-5400000}"
 npx playwright test --project=production-readonly --reporter=line --global-timeout "$GT" \
     ${LATIHAN_GREP:+--grep "$LATIHAN_GREP"} 2>&1 | tee "$OUT/larian-TEMPATAN.txt"
 KEPUTUSAN=${PIPESTATUS[0]}
+fi
 
 # Laporan ditulis BERPERINGKAT oleh spec, jadi ia wujud walaupun larian dibunuh separuh jalan.
 python3 - "$E2E_PROD_REPORT" <<'PY'
