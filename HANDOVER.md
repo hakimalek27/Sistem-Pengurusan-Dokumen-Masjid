@@ -8,7 +8,7 @@
 ### Jadual §9 — dikira mekanikal terhadap jadual, bukan ingatan
 
 ```
-32 baris = 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸
+33 baris = 25 ✅ · 2 🔴 · 3 ⚠️ · 3 ⏸   (masuk sesi: 32 = 21/4/4/3)
 ⚠️ A: 172 lawan 229 (lencongan)   ⚠️ D: role_routes lapisan C (410/410 actual_status = null)
 ⚠️ E: CTA bergantung DOM           ⚠️ F: e-mel sebenar belum dihantar
 ```
@@ -92,8 +92,12 @@ artifak bukti yang DIJEJAK git (67 fail, 0 pelanggaran).
   atas SQLite) — 8 permintaan selari **29,064 ms → 1,064 ms** dengan pemacu fail. Resipi
   pelayan selari: `skrip/pelayan-berbilang.mjs` (modul `http` terbina, tiada pakej baharu).
   📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
-- 4 baris 🔴: `centerCovered` · `DDMS` tiada dalam korpus · fallback lebih cetek daripada Meili ·
-  tajuk langkah tidak boleh dicari (`pluck('title')` satu baris → cadang F10)
+- **2 baris 🔴 sahaja, kedua-duanya keputusan PEMILIK** (bukan kerja tertunggak):
+  `centerCovered` (positif-palsu 100%) dan akronim `DDMS` yang memang tiada dalam korpus.
+  Dua lagi DITUTUP dalam fasa ini: fallback kini SEPADAN dengan Meili (korpus + ambang typo),
+  dan tajuk langkah kini boleh dicari.
+  ⚠️ **Deploy MESTI menjalankan `diwan:sync-help-index --delete`** — kandungan indeks berubah
+  (`steps_text` kini merangkumi tajuk langkah). `guides.json` TIDAK disentuh.
 
 ### Penjaga baharu F8 (10 regresi dibuktikan MERAH)
 

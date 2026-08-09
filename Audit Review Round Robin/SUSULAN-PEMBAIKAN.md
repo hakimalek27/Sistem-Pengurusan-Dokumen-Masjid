@@ -5,7 +5,7 @@
 > ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
 > dakwaan asal saya melebih-lebih). Lihat **§5C**.
 >
-> Jadual §9 dikira mekanikal: **33 baris = 23 ✅ · 4 🔴 · 3 ⚠️ · 3 ⏸**. Baris yang terbukti
+> Jadual §9 dikira mekanikal: **33 baris = 25 ✅ · 2 🔴 · 3 ⚠️ · 3 ⏸**. Baris yang terbukti
 > melebih-lebih sudah ditukar daripada ✅ kepada ⚠️/🔴.
 >
 > **DUA baris 🔴 yang tinggal**, kedua-duanya keputusan pemilik dan bukan kerja yang tertunggak:
