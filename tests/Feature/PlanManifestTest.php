@@ -283,3 +283,42 @@ test('tiada kredensial dalam artifak bukti yang dijejak git', function () {
         .' — keluarkan daripada git dan tambah corak ke Audit Review Round Robin/bukti/.gitignore',
     );
 })->group('plan-manifest');
+
+/**
+ * F8 — penjaga untuk kecacatan yang akan menggagalkan larian PRODUKSI pada SETIAP role tenant.
+ *
+ * `production-guidance-readonly.spec.js` melawat `/app/mamad/records` dengan SENGAJA untuk
+ * membuktikan isolasi tenant, dan mengassert 404. 404 itu menjana ralat console; ujian yang
+ * SAMA kemudian mengassert SIFAR ralat console. Assertion itu tidak boleh dipenuhi oleh
+ * pembinaannya sendiri — pada mana-mana mesin, termasuk produksi.
+ *
+ * CI tidak pernah menjalankan spec itu (project bersyarat `E2E_PRODUCTION`), jadi tiada penjaga
+ * TINGKAH LAKU yang mungkin. Penjaga STRUKTUR ini ialah yang terbaik yang boleh dijalankan pada
+ * setiap larian suite: ia menuntut ralat dipotong pada sempadan probe, dan bahawa apa-apa
+ * selepas probe tetap DIREKAM (bukan dibuang senyap).
+ */
+test('spec produksi tidak boleh mengassert sifar ralat console selepas probe 404 yang disengajakan', function () {
+    $spec = (string) file_get_contents(base_path('e2e/production-guidance-readonly.spec.js'));
+
+    // Anti-vakum: jika fail dinamakan semula/dipindahkan, penjaga mesti gagal, bukan lulus kosong.
+    // ⚠️ `toContain()` Pest ialah VARIADIK — hujah kedua ialah JARUM LAIN, bukan mesej. Saya
+    // melanggar pelajaran ini buat kali KETIGA semasa menulis penjaga ini, dan ia memerahkan
+    // ujian atas sebab yang salah. Gunakan `str_contains` + `toBeTrue` supaya mesej kekal mesej.
+    expect(str_contains($spec, '/app/mamad/records'))->toBeTrue(
+        'probe silang-tenant hilang daripada spec — penjaga ini tidak lagi menguji apa-apa',
+    );
+
+    expect(str_contains($spec, 'const ralatSebelumProbe = errors.length;'))->toBeTrue(
+        'snapshot ralat SEBELUM probe silang-tenant hilang — tanpanya 404 yang disengajakan '
+        .'dikira sebagai ralat console dan assertion menjadi mustahil dipenuhi',
+    );
+
+    expect(str_contains($spec, 'errors.slice(0, ralatSebelumProbe)'))->toBeTrue(
+        'assertion ralat console tidak dipotong pada sempadan probe — setiap role tenant akan gagal',
+    );
+
+    // Dipotong, BUKAN dibuang: yang selepas probe mesti masih direkod untuk diperiksa.
+    expect(str_contains($spec, 'ralat_selepas_probe'))->toBeTrue(
+        'ralat selepas probe dibuang, bukan direkod — kehilangan bukti secara senyap',
+    );
+})->group('plan-manifest');

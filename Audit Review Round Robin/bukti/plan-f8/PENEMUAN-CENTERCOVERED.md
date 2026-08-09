@@ -137,6 +137,13 @@ diukur, dan kaedah terkawal (Playwright pada 390×664 tepat) digunakan sebagai g
 menjatuhkan **mana-mana** pengesahan visual melalui MCP pada mesin ini, jadi ia perlu diketahui
 sekali dan bukan ditemui semula setiap kali.
 
+⚠️ **PINDAAN (diukur semula 9 Ogos, petang):** pernyataan di atas terlalu luas. Skrinsyot MEMANG
+masih mati (`Page.captureScreenshot` CDP timeout 30s, disahkan semula pada tab baharu), tetapi
+**JavaScript dan pembacaan DOM BERFUNGSI**, dan viewport kini nyata (1568×726, bukan 0×0). Jadi
+MCP boleh mengesahkan fakta STRUKTUR pada sistem hidup — ia hanya tidak boleh memberi piksel,
+dan keadaan runtime tour tidak boleh dipercayai kerana pemasa beku (#73).
+📄 `PENGESAHAN-LIVE-MCP.md` — pengesahan langsung pada `bakwim.my` yang menggunakan had ini.
+
 
 ## 3C. ⭐ METRIK PENGGANTI DIUKUR MERENTAS KOHORT PENUH — jurang §3A ditutup
 
