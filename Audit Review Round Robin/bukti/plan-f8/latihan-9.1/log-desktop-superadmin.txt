@@ -2,3 +2,9 @@
 Running 1 test using 1 worker
 
 [1/1] [production-readonly] › e2e\production-guidance-readonly.spec.js:255:5 › desktop · superadmin
+Timed out waiting 300s for the test suite to run
+
+Timed out waiting 300s for the teardown for report begin to run
+
+  1 passed (5.0m)
+  2 errors were not a part of any test, see above for details

@@ -112,9 +112,38 @@ function tulisKeadaan(keadaan) {
 // Sebabnya diukur: pada latihan tempatan satu konteks terkunci 40 minit tanpa had per-ujiannya
 // menembak, dan inventori hanya boleh melaporkan "desktop|admin_masjid" — cukup untuk
 // mengulanginya, tidak cukup untuk mendiagnosnya.
+const mulaKonteks = new Map();
+
 async function jejak(baseURL, viewport, identity, url, kerja) {
-    rekod(baseURL, viewport, identity, { cuba: url });
-    return kerja();
+    const kunci = `${viewport}|${identity}`;
+    if (!mulaKonteks.has(kunci)) mulaKonteks.set(kunci, Date.now());
+    const t0 = Date.now();
+    rekod(baseURL, viewport, identity, { cuba: url, cuba_ms: t0 - mulaKonteks.get(kunci) });
+
+    // `net::ERR_ABORTED` DIUKUR sebagai guguran pengangkutan, bukan halaman rosak: setiap laluan
+    // yang terlibat memberi 200 tiga-daripada-tiga (~700 ms) apabila diprob bersendirian, dan
+    // dalam matriks ia berlaku selepas ~23 navigasi pantas berturut dalam konteks yang SAMA.
+    // Satu percubaan semula membolehkan larian diteruskan — tetapi ia DIREKOD dalam artifak,
+    // kerana harness yang mencuba semula secara senyap akan menyembunyikan masalah sebenar jika
+    // ia berlaku pada produksi.
+    let ulang = 0;
+    let hasil;
+    try {
+        hasil = await kerja();
+    } catch (e) {
+        if (!String(e.message).includes('net::ERR_ABORTED')) throw e;
+        ulang = 1;
+        hasil = await kerja();
+    }
+    // Masa per-navigasi DIKUMPUL, bukan disimpulkan. Tanpa ini "larian tidak siap" tidak dapat
+    // dibezakan daripada "larian terkunci" — dan perbezaan itu mengubah kesimpulan sepenuhnya:
+    // DIUKUR, konteks yang saya laporkan sebagai TERKUNCI sebenarnya maju (200s → laluan ke-17,
+    // 540s → laluan ke-24). Lengkung ini menjawab sama ada ia merosot atau sekata.
+    const semasa = bacaKeadaan(baseURL).inventory
+        .find((e) => `${e.viewport}|${e.identity}` === kunci);
+    const masa = [...(semasa?.masa ?? []), { url, ms: Date.now() - t0, ...(ulang ? { ulang } : {}) }];
+    rekod(baseURL, viewport, identity, { masa });
+    return hasil;
 }
 
 // Satu baca-ubah-tulis per identiti. `kunci` = viewport|identity, jadi percubaan semula
@@ -205,8 +234,18 @@ function monitorBrowserErrors(page) {
     page.on('console', (message) => {
         if (message.type() === 'error') errors.push(message.text());
     });
-
     return errors;
+}
+
+// "Failed to load resource: … 500" TIDAK menamakan sumbernya, jadi ia tidak boleh disiasat.
+// Pendengar respons merekod URL + status setiap 4xx/5xx supaya kegagalan boleh dinamakan.
+function monitorRespons(page) {
+    const buruk = [];
+    page.on('response', (r) => {
+        const s = r.status();
+        if (s >= 400) buruk.push({ status: s, url: r.url() });
+    });
+    return buruk;
 }
 
 // ── Kontrak (7): set role fixture diassert TEPAT, sebelum apa-apa pelayar dibuka ────────────
@@ -223,7 +262,7 @@ for (const viewport of VIEWPORTS) {
     // public (tanpa akaun — identiti ke-10).
     test(`${viewport.name} · public`, async ({ browser, baseURL }) => {
         test.setTimeout(600_000);
-        rekod(baseURL, viewport.name, 'public', { status: 'mula' });
+        rekod(baseURL, viewport.name, 'public', { status: 'mula', masa: [], pages: [] });
         const context = await browser.newContext({ baseURL, viewport: size });
         try {
             const page = await context.newPage();
@@ -254,7 +293,7 @@ for (const viewport of VIEWPORTS) {
     // superadmin (kredensial DIBEKAL LUARAN — tiada lalai).
     test(`${viewport.name} · superadmin`, async ({ browser, baseURL }) => {
         test.setTimeout(600_000);
-        rekod(baseURL, viewport.name, 'superadmin', { status: 'mula' });
+        rekod(baseURL, viewport.name, 'superadmin', { status: 'mula', masa: [], pages: [] });
         const context = await browser.newContext({ baseURL, viewport: size });
         try {
             const page = await context.newPage();
@@ -292,21 +331,29 @@ for (const viewport of VIEWPORTS) {
     for (const account of roleAccounts) {
         test(`${viewport.name} · ${account.role}`, async ({ browser, baseURL }) => {
             test.setTimeout(600_000);
-            rekod(baseURL, viewport.name, account.role, { status: 'mula' });
+            rekod(baseURL, viewport.name, account.role, { status: 'mula', masa: [], pages: [] });
             const context = await browser.newContext({ baseURL, viewport: size });
             try {
                 const page = await context.newPage();
                 const errors = monitorBrowserErrors(page);
+                const responsBuruk = monitorRespons(page);
                 await login(page, baseURL, account.email, account.password, '/app/login',
                     (url) => url.pathname.replace(/\/$/, '') === `/app/${tenantSlug}`);
 
                 // (6) Page-by-page daripada MANIFEST role_routes — desktop DAN mobile.
                 const visited = [];
                 for (const item of routesFor(account.role)) {
+                    // ⚠️ Semakan kesihatan berada DALAM blok berjadual dengan sengaja. Ukuran
+                    // pertama meletakkan `page.goto` sahaja di dalamnya dan memberi ~700 ms rata
+                    // untuk 23 navigasi — tetapi larian menghabiskan 484 saat. Jadi masa itu
+                    // BUKAN dalam navigasi, dan hanya menjadualkan navigasi menyembunyikannya.
                     const response = await jejak(baseURL, viewport.name, account.role, item.url,
-                        () => page.goto(item.url));
+                        async () => {
+                            const r = await page.goto(item.url);
+                            await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
+                            return r;
+                        });
                     expect(response?.status(), `${account.role} ${viewport.name}: ${item.url}`).toBe(200);
-                    await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
                     visited.push({ url: item.url, status: response?.status() });
                 }
 
@@ -320,16 +367,41 @@ for (const viewport of VIEWPORTS) {
                 // (2) carian bantuan 3 pertanyaan (tepat / salah ejaan / istilah karut).
                 await jejak(baseURL, viewport.name, account.role, `/app/${tenantSlug}/bantuan`,
                     () => page.goto(`/app/${tenantSlug}/bantuan`));
+                rekod(baseURL, viewport.name, account.role, { fasa: 'carian-bantuan' });
                 const carian = await assertCarianBantuan(page, `${account.role} ${viewport.name}`);
 
                 // Probe silang-tenant 404 (S1) — tenant sebenar TIDAK dilog masuk, hanya URL.
+                // 🔴 Probe silang-tenant SENGAJA menghasilkan 404 — dan 404 itu menghasilkan
+                // ralat console ("Failed to load resource: … 404"). Assertion di bawah menuntut
+                // SIFAR ralat console, jadi ia TIDAK BOLEH DIPENUHI selagi probe dikira: setiap
+                // role tenant akan gagal, pada mana-mana mesin, termasuk produksi. Ralat dipotong
+                // pada sempadan probe supaya assertion menguji halaman SEBENAR, dan apa-apa yang
+                // muncul selepas probe tetap DIREKOD (bukan dibuang) untuk diperiksa.
+                const ralatSebelumProbe = errors.length;
+                rekod(baseURL, viewport.name, account.role, { fasa: 'probe-silang-tenant' });
                 const cross = await jejak(baseURL, viewport.name, account.role, '/app/mamad/records',
                     () => page.goto('/app/mamad/records'));
                 expect(cross?.status(), `${account.role} silang-tenant`).toBe(404);
 
-                expect([...new Set(errors)], `${account.role} ${viewport.name}`).toEqual([]);
+                // Penanda fasa EKOR. Diukur: 32 navigasi siap dalam ~26s, tetapi ujian tidak
+                // pernah kembali dalam 420s — jadi masa itu dihabiskan SELEPAS navigasi terakhir,
+                // dan tanpa penanda tiada cara mengetahui di mana.
+                // Isi ralat DIREKOD sebelum diassert. Diukur: larian tersekat TEPAT pada fasa
+                // ini sedangkan jumlah masa navigasi hanya ~34s — jadi kosnya ada pada assertion
+                // ini, dan tanpa merekod isinya tiada cara mengetahui mengapa.
+                const unik = [...new Set(errors.slice(0, ralatSebelumProbe))];
                 rekod(baseURL, viewport.name, account.role, {
-                    status: 'selesai', pages: visited, carian, crossTenant: cross?.status(),
+                    fasa: 'semak-ralat-console',
+                    ralat_kiraan: errors.length,
+                    ralat_unik: unik.length,
+                    ralat_contoh: unik.slice(0, 5).map((x) => String(x).slice(0, 160)),
+                    respons_buruk: responsBuruk.slice(0, 10),
+                    ralat_selepas_probe: [...new Set(errors.slice(ralatSebelumProbe))]
+                        .map((x) => String(x).slice(0, 160)),
+                });
+                expect(unik, `${account.role} ${viewport.name}`).toEqual([]);
+                rekod(baseURL, viewport.name, account.role, {
+                    status: 'selesai', fasa: 'selesai', pages: visited, carian, crossTenant: cross?.status(),
                 });
             } finally {
                 await context.close();

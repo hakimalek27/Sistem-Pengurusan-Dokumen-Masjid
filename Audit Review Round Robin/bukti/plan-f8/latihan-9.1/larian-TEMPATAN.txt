@@ -6,3 +6,17 @@
   1 failed
    selesai — proses ditamatkan awal (melangkau pembongkaran 300s)
 ── desktop · admin_masjid
+    Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:8095/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/peti-masuk
+    test-results\production-guidance-readonly-desktop-·-admin-masjid-production-readonly\test-failed-1.png
+  1 failed
+── desktop · pengerusi
+    Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:8095/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya
+    test-results\production-guidance-readonly-desktop-·-pengerusi-production-readonly\test-failed-1.png
+  1 failed
+── desktop · setiausaha
+    Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:8095/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/peti-masuk
+    test-results\production-guidance-readonly-desktop-·-setiausaha-production-readonly\test-failed-1.png
+  1 failed
+── desktop · bendahari
+  1 did not run
+── desktop · nazir

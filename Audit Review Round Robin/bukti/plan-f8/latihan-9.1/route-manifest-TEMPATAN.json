@@ -14,7 +14,7 @@
     "ajk": 13,
     "audit": 14
   },
-  "last_login_at": 1786237530060,
+  "last_login_at": 1786241269515,
   "inventory": [
     {
       "viewport": "desktop",
@@ -205,7 +205,193 @@
       "viewport": "desktop",
       "identity": "admin_masjid",
       "status": "mula",
-      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772"
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 48223,
+      "masa": [
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/ahli-peranan",
+          "ms": 1838
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/analitik-bantuan",
+          "ms": 667
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/bantuan",
+          "ms": 2742
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/carian",
+          "ms": 709
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/kegemaran",
+          "ms": 708
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/laporan",
+          "ms": 726
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/persediaan",
+          "ms": 697
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/pelupusan",
+          "ms": 671
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/penggunaan",
+          "ms": 743
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/profil",
+          "ms": 715
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/retensi",
+          "ms": 649
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/tetapan-masjid",
+          "ms": 713
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772",
+          "ms": 761
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/kelulusan",
+          "ms": 759
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/classification-nodes",
+          "ms": 808
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/delegasi",
+          "ms": 721
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/peti-masuk",
+          "ms": 697
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya",
+          "ms": 752
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/log-aktiviti",
+          "ms": 785
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/pembetulan-rekod",
+          "ms": 727
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/records",
+          "ms": 786
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/registry-files",
+          "ms": 773
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/retensi-peraturan",
+          "ms": 727
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/sensitive-access-logs",
+          "ms": 1176,
+          "ulang": 1
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/tiket-sokongan",
+          "ms": 752
+        },
+        {
+          "url": "/",
+          "ms": 483
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 526
+        },
+        {
+          "url": "/daftar",
+          "ms": 493
+        },
+        {
+          "url": "/bantuan",
+          "ms": 3154
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772?panduan=tenant.dashboard",
+          "ms": 687
+        },
+        {
+          "url": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/bantuan",
+          "ms": 3172
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 438
+        }
+      ],
+      "pages": [],
+      "fasa": "semak-ralat-console",
+      "ralat_kiraan": 5,
+      "ralat_unik": 2,
+      "ralat_contoh": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "respons_buruk": [
+        {
+          "status": 500,
+          "url": "http://127.0.0.1:8095/bantuan/imej/public.registration"
+        },
+        {
+          "status": 500,
+          "url": "http://127.0.0.1:8095/bantuan/imej/tenant.peti-masuk?tenant=15"
+        },
+        {
+          "status": 500,
+          "url": "http://127.0.0.1:8095/bantuan/imej/screen.cipta-nod-klasifikasi?tenant=15"
+        },
+        {
+          "status": 500,
+          "url": "http://127.0.0.1:8095/bantuan/imej/tenant.registry-files?tenant=15"
+        },
+        {
+          "status": 404,
+          "url": "http://127.0.0.1:8095/app/mamad/records"
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "identity": "pengerusi",
+      "status": "mula",
+      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya"
+    },
+    {
+      "viewport": "desktop",
+      "identity": "setiausaha",
+      "status": "mula",
+      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/peti-masuk"
+    },
+    {
+      "viewport": "desktop",
+      "identity": "bendahari",
+      "status": "mula",
+      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya"
+    },
+    {
+      "viewport": "desktop",
+      "identity": "nazir",
+      "status": "mula",
+      "cuba": "/app/smoke-88ba4e65-be15-4f29-b907-257e099fe772/minit-saya"
     }
   ]
 }
