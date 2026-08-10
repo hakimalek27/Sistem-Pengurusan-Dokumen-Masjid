@@ -5,23 +5,19 @@
 > ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
 > dakwaan asal saya melebih-lebih). Lihat **§5C**.
 >
-> Jadual §9 dikira mekanikal: **33 baris = 25 ✅ · 2 🔴 · 3 ⚠️ · 3 ⏸**. Baris yang terbukti
-> melebih-lebih sudah ditukar daripada ✅ kepada ⚠️/🔴.
+> Jadual §9 dikira mekanikal: **34 baris = 27 ✅ · 0 🔴 · 4 ⚠️ · 3 ⏸**.
 >
-> **DUA baris 🔴 yang tinggal**, kedua-duanya keputusan pemilik dan bukan kerja yang tertunggak:
-> `centerCovered` (terbukti positif-palsu **100%** merentas kohort penuh) dan akronim `DDMS`
-> yang memang **tiada dalam korpus** (perbendaharaan kandungan, bukan keupayaan carian).
-> Dua lagi — fallback lebih cetek, dan tajuk langkah tidak boleh dicari — **sudah DIBAIKI**
-> dalam fasa ini, setiap satu dengan counterexample dibuktikan MERAH. ⚠️ Belum di-deploy;
-> deploy MESTI menjalankan `diwan:sync-help-index --delete` kerana kandungan indeks berubah.
+> ⭐ **Tiada lagi baris MERAH.** Pemilik menjawab ketiga-tiga keputusan pada 11 Ogos 2026:
+> `centerCovered` **bersara sebagai gate** (kadar positif-palsu 100% diukur) dan penggantinya
+> kini gate CI pada kohort tenant PENUH · akronim `DDMS`/`SPDM` **ditambah ke katalog** dan
+> boleh dicari · denominator **172**.
 >
-> **Yang menyekat penutupan:** 3 keputusan pemilik · kredensial superadmin produksi (3 baris ⏸) ·
-> e-mel `diwan:staging-check --mail-to=` (nota F). Tiada satu pun boleh saya selesaikan sendiri.
+> **Baki: 4 ⚠️ + 3 ⏸.** Tiga ⏸ dan satu ⚠️ (nota E) menunggu kredensial superadmin produksi;
+> satu ⚠️ menunggu e-mel `staging-check`; satu ⚠️ ialah pendedahan jujur (26 langkah dengan
+> pertindihan tepi 25–49% yang saya TIDAK buktikan mengganggu pengguna).
 >
-> ✅ **Latihan §9.1 TEMPATAN SELESAI 20/20** (396 halaman, 0 ralat console, kontrak 2/2 lulus).
-> Ia mendedahkan satu assertion yang **tidak boleh dipenuhi pada mana-mana mesin** — probe
-> silang-tenant menjana 404 yang ujian sama assert mesti sifar, jadi larian PRODUKSI akan gagal
-> pada kesemua 16 konteks role tenant. Dibaiki. 📄 `bukti/plan-f8/LATIHAN-9.1-TEMPATAN.md`
+> ⚠️ **Deploy WAJIB `diwan:sync-help-index --delete`** — katalog DAN kandungan indeks berubah
+> (`catalog_version 2026.08.11.1`, `steps_text` kini merangkumi tajuk langkah).
 >
 > Jangan baca dokumen ini sebagai pengesahan keluaran.
 >
@@ -84,9 +80,10 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | `diwan:smoke` produksi | 9/9 | 9/9 | **9/9** (Deploy 14) | ✅ |
 | Meilisearch: indeks = bilangan guide | — | tepat 83 | **83** · `isIndexing false` | ✅ |
 | Meilisearch: tiada data tenant/pengguna | — | 0 | **0** e-mel · 0 slug · 0 domain | ✅ |
-| **Popover mobile menutup tengah** (`centerCovered`) | 6 | **0/6** | **45/124** | 🔴 **TIDAK TERCAPAI** — tetapi lihat baris di bawah: kadar positif-palsu **100%** |
-| **Metrik PENGGANTI: popover menutup sasarannya sendiri** | belum diukur | 0 | **0/124 menutup ≥50%** · 0 sasaran luar viewport · **45/45 penanda `centerCovered` = sasaran SELAMAT** | ✅ diukur kohort PENUH (bukan 2 guide W0) — 📄 `PENEMUAN-CENTERCOVERED.md` §3C |
-| **Carian: akronim `DDMS`** | — | ada hasil | **0 hits** | 🔴 §2.2 |
+| **Popover mobile menutup tengah** (`centerCovered`) | 6 | ~~0~~ | **45/124** · kadar positif-palsu **100%** | ✅ **BERSARA sebagai gate** (keputusan pemilik 9 Ogos) — kekal sebagai pemerhatian |
+| **Metrik PENGGANTI: popover menutup sasarannya sendiri** | belum diukur | 0 | **0/124 menutup ≥50%** · 0 sasaran luar viewport · **45/45 penanda `centerCovered` = sasaran SELAMAT** | ✅ kini **GATE CI** pada kohort tenant PENUH (`guidance.spec.js`, hijau 11.7 min) |
+| ⚠️ Pertindihan tepi 25–49% | belum diukur | (tiada sasaran) | **26/124** dalam jalur 25–49% (maksimum 49%) | ⚠️ **DIDEDAHKAN, bukan dikubur** — saya TIDAK membuktikan ia mengganggu pengguna |
+| **Carian: akronim `DDMS`** | — | ada hasil | **ADA HASIL** — `DDMS`/`SPDM`/`Diwan` ditambah ke `keywords` 4 guide (awam+tenant+platform); dijumpai pada panel awam DAN tenant | ✅ **DITUTUP** (keputusan pemilik 9 Ogos) |
 | **Fallback PHP setara dgn Meili** | — | setara | **SEPADAN** — badan fallback kini merangkumi tajuk+arahan langkah + penyelesaian masalah; counterexample MERAH | ✅ **DIBAIKI** (belum deploy) |
 | **Tajuk langkah boleh dicari** | — | (tidak dinyatakan) | **BOLEH** — `steps_text` kini merangkumi tajuk langkah; kerja F6 (placeholder 258→0) akhirnya boleh ditemui | ✅ **DIBAIKI** (perlu `sync-help-index --delete` semasa deploy) |
 | Halaman produksi kekal konteks bantuan | 6/25 | 25/25 | **menunggu larian produksi** | ⏸ §3 |
@@ -398,7 +395,7 @@ kesiapan**: kontrak itu mempunyai banyak item, bukan tiga hasil akhir. Codex pus
 |---|---|
 | indeks tepat 83 dokumen | ✅ **83** live (`bukti-larian/produksi-smoke-meili.txt`) |
 | tiada data tenant/pengguna dalam dokumen | ✅ 9 medan disenaraikan; 0 e-mel/slug/domain |
-| query biasa · salah ejaan · akronim | ✅ 11 · 12 · OCR 10 — dan 🔴 `DDMS` 0 (§2.2) |
+| query biasa · salah ejaan · akronim | ✅ 11 · 12 · OCR 10 · `DDMS`/`SPDM` kini ADA dalam korpus dan boleh dicari (keputusan pemilik 9 Ogos) |
 | Meili mati/timeout → fallback berfungsi | ✅ ujian (a) `refused` + ujian (a2) **timeout sebenar**. Timeout DIUKUR 24,232 ms → **DIBAIKI kepada 2,085 ms** (`diwan.guidance.meilisearch_timeout`); (a2) bukan lagi opt-in |
 | hasil setara fallback vs Meili | ✅ **YA** — korpus fallback = `SEARCHABLE_ATTRIBUTES`; ujian (f) 17 assertion, dua counterexample dibuktikan MERAH |
 | tapisan role/panel/permission · awam tidak nampak tenant | ✅ ujian (c)+(e) + `HelpCatalogTest` |

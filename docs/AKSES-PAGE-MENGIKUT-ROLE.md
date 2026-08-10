@@ -5,7 +5,7 @@
 > Jana semula: `node scripts/audit/generate-role-access-doc.mjs`
 > Penjaga: `tests/Feature/RoleAccessDocTest.php` (gagal jika fail ini menyimpang).
 
-**Sistem:** Diwan / SPDM · **catalog_version manifest:** `2026.08.08.2`
+**Sistem:** Diwan / SPDM · **catalog_version manifest:** `2026.08.11.1`
 **Identiti:** 10 · **Entri route:** 410
 
 Definisi "page terlihat" = route yang `expected_access = allow` **dan** muncul dalam

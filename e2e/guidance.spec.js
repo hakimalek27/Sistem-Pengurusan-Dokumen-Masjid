@@ -957,3 +957,71 @@ for (const viewport of [
         });
     }
 }
+
+// ── F8: `centerCovered` DIBERSARAKAN sebagai gate; penggantinya diluaskan ke kohort PENUH ────
+//
+// Keputusan pemilik (9 Ogos 2026, pilihan (a)): metrik `centerCovered` bersara kepada
+// pemerhatian, dan penjaga "popover tidak menutup sasarannya sendiri" — yang sebelum ini hanya
+// berjalan pada DUA guide W0 — diluaskan kepada kohort tenant penuh.
+//
+// Asas ukuran (📄 bukti/plan-f8/PENEMUAN-CENTERCOVERED.md §3C, kohort 124 langkah, 390×664):
+//   centerCovered ditanda MERAH                      : 45/124
+//   daripada 45 itu, sasaran TIDAK terlindung         : 45/45   -> positif-palsu 100%
+//   popover menutup >=50% sasarannya                  : 0/124
+//   sasaran di LUAR viewport                          : 0/124
+//
+// ⚠️ Mengapa ambang 50% dan BUKAN "sifar pertindihan" seperti penjaga W0: diukur, 47/124 langkah
+// mempunyai pertindihan TEPI (1 pada 0%, 3 pada 1–9%, 17 pada 10–24%, 26 pada 25–49%; maksimum
+// 49%). Meluaskan assertion "sifar pertindihan" secara verbatim akan menghasilkan 47 kegagalan
+// yang BUKAN kecacatan. Ambang ini ialah kriteria yang saya UKUR sebagai 0/124.
+// ⚠️ Yang saya TIDAK buktikan: bahawa pertindihan 25–49% tidak mengganggu pengguna. 26 langkah
+// duduk dalam jalur itu dan ia DIDEDAHKAN dalam laporan, bukan dikubur. Jika pemilik mahu
+// ambang lebih ketat, angka untuk memilihnya ada dalam artifak kohort.
+const KOHORT_MOBILE = JSON.parse(readFileSync(
+    'Audit Review Round Robin/bukti/plan-baseline/manifest.json', 'utf8',
+)).catalogue.filter((g) => g.family === 'tenant');
+
+test('F8 mobile: popover tidak MENGABURKAN sasarannya sendiri — kohort tenant PENUH', async ({ browser, baseURL }) => {
+    test.setTimeout(1_800_000);
+    const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 664 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+
+    const cacat = [];
+    let diukur = 0;
+    for (const guide of KOHORT_MOBILE) {
+        for (const step of guide.steps) {
+            const laluan = String(step.route || guide.route || '').replace('{tenant}', tenantSlug) || `/app/${tenantSlug}`;
+            await page.goto(`${baseURL}${laluan}?panduan=${guide.guide_id}&langkah=${step.index - 1}`,
+                { waitUntil: 'domcontentloaded' });
+            await page.waitForTimeout(2_200);
+            const ukur = await page.evaluate(() => {
+                const pop = document.querySelector('.driver-popover');
+                const el = document.querySelector('.driver-active-element');
+                if (!pop || !el) return null;
+                const a = pop.getBoundingClientRect();
+                const b = el.getBoundingClientRect();
+                const luas = Math.max(0, b.width) * Math.max(0, b.height);
+                const x = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left))
+                    * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+
+                return {
+                    peratus: luas > 0 ? Math.round((x / luas) * 100) : 0,
+                    dalamViewport: b.top < innerHeight && b.bottom > 0 && b.left < innerWidth && b.right > 0,
+                };
+            });
+            if (!ukur) continue;                       // tiada popover/sasaran: diliputi gate lain
+            diukur += 1;
+            if (ukur.peratus >= 50 || !ukur.dalamViewport) {
+                cacat.push(`${guide.guide_id}#${step.index} (${ukur.peratus}%${ukur.dalamViewport ? '' : ', LUAR viewport'})`);
+            }
+        }
+    }
+
+    // Anti-vakum: jika deep-link berhenti berfungsi, `diukur` jatuh dan senarai kosong akan
+    // LULUS tanpa menguji apa-apa. Kohort ialah 124 langkah; terima sedikit variasi benih.
+    expect(diukur).toBeGreaterThan(110, `hanya ${diukur} langkah diukur — deep-link mungkin rosak`);
+    expect(cacat, `popover mengaburkan sasarannya: ${cacat.join(' · ')}`).toEqual([]);
+    await context.close();
+});

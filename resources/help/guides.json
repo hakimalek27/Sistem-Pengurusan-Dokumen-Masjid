@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.08.2",
+  "catalog_version": "2026.08.11.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -1005,7 +1005,11 @@
         "Semak nama masjid pada panel untuk memastikan tenant yang betul.",
         "Baca kad statistik; nombor hanya merangkumi data yang role ini dibenarkan lihat.",
         "Semak senarai semak persediaan jika masih dipaparkan.",
-        "Gunakan menu kiri untuk membuka tugasan; jangan gunakan URL tenant lain secara manual."
+        "Gunakan menu kiri untuk membuka tugasan; jangan gunakan URL tenant lain secara manual.",
+        "DDMS",
+        "SPDM",
+        "Diwan",
+        "sistem pengurusan dokumen"
       ],
       "images": [
         "Manual Penguna/01-Admin-Kerani/imej/01-dashboard.png",
@@ -4722,7 +4726,11 @@
         "Papan Pemuka Platform",
         "Semak pertumbuhan tenant, status saluran dan tugasan operasi platform.",
         "superadmin",
-        "platform"
+        "platform",
+        "DDMS",
+        "SPDM",
+        "Diwan",
+        "sistem pengurusan dokumen"
       ],
       "images": [],
       "steps": [
@@ -5107,7 +5115,11 @@
         "masjid baru",
         "akaun baru",
         "kod akronim",
-        "slug"
+        "slug",
+        "DDMS",
+        "SPDM",
+        "Diwan",
+        "sistem pengurusan dokumen"
       ],
       "images": [
         "Manual Penguna/09-Orang-Awam-Pendaftaran/imej/02-borang-daftar.png",
@@ -7762,7 +7774,11 @@
         "Cari panduan pendaftaran dan log masuk atau laporkan masalah.",
         "bantuan",
         "support",
-        "masalah"
+        "masalah",
+        "DDMS",
+        "SPDM",
+        "Diwan",
+        "sistem pengurusan dokumen"
       ],
       "images": [
         "Manual Penguna/09-Orang-Awam-Pendaftaran/imej/07-pusat-bantuan.png"

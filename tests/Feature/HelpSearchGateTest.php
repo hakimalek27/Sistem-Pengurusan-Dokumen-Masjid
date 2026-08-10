@@ -257,41 +257,42 @@ it('(d) dua tenant: SET guide sama, laluan dikontekskan, tiada silang slug (isol
     }
 });
 
-it('(e) akronim: yang ADA dalam korpus memberi hasil, yang TIADA memberi kosong', function () {
-    config()->set('scout.meilisearch.host', null);
-    $katalog = app(HelpCatalog::class);
-    $mentah = json_encode($katalog->raw(), JSON_UNESCAPED_UNICODE);
+it('(e) akronim: yang ADA dalam korpus memberi hasil, termasuk akronim PRODUK', function () {
+    // SEJARAH: gate §9.2 menuntut `DDMS` memulangkan hasil, tetapi diukur 9 Ogos 2026 istilah itu
+    // muncul **0 kali** dalam katalog — jadi 0 hasil ialah perbendaharaan kandungan, bukan
+    // kegagalan enjin. Pemilik memilih (9 Ogos, pilihan (a)) untuk MENAMBAH akronim produk kepada
+    // `keywords`, kerana sistem ini memang sebuah DDMS dan pengguna mungkin menaipnya.
+    // Ditambah pada 4 guide merentas KETIGA-TIGA panel supaya ia berfungsi untuk pengguna awam,
+    // tenant dan platform: public.help · public.registration · tenant.dashboard · admin.dashboard
+    // ⚠️ Kandungan indeks berubah -> deploy MESTI `diwan:sync-help-index --delete`.
+    $mentah = json_encode(app(HelpCatalog::class)->raw(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-    // ⚠️ Persona PENTING. Versi pertama ujian ini mencari `AJK` sebagai `admin_masjid` dan
-    // mendapat kosong — saya hampir melaporkannya sebagai jurang fallback. Ukuran menunjukkan
-    // satu-satunya guide dengan `ajk` dalam badan carian ialah `workflow.ajk.*`, berskop role
-    // `ajk`. Jadi kosong itu ialah tapisan role yang BERFUNGSI, bukan carian yang rosak.
-    // Ujian kini membuktikan kedua-duanya: akronim boleh dicari, DAN skop role dihormati.
-    $ajk = makeMember($this->mam, 'ajk', 'ajk-gate@mam.test');
-
-    foreach ([['OCR', $this->adminMam], ['AJK', $ajk]] as [$akronim, $persona]) {
-        expect(substr_count($mentah, $akronim))->toBeGreaterThan(0, "prasyarat: {$akronim} sepatutnya ada dalam katalog");
-        $hasil = app(HelpSearchService::class)->search($akronim, 'app', $persona, $this->mam);
-        expect($hasil)->not->toBeEmpty("akronim {$akronim} ADA dalam korpus tetapi carian memberi kosong");
-    }
-
-    // Sisi negatif skop: `admin_masjid` TIDAK boleh melihat guide role `ajk` melalui akronim itu.
-    $bukanMilikku = app(HelpSearchService::class)->search('AJK', 'app', $this->adminMam, $this->mam)
-        ->pluck('id')->filter(fn (string $id) => str_starts_with($id, 'workflow.ajk.'))->all();
-    expect($bukanMilikku)->toBe([], 'admin_masjid melihat guide berskop role ajk melalui carian akronim');
-
-    // TIADA dalam korpus — ini merekod penemuan §9.2, bukan menyembunyikannya.
-    // Jika `DDMS` kemudian DITAMBAH kepada keywords, ujian ini merah dan memaksa jadual §9
-    // dikemas — itu tingkah laku yang dikehendaki, bukan gangguan.
-    // ⚠️ Versi pertama hanya `substr_count` case-SENSITIVE dan tidak pernah MEMANGGIL carian
-    // (Codex #13): `ddms` huruf kecil boleh ditambah tanpa dikesan, dan tingkah laku carian
-    // sebenar tidak diuji. Kini kedua-duanya diuji.
+    // Akronim PRODUK: kini WAJIB ada dalam katalog DAN boleh dicari.
     foreach (['DDMS', 'SPDM'] as $akronim) {
-        expect(mb_stripos($mentah, $akronim))->toBeFalse(
-            "{$akronim} kini ADA dalam katalog (apa-apa huruf) — kemas kini jadual §9 dan PENEMUAN-CARIAN.md");
+        expect(mb_stripos($mentah, $akronim))->not->toBeFalse(
+            "{$akronim} hilang daripada katalog — keputusan pemilik (9 Ogos) ialah ia MESTI ada",
+        );
+        expect(app(HelpSearchService::class)->search($akronim, 'public', null, null))
+            ->not->toBeEmpty("{$akronim} tidak dijumpai oleh carian AWAM walaupun ada dalam katalog");
         expect(app(HelpSearchService::class)->search($akronim, 'app', $this->adminMam, $this->mam))
-            ->toBeEmpty("{$akronim} kini memberi hasil — penemuan §9.2 berubah, kemas dokumen");
+            ->not->toBeEmpty("{$akronim} tidak dijumpai oleh carian TENANT walaupun ada dalam katalog");
     }
+
+    // Akronim yang MEMANG dalam korpus sejak awal — kawalan bahawa enjin tidak berubah.
+    foreach (['OCR', 'ocr'] as $q) {
+        expect(app(HelpSearchService::class)->search($q, 'app', $this->adminMam, $this->mam))
+            ->not->toBeEmpty("akronim `{$q}` sepatutnya memberi hasil (case-insensitive)");
+    }
+
+    // Kawalan NEGATIF: istilah karut mesti kekal kosong, jika tidak "semua akronim dijumpai"
+    // di atas boleh bermakna carian memulangkan segala-galanya.
+    expect(mb_stripos($mentah, 'XYZQ'))->toBeFalse('XYZQ tidak sepatutnya ada dalam katalog');
+    expect(app(HelpSearchService::class)->search('XYZQ', 'app', $this->adminMam, $this->mam))
+        ->toBeEmpty('carian memberi hasil untuk istilah karut — kawalan negatif gagal');
+
+    // Skop role dihormati: guide berskop `ajk` tidak boleh muncul untuk admin_masjid.
+    expect(app(HelpSearchService::class)->search('AJK', 'app', $this->adminMam, $this->mam))
+        ->toBeEmpty('guide berskop role `ajk` bocor kepada admin_masjid');
 });
 
 it('(f) korpus fallback SEPADAN dengan Meilisearch — jurang J1 dan J2 DITUTUP', function () {

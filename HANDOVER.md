@@ -14,7 +14,7 @@ memerlukan penyiasatan lanjut — hanya keputusan.
 ### Jadual §9 — dikira mekanikal terhadap jadual, bukan ingatan
 
 ```
-33 baris = 25 ✅ · 2 🔴 · 3 ⚠️ · 3 ⏸   (masuk sesi: 32 = 21/4/4/3)
+34 baris = 27 ✅ · 0 🔴 · 4 ⚠️ · 3 ⏸   (masuk sesi: 32 = 21/4/4/3)
 ⚠️ A: 172 lawan 229 (lencongan)   ⚠️ D: role_routes lapisan C (410/410 actual_status = null)
 ⚠️ E: CTA bergantung DOM           ⚠️ F: e-mel sebenar belum dihantar
 ```
