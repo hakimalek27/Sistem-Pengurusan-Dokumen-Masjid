@@ -65,6 +65,33 @@ untuk keputusan sebenar, bukan kod keluar.
 **Tindakan pemilik yang berbaki (kecil):** buka e-mel di alamat pemilik (dihantar 11 Ogos dari
 produksi) dan sahkan salam/penutup masih Bahasa Melayu.
 
+### 🔴 CI MERAH — `body.driver-active` menyembunyikan launcher (BUKAN regresi F8)
+
+Tiga larian berturut-turut MERAH selepas `838b28a`, dengan **tiga profil berbeza pada kod yang
+IDENTIK** (`git diff 838b28a 008bcf4` pada `e2e/guidance.spec.js resources/ app/
+playwright.config.js .github/ config/ package*.json` = **KOSONG**):
+
+```
+4a99151        Guidance smoke   2 gagal  (login-submit strict-mode · F2d fokus→BODY)
+008bcf4        Guidance smoke   1 gagal  (F2d fokus→BODY)
+008bcf4 ulang  Session canary   1 gagal  (help-launcher HIDDEN, diselesaikan 61×)
+```
+
+**Pemboleh yang dikongsi** — `resources/css/help.css:76`:
+`body.driver-active .diwan-help-launcher-button { visibility: hidden; }`
+
+| | Kecacatan | Jenis |
+|---|---|---|
+| A | `clearFocusManagement()` memulangkan fokus dengan **satu percubaan buta 50 ms** ke arah launcher yang CSS-nya sendiri sembunyikan sehingga Driver.js membuang `body.driver-active`. Gagal → fokus kekal `<body>` SELAMANYA (tiada percubaan kedua) | **PRODUK** — pengguna papan kekunci tersesat selepas ESC |
+| B | `ci-session-canary.spec.js` mengassert launcher KELIHATAN tetapi tidak melumpuhkan tour auto-mula | **HARNESS** — canary gagal walaupun sesi SIHAT |
+
+⚠️ `disableAutomaticGuides` (localStorage) hanya dihormati pada panel **public**
+(`help.js bootRuntime`: `isPublic && localStorage…`); pada tenant/admin auto-mula datang
+daripada PELAYAN. Jadi menyalinnya ke canary mungkin TIDAK mencukupi — sahkan, jangan andaikan.
+
+➡️ Ini **menyekat `guidance-e2e-gate`**, jadi ia menyekat deploy F9/F10. Ia TIDAK menjejaskan
+pengukuran F8 (matriks dijalankan terhadap PRODUKSI, bukan CI). Butiran penuh: tugasan #75.
+
 ### ⚠️⚠️ SYARAT DEPLOY YANG MUDAH TERLEPAS
 
 Deploy berikutnya **WAJIB** `diwan:sync-help-index --delete`. F8 mengubah **katalog**
