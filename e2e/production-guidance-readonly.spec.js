@@ -246,6 +246,50 @@ const OVERFLOW = () => Math.max(
 // (berapa banyak halaman melompat sendiri bagi pengguna BAHARU pada produksi).
 const rekodPelayaranAutoMula = [];
 
+// ── Tiga baris §9 yang HANYA larian produksi boleh tutup ────────────────────────────────────
+// (a) "Halaman produksi kekal konteks bantuan" — asas audit 6/25, sasaran 25/25.
+// (b) "`helpUrl` `asal=livewire/update`" — asas: ada, sasaran 0. Ini kecacatan F1: `render()`
+//     membaca `request()` setiap render, jadi respons Livewire menetapkan asal kepada
+//     `livewire/update` dan bukan halaman sebenar.
+// (c) EN-leak permukaan UI. Senarai kebocoran ialah senarai yang SAMA seperti
+//     `LocalisationTest` (`Hello!`, `Regards,`, `All rights reserved`, `Whoops!`) — bukan
+//     definisi baharu yang dicipta di sini, supaya angka produksi dan angka CI boleh
+//     dibandingkan secara terus.
+const EN_LEAK = ['Hello!', 'Regards,', 'All rights reserved', 'Whoops!'];
+
+const BACA_KONTEKS = () => {
+    const runtime = document.querySelector('[data-diwan-help-runtime]');
+    const payload = runtime?.querySelector('[data-diwan-guide-payload]');
+    let guide = null;
+    try {
+        guide = payload ? (JSON.parse(payload.textContent)?.id ?? null) : null;
+    } catch { /* katalog tidak sah tidak boleh memecahkan ukuran */ }
+
+    const pautan = document.querySelector('a[href*="asal="]');
+    let asal = null;
+    if (pautan) {
+        try {
+            asal = new URL(pautan.getAttribute('href'), location.origin).searchParams.get('asal');
+        } catch { /* href relatif pelik — biar null, ia akan kelihatan dalam artifak */ }
+    }
+
+    return { guide, asal, teks: document.body?.innerText ?? '' };
+};
+
+async function rakamKonteksBantuan(page, label) {
+    const { guide, asal, teks } = await evaluateTerikat(page, BACA_KONTEKS, `${label} konteks`);
+
+    return {
+        guide,
+        asal,
+        // Konteks DIKEKALKAN bermakna: launcher mengisytiharkan panduan, DAN `asal` menunjuk
+        // kepada halaman sebenar — bukan kepada URL respons Livewire.
+        konteks_ok: Boolean(guide) && Boolean(asal) && !String(asal).includes('livewire/update'),
+        asal_livewire: String(asal ?? '').includes('livewire/update'),
+        en_leak: EN_LEAK.filter((frasa) => teks.includes(frasa)),
+    };
+}
+
 async function assertHalamanSihat(page, label) {
     await expect(page.locator('main')).toBeVisible();
 
@@ -413,7 +457,8 @@ for (const viewport of VIEWPORTS) {
                     () => page.goto(url));
                 expect(response?.status(), `superadmin ${viewport.name}: ${url}`).toBe(200);
                 await assertHalamanSihat(page, `superadmin ${viewport.name} ${url}`);
-                visited.push({ url, status: response?.status() });
+                const konteks = await rakamKonteksBantuan(page, `superadmin ${url}`);
+                visited.push({ url, status: response?.status(), ...konteks });
             }
             // (1) satu tour read-only (telemetri diisytihar dalam laporan larian).
             const tour = tourForRole('superadmin');
@@ -450,14 +495,21 @@ for (const viewport of VIEWPORTS) {
                     // pertama meletakkan `page.goto` sahaja di dalamnya dan memberi ~700 ms rata
                     // untuk 23 navigasi — tetapi larian menghabiskan 484 saat. Jadi masa itu
                     // BUKAN dalam navigasi, dan hanya menjadualkan navigasi menyembunyikannya.
+                    let konteks = null;
                     const response = await jejak(baseURL, viewport.name, account.role, item.url,
                         async () => {
                             const r = await page.goto(item.url);
                             await assertHalamanSihat(page, `${account.role} ${viewport.name} ${item.url}`);
+                            // §9 (a)(b)(c): konteks bantuan, `asal=`, EN-leak — DIREKOD per
+                            // halaman, tidak diassert di sini. Angka produksi ialah TUJUAN
+                            // larian ini; menjadikannya assertion akan menghentikan crawl pada
+                            // halaman pertama yang gagal dan memusnahkan denominatornya.
+                            konteks = await rakamKonteksBantuan(page, `${account.role} ${item.url}`);
+
                             return r;
                         });
                     expect(response?.status(), `${account.role} ${viewport.name}: ${item.url}`).toBe(200);
-                    visited.push({ url: item.url, status: response?.status() });
+                    visited.push({ url: item.url, status: response?.status(), ...(konteks ?? {}) });
                 }
 
                 // (1) satu tour per role×viewport.

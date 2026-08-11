@@ -5,14 +5,21 @@
 > ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
 > dakwaan asal saya melebih-lebih). Lihat **§5C**.
 >
-> Jadual §9 dikira mekanikal: **35 baris = 29 ✅ · 0 🔴 · 3 ⚠️ · 3 ⏸**.
+> Jadual §9 dikira mekanikal: **39 baris = 37 ✅ · 0 🔴 · 2 ⚠️ · 0 ⏸**.
 >
 > ⭐ **Tiada lagi baris MERAH.** Pemilik menjawab ketiga-tiga keputusan pada 11 Ogos 2026:
 > `centerCovered` **bersara sebagai gate** (kadar positif-palsu 100% diukur) dan penggantinya
 > kini gate CI pada kohort tenant PENUH · akronim `DDMS`/`SPDM` **ditambah ke katalog** dan
 > boleh dicari · denominator **172**.
 >
-> **Baki: 3 ⏸ + baki ⚠️.** Tiga ⏸ dan nota E menunggu kredensial superadmin produksi.
+> ⭐ **TIADA lagi baris ⏸.** Pemilik membekalkan kredensial superadmin (fail tempatan diabaikan
+> git) pada 11 Ogos malam, dan matriks §9.1a dijalankan pada produksi: **20/20 konteks · 396
+> halaman · 0 ralat console unik · isolasi silang-tenant 404 pada 16/16 · kontrak 2/2**.
+> Nota E DITUTUP dengan ukuran RUNTIME produksi. Butiran penuh:
+> `bukti/plan-f8/LARIAN-PRODUKSI-9.1a.md`; kecacatan runner yang mesti dibaiki dahulu:
+> `bukti/plan-f8/PENEMUAN-RUNNER-FIXTURE-TERSASAR.md`.
+>
+> **Baki: 2 ⚠️.**
 > Nota F **DITUTUP** (11 Ogos): e-mel dihantar dari produksi, kerangka BM disahkan sebelum
 > penghantaran, dan gate itu sendiri dibaiki supaya ia benar-benar menguji kerangka.
 > Satu ⚠️ ialah pendedahan jujur: 26 langkah dengan pertindihan tepi 25–49% yang saya TIDAK
@@ -71,7 +78,7 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Kohort: `resolved_to_generic` | 119/124 | ≤25/124 + allowlist | **38/124** | ✅ |
 | Kohort: tajuk = penerangan | 77/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
 | Kohort: tajuk terpotong tengah perkataan | 20/124 | 0 | **0/124** (RUNTIME) | ✅ nota C |
-| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** (RUNTIME **tempatan**) | ⚠️ nota E |
+| CTA "Buat pada skrin" pada langkah tanpa tindakan | 20 | 0 | **0** — RUNTIME **PRODUKSI**, 20/20 konteks (`cacat_cta:false`; dibaca drp teks butang popover, bukan medan katalog) | ✅ nota E **DITUTUP** |
 | Kohort: placeholder `Langkah N` pada popover | 118 (katalog) | 0 | **0/124** (RUNTIME) | ✅ |
 | Tour `/log-masuk` ralat palsu | 100% | lulus | **lulus** (CI `ci-guidance`, disahkan live Deploy 5) | ✅ |
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
@@ -89,9 +96,13 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | **Carian: akronim `DDMS`** | — | ada hasil | **ADA HASIL** — `DDMS`/`SPDM`/`Diwan` ditambah ke `keywords` 4 guide (awam+tenant+platform); dijumpai pada panel awam DAN tenant | ✅ **DITUTUP** (keputusan pemilik 9 Ogos) |
 | **Fallback PHP setara dgn Meili** | — | setara | **SEPADAN** — badan fallback kini merangkumi tajuk+arahan langkah + penyelesaian masalah; counterexample MERAH | ✅ **DIBAIKI** (belum deploy) |
 | **Tajuk langkah boleh dicari** | — | (tidak dinyatakan) | **BOLEH** — `steps_text` kini merangkumi tajuk langkah; kerja F6 (placeholder 258→0) akhirnya boleh ditemui | ✅ **DIBAIKI** (perlu `sync-help-index --delete` semasa deploy) |
-| Halaman produksi kekal konteks bantuan | 6/25 | 25/25 | **menunggu larian produksi** | ⏸ §3 |
-| `helpUrl` `asal=livewire/update` | ada | 0 | **menunggu larian produksi** | ⏸ §3 |
-| EN-leak permukaan UI (crawl produksi) | ≥5 kelas | 0 | **menunggu larian produksi** | ⏸ §3 |
+| Halaman produksi kekal konteks bantuan | 6/25 | 25/25 | **28/29** (`admin_masjid` produksi) · `asal` BETUL **66/66** halaman | ✅ (baki 1 = papan pemuka tenant → F9) |
+| `helpUrl` `asal=livewire/update` | ada | 0 | **0** daripada 66 halaman produksi (2 identiti × crawl penuh) | ✅ |
+| EN-leak permukaan UI (crawl produksi) | ≥5 kelas | 0 | **0** halaman (senarai kebocoran SAMA seperti `LocalisationTest`) | ✅ |
+| **Matriks §9.1a PRODUKSI: 20 konteks** | belum dijalankan | 20/20 | **20/20** · 396 halaman · **0** ralat console unik · kontrak **2/2** | ✅ |
+| **Isolasi silang-tenant, LANGSUNG pada produksi** | (ujian sahaja) | 404 setiap role | **404 pada 16/16** konteks role tenant | ✅ |
+| **Carian bantuan pada produksi (3 pertanyaan)** | — | tepat>0, karut=0 | **5 hasil** · salah ejaan **10 hasil** (Meili hidup) · karut **0 hasil** | ✅ |
+| 🔴 Runner produksi memutasi PRODUKSI lalu mati sebelum satu ujian pun berjalan | — | — | 4 kecacatan bebas; fixture tersasar 2×, kata laluan tertinggal dalam `/tmp` kontena | ✅ **DIBAIKI** + pra-terbang WAJIB sebelum mutasi pertama (counterexample MERAH) |
 
 **Nota A — ⚠️ LENCONGAN yang memerlukan tandatangan pemilik: 172, bukan 229.**
 §9 (PELAN-PEMBAIKAN.md:3532, 3535) mewajibkan **229** langkah tindakan dan black-box **229/229**.

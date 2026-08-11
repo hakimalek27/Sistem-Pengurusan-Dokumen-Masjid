@@ -1,0 +1,238 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\hakim\\tools\\node-v24.13.0-win-x64\\node.exe",
+      "C:\\Projek Coding\\Sistem Pengurusan Dokumen Masjid\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--project=production-readonly",
+      "--workers=1",
+      "--global-timeout",
+      "360000",
+      "--grep",
+      "desktop . admin_masjid"
+    ],
+    "configFile": "C:\\Projek Coding\\Sistem Pengurusan Dokumen Masjid\\playwright.config.js",
+    "rootDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 360000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "ci-guidance",
+        "name": "ci-guidance",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/ci-session-canary.spec.js",
+          "e2e/guidance.spec.js",
+          "e2e/guidance-f5.spec.js",
+          "e2e/panel-landing.spec.js",
+          "e2e/registration.spec.js",
+          "e2e/explore.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "unit",
+        "name": "unit",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/step-advance-plan.spec.js",
+          "e2e/nav-target-plan.spec.js",
+          "e2e/page-target-plan.spec.js",
+          "e2e/viewer-control-plan.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "ci-domain",
+        "name": "ci-domain",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/office-workflow.spec.js",
+          "e2e/ddms-extended.spec.js",
+          "e2e/document-viewer.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "ci-a11y",
+        "name": "ci-a11y",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/a11y-axe.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "ci-ocr",
+        "name": "ci-ocr",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/ocr-upload.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "guidance-full",
+        "name": "guidance-full",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/guidance-full.spec.js"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "production-readonly",
+        "name": "production-readonly",
+        "testDir": "C:/Projek Coding/Sistem Pengurusan Dokumen Masjid/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "e2e/production-guidance-readonly.spec.js"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projek Coding\\Sistem Pengurusan Dokumen Masjid\\Audit Review Round Robin\\bukti\\plan-f8\\1cde65a0-c866-4d7e-ac3e-fe5d9a470b02\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "production-guidance-readonly.spec.js",
+      "file": "production-guidance-readonly.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "desktop · admin_masjid",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "production-readonly",
+              "projectName": "production-readonly",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 80054,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-08-11T17:46:20.711Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27cb8adc5855524dbc25-9a8865150da397bb824d",
+          "file": "production-guidance-readonly.spec.js",
+          "line": 480,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "message": "\u001b[31mTimed out waiting 360s for the test suite to run\u001b[39m"
+    },
+    {
+      "message": "\u001b[31mTimed out waiting 360s for the teardown for report begin to run\u001b[39m"
+    }
+  ],
+  "stats": {
+    "startTime": "2026-08-11T17:46:20.067Z",
+    "duration": 360013.203,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

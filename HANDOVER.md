@@ -1,36 +1,66 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F8 hampir tamat · HANYA kredensial produksi tinggal (11 Ogos 2026)
+## ▶️ SAMBUNG DI SINI — F8 PENGUKURAN SELESAI · matriks produksi 20/20 (12 Ogos 2026)
 
 ```
-local = origin = 6c36cda        CI HIJAU 7/7 job (e201228)
+local = origin = 4a99151+       CI: perlu larian baharu untuk commit ini
 Produksi              2325bec   (Deploy 14) — F8 TIDAK deploy
-Jadual §9             35 baris = 29 ✅ · 0 🔴 · 3 ⚠️ · 3 ⏸
+Jadual §9             39 baris = 37 ✅ · 0 🔴 · 2 ⚠️ · 0 ⏸   (dikira mekanikal drp jadual)
                       (masuk sesi 9 Ogos: 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸)
-58 commit sejak produksi · suite penuh LULUS di CI Linux/pgsql
 ```
 
-### 🎯 SATU perkara sahaja menyekat F8 sekarang
-
-**Kredensial superadmin produksi.** Ia membuka 3 baris ⏸ **dan** nota E serentak.
-
-⛔ **JANGAN guna `!` dengan `$env:…`** — arahan itu salah pada TIGA aras, dan ia sudah dicuba:
-`$env:` ialah sintaks PowerShell tetapi `!` menjalankan **bash**; env **tidak bertahan** antara
-panggilan alat pembantu; dan apa-apa yang ditaip selepas `!` **muncul dalam transkrip**, jadi
-kata laluan itu tetap melalui pembantu.
-
-✅ **Cara yang betul — fail tempatan yang wrapper baca sendiri.** Pemilik cipta dalam editor
-sendiri (bukan melalui sembang), di root repo:
+⭐ **Pemilik membekalkan kredensial** (`.e2e-prod-credentials.local.json`, diabaikan git) dan
+matriks §9.1a dijalankan pada PRODUKSI:
 
 ```
-.e2e-prod-credentials.local.json
-{ "email": "superadmin…", "password": "…" }
+20/20 konteks · 396 halaman · 0 ralat console unik · kontrak 2/2 LULUS
+isolasi silang-tenant: 404 pada 16/16 konteks role tenant   ⬅ keselamatan #1 spec, LIVE
+carian bantuan: "Peti Masuk" 5 hasil · salah ejaan 10 hasil (Meili hidup) · karut 0 hasil
+konteks bantuan 28/29 · `asal` BETUL 66/66 · `asal=livewire/update` 0 · EN-leak 0
+cleanup delta sifar · tenant `smoke` (gate deploy) UTUH · 0 rahsia tertinggal
 ```
 
-Diabaikan git (`.gitignore:36`); penjaga Pest menolak jika ia dijejak (dibuktikan MERAH).
-Wrapper mengutamakan fail ini sebelum env dan mencatat hanya NAMA fail — nilai tidak pernah
-dicetak. Kemudian: `pwsh -File scripts/audit/run-production-guidance-readonly.ps1 -TimeoutMinutes 120`.
-Runner sudah TERBUKTI: matriks tempatan **20/20** (396 halaman, 0 ralat console, kontrak 2/2).
+📄 `bukti/plan-f8/LARIAN-PRODUKSI-9.1a.md` (angka + dua pemerhatian jujur)
+📄 `bukti/plan-f8/PENEMUAN-RUNNER-FIXTURE-TERSASAR.md` (5 kecacatan yang mesti dibaiki dahulu)
+
+### 🔴 Runner itu MEMUTASI PRODUKSI lalu mati — baca sebelum menjalankannya lagi
+
+Larian pertama mencipta tenant + 8 akaun pada produksi, mati serta-merta, dan **gagal
+membersih**. Empat punca bebas + satu gantung. Semuanya dibaiki dan dijaga:
+
+| # | Kecacatan | Ubat |
+|---|---|---|
+| 1 | ACL rahsia (`$($env:USERNAME):(R)` → ACE `HAKIM\:`) menafikan **BACA** kepada skrip sendiri | prinsipal berkelayakan + `(F)` |
+| 2 | `FileName='npx'` + `UseShellExecute=$false` tidak boleh dilancarkan (Windows: `npx.cmd`) | `Get-Command npx` → `.Source` |
+| 3 | ralat dalam `finally` **menggantikan** pengecualian asal | `catch` luar merekod punca dahulu |
+| 4 | satu kegagalan cleanup **melangkau** baki (8 kata laluan kekal dalam `/tmp` kontena) | setiap langkah dijaga sendiri |
+| 5 | evaluasi berlumba dgn pelayaran auto-mula tour → 4 konteks tergantung 8–13 min | `evaluate` diikat 45s + ukur semula pada halaman AKHIR |
+
+⭐ **PRA-TERBANG kini WAJIB sebelum mutasi pertama**: `--list` melalui pelancar yang SAMA,
+anti-vakum ≥22 ujian. Counterexample MERAH: kecacatan #2 dipulihkan → berhenti dengan produksi
+**tidak tersentuh**.
+
+### ⚙️ Cara menjalankan matriks produksi (mod KETULAN — larian tunggal TIDAK selamat)
+
+Larian 20 konteks (~26 min) tidak bertahan pada mesin ini; jalankan berketul, **dalam
+panggilan HADAPAN** (bajet 10 min), satu prepare + banyak larian + satu cleanup:
+
+```powershell
+$U = [guid]::NewGuid().ToString()   # SIMPAN nilai ini — tanpanya cleanup mustahil
+pwsh -File scripts/audit/run-production-guidance-readonly.ps1 -RunUuid $U -TimeoutMinutes 8 `
+     -KeepFixture -Grep "desktop . (public|superadmin|admin_masjid|pengerusi|setiausaha)"
+# ketulan seterusnya: tambah -UseExistingFixture (dan -KeepFixture kecuali yang TERAKHIR)
+# ketulan akhir    : -Grep "kontrak"  TANPA -KeepFixture  → cleanup + assertion delta berjalan
+# jika terputus    : -CleanupOnly -RunUuid $U        ⬅ WAJIB, jika tidak fixture kekal di produksi
+```
+
+Partition terbukti (disahkan `--list`, jumlah 22): `5 + 4 + 1 + 5 + 4 + 1 + 2`.
+`ketua_imam` diasingkan kerana ia pernah tergantung. `-PwDebug` → `DEBUG=pw:api` ke **fail**
+(`pw-api.log`) — bukan stdout: banjir output membunuh tugas latar, sama seperti kesenyapan.
+
+⚠️ **Teardown `browser.close()` tergantung secara berselang-seli**, jadi ketulan sering
+menghabiskan seluruh `-TimeoutMinutes` walaupun semua ujian LULUS. Baca `route-manifest.json`
+untuk keputusan sebenar, bukan kod keluar.
 
 **Tindakan pemilik yang berbaki (kecil):** buka e-mel di alamat pemilik (dihantar 11 Ogos dari
 produksi) dan sahkan salam/penutup masih Bahasa Melayu.
@@ -52,7 +82,7 @@ pembaikan carian — ia akan kelihatan seperti tidak berlaku.
 | e-mel staging-check | **kebenaran diberi** | dihantar dari produksi; 9/9 LULUS; kerangka BM disahkan SEBELUM hantar |
 | deploy sekarang? | **TIDAK** — deploy dengan F10 | produksi kekal `2325bec` |
 
-### 📌 Baki 3 ⚠️ — pendedahan jujur, bukan kerja tersekat
+### 📌 Baki 2 ⚠️ — pendedahan jujur, bukan kerja tersekat
 
 1. **Pertindihan tepi 25–49%** — 26/124 langkah; saya **TIDAK** buktikan ia mengganggu pengguna.
    Angka untuk memilih ambang lebih ketat ada dalam `bukti/plan-f8/mobile-kohort-f8.json`.

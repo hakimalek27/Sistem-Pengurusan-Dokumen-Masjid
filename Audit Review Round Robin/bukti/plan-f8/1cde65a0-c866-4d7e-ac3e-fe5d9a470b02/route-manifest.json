@@ -1,0 +1,945 @@
+{
+  "schema_version": 2,
+  "run_tenant": "smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+  "base_url": "https://bakwim.my",
+  "expected_page_counts": {
+    "public": 0,
+    "superadmin": 25,
+    "admin_masjid": 25,
+    "pengerusi": 17,
+    "setiausaha": 15,
+    "bendahari": 15,
+    "nazir": 13,
+    "ketua_imam": 13,
+    "ajk": 13,
+    "audit": 14
+  },
+  "last_login_at": 1786470387088,
+  "inventory": [
+    {
+      "viewport": "desktop",
+      "identity": "superadmin",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "ms": 747
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "ms": 858
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "ms": 681
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "ms": 763
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "ms": 510
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "ms": 553
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "ms": 538
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "ms": 736
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "ms": 502
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "ms": 558
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "ms": 499
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "ms": 577
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "ms": 647
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "ms": 660
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "ms": 683
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "ms": 512
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "ms": 523
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "ms": 614
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "ms": 639
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "ms": 655
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "ms": 617
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "ms": 691
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi-peraturan",
+          "ms": 600
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "ms": 557
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "ms": 603
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "ms": 644
+        },
+        {
+          "url": "/admin/bantuan",
+          "ms": 734
+        },
+        {
+          "url": "/admin/profil-saya",
+          "ms": 498
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "ms": 534
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "ms": 619
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "ms": 603
+        },
+        {
+          "url": "/admin",
+          "ms": 590
+        },
+        {
+          "url": "/admin/help-announcements",
+          "ms": 526
+        },
+        {
+          "url": "/admin/mosques",
+          "ms": 683
+        },
+        {
+          "url": "/admin/storage-orders",
+          "ms": 583
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "ms": 568
+        },
+        {
+          "url": "/admin/users",
+          "ms": 800
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi-peraturan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi-peraturan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "status": 200,
+          "guide": null,
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "status": 200,
+          "guide": "admin.analitik-bantuan",
+          "asal": "/admin/analitik-bantuan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/bantuan",
+          "status": 200,
+          "guide": "admin.bantuan",
+          "asal": "/admin/bantuan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/profil-saya",
+          "status": 200,
+          "guide": "admin.profil-saya",
+          "asal": "/admin/profil-saya",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "status": 200,
+          "guide": "admin.status-sambungan",
+          "asal": "/admin/status-sambungan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "status": 200,
+          "guide": "admin.tetapan-platform",
+          "asal": "/admin/tetapan-platform",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "status": 200,
+          "guide": "admin.whatsapp-platform",
+          "asal": "/admin/whatsapp-platform",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin",
+          "status": 200,
+          "guide": "admin.dashboard",
+          "asal": "/admin",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/help-announcements",
+          "status": 200,
+          "guide": "admin.help-announcements",
+          "asal": "/admin/help-announcements",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/mosques",
+          "status": 200,
+          "guide": "admin.mosques",
+          "asal": "/admin/mosques",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/storage-orders",
+          "status": 200,
+          "guide": "admin.storage-orders",
+          "asal": "/admin/storage-orders",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "status": 200,
+          "guide": "admin.tiket-sokongan",
+          "asal": "/admin/tiket-sokongan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/admin/users",
+          "status": 200,
+          "guide": "admin.users",
+          "asal": "/admin/users",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        }
+      ],
+      "cuba": "/admin/users",
+      "cuba_ms": 45133,
+      "cta": {
+        "guide": "admin.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      }
+    },
+    {
+      "viewport": "desktop",
+      "identity": "admin_masjid",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "ms": 1609
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "ms": 1639
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "ms": 2139
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "ms": 1112
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "ms": 1274
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "ms": 1381
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "ms": 1617
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "ms": 1286
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "ms": 1447
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "ms": 1369
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "ms": 1457
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "ms": 1532
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "ms": 1465
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "ms": 1342
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "ms": 1567
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "ms": 1170
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "ms": 1440
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "ms": 1549
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "ms": 1229
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "ms": 1686
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "ms": 1156
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "ms": 1219
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi-peraturan",
+          "ms": 1960
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "ms": 1371
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "ms": 1741
+        },
+        {
+          "url": "/",
+          "ms": 722
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 1399
+        },
+        {
+          "url": "/daftar",
+          "ms": 853
+        },
+        {
+          "url": "/bantuan",
+          "ms": 989
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02?panduan=tenant.dashboard",
+          "ms": 724
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "ms": 1354
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 232
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "status": 200,
+          "guide": "tenant.ahli-peranan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/ahli-peranan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "status": 200,
+          "guide": "tenant.analitik-bantuan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/analitik-bantuan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "status": 200,
+          "guide": "tenant.bantuan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/bantuan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "status": 200,
+          "guide": "tenant.carian",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/carian",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "status": 200,
+          "guide": "tenant.kegemaran",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kegemaran",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "status": 200,
+          "guide": "tenant.laporan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/laporan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "status": 200,
+          "guide": "tenant.persediaan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/persediaan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "status": 200,
+          "guide": "tenant.pelupusan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pelupusan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "status": 200,
+          "guide": "tenant.penggunaan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/penggunaan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "status": 200,
+          "guide": "tenant.profil",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/profil",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "status": 200,
+          "guide": "tenant.retensi",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "status": 200,
+          "guide": "tenant.tetapan-masjid",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tetapan-masjid",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "status": 200,
+          "guide": "tenant.dashboard",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "status": 200,
+          "guide": "tenant.kelulusan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/kelulusan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "status": 200,
+          "guide": "tenant.classification-nodes",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/classification-nodes",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "status": 200,
+          "guide": "tenant.delegasi",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/delegasi",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "status": 200,
+          "guide": "tenant.peti-masuk",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/peti-masuk",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "status": 200,
+          "guide": "tenant.minit-saya",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/minit-saya",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "status": 200,
+          "guide": "tenant.log-aktiviti",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/log-aktiviti",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "status": 200,
+          "guide": "tenant.pembetulan-rekod",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/pembetulan-rekod",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "status": 200,
+          "guide": "tenant.records",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/records",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "status": 200,
+          "guide": "tenant.registry-files",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/registry-files",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi-peraturan",
+          "status": 200,
+          "guide": "tenant.retensi-peraturan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/retensi",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "status": 200,
+          "guide": "tenant.sensitive-access-logs",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/sensitive-access-logs",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "status": 200,
+          "guide": "tenant.tiket-sokongan",
+          "asal": "/app/smoke-1cde65a0-c866-4d7e-ac3e-fe5d9a470b02/tiket-sokongan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/",
+          "status": 200,
+          "guide": null,
+          "asal": "/",
+          "konteks_ok": false,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200,
+          "guide": "public.login",
+          "asal": "/log-masuk",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/daftar",
+          "status": 200,
+          "guide": "public.registration",
+          "asal": "/daftar",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        },
+        {
+          "url": "/bantuan",
+          "status": 200,
+          "guide": "public.help",
+          "asal": "/bantuan",
+          "konteks_ok": true,
+          "asal_livewire": false,
+          "en_leak": []
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 46904,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    5 hasil dalam skop Admin / Kerani\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    10 hasil dalam skop Admin / Kerani\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Admin / Kerani\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    }
+  ]
+}
