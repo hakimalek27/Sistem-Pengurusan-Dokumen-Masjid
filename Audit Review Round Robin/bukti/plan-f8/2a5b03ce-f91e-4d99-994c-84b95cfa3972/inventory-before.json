@@ -1,0 +1,21 @@
+{
+    "run_uuid": "2a5b03ce-f91e-4d99-994c-84b95cfa3972",
+    "slug": "smoke-2a5b03ce-f91e-4d99-994c-84b95cfa3972",
+    "counts": {
+        "mosques": 2,
+        "users": 9,
+        "login_tokens": 567,
+        "help_events": 131,
+        "guidance_progress": 49
+    },
+    "run_scoped": {
+        "mosque_exists": false,
+        "run_users": 0
+    },
+    "superadmin": {
+        "count": 1,
+        "emails": [
+            "<emel-diredaksi>"
+        ]
+    }
+}

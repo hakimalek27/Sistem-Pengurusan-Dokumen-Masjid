@@ -331,3 +331,137 @@ test('spec produksi tidak boleh mengassert sifar ralat console selepas probe 404
         'ralat selepas probe dibuang, bukan direkod — kehilangan bukti secara senyap',
     );
 })->group('plan-manifest');
+
+/**
+ * F8 — penjaga untuk kecacatan yang MEMUTASI PRODUKSI lalu gagal sebelum satu ujian pun berjalan.
+ *
+ * Larian 11 Ogos 2026 23:13 mencipta tenant `smoke-<uuid>` + 8 akaun pada produksi, kemudian mati
+ * pada `Get-Content` fail rahsianya sendiri (ACL `"$($env:USERNAME):(R)"` menghasilkan ACE yang
+ * bukan milik pengguna ini; diukur: BACA ditolak). Cleanup gagal pula, jadi produksi ditinggalkan
+ * kotor, kata laluan 8 akaun kekal dalam `%TEMP%` DAN dalam `/tmp` kontena produksi, dan punca
+ * sebenar tidak kelihatan kerana ralat `finally` menggantikan pengecualian asal.
+ *
+ * Kecacatan kedua yang terpendam pada larian sama: `$psi.FileName = 'npx'` dengan
+ * `UseShellExecute = $false` tidak boleh dilancarkan pada Windows (`npx` ialah `npx.cmd`;
+ * CreateProcess tidak menyelesaikan PATHEXT).
+ *
+ * Tiada penjaga TINGKAH LAKU mungkin — menjalankan wrapper bermakna menyentuh produksi. Penjaga
+ * STRUKTUR ini menuntut susunan yang menjadikan urutan itu mustahil: runner dibuktikan boleh
+ * dilancarkan SEBELUM `prepare` memutasi apa-apa.
+ */
+test('wrapper produksi membuktikan runner boleh berjalan SEBELUM ia memutasi produksi', function () {
+    $laluan = base_path('scripts/audit/run-production-guidance-readonly.ps1');
+    $ps1 = (string) file_get_contents($laluan);
+
+    // Anti-vakum: fail dinamakan semula/dikosongkan mesti MEMERAHKAN penjaga, bukan meluluskannya.
+    expect(strlen($ps1))->toBeGreaterThan(4000, 'wrapper produksi hilang atau terpangkas');
+
+    // ⚠️ `toContain()` Pest ialah VARIADIK (hujah kedua = jarum lain, bukan mesej) — guna
+    // `str_contains` + `toBeTrue($mesej)` supaya mesej diagnostik kekal mesej.
+    expect(str_contains($ps1, 'Get-Command npx'))->toBeTrue(
+        'wrapper tidak lagi menyelesaikan npx melalui Get-Command — `npx` telanjang tidak boleh '
+        .'dilancarkan dengan UseShellExecute=$false pada Windows (npx ialah npx.cmd)',
+    );
+
+    // Diperiksa pada baris KOD sahaja: komen dalam wrapper mendokumenkan bentuk lama secara
+    // verbatim (itulah gunanya), dan padanan teks buta ke atas seluruh fail memerahkan penjaga
+    // ini kerana DOKUMENTASI — bukan kerana regresi. Diukur: versi pertama penjaga ini gagal
+    // tepat begitu.
+    $baris = preg_split('/\R/', $ps1) ?: [];
+    $npxTelanjang = array_values(array_filter($baris, function (string $b): bool {
+        $bersih = ltrim($b);
+
+        return ! str_starts_with($bersih, '#')
+            && preg_match('/\$psi\.FileName\s*=\s*[\'"]npx[\'"]/', $bersih) === 1;
+    }));
+    expect($npxTelanjang)->toBeEmpty(
+        'wrapper kembali kepada `FileName = \'npx\'` telanjang dalam KOD — larian akan mati '
+        .'SELEPAS fixture dicipta pada produksi: '.implode(' | ', $npxTelanjang),
+    );
+
+    // ⭐ Susunan ialah keseluruhan penjaga: pra-terbang mesti mendahului mutasi PERTAMA.
+    $praTerbang = strpos($ps1, '--project=production-readonly --list');
+    $prepare = strpos($ps1, 'diwan:audit-fixture prepare');
+    expect($praTerbang)->not->toBeFalse('pra-terbang `--list` hilang daripada wrapper');
+    expect($prepare)->not->toBeFalse('langkah `prepare` hilang daripada wrapper');
+    expect($praTerbang)->toBeLessThan(
+        $prepare,
+        'pra-terbang runner berada SELEPAS `audit-fixture prepare` — fixture akan dicipta pada '
+        .'produksi sebelum runner terbukti boleh dilancarkan (kegagalan 11 Ogos 2026)',
+    );
+
+    // Pra-terbang yang mengutip SIFAR ujian tidak membuktikan apa-apa; kiraan mesti diassert.
+    expect(str_contains($ps1, '-lt 22'))->toBeTrue(
+        'pra-terbang tidak lagi mengassert bilangan ujian dikutip (>= 22 = 2 kontrak + 20 konteks) '
+        .'— `--list` yang mengutip sifar ujian boleh keluar 0 dan lulus secara vakum',
+    );
+
+    // ACL: prinsipal berkelayakan + (F). Bentuk lama menafikan BACA kepada skrip itu sendiri.
+    expect(str_contains($ps1, '$($env:USERDOMAIN)\$($env:USERNAME):(F)'))->toBeTrue(
+        'ACL fail rahsia tidak lagi menggunakan prinsipal berkelayakan dengan (F) — bentuk '
+        .'`$($env:USERNAME):(R)` menghasilkan ACE yang menafikan BACA dan PADAM kepada wrapper',
+    );
+
+    // Punca mesti direkod sebelum `finally` memusnahkannya.
+    expect(str_contains($ps1, 'RALAT ASAL:'))->toBeTrue(
+        'wrapper tidak lagi merekod pengecualian asal sebelum `finally` — ralat cleanup akan '
+        .'menggantikan punca sebenar (itu yang menyembunyikan kegagalan 11 Ogos)',
+    );
+})->group('plan-manifest');
+
+/**
+ * F8 — artifak bukti DIJEJAK oleh git, dan `diwan:audit-fixture inventory` memaparkan
+ * `superadmin.emails`: alamat e-mel PERIBADI pemilik. Imbasan sebelum commit pertama larian
+ * produksi menemuinya dalam LAPAN fail. Penjaga kredensial sedia ada hanya mencari KUNCI
+ * seperti `password`/`secret`, jadi ia tidak menangkapnya.
+ *
+ * Akaun fixture (`@smoke.test`) dibenarkan dengan sengaja: ia bukan rahsia, ia dipadam oleh
+ * cleanup, dan kehadirannya ialah bukti bahawa larian itu benar-benar berlaku.
+ */
+test('artifak bukti tidak mengandungi alamat e-mel sebenar', function () {
+    $dijejak = [];
+    exec('git ls-files "Audit Review Round Robin/bukti"', $dijejak);
+    $dijejak = array_values(array_filter($dijejak));
+
+    // Anti-vakum: glob/`git ls-files` yang rosak memberi senarai kosong, dan senarai kosong
+    // meluluskan penjaga ini tanpa memeriksa apa-apa.
+    expect(count($dijejak))->toBeGreaterThan(50, 'senarai fail bukti terlalu kecil — penjaga tidak menguji apa-apa');
+
+    // TLD `.test` dikhaskan untuk ujian oleh RFC 6761 — ia tidak boleh menjadi alamat sebenar.
+    $dibenarkan = '/@([A-Za-z0-9.-]+\.test|(example|invalid)\.[A-Za-z]{2,})$/i';
+
+    // ⚠️ Tiga fail SUDAH mengandungi alamat sebenar sebelum penjaga ini ditulis (e-mel pengarang
+    // commit dalam dump JSON larian CI, dan akaun penghantar SMTP dalam bukti Deploy 3). Ia
+    // sudah berada dalam sejarah git, jadi memadamnya daripada pokok kerja TIDAK mengeluarkannya
+    // daripada repo — perlindungan palsu. Dikecualikan mengikut FAIL dan bukan mengikut alamat,
+    // supaya penjaga ini tidak menambah SALINAN BAHARU alamat itu ke dalam repo (versi pertama
+    // saya berbuat demikian, iaitu tepat perkara yang ia sepatutnya halang).
+    // 📌 Keputusan pemilik: sama ada hendak menulis semula sejarah, atau menerimanya.
+    // Fail BAHARU tetap ditolak sepenuhnya — itulah gunanya penjaga ini.
+    $failDikecualikan = [
+        'Audit Review Round Robin/bukti/deploy-3/BUKTI-DEPLOY-3.md',
+        'Audit Review Round Robin/bukti/plan-f8/bukti-larian/ci-a11y.json',
+        'Audit Review Round Robin/bukti/plan-f8/bukti-larian/ci-domain.json',
+    ];
+    $pelanggaran = [];
+
+    foreach ($dijejak as $laluan) {
+        $penuh = base_path($laluan);
+        if (! is_file($penuh) || in_array($laluan, $failDikecualikan, true)) {
+            continue;
+        }
+        $isi = (string) file_get_contents($penuh);
+        preg_match_all('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $isi, $padanan);
+        foreach (array_unique($padanan[0]) as $emel) {
+            if (preg_match($dibenarkan, $emel) === 1) {
+                continue;
+            }
+            $pelanggaran[] = "$laluan → $emel";
+        }
+    }
+
+    expect($pelanggaran)->toBeEmpty(
+        'artifak bukti mengandungi alamat e-mel sebenar (redaksi pada titik penulisan — lihat '
+        ."fungsi `Redaksi` dalam run-production-guidance-readonly.ps1):\n  ".implode("\n  ", array_slice($pelanggaran, 0, 20)),
+    );
+})->group('plan-manifest');

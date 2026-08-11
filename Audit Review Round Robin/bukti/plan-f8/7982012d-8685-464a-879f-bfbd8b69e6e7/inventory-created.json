@@ -1,0 +1,59 @@
+{
+  "run_uuid": "7982012d-8685-464a-879f-bfbd8b69e6e7",
+  "slug": "smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+  "created": {
+    "mosque_id": 9,
+    "user_ids": [
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61
+    ],
+    "accounts": [
+      {
+        "id": 54,
+        "email": "admin_masjid-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "admin_masjid"
+      },
+      {
+        "id": 55,
+        "email": "pengerusi-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "pengerusi"
+      },
+      {
+        "id": 56,
+        "email": "setiausaha-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "setiausaha"
+      },
+      {
+        "id": 57,
+        "email": "bendahari-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "bendahari"
+      },
+      {
+        "id": 58,
+        "email": "nazir-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "nazir"
+      },
+      {
+        "id": 59,
+        "email": "ketua_imam-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "ketua_imam"
+      },
+      {
+        "id": 60,
+        "email": "ajk-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "ajk"
+      },
+      {
+        "id": 61,
+        "email": "audit-7982012d-8685-464a-879f-bfbd8b69e6e7@smoke.test",
+        "role": "audit"
+      }
+    ]
+  }
+}

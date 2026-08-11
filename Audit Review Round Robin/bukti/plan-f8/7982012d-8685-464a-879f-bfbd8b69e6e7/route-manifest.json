@@ -1,0 +1,4064 @@
+{
+  "schema_version": 2,
+  "run_tenant": "smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+  "base_url": "https://bakwim.my",
+  "expected_page_counts": {
+    "public": 0,
+    "superadmin": 25,
+    "admin_masjid": 25,
+    "pengerusi": 17,
+    "setiausaha": 15,
+    "bendahari": 15,
+    "nazir": 13,
+    "ketua_imam": 13,
+    "ajk": 13,
+    "audit": 14
+  },
+  "last_login_at": 1786468738000,
+  "inventory": [
+    {
+      "viewport": "desktop",
+      "identity": "public",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/",
+          "ms": 2916
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 367
+        },
+        {
+          "url": "/daftar",
+          "ms": 495
+        },
+        {
+          "url": "/bantuan",
+          "ms": 404
+        },
+        {
+          "url": "/bantuan?panduan=public.help",
+          "ms": 325
+        }
+      ],
+      "pages": [
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/bantuan?panduan=public.help",
+      "cuba_ms": 6287,
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    2 hasil dalam skop Orang Awam\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "public.help",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      }
+    },
+    {
+      "viewport": "desktop",
+      "identity": "superadmin",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "ms": 804
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "ms": 641
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1064
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 669
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 740
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 639
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "ms": 999
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 858
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 783
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 692
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "ms": 887
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "ms": 790
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 903
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 764
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 852
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 581
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 853
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 679
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1009
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 734
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 647
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 798
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "ms": 643
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 568
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "ms": 667
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "ms": 640
+        },
+        {
+          "url": "/admin/bantuan",
+          "ms": 726
+        },
+        {
+          "url": "/admin/profil-saya",
+          "ms": 821
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "ms": 622
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "ms": 738
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "ms": 534
+        },
+        {
+          "url": "/admin",
+          "ms": 758
+        },
+        {
+          "url": "/admin/help-announcements",
+          "ms": 669
+        },
+        {
+          "url": "/admin/mosques",
+          "ms": 527
+        },
+        {
+          "url": "/admin/storage-orders",
+          "ms": 696
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "ms": 605
+        },
+        {
+          "url": "/admin/users",
+          "ms": 902
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/profil-saya",
+          "status": 200
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "status": 200
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin",
+          "status": 200
+        },
+        {
+          "url": "/admin/help-announcements",
+          "status": 200
+        },
+        {
+          "url": "/admin/mosques",
+          "status": 200
+        },
+        {
+          "url": "/admin/storage-orders",
+          "status": 200
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/users",
+          "status": 200
+        }
+      ],
+      "cuba": "/admin/users",
+      "cuba_ms": 45471,
+      "cta": {
+        "guide": "admin.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      }
+    },
+    {
+      "viewport": "desktop",
+      "identity": "admin_masjid",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "ms": 356
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "ms": 1399
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1800
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1318
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1254
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1435
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "ms": 1545
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 1289
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 1251
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1361
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "ms": 1014
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "ms": 1297
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1142
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1204
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1661
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1098
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 1398
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1456
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1249
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1296
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1138
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1519
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "ms": 1520
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1320
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "ms": 1128
+        },
+        {
+          "url": "/",
+          "ms": 808
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 881
+        },
+        {
+          "url": "/daftar",
+          "ms": 681
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1585
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 692
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1213
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 310
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 44261,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    5 hasil dalam skop Admin / Kerani\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    10 hasil dalam skop Admin / Kerani\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Admin / Kerani\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "pengerusi",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2472
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1100
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1462
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1395
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 1341
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 1009
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1233
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1410
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1448
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1656
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1164
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1350
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1660
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1157
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1391
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1064
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1280
+        },
+        {
+          "url": "/",
+          "ms": 793
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 937
+        },
+        {
+          "url": "/daftar",
+          "ms": 1002
+        },
+        {
+          "url": "/bantuan",
+          "ms": 981
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 796
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1159
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 351
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 34443,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Pengerusi\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Pengerusi\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Pengerusi\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "setiausaha",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 7240
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 2027
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 2615
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 2092
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1840
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 2605
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 2931
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 2835
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 2213
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 2278
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 2496
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 2700
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 2022
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 3952
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 3430
+        },
+        {
+          "url": "/",
+          "ms": 1947
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 977
+        },
+        {
+          "url": "/daftar",
+          "ms": 1495
+        },
+        {
+          "url": "/bantuan",
+          "ms": 2715
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 1570
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 5327
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 855
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 65229,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    5 hasil dalam skop Setiausaha\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    6 hasil dalam skop Setiausaha\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Setiausaha\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "bendahari",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2646
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1222
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1368
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1292
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 1492
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1356
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1461
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1345
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1374
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1354
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1363
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1650
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1242
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1421
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1408
+        },
+        {
+          "url": "/",
+          "ms": 1089
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 899
+        },
+        {
+          "url": "/daftar",
+          "ms": 810
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1012
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 700
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1343
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 366
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 32838,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Bendahari\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Bendahari\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Bendahari\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "nazir",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1793
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1273
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1063
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1038
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1555
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1679
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1244
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1621
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1591
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1595
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1646
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1042
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1371
+        },
+        {
+          "url": "/",
+          "ms": 918
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 1234
+        },
+        {
+          "url": "/daftar",
+          "ms": 1103
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1215
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 790
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1209
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 243
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 30731,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Nazir\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Nazir\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Nazir\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "ketua_imam",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2559
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1199
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1255
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1629
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1127
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1565
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1326
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1254
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1989
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1294
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1299
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1648
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1542
+        },
+        {
+          "url": "/",
+          "ms": 749
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 855
+        },
+        {
+          "url": "/daftar",
+          "ms": 1506
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1405
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 1053
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1422
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 304
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 32084,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Ketua Imam\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Ketua Imam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Ketua Imam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "ajk",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2578
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1281
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1023
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1331
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1336
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1132
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1210
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1485
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 2221
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1321
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1145
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1425
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1365
+        },
+        {
+          "url": "/",
+          "ms": 1301
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 1224
+        },
+        {
+          "url": "/daftar",
+          "ms": 734
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1595
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 721
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1585
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 434
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 31782,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop AJK\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop AJK\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop AJK\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "desktop",
+      "identity": "audit",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2361
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1098
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1433
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1025
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1328
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1560
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1144
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1403
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1077
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1662
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1285
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1182
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1304
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1063
+        },
+        {
+          "url": "/",
+          "ms": 1032
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 1377
+        },
+        {
+          "url": "/daftar",
+          "ms": 952
+        },
+        {
+          "url": "/bantuan",
+          "ms": 1486
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 911
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1344
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 308
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 30788,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Juruaudit\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Juruaudit\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Juruaudit\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "public",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/",
+          "ms": 2860
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 364
+        },
+        {
+          "url": "/daftar",
+          "ms": 470
+        },
+        {
+          "url": "/bantuan",
+          "ms": 572
+        },
+        {
+          "url": "/bantuan?panduan=public.help",
+          "ms": 395
+        }
+      ],
+      "pages": [
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/bantuan?panduan=public.help",
+      "cuba_ms": 5759,
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    2 hasil dalam skop Orang Awam\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Orang Awam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "public.help",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      }
+    },
+    {
+      "viewport": "mobile",
+      "identity": "superadmin",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "ms": 940
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "ms": 719
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 716
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1038
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 714
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 504
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "ms": 751
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 598
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 610
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 779
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "ms": 704
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "ms": 768
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 751
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 2897
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 690
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 712
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 538
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 848
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 806
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 819
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 760
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 608
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "ms": 730
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 656
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "ms": 642
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "ms": 604
+        },
+        {
+          "url": "/admin/bantuan",
+          "ms": 635
+        },
+        {
+          "url": "/admin/profil-saya",
+          "ms": 652
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "ms": 559
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "ms": 824
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "ms": 508
+        },
+        {
+          "url": "/admin",
+          "ms": 589
+        },
+        {
+          "url": "/admin/help-announcements",
+          "ms": 552
+        },
+        {
+          "url": "/admin/mosques",
+          "ms": 713
+        },
+        {
+          "url": "/admin/storage-orders",
+          "ms": 649
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "ms": 783
+        },
+        {
+          "url": "/admin/users",
+          "ms": 738
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/admin/profil-saya",
+          "status": 200
+        },
+        {
+          "url": "/admin/status-sambungan",
+          "status": 200
+        },
+        {
+          "url": "/admin/tetapan-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin/whatsapp-platform",
+          "status": 200
+        },
+        {
+          "url": "/admin",
+          "status": 200
+        },
+        {
+          "url": "/admin/help-announcements",
+          "status": 200
+        },
+        {
+          "url": "/admin/mosques",
+          "status": 200
+        },
+        {
+          "url": "/admin/storage-orders",
+          "status": 200
+        },
+        {
+          "url": "/admin/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/admin/users",
+          "status": 200
+        }
+      ],
+      "cuba": "/admin/users",
+      "cuba_ms": 46105,
+      "cta": {
+        "guide": "admin.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      }
+    },
+    {
+      "viewport": "mobile",
+      "identity": "admin_masjid",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "ms": 3459
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "ms": 2280
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 4555
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1796
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 2429
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1686
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "ms": 2596
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 1725
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 3280
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1903
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "ms": 2397
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "ms": 1752
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 2082
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 2202
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 2569
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 2478
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 2449
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 2241
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1639
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1539
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 2627
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1936
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "ms": 1695
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1704
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "ms": 3315
+        },
+        {
+          "url": "/",
+          "ms": 1978
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 2606
+        },
+        {
+          "url": "/daftar",
+          "ms": 1543
+        },
+        {
+          "url": "/bantuan",
+          "ms": 4323
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 1451
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 3664
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 580
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/ahli-peranan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/analitik-bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/persediaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tetapan-masjid",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/retensi-peraturan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/tiket-sokongan",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 81171,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    5 hasil dalam skop Admin / Kerani\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    10 hasil dalam skop Admin / Kerani\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Admin / Kerani\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "pengerusi",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1837
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1192
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1007
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1395
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "ms": 1453
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 1124
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1135
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1269
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1518
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1140
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1114
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1254
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1388
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1290
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1320
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1316
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1252
+        },
+        {
+          "url": "/",
+          "ms": 743
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 746
+        },
+        {
+          "url": "/daftar",
+          "ms": 553
+        },
+        {
+          "url": "/bantuan",
+          "ms": 740
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 671
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1131
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 288
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pelupusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 30500,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Pengerusi\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Pengerusi\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Pengerusi\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "setiausaha",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2189
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1367
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1113
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1209
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1502
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1180
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1422
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1362
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 2117
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "ms": 1215
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1419
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1436
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1256
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1373
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1413
+        },
+        {
+          "url": "/",
+          "ms": 874
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 796
+        },
+        {
+          "url": "/daftar",
+          "ms": 668
+        },
+        {
+          "url": "/bantuan",
+          "ms": 873
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 610
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1378
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 314
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/peti-masuk",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 31854,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    5 hasil dalam skop Setiausaha\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    6 hasil dalam skop Setiausaha\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Setiausaha\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "bendahari",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 2593
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1026
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1469
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1426
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "ms": 1307
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1183
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1436
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1227
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1427
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1241
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1338
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "ms": 1331
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1380
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1371
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1121
+        },
+        {
+          "url": "/",
+          "ms": 957
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 624
+        },
+        {
+          "url": "/daftar",
+          "ms": 837
+        },
+        {
+          "url": "/bantuan",
+          "ms": 737
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 705
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1109
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 293
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/penggunaan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/log-aktiviti",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 30337,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Bendahari\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Bendahari\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Bendahari\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "nazir",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1868
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1185
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1445
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1226
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1422
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1236
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1121
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1424
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1076
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1352
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1338
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1207
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1157
+        },
+        {
+          "url": "/",
+          "ms": 790
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 670
+        },
+        {
+          "url": "/daftar",
+          "ms": 631
+        },
+        {
+          "url": "/bantuan",
+          "ms": 766
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 675
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1261
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 242
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 26296,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Nazir\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Nazir\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Nazir\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "ketua_imam",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1963
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1559
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 985
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1426
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1275
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1268
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1282
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1188
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1254
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1302
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1067
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1573
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1220
+        },
+        {
+          "url": "/",
+          "ms": 925
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 602
+        },
+        {
+          "url": "/daftar",
+          "ms": 541
+        },
+        {
+          "url": "/bantuan",
+          "ms": 767
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 797
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1086
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 340
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 26954,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Ketua Imam\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Ketua Imam\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Ketua Imam\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "ajk",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1677
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1197
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1381
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1212
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1183
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1590
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1295
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1220
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1265
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1217
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1245
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1221
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1318
+        },
+        {
+          "url": "/",
+          "ms": 963
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 603
+        },
+        {
+          "url": "/daftar",
+          "ms": 614
+        },
+        {
+          "url": "/bantuan",
+          "ms": 801
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 769
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1170
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 323
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 25947,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop AJK\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop AJK\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop AJK\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    },
+    {
+      "viewport": "mobile",
+      "identity": "audit",
+      "status": "selesai",
+      "masa": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1881
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "ms": 1139
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "ms": 1134
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "ms": 1387
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "ms": 1097
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "ms": 1474
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "ms": 1041
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "ms": 1150
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "ms": 1077
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "ms": 1129
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "ms": 1418
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "ms": 1237
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "ms": 1250
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "ms": 1354
+        },
+        {
+          "url": "/",
+          "ms": 905
+        },
+        {
+          "url": "/log-masuk",
+          "ms": 653
+        },
+        {
+          "url": "/daftar",
+          "ms": 687
+        },
+        {
+          "url": "/bantuan",
+          "ms": 705
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7?panduan=tenant.dashboard",
+          "ms": 662
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "ms": 1151
+        },
+        {
+          "url": "/app/mamad/records",
+          "ms": 288
+        }
+      ],
+      "pages": [
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/bantuan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/carian",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kegemaran",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/laporan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/profil",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/kelulusan",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/classification-nodes",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/delegasi",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/minit-saya",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/pembetulan-rekod",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/records",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/registry-files",
+          "status": 200
+        },
+        {
+          "url": "/app/smoke-7982012d-8685-464a-879f-bfbd8b69e6e7/sensitive-access-logs",
+          "status": 200
+        },
+        {
+          "url": "/",
+          "status": 200
+        },
+        {
+          "url": "/log-masuk",
+          "status": 200
+        },
+        {
+          "url": "/daftar",
+          "status": 200
+        },
+        {
+          "url": "/bantuan",
+          "status": 200
+        }
+      ],
+      "cuba": "/app/mamad/records",
+      "cuba_ms": 26902,
+      "fasa": "selesai",
+      "ralat_kiraan": 1,
+      "ralat_unik": 0,
+      "ralat_contoh": [],
+      "respons_buruk": [
+        {
+          "status": 404,
+          "url": "https://bakwim.my/app/mamad/records"
+        }
+      ],
+      "ralat_selepas_probe": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "carian": [
+        "Sedang mencari panduan...\n            \n                                    1 hasil dalam skop Juruaudit\n                     untuk “Peti Masuk”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    3 hasil dalam skop Juruaudit\n                     untuk “klasfikasi surat”                     Kosongkan carian",
+        "Sedang mencari panduan...\n            \n                                    0 hasil dalam skop Juruaudit\n                     untuk “zzqqxx-tiada-langsung”                     Kosongkan carian"
+      ],
+      "cta": {
+        "guide": "tenant.dashboard",
+        "langkah": 1,
+        "cta": "Seterusnya",
+        "wait_for_user": false,
+        "cacat_cta": false
+      },
+      "crossTenant": 404
+    }
+  ],
+  "contexts": 20,
+  "missing_contexts": []
+}

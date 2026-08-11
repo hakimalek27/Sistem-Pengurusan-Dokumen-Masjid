@@ -186,11 +186,82 @@ async function login(page, baseURL, email, password, loginPath, homePattern) {
 // F8 (Codex P2 #14) — semakan per-halaman yang SEBELUM INI hanya dipakai pada role tenant.
 // Blok `public` hanya mengassert status 200, dan `superadmin` melangkau overflow — jadi dua
 // daripada sepuluh identiti tidak pernah diperiksa untuk landmark atau overflow mendatar.
+// 🔴 F8 (larian produksi 11–12 Ogos) — TIGA konteks tergantung 8–12 minit pada `/delegasi`,
+// dan had per-ujian 600s tidak pernah menembak. Puncanya dipersempit dengan menghapuskan:
+// `page.goto` terikat pada `navigationTimeout: 60_000`, dan `expect().toBeVisible()` pada
+// `expect.timeout: 30_000` — kedua-duanya akan gagal jauh lebih awal. Yang TIDAK terikat ialah
+// `page.evaluate()`: Playwright tidak mengenakan had padanya, jadi ia boleh menunggu selamanya.
+//
+// Mengapa ia berlaku DI SINI: `/delegasi` mencetuskan auto-mula tour (`HelpLauncher` menetapkan
+// `autoStart` untuk pengguna tanpa `GuidanceProgress`), dan kerana langkah pertama
+// `tenant.delegasi` tinggal pada `/delegasi/create`, `help.js:883` memanggil
+// `window.location.assign(...)` ~450 ms selepas DOMContentLoaded. Evaluasi yang bertembung
+// dengan pelayaran itu tidak pernah selesai.
+//
+// Pembaikan TIDAK melemahkan ukuran: nilai yang sama diukur, cuma tunggu itu kini TERIKAT.
+// Gantung menjadi kegagalan yang MENAMAKAN laluannya, bukan kesenyapan yang membunuh larian.
+const EVAL_TIMEOUT_MS = 45_000;
+
+async function evaluateTerikat(page, fn, label) {
+    let pemasa;
+    try {
+        return await Promise.race([
+            page.evaluate(fn),
+            new Promise((_, reject) => {
+                pemasa = setTimeout(
+                    () => reject(new Error(
+                        `${label}: page.evaluate tidak kembali dalam ${EVAL_TIMEOUT_MS} ms — `
+                        + 'halaman berkemungkinan melayari sendiri (auto-mula tour) semasa evaluasi',
+                    )),
+                    EVAL_TIMEOUT_MS,
+                );
+            }),
+        ]);
+    } finally {
+        clearTimeout(pemasa);
+    }
+}
+
+// Diukur daripada `DEBUG=pw:api` pada gantung SEBENAR (nazir, 12 Ogos 00:45):
+//
+//   page.evaluate started
+//     navigated to ".../delegasi/create?panduan=tenant.delegasi&langkah=0"   ⬅ auto-mula tour
+//     "load" event fired
+//   page.evaluate FAILED
+//   taking page screenshot ... browserContext.close succeeded
+//   browser.close started        ⬅ TIDAK PERNAH kembali → seluruh suite mati pada had menyeluruh
+//
+// Jadi urutannya: evaluasi berlumba dengan `location.assign` → ujian GAGAL → teardown
+// `browser.close()` tergantung. Itu menjelaskan mengapa tiada had per-ujian menembak (ujian
+// sudah tamat) dan mengapa Playwright melaporkan "Timed out waiting for the teardown".
+// ⚠️ `waitForLoadState('domcontentloaded')` TIDAK memadai dan telah dibuang: pada ketika itu
+// dokumen SUDAH dimuat, jadi ia kembali serta-merta dan pelayaran 450 ms kemudian tetap
+// berlumba. Yang betul ialah mengukur pada halaman AKHIR: ulang SEKALI apabila konteks
+// pelaksanaan dimusnahkan oleh pelayaran itu.
+const OVERFLOW = () => Math.max(
+    document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0,
+) - window.innerWidth;
+
+// Pelayaran auto-mula DIREKOD, bukan ditelan: kekerapannya ialah maklumat produk yang berguna
+// (berapa banyak halaman melompat sendiri bagi pengguna BAHARU pada produksi).
+const rekodPelayaranAutoMula = [];
+
 async function assertHalamanSihat(page, label) {
     await expect(page.locator('main')).toBeVisible();
-    const overflow = await page.evaluate(() => Math.max(
-        document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0,
-    ) - window.innerWidth);
+
+    let overflow;
+    try {
+        overflow = await evaluateTerikat(page, OVERFLOW, label);
+    } catch (e) {
+        // Pelayaran auto-mula ialah tingkah laku PRODUK yang sah (HelpLauncher `autoStart` →
+        // `help.js:883` apabila langkah pertama panduan tinggal pada laluan lain). Mengukur
+        // semula pada halaman baharu BUKAN menyembunyikan kegagalan — assertion yang sama
+        // dikenakan, cuma pada halaman yang pengguna benar-benar berakhir padanya.
+        rekodPelayaranAutoMula.push(`${label} → ${page.url()}`);
+        await page.waitForLoadState('load');
+        await expect(page.locator('main')).toBeVisible();
+        overflow = await evaluateTerikat(page, OVERFLOW, `${label} (selepas pelayaran auto-mula)`);
+    }
     expect(overflow, `${label} overflow mendatar`).toBeLessThanOrEqual(2);
 }
 
