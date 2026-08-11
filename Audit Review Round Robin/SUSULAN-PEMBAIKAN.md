@@ -5,16 +5,18 @@
 > ditangani** (15 dibaiki dengan counterexample dibuktikan MERAH; **4 DITURUNKAN status** kerana
 > dakwaan asal saya melebih-lebih). Lihat **§5C**.
 >
-> Jadual §9 dikira mekanikal: **34 baris = 27 ✅ · 0 🔴 · 4 ⚠️ · 3 ⏸**.
+> Jadual §9 dikira mekanikal: **35 baris = 29 ✅ · 0 🔴 · 3 ⚠️ · 3 ⏸**.
 >
 > ⭐ **Tiada lagi baris MERAH.** Pemilik menjawab ketiga-tiga keputusan pada 11 Ogos 2026:
 > `centerCovered` **bersara sebagai gate** (kadar positif-palsu 100% diukur) dan penggantinya
 > kini gate CI pada kohort tenant PENUH · akronim `DDMS`/`SPDM` **ditambah ke katalog** dan
 > boleh dicari · denominator **172**.
 >
-> **Baki: 4 ⚠️ + 3 ⏸.** Tiga ⏸ dan satu ⚠️ (nota E) menunggu kredensial superadmin produksi;
-> satu ⚠️ menunggu e-mel `staging-check`; satu ⚠️ ialah pendedahan jujur (26 langkah dengan
-> pertindihan tepi 25–49% yang saya TIDAK buktikan mengganggu pengguna).
+> **Baki: 3 ⏸ + baki ⚠️.** Tiga ⏸ dan nota E menunggu kredensial superadmin produksi.
+> Nota F **DITUTUP** (11 Ogos): e-mel dihantar dari produksi, kerangka BM disahkan sebelum
+> penghantaran, dan gate itu sendiri dibaiki supaya ia benar-benar menguji kerangka.
+> Satu ⚠️ ialah pendedahan jujur: 26 langkah dengan pertindihan tepi 25–49% yang saya TIDAK
+> buktikan mengganggu pengguna.
 >
 > ⚠️ **Deploy WAJIB `diwan:sync-help-index --delete`** — katalog DAN kandungan indeks berubah
 > (`catalog_version 2026.08.11.1`, `steps_text` kini merangkumi tajuk langkah).
