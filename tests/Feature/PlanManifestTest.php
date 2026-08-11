@@ -278,6 +278,15 @@ test('tiada kredensial dalam artifak bukti yang dijejak git', function () {
         }
     }
 
+    // F8 — fail kredensial produksi tidak boleh dijejak di MANA-MANA, bukan hanya dalam bukti/.
+    exec('git ls-files', $semua, $kodSemua);
+    expect($kodSemua)->toBe(0, 'git ls-files gagal');
+    $terlarang = array_values(array_filter($semua, fn (string $f) => str_contains($f, '.e2e-prod-credentials')));
+    expect($terlarang)->toBeEmpty(
+        'fail kredensial produksi DIJEJAK git: '.implode(', ', $terlarang)
+        .' — keluarkan serta-merta (git rm --cached) dan tukar kata laluan itu',
+    );
+
     expect($pelanggaran)->toBeEmpty(
         'artifak bukti mengandungi kunci kredensial: '.implode(', ', $pelanggaran)
         .' — keluarkan daripada git dan tambah corak ke Audit Review Round Robin/bukti/.gitignore',

@@ -45,11 +45,30 @@ New-Item -ItemType Directory -Force $evidenceDir | Out-Null
 $log = Join-Path $evidenceDir 'run.log'
 "run_uuid=$RunUuid  slug=$slug  base_url=$BaseUrl  mula=$(Get-Date -Format o)" | Tee-Object -FilePath $log
 
+# ── Sumber kredensial: fail TEMPATAN dahulu, kemudian env ─────────────────────────────────
+# Mengapa fail dan bukan hanya env: env yang ditetapkan dalam satu shell TIDAK bertahan kepada
+# proses lain, dan menaipnya melalui pembantu bermakna nilainya muncul dalam transkrip
+# perbualan — tepat perkara yang kita elak. Fail ini dibuat pemilik dalam editor sendiri,
+# diabaikan git, dan HANYA dibaca oleh skrip ini. Nilainya tidak pernah dicetak.
+$credFile = Join-Path $repoRoot '.e2e-prod-credentials.local.json'
+if (Test-Path $credFile) {
+    try {
+        $cred = Get-Content -Raw -LiteralPath $credFile | ConvertFrom-Json
+    } catch {
+        throw "$credFile bukan JSON sah — jangkakan {""email"":""…"",""password"":""…""}"
+    }
+    if ($cred.email) { $env:E2E_PROD_SUPERADMIN_EMAIL = [string] $cred.email }
+    if ($cred.password) { $env:E2E_PROD_SUPERADMIN_PASSWORD = [string] $cred.password }
+    "kredensial superadmin dibaca daripada $([IO.Path]::GetFileName($credFile)) (nilai tidak dicetak)" |
+        Tee-Object -FilePath $log -Append
+}
+
 # ── Validasi env — NAMA sahaja dalam ralat, nilai TIDAK pernah dicetak (P18-03) ──────────
 foreach ($name in @('E2E_PROD_SUPERADMIN_EMAIL', 'E2E_PROD_SUPERADMIN_PASSWORD')) {
     $value = [Environment]::GetEnvironmentVariable($name)
     if ([string]::IsNullOrWhiteSpace($value)) {
-        throw "Env $name WAJIB dibekalkan pemanggil (pengurus kata laluan / sesi pentadbir). " +
+        throw "Env $name WAJIB dibekalkan pemanggil, ATAU letakkan dalam $credFile " +
+              '(JSON: {"email":"…","password":"…"} — diabaikan git). ' +
               'Tanpa semakan ini, lalai diam guidance.spec.js akan menghantar kredensial demo ke produksi.'
     }
 }

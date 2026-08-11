@@ -31,3 +31,6 @@ Thumbs.db
 
 # Sijil origin TLS (rahsia — dijana per-server, jangan commit)
 /docker/certs/
+
+# Kredensial superadmin PRODUKSI untuk larian §9.1a — dibuat pemilik, JANGAN sekali-kali dikomit.
+.e2e-prod-credentials.local.json
