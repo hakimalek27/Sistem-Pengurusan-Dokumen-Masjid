@@ -12,14 +12,24 @@ Jadual §9             35 baris = 29 ✅ · 0 🔴 · 3 ⚠️ · 3 ⏸
 
 ### 🎯 SATU perkara sahaja menyekat F8 sekarang
 
-**Kredensial superadmin produksi.** Ia membuka 3 baris ⏸ **dan** nota E serentak. Bekalkan
-melalui `!` supaya nilainya tidak melalui saya:
+**Kredensial superadmin produksi.** Ia membuka 3 baris ⏸ **dan** nota E serentak.
+
+⛔ **JANGAN guna `!` dengan `$env:…`** — arahan itu salah pada TIGA aras, dan ia sudah dicuba:
+`$env:` ialah sintaks PowerShell tetapi `!` menjalankan **bash**; env **tidak bertahan** antara
+panggilan alat pembantu; dan apa-apa yang ditaip selepas `!` **muncul dalam transkrip**, jadi
+kata laluan itu tetap melalui pembantu.
+
+✅ **Cara yang betul — fail tempatan yang wrapper baca sendiri.** Pemilik cipta dalam editor
+sendiri (bukan melalui sembang), di root repo:
 
 ```
-! $env:E2E_PROD_SUPERADMIN_EMAIL="…"; $env:E2E_PROD_SUPERADMIN_PASSWORD="…"
+.e2e-prod-credentials.local.json
+{ "email": "superadmin…", "password": "…" }
 ```
 
-kemudian wrapper: `pwsh -File scripts/audit/run-production-guidance-readonly.ps1 -TimeoutMinutes 120`.
+Diabaikan git (`.gitignore:36`); penjaga Pest menolak jika ia dijejak (dibuktikan MERAH).
+Wrapper mengutamakan fail ini sebelum env dan mencatat hanya NAMA fail — nilai tidak pernah
+dicetak. Kemudian: `pwsh -File scripts/audit/run-production-guidance-readonly.ps1 -TimeoutMinutes 120`.
 Runner sudah TERBUKTI: matriks tempatan **20/20** (396 halaman, 0 ralat console, kontrak 2/2).
 
 **Tindakan pemilik yang berbaki (kecil):** buka e-mel di alamat pemilik (dihantar 11 Ogos dari
@@ -281,12 +291,9 @@ mengubah metrik/penjaga/pelan.
 
 Larian produksi §9.1a memerlukan **kredensial superadmin produksi** melalui env sesi pemilik
 sendiri (`E2E_PROD_SUPERADMIN_*`). Saya tidak pernah menciptanya dan tidak akan.
-⚠️ **Jangan hantar kata laluan dalam sembang** — ia masuk transkrip. Guna `!` supaya nilainya
-tidak pernah melalui saya:
-```
-! $env:E2E_PROD_SUPERADMIN_EMAIL='...'; $env:E2E_PROD_SUPERADMIN_PASSWORD='...'; `
-  pwsh scripts/audit/run-production-guidance-readonly.ps1
-```
+⚠️ **Jangan hantar kata laluan dalam sembang** — ia masuk transkrip. Dan `!` TIDAK membantu
+di sini: apa-apa yang ditaip selepas `!` juga masuk transkrip. Guna fail
+`.e2e-prod-credentials.local.json` (lihat blok "SAMBUNG DI SINI" di atas).
 Selebihnya F8 = pengukuran sahaja, tiada deploy. F9/F10 tidak disekat.
 
 ### Apa yang Deploy 14 bawa
