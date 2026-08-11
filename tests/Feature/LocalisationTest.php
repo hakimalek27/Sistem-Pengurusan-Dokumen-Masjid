@@ -28,6 +28,7 @@ use App\Notifications\MinitRoutedNotification;
 use App\Notifications\NewStorageOrderNotification;
 use App\Notifications\QuotaThresholdNotification;
 use App\Notifications\RetentionNoticeNotification;
+use App\Notifications\StagingSkeletonNotification;
 use App\Notifications\TestNotification;
 use Filament\Facades\Filament;
 use Filament\Schemas\Components\Wizard;
@@ -79,6 +80,7 @@ const NOTIFICATION_MAIL_CLASSES = [
     NewStorageOrderNotification::class,
     QuotaThresholdNotification::class,
     RetentionNoticeNotification::class,
+    StagingSkeletonNotification::class,
     TestNotification::class,
 ];
 
@@ -174,8 +176,9 @@ function notificationFixture(string $class): array
         ])),
         QuotaThresholdNotification::class => new $class($mosque, 80, 16.0, 20.0),
         RetentionNoticeNotification::class => new $class($mosque, 5, 30, 7),
+        StagingSkeletonNotification::class => new $class,
         TestNotification::class => new $class,
-        default => throw new RuntimeException("Daftar fixture untuk kelas {$class} dalam notificationFixture() — §4.3 menuntut liputan 18/18."),
+        default => throw new RuntimeException("Daftar fixture untuk kelas {$class} dalam notificationFixture() — §4.3 menuntut liputan 19/19."),
     };
 
     return [$notification, $penerima];
@@ -214,7 +217,7 @@ test('setiap kunci lang/en wujud dalam lang/ms (4 fail diterbitkan)', function (
 
 /*
 |--------------------------------------------------------------------------
-| 2. E-mel BM penuh — 18/18 (§4.7 #2)
+| 2. E-mel BM penuh — 19/19 (§4.7 #2)
 |--------------------------------------------------------------------------
 */
 
@@ -250,12 +253,12 @@ test('e-mel notifikasi BM penuh dari salam hingga footer', function (string $cla
     }
 })->with(NOTIFICATION_MAIL_CLASSES);
 
-test('data-provider melitupi TEPAT kelas ber-toMail dalam app/Notifications (18/18)', function () {
+test('data-provider melitupi TEPAT kelas ber-toMail dalam app/Notifications (19/19)', function () {
     $daripadaFail = notificationClassesWithToMail();
     $daripadaProvider = collect(NOTIFICATION_MAIL_CLASSES)->sort()->values()->all();
 
-    expect($daripadaFail)->toHaveCount(18,
-        'baseline §4.3 = 18 kelas; kemas kini denominator + fixture jika berubah');
+    expect($daripadaFail)->toHaveCount(19,
+        'baseline §4.3 = 18 kelas + StagingSkeletonNotification (F8) = 19; kemas kini denominator + fixture jika berubah');
 
     $tiadaFixture = array_values(array_diff($daripadaFail, $daripadaProvider));
     expect($tiadaFixture)->toBe([],
@@ -471,4 +474,28 @@ test('tiada label Edit Inggeris pada lima halaman §4.6', function () {
     Filament::setCurrentPanel(Filament::getPanel('app'));
     expect($semak('/app/mam/tetapan-masjid', $admin))->toContain('Sunting Tetapan');
     Filament::setTenant(null, isQuiet: true);
+});
+
+/**
+ * F8 (§4.8 / nota F) — gate `diwan:staging-check --mail-to=` dahulu menghantar `Mail::raw(...)`:
+ * teks kosong TANPA kerangka. Ia membuktikan SMTP menghantar, tetapi bukan perkara yang gate itu
+ * wujud untuk buktikan — bahawa kerangka e-mel kekal Bahasa Melayu selepas melalui penghantar
+ * sebenar. Pemilik yang membuka e-mel mentah tidak ada apa-apa untuk disahkan.
+ *
+ * Ujian ini mengunci kerangka notifikasi ujian itu, supaya kegagalan terjemahan gagal di CI
+ * dan bukan senyap dalam peti masuk pemilik.
+ */
+test('notifikasi ujian staging membawa kerangka e-mel Bahasa Melayu', function () {
+    $html = (string) (new StagingSkeletonNotification)->toMail(null)->render();
+
+    foreach (['Salam sejahtera', 'Sekian', 'Hak cipta terpelihara'] as $frasa) {
+        expect(str_contains($html, $frasa))->toBeTrue("kerangka e-mel kehilangan \"{$frasa}\"");
+    }
+    foreach (['Hello!', 'Regards,', 'All rights reserved'] as $bocor) {
+        expect(str_contains($html, $bocor))->toBeFalse("kerangka e-mel bocor bahasa Inggeris: \"{$bocor}\"");
+    }
+
+    // Anti-vakum: kerangka mesti benar-benar dirender (bukan rentetan kosong yang lulus
+    // kedua-dua gelung di atas secara vakum).
+    expect(mb_strlen($html))->toBeGreaterThan(500, 'kerangka e-mel kosong — render gagal senyap');
 });

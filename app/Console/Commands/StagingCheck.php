@@ -3,12 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProcessOcrJob;
+use App\Notifications\StagingSkeletonNotification;
 use App\Services\WhatsAppGateway;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
@@ -58,7 +59,28 @@ class StagingCheck extends Command
         $mailTo = $this->option('mail-to');
         if ($mailTo) {
             $this->check($checks, 'smtp', function () use ($mailTo) {
-                Mail::raw('Ujian staging Diwan pada '.now()->toIso8601String(), fn ($message) => $message->to($mailTo)->subject('Diwan staging check'));
+                // 🔴 F8: dahulu `Mail::raw(...)` — teks kosong TANPA kerangka. Ia membuktikan
+                // penghantaran, tetapi BUKAN perkara yang gate ini wujud untuk buktikan: bahawa
+                // kerangka e-mel kekal Bahasa Melayu selepas melalui penghantar sebenar
+                // (§4.8 / nota F). E-mel mentah tiada "Salam sejahtera"/"Sekian" untuk dilihat,
+                // jadi pemilik yang membacanya tidak dapat mengesahkan apa-apa.
+                //
+                // Kini ia menghantar notifikasi BERKERANGKA (templat markdown yang SAMA seperti
+                // 18 kelas `toMail()` produk) DAN mengassert kerangka itu BM sebelum menghantar,
+                // supaya kegagalan terjemahan gagal DI SINI dan bukan senyap dalam peti masuk.
+                $notifikasi = new StagingSkeletonNotification;
+                $html = (string) $notifikasi->toMail(null)->render();
+                foreach (['Salam sejahtera', 'Sekian', 'Hak cipta terpelihara'] as $frasa) {
+                    if (! str_contains($html, $frasa)) {
+                        throw new \RuntimeException("kerangka e-mel kehilangan \"{$frasa}\" — locale ms tidak dimuatkan");
+                    }
+                }
+                foreach (['Hello!', 'Regards,', 'All rights reserved'] as $bocor) {
+                    if (str_contains($html, $bocor)) {
+                        throw new \RuntimeException("kerangka e-mel bocor bahasa Inggeris: \"{$bocor}\"");
+                    }
+                }
+                Notification::route('mail', $mailTo)->notify($notifikasi);
 
                 return true;
             });

@@ -128,6 +128,18 @@ zzqqxx-tiada-langsung -> 0        kawalan negatif               ✔
 menyelaraskan yang pertama sahaja dan hampir menghantar enjin yang lebih bising. Dua ujian yang
 merah itulah yang menangkapnya — bukan saya.
 
+## 4C. Kos prestasi meluaskan korpus fallback — DIUKUR, bukan diandaikan
+
+Meluaskan badan carian fallback bermakna menormalkan teks langkah + penyelesaian masalah bagi
+83 guide pada setiap pertanyaan. Itu patut diukur sebelum dianggap percuma:
+
+```
+20 carian fallback berturut : 71 ms   (purata 4 ms setiap satu)
+```
+
+Tiada kos yang bermakna. (Saya menyemak ini kerana satu larian suite mengambil 25 minit dan
+korpus yang lebih luas ialah suspek pertama — ia bukan puncanya; dua suite bertindih.)
+
 ## 5. Apa yang penjaga baharu kunci
 
 | Ujian | Menutup |

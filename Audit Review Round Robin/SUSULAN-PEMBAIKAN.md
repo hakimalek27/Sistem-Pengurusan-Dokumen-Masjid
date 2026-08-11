@@ -75,7 +75,8 @@ jadi mana-mana langkah generik baharu **menggagalkan penjanaan manifest**.
 | Wizard label `Seterus` | rosak | `Seterusnya` | **betul** (F3) | ✅ |
 | Default borang retensi | `auto_padam` | `semak` + dialog | **`semak`** (F4) | ✅ |
 | axe serious (`link-name`) | 1 | 0 | **0** — langkah `Accessibility (axe)` 11/11 dalam CI | ✅ |
-| E-mel kerangka EN | 9 diuji | 0/18 kelas **+ e-mel sebenar** | **0/18 render** · penghantaran sebenar **BELUM** | ⚠️ nota F |
+| E-mel kerangka EN | 9 diuji | 0/18 kelas **+ e-mel sebenar** | **0/18 render** · e-mel **DIHANTAR dari produksi** 11 Ogos ke alamat pemilik; kerangka disahkan pada produksi (`Salam sejahtera`·`Sekian`·`Hak cipta terpelihara` ADA, `Hello`/`Regards` TIADA) | ✅ **DIHANTAR** — pengesahan mata pemilik ialah langkah terakhir |
+| 🔴 Gate `--mail-to` tidak boleh membuktikan apa yang ia dakwa | — | — | ia menghantar `Mail::raw(...)` iaitu teks **TANPA kerangka** — tiada apa untuk pemilik sahkan | ✅ **DIBAIKI**: kini menghantar notifikasi berkerangka DAN mengassert BM sebelum hantar; `APP_LOCALE=en` → **GAGAL** dengan diagnostik tepat |
 | Suite Pest | 409✓/1s | semua ✓ | **632 ✓ / 1 skip** (5,868 assertion) | ✅ |
 | `diwan:smoke` produksi | 9/9 | 9/9 | **9/9** (Deploy 14) | ✅ |
 | Meilisearch: indeks = bilangan guide | — | tepat 83 | **83** · `isIndexing false` | ✅ |
