@@ -1,12 +1,133 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## 📋 BACA DAHULU: `Audit Review Round Robin/KEPUTUSAN-PEMILIK-F8.md`
+## ▶️ SAMBUNG DI SINI — F8 hampir tamat · HANYA kredensial produksi tinggal (11 Ogos 2026)
 
-Enam perkara menunggu pemilik. Fail itu memberi, untuk SETIAP satu: apa yang diukur, pilihan
-yang ada, dan **arahan tepat** yang akan dijalankan sebaik jawapan diberi. Tiada satu pun
-memerlukan penyiasatan lanjut — hanya keputusan.
+```
+local = origin = 6c36cda        CI HIJAU 7/7 job (e201228)
+Produksi              2325bec   (Deploy 14) — F8 TIDAK deploy
+Jadual §9             35 baris = 29 ✅ · 0 🔴 · 3 ⚠️ · 3 ⏸
+                      (masuk sesi 9 Ogos: 21 ✅ · 4 🔴 · 4 ⚠️ · 3 ⏸)
+58 commit sejak produksi · suite penuh LULUS di CI Linux/pgsql
+```
 
-## ▶️ SAMBUNG DI SINI — F8: 19/19 penemuan P2 DITANGANI · 3 keputusan pemilik (9 Ogos)
+### 🎯 SATU perkara sahaja menyekat F8 sekarang
+
+**Kredensial superadmin produksi.** Ia membuka 3 baris ⏸ **dan** nota E serentak. Bekalkan
+melalui `!` supaya nilainya tidak melalui saya:
+
+```
+! $env:E2E_PROD_SUPERADMIN_EMAIL="…"; $env:E2E_PROD_SUPERADMIN_PASSWORD="…"
+```
+
+kemudian wrapper: `pwsh -File scripts/audit/run-production-guidance-readonly.ps1 -TimeoutMinutes 120`.
+Runner sudah TERBUKTI: matriks tempatan **20/20** (396 halaman, 0 ralat console, kontrak 2/2).
+
+**Tindakan pemilik yang berbaki (kecil):** buka e-mel di alamat pemilik (dihantar 11 Ogos dari
+produksi) dan sahkan salam/penutup masih Bahasa Melayu.
+
+### ⚠️⚠️ SYARAT DEPLOY YANG MUDAH TERLEPAS
+
+Deploy berikutnya **WAJIB** `diwan:sync-help-index --delete`. F8 mengubah **katalog**
+(`catalog_version 2026.08.11.1`, akronim produk) **dan** kandungan indeks (`steps_text` kini
+merangkumi tajuk langkah). Tanpa `--delete`, dokumen indeks lama menyembunyikan kedua-dua
+pembaikan carian — ia akan kelihatan seperti tidak berlaku.
+
+### ✅ Keputusan pemilik yang SUDAH dijawab (11 Ogos) — jangan tanya semula
+
+| Keputusan | Jawapan | Dilaksanakan |
+|---|---|---|
+| `centerCovered` | **(a) bersara sebagai gate** | metrik jadi pemerhatian; pengganti "popover tidak mengaburkan sasarannya" kini **gate CI kohort tenant PENUH** (`guidance.spec.js`, 124 langkah @390×664, hijau 11.7 min) |
+| akronim `DDMS` | **(a) tambah ke keywords** | `DDMS`/`SPDM`/`Diwan` pada 4 guide (awam+tenant+platform); `catalog_version` → `2026.08.11.1` |
+| denominator | **172** | 229 kekal direkod sebagai baseline F0 |
+| e-mel staging-check | **kebenaran diberi** | dihantar dari produksi; 9/9 LULUS; kerangka BM disahkan SEBELUM hantar |
+| deploy sekarang? | **TIDAK** — deploy dengan F10 | produksi kekal `2325bec` |
+
+### 📌 Baki 3 ⚠️ — pendedahan jujur, bukan kerja tersekat
+
+1. **Pertindihan tepi 25–49%** — 26/124 langkah; saya **TIDAK** buktikan ia mengganggu pengguna.
+   Angka untuk memilih ambang lebih ketat ada dalam `bukti/plan-f8/mobile-kohort-f8.json`.
+2. **Nota E (CTA)** — bergantung DOM, mesti diukur pada tenant `smoke` PRODUKSI seperti audit
+   asal. Spec §9.1a sudah merakamnya → tertutup dalam larian kredensial itu.
+3. **E-mel kerangka** — dihantar; pengesahan mata pemilik ialah langkah terakhir.
+
+---
+
+## 🔑 PELAJARAN SESI 9–11 OGOS — baca sebelum menyentuh apa-apa
+
+### Kecacatan sebenar yang ditemui (semua dijaga oleh counterexample MERAH)
+
+| # | Kecacatan | Kesan jika tidak dijumpai |
+|---|---|---|
+| 1 | **Assertion ralat console MUSTAHIL dipenuhi** — probe silang-tenant menjana 404, ujian SAMA assert sifar ralat console | larian PRODUKSI gagal pada **kesemua 16** konteks role tenant |
+| 2 | **Gate carian hijau tanpa menguji apa-apa** — status dibaca sebelum Livewire menggantikannya; keputusan tersasar SATU pertanyaan | gate §9.1(2) hijau walaupun carian tidak pernah dijalankan |
+| 3 | **Gate e-mel tidak boleh membuktikan tujuannya** — `Mail::raw` = teks tanpa kerangka | pemilik membuka e-mel dan tiada apa untuk disahkan |
+| 4 | **Meili tergantung = halaman tersekat 24s** (diukur 24,232 ms → 2,085 ms) | halaman bantuan mati 24 saat, bukan sekadar cetek |
+| 5 | **J1 tajuk langkah tidak boleh dicari** (`pluck('instruction')` sahaja) | kerja F6 (258 placeholder → 0) tidak dapat ditemui |
+| 6 | **J2 fallback lebih cetek daripada Meili** | Meili mati → carian jadi cetek secara SENYAP |
+| 7 | **Had per-ujian tidak menyelamatkan worker terkunci** + wrapper `WaitForExit()` tanpa had | larian produksi menggantung selamanya, sifar bukti |
+| 8 | **Runner produksi tidak boleh berjalan** (`No tests found`) | gagal tepat pada saat kredensial dibekalkan |
+
+### Andaian SAYA yang gugur kepada ukuran — jangan ulang
+
+| Andaian | Realiti diukur |
+|---|---|
+| "MCP Chrome tidak boleh digunakan" | skrinsyot MATI, tetapi **baca DOM BERFUNGSI** — pengesahan produksi langsung memang boleh |
+| "gantung ialah `/bantuan`" | `/` juga tergantung pada larian lain; bukan URL |
+| "`/peti-masuk` rosak untuk admin_masjid" | 200 tiga-dari-tiga (~700 ms) apabila diprob bersendirian |
+| "tenant kosong puncanya" | tenant smoke KOSONG juga memberi 200 ×3 |
+| "matriks tidak akan siap pada mesin ini" | **siap 20/20** sebaik 3 punca sebenar ditangani |
+| "500 pada `/bantuan/imej` = pepijat produk" | kunci SQLite; `curl` 200, produksi 200 |
+| "37 mismatch lapisan C = drift akses" | artifak prob dalaman; HTTP sebenar 302 seperti dijangka |
+| "korpus fallback lebih luas = suite lambat" | 4 ms per carian; puncanya RAM 2.1 GB bebas |
+| "meluaskan korpus = pariti" | pariti perlu korpus SAMA **dan** ambang typo sama (`SPDM` mula memberi hasil) |
+
+### Kesilapan proses saya sendiri (direkod supaya tidak berulang)
+
+1. **`toContain()` Pest ialah VARIADIK** — hujah kedua ialah JARUM LAIN, bukan mesej. Dilanggar
+   **tiga kali** sesi ini. Guna `str_contains` + `toBeTrue($mesej)`.
+2. **Memadam direktori "sementara" yang mengandungi fail DIJEJAK** —
+   `storage/framework/testing/.gitignore` (`*` + `!.gitignore`) dipadam → PDF ujian tersapu ke
+   dalam commit. Semak `git ls-files <dir>` sebelum memadam.
+3. **Larian pengesahan separa ditulis ke atas artifak bukti LENGKAP** — laporan 20/20 diganti
+   dengan 2/20. Penjaga dipasang; guna `OUT_DIR=<scratch>` untuk larian separa.
+4. **Menyalurkan larian ujian melalui `tail`** — output ditahan, `EXIT` milik `tail`.
+5. **Dua suite bertindih** — notifikasi tamat larian pertama tiba SELEPAS saya melancarkan yang
+   kedua; keduanya berlanggar pada `storage/framework/testing`.
+6. **Mengisytiharkan kemustahilan sebelum menghabiskan diagnosis** — dikomit dua kali, salah.
+
+### Resipi persekitaran tempatan yang BERFUNGSI (e2e panjang)
+
+`artisan serve` **tidak** menghantar env ke proses anaknya, jadi cache jatuh ke SQLite dan
+menghasilkan 500 `database is locked` yang kelihatan seperti pepijat produk. Guna `php -S`
+LANGSUNG + proksi:
+
+```bash
+cd public && for P in 8111 8112 8113 8114; do
+  SESSION_DRIVER=file CACHE_STORE=file php -d max_execution_time=0 \
+    -S 127.0.0.1:$P ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php &
+done
+node "Audit Review Round Robin/bukti/plan-f8/skrip/pelayan-berbilang.mjs" 8096 8111 8112 8113 8114
+# OUT_DIR=<scratch> FIXTURE=<fixture.json> E2E_BASE_URL=http://127.0.0.1:8096 \
+#   bash "Audit Review Round Robin/bukti/plan-f8/skrip/jalan-konteks.sh" desktop:public …
+```
+
+Pertikaian SQLite: 8 permintaan selari **29,064 ms → 1,064 ms** dengan pemacu fail (27×).
+⚠️ Tugas latar jangka panjang **dibunuh dari luar** pada mesin ini — jalankan matriks dalam
+KETULAN (5 konteks per invokasi muat dalam had 10 minit).
+
+### 📄 Dokumen bukti F8 (11 fail, `Audit Review Round Robin/bukti/plan-f8/`)
+
+`LATIHAN-9.1-TEMPATAN.md` (matriks 20/20 + 3 punca sebenar) · `PENEMUAN-CARIAN.md` (4 penemuan;
+J1/J2 ditutup; pariti typo) · `PENEMUAN-CENTERCOVERED.md` (§3B visual, §3C kohort penuh) ·
+`PENEMUAN-DENOMINATOR.md` (58/1 diperiksa satu per satu) · `PENEMUAN-LAPISAN-C.md` (mengapa
+`null` BETUL) · `PENEMUAN-EMEL-KERANGKA.md` (gate tidak boleh buktikan tujuannya) ·
+`PENGESAHAN-LIVE-MCP.md` (sempadan MCP diukur) · `PENEMUAN-RUNNER-TIDAK-BOLEH-JALAN.md` ·
+`PENEMUAN-TENTUKURAN.md` · `RR-P1-CODEX.md` · `RR-P2-CODEX.md`
+📄 Helaian keputusan: `Audit Review Round Robin/KEPUTUSAN-PEMILIK-F8.md`
+
+---
+
+## 📌 SEBELUM INI — F8: 19/19 penemuan P2 DITANGANI (9 Ogos)
 
 **Produksi kekal `2325bec` (Deploy 14).** F8 TIDAK deploy. CI hijau pada `f6aed9c`.
 📄 **BACA DAHULU:** `Audit Review Round Robin/SUSULAN-PEMBAIKAN.md` §5C
