@@ -24,6 +24,8 @@ let automaticModalGuard = null;
 let autoMinimiseTimer = null;
 let autoMinimiseFrame = null;
 let tourTrigger = null;
+// Pemasa gelung pulang-fokus (F8): disimpan supaya ia boleh DIBATALKAN.
+let fokusPulangTimer = null;
 let rehighlightIndex = null;
 let highlightLossPoller = null;
 let highlightLossIndex = null;
@@ -318,17 +320,51 @@ function focusPopover() {
  * satu frame kerana launcher disembunyikan (`body.driver-active`) sehingga Driver.js
  * membuang kelas itu semasa memusnahkan diri.
  */
+const FOKUS_PULANG_HAD_MS = 2000;
+const FOKUS_PULANG_SELANG_MS = 50;
+
 function clearFocusManagement() {
     const trigger = tourTrigger;
     tourTrigger = null;
-    window.setTimeout(() => {
+
+    // 🔴 F8 (12 Ogos 2026) — satu percubaan buta pada 50 ms KEHILANGAN fokus selama-lamanya.
+    // Diukur dengan kawalan dua hala pada pelayar sebenar: semasa `body.driver-active` ada,
+    // `help.css:76` menjadikan launcher `visibility:hidden`, dan `focus()` pada elemen
+    // tersembunyi ialah **no-op SENYAP** (activeElement kekal `BODY`); sebaik kelas itu
+    // dibuang, `focus()` yang SAMA berjaya. Jadi apabila Driver.js lambat membuang kelasnya
+    // (mesin sibuk — CI gagal ~1 drp 3 di bawah beban), percubaan tunggal itu tidak berkesan,
+    // tiada percubaan kedua dijadualkan, dan pengguna papan kekunci ditinggalkan pada <body>.
+    //
+    // Ubatnya ialah corak yang sama seperti F2/F6-W1: berhenti meneka MASA, ukur HASIL.
+    // Kami tidak meramalkan kebolehfokusan (predikat itu sendiri boleh salah untuk elemen
+    // `position:fixed`) — kami memanggil `focus()` dan MEMERIKSA sama ada ia mendarat.
+    // Percubaan tertunggak daripada tour SEBELUMNYA dibatalkan. Kritikal kerana pembaikan ini
+    // melebarkan tetingkap daripada satu tembakan 50 ms kepada gelung 2 saat: tanpa pembatalan,
+    // gelung tour lama boleh merampas fokus ke launcher DI TENGAH tour baharu (fokus berada
+    // pada `body` seketika semasa tour bermula, jadi pengawal "pengguna sudah pindah" tidak
+    // menghalangnya). Tetingkap 50 ms yang lama menyembunyikan kelas pepijat ini; 2 saat tidak.
+    if (fokusPulangTimer !== null) window.clearTimeout(fokusPulangTimer);
+
+    const mula = Date.now();
+    const cuba = () => {
+        fokusPulangTimer = null;
         // Jangan rampas fokus jika pengguna sudah memindahkannya sendiri.
         if (document.activeElement && document.activeElement !== document.body) return;
+
         const destination = trigger instanceof HTMLElement && document.contains(trigger)
             ? trigger
             : document.querySelector(SELECTOR('help-launcher'));
-        if (destination instanceof HTMLElement) destination.focus({ preventScroll: true });
-    }, 50);
+
+        if (destination instanceof HTMLElement) {
+            destination.focus({ preventScroll: true });
+            if (document.activeElement === destination) return;
+        }
+
+        if (Date.now() - mula < FOKUS_PULANG_HAD_MS) {
+            fokusPulangTimer = window.setTimeout(cuba, FOKUS_PULANG_SELANG_MS);
+        }
+    };
+    fokusPulangTimer = window.setTimeout(cuba, FOKUS_PULANG_SELANG_MS);
 }
 
 /**
@@ -847,6 +883,13 @@ async function startGuide(runtime, guide, startIndex = 0, explicit = false) {
     // `document.body` juga HTMLElement — ia bermakna "tiada apa difokus" (cth deep-link
     // `?panduan=`), jadi ia BUKAN pencetus; sandaran launcher digunakan sebaliknya.
     const aktif = document.activeElement;
+    // Batalkan gelung pulang-fokus tour SEBELUMNYA: laluan ini tidak melalui
+    // `clearFocusManagement()`, jadi tanpa ini gelung lama boleh merampas fokus ke launcher
+    // di tengah tour BAHARU ini.
+    if (fokusPulangTimer !== null) {
+        window.clearTimeout(fokusPulangTimer);
+        fokusPulangTimer = null;
+    }
     tourTrigger = aktif instanceof HTMLElement && aktif !== document.body ? aktif : null;
     activeGuideId = guide.id;
     completed = false;

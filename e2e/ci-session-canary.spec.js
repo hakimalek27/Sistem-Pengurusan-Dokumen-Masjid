@@ -21,8 +21,26 @@ test('@session-canary sesi HTTP kekal selepas log masuk dan reload', async ({ pa
         .catch(() => { throw new Error(`Canary (1) gagal: tidak sampai /app/mam selepas log masuk. ${diagnose}`); });
 
     // (2) Respons akhir bukan borang log masuk — penanda panel berautentikasi hadir.
-    await expect(page.locator('[data-help-target="help-launcher"]'), `Canary (2): penanda panel tiada. ${diagnose}`)
+    //
+    // 🔴 F8 (12 Ogos 2026) — penanda ini dahulu ialah `help-launcher` KELIHATAN, dan itu
+    // memerahkan canary sedangkan sesi SIHAT: `help.css:76` menetapkan
+    // `body.driver-active .diwan-help-launcher-button { visibility: hidden }`, dan pengguna
+    // demo pada DB yang baru di-seed TIADA `GuidanceProgress`, jadi tour auto-mula.
+    // Diukur pada pelayar sebenar (kemajuan dikosongkan dahulu):
+    //     0 ms  driverActive=false  launcher=kelihatan
+    //   300 ms  driverActive=false  launcher=kelihatan
+    //   700 ms  driverActive=TRUE   launcher=TERSEMBUNYI   ← dan tour tidak tamat sendiri
+    // Jadi ia perlumbaan tulen: menang pada mesin pantas, kalah di bawah beban (diukur:
+    // 1 gagal drp 6 dengan beban CPU buatan — sepadan dgn kadar CI).
+    //
+    // Ubatnya BUKAN melonggarkan canary: kami mengassert penanda yang DIUKUR kekal kelihatan
+    // semasa tour aktif (`.fi-user-menu` — dirender hanya untuk pengguna berautentikasi),
+    // DAN menuntut launcher itu WUJUD (susun atur panel dirender) tanpa bergantung pada
+    // keterlihatannya. Canary kekal menguji perkara yang sama: sesi HTTP bertahan.
+    await expect(page.locator('.fi-user-menu'), `Canary (2): penanda panel berautentikasi tiada. ${diagnose}`)
         .toBeVisible();
+    await expect(page.locator('[data-help-target="help-launcher"]'), `Canary (2): susun atur panel tidak dirender. ${diagnose}`)
+        .toHaveCount(1);
     await expect(page.locator('input[id="form.login"]'), `Canary (2): borang log masuk masih kelihatan. ${diagnose}`)
         .toHaveCount(0);
 
@@ -31,8 +49,10 @@ test('@session-canary sesi HTTP kekal selepas log masuk dan reload', async ({ pa
     await page.reload();
     expect(page.url().replace(/\/$/, ''), `Canary (3): reload melontar keluar dari panel. ${diagnose}`)
         .toContain('/app/mam');
-    await expect(page.locator('[data-help-target="help-launcher"]'), `Canary (3): penanda panel hilang selepas reload. ${diagnose}`)
+    await expect(page.locator('.fi-user-menu'), `Canary (3): penanda panel hilang selepas reload. ${diagnose}`)
         .toBeVisible();
+    await expect(page.locator('[data-help-target="help-launcher"]'), `Canary (3): susun atur panel hilang selepas reload. ${diagnose}`)
+        .toHaveCount(1);
 
     // (4) Permintaan BAHARU ke route panel kedua — masih berautentikasi, tiada redirect login.
     const second = await page.goto('/app/mam/peti-masuk');

@@ -794,6 +794,56 @@ test('F2d fokus: fokus awal masuk popover, kekal dalam kitaran vendor, pulang se
     await context.close();
 });
 
+/**
+ * 🔴 F8 (12 Ogos 2026) — penjaga DETERMINISTIK untuk kecacatan yang memerahkan CI ~1 drp 3
+ * di bawah beban, dan yang ujian "F2d fokus" di atas hanya menangkap secara kebetulan.
+ *
+ * Mekanisme, diukur dengan kawalan dua hala pada pelayar sebenar:
+ *   `help.css:76` → `body.driver-active .diwan-help-launcher-button { visibility: hidden }`
+ *   `focus()` semasa kelas ADA    → activeElement kekal **BODY** (no-op SENYAP)
+ *   `focus()` selepas kelas TIADA → activeElement = **help-launcher**
+ * Versi lama `clearFocusManagement()` mencuba SEKALI pada 50 ms. Jika Driver.js belum
+ * membuang kelasnya menjelang saat itu, fokus hilang SELAMANYA — tiada percubaan kedua.
+ *
+ * Ujian ini tidak menunggu perlumbaan menembak: ia MEMAKSA keadaan lambat itu dengan
+ * mengekalkan `body.driver-active` selepas ESC, kemudian menuntut fokus tetap pulang.
+ * Terhadap kod lama ia MERAH setiap kali; terhadap kod baharu ia HIJAU setiap kali.
+ */
+test('F2d fokus: teardown LAMBAT tidak boleh menghilangkan fokus (penjaga deterministik)', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
+    await disableAutomaticGuides(context);
+    const page = await context.newPage();
+    await loginTenant(page, tenantRoles[0]);
+    await page.goto(`/app/${tenantSlug}?panduan=tenant.dashboard&langkah=0`);
+    await expect(page.locator('.driver-popover')).toBeVisible();
+
+    // Kekalkan `body.driver-active` selama 400 ms SELEPAS Driver.js membuangnya — mensimulasi
+    // mesin sibuk. 400 ms dipilih kerana ia jauh melepasi percubaan tunggal 50 ms yang lama.
+    await page.evaluate(() => {
+        const body = document.body;
+        const pemerhati = new MutationObserver(() => {
+            if (!body.classList.contains('driver-active')) {
+                body.classList.add('driver-active');
+                pemerhati.disconnect();
+                window.setTimeout(() => body.classList.remove('driver-active'), 400);
+            }
+        });
+        pemerhati.observe(body, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.driver-popover')).toBeHidden();
+
+    // Kawalan anti-vakum: keadaan lambat itu mesti BENAR-BENAR berlaku, jika tidak ujian ini
+    // lulus tanpa menguji apa-apa.
+    expect(await page.evaluate(() => document.body.classList.contains('driver-active')),
+        'simulasi teardown lambat tidak berlaku — penjaga ini tidak menguji apa-apa').toBe(true);
+
+    await expect.poll(() => page.evaluate(() => document.activeElement?.getAttribute?.('data-help-target')
+        ?? document.activeElement?.tagName), { timeout: 10_000 }).toBe('help-launcher');
+    await context.close();
+});
+
 test('F2c mobile: popover auto-minimize bila bertindih modal, tour kekal aktif', async ({ browser, baseURL }) => {
     const context = await browser.newContext({ baseURL, viewport: { width: 390, height: 664 } });
     await disableAutomaticGuides(context);
