@@ -281,11 +281,17 @@ async function captureClassificationWizard(page, role) {
         });
     };
 
-    const next = () => dialog.getByRole('button', { name: 'Seterus', exact: true });
+    // F9 (12 Ogos 2026) — DAHULU `name: 'Seterus'`. F3 membetulkan terjemahan wizard Filament
+    // kepada `Seterusnya` (`lang/vendor/filament-schemas/ms/components.php`), jadi padanan
+    // `exact` lama tidak lagi memadan APA-APA dan `next().click()` akan tamat masa: penjana
+    // manual itu sendiri rosak, bukan sekadar kapsyennya basi.
+    // `exact: true` dikekalkan dengan sengaja — corak regex `/^Seterusnya$/` DIUKUR memberi
+    // count=0 pada butang Blade (whitespace tidak dinormalisasi untuk regex), pelajaran F6-W1.
+    const next = () => dialog.getByRole('button', { name: 'Seterusnya', exact: true });
 
     await captureStep(1, 'semak-sumber', 'Semak dokumen dan sumber', [
         'Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.',
-        'Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.',
+        'Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.',
     ]);
     await next().click();
     await dialog.locator('form.fi-active').getByText('Butiran Rekod', { exact: true }).waitFor({ state: 'visible', timeout: 10_000 });
@@ -506,7 +512,7 @@ async function captureRole(browser, role) {
         ['/app/mam/persediaan', 'Mula Persediaan Berpandu', 'persediaan-modal.png', 'Persediaan berpandu'],
         ['/app/mam/ahli-peranan', 'Jemput Ahli', 'ahli-jemput.png', 'Jemput ahli'],
         ['/app/mam/pelupusan', 'Sedia Senarai Semakan', 'pelupusan-sedia.png', 'Sedia senarai pelupusan'],
-        ['/app/mam/tetapan-masjid', 'Edit Tetapan', 'tetapan-edit.png', 'Edit tetapan masjid'],
+        ['/app/mam/tetapan-masjid', 'Sunting Tetapan', 'tetapan-edit.png', 'Sunting tetapan masjid'],
         ['/app/mam/penggunaan', 'Tambah Storan', 'storan-tambah.png', 'Permohonan storan tambahan'],
         ['/app/mam/peti-masuk', '+ Muat Naik Dokumen', 'inbox-muat-naik.png', 'Muat naik dokumen'],
         ['/app/mam/profil', 'Tetapan Notifikasi', 'profil-notifikasi.png', 'Tetapan notifikasi'],

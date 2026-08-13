@@ -8,7 +8,27 @@ const permissionSummary = helpCatalog.permission_summaries;
 const pageGuides = helpCatalog.page_guides;
 const taskBlueprints = helpCatalog.task_blueprints;
 const extraGuides = helpCatalog.screen_guides;
-const generatedDate = '22 Julai 2026';
+/**
+ * F9 (12 Ogos 2026) — tarikh ini DAHULU dikodkan tegar sebagai '22 Julai 2026', dan itulah
+ * puncanya manual boleh mendakwa "Versi UI disahkan" sedangkan F3/F5/F6/F7 sudah mengubah UI
+ * di bawahnya: tiada apa dalam sistem yang memaksa tarikh itu bergerak apabila tangkapan
+ * dijana semula. Kini ia DITERBITKAN daripada `manifest-tangkapan.json` (`generatedAt`),
+ * iaitu masa tangkapan SEBENAR — bukan masa penjanaan markdown, dan bukan tarikh yang ditaip.
+ * Manual tidak lagi boleh mengisytiharkan tarikh yang lebih baharu daripada skrinsyotnya.
+ */
+const BULAN_MS = ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
+    'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'];
+
+function tarikhMelayu(iso) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) {
+        throw new Error(`manifest-tangkapan.json: generatedAt tidak sah (${iso}) — tarikh manual mesti daripada tangkapan sebenar.`);
+    }
+
+    return `${d.getDate()} ${BULAN_MS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+const generatedDate = tarikhMelayu(manifest.generatedAt);
 
 
 
