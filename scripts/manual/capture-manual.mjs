@@ -147,6 +147,28 @@ async function shot(page, target, title, callouts = [], fullPage = false) {
     return notes;
 }
 
+/**
+ * F9 (12 Ogos 2026) — `net::ERR_ABORTED` ialah guguran PENGANGKUTAN pada mesin ini, bukan
+ * halaman rosak: DIUKUR dalam matriks produksi §9.1a sebagai 14 daripada 396 navigasi, dan
+ * setiap laluan yang terlibat memberi 200 apabila diprob bersendirian. Penjana manual tidak
+ * mempunyai pemulihan, jadi satu guguran MEMBUNUH seluruh larian 9-persona pada halaman ke-20
+ * (diperhatikan: `/app/mam/tetapan-masjid`).
+ *
+ * Percubaan semula DIREKOD dalam manifest, tidak ditelan — harness yang mencuba semula secara
+ * senyap akan menyembunyikan kemerosotan sebenar jika ia berlaku.
+ */
+async function gotoTahan(page, url, konteks = 'tidak dinyatakan') {
+    try {
+        return await page.goto(url);
+    } catch (error) {
+        if (!String(error.message).includes('net::ERR_ABORTED')) throw error;
+        manifest.retries = manifest.retries ?? [];
+        manifest.retries.push({ url, konteks, sebab: 'net::ERR_ABORTED' });
+
+        return await page.goto(url);
+    }
+}
+
 function commonPageCallouts(label) {
     return [
         { locator: (page) => page.locator('h1'), note: `Tajuk halaman ${label}.` },
@@ -157,7 +179,7 @@ function commonPageCallouts(label) {
 }
 
 async function login(page, role) {
-    await page.goto('/app/login');
+    await gotoTahan(page, '/app/login');
     const image = path.join(outputRoot, role.folder, 'imej', '00-log-masuk.png');
     const notes = await shot(page, image, `Log masuk ${role.label}`, [
         { locator: (p) => p.locator('input[id="form.login"]'), note: 'Masukkan e-mel atau nombor telefon yang didaftarkan.' },
@@ -199,7 +221,7 @@ async function captureModal(page, role, imageName, buttonName, title, calloutNot
     const target = path.join(outputRoot, role.folder, 'imej', imageName);
     await expandDialogForCapture(dialog);
     const notes = await shot(page, target, title, callouts, true);
-    await page.goto(page.url().split('?')[0]);
+    await gotoTahan(page, page.url().split('?')[0]);
     return { image: `imej/${imageName}`, title, labels: labels.map((v) => v.replace(/\s+/g, ' ').trim()).filter(Boolean), notes };
 }
 
@@ -244,7 +266,7 @@ async function expandDialogForCapture(dialog) {
 async function captureModalAtUrl(page, url, role, imageName, buttonName, title, calloutNotes = []) {
     const freshPage = await page.context().newPage();
     try {
-        await freshPage.goto(url);
+        await gotoTahan(freshPage, url);
         return await captureModal(freshPage, role, imageName, buttonName, title, calloutNotes);
     } finally {
         await freshPage.close();
@@ -252,7 +274,7 @@ async function captureModalAtUrl(page, url, role, imageName, buttonName, title, 
 }
 
 async function captureClassificationWizard(page, role) {
-    await page.goto('/app/mam/peti-masuk');
+    await gotoTahan(page, '/app/mam/peti-masuk');
     const button = page.getByRole('button', { name: 'Klasifikasikan', exact: true }).filter({ visible: true }).first();
     if (await button.count() === 0) return [];
 
@@ -330,13 +352,13 @@ async function captureClassificationWizard(page, role) {
         'Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.',
     ]);
 
-    await page.goto('/app/mam/peti-masuk');
+    await gotoTahan(page, '/app/mam/peti-masuk');
 
     return captures;
 }
 
 async function captureRecordDetails(page, role, extras) {
-    await page.goto('/app/mam/records');
+    await gotoTahan(page, '/app/mam/records');
     const preferredLink = page.locator('tr').filter({ hasText: 'Surat jemputan Mesyuarat AJK' })
         .locator('a[href*="/app/mam/records/"]').filter({ visible: true }).first();
     const link = (await preferredLink.count())
@@ -381,7 +403,7 @@ async function captureRecordDetails(page, role, extras) {
         const viewerLink = page.getByRole('link', { name: 'Buka Viewer' }).first();
         if (await viewerLink.count()) {
             const viewer = await page.context().newPage();
-            await viewer.goto(await viewerLink.getAttribute('href'));
+            await gotoTahan(viewer, await viewerLink.getAttribute('href'));
             const viewerState = await viewer.waitForFunction(() => {
                 const status = document.querySelector('[data-status]');
                 const canvas = document.querySelector('canvas');
@@ -407,16 +429,24 @@ async function captureRecordDetails(page, role, extras) {
                 ]),
             });
             await viewer.close();
+        } else {
+            // F9 (Sept 2026) — dahulu cabang ini DIAM. Regenerasi F9 pertama melangkau tangkapan
+            // penonton pada KESEMUA 8 peranan dengan 0 ralat: fixture tidak melampirkan PDF
+            // (`MANUAL_SAMPLE_PDF` tidak diset → `media: 0`), jadi tiada pautan "Buka Viewer".
+            // Manual kemudian merujuk imej Julai yang basi tanpa sesiapa diberitahu.
+            manifest.errors.push(`${role.label}: pautan "Buka Viewer" tiada — rekod latihan tiada lampiran (set MANUAL_SAMPLE_PDF sebelum prepare-manual.php).`);
         }
+    } else {
+        manifest.errors.push(`${role.label}: tab "Lampiran & Versi" tiada pada rekod latihan — tangkapan penonton dilangkau.`);
     }
 }
 
 async function captureFileDetails(page, role, extras) {
-    await page.goto('/app/mam/registry-files');
+    await gotoTahan(page, '/app/mam/registry-files');
     const hrefs = await page.locator('a[href*="/app/mam/registry-files/"]').filter({ visible: true }).evaluateAll((nodes) => nodes.map((node) => node.href));
     const href = hrefs.find((value) => /\/registry-files\/\d+$/.test(value));
     if (!href) return;
-    await page.goto(href);
+    await gotoTahan(page, href);
     await page.waitForURL(/\/registry-files\/\d+/);
     const fileUrl = page.url().split('?')[0];
     const target = path.join(outputRoot, role.folder, 'imej', 'fail-butiran.png');
@@ -461,7 +491,7 @@ async function captureRole(browser, role) {
             throw new Error('MANUAL_ONLY_CLASSIFICATION requires an existing Admin/Kerani or Setiausaha manifest entry.');
         }
         const classification = await captureClassificationWizard(page, role);
-        const crossTenant = await page.goto('/app/man/records');
+        const crossTenant = await gotoTahan(page, '/app/man/records');
         const errors = [...new Set(browserErrors)].filter((message) => !message.includes('Failed to load resource: the server responded with a status of 404'));
         manifest.roles[role.key] = {
             ...previous,
@@ -493,7 +523,7 @@ async function captureRole(browser, role) {
     const pages = [];
     let index = 1;
     for (const item of navigation) {
-        const response = await page.goto(item.href);
+        const response = await gotoTahan(page, item.href, `${role.label} halaman ${index}`);
         const status = response?.status() ?? null;
         const slug = fileSlug(item.href);
         const name = `${String(index).padStart(2, '0')}-${slug}.png`;
@@ -521,7 +551,7 @@ async function captureRole(browser, role) {
     ];
     for (const [url, button, imageName, title] of extraModals) {
         if (!visiblePaths.has(url)) continue;
-        await page.goto(url);
+        await gotoTahan(page, url);
         if (page.url().includes('/login') || (await page.locator('main').count()) === 0) continue;
         const captured = await captureModal(page, role, imageName, button, title);
         if (captured) extras.push(captured);
@@ -538,7 +568,7 @@ async function captureRole(browser, role) {
             ['/app/mam/retensi-peraturan/create', 'retensi-peraturan-cipta.png', 'Cipta peraturan retensi'],
             ['/app/mam/delegasi/create', 'delegasi-cipta.png', 'Cipta delegasi'],
         ]) {
-            const response = await page.goto(url);
+            const response = await gotoTahan(page, url);
             if (response?.status() !== 200) continue;
             const target = path.join(outputRoot, role.folder, 'imej', name);
             extras.push({ image: `imej/${name}`, title, notes: await shot(page, target, title, [
@@ -551,7 +581,7 @@ async function captureRole(browser, role) {
     await captureRecordDetails(page, role, extras);
     await captureFileDetails(page, role, extras);
 
-    await page.goto('/app/mam/minit-saya');
+    await gotoTahan(page, '/app/mam/minit-saya');
     for (const [name, imageName, title] of [
         ['Balas & Edarkan', 'minit-balas.png', 'Balas dan edarkan minit'],
         ['Tanda Selesai', 'minit-selesai.png', 'Tanda tindakan minit selesai'],
@@ -561,7 +591,7 @@ async function captureRole(browser, role) {
     }
 
     if (['pengerusi', 'nazir'].includes(role.key)) {
-        await page.goto('/app/mam/kelulusan');
+        await gotoTahan(page, '/app/mam/kelulusan');
         const captured = await captureModalAtUrl(page, '/app/mam/kelulusan', role, 'kelulusan-lulus.png', 'Lulus', 'Buat keputusan kelulusan', [
             'Sahkan kata laluan dan masukkan nota keputusan jika perlu.',
             'Lulus hanya selepas dokumen serta metadata disemak.',
@@ -569,7 +599,7 @@ async function captureRole(browser, role) {
         if (captured) extras.push(captured);
     }
 
-    await page.goto('/app/mam/carian');
+    await gotoTahan(page, '/app/mam/carian');
     const query = page.locator('input[wire\\:model="query"]');
     if (await query.count()) {
         await query.fill('surat');
@@ -582,7 +612,7 @@ async function captureRole(browser, role) {
         ], true) });
     }
 
-    const crossTenant = await page.goto('/app/man/records');
+    const crossTenant = await gotoTahan(page, '/app/man/records');
     const crossTenantStatus = crossTenant?.status() ?? null;
     if (crossTenantStatus !== 404) manifest.errors.push(`${role.label}: cross-tenant route returned ${crossTenantStatus}`);
 
@@ -610,13 +640,13 @@ async function capturePublic(browser) {
     const page = await context.newPage();
     const captures = [];
 
-    await page.goto('/');
+    await gotoTahan(page, '/');
     captures.push({ image: 'imej/01-laman-utama.png', title: 'Laman utama', notes: await shot(page, path.join(folder, '01-laman-utama.png'), 'Laman utama Diwan', [
         { locator: (p) => p.getByRole('link', { name: /Daftar/i }).first(), note: 'Pilih Daftar untuk permohonan masjid baharu.' },
         { locator: (p) => p.getByRole('link', { name: /Log Masuk/i }).first(), note: 'Pengguna sedia ada memilih Log Masuk.' },
     ]) });
 
-    await page.goto('/daftar');
+    await gotoTahan(page, '/daftar');
     captures.push({ image: 'imej/02-borang-daftar.png', title: 'Pendaftaran langkah 1 - Masjid', notes: await shot(page, path.join(folder, '02-borang-daftar.png'), 'Daftar masjid - langkah 1', [
         { locator: (p) => p.locator('input[wire\\:model\\.blur="name"]'), note: 'Nama rasmi masjid.' },
         { locator: (p) => p.locator('select[wire\\:model="state"]'), note: 'Negeri dan daerah masjid.' },
@@ -668,12 +698,12 @@ async function capturePublic(browser) {
     const adminContext = await browser.newContext({ baseURL, viewport: { width: 1440, height: 1000 } });
     await disableAutomaticGuides(adminContext);
     const admin = await adminContext.newPage();
-    await admin.goto('/admin/login');
+    await gotoTahan(admin, '/admin/login');
     await admin.locator('input[id="form.login"]').fill('superadmin@diwan.test');
     await admin.locator('input[type="password"]').fill(password);
     await admin.getByRole('button', { name: /Log masuk/i }).click();
     await admin.waitForURL(/\/admin\/?$/);
-    await admin.goto('/admin/mosques');
+    await gotoTahan(admin, '/admin/mosques');
     const row = admin.locator('tr').filter({ hasText: mosqueName });
     await row.getByRole('button', { name: 'Lulus' }).click();
     await admin.getByRole('dialog').getByRole('button', { name: 'Sahkan' }).click();
@@ -685,7 +715,7 @@ async function capturePublic(browser) {
     const token = newLog.match(/\/masuk\/([A-Za-z0-9]{64})/)?.[1];
     if (!token) throw new Error('Magic-link token not found in local mail log.');
 
-    await page.goto(`/masuk/${token}`);
+    await gotoTahan(page, `/masuk/${token}`);
     await page.waitForURL(/tetapkan-kata-laluan/, { timeout: 60_000 });
     captures.push({ image: 'imej/04-tetapkan-kata-laluan.png', title: 'Tetapkan kata laluan kali pertama', notes: await shot(page, path.join(folder, '04-tetapkan-kata-laluan.png'), 'Kata laluan kali pertama', [
         { locator: (p) => p.locator('input[wire\\:model="password"]'), note: 'Cipta kata laluan panjang dan unik.' },
@@ -702,14 +732,14 @@ async function capturePublic(browser) {
         { locator: (p) => p.getByRole('button', { name: 'Langkau Buat Sementara' }), note: 'Langkau hanya jika maklumat belum tersedia; lengkapkan kemudian.' },
     ], true) });
 
-    await page.goto('/log-masuk');
+    await gotoTahan(page, '/log-masuk');
     captures.push({ image: 'imej/06-log-masuk-pautan.png', title: 'Log masuk tanpa kata laluan', notes: await shot(page, path.join(folder, '06-log-masuk-pautan.png'), 'Pautan log masuk selamat', [
         { locator: (p) => p.locator('input[wire\\:model="login"]'), note: 'Masukkan e-mel atau nombor telefon yang berdaftar.' },
         { locator: (p) => p.getByRole('button', { name: 'Hantar Pautan Log Masuk' }), note: 'Pautan sah 15 minit dan hanya sekali guna.' },
         { locator: (p) => p.getByRole('link', { name: /kata laluan/i }), note: 'Gunakan log masuk kata laluan jika sudah ditetapkan.' },
     ]) });
 
-    await page.goto('/bantuan');
+    await gotoTahan(page, '/bantuan');
     captures.push({ image: 'imej/07-pusat-bantuan.png', title: 'Pusat bantuan orang awam', notes: await shot(page, path.join(folder, '07-pusat-bantuan.png'), 'Pusat bantuan orang awam', [
         { locator: (p) => p.locator('#help-query'), note: 'Cari panduan dengan ayat biasa atau istilah yang hampir sama.' },
         { locator: (p) => p.locator('[data-help-target="help-diagnosis"]'), note: 'Jalankan diagnosis baca sahaja bagi masalah pendaftaran atau log masuk.' },

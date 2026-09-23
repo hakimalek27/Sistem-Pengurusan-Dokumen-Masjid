@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "catalog_version": "2026.08.11.1",
+  "catalog_version": "2026.09.23.1",
   "generated_at": "2026-07-22T01:32:46.288Z",
   "permission_summaries": {
     "admin_masjid": {
@@ -5418,8 +5418,8 @@
       "id": "screen.edit-tetapan-masjid",
       "version": 2,
       "panel": "app",
-      "title": "Edit tetapan masjid",
-      "summary": "Panduan skrin dan tindakan: Edit tetapan masjid.",
+      "title": "Sunting tetapan masjid",
+      "summary": "Panduan skrin dan tindakan: Sunting tetapan masjid.",
       "route": "/app/{tenant}/tetapan-masjid",
       "roles": [
         "admin_masjid"
@@ -5429,8 +5429,9 @@
         "Buka halaman berkaitan dalam tenant yang betul.",
         "Pastikan rekod atau fail yang dipilih berada dalam skop akses anda."
       ],
-      "outcome": "Edit tetapan masjid selesai dan status kejayaan dapat disahkan.",
+      "outcome": "Sunting tetapan masjid selesai dan status kejayaan dapat disahkan.",
       "keywords": [
+        "Sunting tetapan masjid",
         "Edit tetapan masjid",
         "Semak telefon dan wakil perlindungan data.",
         "Tetapkan kata kunci intake.",

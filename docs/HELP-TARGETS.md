@@ -125,10 +125,10 @@
 | `page-actions` | screen | `/app/{tenant}/records` | `resources/js/help.js:decorateTargets` | both | detail:records | - |
 | `platform-announcements` | admin | `/admin/help-announcements` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
 | `platform-channels` | admin | `/admin/status-sambungan` | `resources/views/filament/admin/pages/status-sambungan.blade.php:4` | both | - | - |
-| `platform-mosques-actions` | admin | `/admin/mosques` | `resources/js/help/page-target-plan.js (sel tindakan baris pertama)` | both | perlu sekurang-kurangnya satu baris tenant | superadmin |
+| `platform-mosques-actions` | admin | `/admin/mosques` | `js:decorateTargets (page-target-plan.js → tbody tr:first-child td:last-child)` | both | perlu sekurang-kurangnya satu baris tenant | superadmin |
 | `platform-settings` | admin | `/admin/tetapan-platform` | `resources/views/filament/admin/pages/tetapan-platform.blade.php:4` | both | - | - |
 | `platform-storage-orders` | admin | `/admin/storage-orders` | `js:decorateTargets (page-target-plan.js → .fi-ta-search-field)` | desktop | - | - |
-| `platform-users-actions` | admin | `/admin/users` | `resources/js/help/page-target-plan.js (sel tindakan baris pertama)` | both | perlu sekurang-kurangnya satu baris pengguna | superadmin |
+| `platform-users-actions` | admin | `/admin/users` | `js:decorateTargets (page-target-plan.js → tbody tr:first-child td:last-child)` | both | perlu sekurang-kurangnya satu baris pengguna | superadmin |
 | `platform-whatsapp` | admin | `/admin/whatsapp-platform` | `resources/views/filament/admin/pages/whatsapp-platform.blade.php:4` | both | - | - |
 | `profil-akaun` | screen|admin | `/app/{tenant}/profil|/admin/profil-saya` | `resources/views/filament/app/pages/profil.blade.php:4` | both | - | - |
 | `profil-kata-laluan` | screen | `/app/{tenant}/profil` | `app/Filament/Concerns/ProfileActions.php:95` | both | - | - |
