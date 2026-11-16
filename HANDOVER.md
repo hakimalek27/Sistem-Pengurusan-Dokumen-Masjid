@@ -1,6 +1,70 @@
 # HANDOVER — Diwan (SPDM) Produksi bakwim.my
 
-## ▶️ SAMBUNG DI SINI — F8 PENGUKURAN SELESAI · matriks produksi 20/20 (12 Ogos 2026)
+## ▶️ SAMBUNG DI SINI — F9 output DIKOMIT · tunggu CI `398d973` · baki: isu lencana + F10 (16 Nov 2026)
+
+```
+local = origin = 398d973        CI untuk 398d973: BELUM disahkan (dipush 16 Nov, had 5j 94%)
+Produksi              2325bec   (Deploy 14) — F8 + F9 BELUM deploy
+F8  ✅ pengukuran selesai (jadual §9 = 37 ✅ · 0 🔴 · 2 ⚠️ · 0 ⏸)
+F9  ✅ output dijana + gate §9A.3 lulus   ⏳ CI hijau belum disahkan
+F10 ⬜ belum mula
+```
+
+**Langkah pertama sesi seterusnya:** `gh run list --limit 3` → sahkan CI `398d973` HIJAU
+(7/7). Ia gagal berselang-seli dahulu; pembaikan `a56fe24` hijau 2/2 larian. Jika merah,
+baca SEBAB setiap kegagalan sebelum menyalahkan F9 (lihat memori `spdm-ukuran-menipu`).
+
+### ✅ Apa yang F9 buat (3 commit: `d8ae496` · `5ba8b39` · `398d973`)
+
+| | Kecacatan penjana manual | Bukti |
+|---|---|---|
+| 1 | locator `name:'Seterus', exact:true` tidak lagi memadan (F3 → `Seterusnya`) | 5 imej klasifikasi kini ditangkap |
+| 2 | modal `'Edit Tetapan'` — **0 rujukan** dlm `app/`; sebenar `'Sunting Tetapan'` | `tetapan-edit.png` ditangkap |
+| 3 | tarikh `'22 Julai 2026'` dikodkan tegar → kini drp `manifest.generatedAt` | 9 manual = "23 September 2026" |
+| 4 | `net::ERR_ABORTED` membunuh larian 9-persona → 23 tapak melalui `gotoTahan()` | 9 percubaan semula DIREKOD |
+| 5 | **penonton dokumen DILANGKAU SENYAP pada 8/8 peranan** (fixture tiada PDF) | kini ralat KUAT + `MANUAL_SAMPLE_PDF` |
+| 6 | ringkasan `media: 0` palsu (`getMedia` dimuat sebelum `addMedia`) → `fresh()` | ringkasan kini `media: 1` |
+| 7 | katalog `screen.edit-tetapan-masjid` masih "Edit" → "Sunting"; `catalog_version 2026.09.23.1` | manifest baseline: diff 1 baris |
+
+**Gate §9A.3 (diukur):** 9/9 persona · 257 imej, 0 mati, **0 lebih lama drp larian** (mtime,
+bukan kewujudan) · 88/88 gambar berurutan + arahan · halaman 25/17/15/15/13/13/13/14 · awam
+9/9 bernota · 404 ×8 · label lama 0 (asas 9) · PDPA 0 e-mel / 0 IC.
+
+### ⚠️ Isu diketahui — unit SETERUSNYA (bukan item gate, sedia ada sejak Julai)
+
+**13 tajuk membawa nombor lencana sidebar** (`### 7. Minit Saya 3`, `Kelulusan 2`).
+Punca: `capture-manual.mjs` mengambil `textContent` anchor `.fi-sidebar a[href]` penuh,
+termasuk `.fi-sidebar-item-badge-ctn`. Label HANYA untuk paparan (tiada padanan imej
+bergantung padanya — disahkan).
+- Ubat: ambil `.fi-sidebar-item-label` (vendor `sidebar/item.blade.php`), sandaran `textContent`.
+- ⛔ **WAJIB tangkapan PENUH dari keadaan segar** — `migrate:fresh --seed` DB latihan →
+  `MANUAL_SAMPLE_PDF=…tiga-halaman.pdf php scripts/manual/prepare-manual.php` → awam + 8 peranan.
+  **JANGAN** `MANUAL_RESUME=1 MANUAL_SKIP_PUBLIC=1`: `generatedAt` akan melompat ke tarikh
+  baharu sementara imej awam kekal lama — tepat kecacatan yang `d8ae496` baiki.
+- Lulus jika: `tajukLencana` 0 · kiraan halaman identik · set tajuk `extras` identik dgn
+  manifest DIKOMIT (`git show HEAD:…`) · `errors` 0 · diff `.md` hanya buang akhiran nombor.
+- Skrip semakan gate (scratchpad sesi 16 Nov — **tidak kekal**, tulis semula jika perlu):
+  imej dirujuk wujud + mtime ≥ mula larian · `#### Gambar N` berurutan + `**Apa perlu dibuat pada
+  Gambar N**` diikuti `1. ` · tajuk `### N. … <nombor>`. Elak regex dalam heredoc — shell ini
+  MENELAN backslash; tulis skrip dengan alat Write.
+
+**Resipi persekitaran F9 (terbukti):** DB `database/manual-latihan-20260812.sqlite` (gitignore) ·
+pelayan `cd public && DB_CONNECTION=sqlite DB_DATABASE=<abs> DIWAN_STORAGE_DISK=manual
+SESSION_DRIVER=file CACHE_STORE=file APP_URL=http://127.0.0.1:8094 php -d max_execution_time=0
+-S 127.0.0.1:8094 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php` ·
+tangkap `MANUAL_BASE_URL=http://127.0.0.1:8094 MANUAL_DEMO_PASSWORD=password MANUAL_ROLE=<r>`
+(berketul, panggilan HADAPAN; ~4 min admin, ~1.5 min yang lain).
+
+### ⚠️⚠️ SYARAT DEPLOY (F10) — terkumpul
+
+- `diwan:sync-help-index --delete` **WAJIB** (katalog berubah F8 + F9: `catalog_version 2026.09.23.1`).
+- `help.js` berubah (`a56fe24`, fokus ESC) → rebuild `app`+`nginx`; aset baharu `help-Dwt3fIBQ.js`
+  (produksi kini `help-Ckg4e8Xm.js` — kecacatan fokus A **masih hidup** di bakwim.my).
+- ⛔ Pengesahan e-mel BM oleh pemilik masih tertunggak (dihantar 11 Ogos).
+
+---
+
+## ▶️ SEBELUM INI — F8 PENGUKURAN SELESAI · matriks produksi 20/20 (12 Ogos 2026)
 
 ```
 local = origin = 4a99151+       CI: perlu larian baharu untuk commit ini
