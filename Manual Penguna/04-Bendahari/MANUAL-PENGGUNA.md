@@ -1,6 +1,6 @@
 # Manual Pengguna Diwan - Bendahari
 
-**Versi UI disahkan:** 22 Julai 2026
+**Versi UI disahkan:** 23 September 2026
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
@@ -242,7 +242,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 2. Semak data dan gunakan hanya tindakan yang dipaparkan.
 3. Pastikan hasil kekal dalam tenant semasa.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Klasifikasi surat`, `Minit untuk tindakan`, `Butang tidak kelihatan`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`, `×`, `Kembali`.
 
 **Hasil dijangka:** Halaman berfungsi tanpa ralat.
 
@@ -291,7 +291,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 5. Semak nama “bagi pihak” pada tindakan yang dibuat delegate.
 6. Batal delegasi sebaik keperluan tamat.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Batal`.
 
 **Hasil dijangka:** Delegate hanya boleh bertindak dalam tenant, capability dan julat masa yang diluluskan.
 

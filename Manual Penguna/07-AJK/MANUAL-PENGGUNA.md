@@ -1,10 +1,10 @@
 # Manual Pengguna Diwan - AJK
 
-**Versi UI disahkan:** 22 Julai 2026
+**Versi UI disahkan:** 23 September 2026
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
-**Liputan Chrome:** 13/13 halaman, silang tenant HTTP 404, 8 skrin tindakan tambahan.
+**Liputan Chrome:** 13/13 halaman, silang tenant HTTP 404, 10 skrin tindakan tambahan.
 
 Manual ini khusus untuk role **AJK**. Gambar menggunakan data latihan. Nama, e-mel, nombor telefon dan dokumen sebenar organisasi tidak patut dimasukkan ke manual.
 
@@ -110,6 +110,28 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 1. Semak kandungan yang dibenarkan.
 2. Jika akses ditolak, minta akses melalui Admin/Kerani; jangan ubah URL.
 
+**Kemudian:** teruskan ke **Gambar 3: Balas dan edarkan minit**.
+
+
+#### Gambar 3: Balas dan edarkan minit
+
+![Baca rekod dan selesaikan tugasan minit - Gambar 3](<imej/minit-balas.png>)
+
+**Apa perlu dibuat pada Gambar 3**
+1. Catat tindakan atau susulan.
+2. Hantar kepada ahli berkaitan jika perlu.
+
+**Kemudian:** teruskan ke **Gambar 4: Tanda tindakan minit selesai**.
+
+
+#### Gambar 4: Tanda tindakan minit selesai
+
+![Baca rekod dan selesaikan tugasan minit - Gambar 4](<imej/minit-selesai.png>)
+
+**Apa perlu dibuat pada Gambar 4**
+1. Tanda selesai hanya selepas kerja lengkap.
+2. Sahkan status berubah.
+
 **Selesai:** semak hasil akhir workflow ini sebelum menutup halaman.
 
 
@@ -119,7 +141,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 |---:|---|---|---:|
 | 1 | Papan pemuka | `/app/{tenant}` | 200 |
 | 2 | Pusat Bantuan | `/app/{tenant}/bantuan` | 200 |
-| 3 | Minit Saya | `/app/{tenant}/minit-saya` | 200 |
+| 3 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
 | 4 | Kelulusan | `/app/{tenant}/kelulusan` | 200 |
 | 5 | Carian | `/app/{tenant}/carian` | 200 |
 | 6 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
@@ -174,21 +196,21 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 2. Semak data dan gunakan hanya tindakan yang dipaparkan.
 3. Pastikan hasil kekal dalam tenant semasa.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Klasifikasi surat`, `Minit untuk tindakan`, `Butang tidak kelihatan`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`, `×`, `Kembali`.
 
 **Hasil dijangka:** Halaman berfungsi tanpa ralat.
 
 
-### 3. Minit Saya
+### 3. Minit Saya 1
 
 **URL:** `/app/{tenant}/minit-saya`
 
 **Tujuan:** Arahan, makluman, balasan dan status tindakan minit yang berkaitan dengan pengguna.
 
-![Minit Saya - paparan 200](<imej/03-minit-saya.png>)
+![Minit Saya 1 - paparan 200](<imej/03-minit-saya.png>)
 
 **Nombor pada gambar**
-1. Tajuk halaman Minit Saya.
+1. Tajuk halaman Minit Saya 1.
 
 **Cara menggunakan**
 1. Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.
@@ -198,7 +220,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 5. Penerima s.k. ialah makluman; penerima tindakan mempunyai tanggungjawab dan SLA.
 6. Tindakan delegate direkod sebagai “oleh X bagi pihak Y”.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Tanda Selesai`, `Balas & Edarkan`.
 
 **Hasil dijangka:** Apabila semua penerima tindakan selesai, minit ditutup dan pengirim dimaklumkan.
 
@@ -590,7 +612,46 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 8. Hasil carian lanjutan
+### 8. Balas dan edarkan minit
+
+![Balas dan edarkan minit](<imej/minit-balas.png>)
+
+**Nombor pada gambar**
+1. Semak semua medan dalam dialog sebelum menghantar.
+2. Tekan hanya selepas maklumat disemak.
+
+**Medan/kawalan yang disahkan:** `Penerima Tindakan*`, `Makluman (s.k.)`, `Catatan*`, `Keutamaan*`.
+
+**Langkah terperinci**
+1. Baca arahan asal dan rekod.
+2. Pilih penerima tindakan susulan.
+3. Tambah penerima s.k. jika perlu.
+4. Tulis catatan jawapan.
+5. Pilih keutamaan dan hantar.
+6. Tanda minit asal selesai hanya selepas tindakan sendiri selesai.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 9. Tanda tindakan minit selesai
+
+![Tanda tindakan minit selesai](<imej/minit-selesai.png>)
+
+**Nombor pada gambar**
+1. Semak semua medan dalam dialog sebelum menghantar.
+2. Tekan hanya selepas maklumat disemak.
+
+**Langkah terperinci**
+1. Pastikan kerja sebenar selesai.
+2. Tekan Tanda Selesai.
+3. Baca pengesahan.
+4. Sahkan status penerima/ minit berubah.
+5. Pengirim dimaklumkan apabila semua penerima tindakan selesai.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 10. Hasil carian lanjutan
 
 ![Hasil carian lanjutan](<imej/carian-hasil.png>)
 

@@ -251,6 +251,9 @@ fwrite(STDOUT, json_encode([
     'users' => $users->count(),
     'record' => $record->id,
     'file' => $hybridFile->id,
-    'media' => $record->getMedia('original')->count(),
+    // F9 (Sept 2026) — `fresh()` WAJIB: `getMedia()` di atas memuatkan relasi SEBELUM
+    // `addMedia()`, jadi kiraan tanpa `fresh()` melaporkan 0 walaupun PDF sudah dilampirkan
+    // (diukur: ringkasan "media: 0" sedangkan DB mempunyai 1 baris media).
+    'media' => $record->fresh()->getMedia('original')->count(),
     'activity_logs' => MosqueActivityLog::query()->withoutGlobalScope('mosque')->where('mosque_id', $mosque->id)->count(),
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL);

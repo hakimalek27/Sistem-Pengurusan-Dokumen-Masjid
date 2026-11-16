@@ -1,6 +1,6 @@
 # Manual Pengguna Diwan - Nazir
 
-**Versi UI disahkan:** 22 Julai 2026
+**Versi UI disahkan:** 23 September 2026
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
@@ -142,7 +142,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 |---:|---|---|---:|
 | 1 | Papan pemuka | `/app/{tenant}` | 200 |
 | 2 | Pusat Bantuan | `/app/{tenant}/bantuan` | 200 |
-| 3 | Minit Saya 2 | `/app/{tenant}/minit-saya` | 200 |
+| 3 | Minit Saya 4 | `/app/{tenant}/minit-saya` | 200 |
 | 4 | Kelulusan 3 | `/app/{tenant}/kelulusan` | 200 |
 | 5 | Carian | `/app/{tenant}/carian` | 200 |
 | 6 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
@@ -197,21 +197,21 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 2. Semak data dan gunakan hanya tindakan yang dipaparkan.
 3. Pastikan hasil kekal dalam tenant semasa.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Klasifikasi surat`, `Minit untuk tindakan`, `Butang tidak kelihatan`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`, `×`, `Kembali`.
 
 **Hasil dijangka:** Halaman berfungsi tanpa ralat.
 
 
-### 3. Minit Saya 2
+### 3. Minit Saya 4
 
 **URL:** `/app/{tenant}/minit-saya`
 
 **Tujuan:** Arahan, makluman, balasan dan status tindakan minit yang berkaitan dengan pengguna.
 
-![Minit Saya 2 - paparan 200](<imej/03-minit-saya.png>)
+![Minit Saya 4 - paparan 200](<imej/03-minit-saya.png>)
 
 **Nombor pada gambar**
-1. Tajuk halaman Minit Saya 2.
+1. Tajuk halaman Minit Saya 4.
 
 **Cara menggunakan**
 1. Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.

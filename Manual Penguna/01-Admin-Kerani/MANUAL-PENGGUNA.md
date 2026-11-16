@@ -1,10 +1,10 @@
 # Manual Pengguna Diwan - Admin / Kerani
 
-**Versi UI disahkan:** 22 Julai 2026
+**Versi UI disahkan:** 23 September 2026
 
 **Tenant contoh:** MAM (data latihan, bukan production)
 
-**Liputan Chrome:** 25/25 halaman, silang tenant HTTP 404, 29 skrin tindakan tambahan.
+**Liputan Chrome:** 25/25 halaman, silang tenant HTTP 404, 31 skrin tindakan tambahan.
 
 Manual ini khusus untuk role **Admin / Kerani**. Gambar menggunakan data latihan. Nama, e-mel, nombor telefon dan dokumen sebenar organisasi tidak patut dimasukkan ke manual.
 
@@ -132,7 +132,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 **Apa perlu dibuat pada Gambar 4**
 1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
-2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
+2. Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
 
 **Kemudian:** teruskan ke **Gambar 5: Klasifikasi peti masuk 2/5 - Jenis dan metadata**.
 
@@ -419,7 +419,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 | 16 | Peti Masuk 1 | `/app/{tenant}/peti-masuk` | 200 |
 | 17 | Rekod | `/app/{tenant}/records` | 200 |
 | 18 | Fail | `/app/{tenant}/registry-files` | 200 |
-| 19 | Minit Saya | `/app/{tenant}/minit-saya` | 200 |
+| 19 | Minit Saya 1 | `/app/{tenant}/minit-saya` | 200 |
 | 20 | Kelulusan | `/app/{tenant}/kelulusan` | 200 |
 | 21 | Carian | `/app/{tenant}/carian` | 200 |
 | 22 | Kegemaran | `/app/{tenant}/kegemaran` | 200 |
@@ -536,7 +536,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 2. Semak data dan gunakan hanya tindakan yang dipaparkan.
 3. Pastikan hasil kekal dalam tenant semasa.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Cari`, `Klasifikasi surat`, `Minit untuk tindakan`, `Butang tidak kelihatan`, `Baca langkah`, `Mulakan panduan`, `Periksa`, `Simpan tetapan`, `Senyap 1 hari`, `Senyap 7 hari`, `Hantar laporan`, `×`, `Kembali`.
 
 **Hasil dijangka:** Halaman berfungsi tanpa ralat.
 
@@ -633,7 +633,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 4. Jika gagal, jangan cipta batch pendua; baiki storan dan gunakan Cuba Semula pada batch sama.
 5. Simpan sijil pelupusan; metadata audit kekal walaupun blob rekod dipadam.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Sedia Senarai Semakan`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Sedia Senarai Semakan`, `Laksana`.
 
 **Hasil dijangka:** Tiada individu menyediakan, meluluskan dan melaksanakan keseluruhan pelupusan seorang diri.
 
@@ -672,7 +672,6 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 
 **Nombor pada gambar**
 1. Tajuk halaman Tetapan Masjid.
-2. Tindakan utama yang dibenarkan untuk peranan ini.
 
 **Cara menggunakan**
 1. Semak telefon rasmi dan wakil perlindungan data.
@@ -682,7 +681,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 5. Pasangkan WhatsApp melalui QR/kod telefon dan semak status tersambung.
 6. Matikan notifikasi jika peranti hilang atau sesi tidak lagi dikawal.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Edit Tetapan`, `Aktifkan WhatsApp`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Sunting Tetapan`, `Aktifkan WhatsApp`.
 
 **Hasil dijangka:** Dokumen masuk ke peti masuk tenant ini dan sumber asal direkodkan.
 
@@ -860,16 +859,16 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 **Hasil dijangka:** Nombor fail elektronik dan fizikal sepadan; sejarah pergerakan tidak terputus.
 
 
-### 19. Minit Saya
+### 19. Minit Saya 1
 
 **URL:** `/app/{tenant}/minit-saya`
 
 **Tujuan:** Arahan, makluman, balasan dan status tindakan minit yang berkaitan dengan pengguna.
 
-![Minit Saya - paparan 200](<imej/19-minit-saya.png>)
+![Minit Saya 1 - paparan 200](<imej/19-minit-saya.png>)
 
 **Nombor pada gambar**
-1. Tajuk halaman Minit Saya.
+1. Tajuk halaman Minit Saya 1.
 
 **Cara menggunakan**
 1. Tapis Kategori: Perlu Tindakan, Makluman, Saya Hantar atau Selesai.
@@ -879,7 +878,7 @@ Ikuti gambar mengikut nombor. Jangan lompat ke gambar seterusnya sehingga langka
 5. Penerima s.k. ialah makluman; penerima tindakan mempunyai tanggungjawab dan SLA.
 6. Tindakan delegate direkod sebagai “oleh X bagi pihak Y”.
 
-**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`.
+**Kawalan/tindakan yang terlihat semasa verifikasi:** `Masjid Al-Muttaqin Wangsa Melawati`, `Tanda Selesai`, `Balas & Edarkan`.
 
 **Hasil dijangka:** Apabila semua penerima tindakan selesai, minit ditutup dan pengirim dimaklumkan.
 
@@ -1092,9 +1091,9 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 4. Edit tetapan masjid
+### 4. Sunting tetapan masjid
 
-![Edit tetapan masjid](<imej/tetapan-edit.png>)
+![Sunting tetapan masjid](<imej/tetapan-edit.png>)
 
 **Nombor pada gambar**
 1. Semak semua medan dalam dialog sebelum menghantar.
@@ -1103,11 +1102,10 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Medan/kawalan yang disahkan:** `Telefon Masjid`, `Wakil Perlindungan Data — Nama`, `Wakil Perlindungan Data — E-mel`, `Kata Kunci Intake`, `Terima dokumen WhatsApp`, `Terima dokumen melalui e-mel`, `Kata Kunci E-mel (pilihan)`, `E-mel Pengirim Dipercayai (pilihan)`.
 
 **Langkah terperinci**
-1. Semak telefon dan wakil perlindungan data.
-2. Tetapkan kata kunci intake.
-3. Aktif/matikan WhatsApp atau e-mel.
-4. Masukkan e-mel pengirim dipercayai, bukan alamat intake.
-5. Simpan dan uji satu dokumen masuk.
+1. Baca tajuk dan semua medan.
+2. Isi medan wajib bertanda *.
+3. Semak semula sebelum menghantar.
+4. Pastikan notifikasi kejayaan dipaparkan.
 
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
@@ -1204,7 +1202,88 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 10. Cipta nod klasifikasi
+### 10. Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber
+
+![Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber](<imej/inbox-klasifikasi.png>)
+
+**Nombor pada gambar**
+1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
+2. Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
+
+**Langkah terperinci**
+1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
+2. Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 11. Klasifikasi peti masuk 2/5 - Jenis dan metadata
+
+![Klasifikasi peti masuk 2/5 - Jenis dan metadata](<imej/inbox-klasifikasi-02-jenis-metadata.png>)
+
+**Nombor pada gambar**
+1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
+2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
+
+**Medan/kawalan yang disahkan:** `Jenis Rekod*`, `Tajuk`, `Arah*`, `Ruj. Kami`, `Ruj. Tuan`, `Tarikh Rekod*`, `Tarikh Terima`, `Nama Pengirim`, `Organisasi Pengirim`, `Nama Penerima`, `Jumlah Lampiran`, `Untuk Perhatian (u.p.)`.
+
+**Langkah terperinci**
+1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
+2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 12. Klasifikasi peti masuk 3/5 - Fail dan sensitiviti
+
+![Klasifikasi peti masuk 3/5 - Fail dan sensitiviti](<imej/inbox-klasifikasi-03-fail-sensitiviti.png>)
+
+**Nombor pada gambar**
+1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
+2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
+
+**Medan/kawalan yang disahkan:** `Failkan Ke*`, `Tahap Akses Rekod*`.
+
+**Langkah terperinci**
+1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
+2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 13. Klasifikasi peti masuk 4/5 - Edaran minit
+
+![Klasifikasi peti masuk 4/5 - Edaran minit](<imej/inbox-klasifikasi-04-edaran-minit.png>)
+
+**Nombor pada gambar**
+1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
+2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
+
+**Medan/kawalan yang disahkan:** `Untuk Tindakan (Minit)`, `Untuk Makluman (s.k.)`, `Catatan / Arahan Minit`, `Keutamaan Minit*`.
+
+**Langkah terperinci**
+1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
+2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 14. Klasifikasi peti masuk 5/5 - Semakan akhir
+
+![Klasifikasi peti masuk 5/5 - Semakan akhir](<imej/inbox-klasifikasi-05-semakan-akhir.png>)
+
+**Nombor pada gambar**
+1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
+2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
+
+**Langkah terperinci**
+1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
+2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 15. Cipta nod klasifikasi
 
 ![Cipta nod klasifikasi](<imej/klasifikasi-cipta.png>)
 
@@ -1223,7 +1302,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 11. Buka fail baharu
+### 16. Buka fail baharu
 
 ![Buka fail baharu](<imej/fail-cipta.png>)
 
@@ -1241,7 +1320,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 12. Cipta peraturan retensi
+### 17. Cipta peraturan retensi
 
 ![Cipta peraturan retensi](<imej/retensi-peraturan-cipta.png>)
 
@@ -1259,7 +1338,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 13. Cipta delegasi
+### 18. Cipta delegasi
 
 ![Cipta delegasi](<imej/delegasi-cipta.png>)
 
@@ -1278,7 +1357,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 14. Butiran rekod dan tindakan mengikut kebenaran
+### 19. Butiran rekod dan tindakan mengikut kebenaran
 
 ![Butiran rekod dan tindakan mengikut kebenaran](<imej/rekod-butiran.png>)
 
@@ -1300,7 +1379,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 15. Mohon pembetulan rekod
+### 20. Mohon pembetulan rekod
 
 ![Mohon pembetulan rekod](<imej/rekod-mohon-pembetulan.png>)
 
@@ -1320,7 +1399,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 16. Edarkan minit
+### 21. Edarkan minit
 
 ![Edarkan minit](<imej/rekod-edarkan-minit.png>)
 
@@ -1340,7 +1419,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 17. Mohon kelulusan
+### 22. Mohon kelulusan
 
 ![Mohon kelulusan](<imej/rekod-mohon-kelulusan.png>)
 
@@ -1360,7 +1439,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 18. Ganti versi rekod
+### 23. Ganti versi rekod
 
 ![Ganti versi rekod](<imej/rekod-ganti-versi.png>)
 
@@ -1377,7 +1456,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 19. Pindah rekod ke fail lain
+### 24. Pindah rekod ke fail lain
 
 ![Pindah rekod ke fail lain](<imej/rekod-pindah-fail.png>)
 
@@ -1397,7 +1476,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 20. Viewer dokumen
+### 25. Viewer dokumen
 
 ![Viewer dokumen](<imej/rekod-viewer.png>)
 
@@ -1418,7 +1497,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 21. Butiran fail elektronik, fizikal atau hibrid
+### 26. Butiran fail elektronik, fizikal atau hibrid
 
 ![Butiran fail elektronik, fizikal atau hibrid](<imej/fail-butiran.png>)
 
@@ -1438,7 +1517,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 22. Keluarkan fail fizikal
+### 27. Keluarkan fail fizikal
 
 ![Keluarkan fail fizikal](<imej/fail-keluarkan-fizikal.png>)
 
@@ -1458,7 +1537,7 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 23. Pindah lokasi fizikal
+### 28. Pindah lokasi fizikal
 
 ![Pindah lokasi fizikal](<imej/fail-pindah-lokasi.png>)
 
@@ -1477,7 +1556,46 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 
 
-### 24. Hasil carian lanjutan
+### 29. Balas dan edarkan minit
+
+![Balas dan edarkan minit](<imej/minit-balas.png>)
+
+**Nombor pada gambar**
+1. Semak semua medan dalam dialog sebelum menghantar.
+2. Tekan hanya selepas maklumat disemak.
+
+**Medan/kawalan yang disahkan:** `Penerima Tindakan*`, `Makluman (s.k.)`, `Catatan*`, `Keutamaan*`.
+
+**Langkah terperinci**
+1. Baca arahan asal dan rekod.
+2. Pilih penerima tindakan susulan.
+3. Tambah penerima s.k. jika perlu.
+4. Tulis catatan jawapan.
+5. Pilih keutamaan dan hantar.
+6. Tanda minit asal selesai hanya selepas tindakan sendiri selesai.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 30. Tanda tindakan minit selesai
+
+![Tanda tindakan minit selesai](<imej/minit-selesai.png>)
+
+**Nombor pada gambar**
+1. Semak semua medan dalam dialog sebelum menghantar.
+2. Tekan hanya selepas maklumat disemak.
+
+**Langkah terperinci**
+1. Pastikan kerja sebenar selesai.
+2. Tekan Tanda Selesai.
+3. Baca pengesahan.
+4. Sahkan status penerima/ minit berubah.
+5. Pengirim dimaklumkan apabila semua penerima tindakan selesai.
+
+**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
+
+
+### 31. Hasil carian lanjutan
 
 ![Hasil carian lanjutan](<imej/carian-hasil.png>)
 
@@ -1491,87 +1609,6 @@ Bahagian ini hanya menyenaraikan tindakan yang benar-benar kelihatan bagi role i
 3. Buka rekod untuk pengesahan.
 4. Tambah bintang jika kerap dirujuk.
 5. Ubah kriteria jika hasil terlalu luas.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 25. Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber
-
-![Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber](<imej/inbox-klasifikasi.png>)
-
-**Nombor pada gambar**
-1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
-2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
-
-**Langkah terperinci**
-1. Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan.
-2. Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 26. Klasifikasi peti masuk 2/5 - Jenis dan metadata
-
-![Klasifikasi peti masuk 2/5 - Jenis dan metadata](<imej/inbox-klasifikasi-02-jenis-metadata.png>)
-
-**Nombor pada gambar**
-1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
-2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
-
-**Medan/kawalan yang disahkan:** `Jenis Rekod*`, `Tajuk`, `Arah*`, `Ruj. Kami`, `Ruj. Tuan`, `Tarikh Rekod*`, `Tarikh Terima`, `Nama Pengirim`, `Organisasi Pengirim`, `Nama Penerima`, `Jumlah Lampiran`, `Untuk Perhatian (u.p.)`.
-
-**Langkah terperinci**
-1. Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen.
-2. u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 27. Klasifikasi peti masuk 3/5 - Fail dan sensitiviti
-
-![Klasifikasi peti masuk 3/5 - Fail dan sensitiviti](<imej/inbox-klasifikasi-03-fail-sensitiviti.png>)
-
-**Nombor pada gambar**
-1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
-2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
-
-**Medan/kawalan yang disahkan:** `Failkan Ke*`, `Tahap Akses Rekod*`.
-
-**Langkah terperinci**
-1. Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih.
-2. Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 28. Klasifikasi peti masuk 4/5 - Edaran minit
-
-![Klasifikasi peti masuk 4/5 - Edaran minit](<imej/inbox-klasifikasi-04-edaran-minit.png>)
-
-**Nombor pada gambar**
-1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
-2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
-
-**Medan/kawalan yang disahkan:** `Untuk Tindakan (Minit)`, `Untuk Makluman (s.k.)`, `Catatan / Arahan Minit`, `Keutamaan Minit*`.
-
-**Langkah terperinci**
-1. Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih.
-2. Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir.
-
-**Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
-
-
-### 29. Klasifikasi peti masuk 5/5 - Semakan akhir
-
-![Klasifikasi peti masuk 5/5 - Semakan akhir](<imej/inbox-klasifikasi-05-semakan-akhir.png>)
-
-**Nombor pada gambar**
-1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
-2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
-
-**Langkah terperinci**
-1. Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia.
-2. Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik.
 
 **Semakan akhir:** jangan tutup halaman sehingga toast kejayaan atau perubahan status yang dijangka kelihatan. Jika validasi gagal, betulkan medan yang ditanda; jangan ulang hantar secara rawak.
 

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-22T03:52:09.507Z",
-  "baseURL": "http://127.0.0.1:8095",
+  "generatedAt": "2026-09-23T03:48:47.289Z",
+  "baseURL": "http://127.0.0.1:8094",
   "roles": {
     "admin_masjid": {
       "label": "Admin / Kerani",
@@ -135,6 +135,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -163,7 +166,10 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
@@ -270,7 +276,8 @@
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
-            "Sedia Senarai Semakan"
+            "Sedia Senarai Semakan",
+            "Laksana"
           ],
           "tabs": []
         },
@@ -305,15 +312,11 @@
             {
               "number": 1,
               "note": "Tajuk halaman Tetapan Masjid."
-            },
-            {
-              "number": 2,
-              "note": "Tindakan utama yang dibenarkan untuk peranan ini."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
-            "Edit Tetapan",
+            "Sunting Tetapan",
             "Aktifkan WhatsApp"
           ],
           "tabs": []
@@ -380,6 +383,7 @@
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
+            "Batal",
             "Batal"
           ],
           "tabs": []
@@ -485,25 +489,29 @@
             "Tutup Fail",
             "Kegemaran",
             "Tutup Fail",
+            "Kegemaran",
+            "Tutup Fail",
             "Kegemaran"
           ],
           "tabs": []
         },
         {
           "order": 19,
-          "label": "Minit Saya",
+          "label": "Minit Saya 1",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/19-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya."
+              "note": "Tajuk halaman Minit Saya 1."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
-            "0"
+            "0",
+            "Tanda Selesai",
+            "Balas & Edarkan"
           ],
           "tabs": []
         },
@@ -723,7 +731,7 @@
         },
         {
           "image": "imej/tetapan-edit.png",
-          "title": "Edit tetapan masjid",
+          "title": "Sunting tetapan masjid",
           "labels": [
             "Telefon Masjid",
             "Wakil Perlindungan Data — Nama",
@@ -822,6 +830,102 @@
             {
               "number": 1,
               "note": "Semak semua medan dalam dialog sebelum menghantar."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi.png",
+          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
+            },
+            {
+              "number": 2,
+              "note": "Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
+          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
+          "labels": [
+            "Jenis Rekod*",
+            "Tajuk",
+            "Arah*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod*",
+            "Tarikh Terima",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Nama Penerima",
+            "Jumlah Lampiran",
+            "Untuk Perhatian (u.p.)"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
+            },
+            {
+              "number": 2,
+              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
+          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
+          "labels": [
+            "Failkan Ke*",
+            "Tahap Akses Rekod*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
+            },
+            {
+              "number": 2,
+              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
+          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
+          "labels": [
+            "Untuk Tindakan (Minit)",
+            "Untuk Makluman (s.k.)",
+            "Catatan / Arahan Minit",
+            "Keutamaan Minit*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
+            },
+            {
+              "number": 2,
+              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
+          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
+            },
+            {
+              "number": 2,
+              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
             }
           ]
         },
@@ -1090,6 +1194,41 @@
           ]
         },
         {
+          "image": "imej/minit-balas.png",
+          "title": "Balas dan edarkan minit",
+          "labels": [
+            "Penerima Tindakan*",
+            "Makluman (s.k.)",
+            "Catatan*",
+            "Keutamaan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/minit-selesai.png",
+          "title": "Tanda tindakan minit selesai",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
           "image": "imej/carian-hasil.png",
           "title": "Hasil carian lanjutan",
           "notes": [
@@ -1100,102 +1239,6 @@
             {
               "number": 2,
               "note": "Buka rekod atau tekan bintang untuk kegemaran."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi.png",
-          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
-          "labels": [],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
-            },
-            {
-              "number": 2,
-              "note": "Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
-          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
-          "labels": [
-            "Jenis Rekod*",
-            "Tajuk",
-            "Arah*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod*",
-            "Tarikh Terima",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Nama Penerima",
-            "Jumlah Lampiran",
-            "Untuk Perhatian (u.p.)"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
-            },
-            {
-              "number": 2,
-              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
-          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
-          "labels": [
-            "Failkan Ke*",
-            "Tahap Akses Rekod*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
-            },
-            {
-              "number": 2,
-              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
-          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
-          "labels": [
-            "Untuk Tindakan (Minit)",
-            "Untuk Makluman (s.k.)",
-            "Catatan / Arahan Minit",
-            "Keutamaan Minit*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
-            },
-            {
-              "number": 2,
-              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
-          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
-          "labels": [],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
-            },
-            {
-              "number": 2,
-              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
             }
           ]
         }
@@ -1296,6 +1339,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -1324,7 +1370,10 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
@@ -1389,19 +1438,23 @@
         },
         {
           "order": 7,
-          "label": "Minit Saya 1",
+          "label": "Minit Saya 3",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/07-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya 1."
+              "note": "Tajuk halaman Minit Saya 3."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "0",
+            "Tanda Selesai",
+            "Balas & Edarkan",
+            "Tanda Selesai",
+            "Balas & Edarkan",
             "Tanda Selesai",
             "Balas & Edarkan"
           ],
@@ -1582,7 +1635,8 @@
             }
           ],
           "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Lulus"
           ],
           "tabs": []
         },
@@ -1632,6 +1686,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran",
             "Kegemaran"
@@ -1948,6 +2003,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -1976,7 +2034,10 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
@@ -2056,6 +2117,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran",
             "Kegemaran"
@@ -2363,6 +2425,102 @@
           ]
         },
         {
+          "image": "imej/inbox-klasifikasi.png",
+          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
+            },
+            {
+              "number": 2,
+              "note": "Tekan Seterusnya hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
+          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
+          "labels": [
+            "Jenis Rekod*",
+            "Tajuk",
+            "Arah*",
+            "Ruj. Kami",
+            "Ruj. Tuan",
+            "Tarikh Rekod*",
+            "Tarikh Terima",
+            "Nama Pengirim",
+            "Organisasi Pengirim",
+            "Nama Penerima",
+            "Jumlah Lampiran",
+            "Untuk Perhatian (u.p.)"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
+            },
+            {
+              "number": 2,
+              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
+          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
+          "labels": [
+            "Failkan Ke*",
+            "Tahap Akses Rekod*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
+            },
+            {
+              "number": 2,
+              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
+          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
+          "labels": [
+            "Untuk Tindakan (Minit)",
+            "Untuk Makluman (s.k.)",
+            "Catatan / Arahan Minit",
+            "Keutamaan Minit*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
+            },
+            {
+              "number": 2,
+              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
+            }
+          ]
+        },
+        {
+          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
+          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
+            },
+            {
+              "number": 2,
+              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
+            }
+          ]
+        },
+        {
           "image": "imej/rekod-butiran.png",
           "title": "Butiran rekod dan tindakan mengikut kebenaran",
           "notes": [
@@ -2561,102 +2719,6 @@
               "note": "Buka rekod atau tekan bintang untuk kegemaran."
             }
           ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi.png",
-          "title": "Klasifikasi peti masuk 1/5 - Semak dokumen dan sumber",
-          "labels": [],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Sahkan tenant, sumber penghantaran, masa diterima, status antivirus dan OCR sebelum meneruskan."
-            },
-            {
-              "number": 2,
-              "note": "Tekan Seterus hanya jika dokumen boleh dibaca dan benar-benar milik masjid ini."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-02-jenis-metadata.png",
-          "title": "Klasifikasi peti masuk 2/5 - Jenis dan metadata",
-          "labels": [
-            "Jenis Rekod*",
-            "Tajuk",
-            "Arah*",
-            "Ruj. Kami",
-            "Ruj. Tuan",
-            "Tarikh Rekod*",
-            "Tarikh Terima",
-            "Nama Pengirim",
-            "Organisasi Pengirim",
-            "Nama Penerima",
-            "Jumlah Lampiran",
-            "Untuk Perhatian (u.p.)"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pilih jenis rekod dan tawan tajuk, arah, Ruj. Kami, Ruj. Tuan, tarikh, pengirim, penerima serta u.p. berdasarkan dokumen."
-            },
-            {
-              "number": 2,
-              "note": "u.p. ialah metadata surat; penerima tindakan sebenar dipilih pada langkah edaran minit."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-03-fail-sensitiviti.png",
-          "title": "Klasifikasi peti masuk 3/5 - Fail dan sensitiviti",
-          "labels": [
-            "Failkan Ke*",
-            "Tahap Akses Rekod*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Pilih fail registri yang tepat atau buka fail baharu; semak amaran kandungan dan jilid sebelum memilih."
-            },
-            {
-              "number": 2,
-              "note": "Tetapkan sensitiviti rekod. Sistem menggunakan tahap paling ketat antara rekod dan fail."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-04-edaran-minit.png",
-          "title": "Klasifikasi peti masuk 4/5 - Edaran minit",
-          "labels": [
-            "Untuk Tindakan (Minit)",
-            "Untuk Makluman (s.k.)",
-            "Catatan / Arahan Minit",
-            "Keutamaan Minit*"
-          ],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Untuk Tindakan mewujudkan tanggungjawab dan SLA; s.k. hanya memaklumkan. Arahan minit wajib jelas jika penerima tindakan dipilih."
-            },
-            {
-              "number": 2,
-              "note": "Semak penerima, catatan dan keutamaan sebelum melihat ringkasan akhir."
-            }
-          ]
-        },
-        {
-          "image": "imej/inbox-klasifikasi-05-semakan-akhir.png",
-          "title": "Klasifikasi peti masuk 5/5 - Semakan akhir",
-          "labels": [],
-          "notes": [
-            {
-              "number": 1,
-              "note": "Sahkan fail, sensitiviti efektif, penerima tindakan, penerima s.k. dan saluran notifikasi yang benar-benar tersedia."
-            },
-            {
-              "number": 2,
-              "note": "Klasifikasikan hanya selepas ringkasan tepat; rekod, nombor kandungan dan minit disimpan secara atomik."
-            }
-          ]
         }
       ],
       "crossTenantStatus": 404,
@@ -2733,6 +2795,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -2761,7 +2826,10 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
@@ -2804,7 +2872,8 @@
             }
           ],
           "buttons": [
-            "Masjid Al-Muttaqin Wangsa Melawati"
+            "Masjid Al-Muttaqin Wangsa Melawati",
+            "Batal"
           ],
           "tabs": []
         },
@@ -3053,6 +3122,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran",
             "Kegemaran"
@@ -3386,6 +3456,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -3414,25 +3487,32 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
         {
           "order": 3,
-          "label": "Minit Saya 2",
+          "label": "Minit Saya 4",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/03-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya 2."
+              "note": "Tajuk halaman Minit Saya 4."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "0",
+            "Tanda Selesai",
+            "Balas & Edarkan",
+            "Tanda Selesai",
+            "Balas & Edarkan",
             "Tanda Selesai",
             "Balas & Edarkan",
             "Tanda Selesai",
@@ -3615,6 +3695,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran",
             "Kegemaran"
@@ -3961,6 +4042,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -3989,25 +4073,30 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
         {
           "order": 3,
-          "label": "Minit Saya 1",
+          "label": "Minit Saya 2",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/03-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya 1."
+              "note": "Tajuk halaman Minit Saya 2."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "0",
+            "Tanda Selesai",
+            "Balas & Edarkan",
             "Tanda Selesai",
             "Balas & Edarkan"
           ],
@@ -4182,6 +4271,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran"
           ],
@@ -4509,6 +4599,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -4537,25 +4630,30 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
         {
           "order": 3,
-          "label": "Minit Saya",
+          "label": "Minit Saya 1",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/03-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya."
+              "note": "Tajuk halaman Minit Saya 1."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
-            "0"
+            "0",
+            "Tanda Selesai",
+            "Balas & Edarkan"
           ],
           "tabs": []
         },
@@ -4726,6 +4824,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran"
           ],
@@ -4930,6 +5029,41 @@
           ]
         },
         {
+          "image": "imej/minit-balas.png",
+          "title": "Balas dan edarkan minit",
+          "labels": [
+            "Penerima Tindakan*",
+            "Makluman (s.k.)",
+            "Catatan*",
+            "Keutamaan*"
+          ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/minit-selesai.png",
+          "title": "Tanda tindakan minit selesai",
+          "labels": [],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
           "image": "imej/carian-hasil.png",
           "title": "Hasil carian lanjutan",
           "notes": [
@@ -5040,6 +5174,9 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "Cari",
+            "Klasifikasi surat",
+            "Minit untuk tindakan",
+            "Butang tidak kelihatan",
             "Baca langkah",
             "Mulakan panduan",
             "Baca langkah",
@@ -5068,25 +5205,30 @@
             "Simpan tetapan",
             "Senyap 1 hari",
             "Senyap 7 hari",
-            "Hantar laporan"
+            "Hantar laporan",
+            "×",
+            "Kembali",
+            "Seterusnya"
           ],
           "tabs": []
         },
         {
           "order": 4,
-          "label": "Minit Saya 1",
+          "label": "Minit Saya 2",
           "path": "/app/mam/minit-saya",
           "status": 200,
           "image": "imej/04-minit-saya.png",
           "notes": [
             {
               "number": 1,
-              "note": "Tajuk halaman Minit Saya 1."
+              "note": "Tajuk halaman Minit Saya 2."
             }
           ],
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "0",
+            "Balas & Edarkan",
+            "Tanda Selesai",
             "Balas & Edarkan"
           ],
           "tabs": []
@@ -5260,6 +5402,7 @@
           "buttons": [
             "Masjid Al-Muttaqin Wangsa Melawati",
             "No. Fail",
+            "Kegemaran",
             "Kegemaran",
             "Kegemaran"
           ],
@@ -5452,6 +5595,21 @@
             "Catatan*",
             "Keutamaan*"
           ],
+          "notes": [
+            {
+              "number": 1,
+              "note": "Semak semua medan dalam dialog sebelum menghantar."
+            },
+            {
+              "number": 2,
+              "note": "Tekan hanya selepas maklumat disemak."
+            }
+          ]
+        },
+        {
+          "image": "imej/minit-selesai.png",
+          "title": "Tanda tindakan minit selesai",
+          "labels": [],
           "notes": [
             {
               "number": 1,
@@ -5662,5 +5820,52 @@
     ],
     "completedRegistration": true
   },
-  "errors": []
+  "errors": [],
+  "retries": [
+    {
+      "url": "http://127.0.0.1:8094/app/mam/tetapan-masjid",
+      "konteks": "Admin / Kerani halaman 11",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Admin / Kerani halaman 15",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "/app/mam/delegasi/create",
+      "konteks": "tidak dinyatakan",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Pengerusi halaman 6",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Setiausaha halaman 15",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Bendahari halaman 5",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Nazir halaman 13",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "Ketua Imam halaman 13",
+      "sebab": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:8094/app/mam/profil",
+      "konteks": "AJK halaman 13",
+      "sebab": "net::ERR_ABORTED"
+    }
+  ]
 }

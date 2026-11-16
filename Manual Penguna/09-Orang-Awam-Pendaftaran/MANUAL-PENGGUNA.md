@@ -1,6 +1,6 @@
 # Manual Pengguna Diwan - Orang Awam / Pendaftaran Masjid
 
-**Versi UI disahkan:** 22 Julai 2026
+**Versi UI disahkan:** 23 September 2026
 
 **Skop:** pusat bantuan, pendaftaran berperingkat, kelulusan, log masuk dan persediaan pertama.
 
